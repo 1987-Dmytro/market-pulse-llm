@@ -24,6 +24,10 @@ import write_reader_topup_prereg as producer  # noqa: E402
 
 PROJECTION = json.loads((REPO_ROOT / "results" / "reader_topup_projection.json").read_text("utf-8"))
 PREREG = json.loads((REPO_ROOT / "results" / "reader_topup_prereg.json").read_text("utf-8"))
+"""ATTEMPT A's registration — the one whose own gate STOPped its run. Not superseded as history:
+the population, the cap, the meter and every unit in it are what attempt B inherits unchanged."""
+
+PREREG_B = json.loads((REPO_ROOT / "results" / "reader_topup_prereg_b.json").read_text("utf-8"))
 
 
 # --- the projection ---------------------------------------------------------
@@ -417,59 +421,158 @@ def test_the_ingest_parses_merges_the_chunks_and_names_its_refusals(synthetic, t
     assert merged[0]["payable_comments"] == 125
 
 
-def test_the_gate_stops_at_its_own_fitted_first_reading(synthetic, capsys):
-    """The $0 question nobody asked before the create, written as arithmetic.
+def fitted(payable: int) -> float:
+    model = PROJECTION["instrument"]["model"]
+    return model["intercept_seconds"] + model["slope_seconds_per_payable"] * payable
 
-    Substitute the registration's OWN fitted seconds for the first unit and ask what the gate
-    prints at n=1. It prints STOP — not because the run is unaffordable but because
+
+def rows_at(pack: dict, count: int, speed: float = 1.0) -> list[dict]:
+    """The first `count` units answered at `speed` × their fitted seconds."""
+    return [
+        {
+            "id": one["id"],
+            "seconds": round(fitted(one["payable_comments"]) * speed, 3),
+            "rendering_sha256": one["rendering_sha256"],
+            "reply": "{}",
+        }
+        for one in pack["items"][:count]
+    ]
+
+
+def the_pack() -> dict:
+    return json.loads((REPO_ROOT / "results" / "reader_topup_pack.json").read_text("utf-8"))
+
+
+def test_ATTEMPT_A_s_gate_stops_at_its_own_fitted_first_reading():
+    """The $0 question nobody asked before the create, kept as arithmetic.
+
+    Substitute the registration's OWN fitted seconds for the first unit and ask what ATTEMPT A's
+    gate prints at n=1. It prints STOP — not because the run is unaffordable but because
     `max(unread units ÷ read, unread payable ÷ read payable)` extrapolates the largest unit across
     all 132, and the units are ordered expensive-first. The run's one real measurement (77.5 s
-    against a fitted 80.4 s) confirms the model; the gate's estimator is what does not survive a
+    against a fitted 80.4 s) confirms the model; the estimator is what does not survive a
     population whose unit sizes span 1 to 16 with a median of 2.
 
-    This test asserts the CURRENT registration's behaviour, and it is meant to be edited: a
-    corrected estimator has to turn this into a GO deliberately, in the open, rather than by
-    nobody noticing. The corrected reading is computed beside it so the next registration has the
-    number ([[a_new_leg_joins_the_gates_denominator]]).
+    Attempt B's gate is asserted to GO on exactly this input in the test below. The two beside
+    each other ARE the correction ([[a_new_leg_joins_the_gates_denominator]]).
     """
-    pack = json.loads((REPO_ROOT / "results" / "reader_topup_pack.json").read_text("utf-8"))
-    model = PROJECTION["instrument"]["model"]
-    fitted = lambda payable: (  # noqa: E731 — the registration's own line, applied per unit
-        model["intercept_seconds"] + model["slope_seconds_per_payable"] * payable
-    )
+    pack = the_pack()
     first = pack["items"][0]
     assert first["payable_comments"] == 16  # expensive first, and this is the largest unit
+    answer = v5.projection(PREREG, 0.74, rows_at(pack, 1), 460.0, pack)
+
+    assert answer["verdict"] == "STOP"
+    assert answer["units_read"] == 1 and answer["projections"]["binding"]["which"] == "by_unit"
+    assert answer["projections"]["by_unit"]["seconds"] > answer["usable_seconds"]
+
+
+def test_ATTEMPT_B_s_gate_goes_on_the_same_reading(synthetic, capsys):
+    """The correction, driven through the whole command and not only the function."""
+    pack = the_pack()
     (synthetic / "pod.jsonl").write_text(
-        json.dumps(
-            {
-                "id": first["id"],
-                "seconds": round(fitted(first["payable_comments"]), 3),
-                "rendering_sha256": first["rendering_sha256"],
-                "reply": "{}",
-            },
-            ensure_ascii=False,
-        )
-        + "\n",
-        "utf-8",
+        "".join(json.dumps(row, ensure_ascii=False) + "\n" for row in rows_at(pack, 1)), "utf-8"
     )
     open_a_segment(now_minus_seconds=460.0)
     capsys.readouterr()
     code = driver.main(["--gate", "--raw", str(synthetic / "pod.jsonl")])
     answer = said(capsys)
 
-    assert code == 2 and answer["verdict"] == "STOP"
-    assert answer["units_read"] == 1 and answer["projections"]["binding"]["which"] == "by_unit"
-    assert answer["projections"]["by_unit"]["seconds"] > answer["usable_seconds"]
+    assert code == 0 and answer["verdict"] == "GO"
+    assert answer["binding"]["which"] == "fitted_model"
+    assert answer["headroom_seconds"] > 2000
+    legs = answer["reported_and_not_binding"]
+    assert legs["by_unit"]["seconds"] > answer["usable_seconds"]
+    assert legs["by_payable_comment"]["seconds"] < answer["usable_seconds"]
 
-    # and the estimator that WOULD have carried it, over the same unread units
-    unread = [one for one in pack["items"] if one["id"] != first["id"]]
-    corrected = sum(fitted(one["payable_comments"]) for one in unread)
-    assert corrected < answer["projections"]["by_unit"]["seconds"] / 1.5
-    assert 460.0 + corrected < answer["usable_seconds"]
-    assert (
-        460.0 + corrected * PROJECTION["instrument"]["out_of_sample"]["ratio"]
-        < answer["usable_seconds"]
+
+def test_the_calibration_floors_at_the_fit_so_a_fast_start_buys_nothing():
+    pack = the_pack()
+    quick = driver.projection(PREREG_B, 0.74, rows_at(pack, 3, speed=0.5), 460.0, pack)
+    exact = driver.projection(PREREG_B, 0.74, rows_at(pack, 3, speed=1.0), 460.0, pack)
+    assert quick["binding"]["measured_over_fitted"] < 1.0
+    assert quick["binding"]["calibration_used"] == 1.0 == exact["binding"]["calibration_used"]
+    assert quick["binding"]["seconds"] == exact["binding"]["seconds"]
+
+
+def test_a_pod_slower_than_the_fit_stretches_the_projection_and_stops():
+    pack = the_pack()
+    verdicts = {
+        speed: driver.projection(PREREG_B, 0.74, rows_at(pack, 3, speed=speed), 460.0, pack)
+        for speed in (1.0, 1.5, 2.0, 3.0)
+    }
+    assert verdicts[1.0]["verdict"] == "GO"
+    assert verdicts[3.0]["verdict"] == "STOP"
+    seconds = [verdicts[speed]["projected_total_seconds"] for speed in (1.0, 1.5, 2.0, 3.0)]
+    assert seconds == sorted(seconds)  # slower pod, longer projection, monotonically
+    for speed, gate in verdicts.items():
+        assert gate["binding"]["calibration_used"] == pytest.approx(max(speed, 1.0), abs=0.05)
+
+
+def test_the_whole_pack_at_fitted_seconds_never_stops():
+    """The sweep attempt A could not survive: every n, on a run that fits."""
+    pack = the_pack()
+    stops = []
+    elapsed = 285.0
+    for count in range(1, len(pack["items"]) + 1):
+        rows = rows_at(pack, count)
+        elapsed = 285.0 + sum(row["seconds"] for row in rows)
+        gate = driver.projection(PREREG_B, 0.74, rows, elapsed, pack)
+        if gate["verdict"] != "GO":
+            stops.append((count, gate["projected_total_seconds"], gate["usable_seconds"]))
+    assert stops == []
+    final = driver.projection(PREREG_B, 0.74, rows_at(pack, len(pack["items"])), elapsed, pack)
+    assert final["units_unread"] == 0 and final["binding"]["seconds"] == 0.0
+    assert final["projected_total_seconds"] < final["usable_seconds"]
+
+
+def test_attempt_b_differs_from_attempt_a_only_where_the_ruling_says():
+    """Re-derived here, and not read off the producer's own printout."""
+    import write_reader_topup_prereg_b as producer_b
+
+    left, right = dict(producer_b.flat(PREREG)), dict(producer_b.flat(PREREG_B))
+    moved = sorted(
+        {key for key in left.keys() & right.keys() if left[key] != right[key]}
+        | (set(left) ^ set(right))
     )
+    assert moved  # something DID change, or this test asserts nothing
+    for key in moved:
+        assert any(
+            key == one or key.startswith(one + ".") or key.startswith(one + "[")
+            for one in producer_b.MAY_MOVE
+        ), key
+    assert PREREG_B["money"]["cap_usd_all_in"] == PREREG["money"]["cap_usd_all_in"] == 2.00
+    assert PREREG_B["population"] == PREREG["population"]
+    assert PREREG_B["instruments"] == PREREG["instruments"]
+    assert (
+        PREREG_B["money"]["arithmetic"]["reading_projection_seconds"]
+        == PREREG["money"]["arithmetic"]["reading_projection_seconds"]
+    )
+    assert (
+        PREREG_B["supersedes"]["sha256"]
+        == hashlib.sha256(
+            (REPO_ROOT / "results" / "reader_topup_prereg.json").read_bytes()
+        ).hexdigest()
+    )
+
+
+def test_the_b_registration_rebuilds_byte_identical(tmp_path):
+    import write_reader_topup_prereg_b as producer_b
+
+    first, second = tmp_path / "a", tmp_path / "b"
+    assert producer_b.main(["--outdir", str(first)]) == 0
+    assert producer_b.main(["--outdir", str(second)]) == 0
+    name = producer_b.OUT_NAME
+    assert (first / name).read_bytes() == (second / name).read_bytes()
+    assert (first / name).read_bytes() == (REPO_ROOT / name).read_bytes()
+
+
+def test_the_b_producer_refuses_a_change_nobody_ruled():
+    import write_reader_topup_prereg_b as producer_b
+
+    tampered = json.loads(json.dumps(PREREG_B))
+    tampered["money"]["cap_usd_all_in"] = 3.00
+    with pytest.raises(SystemExit, match="nobody ruled"):
+        producer_b.assert_only_the_gate_moved(PREREG, tampered)
 
 
 # --- the driver's swaps -----------------------------------------------------
@@ -477,13 +580,14 @@ def test_the_gate_stops_at_its_own_fitted_first_reading(synthetic, capsys):
 
 def test_the_swap_puts_every_borrowed_name_back():
     before = {name: getattr(v5b, name) for name in driver.SWAPPED}
-    before_pack = v5.build_pack
+    before_pack, before_projection = v5.build_pack, v5.projection
     with driver.as_this_phase():
         assert v5b.PHASE == "reader-topup"
         assert v5b.PREREG == driver.PREREG
         assert v5.build_pack is driver.build_pack
+        assert v5.projection is driver.projection
     assert {name: getattr(v5b, name) for name in driver.SWAPPED} == before
-    assert v5.build_pack is before_pack
+    assert v5.build_pack is before_pack and v5.projection is before_projection
 
 
 def test_the_swap_refuses_a_name_v5b_no_longer_has(monkeypatch):

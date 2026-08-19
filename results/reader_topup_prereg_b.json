@@ -1,0 +1,2816 @@
+{
+  "attempt": "ATTEMPT B. Attempt A billed $0.099695 over two segments and its own gate STOPped it; this attempt inherits the step's cap, its ledger and its run record, so the segment it opens is the third and last the recovery clause allows. One attempt, one cap, and no third registration",
+  "authority": "the operator's ruling «выполни ветку B» of 2026-08-19, over the fork published in docs/reports/lora-b.md. There is no PROMPT file for this step: the ruling is the authority and this record is the registration it is executed under",
+  "contract": "docs/reports/lora-b.md — branch B",
+  "frozen_when_the_pod_exists": [
+    "results/reader_topup_pack.json",
+    "results/reader_topup_prereg.json",
+    "results/reader_topup_prereg_b.json",
+    "results/reader_topup_projection.json",
+    "src/market_pulse/prompts.py — the renderer and the parser",
+    "the reader_thread_gm4_v5 prompt text"
+  ],
+  "go_no_go": {
+    "backstop": {
+      "rule": "`--terminate-after` at create + 3.0 h. NOT a cap guard — at the worked example that is $2.22, over the cap. It is what deletes the pod if this Mac dies with the run open",
+      "terminate_after_hours": 3.0
+    },
+    "clock": "seconds since the `pod create` response, which is when the meter starts. Not since ssh came up and not since the model began loading — the machine is billed for provisioning too, and a clock that starts later prices a leg at zero",
+    "gate_records_APPEND": "the run record keeps `gates` as a LIST; every WAIT/GO/KILL snapshot is appended, none overwritten, each stamped with its segment and pod id",
+    "gates": {
+      "0_transport_ssh_deadman": {
+        "max_recreates": 2,
+        "rule": "if `runpodctl ssh info` has not answered with a connectable endpoint by 180 s of THIS segment's create-elapsed, the pod is killed and replaced. A third dead pod is a datacenter state and a STOP",
+        "threshold_seconds": 180.0
+      },
+      "1_first_reply": {
+        "affordability_deadline_since_create_seconds": 3620.8,
+        "ceiling_since_generation_started_seconds": 720,
+        "rule": "the first reply must have landed by the EARLIER of the two, both put on the create-elapsed axis. Affordability is loose on this registration — the cap buys far more than the projection needs — so the twelve-minute ceiling is the one that binds, and that is stated rather than left to be discovered"
+      },
+      "2_full_pass": {
+        "conservatism": "three ways. The calibration floors at 1.0 so a fast start cannot lengthen the run; the line over-predicts its own out-of-sample check by 1.08×; and the units are still ordered expensive-first, so the calibration is measured on the slowest units first",
+        "rule": "`elapsed + max(measured ÷ fitted(read), 1.0) × Σ fitted(unread) ≤ usable`, where `fitted` is the registered line over a unit's payable comments. Attempt A's two legs — unread units ÷ read and unread payable ÷ read payable — are still COMPUTED and printed beside it, and neither binds",
+        "scored_by": "scripts/read_threads_reader_topup.py::projection, through the swap onto v5",
+        "why_it_changed": "attempt A's rule extrapolates the units read across all 132, and this population's units carry 1 to 16 payable comments with a median of 2, ordered expensive-first. Its first reading therefore projected the largest unit onto the whole pack: 10 156 s against a 6 049 s fit, STOP at n=1, by construction rather than by chance. The property attempt A's rule needs — units of roughly one size — is written down here because it is what stopped holding"
+      }
+    },
+    "partial_is_a_result": "the 132 units are independent and the runner skips what is already answered, so a STOP at any gate leaves a USABLE partial buy: the threads that were read get a bought topic and an entity block, and the rest keep the branch-C substitute. Nothing downstream requires the pass to be complete — `build_pass1_sft` renders whatever verdicts exist",
+    "stop_rules": [
+      "a `costPerHr` above the $0.80/h ceiling at create → delete, no generation, STOP",
+      "gate 0 KILL twice → a third dead pod is a datacenter state, STOP",
+      "gate 1 or gate 2 STOP → scp everything, delete, and report what was read",
+      "more than 2 recreates in this attempt → STOP",
+      "never two billing endpoints at once, checked BEFORE `pod create` and not after"
+    ]
+  },
+  "instruments": {
+    "parser": {
+      "entry_point": "market_pulse.reader_v5.parse / merge",
+      "module": "src/market_pulse/prompts.py",
+      "sha256": "a4a5a5d08546f53af18117c37e49f7e396919555563e16737a633c1df1a86eec"
+    },
+    "prompt_sha256": {
+      "reader_thread_gm4_v5": "c529d279321269e19b39a84796debb3af01917ca55aa0a7365d17722aadb6089"
+    },
+    "same_instrument_as": "reader-v5b — the same registered text, the same serving config and the same ceilings. The 24 verdicts already bought and the ones this run buys have to be one instrument, or the training prompts carry two kinds of context and the difference lands inside the arm",
+    "serving": {
+      "adapter": null,
+      "chat_template": {
+        "add_generation_prompt": true,
+        "enable_thinking": false
+      },
+      "decoding": "greedy",
+      "do_sample": false,
+      "forward_batch_size": 1,
+      "gpu_class_preference": [
+        "ADA_24",
+        "ADA_24_PRO",
+        "AMPERE_24"
+      ],
+      "gpu_rule": "requested fastest-first and never asserted. probe-a asked for the display name «NVIDIA L4», the endpoint came back `gpuIds: AMPERE_24` and the worker reported an L4 runtime — so the CLASS is what is requested and the RUNTIME string is what lands in provenance. Seconds per thread are reported per card",
+      "merge_state": "base-no-adapter",
+      "model": "google/gemma-4-31b-it",
+      "model_revision": "842da3794eaa0b77d5f08bae87a17459d91ff475",
+      "output_tokens": 4000,
+      "quantization": {
+        "bnb_4bit_compute_dtype": "bfloat16",
+        "bnb_4bit_quant_type": "nf4",
+        "bnb_4bit_use_double_quant": true,
+        "load_in_4bit": true
+      },
+      "serving_config": "READER",
+      "template_note": "a NEW serving template for this run. `settings()` refuses config-mixing by design; the srv-2d, CAPTION and probe-a templates are never edited"
+    },
+    "task": "reader_thread_gm4_v5"
+  },
+  "money": {
+    "arithmetic": {
+      "at_each_boot": [
+        {
+          "boot_seconds": 180.0,
+          "fits": true,
+          "price_usd_per_hour": 0.8,
+          "seconds_left_for_reading": 8760.0,
+          "times_the_projection_that_fits": 1.448,
+          "usable_seconds": 8940.0,
+          "which_price": "ceiling"
+        },
+        {
+          "boot_seconds": 300.0,
+          "fits": true,
+          "price_usd_per_hour": 0.8,
+          "seconds_left_for_reading": 8640.0,
+          "times_the_projection_that_fits": 1.428,
+          "usable_seconds": 8940.0,
+          "which_price": "ceiling"
+        },
+        {
+          "boot_seconds": 480.0,
+          "fits": true,
+          "price_usd_per_hour": 0.8,
+          "seconds_left_for_reading": 8460.0,
+          "times_the_projection_that_fits": 1.399,
+          "usable_seconds": 8940.0,
+          "which_price": "ceiling"
+        },
+        {
+          "boot_seconds": 720.0,
+          "fits": true,
+          "price_usd_per_hour": 0.8,
+          "seconds_left_for_reading": 8220.0,
+          "times_the_projection_that_fits": 1.359,
+          "usable_seconds": 8940.0,
+          "which_price": "ceiling"
+        },
+        {
+          "boot_seconds": 1200.0,
+          "fits": true,
+          "price_usd_per_hour": 0.8,
+          "seconds_left_for_reading": 7740.0,
+          "times_the_projection_that_fits": 1.28,
+          "usable_seconds": 8940.0,
+          "which_price": "ceiling"
+        },
+        {
+          "boot_seconds": 180.0,
+          "fits": true,
+          "price_usd_per_hour": 0.74,
+          "seconds_left_for_reading": 9489.7,
+          "times_the_projection_that_fits": 1.569,
+          "usable_seconds": 9669.7,
+          "which_price": "reader_card_example"
+        },
+        {
+          "boot_seconds": 300.0,
+          "fits": true,
+          "price_usd_per_hour": 0.74,
+          "seconds_left_for_reading": 9369.7,
+          "times_the_projection_that_fits": 1.549,
+          "usable_seconds": 9669.7,
+          "which_price": "reader_card_example"
+        },
+        {
+          "boot_seconds": 480.0,
+          "fits": true,
+          "price_usd_per_hour": 0.74,
+          "seconds_left_for_reading": 9189.7,
+          "times_the_projection_that_fits": 1.519,
+          "usable_seconds": 9669.7,
+          "which_price": "reader_card_example"
+        },
+        {
+          "boot_seconds": 720.0,
+          "fits": true,
+          "price_usd_per_hour": 0.74,
+          "seconds_left_for_reading": 8949.7,
+          "times_the_projection_that_fits": 1.48,
+          "usable_seconds": 9669.7,
+          "which_price": "reader_card_example"
+        },
+        {
+          "boot_seconds": 1200.0,
+          "fits": true,
+          "price_usd_per_hour": 0.74,
+          "seconds_left_for_reading": 8469.7,
+          "times_the_projection_that_fits": 1.4,
+          "usable_seconds": 9669.7,
+          "which_price": "reader_card_example"
+        }
+      ],
+      "at_each_boot_rule": "the cap, at both prices, less the deletion margin and the boot, against the generation projection. A table and not a forecast: four boots are on record for this stack and they disagree by 6.7×, so the pessimistic end is what the cap has to survive",
+      "boot_deadline_rule": "the FIRST reply must have landed by the earlier of two deadlines put on one axis: 720 s after the generation process started, and the create-elapsed at which the remaining cap can no longer pay for the whole reading. On this registration the cap is generous and the first is the binding one; a generation that has not started yet has no ceiling on this axis",
+      "boot_kill_seconds": 720.0,
+      "delete_margin_seconds": 60.0,
+      "items": 132,
+      "model": {
+        "borrowed_from": "results/reader_topup_projection.json",
+        "in_sample_total_is_not_evidence": "least squares with an intercept forces the residuals to sum to zero, so this line reproduces the total of its OWN 26 items exactly. That is arithmetic. The check below is the one that carries information",
+        "intercept_seconds": 22.2242,
+        "line": "seconds ≈ intercept + slope × payable comments, least squares",
+        "n": 26,
+        "residuals": {
+          "max": 49.79,
+          "median": 3.29,
+          "min": -26.73
+        },
+        "rule": "each unread unit is projected at its OWN size, `intercept + slope × payable`, and the sum is calibrated by max(measured ÷ fitted(read units), 1.0). The floor is the conservatism: a pod faster than the fit is projected at the fit",
+        "slope_seconds_per_payable": 3.63508,
+        "used_by": "scripts/read_threads_reader_topup.py::projection"
+      },
+      "pre_generation_budget_rule": "usable seconds at the worked example less the reading projection — what this registration can afford to spend BEFORE the first reply. reader-v5's own registration went NEGATIVE here (−44.8 s) and the pod that followed was billed 727.9 s for a provisioning it had no budget for; the number is published so the slack is a fact and not a hope",
+      "pre_generation_budget_seconds": 3620.8,
+      "projection_record": {
+        "record": "results/reader_topup_projection.json",
+        "sha256": "cf925d30c7ee477eee76b9b5aa20001e57e16b74d25c501557a1aa96bd8566ab"
+      },
+      "reading_projection_seconds": 6048.9,
+      "the_names_are_the_consumers": "`boot_kill_seconds`, `reading_projection_seconds` and `delete_margin_seconds` are spelled the way `read_threads_reader_v4.deadlines` and `usable_seconds` READ them. A registration is consumed by shipped code, and a field it cannot find is a KeyError on the kill-rule path with a meter running — which is what the first attempt at this run bought for 23 billed seconds",
+      "worst_case_that_still_fits": 1.28
+    },
+    "cap_rule": "$2.00 all-in, frozen at the first `pod create`. It is the EXECUTOR's derivation from a price the operator ruled over — ≈$1.20 published in docs/reports/lora-b.md, $1.44 once the read is chunked into 132 units and priced at the $0.80/h ceiling — rounded up so the cap survives the worst boot on record at the worse price. Raising it is the operator's word BEFORE any endpoint; lowering it makes this record wrong, which is one constant and a rebuild",
+    "cap_usd_all_in": 2.0,
+    "guard": "python3.11 scripts/runpod_guard.py --step reader-topup --step-cap 2.00 --note '<why this reading>' — anchored BEFORE the pod and read at every gate",
+    "meter": {
+      "card_requested": "NVIDIA GeForce RTX 4090",
+      "datacenter": "EU-RO-1, pinned by network volume qw4nwleanc — the volume decides",
+      "price_ceiling_usd_per_hour": 0.8,
+      "price_rule": "**READ ON THE DAY.** `costPerHr` in the create response is the meter of record and every figure here is recomputed from it before the generation process starts. A projection that no longer fits deletes the pod and STOPS (Dv448)",
+      "resource": "ONE rented pod, billed for every second it EXISTS — from `pod create` to `pod delete`. `pod stop` does not stop the bill, so this run deletes and never stops",
+      "usd_per_second_at_the_example": 0.000205556,
+      "worked_example_rule": "$0.74/h is what reader-v5b was BILLED at on the 24 GB card this run asks for. The ceiling beside it is lora-b's, and both are worked because the first is what this run is likely to pay and the second is what it may not exceed",
+      "worked_example_usd_per_hour": 0.74
+    }
+  },
+  "phase": "reader-topup",
+  "population": {
+    "chunk_payable_max": 16,
+    "chunk_rule": "a thread of more than 16 payable comments is split into chunks of 16 in the store's own comment order, and the chunks' verdicts are merged back by `market_pulse.reader_v5.merge`. v5b read its 43-comment thread as 16/16/11 and every other thread whole; ten threads here are over the line, three of them past 100 comments",
+    "enumeration_sha256": "7445a7a6a87bd3279ea21f4c1340471c55b3184151cd034aa636ab651f4d6ef9",
+    "order": "descending payable comments, then thread id — the expensive units first",
+    "payable_comments": 857,
+    "purpose": "every one of these threads carries pass-1 training rows and no bought reader verdict. What the buy changes is measured in the projection record: 559 rows get a bought topic instead of a cut post fragment, and the entity block is expected to reach ~279 of 650 rows against 39 today",
+    "threads": 105,
+    "units": [
+      {
+        "channel": "@matusi_ukr",
+        "id": "@matusi_ukr:22058#1of8",
+        "msg_ids": [
+          576267,
+          576269,
+          576270,
+          576272,
+          576273,
+          576302,
+          576306,
+          576311,
+          576317,
+          576322,
+          576326,
+          576334,
+          576335,
+          576336,
+          576337,
+          576343
+        ],
+        "part": [
+          1,
+          8
+        ],
+        "payable_comments": 16,
+        "post_id": 22058,
+        "rendered_chars": 13220,
+        "rendering_sha256": "fda15464332ca682b958bc64e42f5e208c1e93ee0a79f7b0a55c14d673b2b940",
+        "thread": "@matusi_ukr:22058"
+      },
+      {
+        "channel": "@matusi_ukr",
+        "id": "@matusi_ukr:22058#2of8",
+        "msg_ids": [
+          576345,
+          576351,
+          576352,
+          576358,
+          576359,
+          576366,
+          576371,
+          576375,
+          576376,
+          576378,
+          576388,
+          576397,
+          576404,
+          576407,
+          576414,
+          576419
+        ],
+        "part": [
+          2,
+          8
+        ],
+        "payable_comments": 16,
+        "post_id": 22058,
+        "rendered_chars": 16281,
+        "rendering_sha256": "589c64337544ea15f7550bf6f9b508ca72ff57a937b4b7aaa986f5cd6846a38f",
+        "thread": "@matusi_ukr:22058"
+      },
+      {
+        "channel": "@matusi_ukr",
+        "id": "@matusi_ukr:22058#3of8",
+        "msg_ids": [
+          576426,
+          576427,
+          576428,
+          576430,
+          576433,
+          576435,
+          576436,
+          576440,
+          576445,
+          576452,
+          576460,
+          576461,
+          576464,
+          576469,
+          576471,
+          576472
+        ],
+        "part": [
+          3,
+          8
+        ],
+        "payable_comments": 16,
+        "post_id": 22058,
+        "rendered_chars": 12173,
+        "rendering_sha256": "4050849de34ab553e105ecbb3e7f0efc6b973fa4907069ac5aad74805a62d05a",
+        "thread": "@matusi_ukr:22058"
+      },
+      {
+        "channel": "@matusi_ukr",
+        "id": "@matusi_ukr:22058#4of8",
+        "msg_ids": [
+          576473,
+          576474,
+          576475,
+          576477,
+          576478,
+          576479,
+          576480,
+          576482,
+          576484,
+          576485,
+          576486,
+          576494,
+          576496,
+          576497,
+          576500,
+          576503
+        ],
+        "part": [
+          4,
+          8
+        ],
+        "payable_comments": 16,
+        "post_id": 22058,
+        "rendered_chars": 12568,
+        "rendering_sha256": "5975949a7fc40a98fbf3081c766b8d437a3a3925535674a10a28dc4059a2e86a",
+        "thread": "@matusi_ukr:22058"
+      },
+      {
+        "channel": "@matusi_ukr",
+        "id": "@matusi_ukr:22058#5of8",
+        "msg_ids": [
+          576504,
+          576510,
+          576514,
+          576515,
+          576516,
+          576519,
+          576529,
+          576531,
+          576538,
+          576539,
+          576544,
+          576545,
+          576547,
+          576548,
+          576549,
+          576550
+        ],
+        "part": [
+          5,
+          8
+        ],
+        "payable_comments": 16,
+        "post_id": 22058,
+        "rendered_chars": 11723,
+        "rendering_sha256": "fedb9e8ad10a65a0ea31e2b522a8dfc6c2aa7d179eec2b95155a5244a0c8346b",
+        "thread": "@matusi_ukr:22058"
+      },
+      {
+        "channel": "@matusi_ukr",
+        "id": "@matusi_ukr:22058#6of8",
+        "msg_ids": [
+          576553,
+          576557,
+          576558,
+          576565,
+          576567,
+          576570,
+          576574,
+          576579,
+          576582,
+          576585,
+          576587,
+          576594,
+          576598,
+          576602,
+          576603,
+          576607
+        ],
+        "part": [
+          6,
+          8
+        ],
+        "payable_comments": 16,
+        "post_id": 22058,
+        "rendered_chars": 12820,
+        "rendering_sha256": "054a055972a768b11d0d37431afd82fcd4ad93c6acf2f1acd90da529e491fd31",
+        "thread": "@matusi_ukr:22058"
+      },
+      {
+        "channel": "@matusi_ukr",
+        "id": "@matusi_ukr:22058#7of8",
+        "msg_ids": [
+          576610,
+          576612,
+          576615,
+          576619,
+          576622,
+          576630,
+          576654,
+          576658,
+          576661,
+          576672,
+          576686,
+          576691,
+          576694,
+          576698,
+          576703,
+          576707
+        ],
+        "part": [
+          7,
+          8
+        ],
+        "payable_comments": 16,
+        "post_id": 22058,
+        "rendered_chars": 12431,
+        "rendering_sha256": "c3c457fd3e19507715fdb743b8d31f81856c6d4104a1d296aee8433cd99eba30",
+        "thread": "@matusi_ukr:22058"
+      },
+      {
+        "channel": "@matusi_ukr",
+        "id": "@matusi_ukr:22058#8of8",
+        "msg_ids": [
+          576713,
+          576717,
+          576723,
+          576726,
+          576728,
+          576729,
+          576797,
+          576800,
+          576854,
+          576949,
+          577182,
+          577184,
+          577196
+        ],
+        "part": [
+          8,
+          8
+        ],
+        "payable_comments": 13,
+        "post_id": 22058,
+        "rendered_chars": 14162,
+        "rendering_sha256": "7a6f7a24fc1aedfc3995f7af995a2ec7e8484c7058f6f10028f81a9ea7e78a03",
+        "thread": "@matusi_ukr:22058"
+      },
+      {
+        "channel": "@matusi_ukr",
+        "id": "@matusi_ukr:22295#1of7",
+        "msg_ids": [
+          579615,
+          579616,
+          579619,
+          579627,
+          579638,
+          579642,
+          579646,
+          579649,
+          579652,
+          579660,
+          579663,
+          579664,
+          579665,
+          579672,
+          579679,
+          579685
+        ],
+        "part": [
+          1,
+          7
+        ],
+        "payable_comments": 16,
+        "post_id": 22295,
+        "rendered_chars": 11700,
+        "rendering_sha256": "373aee58fc66e157c69dd359906af11e2972e51012c14101dd0df383cb16bc86",
+        "thread": "@matusi_ukr:22295"
+      },
+      {
+        "channel": "@matusi_ukr",
+        "id": "@matusi_ukr:22295#2of7",
+        "msg_ids": [
+          579687,
+          579691,
+          579694,
+          579699,
+          579700,
+          579704,
+          579705,
+          579708,
+          579709,
+          579710,
+          579712,
+          579716,
+          579717,
+          579718,
+          579724,
+          579725
+        ],
+        "part": [
+          2,
+          7
+        ],
+        "payable_comments": 16,
+        "post_id": 22295,
+        "rendered_chars": 12536,
+        "rendering_sha256": "5e79e5a9e8bf4445b21ff85ca07ad71153eaf4c1c6a51d82bef736b8990cd493",
+        "thread": "@matusi_ukr:22295"
+      },
+      {
+        "channel": "@matusi_ukr",
+        "id": "@matusi_ukr:22295#3of7",
+        "msg_ids": [
+          579726,
+          579729,
+          579730,
+          579733,
+          579736,
+          579738,
+          579741,
+          579749,
+          579753,
+          579757,
+          579758,
+          579759,
+          579765,
+          579766,
+          579768,
+          579772
+        ],
+        "part": [
+          3,
+          7
+        ],
+        "payable_comments": 16,
+        "post_id": 22295,
+        "rendered_chars": 12263,
+        "rendering_sha256": "c2517ce17dab298dd62b850c8144b8cabdae3bb626fd5fbcbae0e4a21d83d9da",
+        "thread": "@matusi_ukr:22295"
+      },
+      {
+        "channel": "@matusi_ukr",
+        "id": "@matusi_ukr:22295#4of7",
+        "msg_ids": [
+          579778,
+          579779,
+          579780,
+          579781,
+          579782,
+          579786,
+          579792,
+          579796,
+          579800,
+          579810,
+          579811,
+          579814,
+          579820,
+          579823,
+          579825,
+          579829
+        ],
+        "part": [
+          4,
+          7
+        ],
+        "payable_comments": 16,
+        "post_id": 22295,
+        "rendered_chars": 12818,
+        "rendering_sha256": "0bf68a45890b0706619bd10d13a52e6bf5310d46ab2f2e5f4975e6348c3e2b53",
+        "thread": "@matusi_ukr:22295"
+      },
+      {
+        "channel": "@matusi_ukr",
+        "id": "@matusi_ukr:22295#5of7",
+        "msg_ids": [
+          579833,
+          579835,
+          579839,
+          579840,
+          579856,
+          579857,
+          579862,
+          579863,
+          579864,
+          579868,
+          579869,
+          579870,
+          579875,
+          579880,
+          579885,
+          579888
+        ],
+        "part": [
+          5,
+          7
+        ],
+        "payable_comments": 16,
+        "post_id": 22295,
+        "rendered_chars": 11913,
+        "rendering_sha256": "ea3a0b47101060953cb78c4b8ecdbc9203f5ae5664aeeb584147b5b9fcc5fe4e",
+        "thread": "@matusi_ukr:22295"
+      },
+      {
+        "channel": "@matusi_ukr",
+        "id": "@matusi_ukr:22295#6of7",
+        "msg_ids": [
+          579908,
+          579913,
+          579916,
+          579922,
+          579925,
+          579941,
+          579948,
+          579949,
+          579950,
+          579959,
+          579974,
+          579978,
+          579982,
+          579987,
+          579994,
+          580014
+        ],
+        "part": [
+          6,
+          7
+        ],
+        "payable_comments": 16,
+        "post_id": 22295,
+        "rendered_chars": 11968,
+        "rendering_sha256": "3b35dc4f1ac4f74e0b0469d3b50db0dc4baeb82d1e89824abd1b1fc8c7d88189",
+        "thread": "@matusi_ukr:22295"
+      },
+      {
+        "channel": "@matusi_ukr",
+        "id": "@matusi_ukr:22295#7of7",
+        "msg_ids": [
+          580015,
+          580018,
+          580029,
+          580041,
+          580062,
+          580064,
+          580073,
+          580117,
+          580196,
+          580346,
+          580424,
+          580439
+        ],
+        "part": [
+          7,
+          7
+        ],
+        "payable_comments": 12,
+        "post_id": 22295,
+        "rendered_chars": 12903,
+        "rendering_sha256": "003d75abaada4fb623d0665bcb4265a7a8858dbf19112a9d8726a2e7a40fd61d",
+        "thread": "@matusi_ukr:22295"
+      },
+      {
+        "channel": "@matusi_ukr",
+        "id": "@matusi_ukr:22133#1of7",
+        "msg_ids": [
+          577285,
+          577289,
+          577295,
+          577300,
+          577305,
+          577311,
+          577312,
+          577313,
+          577314,
+          577317,
+          577323,
+          577329,
+          577333,
+          577339,
+          577343,
+          577344
+        ],
+        "part": [
+          1,
+          7
+        ],
+        "payable_comments": 16,
+        "post_id": 22133,
+        "rendered_chars": 12864,
+        "rendering_sha256": "d13c0661eb81a4f4f3321039c0543adaa98d8f2a914c16036d6e039df5d0ae74",
+        "thread": "@matusi_ukr:22133"
+      },
+      {
+        "channel": "@matusi_ukr",
+        "id": "@matusi_ukr:22133#2of7",
+        "msg_ids": [
+          577346,
+          577350,
+          577354,
+          577355,
+          577356,
+          577358,
+          577359,
+          577373,
+          577378,
+          577389,
+          577399,
+          577404,
+          577408,
+          577415,
+          577420,
+          577426
+        ],
+        "part": [
+          2,
+          7
+        ],
+        "payable_comments": 16,
+        "post_id": 22133,
+        "rendered_chars": 12548,
+        "rendering_sha256": "2a7c3a9a3efc4fc1d47e896d7cee2fc17d2c803ce66b35bb50062ab0a7490c89",
+        "thread": "@matusi_ukr:22133"
+      },
+      {
+        "channel": "@matusi_ukr",
+        "id": "@matusi_ukr:22133#3of7",
+        "msg_ids": [
+          577432,
+          577437,
+          577451,
+          577461,
+          577466,
+          577474,
+          577475,
+          577476,
+          577481,
+          577483,
+          577490,
+          577493,
+          577494,
+          577498,
+          577501,
+          577506
+        ],
+        "part": [
+          3,
+          7
+        ],
+        "payable_comments": 16,
+        "post_id": 22133,
+        "rendered_chars": 13544,
+        "rendering_sha256": "8d5690c58ce8a42c957a4320fa58daa485613ce54f26542933912ad0be0ebf1e",
+        "thread": "@matusi_ukr:22133"
+      },
+      {
+        "channel": "@matusi_ukr",
+        "id": "@matusi_ukr:22133#4of7",
+        "msg_ids": [
+          577508,
+          577513,
+          577517,
+          577525,
+          577527,
+          577530,
+          577532,
+          577534,
+          577538,
+          577547,
+          577554,
+          577559,
+          577563,
+          577568,
+          577570,
+          577576
+        ],
+        "part": [
+          4,
+          7
+        ],
+        "payable_comments": 16,
+        "post_id": 22133,
+        "rendered_chars": 12404,
+        "rendering_sha256": "897540b28282d3acfef82ac13f05eb019dbd6e6b724c895d6513dac7c1b04063",
+        "thread": "@matusi_ukr:22133"
+      },
+      {
+        "channel": "@matusi_ukr",
+        "id": "@matusi_ukr:22133#5of7",
+        "msg_ids": [
+          577581,
+          577586,
+          577589,
+          577592,
+          577595,
+          577604,
+          577605,
+          577608,
+          577616,
+          577621,
+          577624,
+          577630,
+          577635,
+          577638,
+          577639,
+          577646
+        ],
+        "part": [
+          5,
+          7
+        ],
+        "payable_comments": 16,
+        "post_id": 22133,
+        "rendered_chars": 14814,
+        "rendering_sha256": "a2a7420b1177e7edaa86e301d518ce22b318f56f6d447a226b6ba070e1f2bcf5",
+        "thread": "@matusi_ukr:22133"
+      },
+      {
+        "channel": "@matusi_ukr",
+        "id": "@matusi_ukr:22133#6of7",
+        "msg_ids": [
+          577647,
+          577656,
+          577663,
+          577673,
+          577677,
+          577683,
+          577686,
+          577693,
+          577694,
+          577696,
+          577703,
+          577713,
+          577714,
+          577718,
+          577719,
+          577720
+        ],
+        "part": [
+          6,
+          7
+        ],
+        "payable_comments": 16,
+        "post_id": 22133,
+        "rendered_chars": 12422,
+        "rendering_sha256": "4016b9f0e71c76dc93522192c9d19f9e35bf61ef62d8a5f2d2a80f889f595f63",
+        "thread": "@matusi_ukr:22133"
+      },
+      {
+        "channel": "@matusi_ukr",
+        "id": "@matusi_ukr:22133#7of7",
+        "msg_ids": [
+          577721,
+          577735,
+          577740,
+          577764,
+          577794,
+          577825,
+          577927,
+          577945,
+          578441
+        ],
+        "part": [
+          7,
+          7
+        ],
+        "payable_comments": 9,
+        "post_id": 22133,
+        "rendered_chars": 13074,
+        "rendering_sha256": "a85907bc2a42720a1430b8fb9f2bf8ecc1568ad325c597c4c8110c44935dbfba",
+        "thread": "@matusi_ukr:22133"
+      },
+      {
+        "channel": "@matusi_ukr",
+        "id": "@matusi_ukr:22092#1of3",
+        "msg_ids": [
+          576876,
+          576877,
+          576878,
+          576879,
+          576882,
+          576884,
+          576885,
+          576886,
+          576887,
+          576890,
+          576891,
+          576892,
+          576893,
+          576897,
+          576899,
+          576901
+        ],
+        "part": [
+          1,
+          3
+        ],
+        "payable_comments": 16,
+        "post_id": 22092,
+        "rendered_chars": 13112,
+        "rendering_sha256": "d25ab37d449195a508f3cb776aec877620bed5bec48692ea07d0e6af221bc861",
+        "thread": "@matusi_ukr:22092"
+      },
+      {
+        "channel": "@matusi_ukr",
+        "id": "@matusi_ukr:22092#2of3",
+        "msg_ids": [
+          576902,
+          576903,
+          576904,
+          576913,
+          576914,
+          576915,
+          576917,
+          576918,
+          576919,
+          576920,
+          576927,
+          576928,
+          576930,
+          576932,
+          576942,
+          576943
+        ],
+        "part": [
+          2,
+          3
+        ],
+        "payable_comments": 16,
+        "post_id": 22092,
+        "rendered_chars": 12013,
+        "rendering_sha256": "14465c56a7e4db9c6e62e4adec80fcef1aa12813bdcb8d07cfe3dcc6947a082c",
+        "thread": "@matusi_ukr:22092"
+      },
+      {
+        "channel": "@matusi_ukr",
+        "id": "@matusi_ukr:22092#3of3",
+        "msg_ids": [
+          576968,
+          576969,
+          576970
+        ],
+        "part": [
+          3,
+          3
+        ],
+        "payable_comments": 3,
+        "post_id": 22092,
+        "rendered_chars": 10367,
+        "rendering_sha256": "1197b9277788d062594eb5bd0f0a1e3231690ee7e90143897c60312e78ab1a8f",
+        "thread": "@matusi_ukr:22092"
+      },
+      {
+        "channel": "@mandziak",
+        "id": "@mandziak:3679#1of2",
+        "msg_ids": [
+          47932,
+          47933,
+          47934,
+          47935,
+          47936,
+          47937,
+          47938,
+          47939,
+          47940,
+          47941,
+          47942,
+          47943,
+          47947,
+          47948,
+          47950,
+          47952
+        ],
+        "part": [
+          1,
+          2
+        ],
+        "payable_comments": 16,
+        "post_id": 3679,
+        "rendered_chars": 13452,
+        "rendering_sha256": "e33e1f7a377c556ecbe6a3cbe908b2a9188779ec4eee7e274abffedfc21a813a",
+        "thread": "@mandziak:3679"
+      },
+      {
+        "channel": "@mandziak",
+        "id": "@mandziak:3679#2of2",
+        "msg_ids": [
+          47957,
+          47964,
+          47965,
+          47976,
+          47984,
+          47986,
+          47987,
+          47988,
+          47990,
+          47995,
+          47996,
+          47998,
+          48000,
+          48001,
+          48002
+        ],
+        "part": [
+          2,
+          2
+        ],
+        "payable_comments": 15,
+        "post_id": 3679,
+        "rendered_chars": 12722,
+        "rendering_sha256": "1e2623aa24cae40fbc830259eaad32c25d4928afb25e45e8dfe12aa93d67c843",
+        "thread": "@mandziak:3679"
+      },
+      {
+        "channel": "@matusi_ukr",
+        "id": "@matusi_ukr:22158#1of2",
+        "msg_ids": [
+          578029,
+          578031,
+          578032,
+          578034,
+          578035,
+          578036,
+          578037,
+          578038,
+          578048,
+          578049,
+          578050,
+          578053,
+          578054,
+          578055,
+          578056,
+          578059
+        ],
+        "part": [
+          1,
+          2
+        ],
+        "payable_comments": 16,
+        "post_id": 22158,
+        "rendered_chars": 13031,
+        "rendering_sha256": "ab7d84321ae3a1461a2860ed56633d329b96e589ddb4df7a11437a05b658b0e5",
+        "thread": "@matusi_ukr:22158"
+      },
+      {
+        "channel": "@matusi_ukr",
+        "id": "@matusi_ukr:22158#2of2",
+        "msg_ids": [
+          578060,
+          578061,
+          578062,
+          578064,
+          578065,
+          578066,
+          578067,
+          578071,
+          578075,
+          578081,
+          578098
+        ],
+        "part": [
+          2,
+          2
+        ],
+        "payable_comments": 11,
+        "post_id": 22158,
+        "rendered_chars": 12077,
+        "rendering_sha256": "e994062f597d3b8e8370d5dc421667ccc754ae06d78990dd7438ec6225c688e3",
+        "thread": "@matusi_ukr:22158"
+      },
+      {
+        "channel": "@mandziak",
+        "id": "@mandziak:3708#1of2",
+        "msg_ids": [
+          48226,
+          48227,
+          48232,
+          48233,
+          48234,
+          48235,
+          48236,
+          48238,
+          48240,
+          48241,
+          48244,
+          48245,
+          48273,
+          48275,
+          48278,
+          48279
+        ],
+        "part": [
+          1,
+          2
+        ],
+        "payable_comments": 16,
+        "post_id": 3708,
+        "rendered_chars": 12221,
+        "rendering_sha256": "22232b492e5d823e3abaf458b9bd01a89b14ff7e91a05113b482c1fda4a1efb8",
+        "thread": "@mandziak:3708"
+      },
+      {
+        "channel": "@mandziak",
+        "id": "@mandziak:3708#2of2",
+        "msg_ids": [
+          48280,
+          48288,
+          48313,
+          48314
+        ],
+        "part": [
+          2,
+          2
+        ],
+        "payable_comments": 4,
+        "post_id": 3708,
+        "rendered_chars": 10408,
+        "rendering_sha256": "ed5f0503ca0bf94875913860320c4b6d519bb46cd825e5d74a4439f3abf6ce7c",
+        "thread": "@mandziak:3708"
+      },
+      {
+        "channel": "@mandziak",
+        "id": "@mandziak:3718#1of2",
+        "msg_ids": [
+          48390,
+          48391,
+          48392,
+          48394,
+          48395,
+          48396,
+          48397,
+          48398,
+          48399,
+          48400,
+          48401,
+          48405,
+          48406,
+          48407,
+          48408,
+          48415
+        ],
+        "part": [
+          1,
+          2
+        ],
+        "payable_comments": 16,
+        "post_id": 3718,
+        "rendered_chars": 11889,
+        "rendering_sha256": "f71a3a07f24fc5ef7a68812fd42173c949984643413558dc9e7cbc67827c9561",
+        "thread": "@mandziak:3718"
+      },
+      {
+        "channel": "@mandziak",
+        "id": "@mandziak:3718#2of2",
+        "msg_ids": [
+          48424,
+          48450,
+          48694,
+          49067
+        ],
+        "part": [
+          2,
+          2
+        ],
+        "payable_comments": 4,
+        "post_id": 3718,
+        "rendered_chars": 10774,
+        "rendering_sha256": "f15a4609391c0950b974d5fc49662f676eac02f9a1e305388196b8ae69e19816",
+        "thread": "@mandziak:3718"
+      },
+      {
+        "channel": "@klopotenkofood",
+        "id": "@klopotenkofood:6032#1of2",
+        "msg_ids": [
+          21177,
+          21178,
+          21180,
+          21181,
+          21182,
+          21183,
+          21184,
+          21186,
+          21187,
+          21188,
+          21189,
+          21190,
+          21191,
+          21192,
+          21193,
+          21194
+        ],
+        "part": [
+          1,
+          2
+        ],
+        "payable_comments": 16,
+        "post_id": 6032,
+        "rendered_chars": 11725,
+        "rendering_sha256": "5b954c1ba7f0b790aabc7a9d7af380f67d63d5ebf54714f7da2e02f8a3d5b914",
+        "thread": "@klopotenkofood:6032"
+      },
+      {
+        "channel": "@klopotenkofood",
+        "id": "@klopotenkofood:6032#2of2",
+        "msg_ids": [
+          21195
+        ],
+        "part": [
+          2,
+          2
+        ],
+        "payable_comments": 1,
+        "post_id": 6032,
+        "rendered_chars": 10102,
+        "rendering_sha256": "10c873225c6cb89e36d16310b3303b62485d98b42f41dca5adbe63f1bfb8ffff",
+        "thread": "@klopotenkofood:6032"
+      },
+      {
+        "channel": "@matusi_ukr",
+        "id": "@matusi_ukr:22308#1of2",
+        "msg_ids": [
+          580137,
+          580138,
+          580139,
+          580141,
+          580142,
+          580143,
+          580144,
+          580146,
+          580147,
+          580148,
+          580149,
+          580150,
+          580153,
+          580159,
+          580167,
+          580170
+        ],
+        "part": [
+          1,
+          2
+        ],
+        "payable_comments": 16,
+        "post_id": 22308,
+        "rendered_chars": 16439,
+        "rendering_sha256": "c9264e8daa77378137038978d3b2a7ab0531f1eeca5fdfe7cd34ad59ffaba622",
+        "thread": "@matusi_ukr:22308"
+      },
+      {
+        "channel": "@matusi_ukr",
+        "id": "@matusi_ukr:22308#2of2",
+        "msg_ids": [
+          580173
+        ],
+        "part": [
+          2,
+          2
+        ],
+        "payable_comments": 1,
+        "post_id": 22308,
+        "rendered_chars": 10525,
+        "rendering_sha256": "1c086844223430ad22bf0a035968e4a3bbf53875dc58a37b00ae0501660a670d",
+        "thread": "@matusi_ukr:22308"
+      },
+      {
+        "channel": "@matusi_ukr",
+        "id": "@matusi_ukr:22265",
+        "msg_ids": [
+          579275,
+          579276,
+          579277,
+          579278,
+          579279,
+          579285,
+          579286,
+          579287,
+          579288,
+          579293,
+          579294,
+          579295,
+          579300,
+          579301,
+          579302,
+          579314
+        ],
+        "part": null,
+        "payable_comments": 16,
+        "post_id": 22265,
+        "rendered_chars": 11386,
+        "rendering_sha256": "8871bbfe53a1307bab56e19a33678d9548694149bbd4f2bd62592e18a8b3c566",
+        "thread": "@matusi_ukr:22265"
+      },
+      {
+        "channel": "@matusi_ukr",
+        "id": "@matusi_ukr:22217",
+        "msg_ids": [
+          578835,
+          578836,
+          578838,
+          578839,
+          578840,
+          578841,
+          578842,
+          578843,
+          578844,
+          578845,
+          578895,
+          578930,
+          579039,
+          579480
+        ],
+        "part": null,
+        "payable_comments": 14,
+        "post_id": 22217,
+        "rendered_chars": 13381,
+        "rendering_sha256": "371f3e339a47df0adca82a310a6adac120f58778f713612ce51fd9340dac79c5",
+        "thread": "@matusi_ukr:22217"
+      },
+      {
+        "channel": "@mandziak",
+        "id": "@mandziak:3753",
+        "msg_ids": [
+          48853,
+          48854,
+          48855,
+          48860,
+          48864,
+          48867,
+          48868,
+          48870,
+          48873,
+          48881,
+          48882,
+          48944,
+          49220
+        ],
+        "part": null,
+        "payable_comments": 13,
+        "post_id": 3753,
+        "rendered_chars": 12840,
+        "rendering_sha256": "f50c2c5ed1b5e3e7f9a86689dcfd0c9dcfc9e727abbc89f5b9e6a0ca8c3b22b5",
+        "thread": "@mandziak:3753"
+      },
+      {
+        "channel": "@matusi_ukr",
+        "id": "@matusi_ukr:22263",
+        "msg_ids": [
+          579242,
+          579243,
+          579244,
+          579245,
+          579246,
+          579247,
+          579249,
+          579250,
+          579251,
+          579254,
+          579397,
+          579446,
+          580098
+        ],
+        "part": null,
+        "payable_comments": 13,
+        "post_id": 22263,
+        "rendered_chars": 13774,
+        "rendering_sha256": "dea3122ae629a82f311ba9ef4059d57b6fedc0b353248fee35f8ef3f01ea419e",
+        "thread": "@matusi_ukr:22263"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "id": "@VARUS_channel:10367",
+        "msg_ids": [
+          20766,
+          20945,
+          20947,
+          20979,
+          20980,
+          20981,
+          20982,
+          20983,
+          20984,
+          20985,
+          21005,
+          21006
+        ],
+        "part": null,
+        "payable_comments": 12,
+        "post_id": 10367,
+        "rendered_chars": 10715,
+        "rendering_sha256": "de39a70d937340cce0056f1f156b24e6d47f5e68087bc85fb8be6cf2a87d7914",
+        "thread": "@VARUS_channel:10367"
+      },
+      {
+        "channel": "@matusi_ukr",
+        "id": "@matusi_ukr:22131",
+        "msg_ids": [
+          577262,
+          577263,
+          577264,
+          577265,
+          577266,
+          577267,
+          577274,
+          577282,
+          577283,
+          577489,
+          577623,
+          578253
+        ],
+        "part": null,
+        "payable_comments": 12,
+        "post_id": 22131,
+        "rendered_chars": 15868,
+        "rendering_sha256": "faf9c01343c7bf265628a42c058324405146a748fc2e59b8410d2edd527d9823",
+        "thread": "@matusi_ukr:22131"
+      },
+      {
+        "channel": "@mandziak",
+        "id": "@mandziak:3707",
+        "msg_ids": [
+          48214,
+          48215,
+          48217,
+          48218,
+          48219,
+          48220,
+          48230,
+          48239,
+          48242,
+          48243,
+          48348
+        ],
+        "part": null,
+        "payable_comments": 11,
+        "post_id": 3707,
+        "rendered_chars": 11665,
+        "rendering_sha256": "76c174da7a16fd162bc4d78bddb31802d796dd629abf387aab0b8ec5d098f1b2",
+        "thread": "@mandziak:3707"
+      },
+      {
+        "channel": "@klopotenkofood",
+        "id": "@klopotenkofood:6060",
+        "msg_ids": [
+          21343,
+          21344,
+          21345,
+          21346,
+          21347,
+          21349,
+          21350,
+          21351,
+          21353,
+          21366
+        ],
+        "part": null,
+        "payable_comments": 10,
+        "post_id": 6060,
+        "rendered_chars": 12036,
+        "rendering_sha256": "51318f316d2bb142b13a3175cfaab50e7ed2bddfe7d0d5be19248f30e012f793",
+        "thread": "@klopotenkofood:6060"
+      },
+      {
+        "channel": "@tarilka_malyuka",
+        "id": "@tarilka_malyuka:695",
+        "msg_ids": [
+          8,
+          9,
+          10,
+          11,
+          12,
+          16,
+          17,
+          18,
+          19,
+          50
+        ],
+        "part": null,
+        "payable_comments": 10,
+        "post_id": 695,
+        "rendered_chars": 14550,
+        "rendering_sha256": "05c8baacdebc1312c7fc780e7b36e8c2b8ae47b328beac62a725c2e26279ffb5",
+        "thread": "@tarilka_malyuka:695"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "id": "@VARUS_channel:10349",
+        "msg_ids": [
+          20649,
+          20651,
+          20655,
+          20658,
+          20660,
+          20675,
+          20678,
+          20679,
+          20680
+        ],
+        "part": null,
+        "payable_comments": 9,
+        "post_id": 10349,
+        "rendered_chars": 10740,
+        "rendering_sha256": "77c8f91361644575f85e4880d4ea9a8ec0cc41c0c00ad5eba3517e127873e0d7",
+        "thread": "@VARUS_channel:10349"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "id": "@VARUS_channel:10528",
+        "msg_ids": [
+          21396,
+          21398,
+          21399,
+          21400,
+          21403,
+          21406,
+          21409,
+          21410,
+          21431
+        ],
+        "part": null,
+        "payable_comments": 9,
+        "post_id": 10528,
+        "rendered_chars": 10822,
+        "rendering_sha256": "751b5717012050b948168063a419543413affbec9e27fb87c540f94e6d9f2c08",
+        "thread": "@VARUS_channel:10528"
+      },
+      {
+        "channel": "@klopotenkofood",
+        "id": "@klopotenkofood:6035",
+        "msg_ids": [
+          21205,
+          21206,
+          21207,
+          21208,
+          21209,
+          21210,
+          21211,
+          21221,
+          21229
+        ],
+        "part": null,
+        "payable_comments": 9,
+        "post_id": 6035,
+        "rendered_chars": 11198,
+        "rendering_sha256": "8e64e5faa16094cebe33ad7ece2256813df74cd6cf4ace67d6a786937c397114",
+        "thread": "@klopotenkofood:6035"
+      },
+      {
+        "channel": "@matusi_ukr",
+        "id": "@matusi_ukr:22111",
+        "msg_ids": [
+          577082,
+          577083,
+          577084,
+          577085,
+          577086,
+          577088,
+          577089,
+          577092,
+          577159
+        ],
+        "part": null,
+        "payable_comments": 9,
+        "post_id": 22111,
+        "rendered_chars": 12510,
+        "rendering_sha256": "6f6352aa85f9afc7e02bb0bdcb6cdb57689af8b268e7527666b5e6228ac284ab",
+        "thread": "@matusi_ukr:22111"
+      },
+      {
+        "channel": "@kopiyochka1",
+        "id": "@kopiyochka1:21720",
+        "msg_ids": [
+          391531,
+          391532,
+          391539,
+          391542,
+          391544,
+          391772,
+          391773,
+          391774
+        ],
+        "part": null,
+        "payable_comments": 8,
+        "post_id": 21720,
+        "rendered_chars": 10781,
+        "rendering_sha256": "38e38f60b0647ea337b91f6f08b0dc6546e8a8d3f0f92a8d25697c3843f73dc4",
+        "thread": "@kopiyochka1:21720"
+      },
+      {
+        "channel": "@mandziak",
+        "id": "@mandziak:3702",
+        "msg_ids": [
+          48171,
+          48182,
+          48199,
+          48207,
+          48209,
+          48216,
+          48346,
+          49053
+        ],
+        "part": null,
+        "payable_comments": 8,
+        "post_id": 3702,
+        "rendered_chars": 12304,
+        "rendering_sha256": "3ed85ee3934732c2e00b26721367a14ac78341c6381f6aa18dfbc85c5914eff5",
+        "thread": "@mandziak:3702"
+      },
+      {
+        "channel": "@mandziak",
+        "id": "@mandziak:3736",
+        "msg_ids": [
+          48527,
+          48528,
+          48529,
+          48530,
+          48535,
+          48596,
+          49159
+        ],
+        "part": null,
+        "payable_comments": 7,
+        "post_id": 3736,
+        "rendered_chars": 14213,
+        "rendering_sha256": "d9b10c4897834931b0b857488cce6833e7fdaf7f6f5ce4782d18815b31b36f1d",
+        "thread": "@mandziak:3736"
+      },
+      {
+        "channel": "@mandziak",
+        "id": "@mandziak:3768",
+        "msg_ids": [
+          49012,
+          49013,
+          49014,
+          49015,
+          49018,
+          49023,
+          49225
+        ],
+        "part": null,
+        "payable_comments": 7,
+        "post_id": 3768,
+        "rendered_chars": 13151,
+        "rendering_sha256": "ada6fc5fa9824e88827051a9862225dcefaadd9f27a0951a06660124cacb0e8d",
+        "thread": "@mandziak:3768"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "id": "@VARUS_channel:10466",
+        "msg_ids": [
+          21385,
+          21386,
+          21387,
+          21389,
+          21390,
+          21393
+        ],
+        "part": null,
+        "payable_comments": 6,
+        "post_id": 10466,
+        "rendered_chars": 10848,
+        "rendering_sha256": "957091d832fc9746410b6bff32fd98fe040adec0a9dfd6a5b9f94d143773ad5d",
+        "thread": "@VARUS_channel:10466"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "id": "@VARUS_channel:10470",
+        "msg_ids": [
+          21236,
+          21237,
+          21238,
+          21239,
+          21240,
+          21241
+        ],
+        "part": null,
+        "payable_comments": 6,
+        "post_id": 10470,
+        "rendered_chars": 10922,
+        "rendering_sha256": "3656e626d084cf0f7c7ef61fcc12c5fc97711301cf96e06e01ce2bfd2b15de40",
+        "thread": "@VARUS_channel:10470"
+      },
+      {
+        "channel": "@matusi_ukr",
+        "id": "@matusi_ukr:22195",
+        "msg_ids": [
+          578383,
+          578384,
+          578386,
+          578388,
+          578389,
+          578457
+        ],
+        "part": null,
+        "payable_comments": 6,
+        "post_id": 22195,
+        "rendered_chars": 11148,
+        "rendering_sha256": "a265f2d5f4b3091db8e735ba1e1a7de50bb5beed48bdb00660b5a71f0bedaed1",
+        "thread": "@matusi_ukr:22195"
+      },
+      {
+        "channel": "@ya_Nenka",
+        "id": "@ya_Nenka:836",
+        "msg_ids": [
+          2577,
+          2579,
+          2580,
+          2581,
+          2582,
+          2595
+        ],
+        "part": null,
+        "payable_comments": 6,
+        "post_id": 836,
+        "rendered_chars": 14244,
+        "rendering_sha256": "5297428239c1b0daed4a913c6446ce94de7aa233a3e31347b19abd86a37a14df",
+        "thread": "@ya_Nenka:836"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "id": "@VARUS_channel:10525",
+        "msg_ids": [
+          21377,
+          21379,
+          21380,
+          21381,
+          21383
+        ],
+        "part": null,
+        "payable_comments": 5,
+        "post_id": 10525,
+        "rendered_chars": 10446,
+        "rendering_sha256": "2e3d63b9868ae1ab5b9861cc58435fa0ea20b59eab65a62ec01a3e98f818b30f",
+        "thread": "@VARUS_channel:10525"
+      },
+      {
+        "channel": "@mandziak",
+        "id": "@mandziak:3667",
+        "msg_ids": [
+          47830,
+          47832,
+          47859,
+          47860,
+          48201
+        ],
+        "part": null,
+        "payable_comments": 5,
+        "post_id": 3667,
+        "rendered_chars": 12892,
+        "rendering_sha256": "0908acb875f50a7591d9fc11d6c107533d88cd0d9291c7c8d00013cdd5f67410",
+        "thread": "@mandziak:3667"
+      },
+      {
+        "channel": "@mandziak",
+        "id": "@mandziak:3694",
+        "msg_ids": [
+          48097,
+          48098,
+          48105,
+          48107,
+          48108
+        ],
+        "part": null,
+        "payable_comments": 5,
+        "post_id": 3694,
+        "rendered_chars": 11287,
+        "rendering_sha256": "8b3f5af7acf604e788098532347c4d1ff3506219d6c31a3a8ccec07405ef89d9",
+        "thread": "@mandziak:3694"
+      },
+      {
+        "channel": "@mandziak",
+        "id": "@mandziak:3700",
+        "msg_ids": [
+          48160,
+          48165,
+          48187,
+          48336,
+          48816
+        ],
+        "part": null,
+        "payable_comments": 5,
+        "post_id": 3700,
+        "rendered_chars": 10556,
+        "rendering_sha256": "cac966824b9886a9bc9806508d40bf510de51ef90786373febdc43e6a56c109e",
+        "thread": "@mandziak:3700"
+      },
+      {
+        "channel": "@mandziak",
+        "id": "@mandziak:3765",
+        "msg_ids": [
+          48995,
+          48996,
+          48997,
+          49017,
+          49051
+        ],
+        "part": null,
+        "payable_comments": 5,
+        "post_id": 3765,
+        "rendered_chars": 10209,
+        "rendering_sha256": "ed6215277e342328a615e1fa5efc3ab8225f4cf049b35a1a0816095add91e673",
+        "thread": "@mandziak:3765"
+      },
+      {
+        "channel": "@retsepty",
+        "id": "@retsepty:7342",
+        "msg_ids": [
+          49685,
+          49686,
+          49696,
+          49707,
+          49708
+        ],
+        "part": null,
+        "payable_comments": 5,
+        "post_id": 7342,
+        "rendered_chars": 10687,
+        "rendering_sha256": "f163503c5f7005b9cb98f4102f77fd4a697304e9b6c43ed94d1022262b6b42b6",
+        "thread": "@retsepty:7342"
+      },
+      {
+        "channel": "@mandziak",
+        "id": "@mandziak:3721",
+        "msg_ids": [
+          48423,
+          48430,
+          48445,
+          49075
+        ],
+        "part": null,
+        "payable_comments": 4,
+        "post_id": 3721,
+        "rendered_chars": 13307,
+        "rendering_sha256": "05ba91683bb9d5dd9ad115226845dfd86b0029ff74469f531a4e5f41b8e273de",
+        "thread": "@mandziak:3721"
+      },
+      {
+        "channel": "@matusi_ukr",
+        "id": "@matusi_ukr:22327",
+        "msg_ids": [
+          580335,
+          580336,
+          580339,
+          580345
+        ],
+        "part": null,
+        "payable_comments": 4,
+        "post_id": 22327,
+        "rendered_chars": 12295,
+        "rendering_sha256": "45dc850957fd0a8273f4c202c276486c94921a7736e511badfcab89a9e98eb0b",
+        "thread": "@matusi_ukr:22327"
+      },
+      {
+        "channel": "@retsepty",
+        "id": "@retsepty:7313",
+        "msg_ids": [
+          49524,
+          49532,
+          49542,
+          49561
+        ],
+        "part": null,
+        "payable_comments": 4,
+        "post_id": 7313,
+        "rendered_chars": 11128,
+        "rendering_sha256": "91a26bf91a8a4c1bdde45699e1061a9b67e211ef51268ba746354ddfa14ab4dd",
+        "thread": "@retsepty:7313"
+      },
+      {
+        "channel": "@tarilka_malyuka",
+        "id": "@tarilka_malyuka:747",
+        "msg_ids": [
+          84,
+          85,
+          183,
+          187
+        ],
+        "part": null,
+        "payable_comments": 4,
+        "post_id": 747,
+        "rendered_chars": 10719,
+        "rendering_sha256": "d7956ae8de5eb66eeda09f3118787dcc5fd6eee89d02baa617e7719a481261e8",
+        "thread": "@tarilka_malyuka:747"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "id": "@VARUS_channel:10452",
+        "msg_ids": [
+          21130,
+          21131,
+          21164
+        ],
+        "part": null,
+        "payable_comments": 3,
+        "post_id": 10452,
+        "rendered_chars": 10140,
+        "rendering_sha256": "5e2b6ba4b10a1f41661a0e74a34b76e11b00bd69070dcabf76f7e57744effd5f",
+        "thread": "@VARUS_channel:10452"
+      },
+      {
+        "channel": "@mandziak",
+        "id": "@mandziak:3666",
+        "msg_ids": [
+          47833,
+          47838,
+          47839
+        ],
+        "part": null,
+        "payable_comments": 3,
+        "post_id": 3666,
+        "rendered_chars": 11396,
+        "rendering_sha256": "28dd8e9c17bd21891a48c86bfee254105c96a8ed5ca6d6f63a2c6f00457200d4",
+        "thread": "@mandziak:3666"
+      },
+      {
+        "channel": "@mandziak",
+        "id": "@mandziak:3775",
+        "msg_ids": [
+          49072,
+          49094,
+          49104
+        ],
+        "part": null,
+        "payable_comments": 3,
+        "post_id": 3775,
+        "rendered_chars": 11228,
+        "rendering_sha256": "46f39449040098a2e7f096641eed4952050eb746e00cb0856a93bdc9befb2c5d",
+        "thread": "@mandziak:3775"
+      },
+      {
+        "channel": "@msuaaaa",
+        "id": "@msuaaaa:10651",
+        "msg_ids": [
+          13583,
+          13584,
+          13585
+        ],
+        "part": null,
+        "payable_comments": 3,
+        "post_id": 10651,
+        "rendered_chars": 10350,
+        "rendering_sha256": "7cee2784f6db426bba1cee3ff361d2087aeac7ecc6ddaba9efa8cf4210964590",
+        "thread": "@msuaaaa:10651"
+      },
+      {
+        "channel": "@retsepty",
+        "id": "@retsepty:7293",
+        "msg_ids": [
+          49409,
+          49411,
+          49418
+        ],
+        "part": null,
+        "payable_comments": 3,
+        "post_id": 7293,
+        "rendered_chars": 10555,
+        "rendering_sha256": "857ed5d4d19b042934ec61ca0843c4096a705491a2532e92afae76258891505f",
+        "thread": "@retsepty:7293"
+      },
+      {
+        "channel": "@retsepty",
+        "id": "@retsepty:7324",
+        "msg_ids": [
+          49595,
+          49596,
+          49625
+        ],
+        "part": null,
+        "payable_comments": 3,
+        "post_id": 7324,
+        "rendered_chars": 10760,
+        "rendering_sha256": "a3f4cde4f1b5034de9d85772323328cbad94565fd5c14dd798c34005fac7c373",
+        "thread": "@retsepty:7324"
+      },
+      {
+        "channel": "@retsepty",
+        "id": "@retsepty:7345",
+        "msg_ids": [
+          49715,
+          49716,
+          49717
+        ],
+        "part": null,
+        "payable_comments": 3,
+        "post_id": 7345,
+        "rendered_chars": 10906,
+        "rendering_sha256": "3b9e56cb9c1d25aaaa23108ac6d01d32a5f74cdaa7ff0a3c8913e2079bf6e09b",
+        "thread": "@retsepty:7345"
+      },
+      {
+        "channel": "@retsepty",
+        "id": "@retsepty:7350",
+        "msg_ids": [
+          49748,
+          49749,
+          49750
+        ],
+        "part": null,
+        "payable_comments": 3,
+        "post_id": 7350,
+        "rendered_chars": 10891,
+        "rendering_sha256": "d3045dc86097758502d31f959dba4fea02788c2c8ff10b078b17fa0a7bb853fd",
+        "thread": "@retsepty:7350"
+      },
+      {
+        "channel": "@ya_Nenka",
+        "id": "@ya_Nenka:838",
+        "msg_ids": [
+          2584,
+          2585,
+          2586
+        ],
+        "part": null,
+        "payable_comments": 3,
+        "post_id": 838,
+        "rendered_chars": 12217,
+        "rendering_sha256": "28406337018331b662aede964b3751c0657af89943dd477dba3813d3db3c5a3b",
+        "thread": "@ya_Nenka:838"
+      },
+      {
+        "channel": "@ya_Nenka",
+        "id": "@ya_Nenka:840",
+        "msg_ids": [
+          2589,
+          2590,
+          2591
+        ],
+        "part": null,
+        "payable_comments": 3,
+        "post_id": 840,
+        "rendered_chars": 13297,
+        "rendering_sha256": "8e6be967a996152ddc0e1038d635bea298645935f296901d5e363a68537b1f38",
+        "thread": "@ya_Nenka:840"
+      },
+      {
+        "channel": "@ya_Nenka",
+        "id": "@ya_Nenka:844",
+        "msg_ids": [
+          2597,
+          2598,
+          2599
+        ],
+        "part": null,
+        "payable_comments": 3,
+        "post_id": 844,
+        "rendered_chars": 14170,
+        "rendering_sha256": "aa9b632673eaec20b938186f05494493965566a805f89df49b1be2cfba3e66c0",
+        "thread": "@ya_Nenka:844"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "id": "@VARUS_channel:10455",
+        "msg_ids": [
+          21172,
+          21201
+        ],
+        "part": null,
+        "payable_comments": 2,
+        "post_id": 10455,
+        "rendered_chars": 10700,
+        "rendering_sha256": "e7e056e7f62fbad4a98c503931ec50a96f84f5a94c960c6cb290cff7080c0023",
+        "thread": "@VARUS_channel:10455"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "id": "@VARUS_channel:10529",
+        "msg_ids": [
+          21420,
+          21421
+        ],
+        "part": null,
+        "payable_comments": 2,
+        "post_id": 10529,
+        "rendered_chars": 10362,
+        "rendering_sha256": "e1c3da5015542a9760c31b9e15a7e85c32bfaa97b990e568d9b0cd3f1dcbd1b4",
+        "thread": "@VARUS_channel:10529"
+      },
+      {
+        "channel": "@klopotenkofood",
+        "id": "@klopotenkofood:6036",
+        "msg_ids": [
+          21222,
+          21269
+        ],
+        "part": null,
+        "payable_comments": 2,
+        "post_id": 6036,
+        "rendered_chars": 10519,
+        "rendering_sha256": "9136703bcdcdf2a59a45c88c309fd4a30e691c48f0834a5fbed552f8b5ae5a46",
+        "thread": "@klopotenkofood:6036"
+      },
+      {
+        "channel": "@mandziak",
+        "id": "@mandziak:3685",
+        "msg_ids": [
+          48045,
+          48048
+        ],
+        "part": null,
+        "payable_comments": 2,
+        "post_id": 3685,
+        "rendered_chars": 10374,
+        "rendering_sha256": "53a9961fc82b8eebd5a6f8b550c973ba217902b0e629dceda434cece51cbf9dc",
+        "thread": "@mandziak:3685"
+      },
+      {
+        "channel": "@matusi_ukr",
+        "id": "@matusi_ukr:22125",
+        "msg_ids": [
+          577220,
+          577233
+        ],
+        "part": null,
+        "payable_comments": 2,
+        "post_id": 22125,
+        "rendered_chars": 10316,
+        "rendering_sha256": "01f05ddd37f73679ff3c4d7cb0ae9249d521b0fef451724041af07c6e83f7f30",
+        "thread": "@matusi_ukr:22125"
+      },
+      {
+        "channel": "@matusi_ukr",
+        "id": "@matusi_ukr:22292",
+        "msg_ids": [
+          579586,
+          579590
+        ],
+        "part": null,
+        "payable_comments": 2,
+        "post_id": 22292,
+        "rendered_chars": 11008,
+        "rendering_sha256": "59402d6ae3009735e5c7de89ca315cf80b12688d2c47a88a21c5b5eef1ed5bd7",
+        "thread": "@matusi_ukr:22292"
+      },
+      {
+        "channel": "@retsepty",
+        "id": "@retsepty:7278",
+        "msg_ids": [
+          49364,
+          49365
+        ],
+        "part": null,
+        "payable_comments": 2,
+        "post_id": 7278,
+        "rendered_chars": 10388,
+        "rendering_sha256": "7964cb3c56353a252b008164c0eecc287e2d139bd896de3d95cee8ab81b50494",
+        "thread": "@retsepty:7278"
+      },
+      {
+        "channel": "@retsepty",
+        "id": "@retsepty:7294",
+        "msg_ids": [
+          49414,
+          49417
+        ],
+        "part": null,
+        "payable_comments": 2,
+        "post_id": 7294,
+        "rendered_chars": 10284,
+        "rendering_sha256": "59b9fd3fab40e6d5220835bbda38e43cc9463a72a8853f028ddd404d0046cb0b",
+        "thread": "@retsepty:7294"
+      },
+      {
+        "channel": "@retsepty",
+        "id": "@retsepty:7302",
+        "msg_ids": [
+          49439,
+          49449
+        ],
+        "part": null,
+        "payable_comments": 2,
+        "post_id": 7302,
+        "rendered_chars": 10538,
+        "rendering_sha256": "529b9edc708865acaf512153a9be84dfd9a3ae5e09fb65061c401c6acbe8eaa0",
+        "thread": "@retsepty:7302"
+      },
+      {
+        "channel": "@retsepty",
+        "id": "@retsepty:7305",
+        "msg_ids": [
+          49457,
+          49470
+        ],
+        "part": null,
+        "payable_comments": 2,
+        "post_id": 7305,
+        "rendered_chars": 11105,
+        "rendering_sha256": "09e01e4f38e6856afe166e8d4b8d03042d3120b0a73a5a39acfac6f327e63a77",
+        "thread": "@retsepty:7305"
+      },
+      {
+        "channel": "@retsepty",
+        "id": "@retsepty:7321",
+        "msg_ids": [
+          49588,
+          49589
+        ],
+        "part": null,
+        "payable_comments": 2,
+        "post_id": 7321,
+        "rendered_chars": 10817,
+        "rendering_sha256": "875857eb1369b26c3421706d00be75e9bf7927c996b045fd0895d414a86ba7c8",
+        "thread": "@retsepty:7321"
+      },
+      {
+        "channel": "@retsepty",
+        "id": "@retsepty:7323",
+        "msg_ids": [
+          49592,
+          49593
+        ],
+        "part": null,
+        "payable_comments": 2,
+        "post_id": 7323,
+        "rendered_chars": 10957,
+        "rendering_sha256": "eadb60d8697e49e74417ba751fdc31c3929d5c1b868d3367db565414e75bb9a7",
+        "thread": "@retsepty:7323"
+      },
+      {
+        "channel": "@retsepty",
+        "id": "@retsepty:7326",
+        "msg_ids": [
+          49629,
+          49630
+        ],
+        "part": null,
+        "payable_comments": 2,
+        "post_id": 7326,
+        "rendered_chars": 10743,
+        "rendering_sha256": "a64bec50d507d16af0886c8cab1b4313abba146d78a9bf41a2b2b5756da54809",
+        "thread": "@retsepty:7326"
+      },
+      {
+        "channel": "@retsepty",
+        "id": "@retsepty:7328",
+        "msg_ids": [
+          49636,
+          49642
+        ],
+        "part": null,
+        "payable_comments": 2,
+        "post_id": 7328,
+        "rendered_chars": 10780,
+        "rendering_sha256": "f932134d74d2612fac04cae6949c788dca5ca61ca248ac7671b4f4b64b38e7ae",
+        "thread": "@retsepty:7328"
+      },
+      {
+        "channel": "@retsepty",
+        "id": "@retsepty:7331",
+        "msg_ids": [
+          49654,
+          49655
+        ],
+        "part": null,
+        "payable_comments": 2,
+        "post_id": 7331,
+        "rendered_chars": 10884,
+        "rendering_sha256": "507f6d09429696134084514c8b4889cd35ea972c962ad92365112a276ae1b147",
+        "thread": "@retsepty:7331"
+      },
+      {
+        "channel": "@retsepty",
+        "id": "@retsepty:7343",
+        "msg_ids": [
+          49710,
+          49711
+        ],
+        "part": null,
+        "payable_comments": 2,
+        "post_id": 7343,
+        "rendered_chars": 10450,
+        "rendering_sha256": "6cb7de20fb7c45e1cad4c80aa055dace2973e5f72949a54ea8b71854606ec5cb",
+        "thread": "@retsepty:7343"
+      },
+      {
+        "channel": "@tarilka_malyuka",
+        "id": "@tarilka_malyuka:746",
+        "msg_ids": [
+          82,
+          83
+        ],
+        "part": null,
+        "payable_comments": 2,
+        "post_id": 746,
+        "rendered_chars": 11192,
+        "rendering_sha256": "50a0851b7e26c71031e3da716d374174b1f0084fe44e40024dbd5fc5287d75a5",
+        "thread": "@tarilka_malyuka:746"
+      },
+      {
+        "channel": "@tarilka_malyuka",
+        "id": "@tarilka_malyuka:820",
+        "msg_ids": [
+          169,
+          171
+        ],
+        "part": null,
+        "payable_comments": 2,
+        "post_id": 820,
+        "rendered_chars": 10546,
+        "rendering_sha256": "5a8fc6054790cf6a5d358c1fab00a1ea499abb878d89af678390e15ff0560b29",
+        "thread": "@tarilka_malyuka:820"
+      },
+      {
+        "channel": "@tarilka_malyuka",
+        "id": "@tarilka_malyuka:825",
+        "msg_ids": [
+          182,
+          185
+        ],
+        "part": null,
+        "payable_comments": 2,
+        "post_id": 825,
+        "rendered_chars": 11997,
+        "rendering_sha256": "e3b3815358fe35ebde10b44eb476fd515e1fbcee4de7b0ac1e5e052a5acc04d3",
+        "thread": "@tarilka_malyuka:825"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "id": "@VARUS_channel:10356",
+        "msg_ids": [
+          20696
+        ],
+        "part": null,
+        "payable_comments": 1,
+        "post_id": 10356,
+        "rendered_chars": 10163,
+        "rendering_sha256": "3a3bbfbcdefe78c82cc915bf6901d29d8ad9cd220a962f5cb753e5c6dd33e3e0",
+        "thread": "@VARUS_channel:10356"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "id": "@VARUS_channel:10358",
+        "msg_ids": [
+          20720
+        ],
+        "part": null,
+        "payable_comments": 1,
+        "post_id": 10358,
+        "rendered_chars": 10327,
+        "rendering_sha256": "b9148e6c8cfe50b3317760f38314f19d5b26fa73bba5ca173d6732b3eb5b395a",
+        "thread": "@VARUS_channel:10358"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "id": "@VARUS_channel:10375",
+        "msg_ids": [
+          20916
+        ],
+        "part": null,
+        "payable_comments": 1,
+        "post_id": 10375,
+        "rendered_chars": 10225,
+        "rendering_sha256": "de787deb5e4d725902bbca11fe08cc0b5a7acb5ce462d6735aea2dc86ae8f717",
+        "thread": "@VARUS_channel:10375"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "id": "@VARUS_channel:10450",
+        "msg_ids": [
+          21113
+        ],
+        "part": null,
+        "payable_comments": 1,
+        "post_id": 10450,
+        "rendered_chars": 10160,
+        "rendering_sha256": "08b545b5da8e504d54a3e824d3d790617c2b927e971a680af1203798aa2eb1a6",
+        "thread": "@VARUS_channel:10450"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "id": "@VARUS_channel:10496",
+        "msg_ids": [
+          21334
+        ],
+        "part": null,
+        "payable_comments": 1,
+        "post_id": 10496,
+        "rendered_chars": 10252,
+        "rendering_sha256": "bb1dd92b59fdff20cd08cc54a943ab91d8f948c5de064cecef1ef7c2ce7127e6",
+        "thread": "@VARUS_channel:10496"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "id": "@VARUS_channel:10532",
+        "msg_ids": [
+          21504
+        ],
+        "part": null,
+        "payable_comments": 1,
+        "post_id": 10532,
+        "rendered_chars": 10234,
+        "rendering_sha256": "2564381998a233e37f8b2086c515f1dd1ba6f3f27c578fc13292af49f8abca6b",
+        "thread": "@VARUS_channel:10532"
+      },
+      {
+        "channel": "@klopotenkofood",
+        "id": "@klopotenkofood:6024",
+        "msg_ids": [
+          21120
+        ],
+        "part": null,
+        "payable_comments": 1,
+        "post_id": 6024,
+        "rendered_chars": 10295,
+        "rendering_sha256": "68a2aca8a41b59fe00cbd1c0448cff0b8fa7976d7fc035fd7fc7346447583911",
+        "thread": "@klopotenkofood:6024"
+      },
+      {
+        "channel": "@klopotenkofood",
+        "id": "@klopotenkofood:6031",
+        "msg_ids": [
+          21164
+        ],
+        "part": null,
+        "payable_comments": 1,
+        "post_id": 6031,
+        "rendered_chars": 10864,
+        "rendering_sha256": "f43213c889af1a23950c23a265e6256b653aeb3179f854308d9035c7dafc7a97",
+        "thread": "@klopotenkofood:6031"
+      },
+      {
+        "channel": "@kopiyochka1",
+        "id": "@kopiyochka1:21672",
+        "msg_ids": [
+          391300
+        ],
+        "part": null,
+        "payable_comments": 1,
+        "post_id": 21672,
+        "rendered_chars": 10142,
+        "rendering_sha256": "b777d392493157c18e27a67597aa2a56db5545f11cca01b69bf9468e9d503e67",
+        "thread": "@kopiyochka1:21672"
+      },
+      {
+        "channel": "@mandziak",
+        "id": "@mandziak:3746",
+        "msg_ids": [
+          49218
+        ],
+        "part": null,
+        "payable_comments": 1,
+        "post_id": 3746,
+        "rendered_chars": 11538,
+        "rendering_sha256": "4db072e54bae3da74b2cd6cffa0286e1a3c64b5ca94052bae4f5951d11581631",
+        "thread": "@mandziak:3746"
+      },
+      {
+        "channel": "@matusi_ukr",
+        "id": "@matusi_ukr:22208",
+        "msg_ids": [
+          578449
+        ],
+        "part": null,
+        "payable_comments": 1,
+        "post_id": 22208,
+        "rendered_chars": 11030,
+        "rendering_sha256": "3a22b7eabc925f35bd452a1eb788dea4c0460815efbce090d6a5820e8eb7fc8e",
+        "thread": "@matusi_ukr:22208"
+      },
+      {
+        "channel": "@matusi_ukr",
+        "id": "@matusi_ukr:22307",
+        "msg_ids": [
+          580133
+        ],
+        "part": null,
+        "payable_comments": 1,
+        "post_id": 22307,
+        "rendered_chars": 11134,
+        "rendering_sha256": "39caafad51581b141f8e8a4d801cbe9cb4ca72dc36d9a095ba25b8a509355444",
+        "thread": "@matusi_ukr:22307"
+      },
+      {
+        "channel": "@polyakova_fitness",
+        "id": "@polyakova_fitness:1143",
+        "msg_ids": [
+          2421
+        ],
+        "part": null,
+        "payable_comments": 1,
+        "post_id": 1143,
+        "rendered_chars": 11898,
+        "rendering_sha256": "7174cf540ee82bad7e868a3844446a90c901248d10ead88933efad6c621ea72a",
+        "thread": "@polyakova_fitness:1143"
+      },
+      {
+        "channel": "@retsepty",
+        "id": "@retsepty:7280",
+        "msg_ids": [
+          49375
+        ],
+        "part": null,
+        "payable_comments": 1,
+        "post_id": 7280,
+        "rendered_chars": 10160,
+        "rendering_sha256": "2bd14a244dd428ac0da57ace665c21cf18be7b4786ad0a472416e98dd8316821",
+        "thread": "@retsepty:7280"
+      },
+      {
+        "channel": "@retsepty",
+        "id": "@retsepty:7281",
+        "msg_ids": [
+          49374
+        ],
+        "part": null,
+        "payable_comments": 1,
+        "post_id": 7281,
+        "rendered_chars": 10532,
+        "rendering_sha256": "4b68d5bed72793845b7d0e295ce95cf2b4a04c6854c4bc6c6f7dc7d0fb6432ed",
+        "thread": "@retsepty:7281"
+      },
+      {
+        "channel": "@retsepty",
+        "id": "@retsepty:7284",
+        "msg_ids": [
+          49384
+        ],
+        "part": null,
+        "payable_comments": 1,
+        "post_id": 7284,
+        "rendered_chars": 10611,
+        "rendering_sha256": "8f2a79776273061047cf4718c69460379ed3fb034298f6b9a5c04233ef9c5340",
+        "thread": "@retsepty:7284"
+      },
+      {
+        "channel": "@retsepty",
+        "id": "@retsepty:7288",
+        "msg_ids": [
+          49398
+        ],
+        "part": null,
+        "payable_comments": 1,
+        "post_id": 7288,
+        "rendered_chars": 10583,
+        "rendering_sha256": "b399ee7a9e1a800e982e70aaf4d18a7832c5d1dba5aceb5969ccf7cace2eb628",
+        "thread": "@retsepty:7288"
+      },
+      {
+        "channel": "@retsepty",
+        "id": "@retsepty:7289",
+        "msg_ids": [
+          49401
+        ],
+        "part": null,
+        "payable_comments": 1,
+        "post_id": 7289,
+        "rendered_chars": 11058,
+        "rendering_sha256": "fec128e33df3026232a4d0480e7600ffa62f19684f9a3dc812adff2100ec04ee",
+        "thread": "@retsepty:7289"
+      },
+      {
+        "channel": "@retsepty",
+        "id": "@retsepty:7296",
+        "msg_ids": [
+          49428
+        ],
+        "part": null,
+        "payable_comments": 1,
+        "post_id": 7296,
+        "rendered_chars": 10804,
+        "rendering_sha256": "ac9f9b53c4143e684b1da1a3ae12090db0cd3670cdc73f17fd2f6da50399b135",
+        "thread": "@retsepty:7296"
+      },
+      {
+        "channel": "@retsepty",
+        "id": "@retsepty:7301",
+        "msg_ids": [
+          49440
+        ],
+        "part": null,
+        "payable_comments": 1,
+        "post_id": 7301,
+        "rendered_chars": 10502,
+        "rendering_sha256": "f17c54119a63c65f559de40b4bcae1638c2007db657c4e1796cc9f98777b5c61",
+        "thread": "@retsepty:7301"
+      },
+      {
+        "channel": "@retsepty",
+        "id": "@retsepty:7310",
+        "msg_ids": [
+          49529
+        ],
+        "part": null,
+        "payable_comments": 1,
+        "post_id": 7310,
+        "rendered_chars": 10668,
+        "rendering_sha256": "b9ed4885dc3ac119508fcba8bf2c119741ac51c6dbe74a2ef3193cad94324d91",
+        "thread": "@retsepty:7310"
+      },
+      {
+        "channel": "@retsepty",
+        "id": "@retsepty:7317",
+        "msg_ids": [
+          49567
+        ],
+        "part": null,
+        "payable_comments": 1,
+        "post_id": 7317,
+        "rendered_chars": 10155,
+        "rendering_sha256": "221efaa7c4902e209988a7b549c1f2aa3c66a9558e840b8089c2a6875aae8918",
+        "thread": "@retsepty:7317"
+      },
+      {
+        "channel": "@retsepty",
+        "id": "@retsepty:7318",
+        "msg_ids": [
+          49568
+        ],
+        "part": null,
+        "payable_comments": 1,
+        "post_id": 7318,
+        "rendered_chars": 10144,
+        "rendering_sha256": "6f7f7f9409ea9bf577f3357f643cc59bc69f00939f0a88ac0e8a82b57c6a2619",
+        "thread": "@retsepty:7318"
+      },
+      {
+        "channel": "@retsepty",
+        "id": "@retsepty:7320",
+        "msg_ids": [
+          49586
+        ],
+        "part": null,
+        "payable_comments": 1,
+        "post_id": 7320,
+        "rendered_chars": 10159,
+        "rendering_sha256": "cbf84e30acfb73a26d0ee5fc5ed935ca95150c3f999a63b8cc5012da2cc1dafc",
+        "thread": "@retsepty:7320"
+      },
+      {
+        "channel": "@retsepty",
+        "id": "@retsepty:7335",
+        "msg_ids": [
+          49677
+        ],
+        "part": null,
+        "payable_comments": 1,
+        "post_id": 7335,
+        "rendered_chars": 10624,
+        "rendering_sha256": "dc31a96ac85606f74020457efdedf254cc8571f9fe1b300221c85aa1839e6dc9",
+        "thread": "@retsepty:7335"
+      },
+      {
+        "channel": "@retsepty",
+        "id": "@retsepty:7337",
+        "msg_ids": [
+          49678
+        ],
+        "part": null,
+        "payable_comments": 1,
+        "post_id": 7337,
+        "rendered_chars": 10659,
+        "rendering_sha256": "092aa29a694211cd32aa9c28d0610098e12459c4e50bb8a0a51895e4ff9d212d",
+        "thread": "@retsepty:7337"
+      },
+      {
+        "channel": "@retsepty",
+        "id": "@retsepty:7340",
+        "msg_ids": [
+          49697
+        ],
+        "part": null,
+        "payable_comments": 1,
+        "post_id": 7340,
+        "rendered_chars": 10098,
+        "rendering_sha256": "9039ab003f354a27d00d915d82d22ad0799183f57913b416fa94531d990f48c5",
+        "thread": "@retsepty:7340"
+      },
+      {
+        "channel": "@retsepty",
+        "id": "@retsepty:7348",
+        "msg_ids": [
+          49740
+        ],
+        "part": null,
+        "payable_comments": 1,
+        "post_id": 7348,
+        "rendered_chars": 10862,
+        "rendering_sha256": "7305220d2940391678ef67b8c4fab7e44910036c870570823b7d07ebb2c9a387",
+        "thread": "@retsepty:7348"
+      },
+      {
+        "channel": "@retsepty",
+        "id": "@retsepty:7349",
+        "msg_ids": [
+          49742
+        ],
+        "part": null,
+        "payable_comments": 1,
+        "post_id": 7349,
+        "rendered_chars": 10363,
+        "rendering_sha256": "86c9539c0b057f71b9d77c107bd4c3003a0402cb1479870e41a1673f59d91495",
+        "thread": "@retsepty:7349"
+      },
+      {
+        "channel": "@retsepty",
+        "id": "@retsepty:7354",
+        "msg_ids": [
+          49763
+        ],
+        "part": null,
+        "payable_comments": 1,
+        "post_id": 7354,
+        "rendered_chars": 10253,
+        "rendering_sha256": "afda71129a34284dd568ec9fe9d72a5c0209fc116e87219c995ff0f5341eb203",
+        "thread": "@retsepty:7354"
+      },
+      {
+        "channel": "@retsepty",
+        "id": "@retsepty:7361",
+        "msg_ids": [
+          49782
+        ],
+        "part": null,
+        "payable_comments": 1,
+        "post_id": 7361,
+        "rendered_chars": 10105,
+        "rendering_sha256": "86768226544b66f506f9c905acc4743ed06d107046d3bd641461522457e31b4d",
+        "thread": "@retsepty:7361"
+      },
+      {
+        "channel": "@tarilka_malyuka",
+        "id": "@tarilka_malyuka:764",
+        "msg_ids": [
+          177
+        ],
+        "part": null,
+        "payable_comments": 1,
+        "post_id": 764,
+        "rendered_chars": 9988,
+        "rendering_sha256": "b39299c787913a51e70c7e35cfe162b579ae1a27b634b1cecfc47df06c91161d",
+        "thread": "@tarilka_malyuka:764"
+      },
+      {
+        "channel": "@tarilka_malyuka",
+        "id": "@tarilka_malyuka:827",
+        "msg_ids": [
+          179
+        ],
+        "part": null,
+        "payable_comments": 1,
+        "post_id": 827,
+        "rendered_chars": 10950,
+        "rendering_sha256": "9f927ab35a9271e359f1769307f1ce895a2c235846c692eb5b3d149c947cbd71",
+        "thread": "@tarilka_malyuka:827"
+      },
+      {
+        "channel": "@ya_Nenka",
+        "id": "@ya_Nenka:834",
+        "msg_ids": [
+          2575
+        ],
+        "part": null,
+        "payable_comments": 1,
+        "post_id": 834,
+        "rendered_chars": 12241,
+        "rendering_sha256": "88cb04435afadfbaf0f815749fe5d89f1817e0f871be998554b8488881412671",
+        "thread": "@ya_Nenka:834"
+      }
+    ],
+    "units_per_thread_over_the_chunk_line": {
+      "@klopotenkofood:6032": 2,
+      "@mandziak:3679": 2,
+      "@mandziak:3708": 2,
+      "@mandziak:3718": 2,
+      "@matusi_ukr:22058": 8,
+      "@matusi_ukr:22092": 3,
+      "@matusi_ukr:22133": 7,
+      "@matusi_ukr:22158": 2,
+      "@matusi_ukr:22295": 7,
+      "@matusi_ukr:22308": 2
+    }
+  },
+  "producer": {
+    "borrowed": {
+      "results/prereg_reader_probe_v5b.json": "8122fce0eb25c223cff6a6983777e92fff69e3fd53db209b00b43fc4218a00c4",
+      "results/reader_topup_projection.json": "cf925d30c7ee477eee76b9b5aa20001e57e16b74d25c501557a1aa96bd8566ab"
+    },
+    "script": "scripts/write_reader_topup_prereg_b.py",
+    "sha256": "3c7c0f4634a028042837cc404f08e3ca9cab429fad500a02a31fc6232d152ff6"
+  },
+  "return_to_the_ruling": "a STOP at any gate returns the partial buy and its reason to the operator. It does not re-decide branch B, and it never widens the cap: a cap raised after a reading is a cap that was never a cap",
+  "supersedes": {
+    "billed_before_this_attempt_usd": 0.099695,
+    "record": "results/reader_topup_prereg.json",
+    "sha256": "a6669b67226a3654de2bff3d746b4b9b1745814311f4b6573b010cb3e506b81a",
+    "why": "its full-pass gate returned STOP at the first reading, on a run whose own measurement (77.5 s against a fitted 80.4 s) confirms the projection it was priced on. The gate was honoured and the pod deleted; the operator ruled the corrected estimator afterwards, in the open, and this is it"
+  }
+}
