@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-20 20:17:34 (every SessionStart)
+**Auto-refreshed:** 2026-08-20 21:10:12 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
+669ca18 docs(report): lora-b-run ADDENDUM -- the Deviations table Dv575-Dv586, re-derived
+2cbd11f verdict(lora-b): Dv579 -- re-score over the FINAL run record, one leaf moves
+83d1bf1 chore(docs): STATUS.md, the addendum brief and PROMPT-pass1-fewshot, verbatim
+3667434 chore(vault): the /close tail -- the red bar, the idle rung, and the index
 c0b0855 chore(docs): STATUS.md and PROMPT-acceptance-lora-b-run.md, verbatim
-ded221b chore(vault): the red bar, the arm that was never trained, and the rung that does not exist
-a74d296 docs(report): lora-b-run -- the attempt was spent and the bar came back RED at 9 of 14
-603c6d0 verdict(lora-b): RED -- 9 of 14, and arm A's row-for-row table is the base's
-1da4c29 run(lora-b): the ONE paid session -- arm A trained and evaluated, arm B refused by the clock
 ```
 
 ## 📋 Recent decisions
