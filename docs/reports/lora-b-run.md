@@ -584,6 +584,35 @@ would have said 12 — and the reason it was not taken is §11, not the bar.
 
 ---
 
+## Deviations from Dv575
+
+The candidates came from the team lead's acceptance; every number in brackets there was re-derived
+here against `results/lora_b_run.json`, `results/lora_b_arm_a_loss.jsonl`,
+`results/lora_b_verdict.json`, `results/prereg_lora_b.json` and `results/spend_lora_b.json` before
+it was written down. Three of them did not survive as stated — **Dv575**'s idle is 9 778 s and not
+9 720, **Dv576** is bigger than a formula, and **Dv577** is about this report and not about the
+snapshot — and each row says so. The table runs Dv575–Dv586 dense; `docs/PROMPT-pass1-fewshot.md`
+opens at Dv587.
+
+| # | finding | tag |
+|---|---|---|
+| **Dv575** | **The executor left a training pod unpolled, and no rung in this registration can see that.** Arm A's last write is `14:38:23Z` (create `13:21:44Z` + boot 353 s + 4 243.4 s of training re-derives it to `14:38:20Z`, the 3 s being the boot's rounding). The next reading of any kind is the rung-5 milestone at `17:21:21Z` — **9 778 s**, **$1.4396** at $0.53/h, not the 9 720 s / $1.43 the acceptance re-derived from a «found at 17:20Z» moment no artifact records. The record says it itself: the `train-a-retrospective` entry's `honesty` field is *«THESE RUNGS NEVER FIRED DURING ARM A»*. And the retrospective proves they could not have: rungs 4 and 8 both read `results/lora_b_arm_a_loss.jsonl`, so **both go quiet when it stops growing** — a pod that is not training at all trips neither. The counterfactual in §11 is right in its conclusion and quotes the wrong bound: 15 104 s is neither of this run's two limits (19 800 − 4 599 = **15 201 s** cumulative), and the one that actually refused arm B is the platform backstop, which at arm A's end leaves `18:41:43Z − 14:38:23Z` = **14 600 s** against arm B's 6 668 — **7 932 s to spare**, at the same limit that produced the STOP. | `[cause: process]` `[[no-rung-watches-an-idle-pod]]` `[[long-run-watch-the-process]]` |
+| **Dv576** | **The rung that ended arm B is the one rung of this run with no producer, and all three of its numbers are hand-made.** `scripts/gate_lora_b.py` has no `--arm-b-fit`: the snapshot filed under `rung: 7` was composed by hand in-session, so nothing in the suite ever checked it — and rung 7's registered rule is the cumulative `--terminate-after`, not «does arm B fit». The registered instrument for that question exists and is rung 8, `projection()`. Driven now on the real loss log it answers **GO** at arm A's last log line (12 910.3 s · $1.9007) and **KILL over the hard stop** at the snapshot's own `17:21:55Z` (22 724.9 s) — the same refusal, by the arithmetic that was registered. What the hand version got wrong: (a) the registered step formula `ceil(n/16) × 2` is not the trainer's — `optimizer.step()` fires only on a whole `grad_accum` of MICRO-batches, so the count is `floor(ceil(n/2)/8) × 2` = **62** and **80** against the registered 64 and 82, and arm A ran exactly 62; (b) the snapshot priced **79**, which is neither, and `82 × 62/64 = 79.4375` is the only reading that lands on it — the registered count scaled by arm A's own shortfall; (c) `arm_b_training_seconds` 5 406.9 = 79 × 68.442 against the registered leg `max(5 005.9, 82 × measured)` = **5 612.2 s**, and 600 s of scp-and-delete where the projection registers **1 800 s** of overhead. Every error points the same way — toward «arm B fits» — and none of them flips it: at 79 / 80 / 82 steps the branch needs 6 667.6 / 6 736.1 / **6 872.9 s** against the binding 4 787.3. STOP either way. | `[cause: verify-gap]` `[[the-guard-you-built-and-then-bypassed]]` `[[trace-the-producer-not-the-result]]` |
+| **Dv577** | **The «5 437 s» is this report's, not the snapshot's, and the snapshot is right.** `results/lora_b_run.json` records `cumulative_seconds_left` **5 388.3**, which re-derives exactly — `19 800 − (17:21:55Z − 13:21:44Z = 14 411.7 s) = 5 388.3`. The string `5437` occurs in exactly one place in this repository: **§10 of this file, line 490**, inside a hand-typed block that renders the snapshot. No producer emits it, so the finding is a transcription in prose and not an instrument that computed the wrong number — which is also why nothing downstream carries it. The platform figure in the same block does re-derive: `18:41:43Z − 17:21:55Z = 4 788 s` against the record's 4 787.3. No gate flips at either value; the binding bound was the platform's. | `[cause: verify-gap]` `[[rederive-doc-numbers]]` |
+| **Dv578** | **A gate stamped 480.7 s after create publishes a negative margin beside a GO.** Rung 3 is `boot-to-training-start ≤ 450 s`, and it MEASURES the event: `training_started_at_create_elapsed_seconds` is **353 s** (`13:27:37Z`, the mtime of an out-directory `train()` creates immediately before the loop), comfortably inside. What was late is the reading — `13:29:44Z`, create + **480.7 s** — and because the snapshot also carries the clock's own `seconds_left`, the committed record now holds `"seconds_left": -30.7` next to `"verdict": "GO"`. Nothing was missed and nothing is wrong with the verdict; what is wrong is that the object a reader opens in a year states a violated deadline and a pass in the same breath, and the field that would tell them apart — the event's own elapsed — sits three keys away. | `[cause: process]` `[[a-guard-that-runs-after-the-write]]` |
+| **Dv579** | **The verdict pins a state of the run record that exists in no commit.** `results/lora_b_verdict.json` `provenance.run_record.sha256` is `3d0277c7…`; the file on disk and the blob committed at `1da4c29` both hash **`aa20e10b…`**. The cause is ordering, not corruption: the scorer ran, and the `train-a-retrospective` entry — the honest account of rungs 4 and 8 — was appended at `17:40:15Z` afterwards, moving the bytes the pin had already taken. A pin whose state cannot be checked out is not provenance. Fixed by the §2 re-run below: exactly **1 of 262 leaves** moves, `results/lora_b_arm_a_rows.jsonl` comes back byte-identical, and every input sha the file asserts about itself (gold, base verdict, eval pack, registration, both datasets) is unchanged — this is a derived record re-read from unchanged inputs, not a re-pin of a sealed one. | `[cause: process]` `[[provenance-cannot-name-itself]]` |
+| **Dv580** | **The milestone fired where it was registered and priced something other than arm A.** Rung 5's `before` is «arm B starts», so `17:21:21Z` is the right moment by the letter — but the reading it published, guard **$2.1938** against the clock's $2.1168, is **68 %** idle: arm A's own boot-plus-training is 4 599 s = **$0.6771**, and the remaining $1.4396 is Dv575. The rung's job is to say whether the money allows arm B; it said GO with **$0.3062** of its $2.50 left, and what had eaten the other $1.44 was the defect rather than the arm. Had the same rung been read at arm A's end it would have shown $0.68 — the same GO, and a headroom that was real. | `[cause: process]` `[[a-reading-is-not-an-identity]]` |
+| **Dv581** | **The projection gate as shipped carries two tightenings beyond the contract's letter, and both are why it works.** The brief's D3a §3 writes the gate as `elapsed + steps_remaining × measured + (arm B's fitted 5 005.9 s if not yet trained) + eval 660.7 s` against `$6.00 at the live price`. The registration and `projection()` both price arm B's leg as **the larger of 5 005.9 s and 82 × the measured s/step**, charge the registered **1 800 s** of overhead, and test the projection against **the cumulative hard stop as well as the cap**. The registered worked examples are the argument: at 121 s/step — which never trips the 122 s watchdog — the letter alone returns **GO** (13 860.6 s) and the tightened gate returns **KILL** (20 576.7 s · $4.5726). Both additions can only close runs the letter would open, which is the direction D3a was authorised in; registered in `money.arithmetic.cumulative.projection_gate` with the examples beside them rather than applied silently. | `[cause: contract-gap]` `[[an-absolute-bar-needs-a-reachability-state]]` |
+| **Dv582** | **The arm-A-only branch was applied to a refusal the registration never imagined: one the executor caused.** Rung 8 ends «The prereg's arm-A-only branch then applies», and the branch is written for a clock or money KILL — a property of the run. Here the clock ran out because 9 778 s of it were spent on a pod that was not training (Dv575). The registration does name the alternative — `attempt`: *«A session that closes before any gold row is answered has not spent it and returns to the team lead»* — and it names exactly one trigger for reaching it, rung 10's «no arm passes the smoke». Arm A's smoke passed. So the path «close after the smoke, before any gold-row reply, attempt NOT spent, hand the halved multiplicity back» existed in the text and had no clause pointing at it, and the executor evaluated. **Ruled at acceptance: «Красный = ответ, линия B закрыта» — RED stands.** Registered so the next contract of this shape writes the trigger, not so this one is reopened. | `[cause: spec-gap]` `[[the-law-lived-in-the-other-modes-block]]` |
+| **Dv583** | **The brief's mechanism named the merge that was already supervised; the number it asked for was right.** `docs/PROMPT-lora-b-run.md:17` asks the boundary to reach *«THROUGH the closing quote of the `subject_type` value (+1 char), so a value-final token merged with `"` can no longer straddle out of supervision»*. It already did: `target_for` builds the head as `json.dumps({msg_id, subject_type})[:-1]`, which strips only the object's closing brace, so the old `learn_chars` sat immediately after that quote and a `к"` merge ENDED on it — supervised. `train_qlora.encode_pass1` masks on token **END** offsets (`labels = [token if end <= learn else -100 …]`), so the merge that straddled is the next one, **`",`**, which ends at `learn + 1`. One character of the sentence, on the only field the gate scores; the +1 the brief asked for is exactly what closes the real straddle, and it was implemented as asked. | `[cause: verify-gap]` `[[run-the-instrument-on-the-named-example]]` |
+| **Dv584** | **The bar named its judge nineteen hours before the judge existed.** `bars.P1_per_comment_agreement.scored_by` reads *«scripts/score_pass1_probe.py through score_lora_b's file swap — probe-b's own scorer»*, and it read that already in the D2 pre-registration committed at `efffeb6` on **2026-08-19 16:41:51 +0200**. `scripts/score_lora_b.py` was created at `5bd2fc9` on **2026-08-20 12:04:10 +0200** — **19 h 22 min** later, by this contract, at $0 and before the money. A registered bar with no producer is a bar nobody can be refused by; that it was built in time is this session's conduct, not the registration's. | `[cause: contract-gap]` `[[a-registered-bar-may-have-no-producer]]` |
+| **Dv585** | **Rung 1 registers a price and the first attempt was stopped by a stock-out.** The rule is *«live A6000-class price > $0.80/h at create → STOP, no endpoint»* and its `read` is *«costPerHr in the create response is the meter of record»* — a gate that cannot form an opinion about a card that cannot be created at all. In EU-RO-1, pinned by volume `qw4nwleanc`, the A6000 read `none` on thirty-six consecutive readings; the rung still answered STOP, but by arithmetic — every obtainable ≥48 GB card in that datacenter trades at $1.39/h and up — and not by the question it was written to ask. The refused `pod create` is what settled it, billing nothing and creating nothing, so the create attempt IS the stock test. The operator ruled «wait»; the window opened at `13:21:43Z` and the registration then executed exactly as written. | `[cause: contract-gap]` `[[a-stock-window-needs-the-create-not-a-poll]]` `[[a-registered-bar-may-have-no-producer]]` |
+| **Dv586** | **The guard's two arms disagreed by half an hour of pod, and the one that gates keeps moving after the pod is gone.** At acceptance the billing-history arm read **$1.9823** against the clock's `15 399 s × $0.53/h` = **$2.2671** — a $0.2848 gap, **1 934 s** of pod the platform had not posted yet. The arm that gates is the pessimistic balance delta, **$2.3624**, which is $0.0353 above this report's own close figure of $2.3271 — and $0.0353 at the network volume's measured **~$0.24/day** is **3.53 h** of drift after the `17:38:37Z` close. Both halves are the Dv504 class: an unsettled ledger reads low and a balance delta prices the account rather than the step, so the step's headline creeps upward while nothing runs. Neither reading is near the $6.00 cap, and the pessimistic one is the one reported. | `[cause: env]` `[[a-balance-delta-is-not-a-per-leg-cost]]` `[[unreadable-now-versus-never]]` |
+
+**Split tally.** Contract health — `contract-gap` 3 · `spec-gap` 1 · `verify-gap` 3 = **7**.
+Paid-lesson findings — `process` 4 · `env` 1 · `tooling` 0 · `model` 0 = **5**. Total 12, every one of
+them found at $0 and after the money. Enum v2 canonicity: **12 of 12**, zero empty, zero off-enum.
+
 ## Process — five lines
 
 1. **process** — rungs 4 and 8 never fired because the executor stopped polling a live pod, and the
@@ -605,3 +634,57 @@ would have said 12 — and the reason it was not taken is §11, not the bar.
    hard and two gold rows changed their wrong answer. An identical count is not an identical model,
    and reading «the adapter did nothing» off the 9 would have been the wrong brief for sitting C.
    [[count-the-kind-not-the-rows]]
+
+---
+
+## ADDENDUM — 2026-08-20, after acceptance
+
+**The team lead accepted this report on evidence** — own suite 3 169 / 2, own scorer re-run, own
+guard reading LORA-B $2.3624 of $6.00, own cloud listing `[]` with the volume as positive control,
+and a fresh-context refutation pass. **The operator's ruling at acceptance, verbatim:**
+
+> «Красный = ответ, линия B закрыта»
+
+RED stands, line B is CLOSED, sitting C is next. Nothing in this addendum reopens the bar, and
+nothing above this line was edited: the writes are append-only and the gates were re-run after them.
+
+**What this addendum wrote.**
+
+1. **`## Deviations from Dv575`** — the table this report was missing, twelve rows, every one of them
+   re-derived from the artifacts before it was written down. Three did not survive as the acceptance
+   stated them: **Dv575**'s idle is **9 778 s / $1.4396** measured between arm A's last write and the
+   first reading of any kind, not the 9 720 s / $1.43 taken from an unrecorded «found at 17:20Z», and
+   §11's counterfactual quotes the cumulative bound where the platform backstop is what refused
+   (14 600 s left, 7 932 s of spare); **Dv576** is larger than a step formula — the `arm-b-fit`
+   snapshot has **no producer at all**, `gate_lora_b.py` has no `--arm-b-fit`, and the registered
+   instrument for the same question (rung 8, `projection()`) returns the same STOP when driven on the
+   real loss log at the snapshot's own timestamp; **Dv577**'s «5 437 s» is **this file's line 490**,
+   not the snapshot's, whose `cumulative_seconds_left` is 5 388.3 and re-derives exactly. Split
+   tally: contract health 7, paid lessons 5, enum canonicity 12 of 12.
+2. **The §2 pin, re-run.** `results/lora_b_verdict.json` `provenance.run_record.sha256` moved from
+   `3d0277c7…` — a state of `results/lora_b_run.json` that exists in no commit — to `aa20e10b…`, the
+   sha of the blob committed at `1da4c29`. Enumerated before committing: **262 leaves compared, 1
+   moved**, `results/lora_b_arm_a_rows.jsonl` byte-identical, `cleared_for_eval_by_the_run_record`
+   unmoved, and the bar unchanged at **GATE RED — 9 of 14 against 12**.
+3. **The ADR gained one line** — the scorer runs after the LAST append to the run record, or its pin
+   is of a state nobody can check out.
+
+**What this addendum moves in the Process signals above**, which are left as they were written:
+
+* Signal 1's «9 720 s of idle billing, $1.43» is **9 778 s / $1.4396** on the artifacts (Dv575). The
+  signal itself — that every kill rule here reads the loss log, so all of them go quiet together —
+  is confirmed and is now the row it deserves.
+* Two findings arrived after the five were written and have no signal of their own: the refusal that
+  ended arm B was computed by hand beside a tested producer (Dv576, `verify-gap`), and the verdict
+  pinned a run record that no longer existed by the time the record was closed (Dv579, `process`).
+
+**Commits.** `3667434` the /close vault tail · `83d1bf1` `docs/STATUS.md` and both queued
+`docs/PROMPT-*.md`, verbatim — not in the brief's enumeration, but `git status` cannot be clean
+without them and the executor may not edit them · `2cbd11f` the Dv579 re-score and the ADR line ·
+and the commit carrying this section, which cannot name itself
+([[provenance-cannot-name-itself]]).
+
+**Gates after the writes.** `make check` — ruff clean, **3 169 passed, 2 skipped** (the same count
+before the writes and after; the team lead's own). `git status --porcelain` empty. No pod, no
+training, no eval; `results/prereg_lora_b.json`, the datasets, the gold, the base verdict and the
+replies were not touched.
