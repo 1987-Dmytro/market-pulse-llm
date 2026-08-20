@@ -1,0 +1,502 @@
+{
+  "attempt": "ONE. No retry, no second prompt variant, and no tuning after any eval output is seen. **The attempt is SPENT at the first GOLD-row reply generated** — not at pod create, not at a dev reply, and not at the dev gate, whose 200 rows are labelled comments outside both the sealed fourteen and the eval pack's sixty-four. A session that closes before any gold row is answered has NOT spent it and returns to the team lead, and every rung before rung 8 closes the session in exactly that state",
+  "authority": "the operator's rulings of 2026-08-20 registered in docs/STATUS.md «Открытые решения» п. 0 — the base stays Gemma-4-31B, the operator's word replaces sitting C, the goal is the analysis of docs/REFERENCE-signals-w1.md, and the team lead labels — plus the three answers of the joint step review: dev-200, the shot in the same session on a pre-registered gate, and the dev gate as written below",
+  "bars": {
+    "P1_per_comment_agreement": {
+      "arm_a_scored": 9,
+      "base_scored": 9,
+      "collapse": {
+        "map": {
+          "категория_личное": "категория"
+        },
+        "symmetric": true
+      },
+      "comparison": "market_pulse.scorer.reader_comment_agreement",
+      "gating": true,
+      "loss_budget": {
+        "rows_that_may_be_lost": 2,
+        "rule": "a refusal and an ABSENT row cost exactly what a disagreement costs. The budget is registered before the run so the result cannot be re-read against one nobody wrote"
+      },
+      "minimum_agreed": 12,
+      "n": 14,
+      "population": 14,
+      "rule": "the sealed r2 gold, answered under probe-b's own 64-unit pack identity. ONE attempt, SPENT at the first gold-row reply",
+      "threshold": "≥ 12 of 14"
+    },
+    "census_50": {
+      "reading": "the subject_type distribution v2 answers the eval pack's census rows with, beside the base's and arm A's. Line B's whole finding was a census that moved while the bar did not (None 25 → 9, не_наш_рынок 8 → 23)",
+      "rule": "OBSERVATION ONLY — no number here moves any gate"
+    },
+    "dev_gate": {
+      "agreement_delta_minimum": -5,
+      "our_delta_minimum": 10,
+      "our_readings": [
+        "категория_личное",
+        "молочный_бренд"
+      ],
+      "our_rows": 49,
+      "population": 200,
+      "reachability": "our_v2 ≤ 49, so the delta is unreachable whenever our_base > 39. That is a STOP, not a RED: the gate could not have been met by any v2 whatever, the attempt is NOT spent, and the table goes to the operator with the reading",
+      "rule": "paired on the same 200 rows: our_v2 − our_base ≥ 10 (correct rows among the 49 категория_личное/молочный_бренд labels) AND agree_v2 − agree_base ≥ -5 (over all 200). BOTH or no shot",
+      "the_base_is_measured_here": "the base's dev numbers are MEASURED in this session on the same pod, never assumed and never taken from another run. That is what «paired» means",
+      "when": "rung 7, before the shot, on the Mac"
+    },
+    "judge": {
+      "absent_or_refusal": "a DISAGREEMENT — silence about a row that was asked is a miss",
+      "collapse": {
+        "map": {
+          "категория_личное": "категория"
+        },
+        "symmetric": true
+      },
+      "entry_point": "market_pulse.scorer.reader_comment_agreement",
+      "module_sha256": "dbb5406a502f813ba1b4940e0914310efd632386a8da60e0c002cc8964a97d4f",
+      "rule": "the same bytes probe-b and lora-b were scored with. A new equality loop would be a second definition of the bar and is refused",
+      "through": "scripts/score_pass1_probe.py::bar_p1"
+    }
+  },
+  "contract": "docs/PROMPT-pass1-fewshot.md",
+  "do_not": [
+    "no training, no adapter, no second prompt variant, no tuning after any eval output",
+    "never edit results/prereg_pass1_probe_b.json, results/pass1_probe_b_pack.json, the gold, the labels or the base verdict",
+    "never touch the sealed fourteen before the dev gate says GO",
+    "never leave --watch while a pod is billing",
+    "never two billing endpoints"
+  ],
+  "frozen_when_the_pod_exists": [
+    "src/market_pulse/prompts.py",
+    "src/market_pulse/scorer.py",
+    "results/pass1_dev_pack.json",
+    "results/pass1_probe_b_pack_v2.json",
+    "results/pass1_probe_b_pack.json",
+    "results/pass1_probe_b_verdict.json",
+    "results/reader_gold_w1_r2.json",
+    "results/pass1_holdout_100.json",
+    "results/prereg_pass1_fewshot.json"
+  ],
+  "h6": {
+    "mismatches": [],
+    "reading": "every registered number re-derives",
+    "rows": [
+      {
+        "agrees": true,
+        "formula": "200 calls × 5.162 s",
+        "mode": "equals",
+        "name": "dev_base_seconds",
+        "re_derived": 1032.4,
+        "registered": 1032.4
+      },
+      {
+        "agrees": true,
+        "formula": "1.5 × 5.162 s (a BOUND, not a measurement)",
+        "mode": "equals",
+        "name": "v2_seconds_per_call",
+        "re_derived": 7.743,
+        "registered": 7.743
+      },
+      {
+        "agrees": true,
+        "formula": "200 calls × 7.743 s",
+        "mode": "equals",
+        "name": "dev_v2_seconds",
+        "re_derived": 1548.6,
+        "registered": 1548.6
+      },
+      {
+        "agrees": true,
+        "formula": "64 calls × 7.743 s",
+        "mode": "rounds_to",
+        "name": "shot_seconds",
+        "re_derived": 495.552,
+        "registered": 495.6
+      },
+      {
+        "agrees": true,
+        "formula": "boot + dev base + dev v2 + shot + overhead",
+        "mode": "rounds_to",
+        "name": "total_seconds",
+        "re_derived": 5326.552,
+        "registered": 5326.6
+      },
+      {
+        "agrees": true,
+        "formula": "total_seconds / 3600",
+        "mode": "equals",
+        "name": "total_hours",
+        "re_derived": 1.4796,
+        "registered": 1.4796
+      },
+      {
+        "agrees": true,
+        "formula": "total_hours × $0.8/h",
+        "mode": "equals",
+        "name": "worst_case_usd_at_the_ceiling",
+        "re_derived": 1.1837,
+        "registered": 1.1837
+      },
+      {
+        "agrees": true,
+        "formula": "6300.0 s / 3600 × $0.8/h",
+        "mode": "equals",
+        "name": "hard_stop_usd_at_the_ceiling",
+        "re_derived": 1.4,
+        "registered": 1.4
+      },
+      {
+        "agrees": true,
+        "formula": "$1.50 / $0.8/h",
+        "mode": "equals",
+        "name": "session_ceiling_hours",
+        "re_derived": 1.875,
+        "registered": 1.875
+      },
+      {
+        "agrees": true,
+        "formula": "hard stop at the ceiling < cap",
+        "mode": "below",
+        "name": "the_hard_stop_is_under_the_cap",
+        "re_derived": 1.4,
+        "registered": 1.5
+      },
+      {
+        "agrees": true,
+        "formula": "worst case at the ceiling < cap",
+        "mode": "below",
+        "name": "the_worst_case_is_under_the_cap",
+        "re_derived": 1.1837,
+        "registered": 1.5
+      },
+      {
+        "agrees": true,
+        "formula": "450.0 s ≥ max(every boot this stack has measured) = 353.0 s",
+        "mode": "at_least",
+        "name": "boot_ceiling_over_the_worst_measured_boot",
+        "re_derived": 450.0,
+        "registered": 353.0
+      },
+      {
+        "agrees": true,
+        "formula": "all 49 «our» labels + 151 stratified from the other 601",
+        "mode": "equals",
+        "name": "dev_rows",
+        "re_derived": 200,
+        "registered": 200
+      },
+      {
+        "agrees": true,
+        "formula": "paired on the same rows",
+        "mode": "equals",
+        "name": "the_two_dev_legs_are_the_same_size",
+        "re_derived": 200,
+        "registered": 200
+      },
+      {
+        "agrees": true,
+        "formula": "probe-b's eval pack, unchanged in identity and order",
+        "mode": "equals",
+        "name": "shot_units",
+        "re_derived": 64,
+        "registered": 64
+      },
+      {
+        "agrees": true,
+        "formula": "49 «our» rows − 10 = the highest base that leaves it open",
+        "mode": "equals",
+        "name": "our_delta_is_reachable_at_the_bases_own_worst",
+        "re_derived": 39,
+        "registered": 39
+      }
+    ],
+    "rule": "every number docs/PROMPT-pass1-fewshot.md prints, re-derived from the formula the contract names for it. `equals` allows 1% — a rounding is not a finding; `rounds_to` is for the two figures the contract prints rounded; `below` and `at_least` check the DIRECTION of a margin, which is what a ceiling has instead of a value"
+  },
+  "instruments": {
+    "gate": {
+      "script": "scripts/gate_pass1_fewshot.py",
+      "sha256": "eda56fdef296f58f5a3fdf662fdf8724a1fb46278c7de5261af1e5dd9a75f409"
+    },
+    "packs": {
+      "producer": "scripts/build_pass1_fewshot_packs.py",
+      "sha256": "8f52c8ae87bbc339049837ea5ace7e6ae933d331a73fce28ed24db5103cee69e"
+    },
+    "parser": {
+      "entry_point": "market_pulse.prompts.parse_pass1",
+      "module": "src/market_pulse/prompts.py",
+      "sha256": "b70e2114b03a76dc2c8cfc9b559bf7ef22e9193d841b4fccc5ed8bd0a40294ab"
+    },
+    "prompt_sha256": {
+      "pass1_comment_gm4_v1": "5a4a3cb6ce4db89adb304c04de41210fdabfde0c53addfdb75adba0f1d866650",
+      "pass1_comment_gm4_v2": "f5f6a5afdd8573ba52bde5cf79041cf9a01d8421ea402c0f39d2ea1c1d430aee"
+    },
+    "prompt_v1_did_not_move": true,
+    "renderer": "market_pulse.prompts.pass1_messages_gm4",
+    "scorer": {
+      "module": "src/market_pulse/scorer.py",
+      "sha256": "dbb5406a502f813ba1b4940e0914310efd632386a8da60e0c002cc8964a97d4f"
+    },
+    "transport": {
+      "rule": "it CALLS scripts/pass1_pod_runner.py, which calls the shipped v5 runner. One model load serves every leg of a pack, and each leg is answered into its own out-file",
+      "script": "scripts/pass1_fewshot_pod_runner.py",
+      "sha256": "84f15a148e63ea37123a5306336ebfb4bb10d104ef8790e347c2c505fd8b4982"
+    },
+    "v2_is_v1_plus_two_paragraphs": {
+      "codebook_clause_sha256": "178c30c6bcabc7b7eef2062d40cd76880a61e4d25682467fc2cbf80664c3f8c7",
+      "examples_slot_sha256": "c98e446d28f9b2c784144abd5b5d6e6ef155d966f89e890927a45e0c8b282a2a",
+      "rule": "PASS1_COMMENT_PROMPT_V2 == PASS1_COMMENT_PROMPT + the clause + the slot, and nothing else. tests/test_pass1_prompt.py asserts it in both directions"
+    }
+  },
+  "kill_clock": [
+    {
+      "before": "the endpoint exists",
+      "read": "costPerHr in the create response is the meter of record (Dv448)",
+      "rule": "live price > $0.8/h at create → STOP, no endpoint. The backstop stamp is checked against the cumulative hard stop in the same command",
+      "rung": 1
+    },
+    {
+      "before": "the model is loaded",
+      "rule": "ssh dead-man ≤ 180 s or KILL — pass1-probe's proven gate-0",
+      "rung": 2
+    },
+    {
+      "before": "the first reply",
+      "rule": "boot → first reply ≤ 450 s or KILL. The ceiling is above every boot this stack has measured, the worst of them 353 s",
+      "rung": 3
+    },
+    {
+      "before": "the run is allowed to continue past a call",
+      "read": "money.arithmetic.cumulative.projection_gate — the formula and its terms",
+      "rule": "projection gate every 20 calls: the projected attempt total at MEASURED rates, with every leg still owed priced, must fit the cap at the LIVE price AND the cumulative hard stop, else KILL",
+      "rung": 4
+    },
+    {
+      "before": "the executor may look away",
+      "read": "held by scripts/gate_pass1_fewshot.py --watch, a BLOCKING loop",
+      "rule": "liveness: 600 s with no new answered row and no new pod-log line → KILL. The deadline is measured from the LAST EVENT and never from create. The executor does not poll by hand and does not leave the loop — lora-b lost 9 720 s and an arm because every rung there watched the training log and none watched a pod that had stopped working",
+      "rung": 5
+    },
+    {
+      "before": "anything",
+      "read": "the `--terminate-after` stamp, read back and refused on overshoot",
+      "rule": "cumulative hard stop 6300 s, PLATFORM-held. Each pod's --terminate-after is its own create plus what the stop has left",
+      "rung": 6
+    },
+    {
+      "before": "the shot",
+      "read": "bars.dev_gate — both inequalities, paired on the same 200 rows",
+      "rule": "dev gate: our_v2 − our_base ≥ 10 AND agree_v2 − agree_base ≥ -5. Both or NO shot. RED → delete, prove it by listing, the attempt is NOT spent, and the table returns to the team lead",
+      "rung": 7
+    },
+    {
+      "before": "the verdict",
+      "rule": "the shot is 64 units into its OWN out-file, never a dev leg's — the shipped resume skips every id it already sees (Dv560). The attempt is SPENT at the first gold-row reply",
+      "rung": 8
+    }
+  ],
+  "money": {
+    "arithmetic": {
+      "boot_rule": "the registered ceiling, and rung 3's own threshold. It is ≥ the worst boot this stack has measured (353.0 s, lora-b) by ×1.2748. The contract's parenthetical «worst 293 × 1.5» quotes the worst as it stood before lora-b measured 353 s; the CEILING has not moved and is still above the true worst",
+      "boot_seconds_charged": 450.0,
+      "boots_measured": {
+        "lora-b, A6000 + the same volume": [
+          267.0,
+          293.0,
+          353.0
+        ],
+        "pass1-probe-b, the 4090 this contract prefers": [
+          237.155
+        ],
+        "reader-v5b / pass1-probe stack, inference": [
+          146.8,
+          192.1,
+          237.155
+        ]
+      },
+      "calls": {
+        "dev_base": 200,
+        "dev_v2": 200,
+        "our": 49,
+        "shot": 64
+      },
+      "cumulative": {
+        "hard_stop_hours": 1.75,
+        "hard_stop_rule": "cumulative billed ≤ 1.75 h = $1.4 at the $0.8/h ceiling. It sits UNDER the $1.50 cap it defends, and it is the PLATFORM that enforces it — so it protects even a hung call no gate can see",
+        "hard_stop_seconds": 6300.0,
+        "hard_stop_usd_at_the_price_ceiling": 1.4,
+        "projection_gate": {
+          "every": "20 calls",
+          "formula": "billed_by_closed_pods + elapsed_on_this_pod + Σ over every leg still owed of (its remaining calls × its s/call) + overhead_seconds. A leg with a reply is priced at its MEASURED rate — the larger of its mean and its last call; a leg with none is priced at the LARGER of its registered rate and the worst rate measured on this pod so far",
+          "overhead_seconds": 1800.0,
+          "verdict": "KILL if the projection exceeds $1.50 at the LIVE price, or exceeds the 6300 s hard stop in seconds. The stricter binds",
+          "why_every_leg": "the shot's 64 calls are what makes the dev legs affordable at all. A projection that priced only the running leg would open a run the cap closes"
+        },
+        "rule": "the hard stop and EVERY budget check count across ALL pods of this attempt, never per pod. `--terminate-after` on each pod is stamped at that pod's create plus the hard stop LESS what every closed pod already billed, so two pods cannot each be given a fresh window",
+        "session_ceiling_hours": 1.875,
+        "session_ceiling_rule": "cap / price ceiling — the longest session the cap can pay for"
+      },
+      "hours": 1.479598,
+      "leg_seconds": {
+        "base": 1032.4,
+        "shot": 495.552,
+        "v2": 1548.6
+      },
+      "overhead_rule": "0.5 h — staging, the scp's, the dev gate on the Mac, and the deletion",
+      "overhead_seconds": 1800.0,
+      "seconds_per_call": {
+        "base": 5.162,
+        "rule": "base is MEASURED — probe-b's 64 paid calls on an RTX 4090, mean 5.162 s. v2 is UNMEASURED and is registered as a BOUND: 1.5 × the measured base, for the longer prefill five labelled examples add. Rung 4 measures it at call 20 and every 20 after that, and the projection then prices the rest at what the pod is actually doing",
+        "sample": "results/pass1_probe_b_rows.jsonl — 64 calls, one card, one boot. Named beside the number because a rate is a property of the sample it was measured on",
+        "shot": 7.743,
+        "v2": 7.743
+      },
+      "total_seconds": 5326.552,
+      "worst_case_usd_at_the_lora_b_price": 0.784187,
+      "worst_case_usd_at_the_price_ceiling": 1.183678
+    },
+    "cap_rule": "$1.50 all-in, frozen at the FIRST `pod create`. Raising it is the operator's word BEFORE any endpoint exists, never after a reading",
+    "cap_usd_all_in": 1.5,
+    "guard": "PYTHONPATH=src python3.11 scripts/runpod_guard.py --step pass1-fewshot --step-cap 1.50 — the anchor is committed BEFORE the pod exists, and the reading is what the rungs that name one act on",
+    "meter": {
+      "card_preferred": "probe-b's class — RTX 4090 at $0.74/h, the card the 5.162 s/call sample was measured on. An A6000 under the ceiling is allowed",
+      "datacenter": "EU-RO-1, pinned by network volume qw4nwleanc — the volume decides",
+      "memory": "this line does NOT train, so lora-b's 48 GB constraint does not apply: probe-b served this same base on a 24 GB 4090. That makes rung 1 a price gate against a much wider market than lora-b faced",
+      "price_ceiling_usd_per_hour": 0.8,
+      "price_rule": "**READ ON THE DAY.** `costPerHr` in the create response is the meter of record and every figure here is recomputed from it by rung 4 before the run is allowed to continue",
+      "resource": "ONE rented pod, billed for every second it EXISTS — from `pod create` to `pod delete`. `pod stop` does not stop the bill, so the run deletes and never stops",
+      "usd_per_second_at_the_ceiling": 0.000222222
+    },
+    "reading": {
+      "anchor_file": "results/spend_pass1_fewshot.json",
+      "rule": "money is read from the GUARD, never from a ledger and never from prose (Dv33)",
+      "step": "pass1-fewshot"
+    },
+    "recovery": {
+      "rule": "ONE pod re-creation, and only after a deletion PROVEN by listing. It happens only if the guard READING plus the worst case remaining at MEASURED rates is ≤ $1.50 and inside the cumulative stop. Never two billing endpoints",
+      "there_is_no_generation_checkpoint_to_lose": "every reply is flushed to its out-file as it lands and the shipped resume skips every unit already answered, so a re-creation re-asks only what has no reply. That is the one thing this line has that lora-b did not: a KILL mid-leg costs the boot, not the leg"
+    }
+  },
+  "multiplicity": "this is the THIRD shot at the same fourteen — the base (pass1-probe-b), arm A (lora-b) and now v2 — so the false-pass odds are about 3p and not p. Named here, in the registration, so the verdict is never read as a single shot. Accepted by the operator's «приступаем» of 2026-08-20",
+  "phase": "pass1-fewshot",
+  "population": {
+    "dev": {
+      "distribution": {
+        "null": 54,
+        "категория_личное": 47,
+        "молочный_бренд": 2,
+        "не_наш_рынок": 85,
+        "сеть_ритейлер": 12
+      },
+      "labels": {
+        "r1": "776b204f3d3aa1a193f0faad7f68198595c81963199124efca8f6b74a9e1c920",
+        "r2": "8f611437fdd3ed724acda516186bfa2837d94d7e8d74ac6c25e23a8e57d60e50"
+      },
+      "legs": [
+        {
+          "name": "base",
+          "out": "pass1_dev_base.jsonl",
+          "task": "pass1_comment_gm4_v1",
+          "units": 200
+        },
+        {
+          "name": "v2",
+          "out": "pass1_dev_v2.jsonl",
+          "task": "pass1_comment_gm4_v2",
+          "units": 200
+        }
+      ],
+      "pack": "results/pass1_dev_pack.json",
+      "rows": 200,
+      "sha256": "cbdb18c4c0e9dad0e68ea10c865e72d080fb18dc42fb05933d778b1f3eb0cec9"
+    },
+    "gold": {
+      "n": 14,
+      "record": "results/reader_gold_w1_r2.json",
+      "revision": "r2",
+      "rows": [
+        {
+          "msg_id": 20664,
+          "thread": "@VARUS_channel:10348"
+        },
+        {
+          "msg_id": 21599,
+          "thread": "@VARUS_channel:10613"
+        },
+        {
+          "msg_id": 21601,
+          "thread": "@VARUS_channel:10613"
+        },
+        {
+          "msg_id": 21626,
+          "thread": "@VARUS_channel:10613"
+        },
+        {
+          "msg_id": 21629,
+          "thread": "@VARUS_channel:10613"
+        },
+        {
+          "msg_id": 47899,
+          "thread": "@mandziak:3676"
+        },
+        {
+          "msg_id": 47902,
+          "thread": "@mandziak:3676"
+        },
+        {
+          "msg_id": 48276,
+          "thread": "@mandziak:3703"
+        },
+        {
+          "msg_id": 48283,
+          "thread": "@mandziak:3703"
+        },
+        {
+          "msg_id": 578951,
+          "thread": "@matusi_ukr:22242"
+        },
+        {
+          "msg_id": 579379,
+          "thread": "@matusi_ukr:22272"
+        },
+        {
+          "msg_id": 579457,
+          "thread": "@matusi_ukr:22272"
+        },
+        {
+          "msg_id": 580124,
+          "thread": "@matusi_ukr:22303"
+        },
+        {
+          "msg_id": 580129,
+          "thread": "@matusi_ukr:22303"
+        }
+      ],
+      "sha256": "716ff4174bdafa5957caa4d038a11241b6eb299df4035a5f0e983217ec2a46d9"
+    },
+    "holdout": {
+      "record": "results/pass1_holdout_100.json",
+      "rule": "registered EVALUATION ONLY before this session. This line trains nothing, so dev rows MAY overlap it and the overlap is published in both records",
+      "sha256": "5a62c957addfa7211702f38414d6fd2f3d3382ca6dfdb46c92c459c45f0ae647"
+    },
+    "shot": {
+      "out": "pass1_fewshot_shot.jsonl",
+      "pack": "results/pass1_probe_b_pack_v2.json",
+      "sealed_source": {
+        "identity_and_order": "unchanged — asserted id by id, in order",
+        "items": 64,
+        "pack": "results/pass1_probe_b_pack.json",
+        "rule": "the sealed pack, the sealed base verdict and the gold are READ and never written. The base is not re-run on the fourteen: its answers are the ones results/pass1_probe_b_verdict.json already holds",
+        "sha256": "bbbe64203f9c909a2d2e8aeab03d8d61c0fd6604d4854e13462d0e190bc4e113"
+      },
+      "sha256": "2c4b8d7796c1c88ab00a5d2e4b6b6bc9dfc95f19f3ecc8211235e33766c849bf",
+      "units": 64
+    }
+  },
+  "producer": {
+    "borrowed": {
+      "scripts/build_pass1_fewshot_packs.py": "8f52c8ae87bbc339049837ea5ace7e6ae933d331a73fce28ed24db5103cee69e",
+      "scripts/window_summary_5c2.py": "239d2d5fcc0f0c93158ca41383b5ce20beb7f8e9db38974913a302ea4831fdaf"
+    },
+    "script": "scripts/write_pass1_fewshot_prereg.py",
+    "sha256": "4f443019ca62d2367c06b229e125d34b32efd55cf5a396d274c9f22efff274aa"
+  },
+  "return_to_the_operator": "**A FAILED BAR GOES BACK TO THE OPERATOR, never to a prompt iteration.** A RED dev gate or a RED shot closes this line in-session: nothing is re-worded, nothing is re-run, and the dev table and the per-row fourteen go back for the next option of the menu (synthetic + LoRA, or rationale-supervised LoRA). A GREEN shot ships v2 as the pass-1 prompt of the window run, which is the NEXT contract and is priced there",
+  "what_this_line_is": "line B (labels + LoRA) closed RED: the adapter learned the label marginal and not the decision. All four «категория» misses of the base are ONE error class — the comment MENTIONS a retailer or a brand inside a category habit, and the base classifies by the mention. This line fixes the DEFINITION in the prompt and shows the contrast with labelled neighbours. Nothing is trained"
+}
