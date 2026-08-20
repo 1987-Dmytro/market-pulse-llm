@@ -71,11 +71,25 @@ cumulative hard stop allows.
 
 ## 2 — rung 2, the ssh dead-man (≤ 180 s of this pod's create-elapsed)
 
+`runpodctl ssh info` answers `{"error": "pod not ready"}` until the port mapping is published and
+then a JSON object carrying `"ip"` and `"port"`. **Poll on `"port"`, and BOUND the loop below the
+dead-man**, so a poller that is looking for the wrong thing cannot spend the deadline being blind:
+
 ```bash
 runpodctl ssh info <POD_ID>          # "pod not ready" for a minute or two is normal
-PYTHONPATH=src python3.11 scripts/gate_pass1_fewshot.py --gate0            # WAIT (exit 3)
+for i in $(seq 1 34); do            # 34 x 5 s = 170 s, inside the 180 s rung
+  runpodctl ssh info <POD_ID> | grep -q '"port"' && break
+  sleep 5
+done
+runpodctl ssh info <POD_ID>          # the reading the next command asserts
 PYTHONPATH=src python3.11 scripts/gate_pass1_fewshot.py --gate0 --ssh-ok   # it answered
 ```
+
+**`--gate0` without `--ssh-ok` asserts that the endpoint has NOT answered.** Run it as a poll only
+while you are inside the deadline; past 180 s it is a KILL, and it is a KILL whether the endpoint is
+up or not, because what the gate records is the reading you gave it. On 2026-08-20 this cost a pod:
+the loop grepped `"host"`, a key `runpodctl` never emits, spun for 240 s, and the `--gate0` after it
+recorded a dead-man nobody could prove either way ([[a_checker_whose_failure_is_silence]]).
 
 ## 3 — stage, and launch BOTH dev legs in one process
 
