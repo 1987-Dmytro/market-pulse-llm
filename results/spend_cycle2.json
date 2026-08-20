@@ -213,6 +213,36 @@
       "billing_since_usd": 5.255286,
       "billing_read": "read",
       "note": "lora-b pod deleted; arm A trained and evaluated, arm B never started"
+    },
+    {
+      "at": "2026-08-20T20:56:39+00:00",
+      "balance": 16.6914238935,
+      "spent_usd": 5.8183,
+      "remaining_usd": 14.1817,
+      "balance_delta_usd": 5.8183,
+      "billing_since_usd": 5.808615,
+      "billing_read": "read",
+      "note": "pass1-fewshot, before the pod"
+    },
+    {
+      "at": "2026-08-20T21:03:30+00:00",
+      "balance": 16.6914238935,
+      "spent_usd": 5.8183,
+      "remaining_usd": 14.1817,
+      "balance_delta_usd": 5.8183,
+      "billing_since_usd": 5.818338,
+      "billing_read": "read",
+      "note": "after the rung-2 KILL, before the ONE re-creation"
+    },
+    {
+      "at": "2026-08-20T21:08:07+00:00",
+      "balance": 16.6105350102,
+      "spent_usd": 5.8992,
+      "remaining_usd": 14.1008,
+      "balance_delta_usd": 5.8992,
+      "billing_since_usd": 5.818338,
+      "billing_read": "read",
+      "note": "session closed at rung 2, attempt NOT spent"
     }
   ]
 }
