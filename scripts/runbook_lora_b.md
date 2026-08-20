@@ -78,6 +78,19 @@ window down is always accepted — it only shortens it.
 A `costPerHr` above **$0.80/h** is rung 1: delete the pod and STOP — no training, no endpoint. Exit
 code 2 says so and the record keeps the reading either way.
 
+**A REFUSED create is a clean rung-1 STOP and costs $0.** `--pre-create-check` grades the cumulative
+clock and says nothing about stock, so the create is also the stock test — and the platform answering
+
+```
+{"error":"failed to create pod: graphql error: There are no longer any instances available
+ with the requested specifications. Please refresh and try again."}
+```
+
+means no pod came into existence, nothing is billed, and the attempt is not spent. Prove it with
+`runpodctl pod list -a` → `[]` and do NOT run `--open`: there is nothing to open. That is the
+outcome of 2026-08-20, and it is a rung firing, not a failure to work around
+([[the-empty-row-is-the-answer]]).
+
 ## 2 — rung 2, the ssh dead-man (≤ 180 s of this pod's create-elapsed)
 
 ```bash

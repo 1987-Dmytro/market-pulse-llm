@@ -299,8 +299,16 @@ Two readings, twenty minutes apart, because the board moves — the second is th
 | RTX 4090 | 24 GB | 0.74 | Low | not A6000-class |
 
 Rung 1 reads: *"live A6000-class price > $0.80/h at create → STOP, no endpoint."* In the one
-datacenter this attempt can use, 48 GB-class silicon trades at $1.39/h. The rung is satisfied and
-its verdict is STOP.
+datacenter this attempt can use, 48 GB-class silicon trades at $1.39/h and up. The rung is satisfied
+and its verdict is STOP.
+
+**The inference this rests on, said out loud so the team lead can overrule it cheaply.** The
+registration never defines "A6000-class". This report reads it as **≥ 48 GB**, derived from two
+things and not from the name: the measured 35.13 GB peak above, and `config/qlora.yaml`'s own
+comment that "the 48 GB card must survive a long-sequence spike". If the sitting meant something
+narrower — the A6000 die specifically, or an Ampere generation — the conclusion is unchanged, since
+no Ampere 48 GB card is obtainable here either. If it meant something wider, the RTX PRO 6000
+Blackwell at 96 GB is the candidate and it still needs the ceiling raised.
 
 **The memory floor this run needs is measured, and it excludes every card under 48 GB.**
 `results/train/45h2-arm-b/provenance.json` records `gpu_gb_peak` **35.13 GB** for the same base at
@@ -308,8 +316,31 @@ the same `max_seq_len` on a 49 140 MiB A6000. So the obtainable set in EU-RO-1 i
 $0.80/h" — it is "cards of 48 GB or more", and every one of those is above the ceiling.
 
 Thirty-six readings of the stock over twenty minutes, every one `none`, before the create was
-attempted and after. The A6000 does exist in **EU-SE-1** at Low stock — a different datacenter, with
-no volume and no warm `/workspace/hf`.
+attempted and after. The A6000 does exist in **EU-SE-1** at `Low` — a different datacenter.
+
+### The EU-SE-1 branch, priced rather than dismissed
+
+This project has already measured both numbers that decide it, so neither is left as prose:
+
+* **the weights download is cheap.** `scripts/runbook_4b.md`: *"The volume-less fallback, measured.
+  It is cheaper than it sounds: the 62 GB re-download took **4 minutes** (~$0.04)."* At $0.53/h that
+  is ~240 pod-seconds. **The money is not the objection.**
+* **a second network volume is a second monthly bill.** The same runbook: *"Do **not** create a
+  second network volume in another datacenter: that is a second monthly bill and an operator
+  decision."* This project's own measured figure for its network volume is **~$0.24/day** — the
+  literal `knowledge/hot.md` carries as a priced input — which is ~$7/month, recurring, and beside
+  the run rather than inside the $6.00 step cap by the same rule that puts volume spend beside every
+  other run here.
+
+**What actually refuses the volume-less path is rung 3, not the cap.** Boot-to-training-start is
+capped at **450 s**, derived from the worst WARM boot measured (293 s × 1.5), and a warm boot already
+includes the NF4 load. A cold pod adds ~240 s of download and a `pip install` — `/workspace/venv`
+lives on the volume too — which puts the cold path at roughly 430–530 s, straddling the ceiling.
+So the volume-less branch is not a money ruling; it is a request to re-register rung 3 with a
+cold-boot leg, before any endpoint exists.
+
+**And there is a precedent for simply waiting.** `scripts/runbook_4b.md` records this exact scarcity:
+*"On 2026-08-01 the window stayed shut for **49 minutes** and reopened at `Low`."*
 
 ### Why the available card was not substituted
 
@@ -364,7 +395,12 @@ If it does not return, the choice is a ruling and not an executor's call:
 | A100 80GB, $1.39/h | needs the ceiling raised BEFORE any endpoint | faster card, so possibly cheaper in absolute dollars, but `s/step` is unmeasured — rungs 4 and 8 need re-registering first. **And it went out of stock in EU-RO-1 while this was written** |
 | RTX PRO 4500 32 GB, $0.72/h | inside the cap | **excluded by measurement** — this stack peaked at 35.13 GB on the A6000 |
 | RTX PRO 6000 96 GB, $1.89–2.09/h | needs the ceiling raised BEFORE any endpoint | the only card obtainable in EU-RO-1 that can hold the run at all; s/step unmeasured |
+| EU-SE-1, volume-less, A6000 $0.53/h | ~$0.04 of download inside the cap | **rung 3 refuses it**: the 450 s boot ceiling is derived from WARM boots and the cold path adds ~240 s of download plus a `pip install`. Needs rung 3 re-registered, not the cap raised |
+| EU-SE-1 with a second network volume | ~$0.24/day recurring, beside the cap | explicitly "an operator decision" in `scripts/runbook_4b.md`; a second monthly bill for one session |
 | return to the sitting | $0 | line B stays open and unmeasured |
+
+The precedent for the chosen option is in the same runbook: on 2026-08-01 the identical window
+closed and reopened at `Low` after **49 minutes**.
 
 ---
 
