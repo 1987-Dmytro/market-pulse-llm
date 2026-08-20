@@ -456,7 +456,7 @@
     },
     "run_record": {
       "file": "results/lora_b_run.json",
-      "sha256": "3d0277c7d06c55742b3cd01515490c522e90d484264333b53805575249bac76d"
+      "sha256": "aa20e10b74f96a09181bc0608a5e4fdfa13de4a81020168d47044df29e21e04e"
     },
     "training": {
       "config": "config/qlora.yaml",
