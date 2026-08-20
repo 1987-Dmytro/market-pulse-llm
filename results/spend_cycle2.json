@@ -183,6 +183,16 @@
       "billing_since_usd": 2.539161,
       "billing_read": "read",
       "note": "reader-topup COMPLETE: 132 of 132 units read in segment 3; pod deleted and proven"
+    },
+    {
+      "at": "2026-08-20T10:04:29+00:00",
+      "balance": 19.0829718404,
+      "spent_usd": 3.4268,
+      "remaining_usd": 16.5732,
+      "balance_delta_usd": 3.4268,
+      "billing_since_usd": 3.42679,
+      "billing_read": "read",
+      "note": "lora-b anchor, before the pod"
     }
   ]
 }
