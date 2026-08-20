@@ -33,7 +33,8 @@ def sft_row(msg_id: int = 21626, subject_type: str = "сеть_ритейлер"
         json.dumps({"msg_id": msg_id, "subject_type": subject_type}, ensure_ascii=False)[:-1]
         + ', "subject_id": null, "stance": null}'
     )
-    learn = target.index(', "subject_id"')
+    # through the value AND the separator that closes it — D3a's boundary
+    learn = target.index(', "subject_id"') + 1
     return {
         "id": f"@ch:1#{msg_id}",
         "msg_id": msg_id,
@@ -138,15 +139,62 @@ def test_encode_pass1_supervises_the_head_and_masks_the_unlabelled_tail():
     assert encoded["input_ids"][prompt_width:] == [ord(one) % 997 for one in row["target"]]
 
 
-def test_a_token_straddling_the_boundary_is_masked_not_supervised():
-    """Conservative by construction: a merge across the cut supervises LESS, never more."""
-    row = sft_row()
-    encoded = trainer.encode_pass1(MergingTokenizer(row["learn_chars"]), row, max_seq_len=4096)
+def supervised_text(tokenizer, row: dict) -> str:
+    """The characters of the target that survive the mask, as a string.
+
+    Counting surviving TOKENS cannot see this tightening: a merge that is masked and a merge that is
+    supervised whole both change the count by one, and the question is which CHARACTERS are left
+    ([[check_granularity_matches_the_claim]]).
+    """
+    encoded = trainer.encode_pass1(tokenizer, row, max_seq_len=4096)
     prompt_width = len("<t>" + row["prompt"] + "<m>")
-    supervised = [one for one in encoded["labels"][prompt_width:] if one != -100]
-    # the token covering the cut reaches past it, so it is masked and ONE character of the label's
-    # trailing quote goes unsupervised. That is the direction the rule is allowed to be wrong in.
-    assert len(supervised) == row["learn_chars"] - 1
+    spans = tokenizer(row["target"], return_offsets_mapping=True)["offset_mapping"]
+    return "".join(
+        row["target"][start:end]
+        for (start, end), label in zip(spans, encoded["labels"][prompt_width:])
+        if label != -100
+    )
+
+
+def test_the_quote_and_comma_merge_is_supervised_whole_and_the_old_boundary_ate_it():
+    """D3a's tightening, with the boundary it replaced as the negative control.
+
+    `MergingTokenizer(learn - 1)` is the real merge: one token covering the value's closing quote
+    and the separator after it. Under the boundary this run registers that token ENDS on the cut and
+    is supervised whole. Under the boundary before it — one character earlier — the same token ends
+    PAST the cut, is masked, and the label loses its closing quote out of the loss. Same tokenizer,
+    same row, two boundaries: the assertion is the difference between them
+    ([[guard_selftest_negative_control]]).
+    """
+    row = sft_row()
+    merge_at = row["learn_chars"] - 1
+    kept = supervised_text(MergingTokenizer(merge_at), row)
+    assert kept.endswith(f'"сеть_ритейлер"{trainer.SUPERVISED_SEPARATOR}')
+
+    eroded = supervised_text(MergingTokenizer(merge_at), {**row, "learn_chars": merge_at})
+    assert eroded.endswith("сеть_ритейлер")
+    assert not eroded.endswith('сеть_ритейлер"')
+
+
+def test_a_token_that_reaches_past_the_separator_is_still_masked():
+    """The rule still errs toward supervising LESS — the tightening moved the cut, not the rule.
+
+    A merge that starts ON the separator ends past the boundary and is dropped, so the separator can
+    still go unsupervised. What it can no longer do is take the value's own tail with it.
+    """
+    row = sft_row()
+    kept = supervised_text(MergingTokenizer(row["learn_chars"]), row)
+    assert kept.endswith('"сеть_ритейлер"')
+    assert not kept.endswith(trainer.SUPERVISED_SEPARATOR)
+
+
+def test_the_separator_the_builder_writes_is_the_one_the_trainer_masks_on():
+    """Two files, one constant. The trainer does not import the builder — it runs on the pod, where
+    the builder's Mac-side imports do not belong — so the agreement is asserted here instead
+    ([[one_constant_answering_two_questions]])."""
+    import build_pass1_sft as builder
+
+    assert builder.SEPARATOR == trainer.SUPERVISED_SEPARATOR
 
 
 def test_encode_pass1_refuses_a_tokenizer_that_cannot_locate_the_span():
@@ -186,8 +234,27 @@ def test_load_sft_refuses_a_target_the_parser_cannot_read(tmp_path):
 def test_load_sft_refuses_a_learn_chars_that_stops_short_of_the_label(tmp_path):
     """The defect a mask can have and a suite cannot see: it goes green and trains on nothing."""
     row = sft_row()
-    with pytest.raises(SystemExit, match="does not end at the label"):
+    with pytest.raises(SystemExit, match="does not end at"):
         trainer.load_sft(write(tmp_path, [{**row, "learn_chars": 12}]))
+
+
+def test_load_sft_refuses_the_boundary_this_run_replaced(tmp_path):
+    """The old boundary — ON the value, one character short of the separator — is now a REFUSAL.
+
+    Without this the guard would accept both boundaries, a regenerated dataset could ship the old
+    one, and nothing in the suite would say which of the two was trained.
+    """
+    row = sft_row()
+    with pytest.raises(SystemExit, match="does not end at"):
+        trainer.load_sft(write(tmp_path, [{**row, "learn_chars": row["learn_chars"] - 1}]))
+
+
+def test_load_sft_refuses_a_learn_chars_that_runs_past_the_separator(tmp_path):
+    """The mirror of the short boundary: one that starts teaching the fields nobody labelled."""
+    row = sft_row()
+    past = row["target"].index('"subject_id"') + len('"subject_id"')
+    with pytest.raises(SystemExit, match="does not end at"):
+        trainer.load_sft(write(tmp_path, [{**row, "learn_chars": past}]))
 
 
 def test_load_sft_refuses_a_row_under_another_prompt(tmp_path):

@@ -14,9 +14,13 @@ them with `null` and training on it teaches «stance is always null», and that 
 it is disqualifying: of the fourteen sealed gold rows the bar is scored on, THREE score `stance`
 against a non-null gold value (21626, 21629, 580124), so with stance ≡ null not one of them can
 agree whatever it answers about the subject. The reachable maximum is then 11 of 14 against a
-threshold of 12 — the gate would be unreachable before the pod is created. So each row carries `learn_chars`: the target is written whole, and only its head —
-through the `subject_type` value — is supervised. The tail is context the model conditions on and
-is never scored ([[an_absolute_bar_needs_a_reachability_state]]).
+threshold of 12 — the gate would be unreachable before the pod is created. So each row carries `learn_chars`: the
+target is written whole, and only its head — through the `subject_type` value and the one separator
+character that closes it — is supervised. The tail is context the model conditions on and is never
+scored ([[an_absolute_bar_needs_a_reachability_state]]). The separator is D3a's tightening and its
+reason is in :func:`target_for`: the mask is applied on token END offsets, so a boundary that
+stopped ON the value let a `",` merge straddle out and erode the tail of the one field the gate
+scores.
 
 **The context these prompts can carry, and what that costs.** A pass-1 request holds the thread's
 `<topic>` and its `<entities>`, both of which come from a reader verdict that has been PAID FOR. 15
@@ -94,6 +98,19 @@ is what makes the ablation «does more data of the same population help» and no
 
 RECORD_NAME = "results/pass1_sft.json"
 ARM_NAMES = {"a": "results/pass1_sft_arm_a.jsonl", "b": "results/pass1_sft_arm_b.jsonl"}
+
+SMOKE_NAME = "results/lora_b_smoke_pack.json"
+"""The format smoke's pack — ONE training request, and never a gold or eval-pack row.
+
+D3a rung 5: before an arm is evaluated, one TRAINING-set prompt goes through its adapter and the
+reply has to parse as one balanced four-key object. Head-only supervision can in principle un-teach
+the four-key shape, and this is what makes that a cheap KILL instead of an invisible zero at the
+bar. It is a transport-format check and NOT a bar peek — the row is outside both the sealed
+fourteen and the eval pack's sixty-four, and this file asserts it."""
+
+SEPARATOR = ","
+"""The one character `learn_chars` reaches PAST the `subject_type` value — the D3a tightening. It
+is the schema's own field separator, so it carries no label and teaches nothing but structure."""
 
 TEMPLATE_SLACK = 16
 """Tokens of margin over the measured bound, for the chat template the pod wraps each prompt in.
@@ -203,6 +220,17 @@ def target_for(msg_id: int, subject_type: str | None) -> tuple[str, int]:
     Field order is the prompt's own schema order. `subject_id` and `stance` are written `null` —
     they have to be something, the parser demands all four keys — and `learn_chars` stops the loss
     before them, so nothing here teaches the model what a stance is.
+
+    **The boundary runs one character PAST the value's closing delimiter, and that +1 is the whole
+    of the D3a tightening.** `scripts/train_qlora.py` masks on token END offsets — a token that
+    reaches past `learn_chars` is dropped from the loss — so where the tokenizer merges the value's
+    closing `"` with the `,` that follows it (`",`, and on some merges the value's last character
+    with them), that token ENDS at `learn_chars + 1` and the whole merge falls out of supervision.
+    The erosion lands on the tail of `subject_type`, which is the one field the gate scores. Taking
+    the boundary through the separator makes the merged token end exactly ON it, so it is supervised
+    whole; a token reaching past the separator is still masked, so the two unlabelled fields are as
+    untaught as they were. The separator itself is structure the parser demands and carries no
+    label ([[the_guard_hashes_the_half_that_cannot_move]]).
     """
     head = json.dumps(
         {"msg_id": msg_id, "subject_type": subject_type}, ensure_ascii=False, sort_keys=False
@@ -212,7 +240,12 @@ def target_for(msg_id: int, subject_type: str | None) -> tuple[str, int]:
     parsed = prompts.parse_pass1(target, msg_id=msg_id)
     if parsed["subject_type"] != subject_type or parsed["msg_id"] != msg_id:
         raise SystemExit(f"{msg_id}: the parser does not read this target back — {parsed}")
-    return target, len(learned)
+    if target[len(learned)] != SEPARATOR:
+        raise SystemExit(
+            f"{msg_id}: the character after the supervised value is {target[len(learned)]!r} and"
+            f" not {SEPARATOR!r}. The +1 boundary assumes the separator sits there — stop."
+        )
+    return target, len(learned) + 1
 
 
 def ratio() -> dict:
@@ -299,9 +332,14 @@ def bound_topic(text: str, limit: int) -> str:
     return kept.rstrip() + "…"
 
 
-def rendered(unit: dict, context: dict[str, tuple[str, dict]], limit: int) -> dict:
-    """One SFT row: the transport's own request, the team lead's answer, and where its context came
-    from."""
+def request(unit: dict, context: dict[str, tuple[str, dict]], limit: int) -> dict:
+    """The transport's own fields for one unit, and the request they render to.
+
+    Split out of :func:`rendered` because the smoke pack needs the FIELDS — the pod re-renders each
+    item from them and refuses unless its sha matches — while the SFT row needs the rendered string.
+    One function producing both is what keeps the smoke's request the training request rather than
+    a second spelling of it ([[build_the_training_prompt_with_the_inference_call]]).
+    """
     store = unit["store"]
     source, verdict = context.get(unit["thread"], (None, {}))
     topic = (verdict.get("post_summary") or "").strip()
@@ -310,15 +348,40 @@ def rendered(unit: dict, context: dict[str, tuple[str, dict]], limit: int) -> di
         topic_source = "the store's post text, bounded"
         topic = bound_topic(store["post_text"] or "", limit)
     entities = verdict.get("entities") or []
+    fields = {
+        "id": f"{unit['thread']}#{unit['msg_id']}",
+        "thread": unit["thread"],
+        "channel": store["channel"],
+        "post_id": int(store["post_id"]),
+        "topic": topic,
+        "entities": entities,
+        "msg_id": unit["msg_id"],
+        "text": unit["text"],
+    }
     prompt = prompts.pass1_messages_gm4(
-        store["channel"],
-        int(store["post_id"]),
-        topic,
-        entities,
-        unit["msg_id"],
-        unit["text"],
+        fields["channel"],
+        fields["post_id"],
+        fields["topic"],
+        fields["entities"],
+        fields["msg_id"],
+        fields["text"],
         task=prompts.PASS1_TASK,
     )[0]["content"]
+    return {
+        "fields": fields,
+        "prompt": prompt,
+        "topic_source": topic_source,
+        "verdict_source": source,
+    }
+
+
+def rendered(unit: dict, context: dict[str, tuple[str, dict]], limit: int) -> dict:
+    """One SFT row: the transport's own request, the team lead's answer, and where its context came
+    from."""
+    built = request(unit, context, limit)
+    prompt, topic_source, source = built["prompt"], built["topic_source"], built["verdict_source"]
+    entities = built["fields"]["entities"]
+    topic = built["fields"]["topic"]
     target, learn_chars = target_for(unit["msg_id"], unit["subject_type"])
     return {
         "id": f"{unit['thread']}#{unit['msg_id']}",
@@ -339,6 +402,76 @@ def rendered(unit: dict, context: dict[str, tuple[str, dict]], limit: int) -> di
     }
 
 
+def smoke_pack(state: dict) -> dict:
+    """The one-item pack rung 5 sends, built from the SAME request the training row was rendered
+    from.
+
+    The row is arm A's first, which makes it a training row of BOTH arms (A ⊂ B) and keeps the
+    choice deterministic — a smoke that drew a different row on each run would be a different
+    instrument each time. The pod re-renders the item from its fields and refuses unless the sha
+    matches, so what is asserted here is the other half: that the fields render to the string the
+    dataset trained on ([[the_fixture_and_the_artifact_share_anchors]]).
+
+    `instruments` and `serving` are READ out of probe-b's own pack rather than retyped — the smoke
+    has to be the same transport the eval is, and a second spelling of a serving block is a second
+    configuration nobody diffed.
+    """
+    probe = json.loads(summary.read_text_or_refuse(PROBE_PACK))
+    gold = json.loads(summary.read_text_or_refuse(GOLD))
+    barred_ids = {int(row["msg_id"]) for row in gold["per_comment"]}
+    barred_ids |= {int(one["msg_id"]) for one in probe["items"]}
+    barred_keys = {one["id"] for one in probe["items"]}
+
+    row = arm_rows(state, "a")[0]
+    unit = next(one for one in state["units"] if f"{one['thread']}#{one['msg_id']}" == row["id"])
+    if int(row["msg_id"]) in barred_ids or row["id"] in barred_keys:
+        raise SystemExit(
+            f"{row['id']} is a gold row or an eval-pack row. The smoke would then be a peek at the"
+            " bar's own population and the attempt would be spent on it — stop and report."
+        )
+    built = request(unit, state["context"], state["envelope"]["limit"])
+    if built["prompt"] != row["prompt"]:
+        raise SystemExit(
+            f"{row['id']}: the smoke item's fields render a request the dataset row does not carry."
+            " The smoke would check a format the arm was never trained on — stop and report."
+        )
+    mine = {
+        prompts.PASS1_TASK: prompts.prompt_sha256(prompts.PASS1_TASK),
+    }
+    if probe["instruments"]["prompt_sha256"] != mine:
+        raise SystemExit(
+            f"probe-b's pack pins {probe['instruments']['prompt_sha256']} and this checkout renders"
+            f" {mine}. The smoke cannot borrow a serving block from a pack it does not agree with."
+        )
+    item = {
+        **built["fields"],
+        "leg": "smoke",
+        "part": None,
+        "payable_comments": 1,
+        "rendered_chars": len(built["prompt"]),
+        "rendering_sha256": sha_text(built["prompt"]),
+    }
+    return {
+        "phase": "lora-b-smoke",
+        "task": probe["task"],
+        "instruments": probe["instruments"],
+        "serving": probe["serving"],
+        "items": [item],
+        "registration": {"record": "results/prereg_lora_b.json"},
+        "borrowed": {
+            "results/pass1_probe_b_pack.json": summary.sha256_of(PROBE_PACK),
+            "rule": "the instruments and the serving block are read out of the eval's own pack, so"
+            " the smoke and the eval are one transport and not two",
+        },
+        "reading": (
+            "ONE training request, chosen as arm A's first row and therefore a training row of both"
+            " arms. It is in NEITHER the sealed fourteen nor the eval pack's sixty-four — asserted"
+            " by the producer — so a reply to it is not an eval output and the one attempt is not"
+            " spent by seeing it. The attempt is SPENT at the first GOLD-row reply generated"
+        ),
+    }
+
+
 def measure() -> dict:
     """Everything the record needs, computed once: the rows, the bound, and what does not fit."""
     context = verdicts()
@@ -346,8 +479,9 @@ def measure() -> dict:
     budget = envelope(context)
     config = yaml.safe_load(QLORA.read_text(encoding="utf-8"))
     max_seq_len = int(config["training"]["max_seq_len"])
+    units = labelled_units()
     rows, dropped = [], []
-    for unit in labelled_units():
+    for unit in units:
         row = rendered(unit, context, budget["limit"])
         row["bound_tokens"] = bound_tokens(row["prompt"], row["target"], per["tokens_per_char_max"])
         if row["bound_tokens"] > max_seq_len:
@@ -361,6 +495,7 @@ def measure() -> dict:
         "max_seq_len": max_seq_len,
         "rows": rows,
         "dropped": dropped,
+        "units": units,
     }
 
 
@@ -476,6 +611,8 @@ def census(state: dict) -> dict:
 
 def build(state: dict | None = None) -> tuple[dict, dict[str, str]]:
     state = state or measure()
+    smoke = smoke_pack(state)
+    smoke_text = json.dumps(smoke, ensure_ascii=False, indent=2, sort_keys=True) + "\n"
     files = {
         arm: "".join(
             json.dumps(
@@ -536,12 +673,25 @@ def build(state: dict | None = None) -> tuple[dict, dict[str, str]]:
             for name in sorted(PACKS)
         },
         "producer": {"script": "scripts/build_pass1_sft.py"},
+        "smoke": {
+            "file": SMOKE_NAME,
+            "row": smoke["items"][0]["id"],
+            "sha256": sha_text(smoke_text),
+            "rule": smoke["reading"],
+        },
         "supervision": {
             "field": "subject_type",
             "learn_chars": (
                 "each row's target is written whole and only its head — through the subject_type"
-                " value — is supervised. `scripts/train_qlora.py` masks the rest out of the loss"
+                " value AND the one separator character that closes it — is supervised."
+                " `scripts/train_qlora.py` masks the rest out of the loss. The separator is inside"
+                " the boundary because the mask is applied on token END offsets: with the boundary"
+                " ON the value, a tokenizer that merges the closing quote with the comma produces a"
+                " token ending one character past it, and that whole merge — the value's tail with"
+                " it — falls out of supervision. It teaches structure the parser demands and no"
+                " label; the two unlabelled fields are as untaught as they were"
             ),
+            "boundary_char": SEPARATOR,
             "unsupervised_fields": ["subject_id", "stance"],
             "why": (
                 "the team lead labelled subject_type and nothing else. Training the two unlabelled"
@@ -551,6 +701,7 @@ def build(state: dict | None = None) -> tuple[dict, dict[str, str]]:
             ),
         },
     }
+    files[SMOKE_NAME] = smoke_text
     return record, files
 
 
@@ -614,8 +765,8 @@ def main(argv: list[str] | None = None) -> int:
         return 0
 
     record, files = build(state)
-    for arm, text in files.items():
-        path = args.outdir / ARM_NAMES[arm]
+    for key, text in files.items():
+        path = args.outdir / ARM_NAMES.get(key, key)
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(text, encoding="utf-8")
     record["producer"]["sha256"] = summary.sha256_of(Path(__file__))
@@ -623,8 +774,12 @@ def main(argv: list[str] | None = None) -> int:
     out.parent.mkdir(parents=True, exist_ok=True)
     payload = json.dumps(record, ensure_ascii=False, indent=2, sort_keys=True) + "\n"
     out.write_text(payload, encoding="utf-8")
-    for arm in sorted(files):
+    for arm in sorted(ARM_NAMES):
         print(f"\nwrote {ARM_NAMES[arm]}  sha256 {record['datasets'][arm]['sha256'][:16]}…")
+    print(
+        f"wrote {SMOKE_NAME}  sha256 {record['smoke']['sha256'][:16]}…"
+        f"  row {record['smoke']['row']}"
+    )
     print(f"wrote {RECORD_NAME}  sha256 {sha_text(payload)[:16]}…")
     return 0
 

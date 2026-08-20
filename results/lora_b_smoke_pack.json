@@ -1,0 +1,69 @@
+{
+  "borrowed": {
+    "results/pass1_probe_b_pack.json": "bbbe64203f9c909a2d2e8aeab03d8d61c0fd6604d4854e13462d0e190bc4e113",
+    "rule": "the instruments and the serving block are read out of the eval's own pack, so the smoke and the eval are one transport and not two"
+  },
+  "instruments": {
+    "parser": {
+      "entry_point": "market_pulse.prompts.parse_pass1",
+      "module": "src/market_pulse/prompts.py",
+      "rule": "strict single object, domain-checked: the four subject_type readings, the stance domain, and the request's own msg_id echoed back. Everything else is a refusal and no container is repaired",
+      "sha256": "a4a5a5d08546f53af18117c37e49f7e396919555563e16737a633c1df1a86eec"
+    },
+    "prompt_sha256": {
+      "pass1_comment_gm4_v1": "5a4a3cb6ce4db89adb304c04de41210fdabfde0c53addfdb75adba0f1d866650"
+    },
+    "renderer": "market_pulse.prompts.pass1_messages_gm4"
+  },
+  "items": [
+    {
+      "channel": "@VARUS_channel",
+      "entities": [],
+      "id": "@VARUS_channel:10349#20651",
+      "leg": "smoke",
+      "msg_id": 20651,
+      "part": null,
+      "payable_comments": 1,
+      "post_id": 10349,
+      "rendered_chars": 2802,
+      "rendering_sha256": "5aa398c02181007e96b96a25d0b5577960a02139fbc55f0e3cb1c406834237ad",
+      "text": "Паста с сыром, помидором и зеленью!!!!!",
+      "thread": "@VARUS_channel:10349",
+      "topic": "Запит до користувачів запропонувати рецепти страв із набору продуктів."
+    }
+  ],
+  "phase": "lora-b-smoke",
+  "reading": "ONE training request, chosen as arm A's first row and therefore a training row of both arms. It is in NEITHER the sealed fourteen nor the eval pack's sixty-four — asserted by the producer — so a reply to it is not an eval output and the one attempt is not spent by seeing it. The attempt is SPENT at the first GOLD-row reply generated",
+  "registration": {
+    "record": "results/prereg_lora_b.json"
+  },
+  "serving": {
+    "adapter": null,
+    "chat_template": {
+      "add_generation_prompt": true,
+      "enable_thinking": false
+    },
+    "decoding": "greedy",
+    "do_sample": false,
+    "forward_batch_size": 1,
+    "gpu_class_preference": [
+      "ADA_24",
+      "ADA_24_PRO",
+      "AMPERE_24"
+    ],
+    "gpu_rule": "requested fastest-first and never asserted. probe-a asked for the display name «NVIDIA L4», the endpoint came back `gpuIds: AMPERE_24` and the worker reported an L4 runtime — so the CLASS is what is requested and the RUNTIME string is what lands in provenance. Seconds per thread are reported per card",
+    "merge_state": "base-no-adapter",
+    "model": "google/gemma-4-31b-it",
+    "model_revision": "842da3794eaa0b77d5f08bae87a17459d91ff475",
+    "output_tokens": 256,
+    "quantization": {
+      "bnb_4bit_compute_dtype": "bfloat16",
+      "bnb_4bit_quant_type": "nf4",
+      "bnb_4bit_use_double_quant": true,
+      "load_in_4bit": true
+    },
+    "serving_config": "READER",
+    "template_note": "a NEW serving template for this run. `settings()` refuses config-mixing by design; the srv-2d, CAPTION and probe-a templates are never edited"
+  },
+  "task": "pass1_comment_gm4_v1"
+}

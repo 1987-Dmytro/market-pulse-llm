@@ -6,7 +6,7 @@
       "dataset": {
         "file": "results/pass1_sft_arm_a.jsonl",
         "rows": 500,
-        "sha256": "610c996176d6a8af6b4997a8490acbecb98d26d182d1e77932ed083a599c3b77"
+        "sha256": "79988046f96c981fbb6e09eedd71fd343b8b60ddd414c6f35fc754817f79dd40"
       },
       "distribution": {
         "null": 167,
@@ -31,7 +31,7 @@
       "dataset": {
         "file": "results/pass1_sft_arm_b.jsonl",
         "rows": 650,
-        "sha256": "f5b3540ba4ac042c577ed37de7b2a4ffab879fa156a8aae4e7282c93df386341"
+        "sha256": "dc7c8390c3fff439f940bda27965f7d97a327216a6989701460d91cbe2a8fef9"
       },
       "distribution": {
         "null": 213,
@@ -52,7 +52,7 @@
       "steps": 82
     }
   },
-  "attempt": "ONE. No retry, no second draw, and no tuning after any eval output is seen. The multiplicity of running two arms against one bar is named below and was accepted by the sitting; it is not re-decided once the number is in",
+  "attempt": "ONE. No retry, no second draw, and no tuning after any eval output is seen. The multiplicity of running two arms against one bar is named below and was accepted by the sitting; it is not re-decided once the number is in. **The attempt is SPENT at the first GOLD-row reply generated** — not at pod create, not at a training loss, and not at the format smoke, whose row is a training row outside both the sealed fourteen and the eval pack. A session that closes before any gold row is answered has not spent it and returns to the team lead (D3a rung 10)",
   "authority": "sitting-2 of 2026-08-19 (LoRA, line B) and its r2 ruling — docs/STATUS.md «День 19.08», ADR knowledge/decisions/sitting-b-line-b-and-the-team-lead-labels.md",
   "bars": {
     "P1_per_comment_agreement": {
@@ -105,6 +105,7 @@
     "results/pass1_probe_b_pack.json",
     "results/pass1_sft_arm_a.jsonl",
     "results/pass1_sft_arm_b.jsonl",
+    "results/lora_b_smoke_pack.json",
     "results/prereg_lora_b.json"
   ],
   "h6": {
@@ -205,11 +206,35 @@
       },
       {
         "agrees": true,
+        "formula": "the per-pod --terminate-after backstop, cumulative across every pod",
+        "mode": "equals",
+        "name": "cumulative_hard_stop_hours",
+        "re_derived": 5.5,
+        "registered": 5.5
+      },
+      {
+        "agrees": true,
+        "formula": "the hard stop's hours × $0.80/h",
+        "mode": "equals",
+        "name": "cumulative_hard_stop_usd",
+        "re_derived": 4.4,
+        "registered": 4.4
+      },
+      {
+        "agrees": true,
         "formula": "2 adapters × 64 units × 5.162 s",
         "mode": "equals",
         "name": "eval_seconds",
         "re_derived": 660.7,
         "registered": 660
+      },
+      {
+        "agrees": true,
+        "formula": "(boot 450 + arm A + arm B wasted + boot 450 + arm B + eval) × $0.80/h",
+        "mode": "equals",
+        "name": "recreation_worst_case_usd",
+        "re_derived": 3.4399,
+        "registered": 3.44
       },
       {
         "agrees": true,
@@ -254,11 +279,17 @@
     },
     "sft_record": {
       "file": "results/pass1_sft.json",
-      "sha256": "e404e49c091076b745fe932610421e5e48be766c2ae8f5ade5f1d51e162a53db"
+      "sha256": "587062c66cfd2a872bea53162d1c247fb883bc252d57cc721f66945f32678ce8"
+    },
+    "smoke_pack": {
+      "file": "results/lora_b_smoke_pack.json",
+      "row": "@VARUS_channel:10349#20651",
+      "rule": "ONE training request, chosen as arm A's first row and therefore a training row of both arms. It is in NEITHER the sealed fourteen nor the eval pack's sixty-four — asserted by the producer — so a reply to it is not an eval output and the one attempt is not spent by seeing it. The attempt is SPENT at the first GOLD-row reply generated",
+      "sha256": "39cafdfae36ad921434e2f2f89c2874dda98ab13a7b53766837215ae3bb1d783"
     },
     "trainer": {
       "script": "scripts/train_qlora.py",
-      "sha256": "85207e2d012f7894cce0099b091cbda834bb57aa813e70c57a9c3111c66c768b"
+      "sha256": "1a1a0b5983db60d8e17d86a14fb1410af35d31d0dbbb14e66f81a382072e7907"
     },
     "transport": {
       "adapter_flag": "--adapter mounts the arm's adapter AROUND the model local_llm builds and writes <out>.adapter.json beside the evidence BEFORE the first reply. Each arm evaluates into its OWN out file: the shipped runner's resume skips every unit already answered, so a second arm sharing one file would answer nothing and look complete",
@@ -297,12 +328,95 @@
       "before": "anything",
       "rule": "absolute session ceiling 7.5 h = cap / price ceiling; `runpod_guard --until` bounds the window",
       "rung": 6
+    },
+    {
+      "added": "D3a",
+      "before": "every pod create",
+      "read": "money.arithmetic.cumulative — the seconds are the instrument's, never typed",
+      "rule": "the clock is CUMULATIVE. Every budget check counts across ALL pods of this attempt, never per pod, and each pod's `--terminate-after` is stamped at its own create plus 5.5 h LESS what every closed pod already billed — cumulative billed ≤ 5.5 h ≈ $4.40, under the $6.00 cap it defends",
+      "rung": 7
+    },
+    {
+      "added": "D3a",
+      "before": "the run is allowed to continue past a log line",
+      "read": "money.arithmetic.cumulative.projection_gate — formula, terms and the two worked examples that show what it closes",
+      "rule": "training projection gate, every log (5 steps): the projected attempt total at the MEASURED s/step must fit the cap at the LIVE price AND the cumulative hard stop, else KILL. The prereg's arm-A-only branch then applies",
+      "rung": 8
+    },
+    {
+      "added": "D3a",
+      "before": "the ONE allowed pod re-creation",
+      "read": "money.arithmetic.cumulative.recreation_budget_check",
+      "rule": "guard READING + worst-case remaining at MEASURED rates ≤ $6.00, else the session closes with what exists. The reading is the meter and the projection is the forecast; the rung acts on their sum",
+      "rung": 9
+    },
+    {
+      "added": "D3a",
+      "before": "an arm is evaluated",
+      "read": "money.arithmetic.cumulative.format_smoke",
+      "rule": "format smoke per arm: ONE TRAINING-set prompt through that arm's adapter, into its OWN out-file, and the reply must parse as one balanced four-key object. Failure → that arm is NOT evaluated. No arm passing closes the session with the attempt NOT spent",
+      "rung": 10
     }
   ],
   "money": {
     "arithmetic": {
       "boot_seconds_charged": 450,
       "cap_headroom_usd": 3.3725,
+      "cumulative": {
+        "format_smoke": {
+          "not_a_bar_peek": "the row is a training row and is in NEITHER the sealed fourteen nor the eval pack's sixty-four; `scripts/build_pass1_sft.py` refuses to build the pack otherwise. Head-only supervision can in principle un-teach the four-key shape, and this rung makes that a cheap KILL instead of an invisible zero at the bar",
+          "out_file_rule": "its own out-file, never an arm's eval out-file: the shipped runner's resume skips every unit already answered, so a smoke written into the eval file would make the eval answer one unit fewer and look complete (Dv560)",
+          "pack": "results/lora_b_smoke_pack.json",
+          "rule": "before an arm is evaluated, ONE TRAINING-set prompt goes through its adapter and the reply must parse as one balanced four-key object. Failure → that arm is NOT evaluated. If NO arm passes, the session closes and the attempt is NOT spent — no eval output was seen — and it returns to the team lead"
+        },
+        "hard_stop_hours": 5.5,
+        "hard_stop_rule": "cumulative billed ≤ 5.5 h ≈ $4.40 at the $0.80/h ceiling. It sits UNDER the $6.00 cap it defends — the reader-topup lesson — and it protects even a hung unit the between-checks gate cannot see, because it is the platform that enforces it",
+        "hard_stop_seconds": 19800.0,
+        "hard_stop_usd_at_the_price_ceiling": 4.4,
+        "projection_gate": {
+          "arm_b_leg": "0 once arm B is trained or ruled out by the milestone; otherwise the LARGER of the fitted 5005.9 s and 82 steps × the measured s/step",
+          "eval_seconds": 660.7,
+          "every": "log line — config/qlora.yaml log_every, 5 optimizer steps",
+          "formula": "billed_by_closed_pods + elapsed_on_this_pod + steps_remaining × MEASURED s/step + arm_b_leg + eval_seconds + overhead_seconds",
+          "overhead_seconds": 1800.0,
+          "two_deviations_from_the_contracts_letter": "the contract names «arm B's fitted 5 005.9 s if not yet trained» and «$6.00 at the live price». Both are LOOSENED by their letter and both are tightened here, in the direction D3a requires: arm B is priced at the rate the pod is actually running, and the projection is measured against the hard stop as well as the cap. The worked examples below are why — with the contract's letter alone the rung does not close the compliant-slow path it was written for",
+          "verdict": "KILL if the projection exceeds $6.00 at the LIVE price, or exceeds the 5.5 h hard stop in seconds. The stricter of the two binds — a projection above the stop projects a run the backstop cuts mid-arm",
+          "worked_examples": {
+            "compliant_slow": {
+              "at_step": 5,
+              "projected_hours": 5.7157,
+              "projected_seconds": 20576.7,
+              "projected_usd_at_the_price_ceiling": 4.5726,
+              "seconds_per_step": 121.0,
+              "verdict": "KILL"
+            },
+            "compliant_slow_by_the_contracts_letter": {
+              "projected_seconds": 13860.6,
+              "reading": "121.0 s/step never trips the 122 s watchdog, and by the contract's letter — arm B at its fitted seconds, no overhead, measured only against the cap — it also clears the projection gate. It is the path the rung exists to close, and the two tightenings above are what close it",
+              "seconds_per_step": 121.0,
+              "verdict": "GO"
+            },
+            "measured": {
+              "at_step": 5,
+              "projected_hours": 3.2843,
+              "projected_seconds": 11823.6,
+              "projected_usd_at_the_price_ceiling": 2.6275,
+              "seconds_per_step": 61.047,
+              "verdict": "GO"
+            }
+          }
+        },
+        "recreation_budget_check": "the ONE pod re-creation the recovery clause allows happens only if the guard READING plus the worst-case remaining at MEASURED rates is ≤ $6.00; otherwise the session closes with what exists. The reading is the meter, the projection is the forecast, and the rung acts on their sum",
+        "rule": "the 7.5 h ceiling and EVERY budget check count across ALL pods of this attempt, never per pod. `--terminate-after` on each pod is stamped at that pod's create plus the hard stop LESS what every closed pod already billed, so two pods cannot each be given a fresh window",
+        "worst_cases_usd": {
+          "cumulative_hard_stop": 4.4,
+          "no_incident": 2.6275,
+          "rule": "three honest cases and the stop that bounds all of them. `sanctioned_recreation` is the contract's own enumeration — boot + arm A + arm B wasted + boot + arm B + eval — and it does NOT carry the 0.5 h of overhead the no-incident case does, so the comparable figure is the one beside it. Both sit under the hard stop",
+          "sanctioned_recreation": 3.4399,
+          "sanctioned_recreation_seconds": 15479.5,
+          "sanctioned_recreation_with_the_registered_overhead": 3.8399
+        }
+      },
       "eval_rule": "2 adapters × the eval pack's 64 units × the measured seconds per call",
       "eval_seconds": 660.7,
       "hours": 3.2843,
@@ -485,11 +599,11 @@
   },
   "producer": {
     "borrowed": {
-      "results/pass1_sft.json": "e404e49c091076b745fe932610421e5e48be766c2ae8f5ade5f1d51e162a53db",
+      "results/pass1_sft.json": "587062c66cfd2a872bea53162d1c247fb883bc252d57cc721f66945f32678ce8",
       "results/prereg_pass1_probe_b.json": "a29e85ad6e856f6fafa032b3f5ede0e635046171778cbe7a6902b64fa57bacad"
     },
     "script": "scripts/write_lora_b_prereg.py",
-    "sha256": "e9ed14a547d5f0a43082872b65bfd67b4970d0dc0315e21c7b2a04d812d3c17f"
+    "sha256": "c6902a734025f852c6725d20ae1eedac63174dcb2ef54da54c2e9bcfb762e166"
   },
   "reachability": {
     "stance_is_not_trained": {
@@ -553,6 +667,7 @@
     }
   },
   "return_to_sitting": "**A FAILED BAR GOES BACK TO THE SITTING, never to a prompt iteration.** The options the sitting of 2026-08-17 left open are B (labelled subject_type data + LoRA) and C (a different base). There is no pass1-v2 prompt without a sitting ruling, and this clause is pre-registered so it cannot be re-decided once the number is in",
+  "tightened_at_d3a": "TIGHTENED BEFORE ANY POD, BARS UNTOUCHED. Five tightenings from the fresh-context review, all at $0 and all committed before `pod create`: the mask boundary runs one character past the subject_type value (training.supervision), the clock is cumulative across every pod with a hard stop under the cap (money.arithmetic.cumulative), the projection gate fires every log line, the ONE re-creation is budget-checked, and each arm passes a format smoke on a training row before it is evaluated — rungs 7 to 10. The direction is strictly SAFER: `bars`, `population.gold`, `instruments.prompt_sha256`, `money.cap_usd_all_in` and `return_to_sitting` are byte-identical to the registration committed before this session, the kill clock only GAINED rungs, and every pre-existing H6 row re-derives unchanged. What moved is the two dataset shas — the targets are byte-identical and `learn_chars` is +1 on every row — and the records that quote them",
   "training": {
     "config": "config/qlora.yaml",
     "config_is_frozen_law": "never edited. The arms differ by a data path and a sampler flag, both of them CLI arguments recorded here; a hyperparameter moved between the arms would make the comparison meaningless rather than merely wrong",
@@ -562,8 +677,9 @@
     "sampler": "class-weighted, w_c = N/(5·n_c) capped at 8.0, computed on the arm's own dataset. Both arms weighted: the ablation is the data, not the sampler. The epoch draws the dataset's own size WITH replacement, so steps/epoch is unchanged",
     "seed": 42,
     "supervision": {
+      "boundary_char": ",",
       "field": "subject_type",
-      "learn_chars": "each row's target is written whole and only its head — through the subject_type value — is supervised. `scripts/train_qlora.py` masks the rest out of the loss",
+      "learn_chars": "each row's target is written whole and only its head — through the subject_type value AND the one separator character that closes it — is supervised. `scripts/train_qlora.py` masks the rest out of the loss. The separator is inside the boundary because the mask is applied on token END offsets: with the boundary ON the value, a tokenizer that merges the closing quote with the comma produces a token ending one character past it, and that whole merge — the value's tail with it — falls out of supervision. It teaches structure the parser demands and no label; the two unlabelled fields are as untaught as they were",
       "unsupervised_fields": [
         "subject_id",
         "stance"

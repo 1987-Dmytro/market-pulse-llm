@@ -41,6 +41,7 @@ PROBE_PACK = REPO_ROOT / "results" / "pass1_probe_b_pack.json"
 PROBE_VERDICT = REPO_ROOT / "results" / "pass1_probe_b_verdict.json"
 GOLD = REPO_ROOT / "results" / "reader_gold_w1_r2.json"
 SFT = REPO_ROOT / "results" / "pass1_sft.json"
+SMOKE_PACK = REPO_ROOT / "results" / "lora_b_smoke_pack.json"
 QLORA = REPO_ROOT / "config" / "qlora.yaml"
 OUT_NAME = "results/prereg_lora_b.json"
 
@@ -65,6 +66,18 @@ worst case charges for boot: a leg cannot cost more than the clock that kills it
 OVERHEAD_HOURS = 0.5
 """Staging, the scp of everything, and the deletion. Registered, not hoped for."""
 
+CUMULATIVE_HARD_STOP_HOURS = 5.5
+"""D3a rung 7 — the per-pod `--terminate-after` backstop, sized so CUMULATIVE billed time across
+every pod of this attempt stays under it. $4.40 at the price ceiling, and the reader-topup lesson is
+why it is not the cap itself: a hard stop has to sit UNDER the cap it defends, and it has to protect
+even the hung unit no between-checks gate can see. The producer refuses if it stops sitting under
+the cap, or above the worst case the recovery clause itself allows."""
+
+SLOW_STEP_SECONDS = 121.0
+"""The compliant-slow step the projection gate exists for — under the 122 s watchdog and roughly
+double the measured rate. It is not a threshold: it is the worked example the record publishes so
+the rung's two additions can be checked against the job the contract gives it."""
+
 REGISTERED = {
     "arm_a_rows": (500, "the r1 labels, 500 units", "equals"),
     "arm_b_rows": (650, "r1 + r2, 500 + 150 units", "equals"),
@@ -83,6 +96,17 @@ REGISTERED = {
         "equals",
     ),
     "base_bar": (9, "the base model's agreed rows over the sealed fourteen", "equals"),
+    "cumulative_hard_stop_hours": (
+        5.5,
+        "the per-pod --terminate-after backstop, cumulative across every pod",
+        "equals",
+    ),
+    "cumulative_hard_stop_usd": (4.40, "the hard stop's hours × $0.80/h", "equals"),
+    "recreation_worst_case_usd": (
+        3.44,
+        "(boot 450 + arm A + arm B wasted + boot 450 + arm B + eval) × $0.80/h",
+        "equals",
+    ),
     "combined_distribution": (
         {
             "не_наш_рынок": 340,
@@ -178,6 +202,164 @@ def arithmetic(sft: dict) -> dict:
             " The projection above is boot + arm A at the price ceiling; the STOP is on the READING,"
             " never on the projection"
         ),
+        "cumulative": cumulative(train, evaluation, {a: arms[a]["steps"] for a in sorted(arms)}),
+    }
+
+
+def cumulative(train: dict, evaluation: float, steps: dict) -> dict:
+    """D3a's clock: the hard stop, the three honest worst cases, and the projection gate's formula.
+
+    Every number is derived from the constants above, and the three inequalities the rungs rest on
+    are CHECKED rather than asserted in prose — a stop that sat above its cap, or above the worst
+    case the recovery clause allows, would be two rungs contradicting each other on a billed pod.
+    """
+    boot = float(BOOT_CEILING_SECONDS)
+    overhead = OVERHEAD_HOURS * 3600
+    stop_seconds = CUMULATIVE_HARD_STOP_HOURS * 3600
+    stop_usd = CUMULATIVE_HARD_STOP_HOURS * PRICE_CEILING_USD_PER_HOUR
+    # the contract's own enumeration: boot + A + B wasted + boot + B + eval
+    recreation = boot + train["a"] + train["b"] + boot + train["b"] + evaluation
+    no_incident = sum(train.values()) + evaluation + boot + overhead
+
+    if stop_usd >= CAP_USD:
+        raise SystemExit(
+            f"the cumulative hard stop prices at ${stop_usd:.2f} against a cap of ${CAP_USD:.2f}."
+            " A hard stop that does not sit UNDER the cap it defends defends nothing."
+        )
+    if recreation + overhead > stop_seconds:
+        raise SystemExit(
+            f"the sanctioned re-creation runs {(recreation + overhead) / 3600:.2f} h with the"
+            f" registered overhead and the hard stop is {CUMULATIVE_HARD_STOP_HOURS} h. The"
+            " recovery clause would then authorise a run the backstop cuts in half — stop."
+        )
+    if stop_seconds > CAP_USD / PRICE_CEILING_USD_PER_HOUR * 3600:
+        raise SystemExit("the hard stop is above the absolute session ceiling — stop.")
+
+    def projected(seconds_per_step: float, step: int = 5) -> dict:
+        """The gate's own arithmetic at a step of arm A, published as a worked example."""
+        elapsed = boot + step * seconds_per_step
+        remaining = (steps["a"] - step) * seconds_per_step
+        leg = max(train["b"], steps["b"] * seconds_per_step)
+        total = elapsed + remaining + leg + evaluation + overhead
+        return {
+            "seconds_per_step": seconds_per_step,
+            "at_step": step,
+            "projected_seconds": round(total, 1),
+            "projected_hours": round(total / 3600, 4),
+            "projected_usd_at_the_price_ceiling": round(
+                total / 3600 * PRICE_CEILING_USD_PER_HOUR, 4
+            ),
+            "verdict": "KILL"
+            if total > stop_seconds or total / 3600 * PRICE_CEILING_USD_PER_HOUR > CAP_USD
+            else "GO",
+        }
+
+    return {
+        "rule": (
+            "the 7.5 h ceiling and EVERY budget check count across ALL pods of this attempt, never"
+            " per pod. `--terminate-after` on each pod is stamped at that pod's create plus the"
+            " hard stop LESS what every closed pod already billed, so two pods cannot each be given"
+            " a fresh window"
+        ),
+        "hard_stop_hours": CUMULATIVE_HARD_STOP_HOURS,
+        "hard_stop_seconds": stop_seconds,
+        "hard_stop_usd_at_the_price_ceiling": round(stop_usd, 4),
+        "hard_stop_rule": (
+            f"cumulative billed ≤ {CUMULATIVE_HARD_STOP_HOURS} h ≈ ${stop_usd:.2f} at the"
+            f" ${PRICE_CEILING_USD_PER_HOUR:.2f}/h ceiling. It sits UNDER the ${CAP_USD:.2f} cap it"
+            " defends — the reader-topup lesson — and it protects even a hung unit the"
+            " between-checks gate cannot see, because it is the platform that enforces it"
+        ),
+        "worst_cases_usd": {
+            "no_incident": round(no_incident / 3600 * PRICE_CEILING_USD_PER_HOUR, 4),
+            "sanctioned_recreation": round(recreation / 3600 * PRICE_CEILING_USD_PER_HOUR, 4),
+            "sanctioned_recreation_with_the_registered_overhead": round(
+                (recreation + overhead) / 3600 * PRICE_CEILING_USD_PER_HOUR, 4
+            ),
+            "cumulative_hard_stop": round(stop_usd, 4),
+            "rule": (
+                "three honest cases and the stop that bounds all of them. `sanctioned_recreation`"
+                " is the contract's own enumeration — boot + arm A + arm B wasted + boot + arm B +"
+                " eval — and it does NOT carry the 0.5 h of overhead the no-incident case does, so"
+                " the comparable figure is the one beside it. Both sit under the hard stop"
+            ),
+            "sanctioned_recreation_seconds": round(recreation, 1),
+        },
+        "recreation_budget_check": (
+            "the ONE pod re-creation the recovery clause allows happens only if the guard READING"
+            f" plus the worst-case remaining at MEASURED rates is ≤ ${CAP_USD:.2f}; otherwise the"
+            " session closes with what exists. The reading is the meter, the projection is the"
+            " forecast, and the rung acts on their sum"
+        ),
+        "projection_gate": {
+            "every": "log line — config/qlora.yaml log_every, 5 optimizer steps",
+            "formula": (
+                "billed_by_closed_pods + elapsed_on_this_pod + steps_remaining × MEASURED s/step"
+                " + arm_b_leg + eval_seconds + overhead_seconds"
+            ),
+            "arm_b_leg": (
+                f"0 once arm B is trained or ruled out by the milestone; otherwise the LARGER of the"
+                f" fitted {train['b']} s and {steps['b']} steps × the measured s/step"
+            ),
+            "eval_seconds": evaluation,
+            "overhead_seconds": overhead,
+            "verdict": (
+                f"KILL if the projection exceeds ${CAP_USD:.2f} at the LIVE price, or exceeds the"
+                f" {CUMULATIVE_HARD_STOP_HOURS} h hard stop in seconds. The stricter of the two"
+                " binds — a projection above the stop projects a run the backstop cuts mid-arm"
+            ),
+            "two_deviations_from_the_contracts_letter": (
+                "the contract names «arm B's fitted 5 005.9 s if not yet trained» and «$6.00 at the"
+                " live price». Both are LOOSENED by their letter and both are tightened here, in the"
+                " direction D3a requires: arm B is priced at the rate the pod is actually running,"
+                " and the projection is measured against the hard stop as well as the cap. The"
+                " worked examples below are why — with the contract's letter alone the rung does"
+                " not close the compliant-slow path it was written for"
+            ),
+            "worked_examples": {
+                "measured": projected(SECONDS_PER_STEP),
+                "compliant_slow": projected(SLOW_STEP_SECONDS),
+                "compliant_slow_by_the_contracts_letter": {
+                    "seconds_per_step": SLOW_STEP_SECONDS,
+                    "projected_seconds": round(
+                        boot
+                        + 5 * SLOW_STEP_SECONDS
+                        + (steps["a"] - 5) * SLOW_STEP_SECONDS
+                        + train["b"]
+                        + evaluation,
+                        1,
+                    ),
+                    "verdict": "GO",
+                    "reading": (
+                        f"{SLOW_STEP_SECONDS} s/step never trips the"
+                        f" {math.floor(2 * SECONDS_PER_STEP)} s watchdog, and by the contract's"
+                        " letter — arm B at its fitted seconds, no overhead, measured only against"
+                        " the cap — it also clears the projection gate. It is the path the rung"
+                        " exists to close, and the two tightenings above are what close it"
+                    ),
+                },
+            },
+        },
+        "format_smoke": {
+            "rule": (
+                "before an arm is evaluated, ONE TRAINING-set prompt goes through its adapter and"
+                " the reply must parse as one balanced four-key object. Failure → that arm is NOT"
+                " evaluated. If NO arm passes, the session closes and the attempt is NOT spent — no"
+                " eval output was seen — and it returns to the team lead"
+            ),
+            "pack": "results/lora_b_smoke_pack.json",
+            "not_a_bar_peek": (
+                "the row is a training row and is in NEITHER the sealed fourteen nor the eval"
+                " pack's sixty-four; `scripts/build_pass1_sft.py` refuses to build the pack"
+                " otherwise. Head-only supervision can in principle un-teach the four-key shape,"
+                " and this rung makes that a cheap KILL instead of an invisible zero at the bar"
+            ),
+            "out_file_rule": (
+                "its own out-file, never an arm's eval out-file: the shipped runner's resume skips"
+                " every unit already answered, so a smoke written into the eval file would make the"
+                " eval answer one unit fewer and look complete (Dv560)"
+            ),
+        },
     }
 
 
@@ -199,6 +381,9 @@ def h6(sft: dict, sums: dict) -> dict:
         "step_watchdog_seconds": 2 * SECONDS_PER_STEP,
         "census_50_baseline_none": verdict["census"]["subject_type_distribution"]["None"],
         "base_bar": verdict["bars"]["P1_per_comment_agreement"]["agreed"],
+        "cumulative_hard_stop_hours": sums["cumulative"]["hard_stop_hours"],
+        "cumulative_hard_stop_usd": sums["cumulative"]["hard_stop_usd_at_the_price_ceiling"],
+        "recreation_worst_case_usd": sums["cumulative"]["worst_cases_usd"]["sanctioned_recreation"],
         "combined_distribution": {
             key: value for key, value in labels_distribution().items() if value
         },
@@ -353,7 +538,25 @@ def build() -> dict:
         "attempt": (
             "ONE. No retry, no second draw, and no tuning after any eval output is seen. The"
             " multiplicity of running two arms against one bar is named below and was accepted by"
-            " the sitting; it is not re-decided once the number is in"
+            " the sitting; it is not re-decided once the number is in. **The attempt is SPENT at the"
+            " first GOLD-row reply generated** — not at pod create, not at a training loss, and not"
+            " at the format smoke, whose row is a training row outside both the sealed fourteen and"
+            " the eval pack. A session that closes before any gold row is answered has not spent it"
+            " and returns to the team lead (D3a rung 10)"
+        ),
+        "tightened_at_d3a": (
+            "TIGHTENED BEFORE ANY POD, BARS UNTOUCHED. Five tightenings from the fresh-context"
+            " review, all at $0 and all committed before `pod create`: the mask boundary runs one"
+            " character past the subject_type value (training.supervision), the clock is cumulative"
+            " across every pod with a hard stop under the cap (money.arithmetic.cumulative), the"
+            " projection gate fires every log line, the ONE re-creation is budget-checked, and each"
+            " arm passes a format smoke on a training row before it is evaluated — rungs 7 to 10."
+            " The direction is strictly SAFER: `bars`, `population.gold`, `instruments.prompt_sha256`,"
+            " `money.cap_usd_all_in` and `return_to_sitting` are byte-identical to the registration"
+            " committed before this session, the kill clock only GAINED rungs, and every"
+            " pre-existing H6 row re-derives unchanged. What moved is the two dataset shas — the"
+            " targets are byte-identical and `learn_chars` is +1 on every row — and the records that"
+            " quote them"
         ),
         "authority": (
             "sitting-2 of 2026-08-19 (LoRA, line B) and its r2 ruling — docs/STATUS.md «День"
@@ -425,6 +628,7 @@ def build() -> dict:
             "results/pass1_probe_b_pack.json",
             "results/pass1_sft_arm_a.jsonl",
             "results/pass1_sft_arm_b.jsonl",
+            "results/lora_b_smoke_pack.json",
             OUT_NAME,
         ],
         "h6": h6(sft, sums),
@@ -442,6 +646,12 @@ def build() -> dict:
                 "sha256": summary.sha256_of(REPO_ROOT / "src" / "market_pulse" / "scorer.py"),
             },
             "sft_record": {"file": "results/pass1_sft.json", "sha256": summary.sha256_of(SFT)},
+            "smoke_pack": {
+                "file": "results/lora_b_smoke_pack.json",
+                "row": sft["smoke"]["row"],
+                "sha256": summary.sha256_of(SMOKE_PACK),
+                "rule": sft["smoke"]["rule"],
+            },
             "trainer": {
                 "script": "scripts/train_qlora.py",
                 "sha256": summary.sha256_of(REPO_ROOT / "scripts" / "train_qlora.py"),
@@ -489,6 +699,55 @@ def build() -> dict:
                 "rung": 6,
                 "before": "anything",
                 "rule": f"absolute session ceiling {CAP_USD / PRICE_CEILING_USD_PER_HOUR} h = cap / price ceiling; `runpod_guard --until` bounds the window",
+            },
+            {
+                "rung": 7,
+                "added": "D3a",
+                "before": "every pod create",
+                "rule": (
+                    f"the clock is CUMULATIVE. Every budget check counts across ALL pods of this"
+                    f" attempt, never per pod, and each pod's `--terminate-after` is stamped at its"
+                    f" own create plus {CUMULATIVE_HARD_STOP_HOURS} h LESS what every closed pod"
+                    f" already billed — cumulative billed ≤ {CUMULATIVE_HARD_STOP_HOURS} h ≈"
+                    f" ${CUMULATIVE_HARD_STOP_HOURS * PRICE_CEILING_USD_PER_HOUR:.2f}, under the"
+                    f" ${CAP_USD:.2f} cap it defends"
+                ),
+                "read": "money.arithmetic.cumulative — the seconds are the instrument's, never typed",
+            },
+            {
+                "rung": 8,
+                "added": "D3a",
+                "before": "the run is allowed to continue past a log line",
+                "rule": (
+                    "training projection gate, every log (5 steps): the projected attempt total at"
+                    " the MEASURED s/step must fit the cap at the LIVE price AND the cumulative hard"
+                    " stop, else KILL. The prereg's arm-A-only branch then applies"
+                ),
+                "read": "money.arithmetic.cumulative.projection_gate — formula, terms and the two"
+                " worked examples that show what it closes",
+            },
+            {
+                "rung": 9,
+                "added": "D3a",
+                "before": "the ONE allowed pod re-creation",
+                "rule": (
+                    f"guard READING + worst-case remaining at MEASURED rates ≤ ${CAP_USD:.2f}, else"
+                    " the session closes with what exists. The reading is the meter and the"
+                    " projection is the forecast; the rung acts on their sum"
+                ),
+                "read": "money.arithmetic.cumulative.recreation_budget_check",
+            },
+            {
+                "rung": 10,
+                "added": "D3a",
+                "before": "an arm is evaluated",
+                "rule": (
+                    "format smoke per arm: ONE TRAINING-set prompt through that arm's adapter, into"
+                    " its OWN out-file, and the reply must parse as one balanced four-key object."
+                    " Failure → that arm is NOT evaluated. No arm passing closes the session with"
+                    " the attempt NOT spent"
+                ),
+                "read": "money.arithmetic.cumulative.format_smoke",
             },
         ],
         "money": {

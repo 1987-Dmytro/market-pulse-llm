@@ -122,6 +122,13 @@ PASS1_WEIGHT_CAP = 8.0
 weight of 65 and the epoch becomes a loop over those two rows; the cap is what keeps a weighted
 epoch an epoch of the dataset."""
 
+SUPERVISED_SEPARATOR = ","
+"""The one character the supervised head runs PAST the `subject_type` value — D3a's boundary.
+
+`scripts/build_pass1_sft.py` writes it (its own `SEPARATOR`) and this reads it back, so the two
+have to agree; `tests/test_train_qlora_pass1.py` asserts that they do rather than importing the
+builder onto the pod, where it would drag a Mac-side dependency into the training process."""
+
 
 def class_weights(rows: list[dict], k: int = PASS1_K, cap: float = PASS1_WEIGHT_CAP) -> dict:
     """`w_c = N / (K · n_c)`, capped — computed on the arm's OWN dataset.
@@ -158,9 +165,13 @@ def load_sft(path: Path) -> list[dict]:
     """A pre-rendered pass-1 dataset, with every target read back by the eval path's own parser.
 
     The phase-4 half of this file asserts format identity by re-parsing what it serialized; this
-    asserts the same thing about a file it did not write, plus the two properties the masking rests
-    on — that the supervised head ends inside the target and that it carries the label, because a
-    `learn_chars` past the value would supervise nothing and go green.
+    asserts the same thing about a file it did not write, plus the property the masking rests on:
+    the supervised head is EXACTLY the label and the one separator character that closes it. A
+    `learn_chars` that stops short of the value supervises nothing and goes green; one that runs
+    past the separator starts teaching the two fields the team lead never labelled, and both are
+    silent failures on a billed pod. The old check asked only that the head END at the label, which
+    was satisfied by every boundary at or before it — the D3a boundary moved one character and a
+    guard that could not see the move is a guard that fails green ([[a_moved_constant_fails_green]]).
     """
     rows = [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line]
     if not rows:
@@ -178,10 +189,12 @@ def load_sft(path: Path) -> list[dict]:
             raise SystemExit(f"{row['id']}: the parser reads {parsed['subject_type']!r} back")
         head = row["target"][: int(row["learn_chars"])]
         label = "null" if row["subject_type"] is None else f'"{row["subject_type"]}"'
-        if not 0 < int(row["learn_chars"]) < len(row["target"]) or not head.endswith(label):
+        want = f"{label}{SUPERVISED_SEPARATOR}"
+        if not 0 < int(row["learn_chars"]) < len(row["target"]) or not head.endswith(want):
             raise SystemExit(
-                f"{row['id']}: the supervised head {head!r} does not end at the label. A"
-                " learn_chars that stops short of the value trains on nothing and reports green."
+                f"{row['id']}: the supervised head {head!r} does not end at {want!r}. A learn_chars"
+                " that stops short of the value trains on nothing and reports green; one past the"
+                " separator supervises fields nobody labelled."
             )
     ids = [row["id"] for row in rows]
     if len(set(ids)) != len(ids):

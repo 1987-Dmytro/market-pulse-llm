@@ -154,9 +154,11 @@ def test_the_worst_case_fits_the_cap_and_the_milestone_sits_under_its_stop():
     }
 
 
-def test_the_kill_clock_is_six_rungs_in_order_each_before_its_milestone():
+def test_the_kill_clock_is_the_contracts_six_rungs_in_order_each_before_its_milestone():
+    """The parent contract's six, unchanged. D3a may only APPEND to this list — the test below is
+    what says so, and this one is what would catch a tightening that edited a rung instead."""
     rungs = RECORD["kill_clock"]
-    assert [one["rung"] for one in rungs] == [1, 2, 3, 4, 5, 6]
+    assert [one["rung"] for one in rungs[:6]] == [1, 2, 3, 4, 5, 6]
     assert all(one["before"] and one["rule"] for one in rungs)
     assert "0.80" in rungs[0]["rule"] and "no endpoint" in rungs[0]["rule"]
     assert "180 s" in rungs[1]["rule"]
@@ -164,6 +166,93 @@ def test_the_kill_clock_is_six_rungs_in_order_each_before_its_milestone():
     assert "122 s" in rungs[3]["rule"]
     assert "2.50" in rungs[4]["rule"] and "arm B does not start" in rungs[4]["rule"]
     assert "7.5 h" in rungs[5]["rule"]
+    assert not any(one.get("added") for one in rungs[:6])
+
+
+def test_d3a_only_gained_rungs_and_every_one_of_them_says_so():
+    rungs = RECORD["kill_clock"]
+    gained = [one for one in rungs if one.get("added") == "D3a"]
+    assert [one["rung"] for one in gained] == [7, 8, 9, 10]
+    assert gained == rungs[6:]  # appended, never interleaved
+    assert "CUMULATIVE" in gained[0]["rule"]
+    assert "5.5 h" in gained[0]["rule"] and "4.40" in gained[0]["rule"]
+    assert "projection gate" in gained[1]["rule"] and "MEASURED" in gained[1]["rule"]
+    assert "6.00" in gained[2]["rule"] and "MEASURED rates" in gained[2]["rule"]
+    assert "TRAINING-set prompt" in gained[3]["rule"] and "OWN out-file" in gained[3]["rule"]
+    assert all(one["read"].startswith("money.arithmetic.cumulative") for one in gained[1:])
+
+
+def test_the_hard_stop_sits_under_the_cap_and_over_the_sanctioned_recreation():
+    """Three inequalities the two clauses would otherwise contradict each other on."""
+    block = RECORD["money"]["arithmetic"]["cumulative"]
+    cap = RECORD["money"]["cap_usd_all_in"]
+    cases = block["worst_cases_usd"]
+    assert block["hard_stop_hours"] == 5.5
+    assert block["hard_stop_seconds"] == 5.5 * 3600
+    assert cases["cumulative_hard_stop"] == 4.40 < cap
+    assert cases["no_incident"] < cases["sanctioned_recreation"]
+    assert (
+        cases["sanctioned_recreation_with_the_registered_overhead"] < cases["cumulative_hard_stop"]
+    )
+    ceiling = next(r for r in RECORD["h6"]["rows"] if r["name"] == "session_ceiling_hours")
+    assert block["hard_stop_hours"] < ceiling["registered"]  # under the absolute session ceiling
+
+
+def test_the_projection_gates_two_tightenings_are_what_close_the_compliant_slow_path():
+    """The rung's own worked examples: 121 s/step clears the watchdog and the contract's letter, and
+    is KILLED once arm B is priced at the measured rate and the hard stop is one of the bounds."""
+    gate = RECORD["money"]["arithmetic"]["cumulative"]["projection_gate"]
+    worked = gate["worked_examples"]
+    assert worked["measured"]["verdict"] == "GO"
+    assert worked["measured"]["projected_usd_at_the_price_ceiling"] == pytest.approx(
+        RECORD["money"]["arithmetic"]["worst_case_usd"], abs=0.001
+    )
+    assert worked["compliant_slow"]["seconds_per_step"] == 121.0 < 122
+    assert worked["compliant_slow"]["verdict"] == "KILL"
+    assert worked["compliant_slow_by_the_contracts_letter"]["verdict"] == "GO"
+    assert (
+        worked["compliant_slow_by_the_contracts_letter"]["projected_seconds"]
+        < worked["compliant_slow"]["projected_seconds"]
+    )
+    assert gate["overhead_seconds"] == 1800.0
+    assert "LARGER of the" in gate["arm_b_leg"]
+
+
+def test_the_attempt_names_when_it_is_spent_and_the_smoke_is_not_that_moment():
+    assert "SPENT at the" in RECORD["attempt"] and "GOLD-row reply" in RECORD["attempt"]
+    smoke = RECORD["money"]["arithmetic"]["cumulative"]["format_smoke"]
+    assert smoke["pack"] == "results/lora_b_smoke_pack.json"
+    assert "NEITHER the sealed fourteen" in smoke["not_a_bar_peek"]
+    assert "resume skips" in smoke["out_file_rule"]
+    assert RECORD["instruments"]["smoke_pack"]["file"] == smoke["pack"]
+    assert "results/lora_b_smoke_pack.json" in RECORD["frozen_when_the_pod_exists"]
+
+
+def test_the_registration_says_it_was_tightened_before_any_pod_and_the_bars_were_not():
+    note = RECORD["tightened_at_d3a"]
+    assert "TIGHTENED BEFORE ANY POD, BARS UNTOUCHED" in note
+    assert "strictly SAFER" in note
+    for block in ("bars", "population.gold", "instruments.prompt_sha256", "money.cap_usd_all_in"):
+        assert block in note
+
+
+def test_the_supervised_boundary_registered_here_is_the_one_the_datasets_carry():
+    """The tightening's own number, read back off the shipped rows rather than off its prose."""
+    supervision = RECORD["training"]["supervision"]
+    assert supervision["boundary_char"] == ","
+    assert "AND the one separator character" in supervision["learn_chars"]
+    rows = [
+        json.loads(line)
+        for line in (REPO_ROOT / "results" / "pass1_sft_arm_b.jsonl")
+        .read_text("utf-8")
+        .splitlines()
+        if line
+    ]
+    assert len(rows) == 650
+    for row in rows:
+        label = "null" if row["subject_type"] is None else f'"{row["subject_type"]}"'
+        assert row["target"][: row["learn_chars"]].endswith(f"{label},")
+        assert not row["target"][: row["learn_chars"] - 1].endswith(",")
 
 
 def test_the_reachability_block_prices_the_rows_the_arm_must_turn():

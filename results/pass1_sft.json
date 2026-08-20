@@ -113,12 +113,12 @@
     "a": {
       "file": "results/pass1_sft_arm_a.jsonl",
       "rows": 500,
-      "sha256": "610c996176d6a8af6b4997a8490acbecb98d26d182d1e77932ed083a599c3b77"
+      "sha256": "79988046f96c981fbb6e09eedd71fd343b8b60ddd414c6f35fc754817f79dd40"
     },
     "b": {
       "file": "results/pass1_sft_arm_b.jsonl",
       "rows": 650,
-      "sha256": "f5b3540ba4ac042c577ed37de7b2a4ffab879fa156a8aae4e7282c93df386341"
+      "sha256": "dc7c8390c3fff439f940bda27965f7d97a327216a6989701460d91cbe2a8fef9"
     }
   },
   "instruments": {
@@ -180,11 +180,18 @@
   },
   "producer": {
     "script": "scripts/build_pass1_sft.py",
-    "sha256": "8452e1a955cf7b1f329eafb6546c072d8034269f3a9a6980051906e1922ec323"
+    "sha256": "3cc9b52324d13fc219ca4cb698cb53ff11dd240ebed96de8333242d1a7cbfd42"
+  },
+  "smoke": {
+    "file": "results/lora_b_smoke_pack.json",
+    "row": "@VARUS_channel:10349#20651",
+    "rule": "ONE training request, chosen as arm A's first row and therefore a training row of both arms. It is in NEITHER the sealed fourteen nor the eval pack's sixty-four — asserted by the producer — so a reply to it is not an eval output and the one attempt is not spent by seeing it. The attempt is SPENT at the first GOLD-row reply generated",
+    "sha256": "39cafdfae36ad921434e2f2f89c2874dda98ab13a7b53766837215ae3bb1d783"
   },
   "supervision": {
+    "boundary_char": ",",
     "field": "subject_type",
-    "learn_chars": "each row's target is written whole and only its head — through the subject_type value — is supervised. `scripts/train_qlora.py` masks the rest out of the loss",
+    "learn_chars": "each row's target is written whole and only its head — through the subject_type value AND the one separator character that closes it — is supervised. `scripts/train_qlora.py` masks the rest out of the loss. The separator is inside the boundary because the mask is applied on token END offsets: with the boundary ON the value, a tokenizer that merges the closing quote with the comma produces a token ending one character past it, and that whole merge — the value's tail with it — falls out of supervision. It teaches structure the parser demands and no label; the two unlabelled fields are as untaught as they were",
     "unsupervised_fields": [
       "subject_id",
       "stance"

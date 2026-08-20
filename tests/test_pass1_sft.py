@@ -57,9 +57,26 @@ def test_the_supervised_span_ends_at_the_label_and_never_reaches_the_unlabelled_
         head = row["target"][: row["learn_chars"]]
         tail = row["target"][row["learn_chars"] :]
         label = "null" if row["subject_type"] is None else f'"{row["subject_type"]}"'
-        assert head.endswith(label), row["id"]
+        assert head.endswith(f"{label}{sft.SEPARATOR}"), row["id"]
         assert "subject_id" not in head and "stance" not in head
-        assert tail.startswith(', "subject_id": null') and tail.endswith("}")
+        assert tail.startswith(' "subject_id": null') and tail.endswith("}")
+
+
+def test_the_boundary_runs_one_character_past_the_value_and_that_character_is_the_separator(state):
+    """D3a's tightening, asserted in BOTH directions on every row.
+
+    The mask in `scripts/train_qlora.py` is applied on token END offsets, so a boundary sitting ON
+    the value lets a `",` merge end one character past it and fall out of the loss whole. One
+    character further and that merge ends exactly on the boundary. The direction is checked as well
+    as the value: a boundary two characters past would be inside the space before `"subject_id"`,
+    and the guard that would catch it is the same `endswith` above.
+    """
+    for row in state["rows"]:
+        label = "null" if row["subject_type"] is None else f'"{row["subject_type"]}"'
+        value_ends = row["target"].index(label) + len(label)
+        assert row["learn_chars"] == value_ends + 1, row["id"]
+        assert row["target"][value_ends] == sft.SEPARATOR, row["id"]
+        assert row["target"][: row["learn_chars"] - 1].endswith(label), row["id"]
 
 
 def test_training_the_unlabelled_stance_would_put_the_bar_out_of_reach():
