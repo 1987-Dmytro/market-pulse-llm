@@ -79,15 +79,36 @@ PYTHONPATH=src python3.11 scripts/gate_pass1_fewshot.py --gate0 --ssh-ok   # it 
 
 ## 3 — stage, and launch BOTH dev legs in one process
 
+The packs pin the CURRENT parser sha, so the handshake refuses a stale checkout by design. The repo
+has no remote; the transport is a git bundle.
+
 **zsh does not word-split an unquoted variable holding ssh options.** Spell every flag literally.
 
 ```bash
 SSHK=~/.runpod/ssh/runpodctl-ssh-key
+git bundle create /tmp/market-pulse-pass1-fewshot.bundle HEAD
 scp -i $SSHK -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR \
-  -P <PORT> -r <a NEW staging directory> root@<HOST>:/workspace/repo
-ssh -i $SSHK -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR \
-  -p <PORT> root@<HOST> 'mkdir -p /workspace/run'
+  -P <PORT> /tmp/market-pulse-pass1-fewshot.bundle \
+  scripts/pass1_fewshot_pod_runner.py scripts/pass1_pod_runner.py \
+  scripts/reader_v5_pod_runner.py scripts/reader_v4_pod_runner.py \
+  root@<HOST>:/workspace/
 ```
+
+```bash
+ssh -i $SSHK -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR \
+  -p <PORT> root@<HOST>
+# on the pod:
+cd /workspace && rm -rf repo && git clone -q market-pulse-pass1-fewshot.bundle repo
+cd repo && git rev-parse HEAD && git status --short      # equals the Mac's HEAD, empty
+ls -d /workspace/venv /workspace/hf && du -sh /workspace/hf   # the volume is warm, or STOP
+rm -rf /workspace/run && mkdir -p /workspace/run         # the volume REMEMBERS a previous attempt
+ls /workspace/run                                        # empty — the proof, not the hope
+```
+
+If `/workspace/hf` is not there the weights are not on the volume, the boot is a 59 GB download and
+this registration priced no such thing: delete and STOP. The `rm -rf /workspace/run` is not
+tidiness — a replacement pod mounts the same network volume, and an out-file left by a killed leg
+would be RESUMED over, so the run would answer fewer units and look complete.
 
 The launch is DETACHED and its stdout is the pod log the watch loop tails:
 
