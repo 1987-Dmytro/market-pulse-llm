@@ -80,17 +80,30 @@ boot on this stack has never been a constant (146.8 / 192.1 / 237.2 / 267 / 293 
    where the operator ruled «ждать» and the window opened in about an hour — or re-register the
    dead-man from tonight's two readings. Re-registering is a NEW registration, not an edit: this one
    is committed, and its cumulative hard stop and its single recovery do not reset.
-4. **$0.1178 of the $1.50 cap is spent** on the clock's arithmetic (573.0 s × $0.74/h), against a
+4. **A ruling that moves ONLY rung 2 ships the rung that fires next.** Rung 3's 450 s is derived in
+   H6 from `max(measured boots) × 1.2748` — boots, the model-load window — and both `--boot` and the
+   watch's own arming measure CREATE-elapsed, which also carries the ssh wait, the staging and the
+   launch. probe-b bounds the gap: 657 s billed − 237.155 s boot − 330.3 s of generation = **89.5 s**
+   of everything else, so its first reply landed near **326.7 s** with 123.3 s to spare. Tonight the
+   ssh publish alone was unfinished at 231.9 s, and 231.9 + 89.5 + 237.2 = **558.6 s** against a
+   450 s ceiling — killed by the loop, with no human in the path. The re-registration needs rung 3
+   anchored on the LAUNCH, or a ceiling derived from create-to-first-reply, of which this stack has
+   exactly one measurement.
+5. **$0.1178 of the $1.50 cap is spent** on the clock's arithmetic (573.0 s × $0.74/h), against a
    guard balance delta of $0.0906 that is still settling. Cycle 2: **$5.8992 of $20.00, remaining
    $14.1008**.
+6. **`scripts/score_pass1_fewshot.py` is not pinned** in the registration's `instruments` — lora-b's
+   Dv584 class one contract later, except that this time the judge exists and is committed. It is a
+   missing pin, and pins are not added to a committed registration.
 
 ## What this cost and what it bought
 
 It cost $0.1178 and one recovery, and both were spent on the ssh dead-man rather than on the
-question. It bought a D0 that is committed, green and adversarially reviewed before the money — six
-findings landed at $0, including a holdout allocation that would have dropped the `молочный_бренд`
-class entirely and a liveness fingerprint that would have kept a dead pod alive behind a flapping
-scp — and one environment reading the next registration needs.
+question. It bought a D0 that is committed, green and adversarially reviewed before the money —
+**twelve of the eighteen Deviations were found and CLOSED at $0**, among them a holdout allocation
+that would have dropped the `молочный_бренд` class entirely and a liveness fingerprint that would
+have kept a dead pod alive behind a flapping scp — plus one environment reading the next
+registration needs and two findings (consequences 4 and 6) it must absorb.
 
 The report is `docs/reports/pass1-fewshot.md`; the gate record is
 `results/pass1_fewshot_run.json`, append-only, seven gates over two pods.

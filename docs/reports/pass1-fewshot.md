@@ -306,10 +306,24 @@ REMAINING         $14.1008
 PASS1-FEWSHOT SPENT      $0.0906 of $1.50   (balance delta; the billing walk still reads $0.0097)
 ```
 
-Each intermediate commit was checked out into a scratch worktree and the whole suite run on it.
-`5a47ca6` returns 3 183 passed / 2 failed, and both failures reproduce at the pre-contract HEAD
-`317762e` in the same worktree — `test_baselines` and `test_collect_5c1` read repo-root paths and
-git state that a detached worktree does not have. They are worktree artefacts, not commits.
+**Which commits were verified how, enumerated rather than counted.** Three of the nine commits were
+checked out into a scratch worktree and the WHOLE suite run on each — the three that add test files:
+
+| commit | what it adds | worktree suite |
+|---|---|---|
+| `5a47ca6` | holdout · prompt v2 · the moved-pin sweep | 3 183 passed · 2 failed |
+| `d8c0552` | neighbours · both packs · the fewshot runner | 3 205 passed · 2 failed |
+| `1b5a1e1` | the gate and the runbook (no tests of its own) | 3 205 passed · 2 failed |
+
+The same two failures appear in all three AND at the pre-contract HEAD `317762e` in an identically
+built worktree: `test_baselines` and `test_collect_5c1` read repo-root paths and git state a
+detached worktree does not have. They are worktree artefacts and not commits.
+
+The other six — `c7cbfd1` (the registration, the scorer and the tests that read them), the two
+runbook fixes, the report, the vault tail and the ledgers — were **not** run in a worktree. Their
+content was verified by the whole-tree `make check` immediately before staging, which is a weaker
+claim than a worktree run and is stated as the weaker one
+([[count-in-prose-is-not-the-enumeration]]).
 
 ## Deviations (enum v2)
 
@@ -334,10 +348,14 @@ git state that a detached worktree does not have. They are worktree artefacts, n
 | **Dv603** | `BACKSTOP_TOLERANCE_SECONDS = 60.0` is a threshold the gate acts on that lives outside the registration (lora-b precedent). It bounds overshoot only — a window rounded down shortens itself — but a number the gate acts on belongs in the record. | `[cause: contract-gap]` `[[preregistration-is-a-file-not-a-constant]]` |
 | **Dv604** | The guard anchor was taken **~4 h** before the first `pod create`, so the volume drip in that window lands on this step: of the step's $0.0906 balance delta, **$0.0097** is network volume the billing walk attributes to nothing this contract ran. The gate's own clock — 573.0 s × $0.74/h = **$0.117783** — is the per-leg figure; the delta is the account's. | `[cause: env]` `[[a-balance-delta-is-not-a-per-leg-cost]]` |
 
-**Tally.** contract-health (contract-gap + spec-gap + verify-gap) **13** · paid (process + env) **5**.
-Thirteen contract-health entries on a contract that never generated a token is the shape of a D0
-that was reviewed adversarially before the money: eleven of them were found and closed at $0, and
-the two that were not (Dv601, Dv602) are the two that cost the session.
+| **Dv605** | **Rung 3's ceiling is derived from the model load and applied to create-elapsed, and the two are not the same span.** H6 derives 450 s as `max(measured boots) × 1.2748`, and every one of those boots is a `load_captioner` window; `gate_boot` and the watch's own arming both measure `elapsed_on_this_pod_seconds`, which also carries the ssh wait, the staging and the launch. probe-b bounds the gap: 657 s billed − 237.155 s boot − 330.3 s of generation = **89.5 s** of everything else, so its first reply landed near **326.7 s** of create-elapsed with **123.3 s** to spare. Tonight the ssh publish ALONE was still unfinished at 231.9 s; 231.9 + 89.5 + 237.2 = **558.6 s** against the 450 s ceiling. **A ruling that fixes rung 2 and leaves rung 3 anchored on create ships the rung that fires next** — and the watch now arms it with no human in the path. | `[cause: contract-gap]` `[[a-gate-that-checks-position-not-presence]]` `[[registrations-and-draws]]` |
+| **Dv606** | `scripts/score_pass1_fewshot.py` is not pinned in the registration's `instruments` — the same class as lora-b's Dv584, «the bar named its judge before the judge existed», one contract later. The difference is that the judge exists and is committed at `c7cbfd1`, so this is a missing pin rather than a missing producer. It cannot be added: the registration is committed and a re-registration is the operator's call. | `[cause: verify-gap]` `[[a-registered-bar-may-have-no-producer]]` |
+
+**Tally.** contract-health (contract-gap + spec-gap + verify-gap) **15** · paid (process + env) **5**.
+Fifteen contract-health entries on a contract that never generated a token is the shape of a D0
+reviewed adversarially before the money: twelve were found and CLOSED at $0, two more (Dv605,
+Dv606) are open findings the registration can no longer absorb, and the two paid ones — Dv601 and
+Dv602 — are what cost the session.
 
 ## Process signals (five lines)
 
@@ -361,10 +379,14 @@ the two that were not (Dv601, Dv602) are the two that cost the session.
 
 1. **The attempt is NOT spent.** `docs/PROMPT-pass1-fewshot.md` D1 is unexecuted and every D0
    artefact it depends on is committed and green.
-2. **Rung 2 needs a ruling.** Either wait for the datacenter (lora-b's precedent: the operator ruled
-   «ждать» and the window opened in ~1 h) or re-register the dead-man from tonight's two readings —
-   which is a new registration, not an edit, because the current one is committed and spent one
-   recovery.
+2. **Rung 2 needs a ruling — and rung 3 needs one in the same breath (Dv605).** Either wait for the
+   datacenter (lora-b's precedent: the operator ruled «ждать» and the window opened in ~1 h) or
+   re-register, which is a new registration and not an edit, because the current one is committed
+   and has spent its recovery. **A re-registration that moves only rung 2 ships a rung 3 that fires
+   next:** 450 s is derived from the model load and measured from create, and on tonight's numbers
+   231.9 + 89.5 + 237.2 = 558.6 s. Either anchor rung 3 on the launch rather than on create, or
+   derive its ceiling from create-to-first-reply — probe-b's own is 326.7 s and it is the only such
+   measurement this stack has.
 3. **The recovery clause is used.** A third pod under this registration is not allowed.
 4. **$0.1178 of the $1.50 cap is gone** and 5 727 s of the 6 300 s hard stop remain — but the stop
    is cumulative across the attempt, so a re-registration inherits neither.
