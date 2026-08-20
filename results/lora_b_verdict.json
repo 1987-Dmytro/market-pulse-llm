@@ -1,0 +1,481 @@
+{
+  "ablation": {
+    "agreed": {
+      "arm_a": 9,
+      "base": 9
+    },
+    "base_record": {
+      "file": "results/pass1_probe_b_verdict.json",
+      "sha256": "4f3a0cbf226a06a8084b1dc8030316222defcc3f5a94584801ff0d5f3d55ef42"
+    },
+    "lost": {
+      "arm_a": []
+    },
+    "rows": [
+      {
+        "arm_a": true,
+        "base": true,
+        "msg_id": 20664
+      },
+      {
+        "arm_a": true,
+        "base": true,
+        "msg_id": 21599
+      },
+      {
+        "arm_a": false,
+        "base": false,
+        "msg_id": 21601
+      },
+      {
+        "arm_a": true,
+        "base": true,
+        "msg_id": 21626
+      },
+      {
+        "arm_a": true,
+        "base": true,
+        "msg_id": 21629
+      },
+      {
+        "arm_a": true,
+        "base": true,
+        "msg_id": 47899
+      },
+      {
+        "arm_a": false,
+        "base": false,
+        "msg_id": 47902
+      },
+      {
+        "arm_a": true,
+        "base": true,
+        "msg_id": 48276
+      },
+      {
+        "arm_a": false,
+        "base": false,
+        "msg_id": 48283
+      },
+      {
+        "arm_a": true,
+        "base": true,
+        "msg_id": 578951
+      },
+      {
+        "arm_a": true,
+        "base": true,
+        "msg_id": 579379
+      },
+      {
+        "arm_a": false,
+        "base": false,
+        "msg_id": 579457
+      },
+      {
+        "arm_a": false,
+        "base": false,
+        "msg_id": 580124
+      },
+      {
+        "arm_a": true,
+        "base": true,
+        "msg_id": 580129
+      }
+    ],
+    "rule": "paired per row on the registration's own fourteen. The base column is the SEALED record and is not re-run",
+    "turned": {
+      "arm_a": []
+    }
+  },
+  "arms": {
+    "a": {
+      "adapter": {
+        "adapter": "/workspace/run/arm_a/adapter",
+        "files": {
+          "README.md": "31623e74270c800f66c4b228d78e37298bb36dd3a2874edbab7f16d2abfb50c2",
+          "adapter_config.json": "31ddbb982def17bd7bc99b4947126b853cfb561bf45dea27cf0c1bb4516e874d",
+          "adapter_model.safetensors": "1b604585b5a19589a9a049b9aa9448bd417388b5138fdec4a5cfabb649a51ed0"
+        },
+        "rule": "written before the run, from the directory that was mounted. An evidence file with no record beside it was answered by the base"
+      },
+      "arm": "a",
+      "bar": {
+        "absent": 0,
+        "agreed": 9,
+        "collapse": {
+          "map": {
+            "категория_личное": "категория"
+          },
+          "symmetric": true
+        },
+        "comparison": "market_pulse.scorer.reader_comment_agreement",
+        "disagreed": 5,
+        "losses": {
+          "budget": 2,
+          "by_cause": {
+            "absent": 0,
+            "disagreed": 5
+          },
+          "spent": 5
+        },
+        "minimum_agreed": 12,
+        "n": 14,
+        "passed": false,
+        "rate": 0.6428571428571429,
+        "rate_over_the_rows_the_model_answered": null,
+        "rows": [
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21626
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21599
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "категория",
+                "reader": "сеть_ритейлер"
+              }
+            },
+            "msg_id": 21601
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21629
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "молочный_бренд",
+                "reader": "сеть_ритейлер"
+              }
+            },
+            "msg_id": 580124
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 580129
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 47899
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "категория",
+                "reader": "молочный_бренд"
+              }
+            },
+            "msg_id": 47902
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 48276
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "категория",
+                "reader": "не_наш_рынок"
+              }
+            },
+            "msg_id": 48283
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 579379
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "категория",
+                "reader": "не_наш_рынок"
+              }
+            },
+            "msg_id": 579457
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 578951
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 20664
+          }
+        ],
+        "scored": true,
+        "threshold": "12 of 14 rows agreed"
+      },
+      "census_50": {
+        "n": 50,
+        "parsed": 50,
+        "per_thread": {
+          "@VARUS_channel:10348": {
+            "None": 2,
+            "не_наш_рынок": 1,
+            "сеть_ритейлер": 3
+          },
+          "@VARUS_channel:10613": {
+            "None": 2,
+            "сеть_ритейлер": 4
+          },
+          "@mandziak:3676": {
+            "None": 2,
+            "категория_личное": 1,
+            "не_наш_рынок": 4
+          },
+          "@mandziak:3703": {
+            "None": 1,
+            "не_наш_рынок": 6
+          },
+          "@matusi_ukr:22242": {
+            "не_наш_рынок": 11
+          },
+          "@matusi_ukr:22272": {
+            "None": 2,
+            "категория_личное": 8,
+            "молочный_бренд": 2,
+            "не_наш_рынок": 1
+          }
+        },
+        "rule": "REPORTED and never gating — no number here moves bar P1",
+        "stance_distribution": {
+          "None": 2,
+          "negative": 4,
+          "neutral": 28,
+          "positive": 16
+        },
+        "subject_type_distribution": {
+          "None": 9,
+          "категория_личное": 9,
+          "молочный_бренд": 2,
+          "не_наш_рынок": 23,
+          "сеть_ритейлер": 7
+        }
+      },
+      "evaluated": true,
+      "evidence": {
+        "file": "results/lora_b_arm_a_rows.jsonl",
+        "rows": 64,
+        "sha256": "5719ab4795ba4e8bc6da743e17b004e01d449dc078c2d0e59a0d43f4542d3c71"
+      },
+      "refusals": {
+        "by_leg": {},
+        "by_shape": {},
+        "finish_reason_length": [],
+        "never_balanced": [],
+        "of": 64,
+        "refused": 0
+      }
+    },
+    "b": {
+      "arm": "b",
+      "evaluated": false,
+      "why": "results/lora_b_eval_arm_b.jsonl does not exist — arm b produced no reply. A missing arm is a STATE and is never scored 0 of 14"
+    }
+  },
+  "census_50": {
+    "base_distribution": {
+      "None": 25,
+      "категория_личное": 11,
+      "молочный_бренд": 2,
+      "не_наш_рынок": 8,
+      "сеть_ритейлер": 4
+    },
+    "base_none": 25,
+    "by_arm": {
+      "a": {
+        "None": 9,
+        "категория_личное": 9,
+        "молочный_бренд": 2,
+        "не_наш_рынок": 23,
+        "сеть_ритейлер": 7
+      }
+    },
+    "gating": false,
+    "rule": "OBSERVATION ONLY. The base answered None on 25 of the 50 neighbour rows; an arm that moves that profile is interesting and moves no bar"
+  },
+  "cleared_for_eval_by_the_run_record": [
+    "a"
+  ],
+  "contract": "docs/PROMPT-lora-b.md D4",
+  "gate": {
+    "agreed_by_arm": {
+      "a": 9
+    },
+    "arms_not_evaluated": [
+      "b"
+    ],
+    "attempt": "ONE. No retry, no second draw, and no tuning after any eval output is seen. The multiplicity of running two arms against one bar is named below and was accepted by the sitting; it is not re-decided once the number is in. **The attempt is SPENT at the first GOLD-row reply generated** — not at pod create, not at a training loss, and not at the format smoke, whose row is a training row outside both the sealed fourteen and the eval pack. A session that closes before any gold row is answered has not spent it and returns to the team lead (D3a rung 10)",
+    "max_agreed": 9,
+    "minimum_agreed": 12,
+    "multiplicity": "TWO shots at one bar is approximately double the false-pass odds of one, and it is accepted by the sitting-2 ruling rather than hidden: with two independent arms at a false-pass rate p the probability that at least one passes is 1-(1-p)² ≈ 2p. Registered here so the verdict cannot be read later as if one arm had been run",
+    "n": 14,
+    "next": "**A FAILED BAR GOES BACK TO THE SITTING, never to a prompt iteration.** The options the sitting of 2026-08-17 left open are B (labelled subject_type data + LoRA) and C (a different base). There is no pass1-v2 prompt without a sitting ruling, and this clause is pre-registered so it cannot be re-decided once the number is in",
+    "passed": false,
+    "reading": "line B is CLOSED and the question returns to the sitting (option C, a different base). A red bar is an ANSWER, not a bug to fix in-session",
+    "rule": "max(gold14(arm A), gold14(arm B)) ≥ 12 of 14",
+    "scored": true,
+    "ships": null,
+    "tie": false,
+    "tie_rule": "a tie ships arm B — named before the numbers exist",
+    "verdict": "RED"
+  },
+  "phase": "lora-b",
+  "producer": {
+    "script": "scripts/score_lora_b.py",
+    "sha256": "0a391e2e49b8852986495a35fd35b1a4422f4e8568a0e6bd9ca6f458cda23dbd"
+  },
+  "provenance": {
+    "arms": {
+      "a": {
+        "adapter": {
+          "adapter": "/workspace/run/arm_a/adapter",
+          "files": {
+            "README.md": "31623e74270c800f66c4b228d78e37298bb36dd3a2874edbab7f16d2abfb50c2",
+            "adapter_config.json": "31ddbb982def17bd7bc99b4947126b853cfb561bf45dea27cf0c1bb4516e874d",
+            "adapter_model.safetensors": "1b604585b5a19589a9a049b9aa9448bd417388b5138fdec4a5cfabb649a51ed0"
+          },
+          "rule": "written before the run, from the directory that was mounted. An evidence file with no record beside it was answered by the base"
+        },
+        "command": "PYTHONPATH=/workspace/repo/src /workspace/venv/bin/python -u /workspace/repo/scripts/train_qlora.py --data results/pass1_sft_arm_a.jsonl --class-weights --out /workspace/run/arm_a",
+        "dataset": {
+          "file": "results/pass1_sft_arm_a.jsonl",
+          "rows": 500,
+          "sha256": "79988046f96c981fbb6e09eedd71fd343b8b60ddd414c6f35fc754817f79dd40"
+        },
+        "eval_command": "PYTHONPATH=/workspace/repo/src /workspace/venv/bin/python -u /workspace/repo/scripts/pass1_pod_runner.py --pack results/pass1_probe_b_pack.json --repo /workspace/repo --out /workspace/run/eval_arm_a.jsonl --adapter /workspace/run/arm_a/adapter",
+        "sampler_weights": {
+          "null": 0.598802,
+          "категория_личное": 2.777778,
+          "молочный_бренд": 8.0,
+          "не_наш_рынок": 0.398406,
+          "сеть_ритейлер": 2.272727
+        },
+        "steps": 64
+      },
+      "b": {
+        "adapter": null,
+        "command": "PYTHONPATH=/workspace/repo/src /workspace/venv/bin/python -u /workspace/repo/scripts/train_qlora.py --data results/pass1_sft_arm_b.jsonl --class-weights --out /workspace/run/arm_b",
+        "dataset": {
+          "file": "results/pass1_sft_arm_b.jsonl",
+          "rows": 650,
+          "sha256": "dc7c8390c3fff439f940bda27965f7d97a327216a6989701460d91cbe2a8fef9"
+        },
+        "eval_command": "PYTHONPATH=/workspace/repo/src /workspace/venv/bin/python -u /workspace/repo/scripts/pass1_pod_runner.py --pack results/pass1_probe_b_pack.json --repo /workspace/repo --out /workspace/run/eval_arm_b.jsonl --adapter /workspace/run/arm_b/adapter",
+        "sampler_weights": {
+          "null": 0.610329,
+          "категория_личное": 2.765957,
+          "молочный_бренд": 8.0,
+          "не_наш_рынок": 0.382353,
+          "сеть_ритейлер": 2.708333
+        },
+        "steps": 82
+      }
+    },
+    "eval_pack": {
+      "items": 64,
+      "record": "results/pass1_probe_b_pack.json",
+      "rule": "probe-b's own 64-unit pack, unchanged: 14 gold and 50 census rows. The base's per-row verdicts were measured on it and are NOT re-run — the arms are paired against a sealed record, on identical instances and the same prompt sha",
+      "sha256": "bbbe64203f9c909a2d2e8aeab03d8d61c0fd6604d4854e13462d0e190bc4e113"
+    },
+    "gold": {
+      "n": 14,
+      "record": "results/reader_gold_w1_r2.json",
+      "sha256": "716ff4174bdafa5957caa4d038a11241b6eb299df4035a5f0e983217ec2a46d9"
+    },
+    "instruments": {
+      "config_sha256": "6771ed373f9e7c52b3180a45506fe0dfef4446bc89b2c3ff6c1b39992f2d00ff",
+      "parser": {
+        "entry_point": "market_pulse.prompts.parse_pass1",
+        "module": "src/market_pulse/prompts.py",
+        "sha256": "a4a5a5d08546f53af18117c37e49f7e396919555563e16737a633c1df1a86eec"
+      },
+      "prompt_sha256": {
+        "pass1_comment_gm4_v1": "5a4a3cb6ce4db89adb304c04de41210fdabfde0c53addfdb75adba0f1d866650"
+      },
+      "scorer": {
+        "module": "src/market_pulse/scorer.py",
+        "sha256": "dbb5406a502f813ba1b4940e0914310efd632386a8da60e0c002cc8964a97d4f"
+      },
+      "sft_record": {
+        "file": "results/pass1_sft.json",
+        "sha256": "587062c66cfd2a872bea53162d1c247fb883bc252d57cc721f66945f32678ce8"
+      },
+      "smoke_pack": {
+        "file": "results/lora_b_smoke_pack.json",
+        "row": "@VARUS_channel:10349#20651",
+        "rule": "ONE training request, chosen as arm A's first row and therefore a training row of both arms. It is in NEITHER the sealed fourteen nor the eval pack's sixty-four — asserted by the producer — so a reply to it is not an eval output and the one attempt is not spent by seeing it. The attempt is SPENT at the first GOLD-row reply generated",
+        "sha256": "39cafdfae36ad921434e2f2f89c2874dda98ab13a7b53766837215ae3bb1d783"
+      },
+      "trainer": {
+        "script": "scripts/train_qlora.py",
+        "sha256": "1a1a0b5983db60d8e17d86a14fb1410af35d31d0dbbb14e66f81a382072e7907"
+      },
+      "transport": {
+        "adapter_flag": "--adapter mounts the arm's adapter AROUND the model local_llm builds and writes <out>.adapter.json beside the evidence BEFORE the first reply. Each arm evaluates into its OWN out file: the shipped runner's resume skips every unit already answered, so a second arm sharing one file would answer nothing and look complete",
+        "script": "scripts/pass1_pod_runner.py",
+        "sha256": "d4796df2cf152e3ba15f551ac8a2f5564e465fa9d62c5b753810eb6935558cb3"
+      }
+    },
+    "registration": {
+      "file": "results/prereg_lora_b.json",
+      "sha256": "0c541c92aa8c9d3c828217d9301df2ed66afc1a04bcd4741f61d8a02df317bae"
+    },
+    "run_record": {
+      "file": "results/lora_b_run.json",
+      "sha256": "3d0277c7d06c55742b3cd01515490c522e90d484264333b53805575249bac76d"
+    },
+    "training": {
+      "config": "config/qlora.yaml",
+      "config_is_frozen_law": "never edited. The arms differ by a data path and a sampler flag, both of them CLI arguments recorded here; a hyperparameter moved between the arms would make the comparison meaningless rather than merely wrong",
+      "effective_batch": 16,
+      "epochs": 2,
+      "max_seq_len": 1408,
+      "sampler": "class-weighted, w_c = N/(5·n_c) capped at 8.0, computed on the arm's own dataset. Both arms weighted: the ablation is the data, not the sampler. The epoch draws the dataset's own size WITH replacement, so steps/epoch is unchanged",
+      "seed": 42,
+      "supervision": {
+        "boundary_char": ",",
+        "field": "subject_type",
+        "learn_chars": "each row's target is written whole and only its head — through the subject_type value AND the one separator character that closes it — is supervised. `scripts/train_qlora.py` masks the rest out of the loss. The separator is inside the boundary because the mask is applied on token END offsets: with the boundary ON the value, a tokenizer that merges the closing quote with the comma produces a token ending one character past it, and that whole merge — the value's tail with it — falls out of supervision. It teaches structure the parser demands and no label; the two unlabelled fields are as untaught as they were",
+        "unsupervised_fields": [
+          "subject_id",
+          "stance"
+        ],
+        "why": "the team lead labelled subject_type and nothing else. Training the two unlabelled fields as null would teach «stance is always null», and three of the fourteen sealed gold rows score stance — the reachable maximum would fall to 11 against a threshold of 12 and the gate would be unreachable by construction"
+      }
+    }
+  }
+}

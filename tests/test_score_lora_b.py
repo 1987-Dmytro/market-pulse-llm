@@ -84,7 +84,14 @@ def raw_for(agreed_gold_ids: set[int]) -> str:
 
 @pytest.fixture
 def scored(tmp_path, monkeypatch):
-    """`build` pointed at fabricated raw files and an outdir of its own."""
+    """`build` pointed at fabricated raw files, an outdir of its own, and NO run record.
+
+    The run record is redirected too. Once a real session ships `results/lora_b_run.json`, the
+    missing-copy refusal would read THAT file and see an arm the real run evaluated — and every
+    fabricated case with a missing arm would raise. A fixture that reads a shipped artifact is green
+    only until the artifact lands ([[a-test-that-reads-a-shipped-artifact]]).
+    """
+    monkeypatch.setattr(verdict, "RUN", tmp_path / "lora_b_run.json")
 
     def run(arms: dict[str, set[int] | None]):
         raws = {}
