@@ -1,22 +1,35 @@
-# lora-b-run — D3a tightened the run at $0, and rung 1 stopped it before any endpoint
+# lora-b-run — D3a tightened the run at $0, the one attempt was spent, and the bar came back RED
 
-**Status: the ONE attempt is NOT spent. $0.0000 of the $6.00 cap. No pod was created — the
-platform refused the create for the registered card, and the refusal is quoted below.**
+**Status: the attempt is SPENT. The gate is RED at 9 of 14 against a threshold of 12 — line B is
+CLOSED and the question returns to the sitting (option C, a different base). $2.3271 of the $6.00
+cap.**
 
-D3a is executed and committed. D3 stopped at its first rung: the card every measured constant in
-`results/prereg_lora_b.json` was measured on is out of stock in the one datacenter the network
-volume pins, and the only 48 GB-class cards obtainable there price above the kill-clock's ceiling.
-D4 has no reading to grade and does not run.
+D3a is executed and committed. D3 stopped once at rung 1 for a card that was out of stock, waited
+at $0, created the registered pod when the window opened, trained arm A, smoked it, evaluated it,
+and closed. **Arm B was never trained** — not for money but for the clock, and the reason is a gap
+this session found in its own conduct rather than a property of the run. D4 applied the gate by the
+scorer.
 
 | step | outcome | commit |
 |---|---|---|
 | D3a — five tightenings, $0, before any pod | done | `39f5e32` |
 | D4's scorer, built before the money | done | `5bd2fc9` |
 | money anchor, before the pod exists | done | `03c486d` `26fc9a2` |
-| D3 — the ONE paid session | **STOP at rung 1, no endpoint** | — |
-| D4 — the verdict | not reached: no reading exists | — |
+| D3, first attempt — rung 1 STOP, no A6000 in EU-RO-1 | no endpoint, $0 | `258aefe` `f96adfb` `3b82e7a` |
+| D3 — the ONE paid session, arm A only | done, $2.3271 | `1da4c29` |
+| D4 — the verdict | **RED, 9 of 14** | `603c6d0` |
 
 `make check` after every commit: ruff clean, **3 169 passed / 2 skipped** (3 118 / 2 before D3a).
+
+**The verdict in one table** — paired per row against probe-b's SEALED base, on the same fourteen:
+
+| | base (sealed) | arm A | arm B |
+|---|---|---|---|
+| gold-14 agreed | 9 | **9** | not evaluated |
+| turned | — | nothing | — |
+| lost | — | nothing | — |
+| census-50 `None` | 25 | **9** | — |
+| census-50 `не_наш_рынок` | 8 | **23** | — |
 
 ---
 
@@ -239,7 +252,7 @@ Two refusals carry the money:
 
 ---
 
-## 8. D3 — STOP at rung 1, and the evidence for it
+## 8. D3, the FIRST attempt — STOP at rung 1, no endpoint, $0
 
 `scripts/runbook_lora_b.md` §0 ran clean. Three listings as the before-state, with the volume as the
 positive control that the listing works at all:
@@ -381,11 +394,10 @@ one. It is the operator's ruling to make **before** an endpoint exists, not the 
 * The staging bundle is built and the five staged files exist, so a create that succeeds later goes
   straight to §2 of the runbook.
 
-### The ruling this needs
+### The ruling this needed, and what it bought
 
-The operator's answer of 2026-08-20 is **wait for the A6000**: the registration then executes exactly
-as written, at $0 while waiting, and the attempt stays unspent if the card does not return today. A
-free stock watch is running against EU-RO-1.
+The operator's answer of 2026-08-20 was **wait for the A6000**, and it was the right one: the
+registration then executed exactly as written. The wait cost $0 and the window opened.
 
 If it does not return, the choice is a ruling and not an executor's call:
 
@@ -404,25 +416,192 @@ closed and reopened at `Low` after **49 minutes**.
 
 ---
 
+## 9. D3, the paid session — every rung with its reading
+
+A create-on-sight watcher replaced detect-then-create, because a `Low` window closes in seconds and
+two round-trips minutes apart is a race. A refused create bills nothing, so the create attempt IS
+the stock test; the watcher held a PID lock so a second instance could never start, because two
+watchers are two entitlements to create and that is two billing endpoints. It read stock every 30 s
+and attempted a create on every fifth reading regardless, to cover a listing that lags reality.
+
+```
+13:21:12Z [ 12] stock=none
+13:21:43Z [ 13] stock=Low -> create
+13:21:44Z POD CREATED · terminate-after given 2026-08-20T18:41:43Z
+```
+
+**Pod `0cnth2accoyj0n` · RTX A6000 · $0.53/h · EU-RO-1 · created 13:21:44Z.**
+
+| rung | reading | threshold | verdict |
+|---|---|---|---|
+| 1 — price | **$0.53/h**, card `RTX A6000`, location RO | ≤ $0.80/h | **GO** |
+| 1 — backstop | given `18:41:43Z` vs computed `18:51:44Z`, **−601 s** | window ≤ 19 800 s | **GO** |
+| 2 — ssh dead-man | **31.8 s** | ≤ 180 s | **GO** |
+| 3 — boot → first step | **353 s** (loop began `13:27:37Z`) | ≤ 450 s | **GO** |
+| 5 — arm-A milestone | guard **$2.1938** | ≤ $2.50 | **GO** |
+| 7 — arm B fits? | needs 6 668 s, backstop leaves 4 787 s | must fit | **STOP** |
+| 10 — format smoke, arm A | one balanced four-key object | must parse | **GO** |
+
+**Rung 3 was measured, not estimated.** `train()` calls `out.mkdir` immediately before the loop, so
+the mtime of an out directory that has nothing in it yet IS the moment training started: `13:27:37Z`,
+353 s of create-elapsed.
+
+**The staging handshake.** Pod HEAD `3b82e7a9…` equal to the Mac's, `git status --short` empty,
+`/workspace/hf` warm at 59G, `/workspace/venv` present, `/workspace/run` removed and its absence
+proven by `ls` rather than assumed — a replacement pod mounts the same volume and an adapter left by
+a killed arm would be mounted by `--adapter` as if this pod had trained it. Card confirmed on the
+pod: `NVIDIA RTX A6000, 49140 MiB`.
+
+**Arm A trained.** LoRA on 410 modules, weighted sampling on with the registered weights, dataset
+sha `79988046…` equal to the registration's.
+
+```json
+{"steps": 62, "seconds": 4243.4, "seconds_per_step": 68.442, "gpu_gb_peak": 33.19,
+ "micro_batch_final": 2, "grad_accum_final": 8}
+```
+
+Three registered numbers moved, all in the cheap direction and none silently: **62 steps** where
+`ceil(500/16) × 2 = 64` was registered (with micro 2 the last two chunks of each epoch never complete
+an accumulation group), **68.44 s/step** against 61.047, **33.19 GB** peak against the 35.13 GB
+measured on 45h2.
+
+**The smoke was not a bar peek and the reply proves the mask did its job:**
+
+```
+@VARUS_channel:10349#20651
+{"msg_id": 20651, "subject_type": "категория_личное", "subject_id": "Паста", "stance": "positive"}
+```
+
+Four keys, balanced, and `stance`/`subject_id` still populated — head-only supervision did not
+un-teach the shape, which is the failure this rung was written to catch cheaply.
+
+**The eval: 64 of 64, every reply balanced, zero refusals.** The attempt was SPENT at its first
+gold-row reply.
+
+## 10. Why arm B was never trained — the clock, not the money
+
+Rung 5 passed: **$2.1938 ≤ $2.50**, the money allowed arm B. Rung 7 refused:
+
+```
+arm B at the MEASURED 68.442 s/step, 79 steps:     5407 s
++ both evals                                       660.7 s
++ scp everything and delete                          600 s
+= arm B branch needs                                6668 s
+  cumulative hard stop leaves                       5437 s
+  platform backstop leaves                          4787 s   <- the binding one
+  FITS? False
+```
+
+`save_every` is 100 against arms of 62 and ~79 steps, so `step % save_every` never fires and the only
+adapter written is the one after the loop: a backstop firing during arm B loses it whole and buys
+nothing. Two rungs, and the stricter binds. The registration's arm-A-only branch applies, and the
+refusal is a gate snapshot in `results/lora_b_run.json` rather than a sentence here.
+
+## 11. THE SESSION'S OWN DEFECT — rungs 4 and 8 never fired, and it cost arm B
+
+**The executor launched arm A and stopped polling.** No `--train` reading was taken while the meter
+ran. Arm A finished at **14:38:23Z** and was found at **17:20Z**: **9 720 s of idle billing, $1.43 of
+the $2.33 spent** ([[long-run-watch-the-process]], [[remote-job-outlives-its-watcher]]).
+
+The same arithmetic applied afterwards to the recovered loss log is recorded as
+`train-a-retrospective`, and it is not the gate — the gate is a thing that fires while the meter
+runs, and this one was never asked:
+
+```
+watchdog        GO · last five [68.17, 67.17, 67.74, 67.12, 66.81] · threshold 122.0
+projection      12 750.5 s · $1.8772 · over_the_hard_stop=False, at every one of the 12 log lines
+```
+
+**So the rungs would not have caught it either, and that is the finding.** Every kill rule in this
+registration watches training that is too slow. **None watches a pod that is not training at all.**
+The only thing that would eventually have fired is `--terminate-after`, four hours after arm A
+finished.
+
+And it was not free. Without those 9 720 s, arm B needed 6 668 s against **15 104 s** of remaining
+window and would have fit with 8 436 s to spare. **The idle time is what turned a two-arm attempt
+into a one-arm attempt** — halving the multiplicity the sitting accepted and leaving the r2 top-up,
+which a whole paid reader pass was bought for, unmeasured.
+
+The next contract of this shape needs an idle rung: a GPU-utilisation or process-liveness check whose
+deadline runs from the LAST LOG LINE rather than from create.
+
+## 12. Evidence, and the deletion
+
+Ten files scp'd **before any verdict** and hashed on the pod and again on the Mac — ten matching
+sha256: per-row replies, the adapter's three files, the loss log, the provenance, the optimizer
+state, both adapter records, the smoke replies. The 489 MB adapter and the 250 MB optimizer state are
+covered by `.gitignore`, as every previous arm in `results/train/` is; their hashes are committed.
+
+```
+runpodctl pod delete 0cnth2accoyj0n   →  {"deleted": true, "id": "0cnth2accoyj0n"}
+runpodctl pod list -a                 →  []
+runpodctl serverless list             →  []
+runpodctl network-volume list         →  [{"id":"qw4nwleanc",...}]   the POSITIVE CONTROL
+```
+
+**Money, the guard's own pessimistic arm:** `LORA-B SPENT $2.3271 of $6.00`. Cycle 2 stands at
+$5.6205 of $20.00 with $14.3795 remaining. The clock's own figure for the pod is 15 399 s ×
+$0.53/h = $2.2671; the guard's larger number is the one reported.
+
+## 13. D4 — the verdict, by the scorer
+
+```
+     row     base    arm_a
+   20664       ok       ok       21601        X        X
+   21599       ok       ok       47902        X        X
+   21626       ok       ok       48283        X        X
+   21629       ok       ok      579457        X        X
+   47899       ok       ok      580124        X        X
+   48276       ok       ok
+  578951       ok       ok      579379       ok       ok
+  580129       ok       ok
+  AGREED        9        9
+  arm_a turned nothing · lost nothing
+
+GATE RED — max 9 of 14 against 12
+```
+
+**The count is the base's and so is every cell — but the arm is not the base underneath.** It
+answered two of the five misses differently: 21601 moved from `null` to `сеть_ритейлер` and 48283
+from `null` to `не_наш_рынок`, both still wrong. And the census-50 profile moved hard: `None`
+25 → 9, `не_наш_рынок` 8 → 23.
+
+**The fine-tune learned the training set's prior, not the discrimination.** 340 of 650 rows are
+`не_наш_рынок` — 52% — the class-weighted sampler was registered precisely to counter that, and it
+did not hold. The loss fell from 0.689 at step 5 to 0.0095 at step 60 on a head-only target of one or
+two tokens, which is what memorising a marginal looks like. 64 of 64 parsed, zero refusals: nothing
+here is a transport loss.
+
+That is what sitting C is briefed with. The failure is not «not enough data» and not «the format
+collapsed»; it is that supervising `subject_type` alone on a set this skewed teaches the marginal.
+
+**What ships: nothing.** Line B is CLOSED, no retry, no tuning — the pre-registered consequence fires
+without a re-decision. ADR: `knowledge/decisions/lora-b-red-and-line-b-closes.md`.
+
+**What this verdict does NOT claim:** arm B is unmeasured. The multiplicity the sitting accepted was
+two shots at one bar and one was taken. A single arm at 9 of 14 says nothing about whether 650 rows
+would have said 12 — and the reason it was not taken is §11, not the bar.
+
+---
+
 ## Process — five lines
 
-1. **contract-gap** — the registration pinned a datacenter through its volume and a card class
-   through its constants, and pre-registered a rung for the card's PRICE. It did not pre-register
-   what to do when that card is not *obtainable* there at all. The rung still answers — the
-   obtainable 48 GB silicon is above the ceiling — but by arithmetic rather than by design.
+1. **process** — rungs 4 and 8 never fired because the executor stopped polling a live pod, and the
+   retrospective shows they would not have caught it anyway: every kill rule here watches slow
+   training and none watches a pod that is not training. 9 720 s of idle billing, $1.43, and it is
+   what cost arm B. [[long-run-watch-the-process]]
+2. **contract-gap** — the registration pinned a card class through its constants and a datacenter
+   through its volume, and pre-registered a rung for the card's PRICE, not its availability. The rung
+   still answered, by arithmetic rather than by design.
    [[a-registered-bar-may-have-no-producer]]
-2. **verify-gap** — the brief's own mechanism for the mask boundary was one character off its own
-   number: it named the merge that was already supervised, not the one that straddled. Reading the
-   producer instead of the prose is what found it, and the number it asked for was right.
-   [[trace-the-producer-not-the-result]]
-3. **verify-gap** — `load_sft` accepted every boundary at or before the label, so moving the
-   boundary would have gone green in both positions. A guard that cannot see the move it is guarding
-   is not a guard. [[a-moved-constant-fails-green]]
-4. **contract-gap** — the projection gate as the brief writes it does not close the compliant-slow
-   path the brief says it exists for: at 121 s/step the letter says GO. Two strictly-safer additions
-   close it, and they are registered with the arithmetic that makes them necessary rather than
-   applied quietly. [[an-absolute-bar-needs-a-reachability-state]]
-5. **process** — rung 7 is enforced by a platform flag no local instrument can read back, and the
-   first draft recomputed the correct stamp after the pod existed without ever comparing it. Making
-   the caller SAY the value is what turned a recomputation into a check.
-   [[the-guard-you-built-and-then-bypassed]]
+3. **verify-gap** — the brief's own mechanism for the mask boundary named the merge that was already
+   supervised, not the one that straddled; and `load_sft` accepted every boundary at or before the
+   label, so moving it would have gone green in both positions.
+   [[a-moved-constant-fails-green]] · [[trace-the-producer-not-the-result]]
+4. **contract-gap** — the projection gate as written does not close the compliant-slow path it exists
+   for: at 121 s/step the letter says GO. Two strictly-safer additions close it, registered with the
+   arithmetic that makes them necessary. [[an-absolute-bar-needs-a-reachability-state]]
+5. **model** — the bar is red and the count is identical to the base, but the census-50 profile moved
+   hard and two gold rows changed their wrong answer. An identical count is not an identical model,
+   and reading «the adapter did nothing» off the 9 would have been the wrong brief for sitting C.
+   [[count-the-kind-not-the-rows]]
