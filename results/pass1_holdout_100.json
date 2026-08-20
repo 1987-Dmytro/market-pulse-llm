@@ -1,0 +1,594 @@
+{
+  "authority": "the operator's rulings of 2026-08-20 registered in docs/STATUS.md «Открытые решения» п. 0 — the base stays Gemma-4-31B, the team lead labels, and the goal of the layer is the analysis of docs/REFERENCE-signals-w1.md",
+  "contamination": {
+    "holdout_ids_in_the_eval_pack_64": [],
+    "holdout_ids_in_the_gold_14": [],
+    "holdout_threads_in_the_eval_pack_threads": [],
+    "holdout_threads_in_the_gold_threads": [],
+    "rule": "all four lists are EMPTY in a correct holdout",
+    "why_it_is_empty": "scripts/build_pass1_label_pack.py::excluded_threads removes every thread carrying any of the 64 registered probe units from the labelling population WHOLE, so no label shares a thread with a gold row or an eval-pack item. Re-asserted here against the two sealed files rather than assumed"
+  },
+  "contract": "docs/PROMPT-pass1-fewshot.md D0.1",
+  "draw": {
+    "allocation": {
+      "null": 33,
+      "категория_личное": 7,
+      "молочный_бренд": 1,
+      "не_наш_рынок": 52,
+      "сеть_ритейлер": 7
+    },
+    "formula": "largest remainder on the class counts with a FLOOR OF ONE per non-empty class, tie-broken on (−remainder, class); then that many rows per class off one random.Random(SEED) stream, the classes consumed in the prompt's own schema order with null last",
+    "registered_allocation": {
+      "null": 33,
+      "категория_личное": 7,
+      "молочный_бренд": 1,
+      "не_наш_рынок": 52,
+      "сеть_ритейлер": 7
+    },
+    "seed": 20260820,
+    "target": 100,
+    "why_the_floor": "plain largest remainder gives 52:33:8:7:0 — floors 52/32/7/7/0 and the two largest remainders are null (.769) and сеть_ритейлер (.385). That holdout carries no молочный_бренд row at all, so the class with two rows in 650 is the one rounding deletes. The floor is what makes the registered tuple reachable"
+  },
+  "evaluation_only": true,
+  "inputs": {
+    "results/labels_pass1_r1.jsonl": "776b204f3d3aa1a193f0faad7f68198595c81963199124efca8f6b74a9e1c920",
+    "results/labels_pass1_r2.jsonl": "8f611437fdd3ed724acda516186bfa2837d94d7e8d74ac6c25e23a8e57d60e50",
+    "results/pass1_probe_b_pack.json": "bbbe64203f9c909a2d2e8aeab03d8d61c0fd6604d4854e13462d0e190bc4e113",
+    "results/pass1_sft.json": "587062c66cfd2a872bea53162d1c247fb883bc252d57cc721f66945f32678ce8",
+    "results/reader_gold_w1_r2.json": "716ff4174bdafa5957caa4d038a11241b6eb299df4035a5f0e983217ec2a46d9"
+  },
+  "labels": {
+    "r1": {
+      "file": "results/labels_pass1_r1.jsonl",
+      "sha256": "776b204f3d3aa1a193f0faad7f68198595c81963199124efca8f6b74a9e1c920"
+    },
+    "r2": {
+      "file": "results/labels_pass1_r2.jsonl",
+      "sha256": "8f611437fdd3ed724acda516186bfa2837d94d7e8d74ac6c25e23a8e57d60e50"
+    }
+  },
+  "overlap": {
+    "reading": "the holdout is drawn from the same 650 labels arm B is made of, so the overlap is total by construction and is NOT a defect. It is the reason the exemption is keyed on the sealed shas: the day one of those files is rebuilt differently, the exemption stops applying and the refusal fires",
+    "rule": "pass1-fewshot trains NOTHING, so its dev rows MAY overlap this holdout and the overlap is published rather than avoided. A line that TRAINS may not, and that is what the refusal in scripts/build_pass1_sft.py enforces",
+    "sealed_arms": {
+      "a": {
+        "file": "results/pass1_sft_arm_a.jsonl",
+        "holdout_rows_inside_it": 78,
+        "live_sha256": "79988046f96c981fbb6e09eedd71fd343b8b60ddd414c6f35fc754817f79dd40",
+        "registered_sha256": "79988046f96c981fbb6e09eedd71fd343b8b60ddd414c6f35fc754817f79dd40",
+        "rows": 500
+      },
+      "b": {
+        "file": "results/pass1_sft_arm_b.jsonl",
+        "holdout_rows_inside_it": 100,
+        "live_sha256": "dc7c8390c3fff439f940bda27965f7d97a327216a6989701460d91cbe2a8fef9",
+        "registered_sha256": "dc7c8390c3fff439f940bda27965f7d97a327216a6989701460d91cbe2a8fef9",
+        "rows": 650
+      }
+    }
+  },
+  "phase": "pass1-fewshot",
+  "population": {
+    "distribution": {
+      "null": 213,
+      "категория_личное": 47,
+      "молочный_бренд": 2,
+      "не_наш_рынок": 340,
+      "сеть_ритейлер": 48
+    },
+    "proportion": "2:48:47:340:213",
+    "rows": 650
+  },
+  "producer": {
+    "borrowed": {
+      "scripts/build_pass1_label_pack_r2.py": "7ae4f6e440ffdf4130d94d4cebcab6ed73acac16f3d8071985fb650a0ec83202",
+      "scripts/window_summary_5c2.py": "239d2d5fcc0f0c93158ca41383b5ce20beb7f8e9db38974913a302ea4831fdaf",
+      "src/market_pulse/prompts.py": "b70e2114b03a76dc2c8cfc9b559bf7ef22e9193d841b4fccc5ed8bd0a40294ab"
+    },
+    "script": "scripts/write_pass1_holdout.py",
+    "sha256": "56db60d5f8b71f52e5a6942ae59a1187e242178c9f5ab4eaf2e64c8c9cbdf3e1"
+  },
+  "rule": "these 100 rows are NEVER in any training set of any future line. They are EVALUATION ONLY, and scripts/build_pass1_sft.py refuses to build a dataset that contains one of them. The refusal exempts exactly the two SEALED line-B arms below, by sha, because they were built and spent before this holdout existed and their bytes are pinned by results/prereg_lora_b.json and results/lora_b_verdict.json",
+  "units": [
+    {
+      "msg_id": 20660,
+      "subject_type": null,
+      "thread": "@VARUS_channel:10349"
+    },
+    {
+      "msg_id": 20678,
+      "subject_type": "категория_личное",
+      "thread": "@VARUS_channel:10349"
+    },
+    {
+      "msg_id": 20863,
+      "subject_type": null,
+      "thread": "@VARUS_channel:10366"
+    },
+    {
+      "msg_id": 20913,
+      "subject_type": null,
+      "thread": "@VARUS_channel:10366"
+    },
+    {
+      "msg_id": 20922,
+      "subject_type": null,
+      "thread": "@VARUS_channel:10366"
+    },
+    {
+      "msg_id": 20985,
+      "subject_type": "не_наш_рынок",
+      "thread": "@VARUS_channel:10367"
+    },
+    {
+      "msg_id": 21005,
+      "subject_type": "не_наш_рынок",
+      "thread": "@VARUS_channel:10367"
+    },
+    {
+      "msg_id": 21238,
+      "subject_type": "сеть_ритейлер",
+      "thread": "@VARUS_channel:10470"
+    },
+    {
+      "msg_id": 21266,
+      "subject_type": "не_наш_рынок",
+      "thread": "@VARUS_channel:10471"
+    },
+    {
+      "msg_id": 21400,
+      "subject_type": null,
+      "thread": "@VARUS_channel:10528"
+    },
+    {
+      "msg_id": 21409,
+      "subject_type": "сеть_ритейлер",
+      "thread": "@VARUS_channel:10528"
+    },
+    {
+      "msg_id": 21576,
+      "subject_type": "сеть_ритейлер",
+      "thread": "@VARUS_channel:10603"
+    },
+    {
+      "msg_id": 21205,
+      "subject_type": "категория_личное",
+      "thread": "@klopotenkofood:6035"
+    },
+    {
+      "msg_id": 21207,
+      "subject_type": "категория_личное",
+      "thread": "@klopotenkofood:6035"
+    },
+    {
+      "msg_id": 21221,
+      "subject_type": "категория_личное",
+      "thread": "@klopotenkofood:6035"
+    },
+    {
+      "msg_id": 21239,
+      "subject_type": "не_наш_рынок",
+      "thread": "@klopotenkofood:6040"
+    },
+    {
+      "msg_id": 21242,
+      "subject_type": null,
+      "thread": "@klopotenkofood:6040"
+    },
+    {
+      "msg_id": 21245,
+      "subject_type": "не_наш_рынок",
+      "thread": "@klopotenkofood:6040"
+    },
+    {
+      "msg_id": 21246,
+      "subject_type": "не_наш_рынок",
+      "thread": "@klopotenkofood:6040"
+    },
+    {
+      "msg_id": 21251,
+      "subject_type": "не_наш_рынок",
+      "thread": "@klopotenkofood:6040"
+    },
+    {
+      "msg_id": 21286,
+      "subject_type": "не_наш_рынок",
+      "thread": "@klopotenkofood:6040"
+    },
+    {
+      "msg_id": 21289,
+      "subject_type": "не_наш_рынок",
+      "thread": "@klopotenkofood:6040"
+    },
+    {
+      "msg_id": 21351,
+      "subject_type": "не_наш_рынок",
+      "thread": "@klopotenkofood:6060"
+    },
+    {
+      "msg_id": 391532,
+      "subject_type": "сеть_ритейлер",
+      "thread": "@kopiyochka1:21720"
+    },
+    {
+      "msg_id": 391544,
+      "subject_type": "сеть_ритейлер",
+      "thread": "@kopiyochka1:21720"
+    },
+    {
+      "msg_id": 391772,
+      "subject_type": "сеть_ритейлер",
+      "thread": "@kopiyochka1:21720"
+    },
+    {
+      "msg_id": 391773,
+      "subject_type": "сеть_ритейлер",
+      "thread": "@kopiyochka1:21720"
+    },
+    {
+      "msg_id": 47839,
+      "subject_type": "категория_личное",
+      "thread": "@mandziak:3666"
+    },
+    {
+      "msg_id": 47987,
+      "subject_type": "не_наш_рынок",
+      "thread": "@mandziak:3679"
+    },
+    {
+      "msg_id": 48045,
+      "subject_type": "не_наш_рынок",
+      "thread": "@mandziak:3685"
+    },
+    {
+      "msg_id": 48056,
+      "subject_type": null,
+      "thread": "@mandziak:3689"
+    },
+    {
+      "msg_id": 48336,
+      "subject_type": "категория_личное",
+      "thread": "@mandziak:3700"
+    },
+    {
+      "msg_id": 48209,
+      "subject_type": null,
+      "thread": "@mandziak:3702"
+    },
+    {
+      "msg_id": 48236,
+      "subject_type": null,
+      "thread": "@mandziak:3708"
+    },
+    {
+      "msg_id": 48244,
+      "subject_type": "не_наш_рынок",
+      "thread": "@mandziak:3708"
+    },
+    {
+      "msg_id": 48279,
+      "subject_type": "не_наш_рынок",
+      "thread": "@mandziak:3708"
+    },
+    {
+      "msg_id": 48398,
+      "subject_type": "не_наш_рынок",
+      "thread": "@mandziak:3718"
+    },
+    {
+      "msg_id": 48405,
+      "subject_type": "не_наш_рынок",
+      "thread": "@mandziak:3718"
+    },
+    {
+      "msg_id": 48445,
+      "subject_type": "молочный_бренд",
+      "thread": "@mandziak:3721"
+    },
+    {
+      "msg_id": 49218,
+      "subject_type": null,
+      "thread": "@mandziak:3746"
+    },
+    {
+      "msg_id": 48944,
+      "subject_type": null,
+      "thread": "@mandziak:3753"
+    },
+    {
+      "msg_id": 49015,
+      "subject_type": null,
+      "thread": "@mandziak:3768"
+    },
+    {
+      "msg_id": 49225,
+      "subject_type": null,
+      "thread": "@mandziak:3768"
+    },
+    {
+      "msg_id": 49072,
+      "subject_type": null,
+      "thread": "@mandziak:3775"
+    },
+    {
+      "msg_id": 576514,
+      "subject_type": "не_наш_рынок",
+      "thread": "@matusi_ukr:22058"
+    },
+    {
+      "msg_id": 576723,
+      "subject_type": "не_наш_рынок",
+      "thread": "@matusi_ukr:22058"
+    },
+    {
+      "msg_id": 576949,
+      "subject_type": "не_наш_рынок",
+      "thread": "@matusi_ukr:22058"
+    },
+    {
+      "msg_id": 576877,
+      "subject_type": "не_наш_рынок",
+      "thread": "@matusi_ukr:22092"
+    },
+    {
+      "msg_id": 576878,
+      "subject_type": "не_наш_рынок",
+      "thread": "@matusi_ukr:22092"
+    },
+    {
+      "msg_id": 576886,
+      "subject_type": null,
+      "thread": "@matusi_ukr:22092"
+    },
+    {
+      "msg_id": 576901,
+      "subject_type": null,
+      "thread": "@matusi_ukr:22092"
+    },
+    {
+      "msg_id": 576917,
+      "subject_type": null,
+      "thread": "@matusi_ukr:22092"
+    },
+    {
+      "msg_id": 576943,
+      "subject_type": null,
+      "thread": "@matusi_ukr:22092"
+    },
+    {
+      "msg_id": 576968,
+      "subject_type": null,
+      "thread": "@matusi_ukr:22092"
+    },
+    {
+      "msg_id": 577089,
+      "subject_type": "не_наш_рынок",
+      "thread": "@matusi_ukr:22111"
+    },
+    {
+      "msg_id": 577159,
+      "subject_type": "не_наш_рынок",
+      "thread": "@matusi_ukr:22111"
+    },
+    {
+      "msg_id": 577262,
+      "subject_type": "не_наш_рынок",
+      "thread": "@matusi_ukr:22131"
+    },
+    {
+      "msg_id": 577264,
+      "subject_type": "не_наш_рынок",
+      "thread": "@matusi_ukr:22131"
+    },
+    {
+      "msg_id": 577282,
+      "subject_type": "не_наш_рынок",
+      "thread": "@matusi_ukr:22131"
+    },
+    {
+      "msg_id": 577623,
+      "subject_type": "не_наш_рынок",
+      "thread": "@matusi_ukr:22131"
+    },
+    {
+      "msg_id": 578034,
+      "subject_type": null,
+      "thread": "@matusi_ukr:22158"
+    },
+    {
+      "msg_id": 578037,
+      "subject_type": null,
+      "thread": "@matusi_ukr:22158"
+    },
+    {
+      "msg_id": 578050,
+      "subject_type": "не_наш_рынок",
+      "thread": "@matusi_ukr:22158"
+    },
+    {
+      "msg_id": 578064,
+      "subject_type": "не_наш_рынок",
+      "thread": "@matusi_ukr:22158"
+    },
+    {
+      "msg_id": 578075,
+      "subject_type": "не_наш_рынок",
+      "thread": "@matusi_ukr:22158"
+    },
+    {
+      "msg_id": 578384,
+      "subject_type": "не_наш_рынок",
+      "thread": "@matusi_ukr:22195"
+    },
+    {
+      "msg_id": 578836,
+      "subject_type": "не_наш_рынок",
+      "thread": "@matusi_ukr:22217"
+    },
+    {
+      "msg_id": 578838,
+      "subject_type": "не_наш_рынок",
+      "thread": "@matusi_ukr:22217"
+    },
+    {
+      "msg_id": 578841,
+      "subject_type": "не_наш_рынок",
+      "thread": "@matusi_ukr:22217"
+    },
+    {
+      "msg_id": 579242,
+      "subject_type": null,
+      "thread": "@matusi_ukr:22263"
+    },
+    {
+      "msg_id": 579293,
+      "subject_type": null,
+      "thread": "@matusi_ukr:22265"
+    },
+    {
+      "msg_id": 579314,
+      "subject_type": "не_наш_рынок",
+      "thread": "@matusi_ukr:22265"
+    },
+    {
+      "msg_id": 579699,
+      "subject_type": "не_наш_рынок",
+      "thread": "@matusi_ukr:22295"
+    },
+    {
+      "msg_id": 579786,
+      "subject_type": "не_наш_рынок",
+      "thread": "@matusi_ukr:22295"
+    },
+    {
+      "msg_id": 579885,
+      "subject_type": "не_наш_рынок",
+      "thread": "@matusi_ukr:22295"
+    },
+    {
+      "msg_id": 579994,
+      "subject_type": "не_наш_рынок",
+      "thread": "@matusi_ukr:22295"
+    },
+    {
+      "msg_id": 580014,
+      "subject_type": "не_наш_рынок",
+      "thread": "@matusi_ukr:22295"
+    },
+    {
+      "msg_id": 580137,
+      "subject_type": null,
+      "thread": "@matusi_ukr:22308"
+    },
+    {
+      "msg_id": 580142,
+      "subject_type": null,
+      "thread": "@matusi_ukr:22308"
+    },
+    {
+      "msg_id": 13584,
+      "subject_type": "категория_личное",
+      "thread": "@msuaaaa:10651"
+    },
+    {
+      "msg_id": 2421,
+      "subject_type": "не_наш_рынок",
+      "thread": "@polyakova_fitness:1143"
+    },
+    {
+      "msg_id": 49374,
+      "subject_type": "не_наш_рынок",
+      "thread": "@retsepty:7281"
+    },
+    {
+      "msg_id": 49541,
+      "subject_type": "не_наш_рынок",
+      "thread": "@retsepty:7312"
+    },
+    {
+      "msg_id": 49532,
+      "subject_type": "не_наш_рынок",
+      "thread": "@retsepty:7313"
+    },
+    {
+      "msg_id": 49542,
+      "subject_type": "не_наш_рынок",
+      "thread": "@retsepty:7313"
+    },
+    {
+      "msg_id": 49586,
+      "subject_type": "не_наш_рынок",
+      "thread": "@retsepty:7320"
+    },
+    {
+      "msg_id": 49592,
+      "subject_type": null,
+      "thread": "@retsepty:7323"
+    },
+    {
+      "msg_id": 49595,
+      "subject_type": null,
+      "thread": "@retsepty:7324"
+    },
+    {
+      "msg_id": 49596,
+      "subject_type": null,
+      "thread": "@retsepty:7324"
+    },
+    {
+      "msg_id": 49626,
+      "subject_type": "не_наш_рынок",
+      "thread": "@retsepty:7325"
+    },
+    {
+      "msg_id": 49642,
+      "subject_type": "не_наш_рынок",
+      "thread": "@retsepty:7328"
+    },
+    {
+      "msg_id": 49750,
+      "subject_type": "не_наш_рынок",
+      "thread": "@retsepty:7350"
+    },
+    {
+      "msg_id": 9,
+      "subject_type": null,
+      "thread": "@tarilka_malyuka:695"
+    },
+    {
+      "msg_id": 12,
+      "subject_type": null,
+      "thread": "@tarilka_malyuka:695"
+    },
+    {
+      "msg_id": 47,
+      "subject_type": "не_наш_рынок",
+      "thread": "@tarilka_malyuka:715"
+    },
+    {
+      "msg_id": 171,
+      "subject_type": "не_наш_рынок",
+      "thread": "@tarilka_malyuka:820"
+    },
+    {
+      "msg_id": 179,
+      "subject_type": "не_наш_рынок",
+      "thread": "@tarilka_malyuka:827"
+    },
+    {
+      "msg_id": 2579,
+      "subject_type": null,
+      "thread": "@ya_Nenka:836"
+    },
+    {
+      "msg_id": 2580,
+      "subject_type": null,
+      "thread": "@ya_Nenka:836"
+    },
+    {
+      "msg_id": 2586,
+      "subject_type": null,
+      "thread": "@ya_Nenka:838"
+    }
+  ]
+}

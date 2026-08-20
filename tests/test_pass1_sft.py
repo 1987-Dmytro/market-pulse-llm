@@ -250,10 +250,103 @@ def test_the_datasets_rebuild_byte_identical(tmp_path):
     assert str(tmp_path) not in (first / sft.RECORD_NAME).read_text("utf-8")
 
 
+def shipped_at(record: dict, dotted: str):
+    """One dotted path out of a record — the shipped value a rebuilt pin is compared against."""
+    for name in dotted.split("."):
+        record = record[name]
+    return record
+
+
+def moved_paths(old, new, where=""):
+    """Every leaf path at which two records differ, as dotted names."""
+    if isinstance(old, dict) and isinstance(new, dict):
+        for name in sorted(set(old) | set(new)):
+            yield from moved_paths(
+                old.get(name), new.get(name), f"{where}.{name}" if where else name
+            )
+    elif isinstance(old, list) and isinstance(new, list) and len(old) == len(new):
+        for index, (one, two) in enumerate(zip(old, new)):
+            yield from moved_paths(one, two, f"{where}[{index}]")
+    elif old != new:
+        yield where
+
+
 def test_the_shipped_datasets_are_what_the_producer_builds_today(tmp_path):
+    """The SEALED bytes — both arms and the smoke pack — rebuild identically. Those are the
+    artefacts `results/prereg_lora_b.json` freezes and `results/lora_b_verdict.json` scored."""
     assert sft.main(["--outdir", str(tmp_path)]) == 0
-    for name in (*sft.ARM_NAMES.values(), sft.RECORD_NAME):
+    for name in (*sft.ARM_NAMES.values(), sft.SMOKE_NAME):
         assert (tmp_path / name).read_bytes() == (REPO_ROOT / name).read_bytes(), name
+
+
+def test_the_record_moves_only_where_it_quotes_a_file_that_moved(tmp_path):
+    """The enumerated diff, asserted in BOTH directions.
+
+    `results/pass1_sft.json` is not regenerated — two sealed records pin it — so what a rebuild
+    would write has to be checked against it by name. Every path that moves is a pin of a file that
+    moved (`prompts.py` grew the v2 prompt, this producer grew the holdout refusal) or the holdout
+    block that refusal publishes; and every moved pin equals the LIVE sha of what it pins, so a
+    «moved since» cannot hide a wrong value ([[the_checksum_field_the_join_forces]]).
+    """
+    assert sft.main(["--outdir", str(tmp_path)]) == 0
+    shipped = json.loads((REPO_ROOT / sft.RECORD_NAME).read_text("utf-8"))
+    rebuilt = json.loads((tmp_path / sft.RECORD_NAME).read_text("utf-8"))
+
+    def live(path):
+        return subprocess.run(
+            ["shasum", "-a", "256", path], cwd=REPO_ROOT, capture_output=True, text=True, check=True
+        ).stdout.split()[0]
+
+    # the expected set is DERIVED from which pinned file has actually moved, never typed: a list of
+    # three names would be right at the commit that wrote it and wrong at the one before it
+    pins = {
+        "instruments.parser.sha256": (
+            "src/market_pulse/prompts.py",
+            rebuilt["instruments"]["parser"],
+        ),
+        "producer.sha256": ("scripts/build_pass1_sft.py", rebuilt["producer"]),
+    }
+    expect = {"holdout"} | {
+        name for name, (path, block) in pins.items() if block["sha256"] != shipped_at(shipped, name)
+    }
+    assert set(moved_paths(shipped, rebuilt)) == expect, sorted(moved_paths(shipped, rebuilt))
+    for name, (path, block) in pins.items():
+        assert block["sha256"] == live(path), name
+    # and the other direction: everything the record pins that did NOT move still matches
+    assert rebuilt["datasets"] == shipped["datasets"]
+    assert rebuilt["smoke"]["sha256"] == shipped["smoke"]["sha256"]
+
+
+def test_a_holdout_row_in_a_new_arm_is_REFUSED_and_the_sealed_arms_are_not(state, built):
+    """Both directions of D0.1's rule, on the one producer that can break it.
+
+    The sealed arms are exempt because they rebuild to the shas `results/pass1_sft.json` pins — the
+    positive control, and it is what the test above already proved byte for byte. A new arm is not,
+    and the negative control is that the SAME rows refuse under a name the record does not pin.
+    """
+    _, files = built
+    sealed = sft.sealed_arm_shas()
+    holdout = sft.holdout_units()
+    assert len(holdout) == 100
+    rows = sft.arm_rows(state, "b")
+    assert any((row["thread"], int(row["msg_id"])) in holdout for row in rows), (
+        "arm B is the 650 labels the holdout was drawn from — an empty intersection would make the"
+        " refusal below unreachable and this test vacuous"
+    )
+    # positive control: the sealed arm, at its pinned bytes, is carried past the rule
+    assert sft.assert_no_holdout("b", rows, sft.sha_text(files["b"]), sealed) == (
+        "sealed-before-the-holdout"
+    )
+    # the rule: the same rows under an arm nothing pins
+    with pytest.raises(SystemExit, match="EVALUATION ONLY"):
+        sft.assert_no_holdout("c", rows, sft.sha_text(files["b"]), sealed)
+    # and a sealed name whose bytes have moved loses the exemption with them
+    with pytest.raises(SystemExit, match="EVALUATION ONLY"):
+        sft.assert_no_holdout("b", rows, "0" * 64, sealed)
+    # a future arm drawn WITHOUT the holdout builds
+    clean = [row for row in rows if (row["thread"], int(row["msg_id"])) not in holdout]
+    assert len(clean) == len(rows) - 100
+    assert sft.assert_no_holdout("c", clean, "0" * 64, sealed) == "checked-and-clear"
 
 
 def test_the_census_run_writes_nothing(capsys):
@@ -265,8 +358,15 @@ def test_the_census_run_writes_nothing(capsys):
     assert "DROPPED FOR LENGTH" in out and "wrote" not in out
 
 
-def test_the_producer_pins_itself():
-    record = json.loads((REPO_ROOT / "results" / "pass1_sft.json").read_text("utf-8"))
+def test_the_producer_pins_itself(tmp_path):
+    """On the record a rebuild WRITES, not on the shipped one.
+
+    The shipped `results/pass1_sft.json` is sealed — two records of line B pin its bytes — and this
+    contract edited the producer to add the holdout refusal, so its pin there is a «moved since»
+    like every other pin of a file that has been extended. What has to stay true is the property:
+    the record this producer writes names it and hashes it ([[provenance_cannot_name_itself]])."""
+    assert sft.main(["--outdir", str(tmp_path)]) == 0
+    record = json.loads((tmp_path / sft.RECORD_NAME).read_text("utf-8"))
     live = subprocess.run(
         ["shasum", "-a", "256", "scripts/build_pass1_sft.py"],
         cwd=REPO_ROOT,
@@ -276,3 +376,5 @@ def test_the_producer_pins_itself():
     ).stdout.split()[0]
     assert record["producer"]["sha256"] == live
     assert record["producer"]["script"] == "scripts/build_pass1_sft.py"
+    shipped = json.loads((REPO_ROOT / sft.RECORD_NAME).read_text("utf-8"))
+    assert shipped["producer"]["script"] == record["producer"]["script"]

@@ -91,6 +91,8 @@ PROBE_PACK = REPO_ROOT / "results" / "pass1_probe_b_pack.json"
 PROBE_ROWS = REPO_ROOT / "results" / "pass1_probe_b_rows.jsonl"
 GOLD = REPO_ROOT / "results" / "reader_gold_w1_r2.json"
 QLORA = REPO_ROOT / "config" / "qlora.yaml"
+HOLDOUT = REPO_ROOT / "results" / "pass1_holdout_100.json"
+"""The hundred evaluation-only rows of `docs/PROMPT-pass1-fewshot.md` D0.1 — never trained on."""
 
 ARMS = {"a": ("r1",), "b": ("r1", "r2")}
 """Arm A is r1 alone; arm B is r1 plus the r2 top-up. Arm A's rows are a SUBSET of arm B's, which
@@ -609,6 +611,60 @@ def census(state: dict) -> dict:
     }
 
 
+def holdout_units() -> set[tuple[str, int]]:
+    """The registered evaluation-only rows, as `(thread, msg_id)`. Absent file → a STOP.
+
+    Not an optional input with a quiet empty default: a producer whose exclusion list is missing
+    builds a dataset with no exclusion applied and says nothing about it, which is the one failure
+    this guard exists to make impossible ([[a_checker_whose_failure_is_silence]]).
+    """
+    record = json.loads(summary.read_text_or_refuse(HOLDOUT))
+    if not record.get("evaluation_only"):
+        raise SystemExit(
+            f"{summary.rel(HOLDOUT)} does not declare itself evaluation-only. Either it is another"
+            " record or the rule has been edited out of it — stop and report."
+        )
+    return {(one["thread"], int(one["msg_id"])) for one in record["units"]}
+
+
+def sealed_arm_shas() -> dict[str, str]:
+    """The dataset shas `results/pass1_sft.json` pins — the ONLY exemption from the holdout rule.
+
+    Line B's two arms were built, trained and spent BEFORE the holdout existed, and their bytes are
+    pinned by `results/prereg_lora_b.json` and `results/lora_b_verdict.json`. Refusing to rebuild
+    them would refuse the reproduction of sealed evidence; carrying them past the rule by NAME would
+    let the day someone changes what arm A is made of pass unnoticed. So the exemption is keyed on
+    the bytes: an arm is exempt exactly while it rebuilds to the sha the record pins, and the moment
+    its composition moves the exemption is gone and the rule applies to it
+    ([[the_guard_hashes_the_half_that_cannot_move]]).
+    """
+    record = json.loads(summary.read_text_or_refuse(REPO_ROOT / RECORD_NAME))
+    return {arm: block["sha256"] for arm, block in record["datasets"].items()}
+
+
+def assert_no_holdout(arm: str, rows: list[dict], built_sha: str, sealed: dict[str, str]) -> str:
+    """Refuse an arm that trains on a holdout row, unless it IS a sealed line-B dataset.
+
+    Returns the exemption state so the record can publish it — a rule that was not applied and a
+    rule that found nothing must never read the same in a file.
+    """
+    if sealed.get(arm) == built_sha:
+        return "sealed-before-the-holdout"
+    inside = sorted(
+        f"{row['thread']}#{row['msg_id']}"
+        for row in rows
+        if (row["thread"], int(row["msg_id"])) in holdout_units()
+    )
+    if inside:
+        raise SystemExit(
+            f"arm {arm} carries {len(inside)} of the {len(holdout_units())} rows registered as"
+            f" EVALUATION ONLY by {summary.rel(HOLDOUT)} — {inside[:3]}. They are never in any"
+            " training set of any future line. Draw the arm without them, or register a new"
+            " holdout; do not train on these."
+        )
+    return "checked-and-clear"
+
+
 def build(state: dict | None = None) -> tuple[dict, dict[str, str]]:
     state = state or measure()
     smoke = smoke_pack(state)
@@ -624,6 +680,11 @@ def build(state: dict | None = None) -> tuple[dict, dict[str, str]]:
             for row in arm_rows(state, arm)
         )
         for arm in sorted(ARMS)
+    }
+    sealed = sealed_arm_shas()
+    holdout = {
+        arm: assert_no_holdout(arm, arm_rows(state, arm), sha_text(files[arm]), sealed)
+        for arm in sorted(files)
     }
     record = {
         "arms": ARMS,
@@ -650,6 +711,18 @@ def build(state: dict | None = None) -> tuple[dict, dict[str, str]]:
             "renderer": "market_pulse.prompts.pass1_messages_gm4",
         },
         "context_sources": verdict_sources(),
+        "holdout": {
+            "record": summary.rel(HOLDOUT),
+            "sha256": summary.sha256_of(HOLDOUT),
+            "units": len(holdout_units()),
+            "rule": (
+                "the rows registered EVALUATION ONLY by docs/PROMPT-pass1-fewshot.md D0.1 are never"
+                " in any training set of any future line. The two arms below are exempt only while"
+                " they rebuild to the sha this record pins — they were sealed before the holdout"
+                " existed — and an arm whose composition moves loses the exemption with it"
+            ),
+            "arms": holdout,
+        },
         "labels": {
             name: {
                 "file": summary.rel(LABELS[name]),

@@ -231,6 +231,31 @@ def moved_paths(older: dict, newer: dict, opaque: tuple[str, ...] = OPAQUE) -> l
     return sorted(found)
 
 
+def module_pin_paths(record: dict) -> set[str]:
+    """Every path of `record` that carries `src/market_pulse/prompts.py`'s LIVE sha.
+
+    The one class of move this producer's self-check may forgive, and it is derived rather than
+    listed: `docs/PROMPT-pass1-fewshot.md` D0.2 registered a second pass-1 TEXT in that module and
+    ruled old records' pins of it «moved since», never re-pinned. A module sha moves whenever any
+    sibling text is added; the registered `prompt_sha256` map is what says whether the INSTRUMENT
+    moved, and the caller checks that separately and refuses on it
+    ([[the_identity_field_stops_covering_the_change]]).
+    """
+    live = summary.sha256_of(REPO_ROOT / "src" / "market_pulse" / "prompts.py")
+
+    def walk(node, prefix: list[str]):
+        if isinstance(node, dict):
+            for key, value in node.items():
+                yield from walk(value, [*prefix, str(key)])
+        elif isinstance(node, list):
+            for index, value in enumerate(node):
+                yield from walk(value, [*prefix, str(index)])
+        elif node == live:
+            yield ".".join(prefix)
+
+    return set(walk(record, []))
+
+
 def the_registered_order_is_unmoved(older: dict, newer: dict) -> list[str]:
     """What the opaque gate-table range costs, closed — or the gaps.
 
@@ -296,11 +321,17 @@ def build() -> tuple[dict, dict]:
     frozen = json.loads(summary.read_text_or_refuse(SUPERSEDES))
     if unchanged != frozen:
         moved = moved_paths(frozen, unchanged, opaque=())
-        raise SystemExit(
-            f"{summary.rel(SUPERSEDES)} no longer rebuilds from its own producer — {moved} differ."
-            " pass1-probe-b registers the SAME instrument, so a moved path here means the"
-            " instrument moved and the two attempts would not be comparable. Stop and report."
-        )
+        allowed = module_pin_paths(unchanged)
+        if (
+            set(moved) - allowed
+            or frozen["instruments"]["prompt_sha256"] != (unchanged["instruments"]["prompt_sha256"])
+        ):
+            raise SystemExit(
+                f"{summary.rel(SUPERSEDES)} no longer rebuilds from its own producer —"
+                f" {sorted(set(moved) - allowed)} differ beyond the module pins. pass1-probe-b"
+                " registers the SAME instrument, so a moved path here means the instrument moved"
+                " and the two attempts would not be comparable. Stop and report."
+            )
 
     with as_probe_b():
         rebuilt = p1.build()
@@ -429,20 +460,34 @@ def build() -> tuple[dict, dict]:
             f" numbers moved — {gaps}. The pack's order and its verdicts are what the registration"
             " registered. Stop and report."
         )
-    if (found := moved_paths(frozen, record)) != sorted(MOVED):
+    # the enumeration, PLUS the paths that pin `prompts.py` — derived from the record and never
+    # listed. D0.2 of docs/PROMPT-pass1-fewshot.md registered a second pass-1 text in that module
+    # and ruled its old pins «moved since»; the registered `prompt_sha256` map is what says whether
+    # the INSTRUMENT moved, and it is compared whole two lines down
+    allowed = set(MOVED) | module_pin_paths(record)
+    if (found := moved_paths(frozen, record)) != sorted(allowed):
         raise SystemExit(
             "the diff against pass1-probe's frozen record is not the enumerated one."
-            f" unexpected: {sorted(set(found) - set(MOVED))} ·"
-            f" enumerated but unmoved: {sorted(set(MOVED) - set(found))}. This contract may move a"
+            f" unexpected: {sorted(set(found) - allowed)} ·"
+            f" enumerated but unmoved: {sorted(allowed - set(found))}. This contract may move a"
             " boot constant and its transport; anything else is an instrument change. Stop."
         )
+    if frozen["instruments"]["prompt_sha256"] != record["instruments"]["prompt_sha256"]:
+        raise SystemExit(
+            "the registered pass-1 TEXT moved, and that is the one thing this contract may not do:"
+            f" {frozen['instruments']['prompt_sha256']} → {record['instruments']['prompt_sha256']}."
+            " The two attempts would not be comparable. Stop and report."
+        )
     frozen_pack = json.loads(summary.read_text_or_refuse(SUPERSEDED_PACK))
-    if (found := moved_paths(frozen_pack, pack, opaque=())) != sorted(PACK_MOVED):
+    pack_allowed = set(PACK_MOVED) | module_pin_paths(pack)
+    if (found := moved_paths(frozen_pack, pack, opaque=())) != sorted(pack_allowed):
         raise SystemExit(
             "the pack is not object-equal to pass1-probe's outside its registration pointer —"
-            f" unexpected: {sorted(set(found) - set(PACK_MOVED))} ·"
-            f" enumerated but unmoved: {sorted(set(PACK_MOVED) - set(found))}. Stop."
+            f" unexpected: {sorted(set(found) - pack_allowed)} ·"
+            f" enumerated but unmoved: {sorted(pack_allowed - set(found))}. Stop."
         )
+    if frozen_pack["instruments"]["prompt_sha256"] != pack["instruments"]["prompt_sha256"]:
+        raise SystemExit("the pack's registered pass-1 TEXT moved — the units are not comparable.")
     return record, pack
 
 

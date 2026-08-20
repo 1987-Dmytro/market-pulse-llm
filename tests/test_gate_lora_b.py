@@ -22,6 +22,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
 import gate_lora_b as gate  # noqa: E402
+import moved_pins  # noqa: E402
 import pass1_pod_runner as podrunner  # noqa: E402
 import reader_v5_pod_runner as shipped  # noqa: E402
 
@@ -453,11 +454,18 @@ def test_the_smoke_pack_drives_the_real_transport_and_the_gate_reads_its_output(
             ]
 
     out = tmp_path / "lora_b_smoke_a.jsonl"
+    # the sealed smoke pack pins the `prompts.py` of the day it was written, and D0.2 moved that
+    # module; the handshake refuses it now, for the right reason. The copy re-pins ONLY that, in
+    # tmp_path — the sealed file is never written ([[tests/moved_pins.py]])
+    servable = tmp_path / "smoke_pack.json"
+    servable.write_text(
+        json.dumps(moved_pins.servable(SMOKE), ensure_ascii=False), encoding="utf-8"
+    )
     assert (
         podrunner.main(
             [
                 "--pack",
-                str(REPO_ROOT / "results" / "lora_b_smoke_pack.json"),
+                str(servable),
                 "--out",
                 str(out),
                 "--repo",

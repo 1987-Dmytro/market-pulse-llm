@@ -16,6 +16,7 @@ import pytest
 REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
+import moved_pins  # noqa: E402
 import pass1_pod_runner as podrunner  # noqa: E402
 import read_pass1_probe as driver  # noqa: E402
 import read_threads_reader_v5 as v5  # noqa: E402
@@ -24,7 +25,13 @@ import reader_v5_pod_runner as shipped  # noqa: E402
 
 from market_pulse import prompts  # noqa: E402
 
-PACK = json.loads((REPO_ROOT / "results" / "pass1_probe_pack.json").read_text(encoding="utf-8"))
+SEALED = json.loads((REPO_ROOT / "results" / "pass1_probe_pack.json").read_text(encoding="utf-8"))
+"""probe-a's own pack, as it was sealed. It pins the `prompts.py` of the day it was written, and
+`docs/PROMPT-pass1-fewshot.md` D0.2 moved that module — so the handshake refuses it now, BY NAME,
+and the test below asserts that refusal instead of pretending it away."""
+
+
+PACK = moved_pins.servable(SEALED)
 
 
 # --- the swaps ------------------------------------------------------------------------------------
@@ -70,7 +77,12 @@ def test_the_driver_ledger_is_this_steps_and_not_the_readers():
 
 def test_the_handshake_asks_the_pass1_family_and_refuses_a_moved_text():
     got = podrunner.check_instrument(PACK, REPO_ROOT, prompts)
-    assert got["prompt_sha256"] == {prompts.PASS1_TASK: prompts.prompt_sha256(prompts.PASS1_TASK)}
+    # the handshake answers with the family this checkout SERVES, which since D0.2 is two texts,
+    # while the pack pins one — and a text registered LATER is not expected to be in an older map
+    assert got["prompt_sha256"] == {
+        task: prompts.prompt_sha256(task) for task in sorted(prompts.PASS1)
+    }
+    assert set(PACK["instruments"]["prompt_sha256"]) == {prompts.PASS1_TASK}
     bent = json.loads(json.dumps(PACK))
     bent["instruments"]["prompt_sha256"][prompts.PASS1_TASK] = "0" * 64
     with pytest.raises(SystemExit, match="not the registered instrument"):
@@ -79,6 +91,28 @@ def test_the_handshake_asks_the_pass1_family_and_refuses_a_moved_text():
     moved["instruments"]["parser"]["sha256"] = "0" * 64
     with pytest.raises(SystemExit, match="the parser and the renderer have parted"):
         podrunner.check_instrument(moved, REPO_ROOT, prompts)
+    # a task the pack pins that this checkout does not serve is «unserved here» and refused too
+    unknown = json.loads(json.dumps(PACK))
+    unknown["instruments"]["prompt_sha256"]["pass1_comment_gm4_v9"] = "0" * 64
+    with pytest.raises(SystemExit, match="unserved here"):
+        podrunner.check_instrument(unknown, REPO_ROOT, prompts)
+
+
+def test_the_SEALED_pack_is_no_longer_servable_and_the_refusal_names_why():
+    """The consequence of registering a second pass-1 text, asserted rather than discovered.
+
+    `src/market_pulse/prompts.py` moved when `pass1_comment_gm4_v2` joined it, so probe-a's own
+    pack — whose parser pin is that module — can no longer be served on this checkout. That is the
+    correct outcome and it is the one the contract wants: the base's evidence is the file
+    `results/pass1_probe_b_verdict.json` already holds, and it is never re-run
+    ([[the_identity_field_stops_covering_the_change]]). v1's TEXT is untouched, which is what keeps
+    the old evidence comparable.
+    """
+    with pytest.raises(SystemExit, match="the parser and the renderer have parted"):
+        podrunner.check_instrument(SEALED, REPO_ROOT, prompts)
+    assert SEALED["instruments"]["prompt_sha256"][prompts.PASS1_TASK] == prompts.prompt_sha256(
+        prompts.PASS1_TASK
+    )
 
 
 def test_the_shipped_reader_handshake_would_have_refused_this_pack():

@@ -1142,6 +1142,48 @@ No gold value may appear here: no msg_id, no thread, no answer. The one attempt 
 and it is registered, but a prompt that named a gold row would make the measurement worthless
 whatever the bar said."""
 
+PASS1_CODEBOOK_CLAUSE_V2 = (
+    "`subject_type` is what the comment is ABOUT, never what it mentions. A retailer or brand named"
+    " inside a personal category habit (where one buys the curd, which shop's kefir) is"
+    " `категория_личное`. A retailer's own reply that answers a category demand with products is"
+    " `категория_личное`, not `сеть_ритейлер`. A comment about the retailer's service, stock,"
+    " prices or stores is `сеть_ритейлер`. A comment about a named dairy producer or its product as"
+    " such is `молочный_бренд`."
+)
+"""The ONE clause `docs/PROMPT-pass1-fewshot.md` D0.2 adds, in the contract's own words.
+
+It is the error class the base's four «категория» misses are made of, stated as a rule: the base
+classifies by the name it can see (47902's «творог … з АТБ», 21601's retailer answering a category
+demand with SKUs) and not by what the comment is about. Written here as a constant so the prompt,
+the registration and the report quote one string and never three spellings of it
+([[preregistration_is_a_file_not_a_constant]])."""
+
+PASS1_EXAMPLES_SLOT_V2 = (
+    "The request carries a block of LABELLED EXAMPLES after the entities: one comment per reading,"
+    " with the reading a human wrote for it. It is one example of EACH and never a distribution —"
+    " how often a reading appears there says nothing about how often it is the right answer. Read"
+    " them as the boundary between the four readings and the null, not as a menu to match against:"
+    " a comment that resembles none of them still gets the reading the law above gives it."
+)
+"""The examples slot — what the block after `<entities>` is, and what it is not.
+
+The «never a distribution» sentence is the finding of line B written into the text. The adapter of
+`knowledge/decisions/lora-b-red-and-line-b-closes.md` learned the label marginal of its training set
+(52% `не_наш_рынок`) instead of the decision, so the one thing this block must not be read as is a
+frequency table. Balance by construction is the other half of the same defence, and it lives in the
+producer ([[an_identical_count_is_not_an_identical_model]])."""
+
+PASS1_COMMENT_PROMPT_V2 = (
+    PASS1_COMMENT_PROMPT + "\n\n" + PASS1_CODEBOOK_CLAUSE_V2 + "\n\n" + PASS1_EXAMPLES_SLOT_V2
+)
+"""v1's bytes, then the codebook clause, then the examples slot — a strict PREFIX extension.
+
+`PASS1_COMMENT_PROMPT_V2.startswith(PASS1_COMMENT_PROMPT)` is asserted by
+`tests/test_pass1_prompt.py`, and it is the property that makes the contrast measurable: whatever
+the dev table says, the two texts differ by exactly two paragraphs and by nothing else. The
+attribution law reaches v2 by the same reference it reaches v1 by, so the label, the base answer and
+the v2 answer are still decided by ONE law ([[the_prompt_must_carry_the_annotators_law]])."""
+
 PROMPTS = {
     "T1": T1_PROMPT,
     "T2": T2_PROMPT,
@@ -1165,6 +1207,7 @@ PROMPTS = {
     # no `_v4`: the number follows the contract that registers a text, and reader-v4 registered v3's
     "reader_thread_gm4_v5": READER_THREAD_PROMPT_V5,
     "pass1_comment_gm4_v1": PASS1_COMMENT_PROMPT,
+    "pass1_comment_gm4_v2": PASS1_COMMENT_PROMPT_V2,
 }
 RENDER_ONLY = {"precheck_v2ctx_with_post": "precheck_v2_with_post"}
 """Registered tasks whose prompt text *is* another task's, mapped to the base they share.
@@ -1272,14 +1315,22 @@ that run WROTE and never from a re-read (SPEC §7, and `results/reader_probe_b_v
 registered verdict of probe-b whatever this parser would say now)."""
 
 PASS1_TASK = "pass1_comment_gm4_v1"
-PASS1 = frozenset({PASS1_TASK})
+PASS1_TASK_V2 = "pass1_comment_gm4_v2"
+PASS1 = frozenset({PASS1_TASK, PASS1_TASK_V2})
 """The per-comment classifier of architecture D. Registered and hashed like every other prompt, and
 out of the three labelling tables for the reason :data:`READER` and :data:`POSITIONS` are: its answer
 is one object about one comment in a taxonomy no `COMMENT_FIELDS` row describes.
 
 :func:`parse_reply` refuses it BY NAME, and points at :func:`parse_pass1` — which needs an argument
 `parse_reply` has no room for. The echo of the request's `msg_id` is the check that says the answer
-is about the comment that was sent, and a parser that cannot see the request cannot make it."""
+is about the comment that was sent, and a parser that cannot see the request cannot make it.
+
+TWO texts since `docs/PROMPT-pass1-fewshot.md` D0.2, and :data:`PASS1_TASK` stays v1: every caller
+that passes no `task` is a caller whose evidence is already on disk, and the dev leg the fewshot
+contract measures the BASE with is that default rendered unchanged. v2 is opt-in and the pack names
+it ([[a_sealed_caller_forces_the_default]]). One answer schema and one parser serve both — the
+revision is in the instruction and in the block the request carries, never in what may be said
+back."""
 
 WITH_POST = frozenset(
     {
@@ -1653,6 +1704,48 @@ priced, and pass 1's whole claim is that its calls are SHORT.
 """
 
 
+PASS1_EXAMPLES_HEADER = "Labelled examples (subject_type only):"
+"""The first line of the `<examples>` block, and the name the contract gives it.
+
+`docs/PROMPT-pass1-fewshot.md` D0.3 writes the block as one compressed span —
+`Labelled examples (subject_type only): "<text>" → <label>` — which is a row template with its
+block name attached. It is rendered as that name once and one row per example: the name is plural
+and names a BLOCK, and five repetitions of a plural label is not a thing a codebook says. Registered
+as a Deviation of the report rather than read silently, and the whole rendering is pinned by
+`rendering_sha256` per item either way."""
+
+
+def pass1_examples_block(examples: list[dict]) -> str:
+    """The five labelled neighbours, one row each — `"<text>" → <label>`, `null` written as itself.
+
+    Refuses an empty list rather than rendering an empty block: `<entities>` may legitimately
+    resolve to nothing and says so in words, but a v2 request with no examples is the block being
+    FORGOTTEN, and the two states must not look the same to the model
+    ([[an_empty_field_hides_several_states]]). The label is validated against the same four readings
+    the answer is validated against, so an example can never carry a word the parser would refuse.
+    """
+    if not examples:
+        raise ValueError(
+            f"{PASS1_TASK_V2} renders a labelled-examples block and this request carries none."
+            " An empty block is the block forgotten, not a thread that resolved nothing — stop."
+        )
+    rows = [PASS1_EXAMPLES_HEADER]
+    for one in examples:
+        text = str(one.get("text", "")).strip()
+        if not text:
+            raise ValueError(
+                "a labelled example with no text — it would teach the shape of nothing"
+            )
+        label = one.get("label")
+        if label is not None and label not in PASS1_SUBJECT_TYPES:
+            raise ValueError(
+                f"{label!r} is not one of {PASS1_SUBJECT_TYPES} nor null — an example may not carry"
+                " a reading the parser would refuse in an answer"
+            )
+        rows.append(f'"{text}" → {"null" if label is None else label}')
+    return "\n".join(rows)
+
+
 def pass1_messages_gm4(
     channel: str,
     post_id: int,
@@ -1662,6 +1755,7 @@ def pass1_messages_gm4(
     text: str,
     *,
     task: str = PASS1_TASK,
+    examples: list[dict] | None = None,
 ) -> list[dict]:
     """ONE comment as the pass-1 classifier is given it: the topic, the resolved entities, the row.
 
@@ -1678,9 +1772,20 @@ def pass1_messages_gm4(
 
     Ids as attributes and everything fenced, exactly as the reader renders: a comment that itself
     ends in "Answer with the JSON object alone" is retail text and not an instruction.
+
+    `examples` is v2's block and v2's alone, rendered BETWEEN the entities and the comment: the
+    entities resolve the pronouns, the examples show where the readings part, and the comment is
+    the last thing read. Passing them to v1 — or omitting them under v2 — is refused rather than
+    silently rendered, because either would be a third instrument wearing a registered task's name.
     """
     if task not in PASS1:
         raise ValueError(f"{task}: not a registered pass-1 prompt — {sorted(PASS1)}")
+    if (task == PASS1_TASK_V2) != bool(examples):
+        raise ValueError(
+            f"{task} was given {len(examples or ())} labelled examples. {PASS1_TASK_V2} carries the"
+            f" block and {PASS1_TASK} has no slot for one — a request that half-applies the"
+            " revision is a third instrument nobody registered."
+        )
     if not text.strip():
         raise ValueError(f"{channel}:{post_id}:{msg_id}: the comment has no text — nothing to read")
     rows = []
@@ -1695,10 +1800,12 @@ def pass1_messages_gm4(
         subject_type = str(one.get("subject_type") or "").strip() or "?"
         rows.append(f"{name} → {subject_type}" + (f" → {reading}" if reading else ""))
     block = "\n".join(rows) if rows else "(this thread resolved no entity)"
+    shown = "" if not examples else f"<examples>\n{pass1_examples_block(examples)}\n</examples>\n"
     content = (
         f'{PROMPTS[task]}\n\n<thread channel="{channel}" post_id="{post_id}">\n'
         f"<topic>\n{topic.strip() or NO_POST_TEXT}\n</topic>\n"
         f"<entities>\n{block}\n</entities>\n"
+        f"{shown}"
         f'<comment msg_id="{msg_id}">\n{text.strip()}\n</comment>\n</thread>'
     )
     if len(content) > PASS1_MAX_INPUT_CHARS:

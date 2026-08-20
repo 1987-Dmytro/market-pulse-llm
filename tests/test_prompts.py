@@ -85,6 +85,7 @@ def test_taxonomy_v2_prompts_are_registered_beside_v1_and_not_inside_it():
         "reader_thread_gm4_v3",
         "reader_thread_gm4_v5",
         "pass1_comment_gm4_v1",
+        "pass1_comment_gm4_v2",
     }
     # the label tables describe labelling tasks: the caption prompt answers in prose, the two
     # position prompts answer with records, the reader answers with one verdict about a whole

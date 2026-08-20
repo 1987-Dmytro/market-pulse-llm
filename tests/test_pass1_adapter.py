@@ -19,10 +19,16 @@ import pytest
 REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
+import moved_pins  # noqa: E402
 import pass1_pod_runner as podrunner  # noqa: E402
 import reader_v5_pod_runner as runner  # noqa: E402
 
-PACK = json.loads((REPO_ROOT / "results" / "pass1_probe_b_pack.json").read_text("utf-8"))
+SEALED = json.loads((REPO_ROOT / "results" / "pass1_probe_b_pack.json").read_text("utf-8"))
+PACK = moved_pins.servable(SEALED)
+"""The sealed pack with its `prompts.py` pin brought up to date in a THROWAWAY copy — D0.2 of
+`docs/PROMPT-pass1-fewshot.md` moved that module, so the pod's handshake refuses the sealed bytes
+now and would refuse them for the right reason. What this file drives is `--adapter`, and the pin is
+not what it is about ([[tests/moved_pins.py]])."""
 
 
 class FakeClient:

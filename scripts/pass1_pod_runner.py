@@ -80,12 +80,24 @@ def check_instrument(pack: dict, repo: Path, prompts) -> dict:
     they are still different questions: the per-task shas say the registered TEXT is what this
     checkout renders, and the module sha says the parser the Mac will read these replies with is the
     module this pod rendered them from.
+
+    **The first check is over the tasks the PACK pins and not over `prompts.PASS1` whole.** It was
+    written as a whole-dict equality, and `docs/PROMPT-pass1-fewshot.md` D0.2 registered a second
+    pass-1 text — so the day `pass1_comment_gm4_v2` existed, this refused every pack nothing had
+    touched, and with the wrong sentence. The reader's own handshake had already been narrowed for
+    exactly this, one family earlier, and the narrowing is copied here rather than re-invented: a
+    text registered LATER is not in an older pack's map and is not expected to be. Nothing is lost —
+    a pod carrying a different set of texts carries different `prompts.py` bytes, which is the
+    second check ([[the_record_says_subset_the_code_says_equality]]).
     """
     want = dict(pack["instruments"]["prompt_sha256"])
     got = {task: prompts.prompt_sha256(task) for task in sorted(prompts.PASS1)}
-    if want != got:
+    unserved = sorted(set(want) - set(got))
+    moved = {task: got[task] for task in sorted(want) if task in got and got[task] != want[task]}
+    if unserved or moved:
         raise SystemExit(
-            f"the pass-1 prompt shas on this pod are {got} and the registration pinned {want}."
+            f"the pass-1 prompt shas on this pod are {got} and the registration pinned {want}"
+            f" (unserved here: {unserved}; moved: {sorted(moved)})."
             " This checkout is not the registered instrument — stop before the model is loaded."
         )
     module = sha256_of(repo / "src" / "market_pulse" / "prompts.py")

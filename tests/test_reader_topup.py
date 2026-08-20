@@ -16,6 +16,7 @@ import pytest
 REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
+import moved_pins  # noqa: E402
 import project_reader_topup as projector  # noqa: E402
 import read_threads_reader_topup as driver  # noqa: E402
 import read_threads_reader_v5 as v5  # noqa: E402
@@ -103,7 +104,17 @@ def test_the_registration_rebuilds_byte_identical_and_is_what_shipped(tmp_path):
     assert producer.main(["--outdir", str(second)]) == 0
     name = producer.OUT_NAME
     assert (first / name).read_bytes() == (second / name).read_bytes()
-    assert (first / name).read_bytes() == (REPO_ROOT / name).read_bytes()
+    """The rebuild is byte-identical EXCEPT where it pins `src/market_pulse/prompts.py`.
+
+    `docs/PROMPT-pass1-fewshot.md` D0.2 registered `pass1_comment_gm4_v2` in that module and ruled
+    old records' pins of it «moved since», not re-pinned. The registered TEXT this record was
+    measured under has NOT moved, which is the property that keeps the evidence comparable, and it
+    is asserted beside the diff ([[tests/moved_pins.py]]).
+    """
+    moved_pins.assert_only_the_prompts_pin_moved(
+        json.loads((REPO_ROOT / name).read_text("utf-8")),
+        json.loads((first / name).read_text("utf-8")),
+    )
 
 
 def test_the_units_partition_every_threads_payable_comments_exactly_once():

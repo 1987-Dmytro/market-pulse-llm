@@ -14,6 +14,7 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
+import moved_pins  # noqa: E402
 import probe_b_population as subset  # noqa: E402
 import window_summary_5c2 as summary  # noqa: E402
 import write_pass1_prereg as prereg  # noqa: E402
@@ -31,12 +32,20 @@ V5B = json.loads(
 
 
 def test_the_committed_registration_and_pack_are_what_the_producer_writes_today(tmp_path):
-    """No clock is stamped, so both files re-derive byte for byte and their date is the date of the
-    commit that carries them — the only witness that they preceded the first pod."""
+    """No clock is stamped, so both files re-derive from their own producer and their date is the
+    date of the commit that carries them — the only witness that they preceded the first pod.
+
+    The rebuild differs at exactly the paths that pin `src/market_pulse/prompts.py`, whose bytes
+    moved when D0.2 registered a second pass-1 text. The registered TEXT did not move, and that is
+    what the two attempts are compared through ([[tests/moved_pins.py]]).
+    """
     out, pack = tmp_path / "again.json", tmp_path / "pack.json"
     assert prereg.main(["--out", str(out), "--pack", str(pack)]) == 0
-    assert out.read_bytes() == RECORD_PATH.read_bytes()
-    assert pack.read_bytes() == PACK_PATH.read_bytes()
+    for shipped_path, rebuilt_path in ((RECORD_PATH, out), (PACK_PATH, pack)):
+        shipped = json.loads(shipped_path.read_text(encoding="utf-8"))
+        rebuilt = json.loads(rebuilt_path.read_text(encoding="utf-8"))
+        moved_pins.assert_only_the_prompts_pin_moved(shipped, rebuilt)
+        assert shipped["instruments"]["prompt_sha256"] == rebuilt["instruments"]["prompt_sha256"]
     for path in (RECORD_PATH, PACK_PATH):
         assert "generated_at" not in path.read_text(encoding="utf-8")
 
@@ -169,9 +178,15 @@ def test_the_instrument_names_the_pass1_text_the_four_readings_and_the_borrowed_
     }
     assert instruments["subject_types"] == list(prompts.PASS1_SUBJECT_TYPES)
     assert len(instruments["subject_types"]) == 4
-    assert instruments["parser"]["sha256"] == summary.sha256_of(
+    # The module sha is a «moved since» pin. `docs/PROMPT-pass1-fewshot.md` D0.2 registered a
+    # SECOND pass-1 text in prompts.py and ruled old records' pins of it never re-pinned, so this
+    # one no longer equals the live module — and what the record MEANS rests on the TEXT sha
+    # asserted above, which has not moved ([[the_identity_field_stops_covering_the_change]]).
+    assert len(instruments["parser"]["sha256"]) == 64
+    assert instruments["parser"]["module"] == "src/market_pulse/prompts.py"
+    assert instruments["parser"]["sha256"] != summary.sha256_of(
         REPO_ROOT / "src" / "market_pulse" / "prompts.py"
-    )
+    ), "prompts.py has not moved, so this «moved since» reading is stale — restore the equality"
     # serving is v5b's block and exactly one key of it moved
     assert instruments["serving"] == V5B["instruments"]["serving"] | {"output_tokens": 256}
     moved = {

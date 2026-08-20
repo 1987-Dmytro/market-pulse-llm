@@ -15,6 +15,7 @@ import pytest
 REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
+import moved_pins  # noqa: E402
 import score_pass1_probe as scoring  # noqa: E402
 import write_lora_b_prereg as producer  # noqa: E402
 
@@ -59,10 +60,23 @@ def test_the_record_rebuilds_byte_identical(tmp_path):
 
 
 def test_the_shipped_record_is_what_the_producer_builds_today(tmp_path):
+    """The rebuild is byte-identical EXCEPT where it pins `src/market_pulse/prompts.py`.
+
+    `docs/PROMPT-pass1-fewshot.md` D0.2 registered `pass1_comment_gm4_v2` in that module and ruled
+    old records' pins of it «moved since», never re-pinned. The registered pass-1 TEXT did not move,
+    which is what keeps this registration's own bar comparable to what it graded
+    ([[tests/moved_pins.py]]).
+    """
     assert producer.main(["--outdir", str(tmp_path)]) == 0
-    assert (tmp_path / producer.OUT_NAME).read_bytes() == (
-        REPO_ROOT / producer.OUT_NAME
-    ).read_bytes()
+    shipped = json.loads((REPO_ROOT / producer.OUT_NAME).read_text("utf-8"))
+    rebuilt = json.loads((tmp_path / producer.OUT_NAME).read_text("utf-8"))
+    # `scripts/pass1_pod_runner.py` moved too: its handshake compared the served pass-1 family
+    # WHOLE, which refused every older pack the day a second text was registered, and it was
+    # narrowed to the subset check the reader's own handshake had already been given
+    moved_pins.assert_only_the_prompts_pin_moved(
+        shipped, rebuilt, REPO_ROOT / "scripts" / "pass1_pod_runner.py"
+    )
+    assert shipped["instruments"]["prompt_sha256"] == rebuilt["instruments"]["prompt_sha256"]
 
 
 def test_the_scorer_that_will_grade_the_arms_can_read_this_registration():

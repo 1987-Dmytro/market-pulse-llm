@@ -26,6 +26,12 @@ import write_reader_gold as gold  # noqa: E402
 from market_pulse import prompts  # noqa: E402
 
 TEXT = prompts.PASS1_COMMENT_PROMPT
+TEXT_V2 = prompts.PASS1_COMMENT_PROMPT_V2
+BOTH = (TEXT, TEXT_V2)
+"""Both registered pass-1 texts. Every contamination and gold-value proof below runs over the pair:
+a clause added in v2 is a clause the corpus checks have to reach ([[a_guard_on_one_path_is_not_a_
+guard]])."""
+
 GOLD_R2 = json.loads((REPO_ROOT / "results" / "reader_gold_w1_r2.json").read_text(encoding="utf-8"))
 
 CORPUS_DIRS = (
@@ -113,13 +119,14 @@ def test_the_corpus_matcher_finds_a_phrase_that_IS_in_the_store(corpus):
     assert gold.normalise(planted) in flat
 
 
-def test_no_example_in_the_pass1_prompt_occurs_anywhere_in_the_corpus(corpus):
+@pytest.mark.parametrize("text", BOTH)
+def test_no_example_in_the_pass1_prompt_occurs_anywhere_in_the_corpus(corpus, text):
     """Every «…» quotation the text carries, driven from the TEXT and not from a hand list — an
     example added later without joining a constant would still have to clear this."""
     raw, flat = corpus
     quoted = {
         piece
-        for chunk in TEXT.split("«")[1:]
+        for chunk in text.split("«")[1:]
         for piece in (chunk.split("»")[0],)
         if len(piece.split()) >= 3
     }
@@ -129,7 +136,52 @@ def test_no_example_in_the_pass1_prompt_occurs_anywhere_in_the_corpus(corpus):
         assert gold.normalise(sentence) not in flat, sentence
 
 
-def test_the_prompt_names_no_gold_msg_id_no_gold_thread_and_no_gold_answer():
+@pytest.mark.parametrize("text", BOTH)
+def test_no_sentence_of_the_pass1_prompt_occurs_anywhere_in_the_corpus(corpus, text):
+    """The other half, for a clause that quotes nothing: v2's codebook clause and its examples slot
+    carry no «…» at all, so the guillemet sweep above passes over them without reading a word. Every
+    sentence of the text is checked against the store instead, with the same positive control."""
+    raw, flat = corpus
+    sentences = [
+        one.strip()
+        for one in text.replace("\n", " ").split(". ")
+        if len(one.split()) >= 6 and one.strip()
+    ]
+    assert len(sentences) >= 10, len(sentences)
+    for sentence in sentences:
+        assert sentence not in raw, sentence
+        assert gold.normalise(sentence) not in flat, sentence
+    if text is TEXT_V2:
+        # the premise of running this over v2: the two new paragraphs really are in the population
+        assert any("never what it mentions" in one for one in sentences)
+        assert any("never a distribution" in one for one in sentences)
+
+
+def test_v2_is_v1s_bytes_plus_exactly_the_clause_and_the_slot():
+    """The property that makes the dev table a measurement of ONE difference.
+
+    `pass1_comment_gm4_v1`'s sha may not move — `results/prereg_lora_b.json` and
+    `results/pass1_probe_b_verdict.json` were measured under it — and v2 is that string with two
+    paragraphs appended and nothing else. Both directions: the prefix holds, and the remainder is
+    exactly the two registered constants.
+    """
+    pinned = json.loads(
+        (REPO_ROOT / "results" / "pass1_probe_b_pack.json").read_text(encoding="utf-8")
+    )["instruments"]["prompt_sha256"]["pass1_comment_gm4_v1"]
+    assert prompts.prompt_sha256(prompts.PASS1_TASK) == pinned
+    assert TEXT_V2.startswith(TEXT)
+    assert TEXT_V2[len(TEXT) :] == (
+        "\n\n" + prompts.PASS1_CODEBOOK_CLAUSE_V2 + "\n\n" + prompts.PASS1_EXAMPLES_SLOT_V2
+    )
+    assert prompts.PROMPTS[prompts.PASS1_TASK_V2] is prompts.PASS1_COMMENT_PROMPT_V2
+    assert sorted(prompts.PASS1) == [prompts.PASS1_TASK, prompts.PASS1_TASK_V2]
+    # the clause is the contract's own words, and the one thing it may not do is name a row
+    assert "what the comment is ABOUT, never what it mentions" in prompts.PASS1_CODEBOOK_CLAUSE_V2
+    assert "never a distribution" in prompts.PASS1_EXAMPLES_SLOT_V2
+
+
+@pytest.mark.parametrize("text", BOTH)
+def test_the_prompt_names_no_gold_msg_id_no_gold_thread_and_no_gold_answer(text):
     """The contract's own red gate: the prompt states RULES, never a specific row.
 
     Every gold msg_id, every gold thread key and — the one a word-grep would miss — every gold
@@ -152,9 +204,9 @@ def test_the_prompt_names_no_gold_msg_id_no_gold_thread_and_no_gold_answer():
         len(subjects),
         len(texts),
     )
-    flat = TEXT.casefold()
+    flat = text.casefold()
     for value in ids:
-        assert value not in TEXT, value
+        assert value not in text, value
     for value in threads | subjects:
         assert value.casefold() not in flat, value
     # and no gold comment's own words: the longest run of any of them that the prompt repeats
@@ -203,6 +255,63 @@ def test_the_renderer_refuses_a_nameless_entity_and_an_empty_comment():
         prompts.pass1_messages_gm4(**REQUEST | {"text": "   "})
     # the premise: the same call unchanged does not raise
     assert prompts.pass1_messages_gm4(**REQUEST)
+
+
+EXAMPLES = [
+    {"text": "беру сирок у найближчому", "label": "категория_личное"},
+    {"text": "у вас вічно порожні полиці", "label": "сеть_ритейлер"},
+    {"text": "той бренд йогурту тепер кислий", "label": "молочный_бренд"},
+    {"text": "порошок дорогий", "label": "не_наш_рынок"},
+    {"text": "))))", "label": None},
+]
+
+
+def test_v2_renders_the_examples_between_the_entities_and_the_comment():
+    content = prompts.pass1_messages_gm4(**REQUEST, task=prompts.PASS1_TASK_V2, examples=EXAMPLES)[
+        0
+    ]["content"]
+    assert content.startswith(TEXT_V2)
+    assert content.index("<entities>") < content.index("<examples>") < content.index("<comment ")
+    assert f"<examples>\n{prompts.PASS1_EXAMPLES_HEADER}\n" in content
+    assert '"беру сирок у найближчому" → категория_личное' in content
+    # the null is written as the word the schema uses, never as an empty label
+    assert '"))))" → null' in content
+    # counted INSIDE the block: the entity rows and the attribution law's own three examples all
+    # spell « → » too, so a count over the whole request would be a count of the prompt
+    block = content.split("<examples>\n")[1].split("\n</examples>")[0].splitlines()
+    assert block[0] == prompts.PASS1_EXAMPLES_HEADER
+    assert len(block) == len(EXAMPLES) + 1
+    assert all(one.count(" → ") == 1 for one in block[1:]), block
+    assert [one.rsplit(" → ", 1)[1] for one in block[1:]] == [
+        "категория_личное",
+        "сеть_ритейлер",
+        "молочный_бренд",
+        "не_наш_рынок",
+        "null",
+    ]
+    assert content.count("\n</examples>\n") == 1
+
+
+def test_a_pass1_request_may_not_half_apply_the_revision():
+    """Both directions: v1 with a block and v2 without one are refused by name."""
+    with pytest.raises(ValueError, match="half-applies the revision"):
+        prompts.pass1_messages_gm4(**REQUEST, examples=EXAMPLES)
+    with pytest.raises(ValueError, match="half-applies the revision"):
+        prompts.pass1_messages_gm4(**REQUEST, task=prompts.PASS1_TASK_V2)
+    with pytest.raises(ValueError, match="half-applies the revision"):
+        prompts.pass1_messages_gm4(**REQUEST, task=prompts.PASS1_TASK_V2, examples=[])
+    # the premise: the two complete forms do not raise
+    assert prompts.pass1_messages_gm4(**REQUEST)
+    assert prompts.pass1_messages_gm4(**REQUEST, task=prompts.PASS1_TASK_V2, examples=EXAMPLES)
+
+
+def test_an_example_may_not_carry_a_reading_the_parser_would_refuse():
+    with pytest.raises(ValueError, match="not one of"):
+        prompts.pass1_examples_block([{"text": "x", "label": "категория"}])
+    with pytest.raises(ValueError, match="no text"):
+        prompts.pass1_examples_block([{"text": "  ", "label": None}])
+    with pytest.raises(ValueError, match="the block forgotten"):
+        prompts.pass1_examples_block([])
 
 
 def test_a_request_over_the_ceiling_is_refused_rather_than_truncated():

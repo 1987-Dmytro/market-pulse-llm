@@ -27,6 +27,7 @@ sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
 import read_threads_reader_v4 as v4  # noqa: E402
 import write_pass1_prereg as p1  # noqa: E402
+import moved_pins  # noqa: E402
 import write_pass1_prereg_b as prereg  # noqa: E402
 
 RECORD_PATH = REPO_ROOT / "results" / "prereg_pass1_probe_b.json"
@@ -52,12 +53,25 @@ them must be the frozen record's own object, not a re-derivation that happens to
 
 
 def test_the_committed_registration_and_pack_are_what_the_producer_writes_today(tmp_path):
-    """No clock is stamped, so both files re-derive byte for byte and their date is the date of the
-    commit that carries them — the only witness that they preceded the first pod."""
+    """The rebuild is byte-identical EXCEPT where it pins `src/market_pulse/prompts.py`.
+
+    `docs/PROMPT-pass1-fewshot.md` D0.2 registered `pass1_comment_gm4_v2` in that module and ruled
+    old records' pins of it «moved since», never re-pinned. What the b-registration means rests on
+    the registered TEXT, and `pass1_comment_gm4_v1`'s own sha has not moved — asserted below beside
+    the diff, and by the producer's own refusal.
+    """
     out, pack = tmp_path / "again.json", tmp_path / "pack.json"
     assert prereg.main(["--out", str(out), "--pack", str(pack)]) == 0
-    assert out.read_text(encoding="utf-8") == RECORD_PATH.read_text(encoding="utf-8")
-    assert pack.read_text(encoding="utf-8") == PACK_PATH.read_text(encoding="utf-8")
+    # the record also pins THIS producer, which this contract edited; the pack does not
+    for shipped_path, rebuilt_path, also in (
+        (RECORD_PATH, out, (REPO_ROOT / "scripts" / "write_pass1_prereg_b.py",)),
+        (PACK_PATH, pack, ()),
+    ):
+        shipped = json.loads(shipped_path.read_text(encoding="utf-8"))
+        rebuilt = json.loads(rebuilt_path.read_text(encoding="utf-8"))
+        moved_pins.assert_only_the_prompts_pin_moved(shipped, rebuilt, *also)
+        assert shipped["instruments"]["prompt_sha256"] == rebuilt["instruments"]["prompt_sha256"]
+    assert "generated_at" not in out.read_text(encoding="utf-8")
 
 
 def test_everything_bar_P1_is_SCORED_ON_is_object_equal_to_the_frozen_record():
@@ -91,8 +105,11 @@ def test_the_enumeration_refuses_a_path_it_does_not_name():
     finally:
         prereg.MOVED = was
     try:
-        prereg.MOVED = (*was, "instruments.parser.sha256")
-        with pytest.raises(SystemExit, match=r"enumerated but unmoved:"):
+        # a path that genuinely does not move. `instruments.parser.sha256` was the old choice and
+        # it stopped discriminating the day D0.2 registered a second pass-1 text: the module pins
+        # are now DERIVED into the allowed set, so enumerating one there proves nothing
+        prereg.MOVED = (*was, "attempt")
+        with pytest.raises(SystemExit, match=r"enumerated but unmoved: \['attempt'\]"):
             prereg.build()
     finally:
         prereg.MOVED = was

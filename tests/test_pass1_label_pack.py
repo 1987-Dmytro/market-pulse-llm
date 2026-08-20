@@ -18,6 +18,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
 import build_pass1_label_pack as pack  # noqa: E402
+import moved_pins  # noqa: E402
 
 CONTRACT_EXCLUDED = (
     "@VARUS_channel:10348",
@@ -53,9 +54,24 @@ def test_the_pack_rebuilds_byte_identical_from_its_recorded_seed(tmp_path):
 
 
 def test_the_shipped_pack_is_what_the_producer_builds_today(tmp_path):
+    """The rebuild is byte-identical EXCEPT where it pins `src/market_pulse/prompts.py`.
+
+    `docs/PROMPT-pass1-fewshot.md` D0.2 registered `pass1_comment_gm4_v2` in that module and ruled
+    old records' pins of it «moved since», not re-pinned. The registered TEXT this record was
+    measured under has NOT moved, which is the property that keeps the evidence comparable, and it
+    is asserted beside the diff ([[tests/moved_pins.py]]).
+    """
     assert pack.main(["--outdir", str(tmp_path)]) == 0
-    for name in (pack.RENDER_NAME, pack.BLIND_NAME, pack.PACK_NAME):
+    for name in (pack.RENDER_NAME, pack.BLIND_NAME):
         assert (tmp_path / name).read_bytes() == (REPO_ROOT / name).read_bytes(), name
+    shipped = json.loads((REPO_ROOT / pack.PACK_NAME).read_text("utf-8"))
+    rebuilt = json.loads((tmp_path / pack.PACK_NAME).read_text("utf-8"))
+    moved = moved_pins.assert_only_the_prompts_pin_moved(shipped, rebuilt)
+    assert moved == {"producer.borrowed.src/market_pulse/prompts.py"}
+    assert (
+        shipped["rendering"]["codebook"]["attribution_law_sha256"]
+        == (rebuilt["rendering"]["codebook"]["attribution_law_sha256"])
+    )
 
 
 def test_the_excluded_threads_are_derived_and_are_the_contract_s_seven():
