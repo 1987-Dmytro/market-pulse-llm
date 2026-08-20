@@ -1,0 +1,116 @@
+{
+  "arm": "a",
+  "chat_template": {
+    "add_generation_prompt": true,
+    "enable_thinking": false
+  },
+  "class_weights": {
+    "null": 0.598802,
+    "категория_личное": 2.777778,
+    "молочный_бренд": 8.0,
+    "не_наш_рынок": 0.398406,
+    "сеть_ритейлер": 2.272727
+  },
+  "config": {
+    "base": {
+      "revision": "842da3794eaa0b77d5f08bae87a17459d91ff475"
+    },
+    "lora": {
+      "alpha": 32,
+      "dropout": 0.05,
+      "exclude_prefixes": [
+        "vision_tower",
+        "multi_modal_projector",
+        "vision_model"
+      ],
+      "r": 16,
+      "target_suffixes": [
+        "q_proj",
+        "k_proj",
+        "v_proj",
+        "o_proj",
+        "gate_proj",
+        "up_proj",
+        "down_proj"
+      ]
+    },
+    "optimizer": {
+      "learning_rate": 0.0001,
+      "max_grad_norm": 0.3,
+      "name": "paged_adamw_8bit",
+      "scheduler": "cosine",
+      "warmup_ratio": 0.03,
+      "weight_decay": 0.0
+    },
+    "training": {
+      "carve_every": 25,
+      "carve_rows": 24,
+      "epochs": 2,
+      "grad_accum": 8,
+      "gradient_checkpointing": true,
+      "log_every": 5,
+      "max_seq_len": 1408,
+      "micro_batch_size": 2,
+      "save_every": 100,
+      "seed": 42
+    }
+  },
+  "dataset": {
+    "file": "results/pass1_sft_arm_a.jsonl",
+    "rows": 500,
+    "sha256": "79988046f96c981fbb6e09eedd71fd343b8b60ddd414c6f35fc754817f79dd40"
+  },
+  "environment": {
+    "bitsandbytes": "0.50.0",
+    "cuda_runtime": "12.8",
+    "driver": "570.195.03",
+    "gpu": "NVIDIA RTX A6000",
+    "gpu_count": 1,
+    "gpu_memory_total": "49140 MiB",
+    "model_revision": null,
+    "pod_id": null,
+    "revision_requested": "842da3794eaa0b77d5f08bae87a17459d91ff475",
+    "torch": "2.8.0+cu128",
+    "transformers": "5.14.1",
+    "weights_requested": "google/gemma-4-31b-it"
+  },
+  "labelled_by": "the TEAM LEAD — results/labels_pass1_r*_provenance.json",
+  "n_carve": 0,
+  "n_train": 500,
+  "prompt_sha256": {
+    "pass1_comment_gm4_v1": "5a4a3cb6ce4db89adb304c04de41210fdabfde0c53addfdb75adba0f1d866650"
+  },
+  "quantization": {
+    "bnb_4bit_compute_dtype": "bfloat16",
+    "bnb_4bit_quant_type": "nf4",
+    "bnb_4bit_use_double_quant": true,
+    "load_in_4bit": true
+  },
+  "run": {
+    "adapter": "/workspace/run/arm_a/adapter",
+    "gpu_gb_peak": 33.19,
+    "grad_accum_final": 8,
+    "micro_batch_final": 2,
+    "seconds": 4243.4,
+    "seconds_per_step": 68.442,
+    "steps": 62,
+    "steps_per_epoch": 32
+  },
+  "sampler": "weighted with replacement, 500 draws per epoch, w_c = N/(5·n_c) capped at 8.0",
+  "sft_record": {
+    "file": "results/pass1_sft.json",
+    "sha256": "587062c66cfd2a872bea53162d1c247fb883bc252d57cc721f66945f32678ce8"
+  },
+  "supervision": {
+    "boundary_char": ",",
+    "field": "subject_type",
+    "learn_chars": "each row's target is written whole and only its head — through the subject_type value AND the one separator character that closes it — is supervised. `scripts/train_qlora.py` masks the rest out of the loss. The separator is inside the boundary because the mask is applied on token END offsets: with the boundary ON the value, a tokenizer that merges the closing quote with the comma produces a token ending one character past it, and that whole merge — the value's tail with it — falls out of supervision. It teaches structure the parser demands and no label; the two unlabelled fields are as untaught as they were",
+    "unsupervised_fields": [
+      "subject_id",
+      "stance"
+    ],
+    "why": "the team lead labelled subject_type and nothing else. Training the two unlabelled fields as null would teach «stance is always null», and three of the fourteen sealed gold rows score stance — the reachable maximum would fall to 11 against a threshold of 12 and the gate would be unreachable by construction"
+  },
+  "task": "pass1_comment_gm4_v1",
+  "train_sha256": "66b9dca942f54dc8368697b93c0213323b7479668d5bf18d4a6e5bc1b1f613ce"
+}

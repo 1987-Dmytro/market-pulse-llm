@@ -193,6 +193,26 @@
       "billing_since_usd": 3.42679,
       "billing_read": "read",
       "note": "lora-b anchor, before the pod"
+    },
+    {
+      "at": "2026-08-20T17:21:07+00:00",
+      "balance": 16.8892204351,
+      "spent_usd": 5.6205,
+      "remaining_usd": 14.3795,
+      "balance_delta_usd": 5.6205,
+      "billing_since_usd": 5.121677,
+      "billing_read": "read",
+      "note": "lora-b arm A trained, 62 steps, 4243.4 s"
+    },
+    {
+      "at": "2026-08-20T17:38:37+00:00",
+      "balance": 16.755861324,
+      "spent_usd": 5.7539,
+      "remaining_usd": 14.2461,
+      "balance_delta_usd": 5.7539,
+      "billing_since_usd": 5.255286,
+      "billing_read": "read",
+      "note": "lora-b pod deleted; arm A trained and evaluated, arm B never started"
     }
   ]
 }

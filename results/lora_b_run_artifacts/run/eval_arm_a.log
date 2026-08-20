@@ -1,0 +1,72 @@
+[     0.1s] instrument OK · parser a4a5a5d08546f53a…
+[     0.1s] 64 requests match the registration's per-item shas
+[     0.1s] ceiling 256 output tokens · stop at the brace
+[     0.1s] loading google/gemma-4-31b-it @ 842da3794eaa…
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/1188 [00:00<?, ?it/s]Loading weights:   0%|          | 1/1188 [00:00<03:45,  5.26it/s]Loading weights:   0%|          | 2/1188 [00:00<06:16,  3.15it/s]Loading weights:   1%|          | 7/1188 [00:00<01:31, 12.90it/s]Loading weights:   2%|▏         | 20/1188 [00:00<00:30, 38.73it/s]Loading weights:   3%|▎         | 33/1188 [00:00<00:19, 58.95it/s]Loading weights:   4%|▎         | 43/1188 [00:01<00:16, 68.69it/s]Loading weights:   4%|▍         | 52/1188 [00:01<00:16, 67.21it/s]Loading weights:   5%|▌         | 62/1188 [00:01<00:15, 74.58it/s]Loading weights:   6%|▋         | 75/1188 [00:01<00:12, 86.63it/s]Loading weights:   7%|▋         | 85/1188 [00:01<00:13, 84.45it/s]Loading weights:   8%|▊         | 95/1188 [00:01<00:12, 87.63it/s]Loading weights:   9%|▉         | 105/1188 [00:01<00:12, 84.16it/s]Loading weights:  10%|▉         | 117/1188 [00:01<00:11, 91.23it/s]Loading weights:  11%|█         | 130/1188 [00:01<00:10, 100.86it/s]Loading weights:  12%|█▏        | 144/1188 [00:02<00:10, 104.09it/s]Loading weights:  13%|█▎        | 158/1188 [00:02<00:09, 106.68it/s]Loading weights:  14%|█▍        | 169/1188 [00:02<00:09, 104.23it/s]Loading weights:  15%|█▌        | 180/1188 [00:02<00:09, 101.31it/s]Loading weights:  16%|█▌        | 191/1188 [00:02<00:09, 101.12it/s]Loading weights:  17%|█▋        | 202/1188 [00:02<00:10, 97.14it/s] Loading weights:  18%|█▊        | 215/1188 [00:02<00:09, 99.61it/s]Loading weights:  19%|█▉        | 229/1188 [00:02<00:09, 102.85it/s]Loading weights:  20%|██        | 243/1188 [00:03<00:08, 105.64it/s]Loading weights:  21%|██▏       | 255/1188 [00:03<00:08, 107.59it/s]Loading weights:  23%|██▎       | 269/1188 [00:03<00:08, 109.50it/s]Loading weights:  24%|██▍       | 283/1188 [00:03<00:08, 107.88it/s]Loading weights:  25%|██▍       | 296/1188 [00:03<00:08, 108.57it/s]Loading weights:  26%|██▌       | 310/1188 [00:03<00:07, 109.83it/s]Loading weights:  27%|██▋       | 324/1188 [00:03<00:07, 109.46it/s]Loading weights:  28%|██▊       | 335/1188 [00:03<00:07, 107.45it/s]Loading weights:  29%|██▉       | 346/1188 [00:03<00:07, 105.85it/s]Loading weights:  30%|███       | 357/1188 [00:04<00:07, 104.07it/s]Loading weights:  31%|███       | 368/1188 [00:04<00:08, 100.79it/s]Loading weights:  32%|███▏      | 381/1188 [00:04<00:07, 102.40it/s]Loading weights:  33%|███▎      | 395/1188 [00:04<00:07, 105.80it/s]Loading weights:  34%|███▍      | 409/1188 [00:04<00:07, 106.76it/s]Loading weights:  35%|███▌      | 421/1188 [00:04<00:07, 105.82it/s]Loading weights:  37%|███▋      | 435/1188 [00:04<00:06, 108.09it/s]Loading weights:  38%|███▊      | 449/1188 [00:04<00:06, 108.75it/s]Loading weights:  39%|███▉      | 463/1188 [00:05<00:06, 109.55it/s]Loading weights:  40%|████      | 477/1188 [00:05<00:06, 110.27it/s]Loading weights:  41%|████▏     | 491/1188 [00:05<00:06, 109.71it/s]Loading weights:  42%|████▏     | 503/1188 [00:05<00:06, 111.33it/s]Loading weights:  44%|████▎     | 517/1188 [00:05<00:05, 113.18it/s]Loading weights:  45%|████▍     | 531/1188 [00:05<00:05, 113.74it/s]Loading weights:  46%|████▌     | 545/1188 [00:05<00:05, 114.92it/s]Loading weights:  47%|████▋     | 557/1188 [00:05<00:05, 115.58it/s]Loading weights:  48%|████▊     | 569/1188 [00:06<00:05, 108.30it/s]Loading weights:  49%|████▉     | 581/1188 [00:06<00:05, 107.30it/s]Loading weights:  50%|████▉     | 592/1188 [00:06<00:05, 104.55it/s]Loading weights:  51%|█████     | 603/1188 [00:06<00:05, 98.47it/s] Loading weights:  52%|█████▏    | 616/1188 [00:06<00:05, 100.87it/s]Loading weights:  53%|█████▎    | 629/1188 [00:06<00:05, 107.86it/s]Loading weights:  54%|█████▍    | 642/1188 [00:06<00:04, 112.84it/s]Loading weights:  55%|█████▌    | 656/1188 [00:06<00:04, 111.41it/s]Loading weights:  56%|█████▌    | 668/1188 [00:06<00:04, 110.79it/s]Loading weights:  57%|█████▋    | 680/1188 [00:07<00:04, 107.44it/s]Loading weights:  58%|█████▊    | 691/1188 [00:07<00:04, 105.50it/s]Loading weights:  59%|█████▉    | 702/1188 [00:07<00:04, 103.58it/s]Loading weights:  60%|██████    | 713/1188 [00:07<00:04, 100.01it/s]Loading weights:  61%|██████    | 727/1188 [00:07<00:04, 104.07it/s]Loading weights:  62%|██████▏   | 741/1188 [00:07<00:04, 106.60it/s]Loading weights:  63%|██████▎   | 753/1188 [00:07<00:04, 107.97it/s]Loading weights:  64%|██████▍   | 766/1188 [00:07<00:03, 112.02it/s]Loading weights:  66%|██████▌   | 780/1188 [00:08<00:03, 112.92it/s]Loading weights:  67%|██████▋   | 794/1188 [00:08<00:03, 113.86it/s]Loading weights:  68%|██████▊   | 806/1188 [00:08<00:03, 114.01it/s]Loading weights:  69%|██████▉   | 818/1188 [00:08<00:03, 111.83it/s]Loading weights:  70%|██████▉   | 830/1188 [00:08<00:03, 106.72it/s]Loading weights:  79%|███████▉  | 937/1188 [00:08<00:00, 364.93it/s]Loading weights:  91%|█████████ | 1079/1188 [00:08<00:00, 655.29it/s]Loading weights: 100%|██████████| 1188/1188 [00:08<00:00, 135.76it/s]
+[   110.0s] READY · boot 110.0s · the kill clock stops at the first reply below
+[   117.2s] reply  1/64 @VARUS_channel:10348#20594                7.3s ·    75 chars · cut    0 · balanced True · finish stop
+[   124.1s] reply  2/64 @VARUS_channel:10348#20595                6.9s ·    75 chars · cut    0 · balanced True · finish stop
+[   133.2s] reply  3/64 @VARUS_channel:10348#20656                9.1s ·    99 chars · cut    0 · balanced True · finish stop
+[   141.7s] reply  4/64 @VARUS_channel:10348#20664                8.4s ·    95 chars · cut    0 · balanced True · finish stop
+[   150.1s] reply  5/64 @VARUS_channel:10348#20665                8.4s ·    94 chars · cut    0 · balanced True · finish stop
+[   158.5s] reply  6/64 @VARUS_channel:10348#20672                8.4s ·    94 chars · cut    0 · balanced True · finish stop
+[   166.9s] reply  7/64 @VARUS_channel:10348#20673                8.4s ·    94 chars · cut    0 · balanced True · finish stop
+[   176.0s] reply  8/64 @VARUS_channel:10613#21599                9.1s ·   100 chars · cut    0 · balanced True · finish stop
+[   184.6s] reply  9/64 @VARUS_channel:10613#21601                8.6s ·    95 chars · cut    0 · balanced True · finish stop
+[   193.3s] reply 10/64 @VARUS_channel:10613#21609                8.7s ·    95 chars · cut    0 · balanced True · finish stop
+[   201.8s] reply 11/64 @VARUS_channel:10613#21626                8.6s ·    95 chars · cut    0 · balanced True · finish stop
+[   210.4s] reply 12/64 @VARUS_channel:10613#21627                8.5s ·    94 chars · cut    0 · balanced True · finish stop
+[   219.5s] reply 13/64 @VARUS_channel:10613#21629                9.1s ·   101 chars · cut    0 · balanced True · finish stop
+[   226.5s] reply 14/64 @VARUS_channel:10613#21631                7.0s ·    80 chars · cut    0 · balanced True · finish stop
+[   233.5s] reply 15/64 @VARUS_channel:10613#21670                7.0s ·    81 chars · cut    0 · balanced True · finish stop
+[   242.2s] reply 16/64 @VARUS_channel:10613#21678                8.7s ·    95 chars · cut    0 · balanced True · finish stop
+[   250.7s] reply 17/64 @VARUS_channel:10613#21680                8.5s ·    95 chars · cut    0 · balanced True · finish stop
+[   257.5s] reply 18/64 @mandziak:3676#47896                      6.8s ·    81 chars · cut    0 · balanced True · finish stop
+[   264.3s] reply 19/64 @mandziak:3676#47897                      6.8s ·    81 chars · cut    0 · balanced True · finish stop
+[   272.7s] reply 20/64 @mandziak:3676#47898                      8.4s ·    90 chars · cut    0 · balanced True · finish stop
+[   281.2s] reply 21/64 @mandziak:3676#47899                      8.4s ·    99 chars · cut    0 · balanced True · finish stop
+[   289.4s] reply 22/64 @mandziak:3676#47900                      8.3s ·    95 chars · cut    0 · balanced True · finish stop
+[   298.3s] reply 23/64 @mandziak:3676#47902                      8.8s ·   101 chars · cut    0 · balanced True · finish stop
+[   306.6s] reply 24/64 @mandziak:3676#47904                      8.4s ·    91 chars · cut    0 · balanced True · finish stop
+[   315.0s] reply 25/64 @mandziak:3676#47925                      8.3s ·    90 chars · cut    0 · balanced True · finish stop
+[   323.5s] reply 26/64 @mandziak:3676#47926                      8.5s ·    90 chars · cut    0 · balanced True · finish stop
+[   331.8s] reply 27/64 @mandziak:3703#48174                      8.3s ·    91 chars · cut    0 · balanced True · finish stop
+[   338.7s] reply 28/64 @mandziak:3703#48176                      6.9s ·    81 chars · cut    0 · balanced True · finish stop
+[   347.8s] reply 29/64 @mandziak:3703#48177                      9.1s ·    96 chars · cut    0 · balanced True · finish stop
+[   357.5s] reply 30/64 @mandziak:3703#48178                      9.7s ·   106 chars · cut    0 · balanced True · finish stop
+[   365.9s] reply 31/64 @mandziak:3703#48181                      8.4s ·    90 chars · cut    0 · balanced True · finish stop
+[   374.4s] reply 32/64 @mandziak:3703#48231                      8.5s ·    91 chars · cut    0 · balanced True · finish stop
+[   384.4s] reply 33/64 @mandziak:3703#48276                     10.0s ·   122 chars · cut    0 · balanced True · finish stop
+[   394.3s] reply 34/64 @mandziak:3703#48283                      9.9s ·   109 chars · cut    0 · balanced True · finish stop
+[   402.8s] reply 35/64 @mandziak:3703#49098                      8.5s ·    90 chars · cut    0 · balanced True · finish stop
+[   412.0s] reply 36/64 @matusi_ukr:22242#578931                  9.2s ·   100 chars · cut    0 · balanced True · finish stop
+[   421.0s] reply 37/64 @matusi_ukr:22242#578932                  9.0s ·    98 chars · cut    0 · balanced True · finish stop
+[   429.2s] reply 38/64 @matusi_ukr:22242#578939                  8.2s ·    92 chars · cut    0 · balanced True · finish stop
+[   437.6s] reply 39/64 @matusi_ukr:22242#578940                  8.3s ·    92 chars · cut    0 · balanced True · finish stop
+[   447.0s] reply 40/64 @matusi_ukr:22242#578942                  9.4s ·   102 chars · cut    0 · balanced True · finish stop
+[   456.0s] reply 41/64 @matusi_ukr:22242#578944                  9.0s ·    97 chars · cut    0 · balanced True · finish stop
+[   464.8s] reply 42/64 @matusi_ukr:22242#578947                  8.8s ·    94 chars · cut    0 · balanced True · finish stop
+[   473.8s] reply 43/64 @matusi_ukr:22242#578948                  9.0s ·    99 chars · cut    0 · balanced True · finish stop
+[   482.9s] reply 44/64 @matusi_ukr:22242#578951                  9.1s ·    98 chars · cut    0 · balanced True · finish stop
+[   491.8s] reply 45/64 @matusi_ukr:22242#578952                  9.0s ·    99 chars · cut    0 · balanced True · finish stop
+[   501.2s] reply 46/64 @matusi_ukr:22242#579007                  9.4s ·   102 chars · cut    0 · balanced True · finish stop
+[   509.5s] reply 47/64 @matusi_ukr:22242#579042                  8.2s ·    92 chars · cut    0 · balanced True · finish stop
+[   518.2s] reply 48/64 @matusi_ukr:22272#579373                  8.8s ·    98 chars · cut    0 · balanced True · finish stop
+[   527.0s] reply 49/64 @matusi_ukr:22272#579374                  8.8s ·    98 chars · cut    0 · balanced True · finish stop
+[   535.3s] reply 50/64 @matusi_ukr:22272#579375                  8.2s ·    91 chars · cut    0 · balanced True · finish stop
+[   542.4s] reply 51/64 @matusi_ukr:22272#579376                  7.1s ·    81 chars · cut    0 · balanced True · finish stop
+[   549.5s] reply 52/64 @matusi_ukr:22272#579377                  7.1s ·    81 chars · cut    0 · balanced True · finish stop
+[   558.3s] reply 53/64 @matusi_ukr:22272#579379                  8.8s ·    99 chars · cut    0 · balanced True · finish stop
+[   566.9s] reply 54/64 @matusi_ukr:22272#579380                  8.6s ·    95 chars · cut    0 · balanced True · finish stop
+[   575.8s] reply 55/64 @matusi_ukr:22272#579381                  8.9s ·    98 chars · cut    0 · balanced True · finish stop
+[   584.7s] reply 56/64 @matusi_ukr:22272#579383                  8.9s ·    98 chars · cut    0 · balanced True · finish stop
+[   594.2s] reply 57/64 @matusi_ukr:22272#579416                  9.5s ·   103 chars · cut    0 · balanced True · finish stop
+[   603.1s] reply 58/64 @matusi_ukr:22272#579429                  9.0s ·   100 chars · cut    0 · balanced True · finish stop
+[   612.3s] reply 59/64 @matusi_ukr:22272#579457                  9.2s ·    94 chars · cut    0 · balanced True · finish stop
+[   620.6s] reply 60/64 @matusi_ukr:22272#580126                  8.2s ·    95 chars · cut    0 · balanced True · finish stop
+[   629.3s] reply 61/64 @matusi_ukr:22272#580127                  8.7s ·    98 chars · cut    0 · balanced True · finish stop
+[   638.1s] reply 62/64 @matusi_ukr:22272#580340                  8.8s ·    99 chars · cut    0 · balanced True · finish stop
+[   647.1s] reply 63/64 @matusi_ukr:22303#580124                  9.0s ·    99 chars · cut    0 · balanced True · finish stop
+[   656.1s] reply 64/64 @matusi_ukr:22303#580129                  9.0s ·   102 chars · cut    0 · balanced True · finish stop
+[   657.9s] DONE · 64 generated here · 64 replies in /workspace/run/eval_arm_a.jsonl

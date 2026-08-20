@@ -1,0 +1,9 @@
+{
+  "adapter": "/workspace/run/arm_a/adapter",
+  "files": {
+    "README.md": "31623e74270c800f66c4b228d78e37298bb36dd3a2874edbab7f16d2abfb50c2",
+    "adapter_config.json": "31ddbb982def17bd7bc99b4947126b853cfb561bf45dea27cf0c1bb4516e874d",
+    "adapter_model.safetensors": "1b604585b5a19589a9a049b9aa9448bd417388b5138fdec4a5cfabb649a51ed0"
+  },
+  "rule": "written before the run, from the directory that was mounted. An evidence file with no record beside it was answered by the base"
+}

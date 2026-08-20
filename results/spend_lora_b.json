@@ -8,6 +8,18 @@
       "balance": 19.0829718404,
       "step_spent_usd": 0.0,
       "note": "lora-b anchor, before the pod"
+    },
+    {
+      "at": "2026-08-20T17:21:07+00:00",
+      "balance": 16.8892204351,
+      "step_spent_usd": 2.1938,
+      "note": "lora-b arm A trained, 62 steps, 4243.4 s"
+    },
+    {
+      "at": "2026-08-20T17:38:37+00:00",
+      "balance": 16.755861324,
+      "step_spent_usd": 2.3271,
+      "note": "lora-b pod deleted; arm A trained and evaluated, arm B never started"
     }
   ],
   "gpu_note": "RunPod account balance read before the first pod of lora-b. Step spend = the pessimistic maximum of this anchor minus the balance now and the billing walk since `anchored_at` (SPEC 3.23 (4), Dv411), enforced against $6.00. The SPEC amendment 3.4 (4) phase cap is enforced separately, against results/spend_phase4.json, and neither anchor may be regenerated."
