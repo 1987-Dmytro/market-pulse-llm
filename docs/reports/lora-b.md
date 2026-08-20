@@ -1,4 +1,4 @@
-# Report — `lora-b`: D0–D2 closed at $0, and the pod is NOT created
+# Report — `lora-b`: D0–D2 closed, the fork resolved by two rulings, and D3 still not created
 
 Contract `docs/PROMPT-lora-b.md`. **Steps 0, 0.5, D1 and D2 are executed and committed. D3 — the
 one paid session — was NOT started, and D4 has nothing to score.** The reason is the contract's own
@@ -8,16 +8,25 @@ train/eval difference on the gate's own rows that has a measured price and a rem
 fit inside one paid session. With ONE attempt at a sealed bar, that is the operator's call and not
 the executor's, so it is on the table with numbers instead of spent.
 
-**The operator then ruled branch C** (below): the substituted topic is cut to the envelope a
-bought one occupies. It put every one of the 650 rows back under the frozen ceiling, returned the
-second `молочный_бренд` row to both arms, and **H6 now re-derives all fourteen registered numbers**.
-The pod is still not created — the entity-block finding is the half branch C does not touch, and
-that is the ruling still open.
+**The operator then ruled BOTH remaining branches, and both are executed.**
 
-Fourteen commits, `9317c80` → `d928339`, `make check` green at every boundary — 3 004 / 3 009 / 3 053 /
-3 068 / 3 071 / **3 073 passed, 2 skipped** — and `ruff format --check` clean. `knowledge/hot.md`
-carries the handoff the paid session boots from; the census reads **10.1K** against `TARGET_KTOK`
-10.7, up 0.3K for it and named rather than left to be noticed. Cause tags from the closed enum v2 only; lesson names ride as trailing
+- **Branch C** (below, $0): the substituted topic is cut to the envelope a bought one occupies. It
+  put every one of the 650 rows back under the frozen ceiling, returned the second
+  `молочный_бренд` row to both arms, and **H6 re-derived all fourteen registered numbers**.
+- **Branch B** ($1.2259 of a $2.00 step cap, its own report): the reader pass over the 105 threads
+  that had no verdict. 132 of 132 units read. The training set's context is no longer a substitute
+  — **630 of its 650 topics are bought reader summaries and 282 of its rows carry an entity block,
+  against 91 and 39 before.**
+
+**D3 is still not created**, and after the two rulings the reason is one and not three: the bar is
+ONE attempt, and starting it is the operator's word. Everything it consumes is committed, green and
+now materially better than it was when D2 was written.
+
+Twenty-nine commits, `9317c80` → `08c4ef2`, `make check` green at every boundary — 3 004 / 3 009 /
+3 053 / 3 068 / 3 071 / 3 073 / 3 095 / 3 105 / 3 113 / **3 114 passed, 2 skipped** — and
+`ruff format --check` clean. `knowledge/hot.md` carries the handoff the paid session boots from;
+the census reads **10.1K** against `TARGET_KTOK` 10.7, up 0.3K for it and named rather than left to
+be noticed. Cause tags from the closed enum v2 only; lesson names ride as trailing
 `[[wiki-name]]`.
 
 ## Read back, before the first edit
@@ -278,7 +287,7 @@ always empty and graded on requests where it is almost always full.
 | branch | what the arms train on | cost | what it fixes |
 |---|---|---|---:|
 | **A — run as registered** | topic = the raw post, entity block empty on 568 of 607 rows | **$0 extra**; D3 is $2.46 of the $6.00 cap | nothing; the risk is accepted knowingly |
-| **B — buy the reader pass first** | topic = a bought summary, entity block real, on every thread | **≈$1.20** · 105 × 51.3 s ≈ 5 390 s ≈ 1.5 h, in a SEPARATE session | both findings: the context gap AND the 43 dropped rows |
+| **B — buy the reader pass first** ✅ **RULED AND EXECUTED** | topic = a bought summary, entity block real wherever the thread HAS entities | quoted at ≈$1.20; re-priced at $1.34 from the thread sizes; **billed $1.2259**, three segments, 132 of 132 units | the context gap as far as money can: entity blocks **39 → 282** of 650, bought topics **91 → 630** |
 | **C — bound the substituted topic** ✅ **RULED AND EXECUTED** | topic = the post's opening cut to the bought-summary envelope, entity block still empty | **$0** | the length finding only: **0 of 650 rows over the ceiling, max bound 1 225 tokens, both `молочный_бренд` rows kept** |
 
 Branch B cannot happen inside D3: a dataset built during the paid session could not have been
@@ -320,10 +329,11 @@ no `run(` and no `close(` commit, because there was nothing to spend. The three 
    the money», not a footnote after it. ✅ **Closed** by the operator's branch-C ruling: all
    fourteen re-derive.
 2. **The train/eval context difference lands on the gate's own rows** — 12 of the 14 are answered
-   under an entity block the training set almost never carries (39 of 650) — and it has a measured
-   removal cost that does not fit inside the one paid session. **Still open**; branch C does not
-   touch it.
-3. **One attempt.** Every reason above would be a footnote if the bar could be re-run. It cannot.
+   under an entity block the training set almost never carried (39 of 650). ✅ **Closed as far as
+   money can close it** by the operator's branch-B ruling: 282 of 650 now carry one. The residual
+   is structural and is named below.
+3. **One attempt.** Every reason above would be a footnote if the bar could be re-run. It cannot,
+   and this is the only reason left. **Starting D3 is the operator's word.**
 
 Everything D3 needs is committed and green: the datasets, the prereg, the trainer's two flags, the
 transport's `--adapter`, and the exact commands are in the record's `arms[*].command` /
@@ -413,13 +423,67 @@ and is not edited for it; the clause now carries the fact so it is read with it.
 The branch that closes the entity-block finding is still B — a reader pass over the 105 uncovered
 threads, ≈$1.20, in its own session. **The pod is not created.**
 
+## Branch B — ruled and bought, and what it did to D3's input
+
+The detail is `docs/reports/reader-topup.md`; what belongs here is what it changed for THIS
+contract. The pass read 132 units over 105 threads in three segments — two of them defects in the
+executor's own registration, found on a running meter and costing $0.0997 between them, and the
+third a clean 132 of 132 for $1.1262. The projection published before the money said ~279 entity
+blocks and $1.34; the measurement says **282** and **$1.226 all-in**.
+
+### D3's input, before and after the two rulings
+
+| | at D2 (as first built) | after branch C | **after branch B** |
+|---|---:|---:|---:|
+| arm A rows / steps | 464 / 58 | 500 / 64 | **500 / 64** |
+| arm B rows / steps | 607 / 76 | 650 / 82 | **650 / 82** |
+| `молочный_бренд` rows in each arm | 1 | 2 | **2** |
+| rows dropped for length | 43 | 0 | **0** |
+| arm B rows with a BOUGHT topic | 91 | 91 | **630** |
+| arm B rows with an entity block | 39 | 39 | **282** |
+| rows carrying the branch-C ellipsis marker | — | 372 | **6** |
+| the topic envelope, and what it was measured over | — | 147 chars over 24 verdicts | **161 over 123** |
+| H6 rows that re-derive | 7 of 14 | 14 of 14 | **14 of 14** |
+
+The gate's own 14 rows carry 12 entity blocks and the eval pack's 64 items carry 55; arm B now
+carries 43%. **The rest of that gap does not close with money**: a reader verdict resolves entities
+only where the thread HAS them, ten of the first 24 bought resolved none, and recipe and
+marketplace threads name nobody. The projection said so before the buy and the buy agreed.
+
+### The registration was rebuilt twice, and what it COMMITS did not move
+
+`results/prereg_lora_b.json` is not the file that was committed at D2 — it has been regenerated
+after each ruling, because its arms carry the datasets' digests. That is worth checking rather than
+asserting, so: flattening the D2 commit's record (`efffeb6`) against today's, **80 paths moved**,
+all of them downstream of the two rulings — `arms.*` (24), the context census (10), the money
+arithmetic (8), the H6 rows and their `mismatches` list (20), `dropped_for_length` (4), the
+recovery block (6, which also gained the no-mid-arm-checkpoint fact), and the producer's own pins.
+
+What did **not** move, checked block by block:
+
+```
+bars                               identical: True     (the gate, the threshold, the multiplicity)
+go_no_go                           identical: True     (all six kill-clock rungs)
+money.cap_usd_all_in               identical: True     ($6.00)
+population.gold                    identical: True     (the fourteen rows and their record)
+instruments.prompt_sha256          identical: True     (5a4a3cb6…)
+return_to_the_sitting              identical: True
+```
+
+A pre-registration is a commitment about how a result will be judged, and none of that moved. What
+moved is the data the arms are made of, by rulings the operator gave in the open — and no pod has
+been created under any version of it.
+
 ## Deviations from Dv554
+
+Dv566–Dv572 are not missing: they belong to `docs/reports/reader-topup.md`, the paid step branch B
+became. This table runs Dv554–Dv565 and then picks up at Dv573.
 
 | # | finding | tag |
 |---|---|---|
 | **Dv554** | **The registered arm sizes are label counts, and the trainable set is what fits the frozen ceiling.** `config/qlora.yaml` is frozen law and its `max_seq_len` is 1408; 43 of the 650 rendered rows are bounded past it at the worst tokens-per-character probe-b measured (0.291741, its own max over 64 paid rows, not the mean). Arm A is 464 and arm B 607, so steps, seconds and the worst case all move — every one of them cheaper. The rows are dropped BY NAME into the record rather than discovered by a `SystemExit` inside a training loop at $0.80/h. One of the two `молочный_бренд` rows is among them, which is why the class the re-draw was aimed at had one training row. **CLOSED by the operator's branch-C ruling**: cutting the substituted topic to a bought one's envelope put all 650 back under the ceiling and every one of the seven numbers re-derives. | `[cause: contract-gap]` `[[compute-the-ceiling-first]]` |
 | **Dv555** | **The answer has four fields, the labels have one, and the obvious fill puts the bar out of reach.** `parse_pass1` demands `msg_id`, `subject_type`, `subject_id`, `stance`; the team lead labelled `subject_type`. Writing `null` into the other two AND training on it teaches «stance is always null», and three of the fourteen gold rows score `stance` against a non-null value — 21629 scores it ALONE. The reachable maximum would be 11 against a threshold of 12. The contract does not mention the field gap at all; it is closed by masking the unlabelled tail out of the loss, which is why `learn_chars` exists and why the arithmetic is a test. | `[cause: contract-gap]` `[[compute-the-ceiling-first]]` |
-| **Dv556** | **The context a pass-1 request carries is BOUGHT, and 105 of the 120 labelled threads never bought it.** `<topic>` and `<entities>` come from a reader verdict; only 15 labelled threads have one. Arm B carries 39 entity blocks over 607 rows while the gate's own 14 rows carry 12 and the eval pack 55 of 64. The substitute — the store's raw post text as topic — is also what pushes 43 rows past `max_seq_len`, since bought summaries are 26–147 characters and the posts are thousands. Registered as a reachability term with its removal priced (~$1.20, a separate session); NOT silently accepted, and not silently fixed either. | `[cause: contract-gap]` `[[build-the-training-prompt-with-the-inference-call]]` |
+| **Dv556** | **The context a pass-1 request carries is BOUGHT, and 105 of the 120 labelled threads never bought it.** `<topic>` and `<entities>` come from a reader verdict; only 15 labelled threads have one. Arm B carries 39 entity blocks over 607 rows while the gate's own 14 rows carry 12 and the eval pack 55 of 64. The substitute — the store's raw post text as topic — is also what pushes 43 rows past `max_seq_len`, since bought summaries are 26–147 characters and the posts are thousands. Registered as a reachability term with its removal priced (~$1.20, a separate session); NOT silently accepted, and not silently fixed either. **CLOSED as far as money closes it** by the operator's branch-B ruling: 282 of 650 rows carry a block now, and the residual — a verdict resolves entities only where the thread has them — is a property of the population. | `[cause: contract-gap]` `[[build-the-training-prompt-with-the-inference-call]]` |
 | **Dv557** | **«A class-weighted sampling flag» needs a data path the trainer never had.** `train_qlora` is hardwired to phase 4's T1/T2 sources and `prompts.build_messages` refuses a pass-1 task BY NAME (`prompts.py:1419-1420`), so no arrangement of the existing code could have trained on `subject_type` at all. The contract's own sentence — «arm deltas (data path, weights on) live in the prereg record and CLI args only» — is what licenses `--data`; it is read here as naming two flags, not one. | `[cause: contract-gap]` `[[a-consumer-list-is-not-a-meaning-list]]` |
 | **Dv558** | **The two `--adapter` branches are not distinguishable by identity.** `PeftModel.from_pretrained` injects LoRA into the base modules in place, so the wrapped model and the base are the same object graph afterwards and the shipped runner records nothing about weights. A sim that asserted «the loader returned something different» would pass on a wrap that silently did nothing. The branches are separated by an artefact instead: `<out>.adapter.json`, hashed per file, written before the first reply — and `attach` refuses outright if `peft_config` comes back empty, because a run that evaluated the base under an arm's name would publish an ablation with no ablation in it. | `[cause: verify-gap]` `[[gate-verdicts-need-an-artifact]]` |
 | **Dv559** | **H6's first tolerance passed a number that had moved.** `max(1.0, 1%)` is a sane rule for seconds and a blind one for dollars: it marked the worst case $2.4647 as agreeing with the registered $2.63, a 6.3% move, because the absolute floor swallowed it. Tightened to 1% relative, which turns that row red — and the two kill thresholds, which are ceilings and not measurements, are checked for the DIRECTION of their margin instead. Caught by reading the printed table, not by a test; the test came after. | `[cause: verify-gap]` `[[check-granularity-matches-the-claim]]` |
@@ -427,8 +491,10 @@ threads, ≈$1.20, in its own session. **The pod is not created.**
 | **Dv561** | **D3 is not run, and the contract's own H6 clause is why.** «A mismatch is a finding BEFORE the money» — seven of fourteen registered numbers moved, and the context finding lands on 12 of the gate's 14 rows with a removal that costs ~$1.20 in a session this registration cannot contain. Against ONE attempt at a sealed bar, spending it is a ruling and not an execution detail. Everything D3 consumes is committed and green; the split the contract itself offers («you MAY close D0–D2 in one session and run D3–D4 in a fresh one») is where this stops. **After branch C, H6 is green and the remaining reason is the entity block alone** — the ruling on branch B is what the pod waits for. | `[cause: contract-gap]` `[[an-absolute-bar-needs-a-reachability-state]]` |
 | **Dv562** | **A record's prose quoted numbers the record derives, and the ruling made it false.** `reachability.to_pass.reading` in the pre-registration producer spelled out «Arm B carries 45 rows of the first class and ONE of the second — the second brand row … was dropped». Both halves stopped being true the moment branch C rebuilt the datasets, and the block around them is regenerated from `results/pass1_sft.json`, so the record would have shipped a paragraph contradicting the numbers three lines above it. Rewritten as an f-string over the same source, and it says so: «the numbers are read off the dataset record rather than written here — this sentence has already been wrong once». | `[cause: verify-gap]` `[[corrections-break-derivations]]` |
 | **Dv563** | **The contract's arithmetic was right and the executor's substitute was what broke it.** Seven of the fourteen H6 rows were red on the first build, and after a $0 change to how ONE context field is rendered every one of them re-derives — 500 / 650 rows, 64 / 82 steps, 3 907 / 5 006 s, $2.6275 against a registered $2.63. The finding was real and the number it accused was not: H6 says «these two disagree», and reading it as «the contract is wrong» would have been the expensive half of being right. | `[cause: process]` `[[trace-the-producer-not-the-result]]` |
-| **Dv564** | **The fix for a shape difference introduced a smaller one.** Branch C marks a shortened topic with an ellipsis, and a bought topic is never cut — so the marker sits on **372 of the 650 training rows and on 0 of the 64 eval prompts**. Registered rather than rebuilt away: the operator ruled C, an unmarked fragment claims the topic ends there, and after the attempt the marker would be an uncontrolled variable nobody had written down. Both counts are re-derived by a test off the datasets and the eval pack, not quoted from this table. | `[cause: verify-gap]` `[[build-the-training-prompt-with-the-inference-call]]` |
+| **Dv564** | **The fix for a shape difference introduced a smaller one.** Branch C marks a shortened topic with an ellipsis, and a bought topic is never cut — so the marker sits on **372 of the 650 training rows and on 0 of the 64 eval prompts**. Registered rather than rebuilt away: the operator ruled C, an unmarked fragment claims the topic ends there, and after the attempt the marker would be an uncontrolled variable nobody had written down. Both counts are re-derived by a test off the datasets and the eval pack, not quoted from this table. **Branch B all but removed it**: 630 of the 650 topics are bought summaries now, so the marker sits on **6** rows and not 372. | `[cause: verify-gap]` `[[build-the-training-prompt-with-the-inference-call]]` |
 | **Dv565** | **The recovery clause assumed a checkpoint the config cannot write.** `save_every` is 100 and the arms are 64 and 82 steps, so `step % save_every` never fires: the only adapter written is the one after the loop. «ONE pod re-creation after a proven deletion» therefore means «restart the arm from step 0», not «resume it» — a KILL at rung 3 or 4 eighty minutes into arm B loses the arm. `config/qlora.yaml` is frozen law and was NOT edited; the fact is registered inside the clause it changes the meaning of. | `[cause: contract-gap]` `[[a-budget-is-not-an-elapsed]]` |
+| **Dv573** | **The pre-registration D2 committed is not the file on disk, and that is correct.** `results/prereg_lora_b.json` carries the arms' dataset digests, so each of the operator's two rulings regenerated it: 80 paths have moved since `efffeb6`. The check that makes that safe is not a promise, it is a diff — `bars`, `go_no_go`, `money.cap_usd_all_in`, `population.gold`, `instruments.prompt_sha256` and `return_to_the_sitting` are block-for-block identical, so every commitment about how the result will be judged is the one D2 registered. What changed is the data, by ruling, with no pod created under any version. | `[cause: process]` `[[a-provenance-field-can-void-the-gate]]` |
+| **Dv574** | **The branch the report priced worst is the one that paid.** Branch B was published at ≈$1.20 from a mean over the wrong population, re-priced at $1.34 from the thread sizes, and billed $1.2259 including two segments that bought defects rather than verdicts. Its measured benefit — 282 entity blocks against ~279 projected — landed inside 1%. The estimate that was WRONG was the cheap one made in prose; the one made in a committed record with an out-of-sample error bar held. | `[cause: process]` `[[projected-rate-versus-measured-rate]]` |
 
 ## Process signals
 
@@ -458,5 +524,12 @@ threads, ≈$1.20, in its own session. **The pod is not created.**
    substitute for a bought topic was the defect. The table's value was that it made the two
    readings sit beside each other — had it been written as «the registered numbers are stale», the
    $0 fix would have looked like a re-registration instead of a bug.
+
+7. **Three findings, three rulings, and the contract's D3 never moved.** Everything this report
+   describes after D2 — the bounded topic, the reader pass, two rebuilt registrations — was bought
+   by findings made BEFORE the money, under a gate the contract itself wrote («a mismatch is a
+   finding before the money»). The bar, the cap, the kill-clock and the fourteen gold rows are the
+   ones D2 committed, checked block by block. A contract that can absorb three rulings without its
+   commitments moving is what pre-registration is for.
 
 [[compute-the-ceiling-first]]
