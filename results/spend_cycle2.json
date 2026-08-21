@@ -333,6 +333,26 @@
       "billing_since_usd": 6.596898,
       "billing_read": "read",
       "note": "pass1-window r2: anchor at session start, before any pod exists"
+    },
+    {
+      "at": "2026-08-21T19:40:25+00:00",
+      "balance": 15.9031409161,
+      "spent_usd": 6.6066,
+      "remaining_usd": 13.3934,
+      "balance_delta_usd": 6.6066,
+      "billing_since_usd": 6.596898,
+      "billing_read": "read",
+      "note": "pass1-window r2, before the pod"
+    },
+    {
+      "at": "2026-08-21T20:27:11+00:00",
+      "balance": 15.3521521661,
+      "spent_usd": 7.1576,
+      "remaining_usd": 12.8424,
+      "balance_delta_usd": 7.1576,
+      "billing_since_usd": 6.606621,
+      "billing_read": "read",
+      "note": "pod deleted, every one of the 901 answered"
     }
   ]
 }

@@ -1,0 +1,911 @@
+
+=== leg v2 · task pass1_comment_gm4_v2 · 901 units · /workspace/run/pass1_window_r2_v2.jsonl ===
+[     0.1s] instrument OK · parser b70e2114b03a76dc…
+[     0.1s] 901 requests match the registration's per-item shas
+[     0.1s] ceiling 256 output tokens · stop at the brace
+[     0.1s] loading google/gemma-4-31b-it @ 842da3794eaa…
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/1188 [00:00<?, ?it/s]Loading weights:   0%|          | 1/1188 [00:00<04:37,  4.27it/s]Loading weights:   0%|          | 2/1188 [00:04<45:54,  2.32s/it]Loading weights:   0%|          | 5/1188 [00:04<14:16,  1.38it/s]Loading weights:   1%|          | 6/1188 [00:04<12:11,  1.62it/s]Loading weights:   1%|          | 7/1188 [00:04<09:53,  1.99it/s]Loading weights:   1%|          | 12/1188 [00:04<03:43,  5.26it/s]Loading weights:   1%|▏         | 15/1188 [00:05<03:08,  6.22it/s]Loading weights:   2%|▏         | 19/1188 [00:05<02:28,  7.89it/s]Loading weights:   2%|▏         | 21/1188 [00:06<02:58,  6.54it/s]Loading weights:   2%|▏         | 26/1188 [00:06<01:50, 10.53it/s]Loading weights:   2%|▏         | 29/1188 [00:06<01:41, 11.44it/s]Loading weights:   3%|▎         | 33/1188 [00:06<02:02,  9.39it/s]Loading weights:   3%|▎         | 35/1188 [00:07<02:38,  7.25it/s]Loading weights:   3%|▎         | 41/1188 [00:07<01:39, 11.49it/s]Loading weights:   4%|▎         | 43/1188 [00:07<01:34, 12.12it/s]Loading weights:   4%|▍         | 47/1188 [00:08<01:55,  9.86it/s]Loading weights:   4%|▍         | 49/1188 [00:08<02:17,  8.27it/s]Loading weights:   5%|▍         | 54/1188 [00:08<01:31, 12.40it/s]Loading weights:   5%|▍         | 57/1188 [00:09<01:29, 12.66it/s]Loading weights:   5%|▌         | 61/1188 [00:09<01:57,  9.61it/s]Loading weights:   5%|▌         | 63/1188 [00:10<02:38,  7.08it/s]Loading weights:   6%|▌         | 69/1188 [00:10<01:38, 11.38it/s]Loading weights:   6%|▌         | 72/1188 [00:10<01:31, 12.20it/s]Loading weights:   6%|▋         | 75/1188 [00:11<03:23,  5.46it/s]Loading weights:   6%|▋         | 77/1188 [00:13<05:15,  3.52it/s]Loading weights:   7%|▋         | 83/1188 [00:13<03:40,  5.01it/s]Loading weights:   7%|▋         | 85/1188 [00:14<03:52,  4.74it/s]Loading weights:   7%|▋         | 88/1188 [00:15<04:34,  4.01it/s]Loading weights:   7%|▋         | 89/1188 [00:15<04:29,  4.08it/s]Loading weights:   8%|▊         | 90/1188 [00:16<04:42,  3.89it/s]Loading weights:   8%|▊         | 96/1188 [00:16<02:22,  7.66it/s]Loading weights:   8%|▊         | 98/1188 [00:16<02:09,  8.42it/s]Loading weights:   9%|▊         | 102/1188 [00:16<01:53,  9.53it/s]Loading weights:   9%|▉         | 104/1188 [00:17<02:27,  7.34it/s]Loading weights:   9%|▉         | 109/1188 [00:17<01:38, 10.94it/s]Loading weights:   9%|▉         | 112/1188 [00:17<01:26, 12.43it/s]Loading weights:  10%|▉         | 116/1188 [00:17<01:29, 11.91it/s]Loading weights:  10%|▉         | 118/1188 [00:18<02:12,  8.05it/s]Loading weights:  10%|█         | 123/1188 [00:18<01:32, 11.49it/s]Loading weights:  11%|█         | 126/1188 [00:18<01:25, 12.42it/s]Loading weights:  11%|█         | 130/1188 [00:19<01:28, 11.90it/s]Loading weights:  11%|█         | 132/1188 [00:19<02:04,  8.52it/s]Loading weights:  12%|█▏        | 137/1188 [00:19<01:26, 12.12it/s]Loading weights:  12%|█▏        | 140/1188 [00:20<01:19, 13.15it/s]Loading weights:  12%|█▏        | 144/1188 [00:20<01:42, 10.17it/s]Loading weights:  12%|█▏        | 146/1188 [00:21<02:27,  7.06it/s]Loading weights:  13%|█▎        | 152/1188 [00:21<01:33, 11.09it/s]Loading weights:  13%|█▎        | 155/1188 [00:21<01:24, 12.18it/s]Loading weights:  13%|█▎        | 158/1188 [00:22<02:00,  8.56it/s]Loading weights:  13%|█▎        | 160/1188 [00:23<04:07,  4.15it/s]Loading weights:  14%|█▍        | 166/1188 [00:24<03:00,  5.66it/s]Loading weights:  14%|█▍        | 168/1188 [00:24<03:16,  5.20it/s]Loading weights:  14%|█▍        | 171/1188 [00:25<02:50,  5.96it/s]Loading weights:  14%|█▍        | 172/1188 [00:25<02:56,  5.76it/s]Loading weights:  15%|█▍        | 173/1188 [00:25<03:16,  5.17it/s]Loading weights:  15%|█▌        | 181/1188 [00:26<01:34, 10.60it/s]Loading weights:  16%|█▌        | 185/1188 [00:26<01:33, 10.70it/s]Loading weights:  16%|█▌        | 187/1188 [00:26<02:09,  7.72it/s]Loading weights:  16%|█▌        | 193/1188 [00:27<01:24, 11.76it/s]Loading weights:  17%|█▋        | 199/1188 [00:27<01:09, 14.21it/s]Loading weights:  17%|█▋        | 201/1188 [00:27<01:41,  9.68it/s]Loading weights:  17%|█▋        | 206/1188 [00:28<01:16, 12.80it/s]Loading weights:  18%|█▊        | 209/1188 [00:28<01:12, 13.53it/s]Loading weights:  18%|█▊        | 213/1188 [00:28<01:11, 13.66it/s]Loading weights:  18%|█▊        | 215/1188 [00:29<01:38,  9.89it/s]Loading weights:  19%|█▊        | 220/1188 [00:29<01:12, 13.39it/s]Loading weights:  19%|█▉        | 223/1188 [00:29<01:06, 14.57it/s]Loading weights:  19%|█▉        | 227/1188 [00:29<01:17, 12.42it/s]Loading weights:  19%|█▉        | 229/1188 [00:30<01:54,  8.41it/s]Loading weights:  20%|█▉        | 235/1188 [00:30<01:11, 13.24it/s]Loading weights:  20%|██        | 238/1188 [00:30<01:10, 13.49it/s]Loading weights:  20%|██        | 241/1188 [00:31<01:45,  8.94it/s]Loading weights:  20%|██        | 243/1188 [00:32<03:39,  4.31it/s]Loading weights:  21%|██        | 249/1188 [00:33<02:39,  5.90it/s]Loading weights:  21%|██        | 251/1188 [00:33<02:51,  5.45it/s]Loading weights:  21%|██▏       | 254/1188 [00:34<02:18,  6.75it/s]Loading weights:  22%|██▏       | 256/1188 [00:35<03:26,  4.51it/s]Loading weights:  22%|██▏       | 262/1188 [00:35<02:02,  7.56it/s]Loading weights:  22%|██▏       | 264/1188 [00:35<01:52,  8.21it/s]Loading weights:  23%|██▎       | 268/1188 [00:35<01:41,  9.08it/s]Loading weights:  23%|██▎       | 270/1188 [00:36<02:14,  6.83it/s]Loading weights:  23%|██▎       | 276/1188 [00:36<01:25, 10.66it/s]Loading weights:  23%|██▎       | 278/1188 [00:36<01:21, 11.23it/s]Loading weights:  24%|██▎       | 282/1188 [00:37<01:35,  9.45it/s]Loading weights:  24%|██▍       | 284/1188 [00:37<02:05,  7.22it/s]Loading weights:  24%|██▍       | 289/1188 [00:37<01:22, 10.88it/s]Loading weights:  25%|██▍       | 292/1188 [00:38<01:15, 11.80it/s]Loading weights:  25%|██▍       | 296/1188 [00:38<01:18, 11.41it/s]Loading weights:  25%|██▌       | 298/1188 [00:39<01:50,  8.05it/s]Loading weights:  26%|██▌       | 303/1188 [00:39<01:16, 11.56it/s]Loading weights:  26%|██▌       | 306/1188 [00:39<01:11, 12.38it/s]Loading weights:  26%|██▌       | 310/1188 [00:39<01:08, 12.86it/s]Loading weights:  26%|██▋       | 312/1188 [00:40<01:41,  8.59it/s]Loading weights:  27%|██▋       | 318/1188 [00:40<01:03, 13.64it/s]Loading weights:  27%|██▋       | 321/1188 [00:40<00:57, 15.16it/s]Loading weights:  27%|██▋       | 324/1188 [00:41<01:39,  8.66it/s]Loading weights:  27%|██▋       | 326/1188 [00:42<03:23,  4.24it/s]Loading weights:  28%|██▊       | 332/1188 [00:43<02:27,  5.82it/s]Loading weights:  28%|██▊       | 334/1188 [00:43<02:39,  5.35it/s]Loading weights:  28%|██▊       | 337/1188 [00:44<02:18,  6.12it/s]Loading weights:  28%|██▊       | 338/1188 [00:44<02:22,  5.97it/s]Loading weights:  29%|██▊       | 339/1188 [00:44<02:46,  5.09it/s]Loading weights:  29%|██▉       | 347/1188 [00:44<01:22, 10.23it/s]Loading weights:  30%|██▉       | 351/1188 [00:45<01:18, 10.62it/s]Loading weights:  30%|██▉       | 353/1188 [00:45<01:37,  8.53it/s]Loading weights:  30%|███       | 359/1188 [00:45<01:04, 12.78it/s]Loading weights:  31%|███       | 365/1188 [00:46<00:58, 14.04it/s]Loading weights:  31%|███       | 367/1188 [00:46<01:20, 10.26it/s]Loading weights:  31%|███▏      | 372/1188 [00:46<00:58, 13.84it/s]Loading weights:  32%|███▏      | 375/1188 [00:47<01:00, 13.51it/s]Loading weights:  32%|███▏      | 379/1188 [00:47<01:01, 13.25it/s]Loading weights:  32%|███▏      | 381/1188 [00:47<01:23,  9.62it/s]Loading weights:  32%|███▏      | 386/1188 [00:48<01:00, 13.26it/s]Loading weights:  33%|███▎      | 389/1188 [00:48<00:57, 13.87it/s]Loading weights:  33%|███▎      | 393/1188 [00:48<01:08, 11.64it/s]Loading weights:  33%|███▎      | 395/1188 [00:49<01:49,  7.25it/s]Loading weights:  34%|███▎      | 400/1188 [00:49<01:14, 10.52it/s]Loading weights:  34%|███▍      | 402/1188 [00:49<01:14, 10.60it/s]Loading weights:  34%|███▍      | 407/1188 [00:50<01:11, 10.98it/s]Loading weights:  34%|███▍      | 409/1188 [00:50<01:44,  7.47it/s]Loading weights:  35%|███▍      | 415/1188 [00:51<01:14, 10.35it/s]Loading weights:  35%|███▌      | 417/1188 [00:51<01:23,  9.20it/s]Loading weights:  35%|███▌      | 420/1188 [00:52<01:39,  7.75it/s]Loading weights:  35%|███▌      | 421/1188 [00:52<01:56,  6.60it/s]Loading weights:  36%|███▌      | 422/1188 [00:52<02:22,  5.36it/s]Loading weights:  36%|███▌      | 428/1188 [00:52<01:16,  9.99it/s]Loading weights:  36%|███▋      | 431/1188 [00:53<01:05, 11.50it/s]Loading weights:  37%|███▋      | 434/1188 [00:53<01:08, 11.08it/s]Loading weights:  37%|███▋      | 436/1188 [00:54<01:50,  6.83it/s]Loading weights:  37%|███▋      | 442/1188 [00:54<01:08, 10.89it/s]Loading weights:  37%|███▋      | 444/1188 [00:54<01:05, 11.31it/s]Loading weights:  38%|███▊      | 446/1188 [00:54<01:04, 11.42it/s]Loading weights:  38%|███▊      | 448/1188 [00:54<01:18,  9.47it/s]Loading weights:  38%|███▊      | 450/1188 [00:55<02:17,  5.36it/s]Loading weights:  38%|███▊      | 456/1188 [00:55<01:17,  9.39it/s]Loading weights:  39%|███▊      | 458/1188 [00:56<01:14,  9.80it/s]Loading weights:  39%|███▉      | 462/1188 [00:56<01:10, 10.27it/s]Loading weights:  39%|███▉      | 464/1188 [00:57<01:37,  7.41it/s]Loading weights:  39%|███▉      | 469/1188 [00:57<01:02, 11.53it/s]Loading weights:  40%|███▉      | 472/1188 [00:57<01:07, 10.65it/s]Loading weights:  40%|████      | 476/1188 [00:57<01:06, 10.77it/s]Loading weights:  40%|████      | 478/1188 [00:58<01:55,  6.15it/s]Loading weights:  41%|████      | 484/1188 [00:58<01:11,  9.82it/s]Loading weights:  41%|████      | 486/1188 [00:59<01:10,  9.99it/s]Loading weights:  41%|████      | 488/1188 [00:59<01:03, 11.10it/s]Loading weights:  41%|████      | 490/1188 [00:59<01:17,  8.97it/s]Loading weights:  41%|████▏     | 492/1188 [01:00<02:02,  5.67it/s]Loading weights:  42%|████▏     | 498/1188 [01:00<01:14,  9.30it/s]Loading weights:  42%|████▏     | 500/1188 [01:00<01:21,  8.48it/s]Loading weights:  42%|████▏     | 503/1188 [01:01<01:22,  8.32it/s]Loading weights:  43%|████▎     | 505/1188 [01:02<02:05,  5.45it/s]Loading weights:  43%|████▎     | 511/1188 [01:02<01:15,  9.00it/s]Loading weights:  43%|████▎     | 514/1188 [01:02<01:11,  9.41it/s]Loading weights:  44%|████▎     | 517/1188 [01:02<01:10,  9.58it/s]Loading weights:  44%|████▎     | 519/1188 [01:03<01:55,  5.80it/s]Loading weights:  44%|████▍     | 525/1188 [01:03<01:11,  9.33it/s]Loading weights:  44%|████▍     | 527/1188 [01:04<01:09,  9.57it/s]Loading weights:  45%|████▍     | 531/1188 [01:04<01:12,  9.02it/s]Loading weights:  45%|████▍     | 533/1188 [01:05<01:59,  5.46it/s]Loading weights:  45%|████▌     | 539/1188 [01:05<01:15,  8.57it/s]Loading weights:  46%|████▌     | 541/1188 [01:05<01:08,  9.47it/s]Loading weights:  46%|████▌     | 543/1188 [01:06<01:03, 10.10it/s]Loading weights:  46%|████▌     | 545/1188 [01:06<01:19,  8.04it/s]Loading weights:  46%|████▌     | 547/1188 [01:07<01:56,  5.49it/s]Loading weights:  46%|████▋     | 552/1188 [01:07<01:08,  9.30it/s]Loading weights:  47%|████▋     | 555/1188 [01:07<01:05,  9.62it/s]Loading weights:  47%|████▋     | 559/1188 [01:07<00:59, 10.57it/s]Loading weights:  47%|████▋     | 561/1188 [01:08<01:32,  6.77it/s]Loading weights:  48%|████▊     | 567/1188 [01:08<01:00, 10.35it/s]Loading weights:  48%|████▊     | 573/1188 [01:09<00:54, 11.33it/s]Loading weights:  48%|████▊     | 575/1188 [01:10<01:20,  7.60it/s]Loading weights:  49%|████▉     | 581/1188 [01:10<01:01,  9.85it/s]Loading weights:  49%|████▉     | 583/1188 [01:10<01:02,  9.72it/s]Loading weights:  49%|████▉     | 586/1188 [01:10<00:59, 10.13it/s]Loading weights:  49%|████▉     | 588/1188 [01:11<01:33,  6.42it/s]Loading weights:  50%|█████     | 594/1188 [01:11<00:57, 10.37it/s]Loading weights:  51%|█████     | 600/1188 [01:12<00:51, 11.52it/s]Loading weights:  51%|█████     | 602/1188 [01:12<01:15,  7.74it/s]Loading weights:  51%|█████     | 608/1188 [01:13<00:51, 11.26it/s]Loading weights:  51%|█████▏    | 611/1188 [01:13<00:48, 12.02it/s]Loading weights:  52%|█████▏    | 614/1188 [01:13<00:46, 12.31it/s]Loading weights:  52%|█████▏    | 616/1188 [01:14<01:11,  8.00it/s]Loading weights:  52%|█████▏    | 622/1188 [01:14<00:44, 12.76it/s]Loading weights:  53%|█████▎    | 625/1188 [01:14<00:38, 14.52it/s]Loading weights:  53%|█████▎    | 628/1188 [01:14<00:45, 12.44it/s]Loading weights:  53%|█████▎    | 630/1188 [01:15<01:15,  7.38it/s]Loading weights:  54%|█████▎    | 636/1188 [01:15<00:48, 11.49it/s]Loading weights:  54%|█████▍    | 639/1188 [01:15<00:44, 12.29it/s]Loading weights:  54%|█████▍    | 642/1188 [01:16<01:03,  8.58it/s]Loading weights:  54%|█████▍    | 644/1188 [01:16<01:12,  7.54it/s]Loading weights:  55%|█████▍    | 649/1188 [01:17<00:49, 10.92it/s]Loading weights:  55%|█████▍    | 652/1188 [01:17<00:43, 12.43it/s]Loading weights:  55%|█████▌    | 656/1188 [01:17<00:51, 10.31it/s]Loading weights:  55%|█████▌    | 658/1188 [01:18<01:18,  6.79it/s]Loading weights:  56%|█████▌    | 664/1188 [01:18<00:54,  9.61it/s]Loading weights:  56%|█████▌    | 666/1188 [01:19<00:58,  8.90it/s]Loading weights:  56%|█████▋    | 669/1188 [01:19<01:05,  7.87it/s]Loading weights:  56%|█████▋    | 670/1188 [01:19<01:16,  6.74it/s]Loading weights:  56%|█████▋    | 671/1188 [01:20<01:31,  5.65it/s]Loading weights:  57%|█████▋    | 677/1188 [01:20<00:51,  9.84it/s]Loading weights:  57%|█████▋    | 679/1188 [01:20<00:47, 10.71it/s]Loading weights:  57%|█████▋    | 683/1188 [01:21<00:49, 10.14it/s]Loading weights:  58%|█████▊    | 685/1188 [01:21<01:19,  6.35it/s]Loading weights:  58%|█████▊    | 691/1188 [01:21<00:47, 10.43it/s]Loading weights:  58%|█████▊    | 694/1188 [01:22<00:41, 11.78it/s]Loading weights:  59%|█████▊    | 697/1188 [01:22<00:44, 11.08it/s]Loading weights:  59%|█████▉    | 699/1188 [01:23<01:09,  7.05it/s]Loading weights:  59%|█████▉    | 705/1188 [01:23<00:46, 10.33it/s]Loading weights:  60%|█████▉    | 708/1188 [01:23<00:41, 11.59it/s]Loading weights:  60%|█████▉    | 711/1188 [01:23<00:44, 10.77it/s]Loading weights:  60%|██████    | 713/1188 [01:24<01:10,  6.74it/s]Loading weights:  61%|██████    | 719/1188 [01:24<00:47,  9.97it/s]Loading weights:  61%|██████    | 722/1188 [01:25<00:42, 10.88it/s]Loading weights:  61%|██████    | 725/1188 [01:25<00:56,  8.13it/s]Loading weights:  61%|██████    | 727/1188 [01:26<01:18,  5.87it/s]Loading weights:  62%|██████▏   | 733/1188 [01:26<00:49,  9.26it/s]Loading weights:  62%|██████▏   | 735/1188 [01:26<00:51,  8.81it/s]Loading weights:  62%|██████▏   | 739/1188 [01:27<00:48,  9.24it/s]Loading weights:  62%|██████▏   | 741/1188 [01:27<01:05,  6.87it/s]Loading weights:  63%|██████▎   | 747/1188 [01:28<00:44,  9.81it/s]Loading weights:  63%|██████▎   | 749/1188 [01:28<00:42, 10.34it/s]Loading weights:  63%|██████▎   | 752/1188 [01:28<00:44,  9.91it/s]Loading weights:  63%|██████▎   | 754/1188 [01:29<01:06,  6.51it/s]Loading weights:  64%|██████▍   | 760/1188 [01:29<00:41, 10.25it/s]Loading weights:  64%|██████▍   | 762/1188 [01:29<00:40, 10.44it/s]Loading weights:  64%|██████▍   | 766/1188 [01:30<00:44,  9.45it/s]Loading weights:  65%|██████▍   | 768/1188 [01:30<01:04,  6.46it/s]Loading weights:  65%|██████▌   | 773/1188 [01:31<00:43,  9.61it/s]Loading weights:  65%|██████▌   | 776/1188 [01:31<00:39, 10.54it/s]Loading weights:  66%|██████▌   | 780/1188 [01:31<00:38, 10.56it/s]Loading weights:  66%|██████▌   | 782/1188 [01:32<00:59,  6.83it/s]Loading weights:  66%|██████▋   | 788/1188 [01:32<00:38, 10.35it/s]Loading weights:  66%|██████▋   | 790/1188 [01:32<00:37, 10.48it/s]Loading weights:  67%|██████▋   | 794/1188 [01:33<00:37, 10.38it/s]Loading weights:  67%|██████▋   | 796/1188 [01:34<00:59,  6.57it/s]Loading weights:  68%|██████▊   | 802/1188 [01:34<00:35, 10.88it/s]Loading weights:  68%|██████▊   | 805/1188 [01:34<00:33, 11.59it/s]Loading weights:  68%|██████▊   | 808/1188 [01:35<00:56,  6.75it/s]Loading weights:  68%|██████▊   | 810/1188 [01:35<01:09,  5.47it/s]Loading weights:  69%|██████▊   | 816/1188 [01:36<00:42,  8.77it/s]Loading weights:  69%|██████▉   | 818/1188 [01:36<00:39,  9.34it/s]Loading weights:  69%|██████▉   | 822/1188 [01:36<00:37,  9.82it/s]Loading weights:  69%|██████▉   | 824/1188 [01:37<00:57,  6.38it/s]Loading weights:  70%|██████▉   | 830/1188 [01:37<00:39,  8.96it/s]Loading weights:  70%|███████   | 832/1188 [01:38<00:44,  8.04it/s]Loading weights:  70%|███████   | 836/1188 [01:38<00:32, 10.74it/s]Loading weights:  71%|███████▏  | 848/1188 [01:38<00:15, 22.51it/s]Loading weights:  72%|███████▏  | 856/1188 [01:38<00:12, 27.10it/s]Loading weights:  73%|███████▎  | 862/1188 [01:38<00:11, 28.47it/s]Loading weights:  73%|███████▎  | 868/1188 [01:38<00:09, 32.91it/s]Loading weights:  74%|███████▎  | 874/1188 [01:39<00:08, 35.09it/s]Loading weights:  74%|███████▍  | 879/1188 [01:39<00:09, 33.04it/s]Loading weights:  75%|███████▍  | 887/1188 [01:39<00:07, 41.93it/s]Loading weights:  76%|███████▌  | 900/1188 [01:39<00:05, 53.37it/s]Loading weights:  79%|███████▉  | 939/1188 [01:39<00:02, 123.49it/s]Loading weights:  81%|████████  | 959/1188 [01:39<00:01, 139.47it/s]Loading weights:  82%|████████▏ | 979/1188 [01:39<00:01, 153.23it/s]Loading weights:  84%|████████▍ | 997/1188 [01:39<00:01, 159.61it/s]Loading weights:  88%|████████▊ | 1045/1188 [01:39<00:00, 241.50it/s]Loading weights:  90%|█████████ | 1071/1188 [01:40<00:00, 204.19it/s]Loading weights:  92%|█████████▏| 1095/1188 [01:40<00:00, 210.14it/s]Loading weights:  95%|█████████▍| 1123/1188 [01:40<00:00, 215.02it/s]Loading weights:  96%|█████████▋| 1146/1188 [01:40<00:00, 175.65it/s]Loading weights: 100%|█████████▉| 1186/1188 [01:41<00:00, 130.71it/s]Loading weights: 100%|██████████| 1188/1188 [01:41<00:00, 11.76it/s] 
+[   142.9s] READY · boot 142.9s · the kill clock stops at the first reply below
+[   146.0s] reply  1/901 @klopotenkofood:6035#21205                3.2s ·   108 chars · cut    4 · balanced True · finish stop
+[   148.8s] reply  2/901 @klopotenkofood:6035#21206                2.8s ·   109 chars · cut    4 · balanced True · finish stop
+[   151.6s] reply  3/901 @klopotenkofood:6035#21207                2.8s ·   115 chars · cut    1 · balanced True · finish stop
+[   153.9s] reply  4/901 @klopotenkofood:6035#21208                2.3s ·    89 chars · cut    4 · balanced True · finish stop
+[   156.1s] reply  5/901 @klopotenkofood:6035#21209                2.2s ·    89 chars · cut    4 · balanced True · finish stop
+[   158.8s] reply  6/901 @klopotenkofood:6035#21210                2.7s ·   108 chars · cut    4 · balanced True · finish stop
+[   161.5s] reply  7/901 @klopotenkofood:6035#21211                2.6s ·   108 chars · cut    4 · balanced True · finish stop
+[   164.1s] reply  8/901 @klopotenkofood:6035#21221                2.6s ·   108 chars · cut    4 · balanced True · finish stop
+[   166.3s] reply  9/901 @klopotenkofood:6035#21229                2.2s ·    89 chars · cut    4 · balanced True · finish stop
+[   169.3s] reply 10/901 @klopotenkofood:6036#21222                3.0s ·   131 chars · cut    0 · balanced True · finish stop
+[   172.0s] reply 11/901 @klopotenkofood:6036#21269                2.7s ·   105 chars · cut    4 · balanced True · finish stop
+[   174.8s] reply 12/901 @klopotenkofood:6040#21231                2.8s ·   112 chars · cut    0 · balanced True · finish stop
+[   177.1s] reply 13/901 @klopotenkofood:6040#21232                2.3s ·    89 chars · cut    4 · balanced True · finish stop
+[   179.7s] reply 14/901 @klopotenkofood:6040#21233                2.7s ·   109 chars · cut    4 · balanced True · finish stop
+[   182.0s] reply 15/901 @klopotenkofood:6040#21234                2.2s ·    89 chars · cut    4 · balanced True · finish stop
+[   184.7s] reply 16/901 @klopotenkofood:6040#21235                2.8s ·   109 chars · cut    4 · balanced True · finish stop
+[   187.7s] reply 17/901 @klopotenkofood:6040#21236                3.0s ·   121 chars · cut    4 · balanced True · finish stop
+[   190.4s] reply 18/901 @klopotenkofood:6040#21237                2.7s ·   108 chars · cut    4 · balanced True · finish stop
+[   193.3s] reply 19/901 @klopotenkofood:6040#21238                2.8s ·   109 chars · cut    4 · balanced True · finish stop
+[   195.9s] reply 20/901 @klopotenkofood:6040#21239                2.6s ·   108 chars · cut    4 · balanced True · finish stop
+[   198.5s] reply 21/901 @klopotenkofood:6040#21240                2.6s ·   108 chars · cut    4 · balanced True · finish stop
+[   201.1s] reply 22/901 @klopotenkofood:6040#21241                2.6s ·   108 chars · cut    4 · balanced True · finish stop
+[   203.4s] reply 23/901 @klopotenkofood:6040#21242                2.2s ·    89 chars · cut    4 · balanced True · finish stop
+[   206.0s] reply 24/901 @klopotenkofood:6040#21245                2.7s ·   108 chars · cut    4 · balanced True · finish stop
+[   208.6s] reply 25/901 @klopotenkofood:6040#21246                2.6s ·   109 chars · cut    4 · balanced True · finish stop
+[   210.9s] reply 26/901 @klopotenkofood:6040#21247                2.3s ·    89 chars · cut    4 · balanced True · finish stop
+[   213.5s] reply 27/901 @klopotenkofood:6040#21248                2.6s ·   108 chars · cut    4 · balanced True · finish stop
+[   216.2s] reply 28/901 @klopotenkofood:6040#21249                2.6s ·   105 chars · cut    4 · balanced True · finish stop
+[   218.8s] reply 29/901 @klopotenkofood:6040#21250                2.6s ·   108 chars · cut    0 · balanced True · finish stop
+[   221.6s] reply 30/901 @klopotenkofood:6040#21251                2.8s ·   119 chars · cut    0 · balanced True · finish stop
+[   223.8s] reply 31/901 @klopotenkofood:6040#21252                2.2s ·    89 chars · cut    4 · balanced True · finish stop
+[   226.6s] reply 32/901 @klopotenkofood:6040#21253                2.8s ·   116 chars · cut    4 · balanced True · finish stop
+[   229.2s] reply 33/901 @klopotenkofood:6040#21254                2.6s ·   105 chars · cut    4 · balanced True · finish stop
+[   232.0s] reply 34/901 @klopotenkofood:6040#21255                2.7s ·   108 chars · cut    4 · balanced True · finish stop
+[   234.7s] reply 35/901 @klopotenkofood:6040#21256                2.7s ·   109 chars · cut    4 · balanced True · finish stop
+[   236.9s] reply 36/901 @klopotenkofood:6040#21257                2.3s ·    89 chars · cut    4 · balanced True · finish stop
+[   239.5s] reply 37/901 @klopotenkofood:6040#21260                2.6s ·   108 chars · cut    4 · balanced True · finish stop
+[   241.8s] reply 38/901 @klopotenkofood:6040#21261                2.2s ·    89 chars · cut    4 · balanced True · finish stop
+[   244.8s] reply 39/901 @klopotenkofood:6040#21264                3.0s ·   135 chars · cut    4 · balanced True · finish stop
+[   247.5s] reply 40/901 @klopotenkofood:6040#21265                2.8s ·   114 chars · cut    4 · balanced True · finish stop
+[   250.4s] reply 41/901 @klopotenkofood:6040#21266                2.8s ·   115 chars · cut    4 · balanced True · finish stop
+[   253.0s] reply 42/901 @klopotenkofood:6040#21267                2.7s ·   109 chars · cut    0 · balanced True · finish stop
+[   255.7s] reply 43/901 @klopotenkofood:6040#21268                2.7s ·   109 chars · cut    4 · balanced True · finish stop
+[   258.7s] reply 44/901 @klopotenkofood:6040#21270                3.0s ·   125 chars · cut    4 · balanced True · finish stop
+[   261.5s] reply 45/901 @klopotenkofood:6040#21271                2.7s ·   108 chars · cut    4 · balanced True · finish stop
+[   263.7s] reply 46/901 @klopotenkofood:6040#21272                2.2s ·    89 chars · cut    4 · balanced True · finish stop
+[   266.0s] reply 47/901 @klopotenkofood:6040#21273                2.3s ·    89 chars · cut    4 · balanced True · finish stop
+[   268.7s] reply 48/901 @klopotenkofood:6040#21278                2.7s ·   108 chars · cut    4 · balanced True · finish stop
+[   271.6s] reply 49/901 @klopotenkofood:6040#21279                2.9s ·   120 chars · cut    0 · balanced True · finish stop
+[   273.9s] reply 50/901 @klopotenkofood:6040#21280                2.2s ·    89 chars · cut    4 · balanced True · finish stop
+[   276.1s] reply 51/901 @klopotenkofood:6040#21281                2.2s ·    89 chars · cut    4 · balanced True · finish stop
+[   278.7s] reply 52/901 @klopotenkofood:6040#21286                2.7s ·   110 chars · cut    1 · balanced True · finish stop
+[   281.0s] reply 53/901 @klopotenkofood:6040#21287                2.3s ·    89 chars · cut    4 · balanced True · finish stop
+[   283.7s] reply 54/901 @klopotenkofood:6040#21289                2.7s ·   109 chars · cut    4 · balanced True · finish stop
+[   286.4s] reply 55/901 @klopotenkofood:6060#21343                2.6s ·   109 chars · cut    4 · balanced True · finish stop
+[   289.0s] reply 56/901 @klopotenkofood:6060#21344                2.6s ·   110 chars · cut    0 · balanced True · finish stop
+[   291.3s] reply 57/901 @klopotenkofood:6060#21345                2.3s ·    89 chars · cut    4 · balanced True · finish stop
+[   293.5s] reply 58/901 @klopotenkofood:6060#21346                2.3s ·    89 chars · cut    4 · balanced True · finish stop
+[   295.8s] reply 59/901 @klopotenkofood:6060#21347                2.3s ·    89 chars · cut    4 · balanced True · finish stop
+[   298.4s] reply 60/901 @klopotenkofood:6060#21349                2.6s ·   109 chars · cut    4 · balanced True · finish stop
+[   301.5s] reply 61/901 @klopotenkofood:6060#21350                3.0s ·   123 chars · cut    4 · balanced True · finish stop
+[   304.1s] reply 62/901 @klopotenkofood:6060#21351                2.7s ·   110 chars · cut    0 · balanced True · finish stop
+[   306.7s] reply 63/901 @klopotenkofood:6060#21353                2.6s ·   105 chars · cut    4 · balanced True · finish stop
+[   310.2s] reply 64/901 @klopotenkofood:6060#21366                3.4s ·   109 chars · cut    4 · balanced True · finish stop
+[   313.0s] reply 65/901 @kopiyochka1:21672#391300                 2.8s ·   114 chars · cut    4 · balanced True · finish stop
+[   315.8s] reply 66/901 @kopiyochka1:21720#391531                 2.8s ·   113 chars · cut    4 · balanced True · finish stop
+[   318.7s] reply 67/901 @kopiyochka1:21720#391532                 2.8s ·   113 chars · cut    4 · balanced True · finish stop
+[   321.5s] reply 68/901 @kopiyochka1:21720#391539                 2.8s ·   113 chars · cut    4 · balanced True · finish stop
+[   324.4s] reply 69/901 @kopiyochka1:21720#391542                 2.9s ·   113 chars · cut    4 · balanced True · finish stop
+[   327.3s] reply 70/901 @kopiyochka1:21720#391544                 3.0s ·   113 chars · cut    4 · balanced True · finish stop
+[   330.2s] reply 71/901 @kopiyochka1:21720#391772                 2.8s ·   113 chars · cut    4 · balanced True · finish stop
+[   332.4s] reply 72/901 @kopiyochka1:21720#391773                 2.2s ·    87 chars · cut    1 · balanced True · finish stop
+[   335.2s] reply 73/901 @kopiyochka1:21720#391774                 2.8s ·   113 chars · cut    4 · balanced True · finish stop
+[   338.3s] reply 74/901 @mandziak:3666#47833                      3.1s ·   116 chars · cut    4 · balanced True · finish stop
+[   340.6s] reply 75/901 @mandziak:3666#47838                      2.3s ·    89 chars · cut    4 · balanced True · finish stop
+[   342.9s] reply 76/901 @mandziak:3666#47839                      2.2s ·    89 chars · cut    4 · balanced True · finish stop
+[   345.3s] reply 77/901 @mandziak:3667#47830                      2.5s ·    89 chars · cut    4 · balanced True · finish stop
+[   348.0s] reply 78/901 @mandziak:3667#47832                      2.6s ·   113 chars · cut    1 · balanced True · finish stop
+[   350.6s] reply 79/901 @mandziak:3667#47859                      2.6s ·   106 chars · cut    1 · balanced True · finish stop
+[   353.2s] reply 80/901 @mandziak:3667#47860                      2.6s ·   109 chars · cut    4 · balanced True · finish stop
+[   355.5s] reply 81/901 @mandziak:3667#48201                      2.3s ·    89 chars · cut    4 · balanced True · finish stop
+[   357.8s] reply 82/901 @mandziak:3676#47896                      2.3s ·    89 chars · cut    4 · balanced True · finish stop
+[   360.1s] reply 83/901 @mandziak:3676#47897                      2.3s ·    89 chars · cut    4 · balanced True · finish stop
+[   362.9s] reply 84/901 @mandziak:3676#47898                      2.9s ·   104 chars · cut    4 · balanced True · finish stop
+[   365.8s] reply 85/901 @mandziak:3676#47899                      2.9s ·   109 chars · cut    4 · balanced True · finish stop
+[   368.6s] reply 86/901 @mandziak:3676#47900                      2.8s ·   108 chars · cut    4 · balanced True · finish stop
+[   371.3s] reply 87/901 @mandziak:3676#47902                      2.7s ·   108 chars · cut    4 · balanced True · finish stop
+[   374.0s] reply 88/901 @mandziak:3676#47904                      2.7s ·   109 chars · cut    4 · balanced True · finish stop
+[   376.7s] reply 89/901 @mandziak:3676#47925                      2.7s ·   104 chars · cut    4 · balanced True · finish stop
+[   379.9s] reply 90/901 @mandziak:3676#47926                      3.2s ·   109 chars · cut    4 · balanced True · finish stop
+[   382.8s] reply 91/901 @mandziak:3679#47932                      3.0s ·   108 chars · cut    4 · balanced True · finish stop
+[   386.2s] reply 92/901 @mandziak:3679#47933                      3.3s ·   111 chars · cut    4 · balanced True · finish stop
+[   388.5s] reply 93/901 @mandziak:3679#47934                      2.3s ·    89 chars · cut    4 · balanced True · finish stop
+[   391.1s] reply 94/901 @mandziak:3679#47935                      2.7s ·   108 chars · cut    4 · balanced True · finish stop
+[   393.4s] reply 95/901 @mandziak:3679#47936                      2.3s ·    89 chars · cut    4 · balanced True · finish stop
+[   395.7s] reply 96/901 @mandziak:3679#47937                      2.3s ·    89 chars · cut    4 · balanced True · finish stop
+[   398.3s] reply 97/901 @mandziak:3679#47938                      2.6s ·   109 chars · cut    4 · balanced True · finish stop
+[   400.6s] reply 98/901 @mandziak:3679#47939                      2.3s ·    89 chars · cut    4 · balanced True · finish stop
+[   403.7s] reply 99/901 @mandziak:3679#47940                      3.0s ·   111 chars · cut    4 · balanced True · finish stop
+[   406.4s] reply 100/901 @mandziak:3679#47941                      2.7s ·   109 chars · cut    4 · balanced True · finish stop
+[   408.8s] reply 101/901 @mandziak:3679#47942                      2.4s ·    89 chars · cut    4 · balanced True · finish stop
+[   411.6s] reply 102/901 @mandziak:3679#47943                      2.8s ·   111 chars · cut    4 · balanced True · finish stop
+[   414.2s] reply 103/901 @mandziak:3679#47947                      2.6s ·   108 chars · cut    4 · balanced True · finish stop
+[   416.9s] reply 104/901 @mandziak:3679#47948                      2.6s ·   108 chars · cut    4 · balanced True · finish stop
+[   419.2s] reply 105/901 @mandziak:3679#47950                      2.3s ·    89 chars · cut    4 · balanced True · finish stop
+[   422.0s] reply 106/901 @mandziak:3679#47952                      2.8s ·   108 chars · cut    0 · balanced True · finish stop
+[   424.3s] reply 107/901 @mandziak:3679#47957                      2.4s ·    89 chars · cut    4 · balanced True · finish stop
+[   427.0s] reply 108/901 @mandziak:3679#47964                      2.7s ·   109 chars · cut    4 · balanced True · finish stop
+[   429.7s] reply 109/901 @mandziak:3679#47965                      2.7s ·   110 chars · cut    4 · balanced True · finish stop
+[   432.4s] reply 110/901 @mandziak:3679#47976                      2.7s ·   111 chars · cut    4 · balanced True · finish stop
+[   434.7s] reply 111/901 @mandziak:3679#47984                      2.2s ·    89 chars · cut    4 · balanced True · finish stop
+[   437.9s] reply 112/901 @mandziak:3679#47986                      3.2s ·   111 chars · cut    4 · balanced True · finish stop
+[   440.7s] reply 113/901 @mandziak:3679#47987                      2.8s ·   109 chars · cut    4 · balanced True · finish stop
+[   443.4s] reply 114/901 @mandziak:3679#47988                      2.7s ·   110 chars · cut    4 · balanced True · finish stop
+[   445.7s] reply 115/901 @mandziak:3679#47990                      2.3s ·    89 chars · cut    4 · balanced True · finish stop
+[   448.0s] reply 116/901 @mandziak:3679#47995                      2.3s ·    89 chars · cut    4 · balanced True · finish stop
+[   450.2s] reply 117/901 @mandziak:3679#47996                      2.3s ·    89 chars · cut    4 · balanced True · finish stop
+[   452.9s] reply 118/901 @mandziak:3679#47998                      2.6s ·   108 chars · cut    4 · balanced True · finish stop
+[   455.1s] reply 119/901 @mandziak:3679#48000                      2.2s ·    89 chars · cut    4 · balanced True · finish stop
+[   457.7s] reply 120/901 @mandziak:3679#48001                      2.6s ·   110 chars · cut    4 · balanced True · finish stop
+[   460.1s] reply 121/901 @mandziak:3679#48002                      2.3s ·    89 chars · cut    4 · balanced True · finish stop
+[   462.7s] reply 122/901 @mandziak:3684#48004                      2.6s ·   108 chars · cut    1 · balanced True · finish stop
+[   465.3s] reply 123/901 @mandziak:3684#48009                      2.6s ·   104 chars · cut    4 · balanced True · finish stop
+[   467.9s] reply 124/901 @mandziak:3684#48011                      2.6s ·   104 chars · cut    4 · balanced True · finish stop
+[   470.8s] reply 125/901 @mandziak:3684#48016                      2.8s ·   114 chars · cut    1 · balanced True · finish stop
+[   473.6s] reply 126/901 @mandziak:3684#48018                      2.8s ·   114 chars · cut    1 · balanced True · finish stop
+[   476.2s] reply 127/901 @mandziak:3684#48020                      2.6s ·   104 chars · cut    4 · balanced True · finish stop
+[   478.8s] reply 128/901 @mandziak:3684#48036                      2.6s ·   104 chars · cut    4 · balanced True · finish stop
+[   481.6s] reply 129/901 @mandziak:3684#48040                      2.8s ·   114 chars · cut    1 · balanced True · finish stop
+[   484.5s] reply 130/901 @mandziak:3684#48041                      2.8s ·   114 chars · cut    1 · balanced True · finish stop
+[   487.1s] reply 131/901 @mandziak:3684#48047                      2.6s ·   104 chars · cut    4 · balanced True · finish stop
+[   489.9s] reply 132/901 @mandziak:3684#48064                      2.8s ·   114 chars · cut    1 · balanced True · finish stop
+[   492.2s] reply 133/901 @mandziak:3684#48099                      2.3s ·    89 chars · cut    4 · balanced True · finish stop
+[   495.3s] reply 134/901 @mandziak:3685#48045                      3.1s ·   127 chars · cut    0 · balanced True · finish stop
+[   498.1s] reply 135/901 @mandziak:3685#48048                      2.8s ·   105 chars · cut    4 · balanced True · finish stop
+[   501.1s] reply 136/901 @mandziak:3689#48054                      3.1s ·   125 chars · cut    4 · balanced True · finish stop
+[   503.5s] reply 137/901 @mandziak:3689#48055                      2.3s ·    89 chars · cut    4 · balanced True · finish stop
+[   506.1s] reply 138/901 @mandziak:3689#48056                      2.6s ·   112 chars · cut    4 · balanced True · finish stop
+[   508.4s] reply 139/901 @mandziak:3689#48057                      2.3s ·    89 chars · cut    4 · balanced True · finish stop
+[   510.6s] reply 140/901 @mandziak:3689#48067                      2.3s ·    89 chars · cut    4 · balanced True · finish stop
+[   512.9s] reply 141/901 @mandziak:3689#48081                      2.2s ·    89 chars · cut    4 · balanced True · finish stop
+[   515.8s] reply 142/901 @mandziak:3689#48109                      3.0s ·   122 chars · cut    0 · balanced True · finish stop
+[   518.1s] reply 143/901 @mandziak:3689#48268                      2.3s ·    89 chars · cut    4 · balanced True · finish stop
+[   520.5s] reply 144/901 @mandziak:3694#48097                      2.3s ·    89 chars · cut    4 · balanced True · finish stop
+[   523.1s] reply 145/901 @mandziak:3694#48098                      2.7s ·   104 chars · cut    4 · balanced True · finish stop
+[   526.4s] reply 146/901 @mandziak:3694#48105                      3.3s ·    99 chars · cut    4 · balanced True · finish stop
+[   528.7s] reply 147/901 @mandziak:3694#48107                      2.3s ·    89 chars · cut    4 · balanced True · finish stop
+[   530.9s] reply 148/901 @mandziak:3694#48108                      2.3s ·    89 chars · cut    4 · balanced True · finish stop
+[   533.2s] reply 149/901 @mandziak:3700#48160                      2.2s ·    89 chars · cut    4 · balanced True · finish stop
+[   535.4s] reply 150/901 @mandziak:3700#48165                      2.3s ·    89 chars · cut    4 · balanced True · finish stop
+[   538.6s] reply 151/901 @mandziak:3700#48187                      3.2s ·   130 chars · cut    4 · balanced True · finish stop
+[   541.6s] reply 152/901 @mandziak:3700#48336                      3.0s ·   109 chars · cut    4 · balanced True · finish stop
+[   544.3s] reply 153/901 @mandziak:3700#48816                      2.7s ·   108 chars · cut    1 · balanced True · finish stop
+[   546.7s] reply 154/901 @mandziak:3701#48164                      2.3s ·    89 chars · cut    4 · balanced True · finish stop
+[   549.6s] reply 155/901 @mandziak:3701#48302                      2.8s ·   113 chars · cut    4 · balanced True · finish stop
+[   552.4s] reply 156/901 @mandziak:3701#48323                      2.8s ·   110 chars · cut    4 · balanced True · finish stop
+[   555.3s] reply 157/901 @mandziak:3702#48171                      2.8s ·   113 chars · cut    4 · balanced True · finish stop
+[   558.1s] reply 158/901 @mandziak:3702#48182                      2.8s ·   110 chars · cut    4 · balanced True · finish stop
+[   561.1s] reply 159/901 @mandziak:3702#48199                      3.0s ·    99 chars · cut    4 · balanced True · finish stop
+[   563.8s] reply 160/901 @mandziak:3702#48207                      2.7s ·   104 chars · cut    4 · balanced True · finish stop
+[   566.5s] reply 161/901 @mandziak:3702#48209                      2.7s ·   108 chars · cut    4 · balanced True · finish stop
+[   569.5s] reply 162/901 @mandziak:3702#48216                      3.0s ·   116 chars · cut    1 · balanced True · finish stop
+[   572.8s] reply 163/901 @mandziak:3702#48346                      3.2s ·   104 chars · cut    4 · balanced True · finish stop
+[   575.0s] reply 164/901 @mandziak:3702#49053                      2.3s ·    89 chars · cut    4 · balanced True · finish stop
+[   577.7s] reply 165/901 @mandziak:3703#48174                      2.6s ·   109 chars · cut    4 · balanced True · finish stop
+[   580.0s] reply 166/901 @mandziak:3703#48176                      2.4s ·    89 chars · cut    4 · balanced True · finish stop
+[   582.9s] reply 167/901 @mandziak:3703#48177                      2.8s ·   114 chars · cut    4 · balanced True · finish stop
+[   585.7s] reply 168/901 @mandziak:3703#48178                      2.8s ·   120 chars · cut    0 · balanced True · finish stop
+[   588.4s] reply 169/901 @mandziak:3703#48181                      2.6s ·   108 chars · cut    4 · balanced True · finish stop
+[   591.3s] reply 170/901 @mandziak:3703#48231                      3.0s ·   109 chars · cut    4 · balanced True · finish stop
+[   594.3s] reply 171/901 @mandziak:3703#48276                      3.0s ·   109 chars · cut    4 · balanced True · finish stop
+[   597.5s] reply 172/901 @mandziak:3703#48283                      3.2s ·   108 chars · cut    4 · balanced True · finish stop
+[   600.4s] reply 173/901 @mandziak:3703#49098                      2.9s ·   108 chars · cut    4 · balanced True · finish stop
+[   602.7s] reply 174/901 @mandziak:3707#48214                      2.2s ·    89 chars · cut    4 · balanced True · finish stop
+[   605.3s] reply 175/901 @mandziak:3707#48215                      2.6s ·   102 chars · cut    0 · balanced True · finish stop
+[   607.9s] reply 176/901 @mandziak:3707#48217                      2.7s ·   108 chars · cut    4 · balanced True · finish stop
+[   610.6s] reply 177/901 @mandziak:3707#48218                      2.6s ·   109 chars · cut    4 · balanced True · finish stop
+[   613.4s] reply 178/901 @mandziak:3707#48219                      2.8s ·   119 chars · cut    4 · balanced True · finish stop
+[   616.0s] reply 179/901 @mandziak:3707#48220                      2.6s ·   102 chars · cut    0 · balanced True · finish stop
+[   619.4s] reply 180/901 @mandziak:3707#48230                      3.4s ·   118 chars · cut    1 · balanced True · finish stop
+[   621.7s] reply 181/901 @mandziak:3707#48239                      2.3s ·    89 chars · cut    4 · balanced True · finish stop
+[   624.6s] reply 182/901 @mandziak:3707#48242                      2.9s ·   112 chars · cut    1 · balanced True · finish stop
+[   627.4s] reply 183/901 @mandziak:3707#48243                      2.8s ·   117 chars · cut    4 · balanced True · finish stop
+[   629.7s] reply 184/901 @mandziak:3707#48348                      2.3s ·    89 chars · cut    4 · balanced True · finish stop
+[   631.9s] reply 185/901 @mandziak:3708#48226                      2.2s ·    89 chars · cut    4 · balanced True · finish stop
+[   634.3s] reply 186/901 @mandziak:3708#48227                      2.4s ·    89 chars · cut    4 · balanced True · finish stop
+[   636.9s] reply 187/901 @mandziak:3708#48232                      2.6s ·   110 chars · cut    0 · balanced True · finish stop
+[   639.2s] reply 188/901 @mandziak:3708#48233                      2.4s ·    89 chars · cut    4 · balanced True · finish stop
+[   642.3s] reply 189/901 @mandziak:3708#48234                      3.0s ·   109 chars · cut    4 · balanced True · finish stop
+[   645.0s] reply 190/901 @mandziak:3708#48235                      2.7s ·   104 chars · cut    4 · balanced True · finish stop
+[   647.4s] reply 191/901 @mandziak:3708#48236                      2.4s ·    89 chars · cut    4 · balanced True · finish stop
+[   649.7s] reply 192/901 @mandziak:3708#48238                      2.3s ·    89 chars · cut    4 · balanced True · finish stop
+[   652.5s] reply 193/901 @mandziak:3708#48240                      2.8s ·   111 chars · cut    4 · balanced True · finish stop
+[   655.4s] reply 194/901 @mandziak:3708#48241                      2.9s ·   111 chars · cut    4 · balanced True · finish stop
+[   658.1s] reply 195/901 @mandziak:3708#48244                      2.6s ·   108 chars · cut    4 · balanced True · finish stop
+[   660.4s] reply 196/901 @mandziak:3708#48245                      2.3s ·    89 chars · cut    4 · balanced True · finish stop
+[   663.1s] reply 197/901 @mandziak:3708#48273                      2.7s ·   111 chars · cut    1 · balanced True · finish stop
+[   665.3s] reply 198/901 @mandziak:3708#48275                      2.2s ·    89 chars · cut    4 · balanced True · finish stop
+[   668.0s] reply 199/901 @mandziak:3708#48278                      2.7s ·   108 chars · cut    1 · balanced True · finish stop
+[   670.8s] reply 200/901 @mandziak:3708#48279                      2.8s ·   107 chars · cut    0 · balanced True · finish stop
+[   673.4s] reply 201/901 @mandziak:3708#48280                      2.6s ·   108 chars · cut    1 · balanced True · finish stop
+[   675.6s] reply 202/901 @mandziak:3708#48288                      2.2s ·    89 chars · cut    4 · balanced True · finish stop
+[   678.2s] reply 203/901 @mandziak:3708#48313                      2.6s ·   108 chars · cut    4 · balanced True · finish stop
+[   681.3s] reply 204/901 @mandziak:3708#48314                      3.0s ·    99 chars · cut    4 · balanced True · finish stop
+[   683.5s] reply 205/901 @mandziak:3718#48390                      2.2s ·    89 chars · cut    4 · balanced True · finish stop
+[   686.1s] reply 206/901 @mandziak:3718#48391                      2.6s ·   108 chars · cut    4 · balanced True · finish stop
+[   689.0s] reply 207/901 @mandziak:3718#48392                      2.9s ·   109 chars · cut    4 · balanced True · finish stop
+[   691.6s] reply 208/901 @mandziak:3718#48394                      2.6s ·   108 chars · cut    4 · balanced True · finish stop
+[   694.3s] reply 209/901 @mandziak:3718#48395                      2.6s ·   108 chars · cut    4 · balanced True · finish stop
+[   696.5s] reply 210/901 @mandziak:3718#48396                      2.2s ·    89 chars · cut    4 · balanced True · finish stop
+[   698.7s] reply 211/901 @mandziak:3718#48397                      2.2s ·    89 chars · cut    4 · balanced True · finish stop
+[   701.4s] reply 212/901 @mandziak:3718#48398                      2.7s ·   109 chars · cut    4 · balanced True · finish stop
+[   703.6s] reply 213/901 @mandziak:3718#48399                      2.2s ·    89 chars · cut    4 · balanced True · finish stop
+[   706.4s] reply 214/901 @mandziak:3718#48400                      2.8s ·   109 chars · cut    4 · balanced True · finish stop
+[   709.1s] reply 215/901 @mandziak:3718#48401                      2.7s ·   108 chars · cut    4 · balanced True · finish stop
+[   711.3s] reply 216/901 @mandziak:3718#48405                      2.2s ·    89 chars · cut    4 · balanced True · finish stop
+[   714.0s] reply 217/901 @mandziak:3718#48406                      2.6s ·   108 chars · cut    1 · balanced True · finish stop
+[   717.0s] reply 218/901 @mandziak:3718#48407                      3.0s ·   132 chars · cut    4 · balanced True · finish stop
+[   719.7s] reply 219/901 @mandziak:3718#48408                      2.7s ·   108 chars · cut    1 · balanced True · finish stop
+[   722.4s] reply 220/901 @mandziak:3718#48415                      2.7s ·   109 chars · cut    4 · balanced True · finish stop
+[   725.3s] reply 221/901 @mandziak:3718#48424                      2.9s ·   108 chars · cut    4 · balanced True · finish stop
+[   728.1s] reply 222/901 @mandziak:3718#48450                      2.7s ·   110 chars · cut    1 · balanced True · finish stop
+[   730.8s] reply 223/901 @mandziak:3718#48694                      2.7s ·   108 chars · cut    4 · balanced True · finish stop
+[   733.0s] reply 224/901 @mandziak:3718#49067                      2.3s ·    89 chars · cut    4 · balanced True · finish stop
+[   735.8s] reply 225/901 @mandziak:3721#48423                      2.7s ·    89 chars · cut    4 · balanced True · finish stop
+[   738.0s] reply 226/901 @mandziak:3721#48430                      2.3s ·    89 chars · cut    4 · balanced True · finish stop
+[   740.8s] reply 227/901 @mandziak:3721#48445                      2.7s ·   110 chars · cut    0 · balanced True · finish stop
+[   743.0s] reply 228/901 @mandziak:3721#49075                      2.3s ·    89 chars · cut    4 · balanced True · finish stop
+[   745.9s] reply 229/901 @mandziak:3736#48527                      2.8s ·   111 chars · cut    4 · balanced True · finish stop
+[   748.5s] reply 230/901 @mandziak:3736#48528                      2.6s ·   104 chars · cut    4 · balanced True · finish stop
+[   751.3s] reply 231/901 @mandziak:3736#48529                      2.8s ·   114 chars · cut    1 · balanced True · finish stop
+[   753.6s] reply 232/901 @mandziak:3736#48530                      2.3s ·    89 chars · cut    4 · balanced True · finish stop
+[   755.9s] reply 233/901 @mandziak:3736#48535                      2.3s ·    89 chars · cut    4 · balanced True · finish stop
+[   758.2s] reply 234/901 @mandziak:3736#48596                      2.3s ·    89 chars · cut    4 · balanced True · finish stop
+[   760.4s] reply 235/901 @mandziak:3736#49159                      2.3s ·    89 chars · cut    4 · balanced True · finish stop
+[   762.7s] reply 236/901 @mandziak:3746#49218                      2.3s ·    89 chars · cut    4 · balanced True · finish stop
+[   765.8s] reply 237/901 @mandziak:3753#48853                      3.1s ·    99 chars · cut    4 · balanced True · finish stop
+[   768.7s] reply 238/901 @mandziak:3753#48854                      2.9s ·   108 chars · cut    0 · balanced True · finish stop
+[   771.0s] reply 239/901 @mandziak:3753#48855                      2.3s ·    89 chars · cut    4 · balanced True · finish stop
+[   773.3s] reply 240/901 @mandziak:3753#48860                      2.3s ·    89 chars · cut    4 · balanced True · finish stop
+[   775.6s] reply 241/901 @mandziak:3753#48864                      2.3s ·    89 chars · cut    4 · balanced True · finish stop
+[   777.8s] reply 242/901 @mandziak:3753#48867                      2.3s ·    89 chars · cut    4 · balanced True · finish stop
+[   780.2s] reply 243/901 @mandziak:3753#48868                      2.3s ·    89 chars · cut    4 · balanced True · finish stop
+[   782.4s] reply 244/901 @mandziak:3753#48870                      2.2s ·    89 chars · cut    4 · balanced True · finish stop
+[   785.0s] reply 245/901 @mandziak:3753#48873                      2.6s ·   110 chars · cut    0 · balanced True · finish stop
+[   787.7s] reply 246/901 @mandziak:3753#48881                      2.6s ·   113 chars · cut    1 · balanced True · finish stop
+[   789.9s] reply 247/901 @mandziak:3753#48882                      2.3s ·    89 chars · cut    4 · balanced True · finish stop
+[   792.3s] reply 248/901 @mandziak:3753#48944                      2.4s ·    89 chars · cut    4 · balanced True · finish stop
+[   794.5s] reply 249/901 @mandziak:3753#49220                      2.2s ·    89 chars · cut    4 · balanced True · finish stop
+[   797.3s] reply 250/901 @mandziak:3765#48995                      2.8s ·   111 chars · cut    0 · balanced True · finish stop
+[   800.0s] reply 251/901 @mandziak:3765#48996                      2.6s ·   109 chars · cut    4 · balanced True · finish stop
+[   802.8s] reply 252/901 @mandziak:3765#48997                      2.8s ·   112 chars · cut    4 · balanced True · finish stop
+[   805.6s] reply 253/901 @mandziak:3765#49017                      2.8s ·   110 chars · cut    0 · balanced True · finish stop
+[   808.4s] reply 254/901 @mandziak:3765#49051                      2.8s ·   123 chars · cut    1 · balanced True · finish stop
+[   810.7s] reply 255/901 @mandziak:3768#49012                      2.3s ·    89 chars · cut    4 · balanced True · finish stop
+[   813.1s] reply 256/901 @mandziak:3768#49013                      2.4s ·    89 chars · cut    4 · balanced True · finish stop
+[   815.3s] reply 257/901 @mandziak:3768#49014                      2.2s ·    89 chars · cut    4 · balanced True · finish stop
+[   817.6s] reply 258/901 @mandziak:3768#49015                      2.3s ·    89 chars · cut    4 · balanced True · finish stop
+[   819.8s] reply 259/901 @mandziak:3768#49018                      2.3s ·    89 chars · cut    4 · balanced True · finish stop
+[   822.4s] reply 260/901 @mandziak:3768#49023                      2.6s ·    89 chars · cut    4 · balanced True · finish stop
+[   824.7s] reply 261/901 @mandziak:3768#49225                      2.3s ·    89 chars · cut    4 · balanced True · finish stop
+[   827.4s] reply 262/901 @mandziak:3775#49072                      2.7s ·   109 chars · cut    4 · balanced True · finish stop
+[   830.1s] reply 263/901 @mandziak:3775#49094                      2.7s ·   108 chars · cut    4 · balanced True · finish stop
+[   832.4s] reply 264/901 @mandziak:3775#49104                      2.3s ·    89 chars · cut    4 · balanced True · finish stop
+[   835.0s] reply 265/901 @matusi_ukr:22058#576267                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[   838.2s] reply 266/901 @matusi_ukr:22058#576269                  3.2s ·   138 chars · cut    4 · balanced True · finish stop
+[   841.0s] reply 267/901 @matusi_ukr:22058#576270                  2.8s ·   102 chars · cut    1 · balanced True · finish stop
+[   843.7s] reply 268/901 @matusi_ukr:22058#576272                  2.6s ·   102 chars · cut    1 · balanced True · finish stop
+[   846.8s] reply 269/901 @matusi_ukr:22058#576273                  3.1s ·   105 chars · cut    0 · balanced True · finish stop
+[   849.8s] reply 270/901 @matusi_ukr:22058#576302                  3.1s ·   110 chars · cut    4 · balanced True · finish stop
+[   852.8s] reply 271/901 @matusi_ukr:22058#576306                  3.0s ·   116 chars · cut    4 · balanced True · finish stop
+[   855.7s] reply 272/901 @matusi_ukr:22058#576311                  2.8s ·   107 chars · cut    4 · balanced True · finish stop
+[   858.4s] reply 273/901 @matusi_ukr:22058#576317                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[   861.0s] reply 274/901 @matusi_ukr:22058#576322                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[   863.9s] reply 275/901 @matusi_ukr:22058#576326                  2.9s ·   102 chars · cut    1 · balanced True · finish stop
+[   866.6s] reply 276/901 @matusi_ukr:22058#576334                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[   869.5s] reply 277/901 @matusi_ukr:22058#576335                  2.9s ·   108 chars · cut    4 · balanced True · finish stop
+[   872.6s] reply 278/901 @matusi_ukr:22058#576336                  3.1s ·   121 chars · cut    4 · balanced True · finish stop
+[   875.3s] reply 279/901 @matusi_ukr:22058#576337                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[   878.3s] reply 280/901 @matusi_ukr:22058#576343                  3.0s ·   111 chars · cut    4 · balanced True · finish stop
+[   881.0s] reply 281/901 @matusi_ukr:22058#576345                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[   884.1s] reply 282/901 @matusi_ukr:22058#576351                  3.1s ·   121 chars · cut    4 · balanced True · finish stop
+[   886.8s] reply 283/901 @matusi_ukr:22058#576352                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[   889.1s] reply 284/901 @matusi_ukr:22058#576358                  2.3s ·    87 chars · cut    1 · balanced True · finish stop
+[   892.5s] reply 285/901 @matusi_ukr:22058#576359                  3.4s ·   109 chars · cut    4 · balanced True · finish stop
+[   895.7s] reply 286/901 @matusi_ukr:22058#576366                  3.2s ·   100 chars · cut    4 · balanced True · finish stop
+[   898.5s] reply 287/901 @matusi_ukr:22058#576371                  2.8s ·   102 chars · cut    1 · balanced True · finish stop
+[   901.7s] reply 288/901 @matusi_ukr:22058#576375                  3.2s ·   109 chars · cut    4 · balanced True · finish stop
+[   904.5s] reply 289/901 @matusi_ukr:22058#576376                  2.8s ·    87 chars · cut    1 · balanced True · finish stop
+[   907.2s] reply 290/901 @matusi_ukr:22058#576378                  2.6s ·   102 chars · cut    1 · balanced True · finish stop
+[   910.4s] reply 291/901 @matusi_ukr:22058#576388                  3.2s ·   113 chars · cut    4 · balanced True · finish stop
+[   913.0s] reply 292/901 @matusi_ukr:22058#576397                  2.6s ·   102 chars · cut    1 · balanced True · finish stop
+[   915.7s] reply 293/901 @matusi_ukr:22058#576404                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[   918.4s] reply 294/901 @matusi_ukr:22058#576407                  2.7s ·    87 chars · cut    1 · balanced True · finish stop
+[   921.1s] reply 295/901 @matusi_ukr:22058#576414                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[   923.9s] reply 296/901 @matusi_ukr:22058#576419                  2.9s ·   108 chars · cut    4 · balanced True · finish stop
+[   926.6s] reply 297/901 @matusi_ukr:22058#576426                  2.6s ·   102 chars · cut    1 · balanced True · finish stop
+[   929.5s] reply 298/901 @matusi_ukr:22058#576427                  2.9s ·   110 chars · cut    4 · balanced True · finish stop
+[   932.4s] reply 299/901 @matusi_ukr:22058#576428                  2.9s ·   108 chars · cut    4 · balanced True · finish stop
+[   935.2s] reply 300/901 @matusi_ukr:22058#576430                  2.8s ·   114 chars · cut    1 · balanced True · finish stop
+[   937.5s] reply 301/901 @matusi_ukr:22058#576433                  2.3s ·    87 chars · cut    1 · balanced True · finish stop
+[   940.2s] reply 302/901 @matusi_ukr:22058#576435                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[   942.8s] reply 303/901 @matusi_ukr:22058#576436                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[   945.5s] reply 304/901 @matusi_ukr:22058#576440                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[   948.8s] reply 305/901 @matusi_ukr:22058#576445                  3.3s ·   131 chars · cut    4 · balanced True · finish stop
+[   951.6s] reply 306/901 @matusi_ukr:22058#576452                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[   954.3s] reply 307/901 @matusi_ukr:22058#576460                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[   957.3s] reply 308/901 @matusi_ukr:22058#576461                  3.0s ·   115 chars · cut    1 · balanced True · finish stop
+[   960.0s] reply 309/901 @matusi_ukr:22058#576464                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[   962.7s] reply 310/901 @matusi_ukr:22058#576469                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[   965.3s] reply 311/901 @matusi_ukr:22058#576471                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[   968.0s] reply 312/901 @matusi_ukr:22058#576472                  2.6s ·   102 chars · cut    1 · balanced True · finish stop
+[   970.6s] reply 313/901 @matusi_ukr:22058#576473                  2.6s ·   102 chars · cut    1 · balanced True · finish stop
+[   973.3s] reply 314/901 @matusi_ukr:22058#576474                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[   976.0s] reply 315/901 @matusi_ukr:22058#576475                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[   978.6s] reply 316/901 @matusi_ukr:22058#576477                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[   981.3s] reply 317/901 @matusi_ukr:22058#576478                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[   984.0s] reply 318/901 @matusi_ukr:22058#576479                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[   986.6s] reply 319/901 @matusi_ukr:22058#576480                  2.6s ·   102 chars · cut    1 · balanced True · finish stop
+[   989.7s] reply 320/901 @matusi_ukr:22058#576482                  3.0s ·   109 chars · cut    4 · balanced True · finish stop
+[   992.3s] reply 321/901 @matusi_ukr:22058#576484                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[   995.2s] reply 322/901 @matusi_ukr:22058#576485                  2.9s ·   108 chars · cut    4 · balanced True · finish stop
+[   997.8s] reply 323/901 @matusi_ukr:22058#576486                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[  1000.6s] reply 324/901 @matusi_ukr:22058#576494                  2.8s ·   102 chars · cut    1 · balanced True · finish stop
+[  1003.3s] reply 325/901 @matusi_ukr:22058#576496                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[  1006.5s] reply 326/901 @matusi_ukr:22058#576497                  3.2s ·   108 chars · cut    4 · balanced True · finish stop
+[  1009.1s] reply 327/901 @matusi_ukr:22058#576500                  2.6s ·   102 chars · cut    1 · balanced True · finish stop
+[  1011.8s] reply 328/901 @matusi_ukr:22058#576503                  2.6s ·   102 chars · cut    1 · balanced True · finish stop
+[  1014.5s] reply 329/901 @matusi_ukr:22058#576504                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[  1017.2s] reply 330/901 @matusi_ukr:22058#576510                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[  1019.8s] reply 331/901 @matusi_ukr:22058#576514                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[  1022.6s] reply 332/901 @matusi_ukr:22058#576515                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[  1025.2s] reply 333/901 @matusi_ukr:22058#576516                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[  1027.9s] reply 334/901 @matusi_ukr:22058#576519                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[  1030.2s] reply 335/901 @matusi_ukr:22058#576529                  2.3s ·    87 chars · cut    1 · balanced True · finish stop
+[  1033.1s] reply 336/901 @matusi_ukr:22058#576531                  2.9s ·   116 chars · cut    0 · balanced True · finish stop
+[  1035.4s] reply 337/901 @matusi_ukr:22058#576538                  2.3s ·    87 chars · cut    1 · balanced True · finish stop
+[  1038.1s] reply 338/901 @matusi_ukr:22058#576539                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[  1040.7s] reply 339/901 @matusi_ukr:22058#576544                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[  1043.4s] reply 340/901 @matusi_ukr:22058#576545                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[  1046.3s] reply 341/901 @matusi_ukr:22058#576547                  2.9s ·   107 chars · cut    4 · balanced True · finish stop
+[  1049.2s] reply 342/901 @matusi_ukr:22058#576548                  2.9s ·   113 chars · cut    4 · balanced True · finish stop
+[  1051.9s] reply 343/901 @matusi_ukr:22058#576549                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[  1054.6s] reply 344/901 @matusi_ukr:22058#576550                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[  1057.5s] reply 345/901 @matusi_ukr:22058#576553                  2.9s ·   103 chars · cut    0 · balanced True · finish stop
+[  1060.4s] reply 346/901 @matusi_ukr:22058#576557                  2.9s ·   110 chars · cut    1 · balanced True · finish stop
+[  1063.6s] reply 347/901 @matusi_ukr:22058#576558                  3.2s ·   129 chars · cut    0 · balanced True · finish stop
+[  1066.1s] reply 348/901 @matusi_ukr:22058#576565                  2.4s ·    87 chars · cut    1 · balanced True · finish stop
+[  1068.7s] reply 349/901 @matusi_ukr:22058#576567                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[  1071.5s] reply 350/901 @matusi_ukr:22058#576570                  2.8s ·   102 chars · cut    1 · balanced True · finish stop
+[  1074.6s] reply 351/901 @matusi_ukr:22058#576574                  3.0s ·   122 chars · cut    4 · balanced True · finish stop
+[  1077.2s] reply 352/901 @matusi_ukr:22058#576579                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[  1080.0s] reply 353/901 @matusi_ukr:22058#576582                  2.8s ·   102 chars · cut    1 · balanced True · finish stop
+[  1083.0s] reply 354/901 @matusi_ukr:22058#576585                  2.9s ·   108 chars · cut    4 · balanced True · finish stop
+[  1085.8s] reply 355/901 @matusi_ukr:22058#576587                  2.8s ·   102 chars · cut    1 · balanced True · finish stop
+[  1088.6s] reply 356/901 @matusi_ukr:22058#576594                  2.8s ·   104 chars · cut    0 · balanced True · finish stop
+[  1091.3s] reply 357/901 @matusi_ukr:22058#576598                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[  1094.1s] reply 358/901 @matusi_ukr:22058#576602                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[  1097.1s] reply 359/901 @matusi_ukr:22058#576603                  3.0s ·   121 chars · cut    4 · balanced True · finish stop
+[  1099.8s] reply 360/901 @matusi_ukr:22058#576607                  2.6s ·   102 chars · cut    1 · balanced True · finish stop
+[  1102.7s] reply 361/901 @matusi_ukr:22058#576610                  2.9s ·   107 chars · cut    4 · balanced True · finish stop
+[  1105.3s] reply 362/901 @matusi_ukr:22058#576612                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[  1108.0s] reply 363/901 @matusi_ukr:22058#576615                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[  1110.8s] reply 364/901 @matusi_ukr:22058#576619                  2.7s ·   103 chars · cut    0 · balanced True · finish stop
+[  1113.6s] reply 365/901 @matusi_ukr:22058#576622                  2.9s ·   111 chars · cut    0 · balanced True · finish stop
+[  1116.9s] reply 366/901 @matusi_ukr:22058#576630                  3.3s ·   112 chars · cut    4 · balanced True · finish stop
+[  1119.9s] reply 367/901 @matusi_ukr:22058#576654                  2.9s ·   102 chars · cut    1 · balanced True · finish stop
+[  1122.7s] reply 368/901 @matusi_ukr:22058#576658                  2.8s ·   118 chars · cut    4 · balanced True · finish stop
+[  1125.4s] reply 369/901 @matusi_ukr:22058#576661                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[  1128.3s] reply 370/901 @matusi_ukr:22058#576672                  2.9s ·   108 chars · cut    4 · balanced True · finish stop
+[  1130.9s] reply 371/901 @matusi_ukr:22058#576686                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[  1134.0s] reply 372/901 @matusi_ukr:22058#576691                  3.0s ·   123 chars · cut    4 · balanced True · finish stop
+[  1136.8s] reply 373/901 @matusi_ukr:22058#576694                  2.8s ·   109 chars · cut    1 · balanced True · finish stop
+[  1139.7s] reply 374/901 @matusi_ukr:22058#576698                  2.9s ·   111 chars · cut    4 · balanced True · finish stop
+[  1142.1s] reply 375/901 @matusi_ukr:22058#576703                  2.4s ·    87 chars · cut    1 · balanced True · finish stop
+[  1144.7s] reply 376/901 @matusi_ukr:22058#576707                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[  1147.7s] reply 377/901 @matusi_ukr:22058#576713                  3.0s ·   111 chars · cut    4 · balanced True · finish stop
+[  1151.0s] reply 378/901 @matusi_ukr:22058#576717                  3.2s ·   129 chars · cut    0 · balanced True · finish stop
+[  1153.2s] reply 379/901 @matusi_ukr:22058#576723                  2.3s ·    91 chars · cut    0 · balanced True · finish stop
+[  1156.1s] reply 380/901 @matusi_ukr:22058#576726                  2.8s ·   102 chars · cut    1 · balanced True · finish stop
+[  1158.9s] reply 381/901 @matusi_ukr:22058#576728                  2.8s ·   102 chars · cut    1 · balanced True · finish stop
+[  1161.8s] reply 382/901 @matusi_ukr:22058#576729                  2.9s ·   114 chars · cut    4 · balanced True · finish stop
+[  1165.0s] reply 383/901 @matusi_ukr:22058#576797                  3.2s ·   100 chars · cut    4 · balanced True · finish stop
+[  1167.9s] reply 384/901 @matusi_ukr:22058#576800                  3.0s ·   102 chars · cut    1 · balanced True · finish stop
+[  1170.6s] reply 385/901 @matusi_ukr:22058#576854                  2.6s ·   102 chars · cut    1 · balanced True · finish stop
+[  1173.3s] reply 386/901 @matusi_ukr:22058#576949                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[  1176.8s] reply 387/901 @matusi_ukr:22058#577182                  3.5s ·   108 chars · cut    4 · balanced True · finish stop
+[  1179.9s] reply 388/901 @matusi_ukr:22058#577184                  3.1s ·   111 chars · cut    0 · balanced True · finish stop
+[  1182.5s] reply 389/901 @matusi_ukr:22058#577196                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[  1184.8s] reply 390/901 @matusi_ukr:22092#576876                  2.2s ·    87 chars · cut    1 · balanced True · finish stop
+[  1187.5s] reply 391/901 @matusi_ukr:22092#576877                  2.8s ·   110 chars · cut    0 · balanced True · finish stop
+[  1190.3s] reply 392/901 @matusi_ukr:22092#576878                  2.8s ·   112 chars · cut    4 · balanced True · finish stop
+[  1192.7s] reply 393/901 @matusi_ukr:22092#576879                  2.4s ·    87 chars · cut    1 · balanced True · finish stop
+[  1195.0s] reply 394/901 @matusi_ukr:22092#576882                  2.3s ·    87 chars · cut    1 · balanced True · finish stop
+[  1197.8s] reply 395/901 @matusi_ukr:22092#576884                  2.9s ·   117 chars · cut    0 · balanced True · finish stop
+[  1200.6s] reply 396/901 @matusi_ukr:22092#576885                  2.7s ·   110 chars · cut    4 · balanced True · finish stop
+[  1202.9s] reply 397/901 @matusi_ukr:22092#576886                  2.4s ·    87 chars · cut    1 · balanced True · finish stop
+[  1205.4s] reply 398/901 @matusi_ukr:22092#576887                  2.4s ·    87 chars · cut    1 · balanced True · finish stop
+[  1208.2s] reply 399/901 @matusi_ukr:22092#576890                  2.8s ·   117 chars · cut    0 · balanced True · finish stop
+[  1211.0s] reply 400/901 @matusi_ukr:22092#576891                  2.8s ·    87 chars · cut    1 · balanced True · finish stop
+[  1213.5s] reply 401/901 @matusi_ukr:22092#576892                  2.5s ·    87 chars · cut    1 · balanced True · finish stop
+[  1215.9s] reply 402/901 @matusi_ukr:22092#576893                  2.4s ·    87 chars · cut    1 · balanced True · finish stop
+[  1218.2s] reply 403/901 @matusi_ukr:22092#576897                  2.3s ·    87 chars · cut    1 · balanced True · finish stop
+[  1220.6s] reply 404/901 @matusi_ukr:22092#576899                  2.4s ·    87 chars · cut    1 · balanced True · finish stop
+[  1223.1s] reply 405/901 @matusi_ukr:22092#576901                  2.5s ·    87 chars · cut    1 · balanced True · finish stop
+[  1225.5s] reply 406/901 @matusi_ukr:22092#576902                  2.4s ·    87 chars · cut    1 · balanced True · finish stop
+[  1228.3s] reply 407/901 @matusi_ukr:22092#576903                  2.8s ·   115 chars · cut    4 · balanced True · finish stop
+[  1230.6s] reply 408/901 @matusi_ukr:22092#576904                  2.3s ·    87 chars · cut    1 · balanced True · finish stop
+[  1232.9s] reply 409/901 @matusi_ukr:22092#576913                  2.3s ·    87 chars · cut    1 · balanced True · finish stop
+[  1235.8s] reply 410/901 @matusi_ukr:22092#576914                  2.9s ·   108 chars · cut    4 · balanced True · finish stop
+[  1238.1s] reply 411/901 @matusi_ukr:22092#576915                  2.3s ·    87 chars · cut    1 · balanced True · finish stop
+[  1240.4s] reply 412/901 @matusi_ukr:22092#576917                  2.3s ·    87 chars · cut    1 · balanced True · finish stop
+[  1242.9s] reply 413/901 @matusi_ukr:22092#576918                  2.5s ·    87 chars · cut    1 · balanced True · finish stop
+[  1245.3s] reply 414/901 @matusi_ukr:22092#576919                  2.4s ·    87 chars · cut    1 · balanced True · finish stop
+[  1247.7s] reply 415/901 @matusi_ukr:22092#576920                  2.4s ·    87 chars · cut    1 · balanced True · finish stop
+[  1249.9s] reply 416/901 @matusi_ukr:22092#576927                  2.2s ·    87 chars · cut    1 · balanced True · finish stop
+[  1252.2s] reply 417/901 @matusi_ukr:22092#576928                  2.2s ·    87 chars · cut    1 · balanced True · finish stop
+[  1254.7s] reply 418/901 @matusi_ukr:22092#576930                  2.6s ·    87 chars · cut    1 · balanced True · finish stop
+[  1257.0s] reply 419/901 @matusi_ukr:22092#576932                  2.3s ·    87 chars · cut    1 · balanced True · finish stop
+[  1259.3s] reply 420/901 @matusi_ukr:22092#576942                  2.3s ·    87 chars · cut    1 · balanced True · finish stop
+[  1261.8s] reply 421/901 @matusi_ukr:22092#576943                  2.4s ·    87 chars · cut    1 · balanced True · finish stop
+[  1264.1s] reply 422/901 @matusi_ukr:22092#576968                  2.3s ·    87 chars · cut    1 · balanced True · finish stop
+[  1266.5s] reply 423/901 @matusi_ukr:22092#576969                  2.4s ·    87 chars · cut    1 · balanced True · finish stop
+[  1269.0s] reply 424/901 @matusi_ukr:22092#576970                  2.5s ·    87 chars · cut    1 · balanced True · finish stop
+[  1271.8s] reply 425/901 @matusi_ukr:22111#577082                  2.8s ·   104 chars · cut    0 · balanced True · finish stop
+[  1275.2s] reply 426/901 @matusi_ukr:22111#577083                  3.4s ·   119 chars · cut    4 · balanced True · finish stop
+[  1278.4s] reply 427/901 @matusi_ukr:22111#577084                  3.2s ·   125 chars · cut    4 · balanced True · finish stop
+[  1281.4s] reply 428/901 @matusi_ukr:22111#577085                  3.0s ·   112 chars · cut    1 · balanced True · finish stop
+[  1284.4s] reply 429/901 @matusi_ukr:22111#577086                  3.1s ·   112 chars · cut    4 · balanced True · finish stop
+[  1287.7s] reply 430/901 @matusi_ukr:22111#577088                  3.3s ·   117 chars · cut    4 · balanced True · finish stop
+[  1290.5s] reply 431/901 @matusi_ukr:22111#577089                  2.7s ·   103 chars · cut    1 · balanced True · finish stop
+[  1293.4s] reply 432/901 @matusi_ukr:22111#577092                  3.0s ·    87 chars · cut    1 · balanced True · finish stop
+[  1296.5s] reply 433/901 @matusi_ukr:22111#577159                  3.0s ·   111 chars · cut    1 · balanced True · finish stop
+[  1299.2s] reply 434/901 @matusi_ukr:22125#577220                  2.7s ·   110 chars · cut    4 · balanced True · finish stop
+[  1301.5s] reply 435/901 @matusi_ukr:22125#577233                  2.3s ·    87 chars · cut    1 · balanced True · finish stop
+[  1304.2s] reply 436/901 @matusi_ukr:22131#577262                  2.7s ·    87 chars · cut    1 · balanced True · finish stop
+[  1306.7s] reply 437/901 @matusi_ukr:22131#577263                  2.5s ·    87 chars · cut    1 · balanced True · finish stop
+[  1309.6s] reply 438/901 @matusi_ukr:22131#577264                  2.9s ·   114 chars · cut    1 · balanced True · finish stop
+[  1311.9s] reply 439/901 @matusi_ukr:22131#577265                  2.3s ·    87 chars · cut    1 · balanced True · finish stop
+[  1314.8s] reply 440/901 @matusi_ukr:22131#577266                  2.9s ·    87 chars · cut    1 · balanced True · finish stop
+[  1317.5s] reply 441/901 @matusi_ukr:22131#577267                  2.8s ·    87 chars · cut    1 · balanced True · finish stop
+[  1320.3s] reply 442/901 @matusi_ukr:22131#577274                  2.8s ·   109 chars · cut    4 · balanced True · finish stop
+[  1322.9s] reply 443/901 @matusi_ukr:22131#577282                  2.5s ·    87 chars · cut    1 · balanced True · finish stop
+[  1325.4s] reply 444/901 @matusi_ukr:22131#577283                  2.5s ·    87 chars · cut    1 · balanced True · finish stop
+[  1328.2s] reply 445/901 @matusi_ukr:22131#577489                  2.8s ·    87 chars · cut    1 · balanced True · finish stop
+[  1331.0s] reply 446/901 @matusi_ukr:22131#577623                  2.8s ·    87 chars · cut    1 · balanced True · finish stop
+[  1334.1s] reply 447/901 @matusi_ukr:22131#578253                  3.1s ·   111 chars · cut    0 · balanced True · finish stop
+[  1337.0s] reply 448/901 @matusi_ukr:22133#577285                  2.9s ·   103 chars · cut    0 · balanced True · finish stop
+[  1339.6s] reply 449/901 @matusi_ukr:22133#577289                  2.6s ·    87 chars · cut    1 · balanced True · finish stop
+[  1342.3s] reply 450/901 @matusi_ukr:22133#577295                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[  1345.0s] reply 451/901 @matusi_ukr:22133#577300                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[  1348.0s] reply 452/901 @matusi_ukr:22133#577305                  3.0s ·   120 chars · cut    4 · balanced True · finish stop
+[  1350.6s] reply 453/901 @matusi_ukr:22133#577311                  2.6s ·   102 chars · cut    1 · balanced True · finish stop
+[  1353.7s] reply 454/901 @matusi_ukr:22133#577312                  3.1s ·   126 chars · cut    1 · balanced True · finish stop
+[  1356.8s] reply 455/901 @matusi_ukr:22133#577313                  3.1s ·   121 chars · cut    4 · balanced True · finish stop
+[  1359.6s] reply 456/901 @matusi_ukr:22133#577314                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[  1361.9s] reply 457/901 @matusi_ukr:22133#577317                  2.3s ·    87 chars · cut    1 · balanced True · finish stop
+[  1364.2s] reply 458/901 @matusi_ukr:22133#577323                  2.3s ·    87 chars · cut    1 · balanced True · finish stop
+[  1367.1s] reply 459/901 @matusi_ukr:22133#577329                  2.9s ·   108 chars · cut    4 · balanced True · finish stop
+[  1370.3s] reply 460/901 @matusi_ukr:22133#577333                  3.2s ·   129 chars · cut    0 · balanced True · finish stop
+[  1373.3s] reply 461/901 @matusi_ukr:22133#577339                  3.0s ·   108 chars · cut    4 · balanced True · finish stop
+[  1375.6s] reply 462/901 @matusi_ukr:22133#577343                  2.3s ·    87 chars · cut    1 · balanced True · finish stop
+[  1378.5s] reply 463/901 @matusi_ukr:22133#577344                  2.9s ·   110 chars · cut    4 · balanced True · finish stop
+[  1381.4s] reply 464/901 @matusi_ukr:22133#577346                  2.9s ·   102 chars · cut    1 · balanced True · finish stop
+[  1384.0s] reply 465/901 @matusi_ukr:22133#577350                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[  1386.7s] reply 466/901 @matusi_ukr:22133#577354                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[  1389.4s] reply 467/901 @matusi_ukr:22133#577355                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[  1392.0s] reply 468/901 @matusi_ukr:22133#577356                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[  1394.7s] reply 469/901 @matusi_ukr:22133#577358                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[  1397.5s] reply 470/901 @matusi_ukr:22133#577359                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[  1400.4s] reply 471/901 @matusi_ukr:22133#577373                  2.9s ·   109 chars · cut    4 · balanced True · finish stop
+[  1403.4s] reply 472/901 @matusi_ukr:22133#577378                  3.0s ·   113 chars · cut    4 · balanced True · finish stop
+[  1406.2s] reply 473/901 @matusi_ukr:22133#577389                  2.9s ·   102 chars · cut    1 · balanced True · finish stop
+[  1409.1s] reply 474/901 @matusi_ukr:22133#577399                  2.9s ·   109 chars · cut    4 · balanced True · finish stop
+[  1412.0s] reply 475/901 @matusi_ukr:22133#577404                  2.9s ·   110 chars · cut    4 · balanced True · finish stop
+[  1414.7s] reply 476/901 @matusi_ukr:22133#577408                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[  1417.5s] reply 477/901 @matusi_ukr:22133#577415                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[  1420.1s] reply 478/901 @matusi_ukr:22133#577420                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[  1422.9s] reply 479/901 @matusi_ukr:22133#577426                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[  1425.6s] reply 480/901 @matusi_ukr:22133#577432                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[  1428.3s] reply 481/901 @matusi_ukr:22133#577437                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[  1431.1s] reply 482/901 @matusi_ukr:22133#577451                  2.8s ·   102 chars · cut    1 · balanced True · finish stop
+[  1434.0s] reply 483/901 @matusi_ukr:22133#577461                  2.9s ·   113 chars · cut    4 · balanced True · finish stop
+[  1436.7s] reply 484/901 @matusi_ukr:22133#577466                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[  1439.5s] reply 485/901 @matusi_ukr:22133#577474                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[  1442.7s] reply 486/901 @matusi_ukr:22133#577475                  3.3s ·   114 chars · cut    1 · balanced True · finish stop
+[  1445.7s] reply 487/901 @matusi_ukr:22133#577476                  2.9s ·   109 chars · cut    4 · balanced True · finish stop
+[  1448.4s] reply 488/901 @matusi_ukr:22133#577481                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[  1451.3s] reply 489/901 @matusi_ukr:22133#577483                  2.9s ·   107 chars · cut    4 · balanced True · finish stop
+[  1454.4s] reply 490/901 @matusi_ukr:22133#577490                  3.1s ·   124 chars · cut    4 · balanced True · finish stop
+[  1457.3s] reply 491/901 @matusi_ukr:22133#577493                  2.9s ·   102 chars · cut    1 · balanced True · finish stop
+[  1460.4s] reply 492/901 @matusi_ukr:22133#577494                  3.1s ·   111 chars · cut    4 · balanced True · finish stop
+[  1463.5s] reply 493/901 @matusi_ukr:22133#577498                  3.1s ·   110 chars · cut    4 · balanced True · finish stop
+[  1466.1s] reply 494/901 @matusi_ukr:22133#577501                  2.6s ·    87 chars · cut    1 · balanced True · finish stop
+[  1469.2s] reply 495/901 @matusi_ukr:22133#577506                  3.1s ·   118 chars · cut    0 · balanced True · finish stop
+[  1471.9s] reply 496/901 @matusi_ukr:22133#577508                  2.6s ·   102 chars · cut    1 · balanced True · finish stop
+[  1475.1s] reply 497/901 @matusi_ukr:22133#577513                  3.2s ·   113 chars · cut    4 · balanced True · finish stop
+[  1477.7s] reply 498/901 @matusi_ukr:22133#577517                  2.6s ·   102 chars · cut    1 · balanced True · finish stop
+[  1480.6s] reply 499/901 @matusi_ukr:22133#577525                  2.9s ·   110 chars · cut    0 · balanced True · finish stop
+[  1483.9s] reply 500/901 @matusi_ukr:22133#577527                  3.3s ·   135 chars · cut    4 · balanced True · finish stop
+[  1486.8s] reply 501/901 @matusi_ukr:22133#577530                  2.9s ·   111 chars · cut    4 · balanced True · finish stop
+[  1489.5s] reply 502/901 @matusi_ukr:22133#577532                  2.7s ·   103 chars · cut    0 · balanced True · finish stop
+[  1492.3s] reply 503/901 @matusi_ukr:22133#577534                  2.9s ·   110 chars · cut    4 · balanced True · finish stop
+[  1495.3s] reply 504/901 @matusi_ukr:22133#577538                  2.9s ·   109 chars · cut    4 · balanced True · finish stop
+[  1498.3s] reply 505/901 @matusi_ukr:22133#577547                  3.1s ·   121 chars · cut    4 · balanced True · finish stop
+[  1501.1s] reply 506/901 @matusi_ukr:22133#577554                  2.7s ·   100 chars · cut    4 · balanced True · finish stop
+[  1503.4s] reply 507/901 @matusi_ukr:22133#577559                  2.3s ·    87 chars · cut    1 · balanced True · finish stop
+[  1506.1s] reply 508/901 @matusi_ukr:22133#577563                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[  1509.0s] reply 509/901 @matusi_ukr:22133#577568                  2.9s ·   117 chars · cut    0 · balanced True · finish stop
+[  1512.0s] reply 510/901 @matusi_ukr:22133#577570                  3.0s ·   106 chars · cut    4 · balanced True · finish stop
+[  1514.7s] reply 511/901 @matusi_ukr:22133#577576                  2.7s ·   100 chars · cut    4 · balanced True · finish stop
+[  1517.4s] reply 512/901 @matusi_ukr:22133#577581                  2.7s ·   100 chars · cut    4 · balanced True · finish stop
+[  1520.2s] reply 513/901 @matusi_ukr:22133#577586                  2.8s ·   102 chars · cut    1 · balanced True · finish stop
+[  1523.0s] reply 514/901 @matusi_ukr:22133#577589                  2.7s ·   100 chars · cut    4 · balanced True · finish stop
+[  1525.7s] reply 515/901 @matusi_ukr:22133#577592                  2.7s ·   100 chars · cut    4 · balanced True · finish stop
+[  1528.6s] reply 516/901 @matusi_ukr:22133#577595                  2.9s ·   102 chars · cut    1 · balanced True · finish stop
+[  1530.9s] reply 517/901 @matusi_ukr:22133#577604                  2.3s ·    87 chars · cut    1 · balanced True · finish stop
+[  1534.2s] reply 518/901 @matusi_ukr:22133#577605                  3.2s ·   108 chars · cut    4 · balanced True · finish stop
+[  1536.9s] reply 519/901 @matusi_ukr:22133#577608                  2.7s ·   100 chars · cut    4 · balanced True · finish stop
+[  1540.3s] reply 520/901 @matusi_ukr:22133#577616                  3.4s ·   133 chars · cut    4 · balanced True · finish stop
+[  1544.0s] reply 521/901 @matusi_ukr:22133#577621                  3.6s ·   112 chars · cut    4 · balanced True · finish stop
+[  1547.0s] reply 522/901 @matusi_ukr:22133#577624                  3.0s ·   115 chars · cut    4 · balanced True · finish stop
+[  1549.3s] reply 523/901 @matusi_ukr:22133#577630                  2.3s ·    87 chars · cut    1 · balanced True · finish stop
+[  1552.2s] reply 524/901 @matusi_ukr:22133#577635                  2.9s ·   107 chars · cut    0 · balanced True · finish stop
+[  1555.0s] reply 525/901 @matusi_ukr:22133#577638                  2.7s ·   103 chars · cut    1 · balanced True · finish stop
+[  1557.9s] reply 526/901 @matusi_ukr:22133#577639                  2.9s ·   109 chars · cut    1 · balanced True · finish stop
+[  1560.9s] reply 527/901 @matusi_ukr:22133#577646                  3.0s ·   119 chars · cut    4 · balanced True · finish stop
+[  1563.6s] reply 528/901 @matusi_ukr:22133#577647                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[  1566.5s] reply 529/901 @matusi_ukr:22133#577656                  2.9s ·   108 chars · cut    1 · balanced True · finish stop
+[  1569.3s] reply 530/901 @matusi_ukr:22133#577663                  2.8s ·   105 chars · cut    0 · balanced True · finish stop
+[  1572.0s] reply 531/901 @matusi_ukr:22133#577673                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[  1574.7s] reply 532/901 @matusi_ukr:22133#577677                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[  1577.6s] reply 533/901 @matusi_ukr:22133#577683                  2.8s ·   108 chars · cut    4 · balanced True · finish stop
+[  1580.4s] reply 534/901 @matusi_ukr:22133#577686                  2.8s ·   102 chars · cut    1 · balanced True · finish stop
+[  1583.1s] reply 535/901 @matusi_ukr:22133#577693                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[  1585.8s] reply 536/901 @matusi_ukr:22133#577694                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[  1588.7s] reply 537/901 @matusi_ukr:22133#577696                  2.8s ·   106 chars · cut    4 · balanced True · finish stop
+[  1591.4s] reply 538/901 @matusi_ukr:22133#577703                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[  1594.1s] reply 539/901 @matusi_ukr:22133#577713                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[  1596.9s] reply 540/901 @matusi_ukr:22133#577714                  2.8s ·   102 chars · cut    1 · balanced True · finish stop
+[  1599.9s] reply 541/901 @matusi_ukr:22133#577718                  3.0s ·   112 chars · cut    4 · balanced True · finish stop
+[  1602.6s] reply 542/901 @matusi_ukr:22133#577719                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[  1605.2s] reply 543/901 @matusi_ukr:22133#577720                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[  1607.9s] reply 544/901 @matusi_ukr:22133#577721                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[  1610.5s] reply 545/901 @matusi_ukr:22133#577735                  2.6s ·    87 chars · cut    1 · balanced True · finish stop
+[  1613.3s] reply 546/901 @matusi_ukr:22133#577740                  2.8s ·    87 chars · cut    1 · balanced True · finish stop
+[  1616.3s] reply 547/901 @matusi_ukr:22133#577764                  3.0s ·   115 chars · cut    1 · balanced True · finish stop
+[  1619.4s] reply 548/901 @matusi_ukr:22133#577794                  3.1s ·   109 chars · cut    1 · balanced True · finish stop
+[  1622.4s] reply 549/901 @matusi_ukr:22133#577825                  3.0s ·   102 chars · cut    1 · balanced True · finish stop
+[  1625.1s] reply 550/901 @matusi_ukr:22133#577927                  2.7s ·   105 chars · cut    0 · balanced True · finish stop
+[  1627.4s] reply 551/901 @matusi_ukr:22133#577945                  2.4s ·    87 chars · cut    1 · balanced True · finish stop
+[  1630.7s] reply 552/901 @matusi_ukr:22133#578441                  3.3s ·   117 chars · cut    1 · balanced True · finish stop
+[  1633.0s] reply 553/901 @matusi_ukr:22158#578029                  2.3s ·    87 chars · cut    1 · balanced True · finish stop
+[  1635.9s] reply 554/901 @matusi_ukr:22158#578031                  2.9s ·   115 chars · cut    1 · balanced True · finish stop
+[  1638.9s] reply 555/901 @matusi_ukr:22158#578032                  3.0s ·   110 chars · cut    4 · balanced True · finish stop
+[  1641.3s] reply 556/901 @matusi_ukr:22158#578034                  2.4s ·    87 chars · cut    1 · balanced True · finish stop
+[  1643.6s] reply 557/901 @matusi_ukr:22158#578035                  2.3s ·    87 chars · cut    1 · balanced True · finish stop
+[  1646.6s] reply 558/901 @matusi_ukr:22158#578036                  3.0s ·   116 chars · cut    0 · balanced True · finish stop
+[  1649.0s] reply 559/901 @matusi_ukr:22158#578037                  2.4s ·    87 chars · cut    1 · balanced True · finish stop
+[  1651.3s] reply 560/901 @matusi_ukr:22158#578038                  2.2s ·    87 chars · cut    1 · balanced True · finish stop
+[  1653.6s] reply 561/901 @matusi_ukr:22158#578048                  2.4s ·    87 chars · cut    1 · balanced True · finish stop
+[  1655.9s] reply 562/901 @matusi_ukr:22158#578049                  2.3s ·    87 chars · cut    1 · balanced True · finish stop
+[  1658.7s] reply 563/901 @matusi_ukr:22158#578050                  2.8s ·   110 chars · cut    4 · balanced True · finish stop
+[  1661.0s] reply 564/901 @matusi_ukr:22158#578053                  2.3s ·    87 chars · cut    1 · balanced True · finish stop
+[  1663.8s] reply 565/901 @matusi_ukr:22158#578054                  2.9s ·   110 chars · cut    4 · balanced True · finish stop
+[  1666.5s] reply 566/901 @matusi_ukr:22158#578055                  2.6s ·   106 chars · cut    0 · balanced True · finish stop
+[  1669.3s] reply 567/901 @matusi_ukr:22158#578056                  2.8s ·   108 chars · cut    0 · balanced True · finish stop
+[  1671.6s] reply 568/901 @matusi_ukr:22158#578059                  2.3s ·    87 chars · cut    1 · balanced True · finish stop
+[  1674.4s] reply 569/901 @matusi_ukr:22158#578060                  2.9s ·   116 chars · cut    4 · balanced True · finish stop
+[  1677.1s] reply 570/901 @matusi_ukr:22158#578061                  2.6s ·   109 chars · cut    4 · balanced True · finish stop
+[  1679.9s] reply 571/901 @matusi_ukr:22158#578062                  2.9s ·   117 chars · cut    4 · balanced True · finish stop
+[  1683.0s] reply 572/901 @matusi_ukr:22158#578064                  3.1s ·   121 chars · cut    1 · balanced True · finish stop
+[  1685.5s] reply 573/901 @matusi_ukr:22158#578065                  2.4s ·    87 chars · cut    1 · balanced True · finish stop
+[  1688.1s] reply 574/901 @matusi_ukr:22158#578066                  2.7s ·   109 chars · cut    4 · balanced True · finish stop
+[  1690.5s] reply 575/901 @matusi_ukr:22158#578067                  2.4s ·    87 chars · cut    1 · balanced True · finish stop
+[  1693.2s] reply 576/901 @matusi_ukr:22158#578071                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[  1696.3s] reply 577/901 @matusi_ukr:22158#578075                  3.1s ·   111 chars · cut    4 · balanced True · finish stop
+[  1699.2s] reply 578/901 @matusi_ukr:22158#578081                  2.8s ·   111 chars · cut    4 · balanced True · finish stop
+[  1701.4s] reply 579/901 @matusi_ukr:22158#578098                  2.2s ·    87 chars · cut    1 · balanced True · finish stop
+[  1704.5s] reply 580/901 @matusi_ukr:22195#578383                  3.1s ·   108 chars · cut    4 · balanced True · finish stop
+[  1707.4s] reply 581/901 @matusi_ukr:22195#578384                  2.9s ·   108 chars · cut    4 · balanced True · finish stop
+[  1710.3s] reply 582/901 @matusi_ukr:22195#578386                  2.9s ·   108 chars · cut    4 · balanced True · finish stop
+[  1713.2s] reply 583/901 @matusi_ukr:22195#578388                  2.8s ·   108 chars · cut    4 · balanced True · finish stop
+[  1716.1s] reply 584/901 @matusi_ukr:22195#578389                  2.9s ·   104 chars · cut    0 · balanced True · finish stop
+[  1719.0s] reply 585/901 @matusi_ukr:22195#578457                  2.9s ·   108 chars · cut    4 · balanced True · finish stop
+[  1721.8s] reply 586/901 @matusi_ukr:22208#578449                  2.9s ·   115 chars · cut    4 · balanced True · finish stop
+[  1724.7s] reply 587/901 @matusi_ukr:22217#578835                  2.9s ·   110 chars · cut    4 · balanced True · finish stop
+[  1727.4s] reply 588/901 @matusi_ukr:22217#578836                  2.7s ·   103 chars · cut    1 · balanced True · finish stop
+[  1730.5s] reply 589/901 @matusi_ukr:22217#578838                  3.1s ·   131 chars · cut    1 · balanced True · finish stop
+[  1732.8s] reply 590/901 @matusi_ukr:22217#578839                  2.3s ·    87 chars · cut    1 · balanced True · finish stop
+[  1735.8s] reply 591/901 @matusi_ukr:22217#578840                  3.0s ·   111 chars · cut    4 · balanced True · finish stop
+[  1738.7s] reply 592/901 @matusi_ukr:22217#578841                  2.9s ·   110 chars · cut    4 · balanced True · finish stop
+[  1741.5s] reply 593/901 @matusi_ukr:22217#578842                  2.7s ·   103 chars · cut    1 · balanced True · finish stop
+[  1745.0s] reply 594/901 @matusi_ukr:22217#578843                  3.5s ·   111 chars · cut    4 · balanced True · finish stop
+[  1748.0s] reply 595/901 @matusi_ukr:22217#578844                  3.0s ·   103 chars · cut    1 · balanced True · finish stop
+[  1750.9s] reply 596/901 @matusi_ukr:22217#578845                  2.9s ·   111 chars · cut    4 · balanced True · finish stop
+[  1754.3s] reply 597/901 @matusi_ukr:22217#578895                  3.4s ·   109 chars · cut    1 · balanced True · finish stop
+[  1756.6s] reply 598/901 @matusi_ukr:22217#578930                  2.3s ·    87 chars · cut    1 · balanced True · finish stop
+[  1759.5s] reply 599/901 @matusi_ukr:22217#579039                  2.9s ·   112 chars · cut    0 · balanced True · finish stop
+[  1762.5s] reply 600/901 @matusi_ukr:22217#579480                  3.0s ·   102 chars · cut    1 · balanced True · finish stop
+[  1765.6s] reply 601/901 @matusi_ukr:22242#578931                  3.1s ·   114 chars · cut    4 · balanced True · finish stop
+[  1768.5s] reply 602/901 @matusi_ukr:22242#578932                  2.9s ·   109 chars · cut    1 · balanced True · finish stop
+[  1771.2s] reply 603/901 @matusi_ukr:22242#578939                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[  1774.1s] reply 604/901 @matusi_ukr:22242#578940                  2.9s ·   103 chars · cut    1 · balanced True · finish stop
+[  1777.1s] reply 605/901 @matusi_ukr:22242#578942                  2.9s ·   112 chars · cut    0 · balanced True · finish stop
+[  1780.1s] reply 606/901 @matusi_ukr:22242#578944                  3.1s ·   118 chars · cut    0 · balanced True · finish stop
+[  1783.0s] reply 607/901 @matusi_ukr:22242#578947                  2.9s ·   108 chars · cut    4 · balanced True · finish stop
+[  1786.0s] reply 608/901 @matusi_ukr:22242#578948                  2.9s ·   113 chars · cut    4 · balanced True · finish stop
+[  1789.2s] reply 609/901 @matusi_ukr:22242#578951                  3.2s ·   109 chars · cut    1 · balanced True · finish stop
+[  1792.0s] reply 610/901 @matusi_ukr:22242#578952                  2.8s ·   113 chars · cut    4 · balanced True · finish stop
+[  1794.9s] reply 611/901 @matusi_ukr:22242#579007                  2.9s ·   112 chars · cut    0 · balanced True · finish stop
+[  1797.7s] reply 612/901 @matusi_ukr:22242#579042                  2.7s ·   103 chars · cut    1 · balanced True · finish stop
+[  1800.0s] reply 613/901 @matusi_ukr:22263#579242                  2.3s ·    87 chars · cut    1 · balanced True · finish stop
+[  1802.3s] reply 614/901 @matusi_ukr:22263#579243                  2.4s ·    87 chars · cut    1 · balanced True · finish stop
+[  1804.9s] reply 615/901 @matusi_ukr:22263#579244                  2.6s ·    87 chars · cut    1 · balanced True · finish stop
+[  1807.5s] reply 616/901 @matusi_ukr:22263#579245                  2.6s ·    87 chars · cut    1 · balanced True · finish stop
+[  1809.9s] reply 617/901 @matusi_ukr:22263#579246                  2.4s ·    87 chars · cut    1 · balanced True · finish stop
+[  1812.6s] reply 618/901 @matusi_ukr:22263#579247                  2.7s ·    87 chars · cut    1 · balanced True · finish stop
+[  1815.2s] reply 619/901 @matusi_ukr:22263#579249                  2.6s ·    87 chars · cut    1 · balanced True · finish stop
+[  1817.4s] reply 620/901 @matusi_ukr:22263#579250                  2.2s ·    87 chars · cut    1 · balanced True · finish stop
+[  1819.8s] reply 621/901 @matusi_ukr:22263#579251                  2.4s ·    87 chars · cut    1 · balanced True · finish stop
+[  1822.6s] reply 622/901 @matusi_ukr:22263#579254                  2.8s ·    87 chars · cut    1 · balanced True · finish stop
+[  1825.2s] reply 623/901 @matusi_ukr:22263#579397                  2.6s ·    87 chars · cut    1 · balanced True · finish stop
+[  1828.1s] reply 624/901 @matusi_ukr:22263#579446                  2.9s ·   116 chars · cut    4 · balanced True · finish stop
+[  1831.2s] reply 625/901 @matusi_ukr:22263#580098                  3.1s ·   119 chars · cut    4 · balanced True · finish stop
+[  1833.5s] reply 626/901 @matusi_ukr:22265#579275                  2.2s ·    87 chars · cut    1 · balanced True · finish stop
+[  1835.8s] reply 627/901 @matusi_ukr:22265#579276                  2.3s ·    87 chars · cut    1 · balanced True · finish stop
+[  1838.0s] reply 628/901 @matusi_ukr:22265#579277                  2.2s ·    87 chars · cut    1 · balanced True · finish stop
+[  1840.3s] reply 629/901 @matusi_ukr:22265#579278                  2.3s ·    87 chars · cut    1 · balanced True · finish stop
+[  1842.7s] reply 630/901 @matusi_ukr:22265#579279                  2.4s ·    87 chars · cut    1 · balanced True · finish stop
+[  1844.9s] reply 631/901 @matusi_ukr:22265#579285                  2.3s ·    87 chars · cut    1 · balanced True · finish stop
+[  1847.2s] reply 632/901 @matusi_ukr:22265#579286                  2.2s ·    87 chars · cut    1 · balanced True · finish stop
+[  1849.5s] reply 633/901 @matusi_ukr:22265#579287                  2.3s ·    87 chars · cut    1 · balanced True · finish stop
+[  1851.7s] reply 634/901 @matusi_ukr:22265#579288                  2.3s ·    87 chars · cut    1 · balanced True · finish stop
+[  1854.0s] reply 635/901 @matusi_ukr:22265#579293                  2.3s ·    87 chars · cut    1 · balanced True · finish stop
+[  1856.3s] reply 636/901 @matusi_ukr:22265#579294                  2.3s ·    87 chars · cut    1 · balanced True · finish stop
+[  1858.5s] reply 637/901 @matusi_ukr:22265#579295                  2.2s ·    87 chars · cut    1 · balanced True · finish stop
+[  1860.8s] reply 638/901 @matusi_ukr:22265#579300                  2.2s ·    87 chars · cut    1 · balanced True · finish stop
+[  1863.0s] reply 639/901 @matusi_ukr:22265#579301                  2.2s ·    87 chars · cut    1 · balanced True · finish stop
+[  1865.3s] reply 640/901 @matusi_ukr:22265#579302                  2.3s ·    87 chars · cut    1 · balanced True · finish stop
+[  1867.5s] reply 641/901 @matusi_ukr:22265#579314                  2.2s ·    87 chars · cut    1 · balanced True · finish stop
+[  1870.3s] reply 642/901 @matusi_ukr:22272#579373                  2.7s ·   109 chars · cut    4 · balanced True · finish stop
+[  1872.7s] reply 643/901 @matusi_ukr:22272#579374                  2.4s ·    87 chars · cut    1 · balanced True · finish stop
+[  1875.0s] reply 644/901 @matusi_ukr:22272#579375                  2.4s ·    87 chars · cut    1 · balanced True · finish stop
+[  1877.3s] reply 645/901 @matusi_ukr:22272#579376                  2.3s ·    87 chars · cut    1 · balanced True · finish stop
+[  1879.7s] reply 646/901 @matusi_ukr:22272#579377                  2.4s ·    87 chars · cut    1 · balanced True · finish stop
+[  1882.4s] reply 647/901 @matusi_ukr:22272#579379                  2.7s ·   110 chars · cut    4 · balanced True · finish stop
+[  1885.2s] reply 648/901 @matusi_ukr:22272#579380                  2.7s ·   109 chars · cut    4 · balanced True · finish stop
+[  1888.2s] reply 649/901 @matusi_ukr:22272#579381                  3.0s ·   109 chars · cut    4 · balanced True · finish stop
+[  1890.7s] reply 650/901 @matusi_ukr:22272#579383                  2.5s ·    87 chars · cut    1 · balanced True · finish stop
+[  1893.7s] reply 651/901 @matusi_ukr:22272#579416                  3.1s ·   110 chars · cut    4 · balanced True · finish stop
+[  1897.1s] reply 652/901 @matusi_ukr:22272#579429                  3.4s ·   114 chars · cut    4 · balanced True · finish stop
+[  1900.4s] reply 653/901 @matusi_ukr:22272#579457                  3.2s ·   108 chars · cut    4 · balanced True · finish stop
+[  1902.9s] reply 654/901 @matusi_ukr:22272#580126                  2.5s ·    87 chars · cut    1 · balanced True · finish stop
+[  1905.7s] reply 655/901 @matusi_ukr:22272#580127                  2.8s ·   112 chars · cut    4 · balanced True · finish stop
+[  1908.7s] reply 656/901 @matusi_ukr:22272#580340                  2.9s ·   109 chars · cut    4 · balanced True · finish stop
+[  1911.3s] reply 657/901 @matusi_ukr:22292#579586                  2.6s ·   109 chars · cut    4 · balanced True · finish stop
+[  1913.9s] reply 658/901 @matusi_ukr:22292#579590                  2.6s ·   109 chars · cut    4 · balanced True · finish stop
+[  1916.6s] reply 659/901 @matusi_ukr:22295#579615                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[  1919.8s] reply 660/901 @matusi_ukr:22295#579616                  3.2s ·   129 chars · cut    4 · balanced True · finish stop
+[  1922.4s] reply 661/901 @matusi_ukr:22295#579619                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[  1925.2s] reply 662/901 @matusi_ukr:22295#579627                  2.8s ·   102 chars · cut    1 · balanced True · finish stop
+[  1927.9s] reply 663/901 @matusi_ukr:22295#579638                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[  1930.5s] reply 664/901 @matusi_ukr:22295#579642                  2.6s ·   102 chars · cut    1 · balanced True · finish stop
+[  1933.2s] reply 665/901 @matusi_ukr:22295#579646                  2.6s ·   102 chars · cut    1 · balanced True · finish stop
+[  1935.4s] reply 666/901 @matusi_ukr:22295#579649                  2.3s ·    87 chars · cut    1 · balanced True · finish stop
+[  1938.3s] reply 667/901 @matusi_ukr:22295#579652                  2.8s ·   108 chars · cut    4 · balanced True · finish stop
+[  1940.9s] reply 668/901 @matusi_ukr:22295#579660                  2.6s ·   102 chars · cut    1 · balanced True · finish stop
+[  1943.8s] reply 669/901 @matusi_ukr:22295#579663                  2.8s ·   114 chars · cut    1 · balanced True · finish stop
+[  1946.8s] reply 670/901 @matusi_ukr:22295#579664                  3.0s ·   112 chars · cut    4 · balanced True · finish stop
+[  1949.6s] reply 671/901 @matusi_ukr:22295#579665                  2.8s ·   102 chars · cut    1 · balanced True · finish stop
+[  1952.5s] reply 672/901 @matusi_ukr:22295#579672                  2.9s ·   112 chars · cut    0 · balanced True · finish stop
+[  1955.5s] reply 673/901 @matusi_ukr:22295#579679                  3.0s ·   123 chars · cut    0 · balanced True · finish stop
+[  1958.4s] reply 674/901 @matusi_ukr:22295#579685                  2.9s ·   111 chars · cut    4 · balanced True · finish stop
+[  1961.4s] reply 675/901 @matusi_ukr:22295#579687                  2.9s ·   113 chars · cut    1 · balanced True · finish stop
+[  1964.3s] reply 676/901 @matusi_ukr:22295#579691                  2.9s ·   108 chars · cut    4 · balanced True · finish stop
+[  1967.2s] reply 677/901 @matusi_ukr:22295#579694                  2.9s ·   112 chars · cut    4 · balanced True · finish stop
+[  1970.6s] reply 678/901 @matusi_ukr:22295#579699                  3.5s ·   125 chars · cut    4 · balanced True · finish stop
+[  1973.6s] reply 679/901 @matusi_ukr:22295#579700                  2.9s ·   109 chars · cut    1 · balanced True · finish stop
+[  1976.3s] reply 680/901 @matusi_ukr:22295#579704                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[  1978.6s] reply 681/901 @matusi_ukr:22295#579705                  2.4s ·    87 chars · cut    1 · balanced True · finish stop
+[  1981.3s] reply 682/901 @matusi_ukr:22295#579708                  2.6s ·   102 chars · cut    1 · balanced True · finish stop
+[  1984.3s] reply 683/901 @matusi_ukr:22295#579709                  3.0s ·   118 chars · cut    4 · balanced True · finish stop
+[  1987.1s] reply 684/901 @matusi_ukr:22295#579710                  2.9s ·   116 chars · cut    0 · balanced True · finish stop
+[  1989.8s] reply 685/901 @matusi_ukr:22295#579712                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[  1992.7s] reply 686/901 @matusi_ukr:22295#579716                  2.9s ·   111 chars · cut    4 · balanced True · finish stop
+[  1995.5s] reply 687/901 @matusi_ukr:22295#579717                  2.8s ·   115 chars · cut    0 · balanced True · finish stop
+[  1998.4s] reply 688/901 @matusi_ukr:22295#579718                  2.9s ·   110 chars · cut    4 · balanced True · finish stop
+[  2000.7s] reply 689/901 @matusi_ukr:22295#579724                  2.3s ·    87 chars · cut    1 · balanced True · finish stop
+[  2003.7s] reply 690/901 @matusi_ukr:22295#579725                  3.0s ·   118 chars · cut    4 · balanced True · finish stop
+[  2006.6s] reply 691/901 @matusi_ukr:22295#579726                  2.8s ·   110 chars · cut    4 · balanced True · finish stop
+[  2009.2s] reply 692/901 @matusi_ukr:22295#579729                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[  2012.1s] reply 693/901 @matusi_ukr:22295#579730                  2.8s ·   110 chars · cut    4 · balanced True · finish stop
+[  2014.9s] reply 694/901 @matusi_ukr:22295#579733                  2.8s ·   107 chars · cut    4 · balanced True · finish stop
+[  2017.6s] reply 695/901 @matusi_ukr:22295#579736                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[  2020.2s] reply 696/901 @matusi_ukr:22295#579738                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[  2023.1s] reply 697/901 @matusi_ukr:22295#579741                  2.8s ·   102 chars · cut    1 · balanced True · finish stop
+[  2025.7s] reply 698/901 @matusi_ukr:22295#579749                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[  2028.4s] reply 699/901 @matusi_ukr:22295#579753                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[  2031.1s] reply 700/901 @matusi_ukr:22295#579757                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[  2034.0s] reply 701/901 @matusi_ukr:22295#579758                  2.9s ·   108 chars · cut    4 · balanced True · finish stop
+[  2036.7s] reply 702/901 @matusi_ukr:22295#579759                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[  2039.3s] reply 703/901 @matusi_ukr:22295#579765                  2.6s ·   102 chars · cut    1 · balanced True · finish stop
+[  2042.2s] reply 704/901 @matusi_ukr:22295#579766                  2.9s ·   102 chars · cut    1 · balanced True · finish stop
+[  2045.1s] reply 705/901 @matusi_ukr:22295#579768                  2.9s ·   108 chars · cut    4 · balanced True · finish stop
+[  2048.2s] reply 706/901 @matusi_ukr:22295#579772                  3.0s ·   126 chars · cut    1 · balanced True · finish stop
+[  2051.0s] reply 707/901 @matusi_ukr:22295#579778                  2.8s ·   114 chars · cut    0 · balanced True · finish stop
+[  2053.3s] reply 708/901 @matusi_ukr:22295#579779                  2.3s ·    87 chars · cut    1 · balanced True · finish stop
+[  2056.2s] reply 709/901 @matusi_ukr:22295#579780                  2.9s ·   110 chars · cut    1 · balanced True · finish stop
+[  2059.0s] reply 710/901 @matusi_ukr:22295#579781                  2.8s ·   111 chars · cut    4 · balanced True · finish stop
+[  2062.1s] reply 711/901 @matusi_ukr:22295#579782                  3.1s ·   124 chars · cut    4 · balanced True · finish stop
+[  2065.1s] reply 712/901 @matusi_ukr:22295#579786                  3.0s ·   121 chars · cut    1 · balanced True · finish stop
+[  2068.3s] reply 713/901 @matusi_ukr:22295#579792                  3.1s ·   110 chars · cut    4 · balanced True · finish stop
+[  2070.9s] reply 714/901 @matusi_ukr:22295#579796                  2.6s ·   102 chars · cut    1 · balanced True · finish stop
+[  2073.6s] reply 715/901 @matusi_ukr:22295#579800                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[  2076.7s] reply 716/901 @matusi_ukr:22295#579810                  3.1s ·   118 chars · cut    1 · balanced True · finish stop
+[  2079.6s] reply 717/901 @matusi_ukr:22295#579811                  2.8s ·   111 chars · cut    4 · balanced True · finish stop
+[  2082.6s] reply 718/901 @matusi_ukr:22295#579814                  3.0s ·   120 chars · cut    4 · balanced True · finish stop
+[  2085.3s] reply 719/901 @matusi_ukr:22295#579820                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[  2088.2s] reply 720/901 @matusi_ukr:22295#579823                  2.9s ·   114 chars · cut    1 · balanced True · finish stop
+[  2090.8s] reply 721/901 @matusi_ukr:22295#579825                  2.6s ·   102 chars · cut    1 · balanced True · finish stop
+[  2093.4s] reply 722/901 @matusi_ukr:22295#579829                  2.6s ·   102 chars · cut    1 · balanced True · finish stop
+[  2096.1s] reply 723/901 @matusi_ukr:22295#579833                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[  2098.8s] reply 724/901 @matusi_ukr:22295#579835                  2.7s ·   105 chars · cut    0 · balanced True · finish stop
+[  2101.5s] reply 725/901 @matusi_ukr:22295#579839                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[  2104.1s] reply 726/901 @matusi_ukr:22295#579840                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[  2106.4s] reply 727/901 @matusi_ukr:22295#579856                  2.3s ·    87 chars · cut    1 · balanced True · finish stop
+[  2109.1s] reply 728/901 @matusi_ukr:22295#579857                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[  2111.9s] reply 729/901 @matusi_ukr:22295#579862                  2.9s ·   115 chars · cut    1 · balanced True · finish stop
+[  2114.6s] reply 730/901 @matusi_ukr:22295#579863                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[  2117.2s] reply 731/901 @matusi_ukr:22295#579864                  2.6s ·   102 chars · cut    1 · balanced True · finish stop
+[  2120.1s] reply 732/901 @matusi_ukr:22295#579868                  2.8s ·   107 chars · cut    4 · balanced True · finish stop
+[  2122.9s] reply 733/901 @matusi_ukr:22295#579869                  2.8s ·   112 chars · cut    4 · balanced True · finish stop
+[  2125.6s] reply 734/901 @matusi_ukr:22295#579870                  2.6s ·   102 chars · cut    1 · balanced True · finish stop
+[  2128.5s] reply 735/901 @matusi_ukr:22295#579875                  3.0s ·   108 chars · cut    1 · balanced True · finish stop
+[  2131.6s] reply 736/901 @matusi_ukr:22295#579880                  3.1s ·   116 chars · cut    4 · balanced True · finish stop
+[  2134.4s] reply 737/901 @matusi_ukr:22295#579885                  2.8s ·   102 chars · cut    1 · balanced True · finish stop
+[  2137.1s] reply 738/901 @matusi_ukr:22295#579888                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[  2139.8s] reply 739/901 @matusi_ukr:22295#579908                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[  2142.6s] reply 740/901 @matusi_ukr:22295#579913                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[  2145.2s] reply 741/901 @matusi_ukr:22295#579916                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[  2148.1s] reply 742/901 @matusi_ukr:22295#579922                  2.9s ·   117 chars · cut    4 · balanced True · finish stop
+[  2150.8s] reply 743/901 @matusi_ukr:22295#579925                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[  2153.5s] reply 744/901 @matusi_ukr:22295#579941                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[  2156.8s] reply 745/901 @matusi_ukr:22295#579948                  3.2s ·   125 chars · cut    4 · balanced True · finish stop
+[  2159.7s] reply 746/901 @matusi_ukr:22295#579949                  2.9s ·   116 chars · cut    1 · balanced True · finish stop
+[  2162.3s] reply 747/901 @matusi_ukr:22295#579950                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[  2165.0s] reply 748/901 @matusi_ukr:22295#579959                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[  2167.7s] reply 749/901 @matusi_ukr:22295#579974                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[  2170.3s] reply 750/901 @matusi_ukr:22295#579978                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[  2173.2s] reply 751/901 @matusi_ukr:22295#579982                  2.9s ·   109 chars · cut    1 · balanced True · finish stop
+[  2175.9s] reply 752/901 @matusi_ukr:22295#579987                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[  2178.9s] reply 753/901 @matusi_ukr:22295#579994                  3.0s ·   120 chars · cut    4 · balanced True · finish stop
+[  2181.7s] reply 754/901 @matusi_ukr:22295#580014                  2.9s ·   108 chars · cut    1 · balanced True · finish stop
+[  2184.8s] reply 755/901 @matusi_ukr:22295#580015                  3.0s ·   118 chars · cut    4 · balanced True · finish stop
+[  2187.8s] reply 756/901 @matusi_ukr:22295#580018                  3.0s ·   102 chars · cut    1 · balanced True · finish stop
+[  2190.5s] reply 757/901 @matusi_ukr:22295#580029                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[  2193.3s] reply 758/901 @matusi_ukr:22295#580041                  2.8s ·   103 chars · cut    0 · balanced True · finish stop
+[  2196.0s] reply 759/901 @matusi_ukr:22295#580062                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[  2198.9s] reply 760/901 @matusi_ukr:22295#580064                  2.9s ·   110 chars · cut    1 · balanced True · finish stop
+[  2201.6s] reply 761/901 @matusi_ukr:22295#580073                  2.7s ·   102 chars · cut    1 · balanced True · finish stop
+[  2204.2s] reply 762/901 @matusi_ukr:22295#580117                  2.6s ·   102 chars · cut    1 · balanced True · finish stop
+[  2206.9s] reply 763/901 @matusi_ukr:22295#580196                  2.6s ·    87 chars · cut    1 · balanced True · finish stop
+[  2209.5s] reply 764/901 @matusi_ukr:22295#580346                  2.6s ·    87 chars · cut    1 · balanced True · finish stop
+[  2212.4s] reply 765/901 @matusi_ukr:22295#580424                  3.0s ·   100 chars · cut    4 · balanced True · finish stop
+[  2215.3s] reply 766/901 @matusi_ukr:22295#580439                  2.9s ·   107 chars · cut    4 · balanced True · finish stop
+[  2218.2s] reply 767/901 @matusi_ukr:22303#580124                  2.9s ·   112 chars · cut    4 · balanced True · finish stop
+[  2220.8s] reply 768/901 @matusi_ukr:22303#580129                  2.7s ·   110 chars · cut    4 · balanced True · finish stop
+[  2223.1s] reply 769/901 @matusi_ukr:22307#580133                  2.3s ·    87 chars · cut    1 · balanced True · finish stop
+[  2225.6s] reply 770/901 @matusi_ukr:22308#580137                  2.5s ·    87 chars · cut    1 · balanced True · finish stop
+[  2227.9s] reply 771/901 @matusi_ukr:22308#580138                  2.3s ·    87 chars · cut    1 · balanced True · finish stop
+[  2231.2s] reply 772/901 @matusi_ukr:22308#580139                  3.3s ·   102 chars · cut    1 · balanced True · finish stop
+[  2234.0s] reply 773/901 @matusi_ukr:22308#580141                  2.8s ·    87 chars · cut    1 · balanced True · finish stop
+[  2236.5s] reply 774/901 @matusi_ukr:22308#580142                  2.5s ·    87 chars · cut    1 · balanced True · finish stop
+[  2238.8s] reply 775/901 @matusi_ukr:22308#580143                  2.4s ·    87 chars · cut    1 · balanced True · finish stop
+[  2241.2s] reply 776/901 @matusi_ukr:22308#580144                  2.4s ·    87 chars · cut    1 · balanced True · finish stop
+[  2243.8s] reply 777/901 @matusi_ukr:22308#580146                  2.6s ·    87 chars · cut    1 · balanced True · finish stop
+[  2246.5s] reply 778/901 @matusi_ukr:22308#580147                  2.7s ·    87 chars · cut    1 · balanced True · finish stop
+[  2249.8s] reply 779/901 @matusi_ukr:22308#580148                  3.3s ·   111 chars · cut    4 · balanced True · finish stop
+[  2252.9s] reply 780/901 @matusi_ukr:22308#580149                  3.0s ·   109 chars · cut    1 · balanced True · finish stop
+[  2255.4s] reply 781/901 @matusi_ukr:22308#580150                  2.5s ·    87 chars · cut    1 · balanced True · finish stop
+[  2258.1s] reply 782/901 @matusi_ukr:22308#580153                  2.7s ·    87 chars · cut    1 · balanced True · finish stop
+[  2261.1s] reply 783/901 @matusi_ukr:22308#580159                  3.0s ·   111 chars · cut    4 · balanced True · finish stop
+[  2264.1s] reply 784/901 @matusi_ukr:22308#580167                  3.0s ·   111 chars · cut    4 · balanced True · finish stop
+[  2266.5s] reply 785/901 @matusi_ukr:22308#580170                  2.4s ·    87 chars · cut    1 · balanced True · finish stop
+[  2268.8s] reply 786/901 @matusi_ukr:22308#580173                  2.4s ·    87 chars · cut    1 · balanced True · finish stop
+[  2271.2s] reply 787/901 @matusi_ukr:22327#580335                  2.3s ·    87 chars · cut    1 · balanced True · finish stop
+[  2274.1s] reply 788/901 @matusi_ukr:22327#580336                  3.0s ·    87 chars · cut    1 · balanced True · finish stop
+[  2276.5s] reply 789/901 @matusi_ukr:22327#580339                  2.4s ·    87 chars · cut    1 · balanced True · finish stop
+[  2279.8s] reply 790/901 @matusi_ukr:22327#580345                  3.3s ·   108 chars · cut    4 · balanced True · finish stop
+[  2282.5s] reply 791/901 @msuaaaa:10651#13583                      2.8s ·   103 chars · cut    1 · balanced True · finish stop
+[  2285.4s] reply 792/901 @msuaaaa:10651#13584                      2.8s ·   111 chars · cut    4 · balanced True · finish stop
+[  2288.0s] reply 793/901 @msuaaaa:10651#13585                      2.7s ·   103 chars · cut    1 · balanced True · finish stop
+[  2290.9s] reply 794/901 @polyakova_fitness:1143#2421              2.8s ·   119 chars · cut    1 · balanced True · finish stop
+[  2293.5s] reply 795/901 @retsepty:7278#49364                      2.7s ·    99 chars · cut    4 · balanced True · finish stop
+[  2296.2s] reply 796/901 @retsepty:7278#49365                      2.7s ·    99 chars · cut    4 · balanced True · finish stop
+[  2298.9s] reply 797/901 @retsepty:7280#49375                      2.7s ·   105 chars · cut    4 · balanced True · finish stop
+[  2301.6s] reply 798/901 @retsepty:7281#49374                      2.7s ·   109 chars · cut    4 · balanced True · finish stop
+[  2304.3s] reply 799/901 @retsepty:7284#49384                      2.7s ·   109 chars · cut    4 · balanced True · finish stop
+[  2306.9s] reply 800/901 @retsepty:7288#49398                      2.6s ·   109 chars · cut    1 · balanced True · finish stop
+[  2309.6s] reply 801/901 @retsepty:7289#49401                      2.7s ·   105 chars · cut    4 · balanced True · finish stop
+[  2311.9s] reply 802/901 @retsepty:7293#49409                      2.3s ·    89 chars · cut    4 · balanced True · finish stop
+[  2314.5s] reply 803/901 @retsepty:7293#49411                      2.6s ·   104 chars · cut    4 · balanced True · finish stop
+[  2317.2s] reply 804/901 @retsepty:7293#49418                      2.7s ·   109 chars · cut    4 · balanced True · finish stop
+[  2319.5s] reply 805/901 @retsepty:7294#49414                      2.3s ·    89 chars · cut    4 · balanced True · finish stop
+[  2322.2s] reply 806/901 @retsepty:7294#49417                      2.7s ·   109 chars · cut    4 · balanced True · finish stop
+[  2324.8s] reply 807/901 @retsepty:7296#49428                      2.6s ·   108 chars · cut    1 · balanced True · finish stop
+[  2327.5s] reply 808/901 @retsepty:7301#49440                      2.7s ·   109 chars · cut    4 · balanced True · finish stop
+[  2330.3s] reply 809/901 @retsepty:7302#49439                      2.7s ·   109 chars · cut    4 · balanced True · finish stop
+[  2332.9s] reply 810/901 @retsepty:7302#49449                      2.6s ·    99 chars · cut    4 · balanced True · finish stop
+[  2335.6s] reply 811/901 @retsepty:7305#49457                      2.7s ·    99 chars · cut    4 · balanced True · finish stop
+[  2338.8s] reply 812/901 @retsepty:7305#49470                      3.2s ·   108 chars · cut    4 · balanced True · finish stop
+[  2341.6s] reply 813/901 @retsepty:7310#49529                      2.8s ·   108 chars · cut    0 · balanced True · finish stop
+[  2344.5s] reply 814/901 @retsepty:7312#49531                      2.8s ·   108 chars · cut    0 · balanced True · finish stop
+[  2347.3s] reply 815/901 @retsepty:7312#49541                      2.9s ·   108 chars · cut    0 · balanced True · finish stop
+[  2350.2s] reply 816/901 @retsepty:7312#49560                      2.8s ·   106 chars · cut    1 · balanced True · finish stop
+[  2352.8s] reply 817/901 @retsepty:7313#49524                      2.6s ·   105 chars · cut    4 · balanced True · finish stop
+[  2355.6s] reply 818/901 @retsepty:7313#49532                      2.8s ·   108 chars · cut    0 · balanced True · finish stop
+[  2358.5s] reply 819/901 @retsepty:7313#49542                      2.9s ·   108 chars · cut    0 · balanced True · finish stop
+[  2361.3s] reply 820/901 @retsepty:7313#49561                      2.8s ·   106 chars · cut    1 · balanced True · finish stop
+[  2364.2s] reply 821/901 @retsepty:7317#49567                      2.8s ·   106 chars · cut    1 · balanced True · finish stop
+[  2367.0s] reply 822/901 @retsepty:7318#49568                      2.8s ·   106 chars · cut    1 · balanced True · finish stop
+[  2369.8s] reply 823/901 @retsepty:7320#49586                      2.8s ·   106 chars · cut    1 · balanced True · finish stop
+[  2372.1s] reply 824/901 @retsepty:7321#49588                      2.3s ·    89 chars · cut    4 · balanced True · finish stop
+[  2374.8s] reply 825/901 @retsepty:7321#49589                      2.7s ·    99 chars · cut    4 · balanced True · finish stop
+[  2377.1s] reply 826/901 @retsepty:7323#49592                      2.3s ·    89 chars · cut    4 · balanced True · finish stop
+[  2379.8s] reply 827/901 @retsepty:7323#49593                      2.7s ·   105 chars · cut    4 · balanced True · finish stop
+[  2382.1s] reply 828/901 @retsepty:7324#49595                      2.3s ·    89 chars · cut    4 · balanced True · finish stop
+[  2384.4s] reply 829/901 @retsepty:7324#49596                      2.3s ·    89 chars · cut    4 · balanced True · finish stop
+[  2387.2s] reply 830/901 @retsepty:7324#49625                      2.9s ·   108 chars · cut    0 · balanced True · finish stop
+[  2390.1s] reply 831/901 @retsepty:7325#49626                      2.9s ·   108 chars · cut    0 · balanced True · finish stop
+[  2392.9s] reply 832/901 @retsepty:7325#49627                      2.8s ·   112 chars · cut    1 · balanced True · finish stop
+[  2395.6s] reply 833/901 @retsepty:7326#49629                      2.6s ·   109 chars · cut    4 · balanced True · finish stop
+[  2398.2s] reply 834/901 @retsepty:7326#49630                      2.6s ·   109 chars · cut    4 · balanced True · finish stop
+[  2401.0s] reply 835/901 @retsepty:7327#49632                      2.8s ·   112 chars · cut    1 · balanced True · finish stop
+[  2403.8s] reply 836/901 @retsepty:7328#49636                      2.8s ·   112 chars · cut    1 · balanced True · finish stop
+[  2407.8s] reply 837/901 @retsepty:7328#49642                      4.0s ·   123 chars · cut    1 · balanced True · finish stop
+[  2410.8s] reply 838/901 @retsepty:7331#49654                      2.9s ·   112 chars · cut    4 · balanced True · finish stop
+[  2413.1s] reply 839/901 @retsepty:7331#49655                      2.3s ·    89 chars · cut    4 · balanced True · finish stop
+[  2415.9s] reply 840/901 @retsepty:7335#49677                      2.9s ·   110 chars · cut    4 · balanced True · finish stop
+[  2418.8s] reply 841/901 @retsepty:7337#49678                      2.9s ·   110 chars · cut    4 · balanced True · finish stop
+[  2421.4s] reply 842/901 @retsepty:7340#49697                      2.6s ·   109 chars · cut    4 · balanced True · finish stop
+[  2424.1s] reply 843/901 @retsepty:7342#49685                      2.7s ·   104 chars · cut    4 · balanced True · finish stop
+[  2426.7s] reply 844/901 @retsepty:7342#49686                      2.7s ·    99 chars · cut    4 · balanced True · finish stop
+[  2429.4s] reply 845/901 @retsepty:7342#49696                      2.7s ·   109 chars · cut    4 · balanced True · finish stop
+[  2432.2s] reply 846/901 @retsepty:7342#49707                      2.8s ·   110 chars · cut    4 · balanced True · finish stop
+[  2434.8s] reply 847/901 @retsepty:7342#49708                      2.6s ·   109 chars · cut    0 · balanced True · finish stop
+[  2437.1s] reply 848/901 @retsepty:7343#49710                      2.3s ·    89 chars · cut    4 · balanced True · finish stop
+[  2439.7s] reply 849/901 @retsepty:7343#49711                      2.6s ·   111 chars · cut    0 · balanced True · finish stop
+[  2442.4s] reply 850/901 @retsepty:7345#49715                      2.6s ·   109 chars · cut    4 · balanced True · finish stop
+[  2445.2s] reply 851/901 @retsepty:7345#49716                      2.8s ·   118 chars · cut    1 · balanced True · finish stop
+[  2447.9s] reply 852/901 @retsepty:7345#49717                      2.7s ·   109 chars · cut    0 · balanced True · finish stop
+[  2450.5s] reply 853/901 @retsepty:7348#49740                      2.7s ·   109 chars · cut    0 · balanced True · finish stop
+[  2453.2s] reply 854/901 @retsepty:7349#49742                      2.6s ·   109 chars · cut    4 · balanced True · finish stop
+[  2455.8s] reply 855/901 @retsepty:7350#49748                      2.7s ·   104 chars · cut    4 · balanced True · finish stop
+[  2458.5s] reply 856/901 @retsepty:7350#49749                      2.7s ·   104 chars · cut    4 · balanced True · finish stop
+[  2461.4s] reply 857/901 @retsepty:7350#49750                      2.9s ·   109 chars · cut    4 · balanced True · finish stop
+[  2464.1s] reply 858/901 @retsepty:7354#49763                      2.7s ·   104 chars · cut    4 · balanced True · finish stop
+[  2466.7s] reply 859/901 @retsepty:7361#49782                      2.6s ·   109 chars · cut    4 · balanced True · finish stop
+[  2469.4s] reply 860/901 @tarilka_malyuka:695#8                    2.6s ·   106 chars · cut    4 · balanced True · finish stop
+[  2472.1s] reply 861/901 @tarilka_malyuka:695#9                    2.7s ·   100 chars · cut    4 · balanced True · finish stop
+[  2474.6s] reply 862/901 @tarilka_malyuka:695#10                   2.5s ·   105 chars · cut    4 · balanced True · finish stop
+[  2476.7s] reply 863/901 @tarilka_malyuka:695#11                   2.2s ·    83 chars · cut    1 · balanced True · finish stop
+[  2479.2s] reply 864/901 @tarilka_malyuka:695#12                   2.5s ·    83 chars · cut    1 · balanced True · finish stop
+[  2481.8s] reply 865/901 @tarilka_malyuka:695#16                   2.6s ·   111 chars · cut    4 · balanced True · finish stop
+[  2484.0s] reply 866/901 @tarilka_malyuka:695#17                   2.2s ·    83 chars · cut    1 · balanced True · finish stop
+[  2486.2s] reply 867/901 @tarilka_malyuka:695#18                   2.2s ·    83 chars · cut    1 · balanced True · finish stop
+[  2489.1s] reply 868/901 @tarilka_malyuka:695#19                   2.8s ·    98 chars · cut    1 · balanced True · finish stop
+[  2491.7s] reply 869/901 @tarilka_malyuka:695#50                   2.7s ·    83 chars · cut    1 · balanced True · finish stop
+[  2494.2s] reply 870/901 @tarilka_malyuka:715#45                   2.5s ·   106 chars · cut    4 · balanced True · finish stop
+[  2496.7s] reply 871/901 @tarilka_malyuka:715#47                   2.5s ·   106 chars · cut    4 · balanced True · finish stop
+[  2499.3s] reply 872/901 @tarilka_malyuka:715#48                   2.6s ·   105 chars · cut    4 · balanced True · finish stop
+[  2501.5s] reply 873/901 @tarilka_malyuka:715#49                   2.2s ·    83 chars · cut    1 · balanced True · finish stop
+[  2503.6s] reply 874/901 @tarilka_malyuka:746#82                   2.1s ·    83 chars · cut    1 · balanced True · finish stop
+[  2506.8s] reply 875/901 @tarilka_malyuka:746#83                   3.2s ·    96 chars · cut    4 · balanced True · finish stop
+[  2509.6s] reply 876/901 @tarilka_malyuka:747#84                   2.8s ·   111 chars · cut    0 · balanced True · finish stop
+[  2511.6s] reply 877/901 @tarilka_malyuka:747#85                   2.1s ·    83 chars · cut    1 · balanced True · finish stop
+[  2514.1s] reply 878/901 @tarilka_malyuka:747#183                  2.5s ·    98 chars · cut    0 · balanced True · finish stop
+[  2517.1s] reply 879/901 @tarilka_malyuka:747#187                  3.0s ·    94 chars · cut    1 · balanced True · finish stop
+[  2519.2s] reply 880/901 @tarilka_malyuka:764#177                  2.1s ·    83 chars · cut    0 · balanced True · finish stop
+[  2521.3s] reply 881/901 @tarilka_malyuka:820#169                  2.1s ·    83 chars · cut    0 · balanced True · finish stop
+[  2524.2s] reply 882/901 @tarilka_malyuka:820#171                  2.9s ·   120 chars · cut    4 · balanced True · finish stop
+[  2526.8s] reply 883/901 @tarilka_malyuka:825#182                  2.6s ·   111 chars · cut    4 · balanced True · finish stop
+[  2529.8s] reply 884/901 @tarilka_malyuka:825#185                  3.0s ·   112 chars · cut    4 · balanced True · finish stop
+[  2533.0s] reply 885/901 @tarilka_malyuka:827#179                  3.2s ·    98 chars · cut    0 · balanced True · finish stop
+[  2535.3s] reply 886/901 @ya_Nenka:834#2575                        2.3s ·    88 chars · cut    4 · balanced True · finish stop
+[  2537.7s] reply 887/901 @ya_Nenka:836#2577                        2.4s ·    88 chars · cut    4 · balanced True · finish stop
+[  2540.2s] reply 888/901 @ya_Nenka:836#2579                        2.5s ·   103 chars · cut    0 · balanced True · finish stop
+[  2542.8s] reply 889/901 @ya_Nenka:836#2580                        2.7s ·    88 chars · cut    4 · balanced True · finish stop
+[  2545.1s] reply 890/901 @ya_Nenka:836#2581                        2.3s ·    88 chars · cut    4 · balanced True · finish stop
+[  2548.0s] reply 891/901 @ya_Nenka:836#2582                        2.9s ·    88 chars · cut    4 · balanced True · finish stop
+[  2550.2s] reply 892/901 @ya_Nenka:836#2595                        2.2s ·    88 chars · cut    4 · balanced True · finish stop
+[  2552.5s] reply 893/901 @ya_Nenka:838#2584                        2.3s ·    88 chars · cut    4 · balanced True · finish stop
+[  2554.8s] reply 894/901 @ya_Nenka:838#2585                        2.3s ·    88 chars · cut    4 · balanced True · finish stop
+[  2557.1s] reply 895/901 @ya_Nenka:838#2586                        2.3s ·    88 chars · cut    4 · balanced True · finish stop
+[  2559.4s] reply 896/901 @ya_Nenka:840#2589                        2.3s ·    88 chars · cut    4 · balanced True · finish stop
+[  2562.0s] reply 897/901 @ya_Nenka:840#2590                        2.6s ·    88 chars · cut    4 · balanced True · finish stop
+[  2564.3s] reply 898/901 @ya_Nenka:840#2591                        2.4s ·    88 chars · cut    4 · balanced True · finish stop
+[  2567.0s] reply 899/901 @ya_Nenka:844#2597                        2.6s ·   103 chars · cut    4 · balanced True · finish stop
+[  2569.2s] reply 900/901 @ya_Nenka:844#2598                        2.2s ·    88 chars · cut    4 · balanced True · finish stop
+[  2571.9s] reply 901/901 @ya_Nenka:844#2599                        2.6s ·   104 chars · cut    4 · balanced True · finish stop
+[  2571.9s] DONE · 901 generated here · 901 replies in /workspace/run/pass1_window_r2_v2.jsonl
