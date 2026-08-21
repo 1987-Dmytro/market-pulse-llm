@@ -93,4 +93,4 @@ sitting C is briefed with.
 **The scorer runs after the LAST append to the run record, or its pin is of a state nobody can check
 out** — the committed verdict pinned `3d0277c7…` while every copy of `results/lora_b_run.json` hashes
 `aa20e10b…`, because the `train-a-retrospective` entry landed at 17:40:15Z after the scorer had
-already read the file (Dv579, re-run in the addendum). [[provenance-cannot-name-itself]]
+already read the file (Dv579, re-run in the addendum). [[provenance_cannot_name_itself]]
