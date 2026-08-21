@@ -1,11 +1,19 @@
-# pass1-window — D0 delivered and reviewed, and the review overturned my own registration of rung 4
+# pass1-window — RED at rung 7, killed by rung 4, and the rate is a property of the POD
 
-**Status at the time of writing: D0 is complete, committed and green; no pod has been created.**
-Everything below is at $0. The paid session's sections are marked and are empty until it runs.
+**The completeness bar is RED: 131 of 1 032 answered.** One pod, `xpz3zb7yxus5cw`, 845.0 s,
+**$0.173694 of the $1.50 cap**. Rung 4 deleted it at 131 rows because the projection left the 6 500 s
+hard stop — while the cap was never near it, $1.3948 of $1.50. The recovery clause then REFUSED on
+seconds, so there is no second pod and the question returns to the operator.
 
-The one thing the team lead should read first is **Process signal 1** and the section
-[Rung 4 and the span I quoted the wrong one of](#rung-4-and-the-span-i-quoted-the-wrong-one-of).
-It carries a number that decides whether $1.50 is enough, and it is a question for the operator.
+**Nothing was lost that a bar owns.** The transport is clean — 131 replies, 131 parsed, 0 sha
+mismatches, 0 refusals, 0 duplicates. The out-file, its census and the per-thread pass-2 table are on
+disk and committed. No gold row was scored against a threshold, and the fourteen the pod did reach
+are a census row with their multiplicity named.
+
+**The one reading that outlives the RED:** this pod ran at **4.498 s/call against the 2.726 the
+registration's sample measured — 1.65×** — with the request width, a cold leg, the prompt, the card
+model, the datacenter and the population each ruled out in turn. A rate is a property of the pod it
+was measured on, and `pass2-signals` and every future window pass must be priced on that.
 
 ## Read back first, one line each (the contract's own list)
 
@@ -245,58 +253,252 @@ differs from HEAD — so its GO is also the proof that the plan predates the mon
 | **Dv645** | `instruments.scorer_pass1_fewshot` is DROPPED from the copied block with its reason: it is r2's D2 judge for a dev gate and a gold bar, and this contract calls neither. A pin naming a script this run never runs is a pin nobody checks. Conversely `gate_imported_from` and `window_summary_5c2` are ADDED — an imported instrument is an instrument, and the gate hashes the pack through the latter. | `[cause: process]` `[[a_consumer_list_is_not_a_meaning_list]]` |
 | **Dv646** | The self-exclusion block publishes a DENOMINATOR beside its zero. «0 items shown a neighbour from their own thread» is free on a query whose thread carries no label, and window-1 is the population the 650 labels were drawn from — so the record also carries the **968 items whose own thread carries labels** and the **15 583 label-instances withheld** from them. The 64 the rule cannot bite on are exactly probe-b's, whose threads were removed from the labelling population whole. | `[cause: spec-gap]` `[[a_prefilter_cannot_certify_the_population]]` |
 
-## Process signals (five lines)
+## D1 — the paid session, rung by rung
 
-1. **The review before the pod found a defect in the block I wrote to register a risk, and that is
-   the most useful thing that happened today.** I measured rung 4's knife edge, wrote it into the
-   record, and computed it over the pre-generation r2 MEASURED while the same record CHARGES a
-   different value for the same span. The headline I published — «1.19×, margin not comfort» — was
-   false at the number the budget pays for, where the real figure is 0.98. Every ingredient was
-   already in my own record; what I lacked was a reader who would not take my framing. The lesson is
-   not «measure the span» — I did — it is that **a derived number must be recomputed at every value
-   the record carries for its inputs**, and a record that holds two values for one span is a record
-   that will be quoted at the flattering one.
-2. **Driving D2 at $0 on r2's real replies was worth more than any argument about the instrument.**
-   The 200 dev rows render byte for byte in both packs, so 200 replies a pod actually generated are
-   valid rows of this out-file — and running them through rung 7 and through `leg_table` reproduced
-   136/200 and 38/49 exactly. That single check verified the completeness bar against a real
-   transport, proved D2's clause is satisfiable, and surfaced the missing `our_readings` key. Two
-   packs sharing anchors is usually a hazard; here it was an instrument, and it was free.
-3. **Nine of the twelve surviving findings were about numbers I had already written down.** Not one
-   was about missing code. The pattern across Dv625, Dv627, Dv630, Dv631, Dv634, Dv635 and Dv643 is
-   the same shape seven times: a quantity that is right about one population, one span or one key,
-   carried into a sentence about another. Registering a risk is not the same as registering it in
-   the units the risk is measured in.
-4. **The skeptic pass was contaminated by my own fixes and the report says so rather than quoting a
-   ratio.** Findings were repaired while the lenses were still running, so «refuted» sometimes means
-   «already fixed» and sometimes means «never real», and nothing distinguishes them from the
-   outside. What every fix rests on instead is a demonstration in this session's own output — a grep
-   that found no guard, a bisected threshold, a mutation watched red. A review whose verdicts cannot
-   be trusted is still worth its findings; a report that quoted its verdicts would not be.
-5. **The contract is executable as written and one number in it is worth the operator's attention.**
-   6 500 s buys $1.4444 of a $1.50 cap and leaves 583.46 s of slack over the worst case — and rung 4
-   spends that slack as a rate allowance, which is why one 4.066 s call can end a healthy run. 6 700 s
-   is $1.4889, still inside the cap, and moves the edge above the worst call this stack has measured.
-   That is a re-registration and it was not taken here.
+```
+pod xpz3zb7yxus5cw   created 2026-08-21T15:32:18Z   deleted 15:46:23Z   845.0 s   $0.173694
+                     RTX 4090, costPerHr 0.74, EU-RO-1, volume qw4nwleanc
 
-## What returns to the operator
+15:32:26Z  price     rung 1  GO    elapsed     8.0   0.74 ≤ 0.80; --terminate-after 17:20:38Z,
+                                                     equal to the computed stamp to the second
+15:33:00Z  gate0     rung 2  GO    elapsed    41.5   ssh answered at 29 s on a clock-bounded poll
+   (live in every     rung 3  ·)   launched_at 15:33:41 = 83 s of create-elapsed; load 164.9 s;
+    watch poll)                    first reply 169.5 s of launch, 252.5 s of create — of 450/1100
+15:46:23Z  watch     rung 5  KILL  elapsed   845.6   131/1032 answered, watched 748.2 s, never idle
+                     rung 4        the projection left the HARD STOP: 6 785.7 s of 6 500
+                                   the cap was never near it: $1.3948 of $1.50
+15:46:23Z  delete            GO    {"deleted": true} — three listings, the volume as the control
+```
 
-**One question, with its arithmetic.** The registered hard stop of 6 500 s makes rung 4 kill a
-healthy pod on a single 4.066 s reply whenever the pre-generation runs near the 1 100 s the budget
-charges — and such a kill also refuses the one re-creation, closing the session with no verdict.
-6 700 s is $1.4889 of the same $1.50 cap and puts the edge at 4.167 s/call. **Raising it is the
-operator's word and was not taken.** The run is authorised and executable either way; the executor's
-mitigation is to stage briskly, and the runbook now says so with the table beside it.
+**Rung 3 was checked live in every watch poll and never recorded as a standalone gate**, because
+`--boot` needs a live pod and the watch's KILL deletes it inside the loop. The reading is
+unambiguous in the artifacts — the pod wrote `launched_at` at 15:33:41, the first row carries
+`boot_seconds 164.915` and `elapsed_since_start 169.505` — so launch → first reply was 169.5 s of a
+450 s ceiling and 252.5 s of create-elapsed of an 1 100 s backstop. Reported from the artifacts,
+never back-filled (Dv649).
 
-**One reminder the record already binds.** The fourteen inside this population are answered because
-they are IN it. Their agreement is a census row with its multiplicity named — the fourth look at the
-same rows — and it can never be promoted to «v2 takes N of 14», by this report, by the acceptance,
-or by the next registration. The same holds for the 650 labelled rows and the 450 outside dev-200.
+### What rung 4 did, and why it was right
 
-## D1 — the paid session
+`leg_state` prices every call still owed at the LARGER of the leg's mean and its LAST call. At the
+killing poll the last call was **5.151 s**, the mean was 4.498, and 901 calls were still owed:
 
-*Not run. This section is written after the pod, rung by rung, with the guard reading at each one.*
+```
+845.6 (elapsed) + 901 × 5.151 (the last call) + 1300 (overhead) = 6 785.7 s  >  6 500   KILL
+                                                                  $1.3948    ≤  $1.50
+```
+
+The dollars were never in danger. **The seconds are what the platform holds**, exactly as the
+registration says, and rung 4 did precisely what it was registered to do.
+
+### The reading of the session: a rate is a property of the POD
+
+|  | n | mean | min | max |
+|---|---:|---:|---:|---:|
+| r2's dev-200 v2 leg, pod `8tpx8lf05n6skc` | 200 | **2.726** | 2.092 | 4.066 |
+| this window leg, pod `xpz3zb7yxus5cw` | 131 | **4.498** | 3.799 | 5.798 |
+| ratio | | **1.65×** | | |
+
+Five explanations were ruled out one at a time, with numbers, before this was written down:
+
+* **the request** — the window's rendered requests are 1.14 % wider than dev-200's (4 725.8 against
+  4 672.4 chars). The entity blocks nearly double, 0.96 → 1.80 a request, and contribute almost
+  nothing to the width. This is the H6 row the registration already carried (Dv628);
+* **a cold leg** — r2's BASE leg ran first, straight off the model load, and its first ten calls
+  averaged **2.199 s**. There is no warm-up effect on this stack that could explain 1.65×;
+* **the prompt** — identical family, identical shas, and the pod's own handshake matched all 1 032
+  per-item shas before the first call;
+* **the card model and the place** — RTX 4090 both times, EU-RO-1 both times, the same volume;
+* **the population** — the 200 dev rows are INSIDE this window and render byte for byte the same.
+
+What is left is the pod. **The registration charged 3.4075 s/call — 2.726 × a 1.25 margin — and the
+live rate is 1.32× the charge and 1.65× the sample.** The margin was bought against the growth of
+the request; what moved was the silicon (Dv647).
+
+### The recovery clause, pasted either way
+
+```
+$ PYTHONPATH=src python3.11 scripts/gate_pass1_window.py --pre-create-check
+  pods_opened                      1        re_creations_allowed              1
+  billed_by_closed_pods_seconds  845.0      spent_closed_pods_usd      0.173694
+  worst_case_ahead_seconds      5916.54     widest_dead_pod_that_fits    583.46
+  projected_attempt_seconds     6761.54  >  hard_stop_seconds            6500.0
+  projected_attempt_usd         1.488481 ≤  cap_usd_all_in                  1.50
+  fits_the_hard_stop  False · fits_the_cap  True · fits_the_re_creation_count  True
+  verdict  KILL
+  STOP: this create cannot be paid for by the registration. The attempt is NOT spent —
+  return it to the operator
+```
+
+It refused on SECONDS while the money still fitted — the shape the registration predicted. **No
+second pod was created.** Two of the three tests passed and the stricter bound.
+
+Worth stating exactly, because it is the cleanest form of the finding: at the rate this pod ran,
+**one pod doing the whole run fits** — 252.5 + 1 032 × 4.498 + 1 300 = **6 195 s of 6 500**, and
+$1.273 of $1.50. It is paying pod 1's 845 s out of the 583 s of slack that makes a second pod
+impossible. **The run was affordable; the restart was not.**
 
 ## D2 — the census ($0)
 
-*Not run. `results/pass1_window_census.json` and the four numbered readings the contract lists.*
+`results/pass1_window_census.json`. **Rung 7 is RED on completeness and green on everything else.**
+
+```
+$ PYTHONPATH=src python3.11 scripts/gate_pass1_window.py --completeness
+  rows_in_the_file  131      answered  131 of 1032       parsed  131
+  sha_mismatches      0      parse_refusals    0  {}      replies that never closed an object  0
+  duplicate_ids      []      ids the leg never asked   []
+  VERDICT  RED
+```
+
+131 replies, 131 parsed, not one transport defect. The instrument is sound; the bar failed on the
+one number the money model could not deliver.
+
+### What v2 said, in THREE states
+
+| | rows |
+|---|---:|
+| `сеть_ритейлер` | 46 |
+| `категория_личное` | 36 |
+| `None` | 37 |
+| `молочный_бренд` | 9 |
+| `не_наш_рынок` | 3 |
+| REFUSED — answered and unparseable | **0** |
+| UNANSWERED — the pod was killed first | **901** |
+
+The last two rows are the point. Folding 901 never-asked comments into a refusal class would put the
+pod's death in the parser's column — and writing this census is where that mistake was caught, three
+times, in three places, in my own code (Dv650).
+
+### Report-only readings — BOTH denominators, and none of them a bar
+
+| reading | over the registered rows | over the rows answered | «our» |
+|---|---|---|---|
+| the 650 labelled rows | 69 / 650 | **69 / 117** = 0.590 | 23 / 49 |
+| the 450 not in dev-200 | 35 / 450 | **35 / 65** = 0.538 | **0 / 0 — structurally** |
+| the dev-200 | 34 / 200 | **34 / 48** = 0.708 | 21 / 49 |
+| the fourteen | 4 / 14 | **4 of the 5 reached** | — |
+
+**None of these is comparable to r2's 136/200 · 38/49, and the dev-200 row is NOT a reproduction of
+it.** Eighty-three per cent of those rows were never asked: the first column counts them as
+disagreements and is comparable to nothing, the second is a reading over a handful (Dv651).
+
+**The 450's zero is structural and permanent** (Dv652): `dev_units` takes ALL 49 «our» rows into
+dev-200 whole, so the 450 outside it contain none of the class this programme is about — that
+reading can never say anything about «our» rows, on this run or any other.
+
+**The fourteen: the pod reached FIVE and agreed on four.**
+
+```
+@VARUS_channel:10348#20664   сеть_ритейлер   ->  сеть_ритейлер   ✓
+@VARUS_channel:10613#21599   категория       ->  категория       ✓
+@VARUS_channel:10613#21601   категория       ->  категория       ✓
+@VARUS_channel:10613#21626   сеть_ритейлер   ->  сеть_ритейлер   ✓
+@VARUS_channel:10613#21629   None            ->  категория       ✗
+the other nine                                   UNANSWERED — never reached
+```
+
+The fourth look at these rows and the thinnest of the four. A census row, not comparable to the
+base's 9/14 or arm A's 9/14 — both taken on complete runs — and not quotable as a verdict on v2.
+
+### The pass-2 filter table — the one output that survives the RED for what it is
+
+**91 filtered rows across 24 of the 127 callable threads, 5 963 characters.** Partial by the same
+fraction as the run: it prices `pass2-signals` per ANSWERED thread and the whole-window figure has
+to be bought again. The per-thread rows, their label tallies and their entity-block sizes are in the
+census.
+
+### Measured spans, beside what was charged
+
+| span | measured | charged |
+|---|---:|---:|
+| ssh publish | **29 s** (the gate recorded 41.5 of create-elapsed) | 500 |
+| stage + launch | **54 s** | 150 |
+| model load | **164.9 s** | 450 |
+| pre-generation, whole | **252.5 s** | 1 100 |
+| s/call | **4.498** (slowest 5.798) | 3.4075 |
+| billed | **845.0 s = $0.173694** | 5 916.54 s = $1.3148 |
+
+Every pre-generation line came in at a third to a half of its allowance. The one line that was
+UNDER-charged is the only one that mattered.
+
+## Deviations added by the paid session
+
+| # | What | Tag |
+|---|---|---|
+| **Dv647** | **The finding the whole session turns on.** `money.arithmetic.seconds_per_call` charged 3.4075 = the MEASURED 2.726 × 1.25, and named the margin «for the window's larger entity blocks». The live rate on `xpz3zb7yxus5cw` is **4.498 s/call — 1.65× the sample and 1.29× the charge**. Five candidate causes were eliminated with numbers before this was written: request width (+1.14 %), a cold leg (r2's own base leg, first off the load, ran 2.199), the prompt (identical shas, handshake matched all 1 032), the card model (RTX 4090 both) and the population (the 200 dev rows are inside this window and render byte for byte). The sample was reproducible and it was not representative. | `[cause: env]` `[[a_reproducible_probe_can_be_unrepresentative]]` |
+| **Dv648** | `pre_create` prices a re-creation at the REGISTERED worst case and `projection` prices the running leg at the MEASURED rate, so the two halves of the same clause disagree about the same run — and the one that authorises the spend is the optimistic one. It did not bite here (the clause refused on seconds anyway) but it is the shape that would have bought a second pod that could not finish. | `[cause: verify-gap]` `[[two_instruments_two_inputs]]` |
+| **Dv649** | Rung 3 is checked live in every watch poll and **cannot be recorded as a standalone gate on a killed pod** — `--boot` needs a live pod and the watch's KILL deletes it inside the loop. The reading is unambiguous in the artifacts (launch 15:33:41, `boot_seconds 164.915`, `elapsed_since_start 169.505`) and is reported from them rather than back-filled. r2 carried the same shape as a post-hoc note. | `[cause: contract-gap]` `[[a_registered_bar_may_have_no_producer]]` |
+| **Dv650** | **Found while writing the census, in my own code, three times.** The label distribution folded 901 never-asked rows into a `REFUSED` class; the pass-2 table carried one `threads_total` over two denominators (129 in the cell, 127 callable); and the fourteen's `v2` column printed `None` for both «answered null» and «never reached», on nine of fourteen rows. All three now carry the distinction explicitly. A run that ends early makes every count in a census ambiguous, and the census is written after the money. | `[cause: verify-gap]` `[[the_empty_class_eats_the_parse_failures]]` |
+| **Dv651** | Every report-only reading publishes TWO denominators — the registered rows and the rows the pod answered — because 83 % of the population was never asked. The dev-200 row is NOT a reproduction of r2's 136/200: it is 34/200 counting 152 unasked rows as disagreements, or 34/48 over what was reached. | `[cause: spec-gap]` `[[measure_on_the_rows_the_gate_scores]]` |
+| **Dv652** | The «450 not in dev-200» reading the contract asks for has **`our_n` = 0 by construction and always will**: `build_pass1_fewshot_packs.py::dev_units` takes all 49 «our» rows into dev-200 whole. It is a reading of overall agreement on untuned rows and can say nothing about the class the programme is about — on this run or any other. | `[cause: contract-gap]` `[[an_empty_class_is_the_definitions_answer]]` |
+| **Dv653** | `gate_pass1_fewshot.py::leg_table` refuses any out-file row its leg never asked, which is right for a gate reading one leg's own file and wrong for a census taking three overlapping readings out of one. The census FILTERS the out-file to each subset in a scratch directory and hands `leg_table` the same lines, selected — the function is not modified and the rows are not touched. | `[cause: process]` `[[a_consumer_list_is_not_a_meaning_list]]` |
+
+## Process signals (five lines)
+
+1. **The rate was the one input nobody put on the suspect list — not the review's five lenses, not
+   the skeptics, not me.** Every one of us attacked what the rate would be MULTIPLIED by: the
+   margin's reason, the span the curve was computed over, the knife edge, the deletion tail. The
+   registration even carried an H6 row measuring the margin's own justification and finding it
+   generous by an order of magnitude. All of that was true and none of it mattered, because 2.726
+   s/call over 200 rows on pod `8tpx8lf05n6skc` does not describe pod `xpz3zb7yxus5cw`. The 5c2
+   retro's rule — «beside every price, name what it was measured ON» — was followed to the letter:
+   the sample is named in the record, in the money block and in the report. Naming the sample is not
+   the same as asking whether the sample is the population, and on a rented GPU the population is
+   the pod.
+2. **The review before the pod found nine defects and the tenth was the one it could not see.** It
+   raised 21 findings, 12 survived, and every fix carries a mutation watched red — the guard that
+   would have graded a tampered pack, the `--price` that left a billing pod unrecorded, the runbook
+   that deleted the replies its own recovery clause promised to keep. Two of those would have ended
+   the session at a cost. What the review could not do is question a number that had a measurement
+   behind it: 2.726 was real, reproducible and sourced. A review checks whether the arithmetic
+   follows from the inputs; it cannot check whether the inputs will still be true on hardware nobody
+   has rented yet.
+3. **Rung 4 was right and killing it was the correct outcome.** At 5.151 s/call the projection was
+   6 785.7 s against a 6 500 s stop, and a gate that let that run would have discovered the overrun
+   in a bill. The uncomfortable part is the counterfactual the arithmetic also proves: at the mean
+   the run fits in one pod — 6 195 s of 6 500, $1.273 of $1.50 — and it is paying pod 1's 845 s out
+   of 583 s of slack that makes a restart impossible. The run was affordable. The restart was not,
+   and that is a property of pricing a re-creation at the full worst case rather than at what
+   remains.
+4. **Writing the census found the same defect three times in my own code, after the money.** Never-
+   asked rows folded into a refusal class, one `threads_total` over two denominators, and a `None`
+   column meaning both «said null» and «never reached» on nine of fourteen gold rows. Each is the
+   class I had already found and fixed twice during D0. A run that ends early makes every count in a
+   census ambiguous at once, and the census is the artifact written when the evidence can no longer
+   be re-bought.
+5. **What survived the RED is worth more than the run would have been.** The transport is proven on
+   1 032 registered requests and 131 real replies with zero defects of any kind; the completeness
+   bar, its refusal semantics and D2's whole reading path were driven at $0 on r2's own replies
+   before the create; and the session returns a measured rate for this pod class that re-prices
+   `pass2-signals`, the remaining 901 comments and any future window pass. $0.1737 bought a number
+   the programme did not have.
+
+## What returns to the operator
+
+**The bar is RED and the reason is a rate, not a defect.** 131 of 1 032, 845.0 s, $0.173694 of
+$1.50. Step spend $0.1599 by the guard's balance delta; cycle 2 at $6.5436 of $20.00.
+
+**Three things need your word, and the first two are the same decision seen twice.**
+
+1. **The 901 comments still owed have to be re-priced before they are re-bought.** At the measured
+   4.498 s/call the remaining rows are 901 × 4.498 = 4 053 s of generation; with a fresh pod's
+   pre-generation and the registered overhead that is ≈ 5 600 s = **$1.15 at $0.80/h**, and it does
+   NOT fit under this registration's 6 500 s stop once pod 1's 845 s are counted. A continuation
+   needs its own registration with a rate charged on the POD CLASS and not on a sibling run —
+   `pass1-window r2`, in the shape `pass1-fewshot r2` took.
+2. **6 700 s was already the right question and it arrived through the other door.** Before the
+   create I reported that 6 700 s = $1.4889 stays inside the $1.50 cap and moves rung 4's edge to
+   4.167 s/call; you ruled «proceed as registered» on a risk described as one outlier call. The
+   actual failure needed no outlier: the whole rate sat above the edge. At 4.498 s/call a hard stop
+   of **7 000 s = $1.5556** would be needed and that is OUTSIDE the cap — so this is not a
+   hard-stop tweak any more. It is the cap and the rate together, and it belongs in the next
+   registration rather than in an amendment to this one.
+3. **`pass2-signals` cannot be priced from this census as it stands.** The contract says it is
+   priced from THIS run's census, and the census covers 24 of 127 callable threads — 91 filtered
+   rows of an unknown whole. The per-thread shape is sound and the extrapolation is not mine to
+   make.
+
+**And the reminder the record binds regardless of the RED.** The fourteen: the pod reached five and
+agreed on four. That is a census row with its multiplicity named — the fourth look at those rows and
+the thinnest of the four — and it is not comparable to the base's 9/14 or arm A's 9/14, both taken
+on complete runs. It may not be quoted as a verdict on v2 by this report, by the acceptance, or by
+the next registration.
