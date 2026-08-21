@@ -337,7 +337,7 @@
       "moved_since_r1": true,
       "rule": "the ONE instrument this re-registration amends, and the one pin that must move. r1's record still carries its own sha (eda56fdef296f58f…) and is never edited; this checkout's gate reads THIS record and holds r2's rungs",
       "script": "scripts/gate_pass1_fewshot.py",
-      "sha256": "923d8b18aa8a4e112ee9c7cb3fc5a0b0f4871da406d59c67209eb0d052ecde3b"
+      "sha256": "07a5a07aa8e94d980704b82dbddb4c58abe36b4c6fb3f4f4a42a4f3fcf4d02ff"
     },
     "packs": {
       "producer": "scripts/build_pass1_fewshot_packs.py",

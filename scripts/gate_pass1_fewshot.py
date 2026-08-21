@@ -409,14 +409,21 @@ def first_reply_after_launch(record: dict, where: Path) -> float | None:
     subtracting the launch stamp takes the ssh wait and the staging off twice — a 460 s load would
     read as 415 s and rung 3 would report GO on exactly the condition it was re-anchored to catch.
 
-    The runner already writes the answer. `elapsed_since_start` is monotonic seconds from the
-    runner's start to that row, so the smallest one across the legs IS «launch → first reply», and
-    the gate reads it instead of being told ([[a_flag_that_asserts_turns_a_poll_into_a_verdict]]).
+    The runner already writes the answer: `elapsed_since_start` is monotonic seconds from its own
+    start to that row, so the FIRST one is «launch → first reply» and the gate reads it instead of
+    being told ([[a_flag_that_asserts_turns_a_poll_into_a_verdict]]).
+
+    **Only the FIRST registered leg is read, and that is the whole correctness of it.** Dv599 runs
+    both dev legs in one process with one model load, but `pass1_fewshot_pod_runner` calls the
+    shipped `run()` once PER LEG and `run()` re-zeros its own clock — so the v2 leg's first row is
+    ~8 s after ITS start, with the load already paid. Taking the minimum across both legs would
+    return that 8 s and rung 3 would report GO on anything, which is the permissive direction and
+    exactly the defect this whole reading replaced. The base leg is the one that pays the load.
     """
+    leg = record["population"]["dev"]["legs"][0]
     seen = [
         float(row["elapsed_since_start"])
-        for one in record["population"]["dev"]["legs"]
-        for row in rows_of(where / one["out"])
+        for row in rows_of(where / leg["out"])
         if row.get("elapsed_since_start") is not None
     ]
     return min(seen) if seen else None

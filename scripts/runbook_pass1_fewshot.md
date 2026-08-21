@@ -98,7 +98,12 @@ own ceiling, read out of the record so it cannot drift:
 
 ```bash
 CEIL=$(python3.11 -c "import json;print(int(json.load(open('results/prereg_pass1_fewshot_r2.json'))['money']['arithmetic']['ssh_seconds_charged']))")
-CREATED=$(date -u -j -f '%Y-%m-%dT%H:%M:%S' '<the create response stamp, UTC, no zone>' +%s)
+CREATED=$(date -u -j -f '%Y-%m-%dT%H:%M:%S' '<the create stamp, UTC, WITHOUT its Z or +00:00>' +%s)
+# a deadline that failed to parse is an EMPTY variable, and an empty variable makes the loop below
+# exit before one API call — silently, and then you hand-poll, which is the class that cost r1 pod 1
+[ -n "$CREATED" ] || { echo "the create stamp did not parse — fix it before polling"; false; }
+echo "polling until $(date -u -r $((CREATED + CEIL)) +%Y-%m-%dT%H:%M:%SZ), rung 2's own ceiling"
+
 runpodctl ssh info <POD_ID>          # "pod not ready" for FOUR minutes was normal on 2026-08-20
 while [ "$(date -u +%s)" -lt $((CREATED + CEIL)) ]; do
   runpodctl ssh info <POD_ID> | grep -q '"port"' && break
@@ -107,6 +112,11 @@ done
 runpodctl ssh info <POD_ID>          # the reading the next command asserts
 PYTHONPATH=src python3.11 scripts/gate_pass1_fewshot.py --gate0 --ssh-ok   # it answered
 ```
+
+**If it did not come up, do not linger.** The loop ends at the rung, `--gate0` KILLs a second later,
+and r1 measured a 78.5 s tail between the rung firing and the meter stopping — about **578 s** of
+billed pod against the **623.448 s** at which the ONE re-creation stops fitting. That is ~45 s of
+margin: delete immediately, then `--close`.
 
 **`--gate0` run WITHOUT `--ssh-ok` asserts that the endpoint has NOT answered** — that form is a
 KILL past 500 s of create-elapsed whether or not the pod is actually up, because what the gate
@@ -290,7 +300,16 @@ yours to paste: `--pre-create-check` computes both bounds and the count, and ret
 create cannot be paid for. Every reply already on disk is kept — the shipped resume re-asks only
 what has no answer, so a KILL mid-leg costs the load and not the leg.
 
+**Clear the Mac's copies of the dead pod's run directory first.** The replacement pod clears
+`/workspace/run` in step 3, so anything still on the Mac is the previous attempt's: a stale
+`launched_at` makes `--watch` refuse with a live pod («BEFORE this pod was created»), and stale
+out-file rows are a high-water mark the new pod's real progress never rises above — it would die on
+the liveness rung while working, or the loop would return GO having watched nothing.
+
 ```bash
+rm -f results/pass1_fewshot_r2_launched_at results/pass1_fewshot_pod.log \
+      results/pass1_dev_base.jsonl results/pass1_dev_v2.jsonl results/pass1_fewshot_shot.jsonl
+ls results/pass1_dev_*.jsonl results/pass1_fewshot_r2_launched_at 2>&1   # "No such file" — the proof
 PYTHONPATH=src python3.11 scripts/gate_pass1_fewshot.py --pre-create-check   # then step 1 again
 ```
 

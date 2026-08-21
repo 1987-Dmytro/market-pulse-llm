@@ -5,8 +5,8 @@ committed: the r2 registration by a **sibling producer**, the gate amended on it
 guard anchor, the runbook, and tests in both directions on a fake transport. r1 is untouched — the
 file on disk is still byte for byte `c7cbfd1` and a test says so. **The adversarial review before the
 first `pod create` raised 21 findings, 7 survived refutation, and they collapse into four defects —
-two of them would have deleted a healthy pod with the attempt unspent.** All four are fixed, each
-with a mutation that was watched to go red.
+two of them would have deleted a healthy pod with the attempt unspent.** A second pass over the
+transport found a fifth. All are fixed, each with a mutation that was watched to go red.
 
 *(This report is written at the D0′ boundary and is extended after D1/D2. The paid session's own
 section is below.)*
@@ -185,6 +185,23 @@ guard that fires only when someone remembers to ask is the habit rung 5 was boug
 way** (a pod that exists against no counter is a pod nothing is measuring) and returns KILL with the
 delete instruction.
 
+### Dv620 — the reading was right and the leg was wrong
+
+Caught in a second pass, after the four above and before the pod. `first_reply_after_launch` took
+`min(elapsed_since_start)` across **both** dev legs. Dv599 runs them in one process with one model
+load — but `scripts/pass1_fewshot_pod_runner.py` calls the shipped `run()` once **per leg**, and
+`run()` re-zeros its own monotonic `started`. The v2 leg's first row therefore lands ~8 s after ITS
+start, with the load already paid, so the minimum across both legs is that 8 s and rung 3 reports GO
+on anything — the permissive direction again, and `--boot` runs after both legs have finished, so it
+would always have seen it.
+
+The verification that settled it is two file reads: `results/pass1_probe_b_rows.jsonl`'s first PAID
+row carries `boot_seconds 237.155` and `elapsed_since_start 242.155`, which proves the field exists
+on the real pass-1 path; and `pass1_fewshot_pod_runner.main()` loops `for leg in legs: runner.run(…)`,
+which proves the clock restarts. The reading is now the **first registered leg** — the one that pays
+the load — with a test that puts an over-ceiling row in `base` and an 8 s row in `v2` and asserts
+the gate reads 550 and KILLs. Reverting it to the minimum makes that test red.
+
 ### The mutations, watched
 
 A finding that has never been seen to fail is arithmetic wearing a gate's name. Each fix was
@@ -196,6 +213,7 @@ reverted on a scratch copy and the suite re-run:
 | `first_reply_after_launch` always returns `None` | `…without_a_launch_stamp_can_NEVER_report_GO`, `…watch_arms_rung_3…` |
 | the `and at_create <= backstop` conjunct deleted | `test_the_create_anchored_BACKSTOP_kills_a_pod_with_a_FRESH_launch_stamp` |
 | `--price` ignores the recovery verdict | `test_pre_create_check_refuses_a_THIRD_pod_even_when_the_seconds_would_fit` |
+| `first_reply_after_launch` reads both legs again | `test_rung_3_reads_the_BASE_legs_clock_and_not_the_v2_legs_RESTARTED_one` |
 
 ## H6 — 31 rows, and three of them check REASONS rather than numbers
 
@@ -252,7 +270,7 @@ QUERY BACKSTOP_TOLERANCE_SECONDS
     # and NOT scripts/gate_pass1_fewshot.py — the name left the gate, and a test keeps it out
 
 $ make check
-3265 passed, 2 skipped in 519.18s          # 3239/2 at step 0; +26 tests
+3266 passed, 2 skipped in 516.40s          # 3239/2 at step 0; +27 tests
 $ ruff format --check . && ruff check .
 394 files already formatted · All checks passed!
 
@@ -289,4 +307,6 @@ PASS1-FEWSHOT-R2 SPENT      $0.0000 of $1.38  (anchor $16.44 from runpod_balance
 | **Dv616** | `scripts/score_pass1_fewshot.py` carried its own copies of the registration and run-record paths. Left as literals they would have gone on scoring r1's law over r2's session; they are `gate.PREREG` / `gate.RECORD` by reference now, which is also why the scorer's sha moved and is pinned. | `[cause: verify-gap]` `[[preregistration_is_a_file_not_a_constant]]` |
 | **Dv617** | The two sealed packs carry `"record": "results/prereg_pass1_fewshot.json"` and are byte-frozen, so they name a superseded law and cannot be rewritten. `supersedes` in the r2 record is what closes the loop; named here so a reader of the packs is not sent to r1 without knowing it. | `[cause: env]` `[[a_citation_is_not_a_record]]` |
 | **Dv618** | The guard anchor is taken at session start as the contract asks, so the volume drip across the whole D0′ window lands on r2's balance delta — Dv604's class, expected this time rather than discovered. The gate's own clock is the per-leg figure; the delta is the account's. | `[cause: env]` `[[a_balance_delta_is_not_a_per_leg_cost]]` |
+| **Dv620** | `first_reply_after_launch` took the minimum across BOTH dev legs. `pass1_fewshot_pod_runner` shares the model LOAD across the legs and calls the shipped `run()` once per leg, and `run()` re-zeros its own monotonic clock — so the v2 leg's first row is ~8 s after its own start and the minimum would have reported GO on any load whatever. Read from the FIRST registered leg, the one that pays the load. | `[cause: verify-gap]` `[[two_instruments_two_inputs]]` |
+| **Dv621** | The runbook's poll deadline is parsed by BSD `date`, which errors on a stamp carrying its `Z` and leaves an EMPTY variable — the `while` guard is then false on entry and the loop exits without one API call, silently, and the executor hand-polls. That is the class that cost r1 pod 1. The deadline is echoed and an empty parse refuses. Recovery also clears the Mac's copies of the dead pod's run directory: a stale `launched_at` makes `--watch` refuse with a live pod, and stale rows are a high-water mark the new pod never rises above. | `[cause: verify-gap]` `[[a_checker_whose_failure_is_silence]]` |
 | **Dv619** | The launch stamp's clock-skew allowance REUSES the registered backstop tolerance — one constant answering two questions. It is bounded and named rather than fixed: an accepted stale stamp makes rung 3 fire EARLIER, never later, and the create-anchored backstop reads `backstop_seconds` and never touches the tolerance, so no value of the field can buy a window nobody priced. | `[cause: process]` `[[one_constant_answering_two_questions]]` |

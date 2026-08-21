@@ -275,6 +275,27 @@ def test_rung_3_is_anchored_on_the_LAUNCH_and_backstopped_on_create(run, tmp_pat
     assert run.main(boot, now=at(5 + CEILING + 20)) == gate.KILL
 
 
+def test_rung_3_reads_the_BASE_legs_clock_and_not_the_v2_legs_RESTARTED_one(run, tmp_path):
+    """Dv599 shares the model LOAD across the two dev legs. It does not share the clock.
+
+    `pass1_fewshot_pod_runner` calls the shipped `run()` once per leg and `run()` re-zeros its own
+    monotonic `started`, so the v2 leg's first row lands ~8 s after ITS start with the load already
+    paid. A minimum across both legs would return that 8 s and rung 3 would report GO on anything —
+    the permissive direction, and the same sign as the create-anchored recipe this reading replaced.
+    """
+    assert RECORD["population"]["dev"]["legs"][0]["name"] == "base"
+    where = tmp_path / "out"
+    assert opened(run) == gate.GO
+    launch_stamp(where, 5)
+    replied(where, CEILING + 100)  # the base leg: a load well OVER the ceiling
+    replied(where, 8.0, leg="pass1_dev_v2.jsonl")  # the v2 leg, on its own restarted clock
+    assert gate.first_reply_after_launch(RECORD, where) == CEILING + 100
+    assert run.main(["--boot", "--outdir", str(where)], now=at(5 + CEILING + 200)) == gate.KILL
+    recorded = json.loads(run.RECORD.read_text("utf-8"))["gates"][-1]
+    assert recorded["first_reply_at_launch_elapsed_seconds"] == CEILING + 100
+    assert "after launch" in recorded["cause"]
+
+
 def test_the_create_anchored_BACKSTOP_kills_a_pod_with_a_FRESH_launch_stamp(run, tmp_path):
     """The bound on the anchor. A stamp taken late cannot buy a window the registration never priced."""
     where = tmp_path / "out"
