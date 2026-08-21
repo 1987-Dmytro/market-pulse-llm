@@ -558,3 +558,128 @@ agreed on four. That is a census row with its multiplicity named — the fourth 
 the thinnest of the four — and it is not comparable to the base's 9/14 or arm A's 9/14, both taken
 on complete runs. It may not be quoted as a verdict on v2 by this report, by the acceptance, or by
 the next registration.
+
+---
+
+# ADDENDUM — the team lead's acceptance, 2026-08-21 (evening)
+
+**Appended, never rewritten.** Everything above is the report as it was accepted; this section
+carries what the acceptance found and what was changed because of it. Where a number below differs
+from one in the body, **the number below is the one to quote** — the body's is named here so a later
+reader can see which reading was corrected and why, instead of finding two values and picking the
+kind one. Written under `docs/PROMPT-pass1-window-r2.md` step 0.5, at $0, before any r2 code. Its
+Deviations are enumerated with r2's, from Dv659, in `docs/reports/pass1-window-r2.md` — one
+enumeration for one contract.
+
+## 1 — the report-only readings were inflated by msg_id collisions
+
+**A msg_id is unique per CHANNEL and not per window, and the scoring path keyed on it alone.**
+
+`src/market_pulse/scorer.py::reader_comment_agreement` builds `answers = {int(one["msg_id"]): one
+for one in per_comment}` — a last-wins map — and `scripts/gate_pass1_fewshot.py::leg_table` derives
+`agreed_ids` as a **set** of msg_ids while `our_rows` stays a **list** of them. Seven msg_ids inside
+`membership.labelled_650` live in two threads each, `@VARUS_channel` against `@klopotenkofood`, and
+the pack's own `gold_id_collisions` block had already named all thirteen collisions in the
+population — for the GOLD rows, where the two keys agree. Nobody carried the same question to the
+labelled readings.
+
+Five of the seven pairs had exactly one twin answered, so five twins the pod never reached inherited
+their namesake's reply and were scored as present:
+
+| msg_id | `@VARUS_channel` | `@klopotenkofood` | what the id-only key did to the 650 |
+|---|---|---|---|
+| 21164 | answered · said `молочный_бренд` · gold `не_наш_рынок` | answered · said `категория` · gold `не_наш_рынок` | both answered — nothing inherited, both disagree either way |
+| 21195 | answered · said `null` · gold `сеть_ритейлер` | answered · said `категория` · gold `категория` («our») | both answered — the map kept one reply, and the reading is the same on either |
+| 21209 | answered · said `null` · gold `сеть_ритейлер` | **never answered** · gold `null` | +1 answered, **and +1 AGREED** — the inherited `null` matched the twin's gold |
+| 21211 | answered · said `сеть_ритейлер` · gold `сеть_ритейлер` | **never answered** · gold `категория` («our») | +1 answered, **+1 our_agreed** — `our_rows` holds 21211 and `agreed_ids` holds it too |
+| 21236 | answered · said `сеть_ритейлер` · gold `сеть_ритейлер` | **never answered** · gold `не_наш_рынок` | +1 answered |
+| 21239 | answered · said `сеть_ритейлер` · gold `сеть_ритейлер` | **never answered** · gold `не_наш_рынок` | +1 answered |
+| 21256 | answered · said `сеть_ритейлер` · gold `сеть_ритейлер` | **never answered** · gold `категория` («our») | +1 answered, **+1 our_agreed** |
+
+**+5 answered · +1 agreed · +2 «our» agreed** — and that is exactly the gap, to the row:
+
+| reading | the body says | **corrected** | what moved |
+|---|---|---|---|
+| the 650 labelled rows | 69 / 117 · «our» 23 / 49 | **68 / 112 · «our» 21 / 49** | five inherited replies, one inherited agreement, two inherited «our» agreements |
+| the 450 not in dev-200 | 35 / 65 | **34 / 64** | it carries one of the seven, 21209 — the one that inherited an agreement |
+| the dev-200 | 34 / 48 · «our» 21 / 49 | **34 / 48 · «our» 21 / 49** | nothing: dev-200 carries no collision at all |
+| the fourteen | 4 of the 5 reached | **4 of the 5 reached** | nothing: the gold pairs carry no collision either |
+
+The rates over the registered rows move with them: the 650 reads 68/650 and the 450 reads 34/450.
+None of these was ever a bar and none of them becomes one by being corrected.
+
+**The scorer is NOT edited, and neither is `leg_table`.** `src/market_pulse/scorer.py` is the single
+judge of every number in this programme and is pinned by sealed records;
+`scripts/gate_pass1_fewshot.py` is pinned by four of them, r2's sealed registration included, and is
+the instrument D2's own clause names. Editing either to fix a census would move bytes a closed
+session's record certifies. What changed is the census path: `census_pass1_window.py::labelled_reading`
+now hands `leg_table` **one thread at a time** and sums the tables. Within a thread a msg_id is
+unique, so the collision cannot occur and every row is still scored by the function the contract
+names.
+
+**The rule this establishes, and it binds the next contract.** *Comment identity anywhere in this
+window is the PAIR `(thread, msg_id)`.* `pass2-signals` assembles per thread over rows pass 1
+labelled, and a table keyed on msg_id would merge two comments of two different channels into one
+row of one thread. The pack already keys `membership` on the pair; the census now does; the next
+registration must say so in its own record.
+
+**The check that survives.** `tests/test_pass1_window_census.py` builds the 21209 pair — one twin
+answered, one never — and calls **both paths on the same pinned instrument**: the id-only key
+answers `2 answered / 1 agreed`, the pair answers `1 / 0`. The mutation (one group instead of one
+group per thread) was watched red: `assert 2 == 1`.
+
+## 2 — the refusal that ended the session was never a record
+
+`--pre-create-check` printed its KILL and returned exit 2 **without calling `append_gate`**. The
+paste in «The recovery clause, pasted either way» above was the only place it existed: no gate entry,
+no run-record key, nothing a later reader could re-derive. A guard whose verdict lives in a terminal
+is not a record.
+
+It is now appended to `results/pass1_window_run.json` as a `pre-create-check` gate, marked
+`recorded_after_the_fact`, carrying the stdout line as the command printed it. It is not a typed
+recollection: `pre_create(record, state)` is pure in both arguments, so it was **recomputed** from
+the committed registration and the recorded state and reproduces every field —
+`projected_attempt_seconds 6761.54 > hard_stop 6500.0`, `projected_attempt_usd 1.488481 ≤ 1.50`,
+`widest_dead_pod_that_still_fits_seconds 583.46`, verdict `KILL`. `state["latest"]` was left where the
+session ended it (`completeness · RED`): an entry appended a day later may not rewrite how the run
+finished. The moment it actually ran is **not** in the record and cannot be — it ran after the
+15:46:23Z deletion and before rung 7, and nothing stamped it.
+
+`tests/test_gate_pass1_window.py` re-derives every field of the entry from the record and the state;
+the mutation (`projected_attempt_seconds` 6761.54 → 6500.0) was watched red. **From r2 on,
+`--pre-create-check` records its verdict at the moment it runs** — that lands in the r2 sibling,
+because `scripts/gate_pass1_window.py` is pinned by this contract's sealed registration and may not
+be edited to gain the behaviour.
+
+## 3 — the pod log names the 132nd reply, and the file does not hold it
+
+Dv657 reported 131 as a lower bound and could not name what was missing. The pod's own log can:
+
+```
+[   754.5s] reply 131/1032 @klopotenkofood:6032#21195                5.2s ·   119 chars · cut    1 · balanced True · finish stop
+[   759.2s] reply 132/1032 @klopotenkofood:6035#21205                4.7s ·   108 chars · cut    4 · balanced True · finish stop
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^ absent from results/pass1_window_v2.jsonl
+```
+
+The runner writes its log line as the reply lands, so the log reaches one row further than the
+out-file that is copied beside it. The census now derives this rather than asserting it
+(`replies_the_mac_does_not_hold`): 131 rows in the file, 132 replies in the log, one id named. **132
+is itself a lower bound** — the log is copied once a poll too. The rows themselves survive at
+`/workspace/run/pass1_window_v2.jsonl` on volume `qw4nwleanc`; r2 copies that file back as EVIDENCE,
+counts what it holds beyond the Mac's 131 and prices it, and does not merge it.
+
+## 4 — one more figure in the body, found while checking the others
+
+The rate table in «a rate is a property of the POD» prints the window leg's minimum as **3.799 s**.
+The file's minimum is **3.780**; 3.799 is the second-smallest of the 131. The mean (4.498), the max
+(5.798) and every dev-200 figure beside them re-derive exactly. It changes nothing — the argument
+runs on the mean and the maximum — and it is named here because the acceptance was already
+correcting three readings in this file and a fourth one left unnamed is the same class again.
+
+## What this addendum does NOT change
+
+The bar is still **RED at 131 of 1 032**. The pod, its 845.0 s and its $0.173694 are unmoved. Rung 4
+was right, the transport was clean on every row it bought, and the pass-2 filter table still covers
+24 of 127 callable threads and still cannot price `pass2-signals`. The step is still **OPEN** for
+`money-anchors`. The fourteen are still a census row with their multiplicity named — the pod reached
+five and agreed on four — and this addendum does not promote them either.
