@@ -280,7 +280,8 @@
       "verdict": "RED"
     },
     {
-      "at": "2026-08-21T21:34:00+00:00",
+      "at": "2026-08-21T19:03:30+00:00",
+      "at_is": "the moment this entry was WRITTEN by the step 0.5 addendum, taken from the clock the way `append_gate` takes it — not the moment the guard ran, which nothing recorded. The first version of this field carried 2026-08-21T21:34:00+00:00, a stamp typed by hand that had not happened yet: a record of a closed paid session may not carry an invented time coordinate ([[session_metadata_is_queried_not_recalled]])",
       "billed_by_closed_pods_seconds": 845.0,
       "cap_usd_all_in": 1.5,
       "fits_the_cap": true,

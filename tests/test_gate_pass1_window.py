@@ -1095,3 +1095,15 @@ def test_the_paid_sessions_pre_create_REFUSAL_is_in_the_run_record_and_recompute
 
     # and it did not rewrite the session's ending
     assert state["latest"] == {"kind": "completeness", "pod": 1, "verdict": "RED"}
+
+    # its `at` is a CLOCK READING and not a typed coordinate: after the last gate the session really
+    # recorded, and not in the future. The first version of this field carried a stamp three hours
+    # ahead of the machine clock ([[session_metadata_is_queried_not_recalled]])
+    from datetime import UTC, datetime
+
+    written = gate.stamp(entry["at"])
+    last_real = gate.stamp(
+        [one["at"] for one in state["gates"] if not one.get("recorded_after_the_fact")][-1]
+    )
+    assert last_real <= written <= datetime.now(UTC)
+    assert "not the moment the guard ran" in entry["at_is"]
