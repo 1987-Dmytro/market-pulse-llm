@@ -502,12 +502,16 @@ threshold and the operator's word — and the multiplicity is now five.
 |---|---:|---|
 | the gate's CLOCK | **$0.568361** | 2 765.0 s × $0.74/h, exact and final. **This is the number to quote.** |
 | the guard's balance delta, 20:27Z | $0.5607 | the account moved by this much between the anchor and that moment |
-| the guard's billing WALK | **UNAVAILABLE** | «no billing rows yet» — the delta stands alone as a LOWER BOUND |
+| the guard's billing WALK, 20:27Z | **UNAVAILABLE** | «no billing rows yet» — the delta stands alone as a LOWER BOUND |
+| the guard's billing WALK, 21:05Z | **$0.1691** (`pods $0.1691`) | readable now, and 30 % of the clock — it LAGS |
+| the guard's balance delta, 21:05Z | $0.5903 | the same delta later; it goes on growing at the volume's ~$0.24/day |
 
-The walk is unreadable NOW and that is not the same as never ([[unreadable_now_versus_never]]); r1's
-walk reported `pods $0.0000` for a pod that had demonstrably run. **The step is left OPEN**, as r1's
-is; `money-anchors` owns the settled close. Cycle 2 reads **$7.1576 of $20.00** at the same moment,
-$12.8424 remaining.
+**Unreadable NOW is not never, and this step demonstrated both halves of that in forty minutes**
+([[unreadable_now_versus_never]]). At 20:27Z the walk had no rows at all and the guard said so rather
+than reporting a zero; at 21:05Z it reports $0.1691 for a pod the clock prices at $0.568361 — readable,
+lagging, and still not the number to quote. r1's walk reported `pods $0.0000` for a pod that had run
+845 s and never moved off it in the session. **The step is left OPEN**, as r1's is; `money-anchors`
+owns the settled close. Cycle 2 reads **$7.1576 of $20.00** at 20:27Z, $12.8424 remaining.
 
 **The step sum:** r1's pod $0.173694 + this pod $0.568361 = **$0.742055 for the whole window**,
 against the $2.1737 the two registrations were allowed to spend on it.
