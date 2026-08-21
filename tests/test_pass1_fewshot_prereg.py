@@ -1,4 +1,10 @@
-"""`results/prereg_pass1_fewshot.json` — the law, and H6 as the refusal gate it claims to be.
+"""`results/prereg_pass1_fewshot.json` — r1's law, SEALED, and H6 as the refusal gate it claims to be.
+
+r1 is superseded by `results/prereg_pass1_fewshot_r2.json` and is never edited or re-opened: the
+file on disk is still byte for byte what `c7cbfd1` committed, and one test below says exactly that.
+What r2 DID move is the gate r1 pins — that is the one instrument the re-registration amends — so
+the byte-identical rebuild claim is narrowed to an enumerated diff DERIVED from which paths of the
+rebuild carry the gate's live sha, rather than deleted ([[the_identity_field_stops_covering_the_change]]).
 
 Three things carry the money. Every number the contract prints re-derives, and H6 REFUSES rather
 than reporting when one does not — driven in both directions, because a re-derivation that has never
@@ -9,6 +15,7 @@ the base's dev number is measured with a meter running.
 """
 
 import json
+import subprocess
 import sys
 from pathlib import Path
 
@@ -18,18 +25,46 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
 import build_pass1_fewshot_packs as packs  # noqa: E402
+import moved_pins  # noqa: E402
 import write_pass1_fewshot_prereg as prereg  # noqa: E402
+import write_pass1_prereg_b as prereg_b  # noqa: E402
 
 from market_pulse import prompts  # noqa: E402
+
+GATE = REPO_ROOT / "scripts" / "gate_pass1_fewshot.py"
+SEALED_AT = "c7cbfd1"
 
 RECORD = json.loads((REPO_ROOT / prereg.OUT_NAME).read_text("utf-8"))
 DEV = json.loads((REPO_ROOT / packs.DEV_NAME).read_text("utf-8"))
 SHOT = json.loads((REPO_ROOT / packs.SHOT_NAME).read_text("utf-8"))
 
 
-def test_the_shipped_registration_is_what_the_producer_writes_today(tmp_path):
+def test_r1_on_disk_is_still_byte_for_byte_what_it_was_committed_as():
+    """«r1 is never edited» is checkable, so it is checked — against the commit that sealed it."""
+    committed = subprocess.run(
+        ["git", "show", f"{SEALED_AT}:{prereg.OUT_NAME}"],
+        cwd=REPO_ROOT,
+        capture_output=True,
+        check=True,
+    ).stdout
+    assert committed == (REPO_ROOT / prereg.OUT_NAME).read_bytes()
+
+
+def test_the_shipped_registration_rebuilds_EXCEPT_where_it_pins_the_gate_r2_amended(tmp_path):
+    """The narrowed claim, asserted in BOTH directions and derived rather than typed.
+
+    `docs/PROMPT-pass1-fewshot-r2.md` amends `scripts/gate_pass1_fewshot.py` — rung 2's ceiling,
+    rung 3's anchor, the tolerance that left the source. r1 pins that file, so r1's rebuild has to
+    move THERE and nowhere else. The expected set is computed from which paths of the rebuild carry
+    the gate's live sha: a record that moved somewhere else fails, and a list gone stale fails too.
+    """
     assert prereg.main(["--outdir", str(tmp_path)]) == 0
-    assert (tmp_path / prereg.OUT_NAME).read_bytes() == (REPO_ROOT / prereg.OUT_NAME).read_bytes()
+    shipped = json.loads((REPO_ROOT / prereg.OUT_NAME).read_text("utf-8"))
+    rebuilt = json.loads((tmp_path / prereg.OUT_NAME).read_text("utf-8"))
+    expected = moved_pins.paths_holding(rebuilt, moved_pins.live_sha(GATE))
+    assert expected, "no path of the rebuild carries the gate's live sha — the check is vacuous"
+    assert set(prereg_b.moved_paths(shipped, rebuilt, opaque=())) == expected
+    assert expected == {"instruments.gate.sha256"}
     assert "generated_at" not in (REPO_ROOT / prereg.OUT_NAME).read_text("utf-8")
 
 
@@ -128,12 +163,13 @@ def test_the_registration_pins_the_instruments_the_run_will_actually_use():
     assert instruments["prompt_sha256"][prompts.PASS1_TASK] == prompts.prompt_sha256(
         prompts.PASS1_TASK
     )
-    for name, path in (
-        ("transport", "scripts/pass1_fewshot_pod_runner.py"),
-        ("gate", "scripts/gate_pass1_fewshot.py"),
-    ):
-        assert instruments[name]["script"] == path
-        assert instruments[name]["sha256"] == packs.summary.sha256_of(REPO_ROOT / path)
+    assert instruments["transport"]["script"] == "scripts/pass1_fewshot_pod_runner.py"
+    assert instruments["transport"]["sha256"] == packs.summary.sha256_of(
+        REPO_ROOT / "scripts/pass1_fewshot_pod_runner.py"
+    )
+    # the gate is the ONE pin r2 moved, and r1 is never re-pinned: it holds the sha it shipped with
+    assert instruments["gate"]["script"] == "scripts/gate_pass1_fewshot.py"
+    assert instruments["gate"]["sha256"] != moved_pins.live_sha(GATE)
     assert RECORD["population"]["dev"]["sha256"] == packs.summary.sha256_of(
         REPO_ROOT / packs.DEV_NAME
     )

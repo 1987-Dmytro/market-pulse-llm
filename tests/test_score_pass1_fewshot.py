@@ -23,7 +23,7 @@ import build_pass1_fewshot_packs as packs  # noqa: E402
 import gate_pass1_fewshot as gate  # noqa: E402
 import score_pass1_fewshot as scorer  # noqa: E402
 
-RECORD = json.loads((REPO_ROOT / "results" / "prereg_pass1_fewshot.json").read_text("utf-8"))
+RECORD = json.loads((REPO_ROOT / "results" / "prereg_pass1_fewshot_r2.json").read_text("utf-8"))
 DEV = json.loads((REPO_ROOT / packs.DEV_NAME).read_text("utf-8"))
 SHOT = json.loads((REPO_ROOT / packs.SHOT_NAME).read_text("utf-8"))
 
@@ -65,7 +65,7 @@ def sandbox(tmp_path, monkeypatch):
     """The scorer pointed at throwaway results — nothing under the repo's own results/ is read."""
     where = tmp_path / "results"
     where.mkdir()
-    monkeypatch.setattr(scorer, "RUN", where / "pass1_fewshot_run.json")
+    monkeypatch.setattr(scorer, "RUN", where / "pass1_fewshot_r2_run.json")
     monkeypatch.setattr(scorer, "REPO_ROOT", tmp_path)
     monkeypatch.setattr(gate, "REPO_ROOT", tmp_path)
     return where

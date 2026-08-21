@@ -1,9 +1,28 @@
 #!/usr/bin/env python3
-"""pass1-fewshot — the Mac half of the ONE paid session: every rung, and the loop that HOLDS them.
+"""pass1-fewshot r2 — the Mac half of the ONE paid session: every rung, and the loop that HOLDS them.
 
-`results/prereg_pass1_fewshot.json` is the law. Every threshold below is READ out of it and none is
-typed here — a gate whose number lives in two files goes green after one of them moves
+`results/prereg_pass1_fewshot_r2.json` is the law. Every threshold below is READ out of it and none
+is typed here — a gate whose number lives in two files goes green after one of them moves
 ([[preregistration_is_a_file_not_a_constant]]).
+
+**This instrument is r2's.** `results/prereg_pass1_fewshot.json` is sealed, superseded and never
+re-opened; its own pin of this script is «moved since» and is not re-pinned. What r2 amends here is
+exactly four things, each from a finding of `docs/reports/pass1-fewshot.md`:
+
+* **Rung 2** reads its ceiling from the record as always — the record now says 500 s (Dv602).
+* **Rung 3 is anchored on the RUNNER'S LAUNCH**, not on create. r1 derived the 450 s ceiling from
+  the model-LOAD window and measured it from create-elapsed, which also carries the ssh wait, the
+  staging and the launch — and the two spans this stack has MEASURED already exceed it together
+  (Dv605). The anchor is `launched_at`, a stamp the pod writes and `--watch` copies back; a run
+  record without it cannot report GO on this rung. Beside it, a create-anchored **BACKSTOP** the
+  record names, so a late stamp can never buy a window nobody priced.
+* **Rung 6's overshoot tolerance no longer lives in this file.** It is read from
+  `money.arithmetic.cumulative.backstop_tolerance_seconds` (Dv603), and its absence from the record
+  is a refusal, never a default: a threshold with a fallback in the source is the two-copies state
+  this architecture exists to forbid.
+* **`--pre-create-check` holds the recovery clause.** It was arithmetic a human pasted in r1; it is
+  now a gate that computes both bounds — the seconds against the hard stop and the dollars against
+  the cap — and refuses the create itself.
 
 **`--watch` is why this contract exists in this shape.** lora-b's arm A finished at 14:38Z and was
 found at 17:20Z: 9 720 seconds of billed idle, $1.43, and the arm B that never ran. Every rung of
@@ -21,7 +40,7 @@ is a deadline that gets discovered in a bill.
         --created-at <UTC ISO8601> --usd-per-hour <costPerHr> --card '<the card>' \\
         --terminate-after '<the stamp `pod create` was actually given>'
     PYTHONPATH=src python3.11 scripts/gate_pass1_fewshot.py --gate0 [--ssh-ok]
-    PYTHONPATH=src python3.11 scripts/gate_pass1_fewshot.py --boot [--first-reply-at <UTC ISO8601>]
+    PYTHONPATH=src python3.11 scripts/gate_pass1_fewshot.py --boot
     PYTHONPATH=src python3.11 scripts/gate_pass1_fewshot.py --watch --pack results/pass1_dev_pack.json \\
         --ssh root@<HOST> --ssh-port <PORT>
     PYTHONPATH=src python3.11 scripts/gate_pass1_fewshot.py --projection --pack results/pass1_dev_pack.json
@@ -48,15 +67,17 @@ import window_summary_5c2 as summary  # noqa: E402
 
 from market_pulse import prompts, scorer  # noqa: E402
 
-PHASE = "pass1-fewshot"
-PREREG = REPO_ROOT / "results" / "prereg_pass1_fewshot.json"
-RECORD = REPO_ROOT / "results" / "pass1_fewshot_run.json"
+PHASE = "pass1-fewshot-r2"
+PREREG = REPO_ROOT / "results" / "prereg_pass1_fewshot_r2.json"
+RECORD = REPO_ROOT / "results" / "pass1_fewshot_r2_run.json"
 DEV_PACK = REPO_ROOT / "results" / "pass1_dev_pack.json"
 LABELS = (
     REPO_ROOT / "results" / "labels_pass1_r1.jsonl",
     REPO_ROOT / "results" / "labels_pass1_r2.jsonl",
 )
 POD_LOG = REPO_ROOT / "results" / "pass1_fewshot_pod.log"
+LAUNCH_STAMP = "pass1_fewshot_r2_launched_at"
+"""What `--watch` copies the pod's own launch stamp back INTO, beside the out-files it pulls."""
 
 GO, KILL, WAIT = 0, 2, 3
 
@@ -192,9 +213,24 @@ def clock(record: dict, state: dict, now: datetime | None = None) -> dict:
     }
 
 
-BACKSTOP_TOLERANCE_SECONDS = 60.0
-"""How far the stamp actually given to `pod create` may sit BEYOND the computed one. Rounding the
-window down is always safe — it shortens it — so only overshoot is bounded."""
+def tolerance(record: dict) -> float:
+    """How far the stamp given to `pod create` may sit BEYOND the computed one — READ, never typed.
+
+    r1 kept this number as a module constant of this instrument: a threshold the gate ACTS on,
+    living outside the registration (Dv603). It is registered now, its NAME has left this file, and
+    its absence from the record is a refusal rather than a fallback — a threshold with a default in
+    the source is exactly the two-copies state one of the two files can move out of silently
+    ([[preregistration_is_a_file_not_a_constant]]).
+    """
+    cumulative = record["money"]["arithmetic"]["cumulative"]
+    if "backstop_tolerance_seconds" not in cumulative:
+        raise SystemExit(
+            f"{rel(PREREG)} carries no"
+            " money.arithmetic.cumulative.backstop_tolerance_seconds. Rung 6's overshoot allowance"
+            " is a number this gate ACTS on, so it belongs in the record and this instrument will"
+            " not supply one — re-register it."
+        )
+    return float(cumulative["backstop_tolerance_seconds"])
 
 
 def terminate_after(record: dict, state: dict, created_at: str, given: str) -> dict:
@@ -215,7 +251,7 @@ def terminate_after(record: dict, state: dict, created_at: str, given: str) -> d
         )
     computed = stamp(created_at) + timedelta(seconds=left)
     overshoot = (stamp(given) - computed).total_seconds()
-    if overshoot > BACKSTOP_TOLERANCE_SECONDS:
+    if overshoot > tolerance(record):
         raise SystemExit(
             f"--terminate-after was given as {given}, which is {overshoot:.0f} s beyond the"
             f" {computed.isoformat(timespec='seconds')} the cumulative hard stop allows this pod"
@@ -228,7 +264,67 @@ def terminate_after(record: dict, state: dict, created_at: str, given: str) -> d
         "given": given,
         "window_seconds": round(left, 1),
         "overshoot_seconds": round(overshoot, 1),
+        "tolerance_seconds": tolerance(record),
         "billed_by_closed_pods_seconds": round(seconds_before, 1),
+    }
+
+
+def pre_create(record: dict, state: dict) -> dict:
+    """The recovery clause, COMPUTED — never two endpoints, and never a create nothing can pay for.
+
+    In r1 this was arithmetic a human pasted before the second `pod create`: reading + worst case
+    ahead ≤ cap, and billed + worst case ≤ the hard stop. It worked, and it worked because the
+    executor did it. Here it is the gate: both bounds are computed from the registration on every
+    create, the stricter binds, and the knife-edge is DERIVED rather than typed — the widest dead
+    pod that still leaves the whole worst case inside the stop is `hard_stop − total_seconds`.
+
+    The count is checked too. Two CHEAP deaths would still leave the seconds fitting, and only
+    `re_creations_allowed` says no to a third pod ([[a_kill_threshold_from_one_passing_run]]).
+    """
+    sums = record["money"]["arithmetic"]
+    stop = float(sums["cumulative"]["hard_stop_seconds"])
+    worst_seconds = float(sums["total_seconds"])
+    worst_usd = float(sums["worst_case_usd_at_the_price_ceiling"])
+    cap = float(record["money"]["cap_usd_all_in"])
+    allowed = int(sums["recovery_arithmetic"]["re_creations_allowed"])
+    billed, spent = billed_before(state)
+    opened = len(state.get("pods", []))
+    seconds_ahead = billed + worst_seconds
+    usd_ahead = spent + worst_usd
+    fits_seconds = seconds_ahead <= stop
+    fits_usd = usd_ahead <= cap
+    fits_count = opened <= allowed
+    verdict = "GO" if fits_seconds and fits_usd and fits_count else "KILL"
+    return {
+        "rung": 0,
+        "pods_opened": opened,
+        "re_creations_allowed": allowed,
+        "this_would_be_pod": opened + 1,
+        "billed_by_closed_pods_seconds": round(billed, 1),
+        "spent_closed_pods_usd": round(spent, 6),
+        "worst_case_ahead_seconds": worst_seconds,
+        "worst_case_ahead_usd_at_the_price_ceiling": worst_usd,
+        "projected_attempt_seconds": round(seconds_ahead, 3),
+        "hard_stop_seconds": stop,
+        "projected_attempt_usd": round(usd_ahead, 6),
+        "cap_usd_all_in": cap,
+        "widest_dead_pod_that_still_fits_seconds": round(stop - worst_seconds, 3),
+        "fits_the_hard_stop": fits_seconds,
+        "fits_the_cap": fits_usd,
+        "fits_the_re_creation_count": fits_count,
+        "terminate_after_window_seconds": round(stop - billed, 1),
+        "verdict": verdict,
+        "rule": record["money"]["recovery"]["rule"],
+        "next_step": (
+            f"no pod is open and the whole worst case still fits — create with --terminate-after ="
+            f" create + {round(stop - billed, 1):.0f} s"
+            if verdict == "GO"
+            else "STOP: this create cannot be paid for by the registration."
+            f" seconds {round(seconds_ahead, 1)}/{stop:.0f}"
+            f" · usd {round(usd_ahead, 4)}/{cap:.2f}"
+            f" · pod {opened + 1} of {allowed + 1} allowed."
+            " The attempt is NOT spent — return it to the operator"
+        ),
     }
 
 
@@ -256,28 +352,156 @@ def gate_zero(record: dict, state: dict, elapsed: float, ssh_ok: bool, now=None)
     }
 
 
-def gate_boot(record: dict, state: dict, elapsed: float, first_reply: str | None, now=None) -> dict:
-    """Rung 3 — boot to the FIRST REPLY, on this pod's create-elapsed. Three outcomes, not two."""
-    rule = rung(record, 3)["rule"]
-    threshold = first_number(rule)
-    at = None if first_reply is None else round(elapsed_since_create(state, first_reply), 1)
-    verdict = (
-        "GO" if at is not None and at <= threshold else "KILL" if elapsed >= threshold else "WAIT"
+def launched_at_of(record: dict, state: dict, where: Path, now=None) -> str | None:
+    """Rung 3's ANCHOR: the stamp the runner's own launch wrote, or None while it has none.
+
+    The runbook writes it on the POD, into the run directory, in the same shell command that execs
+    the runner; `--watch` copies it back beside the out-files and this reads it from there. It is a
+    READING and not a flag on purpose — a stamp the executor types is an assertion, and this
+    particular assertion can only ever move a deadline LATER
+    ([[a_flag_that_asserts_turns_a_poll_into_a_verdict]]). The create-anchored backstop bounds it
+    either way, and the value is written into the pod ONCE and never overwritten: a stamp that moved
+    forward would push out the very deadline it places.
+    """
+    pod = live_pod(state)
+    if pod is None:
+        return None
+    if pod.get("launched_at"):
+        return pod["launched_at"]
+    path = where / LAUNCH_STAMP
+    if not path.exists():
+        return None
+    text = path.read_text(encoding="utf-8").strip()
+    if not text:
+        return None
+    try:
+        when = stamp(text)
+    except ValueError:
+        raise SystemExit(
+            f"{rel(path)} holds {text!r}, which is not a UTC ISO8601 stamp. Rung 3's anchor is"
+            " unreadable — stop, delete the pod and report."
+        ) from None
+    created = stamp(pod["created_at"])
+    skew = tolerance(record)
+    if when < created - timedelta(seconds=skew):
+        raise SystemExit(
+            f"{rel(path)} says the runner launched at {when.isoformat(timespec='seconds')}, BEFORE"
+            f" this pod was created at {pod['created_at']}. That stamp is a previous attempt's —"
+            " the run directory was not cleared. Stop, delete the pod and report."
+        )
+    if when > (now or datetime.now(UTC)) + timedelta(seconds=skew):
+        raise SystemExit(
+            f"{rel(path)} says the runner launched at {when.isoformat(timespec='seconds')}, in the"
+            " FUTURE. A launch anchor ahead of the clock would hand rung 3 a window nobody priced."
+            " Stop, delete the pod and report."
+        )
+    pod["launched_at"] = when.isoformat(timespec="seconds")
+    save(state)
+    return pod["launched_at"]
+
+
+def first_reply_after_launch(record: dict, where: Path) -> float | None:
+    """Seconds from the runner's launch to the FIRST reply — READ off the out-files, never typed.
+
+    r1 took this as `--first-reply-at <create + the first row's boot_seconds>`, a stamp the executor
+    computed by hand. Under r2's launch anchor that recipe is wrong in the PERMISSIVE direction:
+    `boot_seconds` is measured from the runner's own start, so adding it to CREATE and then
+    subtracting the launch stamp takes the ssh wait and the staging off twice — a 460 s load would
+    read as 415 s and rung 3 would report GO on exactly the condition it was re-anchored to catch.
+
+    The runner already writes the answer. `elapsed_since_start` is monotonic seconds from the
+    runner's start to that row, so the smallest one across the legs IS «launch → first reply», and
+    the gate reads it instead of being told ([[a_flag_that_asserts_turns_a_poll_into_a_verdict]]).
+    """
+    seen = [
+        float(row["elapsed_since_start"])
+        for one in record["population"]["dev"]["legs"]
+        for row in rows_of(where / one["out"])
+        if row.get("elapsed_since_start") is not None
+    ]
+    return min(seen) if seen else None
+
+
+def gate_boot(
+    record: dict,
+    state: dict,
+    elapsed: float,
+    at_launch: float | None,
+    launched: str | None,
+    now=None,
+) -> dict:
+    """Rung 3 — LAUNCH to the first reply, with a create-anchored backstop beside it.
+
+    r1 derived this ceiling from the model-LOAD window and applied it to create-elapsed, and the two
+    are not the same span: create-elapsed also carries the ssh wait, the staging and the launch, and
+    the two spans this stack has MEASURED already exceed the ceiling together — 231.9 + 237.155 =
+    469.1 s against 450 (Dv605). So the ceiling did not move and its ANCHOR did.
+
+    Without the anchor there is no GO. A rung whose deadline cannot be demonstrated has not been
+    passed — that is the ruling r1 closed its first pod under — and a reply that arrives with no
+    launch stamp beside it is exactly that state ([[a_checker_whose_failure_is_silence]]).
+    """
+    rule = rung(record, 3)
+    threshold = first_number(rule["rule"])
+    if "backstop_seconds" not in rule:
+        raise SystemExit(
+            f"{rel(PREREG)} rung 3 carries no `backstop_seconds`. The launch anchor is only safe"
+            " because a create-anchored backstop bounds it — this instrument will not invent one."
+        )
+    backstop = float(rule["backstop_seconds"])
+    since_launch = None if launched is None else round(elapsed_since(launched, now), 1)
+    at_launch = None if at_launch is None else round(at_launch, 1)
+    at_create = (
+        None
+        if at_launch is None or launched is None
+        else round(elapsed_since_create(state, launched) + at_launch, 1)
     )
+
+    if at_launch is not None:
+        if launched is None:
+            verdict, cause = (
+                "KILL",
+                "a first reply with NO launch anchor — the rung cannot be shown",
+            )
+        elif at_launch <= threshold and at_create <= backstop:
+            verdict, cause = "GO", None
+        elif at_launch > threshold:
+            verdict, cause = "KILL", f"the first reply landed {at_launch} s after launch"
+        else:
+            verdict, cause = "KILL", f"the first reply landed {at_create} s after create"
+    elif since_launch is not None and since_launch >= threshold:
+        verdict, cause = "KILL", f"{since_launch} s since launch and NOT ONE reply"
+    elif elapsed >= backstop:
+        verdict, cause = "KILL", f"{elapsed:.0f} s since create and NOT ONE reply"
+    else:
+        verdict, cause = "WAIT", None
+
     return {
         "rung": 3,
+        "anchor": rule.get("anchor"),
+        "launched_at": launched,
         "elapsed_on_this_pod_seconds": round(elapsed, 1),
-        "first_reply_at_create_elapsed_seconds": at,
+        "seconds_since_launch": since_launch,
+        "first_reply_at_launch_elapsed_seconds": at_launch,
+        "first_reply_at_create_elapsed_seconds": at_create,
         "threshold_seconds": threshold,
-        "seconds_left": round(threshold - elapsed, 1),
+        "backstop_seconds": backstop,
+        "seconds_left_on_the_anchor": None
+        if since_launch is None
+        else round(threshold - since_launch, 1),
+        "seconds_left_on_the_backstop": round(backstop - elapsed, 1),
         "verdict": verdict,
-        "rule": rule,
+        "cause": cause,
+        "rule": rule["rule"],
+        "backstop_rule": rule.get("backstop_rule"),
         "next_step": (
             "the dev legs are generating — stay inside --watch"
             if verdict == "GO"
-            else "keep watching the pod log for the first reply"
-            if verdict == "WAIT"
-            else "KILL: delete, prove it by listing, --close; the attempt is NOT spent"
+            else (
+                "keep watching the pod log for the first reply; --watch pulls the launch stamp"
+                if verdict == "WAIT"
+                else "KILL: delete, prove it by listing, --close; the attempt is NOT spent"
+            )
         ),
         **clock(record, state, now),
     }
@@ -496,6 +720,7 @@ def watch(
         first_number(record["money"]["arithmetic"]["cumulative"]["projection_gate"]["every"])
     )
     boot_ceiling = first_number(rung(record, 3)["rule"])
+    backstop = float(rung(record, 3)["backstop_seconds"])
     cleared = boot_is_cleared(state)
     legs = [one for pack in packs for one in legs_of(pack)]
     owed = sum(one["units"] for one in legs)
@@ -510,11 +735,16 @@ def watch(
             high = (max(high[0], mark[0]), max(high[1], mark[1]))
         answered, lines = high
         idle = clock_now() - last_event
+        launched = launched_at_of(record, state, where, now)
+        since_launch = None if launched is None else elapsed_since(launched, now)
         current = leg_state(record, packs, where)
         common = {
             "rung": 5,
             "answered": answered,
             "owed": owed,
+            "launched_at": launched,
+            "seconds_since_launch": None if since_launch is None else round(since_launch, 1),
+            "boot_backstop_seconds": backstop,
             "pod_log_lines": lines,
             "idle_seconds": round(idle, 1),
             "idle_deadline_seconds": deadline,
@@ -537,19 +767,27 @@ def watch(
                 **clock(record, state, now),
             }
         ahead = projection(record, state, current, now)
-        if not cleared and not answered and ahead["elapsed_on_this_pod_seconds"] >= boot_ceiling:
-            killed = kill()
-            return {
-                **common,
-                "verdict": "KILL",
-                "cause": (
-                    f"rung 3 — {ahead['elapsed_on_this_pod_seconds']:.0f} s of this pod's"
-                    f" create-elapsed and NOT ONE reply, against a {boot_ceiling:.0f} s ceiling"
-                ),
-                "delete": killed,
-                "next_step": "prove the deletion by LISTING, with the volume as positive control",
-                **clock(record, state, now),
-            }
+        if not cleared and not answered:
+            create_elapsed = ahead["elapsed_on_this_pod_seconds"]
+            over_anchor = since_launch is not None and since_launch >= boot_ceiling
+            over_backstop = create_elapsed >= backstop
+            if over_anchor or over_backstop:
+                killed = kill()
+                return {
+                    **common,
+                    "verdict": "KILL",
+                    "cause": (
+                        f"rung 3 — {since_launch:.0f} s since the runner's own launch and NOT ONE"
+                        f" reply, against a {boot_ceiling:.0f} s ceiling"
+                        if over_anchor
+                        else f"rung 3's create-anchored BACKSTOP — {create_elapsed:.0f} s of this"
+                        f" pod's create-elapsed and NOT ONE reply, against {backstop:.0f} s"
+                        + ("" if launched else " and no launch stamp has been copied back at all")
+                    ),
+                    "delete": killed,
+                    "next_step": "prove the deletion by LISTING, with the volume as positive control",
+                    **clock(record, state, now),
+                }
         if ahead["verdict"] == "KILL" or ahead["cumulative_seconds_left"] <= 0:
             killed = kill()
             return {
@@ -752,8 +990,11 @@ def main(argv: list[str] | None = None, now: datetime | None = None) -> int:
     )
     parser.add_argument("--gate0", action="store_true", help="rung 2, the ssh dead-man")
     parser.add_argument("--ssh-ok", action="store_true", help="the endpoint answered")
-    parser.add_argument("--boot", action="store_true", help="rung 3, boot to the first reply")
-    parser.add_argument("--first-reply-at", help="when the first reply landed, UTC ISO8601")
+    parser.add_argument(
+        "--boot",
+        action="store_true",
+        help="rung 3: launch → the first reply, both READ off the run directory. It takes no stamp",
+    )
     parser.add_argument(
         "--projection", action="store_true", help="rung 4, once, on what is on disk"
     )
@@ -785,14 +1026,10 @@ def main(argv: list[str] | None = None, now: datetime | None = None) -> int:
                 " billing endpoints at once — delete it, prove it by listing, and --close first."
             )
             return KILL
-        stop = float(record["money"]["arithmetic"]["cumulative"]["hard_stop_seconds"])
-        billed, spent = billed_before(state)
-        print(
-            f"no pod is open · {len(state.get('pods', []))} closed, {billed:.0f} s"
-            f" = ${spent:.4f} billed · the hard stop leaves {stop - billed:.0f} s"
-            f" for the next pod's --terminate-after"
-        )
-        return GO if billed < stop else KILL
+        gate = pre_create(record, state)
+        print(json.dumps(gate, ensure_ascii=False, indent=2, sort_keys=True))
+        print(f"\n{gate['verdict']}  ·  {gate['next_step']}")
+        return GO if gate["verdict"] == "GO" else KILL
 
     if args.price:
         for name in ("pod_id", "created_at", "usd_per_hour", "card", "terminate_after"):
@@ -805,6 +1042,11 @@ def main(argv: list[str] | None = None, now: datetime | None = None) -> int:
                 " endpoints at once — close it with --close first."
             )
         ceiling = float(record["money"]["meter"]["price_ceiling_usd_per_hour"])
+        # the recovery clause, read on the state BEFORE this pod joins it. `--pre-create-check` is a
+        # step a human runs, and a guard that fires only when someone remembers to ask is the habit
+        # rung 5 was bought to remove. The pod is RECORDED either way — a pod that exists against no
+        # counter is a pod nothing is measuring — and the verdict is then the KILL
+        recovery = pre_create(record, state)
         backstop = terminate_after(record, state, args.created_at, args.terminate_after)
         state.setdefault("pods", []).append(
             {
@@ -824,12 +1066,20 @@ def main(argv: list[str] | None = None, now: datetime | None = None) -> int:
             "card": args.card,
             "backstop": backstop,
             "terminate_after_rule": rung(record, 6)["rule"],
-            "verdict": "GO" if args.usd_per_hour <= ceiling else "KILL",
+            "recovery": recovery,
+            "verdict": (
+                "GO" if args.usd_per_hour <= ceiling and recovery["verdict"] == "GO" else "KILL"
+            ),
             "rule": rung(record, 1)["rule"],
             "next_step": (
                 "the backstop the platform holds is inside the cumulative stop; poll --gate0"
-                if args.usd_per_hour <= ceiling
-                else "DELETE the pod now and STOP — no generation of any kind"
+                if args.usd_per_hour <= ceiling and recovery["verdict"] == "GO"
+                else "DELETE the pod now and STOP — no generation of any kind. "
+                + (
+                    "the live price is over the registered ceiling"
+                    if args.usd_per_hour > ceiling
+                    else recovery["next_step"]
+                )
             ),
             **clock(record, state, now),
         }
@@ -855,7 +1105,12 @@ def main(argv: list[str] | None = None, now: datetime | None = None) -> int:
         if pod is None:
             raise SystemExit("no pod is live — --boot has nothing to measure")
         gate = gate_boot(
-            record, state, elapsed_since(pod["created_at"], now), args.first_reply_at, now
+            record,
+            state,
+            elapsed_since(pod["created_at"], now),
+            first_reply_after_launch(record, args.outdir),
+            launched_at_of(record, state, args.outdir, now),
+            now,
         )
         append_gate(state, gate, "boot")
         return show(gate)
@@ -882,6 +1137,13 @@ def main(argv: list[str] | None = None, now: datetime | None = None) -> int:
         def pull() -> None:
             for name in names:
                 scp(args.ssh, args.ssh_port, f"{args.remote_dir}/{name}", args.outdir / name)
+            # rung 3's anchor comes back with them: the launch stamp is a file the POD wrote
+            scp(
+                args.ssh,
+                args.ssh_port,
+                f"{args.remote_dir}/launched_at",
+                args.outdir / LAUNCH_STAMP,
+            )
             scp(args.ssh, args.ssh_port, args.remote_log, POD_LOG)
 
         def kill() -> dict:

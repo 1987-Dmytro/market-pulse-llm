@@ -38,11 +38,15 @@ import read_threads_reader_v5 as v5  # noqa: E402
 import score_pass1_probe as scoring  # noqa: E402
 import window_summary_5c2 as summary  # noqa: E402
 
-PHASE = "pass1-fewshot"
-PREREG = REPO_ROOT / "results" / "prereg_pass1_fewshot.json"
+PHASE = gate.PHASE
+PREREG = gate.PREREG
 DEV_PACK = REPO_ROOT / "results" / "pass1_dev_pack.json"
 SHOT_PACK = REPO_ROOT / "results" / "pass1_probe_b_pack_v2.json"
-RUN = REPO_ROOT / "results" / "pass1_fewshot_run.json"
+RUN = gate.RECORD
+"""The registration and the run record are the GATE's, by reference and not by a second spelling.
+r2 moved both files, and the two lines that used to name them here would have gone on reading r1's
+— a judge pointed at a superseded law is the quietest way to score the wrong session
+([[preregistration_is_a_file_not_a_constant]])."""
 BASE_VERDICT = REPO_ROOT / "results" / "pass1_probe_b_verdict.json"
 LORA_B_VERDICT = REPO_ROOT / "results" / "lora_b_verdict.json"
 OUT_NAME = "results/pass1_fewshot_verdict.json"
