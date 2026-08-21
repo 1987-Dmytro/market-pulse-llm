@@ -257,16 +257,18 @@ wrote results/prereg_pass1_fewshot_r2.json  sha256 69422f09b62f0362…
   H6: 31 rows, every registered number re-derives
 
 $ make preflight ARGS='gate_pass1_fewshot.py prereg_pass1_fewshot.json BACKSTOP_TOLERANCE_SECONDS'
-QUERY gate_pass1_fewshot.py
-[3] pins — 6 of the 15 touched paths are pinned by a record
-    scripts/gate_pass1_fewshot.py   <- 2 pin(s): prereg_pass1_fewshot.json…gate.sha256 eda56fdef296…,
-                                        prereg_pass1_fewshot_r2.json…gate.sha256 923d8b18aa8a…
-    scripts/score_pass1_fewshot.py  <- 1 pin(s): prereg_pass1_fewshot_r2.json
-                                        .instruments.scorer_pass1_fewshot.sha256 39b648efba94…
+QUERY gate_pass1_fewshot.py                                     # re-run at the close, not before it
+[3] pins — 6 of the 16 touched paths are pinned by a record
+    scripts/gate_pass1_fewshot.py   <- 3 pin(s): pass1_fewshot_verdict.json…gate.sha256 07a5a07aa8e9…,
+                                        prereg_pass1_fewshot.json…gate.sha256 eda56fdef296…,
+                                        prereg_pass1_fewshot_r2.json…gate.sha256 07a5a07aa8e9…
+    scripts/score_pass1_fewshot.py  <- 3 pin(s): prereg_pass1_fewshot_r2.json
+                                        .instruments.scorer_pass1_fewshot.sha256 39b648efba94…, +2 in
+                                        the verdict's own provenance
     results/prereg_pass1_fewshot.json <- 3 pin(s): … prereg_pass1_fewshot_r2.json.supersedes.sha256
                                         bd731e53126b…
 [4] digests — sha256 of all 6 pinned paths, against what is pinned
-    scripts/gate_pass1_fewshot.py  live 923d8b18aa8a4e11…  DIFFERS
+    scripts/gate_pass1_fewshot.py  live 07a5a07aa8e94d98…  DIFFERS
         results/prereg_pass1_fewshot.json.instruments.gate.sha256 pins eda56fdef296f58f…
         — the file has moved since                         # the ONE ruled move, and it is r1's pin
     5 of 6 pinned paths match every digest on them
@@ -338,16 +340,18 @@ pod 8tpx8lf05n6skc   created 2026-08-21T12:54:43Z   deleted 13:17:22Z   1 359.0 
 13:17:25Z  close             GO                      1 359.0 s billed, deletion proven by listing
 ```
 
-**The environment, measured rather than assumed.** Three numbers this stack did not have:
+**The environment, measured rather than assumed.** Three numbers this stack did not have. The ssh
+figure is an UPPER bound where 20.08's two are lower ones: the loop polls at 5 s, so «up by 50 s»
+means the publish landed somewhere in (45, 50] and was never observed earlier.
 
 | span | r2, this pod | what the registration charged | what 20.08 read |
 |---|---|---|---|
-| ssh publish | **50.0 s** | 500 s (rung 2's ceiling) | > 262.5 s and > 231.9 s, both lower bounds |
+| ssh publish | **≤ 50.0 s** | 500 s (rung 2's ceiling) | > 262.5 s and > 231.9 s, both lower bounds |
 | model load | **142.709 s** | 450 s | 146.8 … 353 s, and 142.7 is a new floor |
 | base s/call | **2.293 s** | 5.162 (measured, probe-b) | — |
 | v2 s/call | **2.726 s** | 7.743 (a BOUND, 1.5 × base) | — |
 
-The ssh spread rung 2 was registered as — 14.5 s … > 262.5 s — now has a reading inside it, and the
+The ssh spread rung 2 was registered as — 14.5 s … > 262.5 s — now has a bound inside it, and the
 500 s ceiling was never approached. **v2's prefill costs +18.9 %, not the +50 % the bound charged**,
 so the whole generation took 1 147 s of a budget that priced 3 076.552.
 
@@ -398,10 +402,20 @@ other way).
    losses are `категория_личное` answered **`не_наш_рынок`**: told that a retailer named inside a
    personal habit is a category comment, the model pushed the comment out of the market instead.
    The clause is **not monotone on the class it targets** — 13 fixed, 7 broken, net +6.
-3. **The mention-vs-about error class is still live, in the other direction.** v2's single largest
-   confusion cell over all 200 rows is `не_наш_рынок → категория`, **24 rows**: out-of-market
-   comments pulled INTO the category. The base's four gold misses were the same error with the
-   arrow reversed.
+3. **The mention-vs-about error class is not what v2 fixed — that cell is the one thing it did not
+   move.** Both confusion tables, computed over the same 200 rows:
+
+   | | base | v2 |
+   |---|---:|---:|
+   | `не_наш_рынок → None` (silence) | **48** | 12 |
+   | `не_наш_рынок → категория` | **22** | **24** |
+   | `категория → None` | 16 | 4 |
+   | `None → категория` | 15 | 6 |
+   | total off-diagonal | **113** | **64** |
+
+   v2 removed 36 of the base's 48 silences and cut the off-diagonal by 49 — and left the
+   out-of-market-pulled-into-the-category cell where it was, two rows LARGER. It is now v2's single
+   biggest error. The clause bought answers, not this discrimination.
 
 So `+49` of overall agreement is real and large, and it is bought almost entirely on
 `не_наш_рынок` (12 → 46). The registered question — «does the definition fix the mention-vs-about
@@ -483,14 +497,19 @@ $ make check
    and is not, by itself, an answer to the mention-vs-about confusion.
 4. **$0.397133 of the step's $1.50 is spent** across both registrations, and the recovery clause of
    r2 was never used: one pod, one create, no re-creation.
-5. **The environment has three new readings** — ssh 50 s, load 142.7 s, v2 at +18.9 % over base —
+5. **The environment has three new readings** — ssh ≤ 50 s (5 s poll granularity), load 142.7 s,
+   v2 at +18.9 % over base —
    and the next registration should price the prefill from the measurement rather than the ×1.5 bound.
 
-**Tally.** contract-health (contract-gap + spec-gap + verify-gap) **12** · paid (process + env) **4**.
-Sixteen entries on a re-registration that moved four rungs, and **five of the twelve contract-health
-ones are defects the adversarial review found in work this session had already written** — the
-producer's copied thresholds, the typed first-reply recipe, the iteration-bounded poll, the bypassed
-recovery clause and the leg the reading came from. Every one of them was closed at $0, before the
-create, and each carries a mutation that was watched to go red. The paid four are the environment
-(three new spans, and a pod locale that eats a proof) and the process notes on the producer choice
-and the anchor's timing. **Nothing was found on the pod that was not found before it.**
+**Tally**, counted off the table rather than from memory (`grep -o '\[cause: [a-z-]*\]' | sort | uniq -c`):
+contract-gap 3 · spec-gap 1 · verify-gap 7 → **contract-health 11**; process 2 · env 3 → **paid 4+1**,
+sixteen entries on a re-registration that moved four rungs.
+
+**Five of them are defects found in work this session had already written** — four by the
+adversarial review before the create (Dv613 the producer's copied thresholds, Dv612 the typed
+first-reply recipe, Dv614 the iteration-bounded poll, Dv615 the bypassed recovery clause) and one by
+the second pass over the transport (Dv620, the leg the reading came from). Every one was closed at
+$0, before the create, and each carries a mutation that was watched to go red. The five paid entries
+are the environment (three new spans, a runbook glob that duplicates two files, and a pod locale
+that eats a proof) and the process notes on the producer choice and the anchor's timing.
+**Nothing was found on the pod that was not found before it.**

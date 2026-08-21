@@ -186,14 +186,17 @@ what actually happened:
 - **v2's remaining error on «our» rows runs the OPPOSITE way from the clause.** Five of the seven
   losses are `категория_личное` answered `не_наш_рынок` — told that a retailer named inside a
   personal habit is a category comment, the model pushed the comment out of the market instead.
-- **the mention-vs-about class is still live, with the arrow reversed.** v2's largest confusion cell
-  over all 200 rows is `не_наш_рынок → категория`, **24 rows**.
+- **the mention-vs-about class is the one cell v2 did NOT move.** Over the same 200 rows the base
+  confused `не_наш_рынок → категория` on 22 rows and v2 on **24** — two MORE — while v2 removed 36 of
+  the base's 48 `не_наш_рынок → None` silences and cut the off-diagonal 113 → 64. The clause bought
+  answers, not this discrimination.
 
 So the clause is a real and cheap gain on the MARKET boundary and is not, by itself, an answer to
 the mention-vs-about confusion. That is what goes to the operator with the table.
 
-**Three environment readings the next registration should price from.** ssh published at **50 s** of
-create-elapsed — a reading inside the spread rung 2 was registered as (14.5 s … > 262.5 s), and the
+**Three environment readings the next registration should price from.** ssh was up **by 50 s** of
+create-elapsed — an UPPER bound on a 5 s poll, where 20.08's two are lower bounds, so the publish
+landed in (45, 50]. It sits inside the spread rung 2 was registered as (14.5 s … > 262.5 s), and the
 500 s ceiling was never approached. The model load was **142.709 s**, a new floor for this stack
 (the old range was 146.8 … 353). And **v2's prefill costs +18.9 %, not the +50 %** the bound charged:
 2.293 s/call base against 2.726 s/call v2, where the registration charged 5.162 and 7.743. The whole
