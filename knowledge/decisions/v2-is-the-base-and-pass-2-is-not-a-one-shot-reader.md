@@ -160,6 +160,34 @@ are counted, and a hard stop that would carry the whole run at the measured rate
 OUTSIDE the $1.50 cap. So the next step is a cap-and-rate decision together, not an amendment to
 this one.
 
+## The acceptance's correction — comment identity is the PAIR, and it binds pass 2
+
+The team lead's acceptance of `pass1-window` (21.08, evening) found that the report-only readings
+were scored on the msg_id alone. A msg_id is unique per CHANNEL, not per window: seven of them inside
+the 650 labelled rows live in two threads each, and five had exactly one twin answered, so five
+comments the pod never reached inherited a namesake's reply. Corrected, pair-keyed:
+
+| reading | as first reported | corrected |
+|---|---|---|
+| the 650 labelled rows | 69 / 117 · «our» 23 / 49 | **68 / 112 · «our» 21 / 49** |
+| the 450 not in dev-200 | 35 / 65 | **34 / 64** |
+| the dev-200 | 34 / 48 · «our» 21 / 49 | unchanged — it carries no collision |
+| the fourteen | 4 of the 5 reached | unchanged — the gold pairs carry no collision |
+
+Neither `scorer.reader_comment_agreement` nor `gate_pass1_fewshot.py::leg_table` was touched: both
+are pinned by sealed records, and the census now hands the named instrument one THREAD at a time,
+where a msg_id is unique. Details and the pair-by-pair reconciliation are in the ADDENDUM of
+`docs/reports/pass1-window.md`.
+
+**What this binds.** *Comment identity anywhere in window 1 is the pair `(thread, msg_id)`.* Ruling
+(г) makes pass 2 a per-thread assembly call over the rows pass 1 filtered — a table keyed on msg_id
+would merge two comments of two channels into one thread's row, and the merge would be silent. The
+`pass2-signals` registration says so in its own record or it is not registered.
+
+The same acceptance found that `--pre-create-check` printed the refusal that ended the paid session
+and recorded nothing. It is now an appended, recomputed gate in `results/pass1_window_run.json`, and
+from `pass1-window r2` on, that guard records its verdict at the moment it runs.
+
 ## What binds, from here
 
 1. **v2 is the base.** A line that claims to improve on pass 1 measures against 136/200 and 38/49 on
