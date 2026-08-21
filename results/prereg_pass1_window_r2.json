@@ -53,6 +53,7 @@
     "src/market_pulse/prompts.py — v2, v1, the renderer and the parser",
     "src/market_pulse/scorer.py — the single judge, pinned by sealed records",
     "results/pass1_window_pack.json and results/pass1_window_v2.jsonl — r1's pack and its replies, the two inputs this pack was subtracted from",
+    "results/pass1_window_volume_tail.jsonl — the r1 pod's surviving out-file, EVIDENCE the moment step 3a copies it back. A re-creation's cleanup clears this attempt's own clocks and never this file: it is the only place its extra rows exist, and the directory it came from is cleared on the first pod",
     "results/prereg_pass1_window.json — r1's record, sealed and superseded",
     "results/pass1_window_r2_pack.json — this pack, its items and their per-item shas",
     "results/prereg_pass1_window_r2.json — this record",
@@ -1022,7 +1023,7 @@
     },
     "copied_rule": "r1's producer is IMPORTED for the four helpers that are pure in their arguments — `sealed`, `dig`, `live_pins`, `deletion_tail`, `r2_overhead_reading` — and nothing else. Every number of the money block is computed here, because that is the half that moved",
     "script": "scripts/write_pass1_window_prereg_r2.py",
-    "sha256": "9242c5f868b72d3f13e8f66c7b89a6af146a6e66c2c1a5a475480aff153d197d"
+    "sha256": "2be1bb9f97eb2e3b186c580ca2be0b45b737841f7678c61bbaa2db3b77dd5850"
   },
   "return_to_the_operator": "THE FOURTEEN ARE A CENSUS ROW AND THIS IS THEIR FIFTH LOOK. The base took 9/14 (pass1-probe-b), arm A of the LoRA line took 9/14 (lora-b), v2 was registered for a shot it never fired, r1's production pass reached five of them and agreed on four, and this run answers the remaining nine. Their agreement over the union is REPORTED with that multiplicity beside it and it may not be promoted to «v2 takes N of 14» by this report, by the acceptance or by the next registration. A bar on the fourteen needs a NEW registration with its own attempt, its own threshold and the operator's word. The same holds for the 650, the 450 and the dev-200: bigger samples, still readings. AND THE RATE IS STILL NOT KNOWN — this record charges the TOP of a measured spread and the spread has two readings in it. If this pod comes in under the charge, that is one more reading of the class and not a rate the programme owns",
   "run_record": "results/pass1_window_r2_run.json",

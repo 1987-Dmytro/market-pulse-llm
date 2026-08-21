@@ -366,6 +366,12 @@ contract and an open window, and the report says both.
 
 ## 7 — D2, the census ($0, after the pod is closed)
 
+```bash
+PYTHONPATH=src python3.11 scripts/census_pass1_window_r2.py
+PYTHONPATH=src python3.11 scripts/volume_tail_pass1_window.py \
+  --tail results/pass1_window_volume_tail.jsonl --seconds-per-call <THIS pod's measured rate>
+```
+
 `results/pass1_window_r2_census.json` and `docs/reports/pass1-window-r2.md`. The census is over the
 UNION 131 + 901 = 1 032, keyed on the PAIR `(thread, msg_id)` — seven msg_ids of the 650 labelled
 rows live in two threads each, so a union keyed on the msg_id would merge two channels' comments into
@@ -380,8 +386,10 @@ Only after a deletion PROVEN by listing, and only if the arithmetic still closes
 paste: `--pre-create-check` computes both bounds and the count, and records its verdict.
 
 **Clear the Mac's copies of the dead pod's run directory first, and ONLY this contract's** (Dv621).
-r1's `pass1_window_v2.jsonl`, `pass1_window_launched_at`, `pass1_window_pod.log` and the volume tail
-are that session's committed evidence and are frozen — the record lists them.
+r1's `pass1_window_v2.jsonl`, `pass1_window_launched_at`, `pass1_window_pod.log` and
+`pass1_window_volume_tail.jsonl` are evidence and are frozen — the record lists them. The volume tail
+in particular is the ONLY place its extra rows exist: the directory it came from was cleared by this
+attempt's first pod.
 
 ```bash
 rm -f results/pass1_window_r2_launched_at results/pass1_window_r2_pod.log \

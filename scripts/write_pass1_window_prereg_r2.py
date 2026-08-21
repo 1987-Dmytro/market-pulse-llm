@@ -1755,6 +1755,10 @@ def build() -> dict:
             "src/market_pulse/scorer.py — the single judge, pinned by sealed records",
             "results/pass1_window_pack.json and results/pass1_window_v2.jsonl — r1's pack and its"
             " replies, the two inputs this pack was subtracted from",
+            "results/pass1_window_volume_tail.jsonl — the r1 pod's surviving out-file, EVIDENCE the"
+            " moment step 3a copies it back. A re-creation's cleanup clears this attempt's own"
+            " clocks and never this file: it is the only place its extra rows exist, and the"
+            " directory it came from is cleared on the first pod",
             "results/prereg_pass1_window.json — r1's record, sealed and superseded",
             f"{PACK_NAME} — this pack, its items and their per-item shas",
             f"{OUT_NAME} — this record",

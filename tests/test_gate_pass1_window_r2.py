@@ -328,10 +328,14 @@ def test_a_pod_at_6_9_seconds_per_call_is_a_KILL_at_the_CHARGED_span_and_a_GO_at
     assert survives["verdict"] == "GO"
     assert survives["projected_seconds"] < HARD_STOP
 
-    # the rate at which a 20-call death still leaves the clause reachable, derived not typed
-    breakeven = (HARD_STOP - OVERHEAD - WIDEST_DEAD_POD) / (CALLS - 20)
-    assert 7.5 < breakeven < 7.6
-    assert breakeven > 6.9
+    # the rate at which a 20-call death still leaves the clause reachable, derived not typed —
+    # and the meter runs to `pod delete`, so the charged deletion tail comes off the allowance first
+    tail = SUMS["recovery_arithmetic"]["deletion_tail"]["charged_seconds"]
+    breakeven_ignoring_the_tail = (HARD_STOP - OVERHEAD - WIDEST_DEAD_POD) / (CALLS - 20)
+    breakeven = (HARD_STOP - OVERHEAD - (WIDEST_DEAD_POD - tail)) / (CALLS - 20)
+    assert round(breakeven_ignoring_the_tail, 4) == 7.528
+    assert round(breakeven, 4) == 7.6171
+    assert breakeven > breakeven_ignoring_the_tail > 6.9, "the contract's 6.9 is under both"
 
 
 def test_the_watch_loop_kills_on_the_projection_from_INSIDE_its_own_loop(run, tmp_path):
