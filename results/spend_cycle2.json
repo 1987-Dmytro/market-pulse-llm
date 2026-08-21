@@ -323,6 +323,16 @@
       "billing_since_usd": 6.383695,
       "billing_read": "read",
       "note": "pod deleted after a rung-4 KILL at 131 of 1032"
+    },
+    {
+      "at": "2026-08-21T19:04:07+00:00",
+      "balance": 15.9128631383,
+      "spent_usd": 6.5969,
+      "remaining_usd": 13.4031,
+      "balance_delta_usd": 6.5969,
+      "billing_since_usd": 6.596898,
+      "billing_read": "read",
+      "note": "pass1-window r2: anchor at session start, before any pod exists"
     }
   ]
 }
