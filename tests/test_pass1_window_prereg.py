@@ -200,13 +200,18 @@ def test_the_step_opens_with_no_pods_of_its_own():
         "rule": RECORD["money"]["step_sum"]["rule"],
     }
     assert RECORD["money"]["reading"]["step"] == "pass1-window"
-    assert (
-        not (REPO_ROOT / "results" / "pass1_window_run.json").exists()
-        or json.loads((REPO_ROOT / "results" / "pass1_window_run.json").read_text("utf-8")).get(
-            "pods"
-        )
-        == []
-    )
+    # The durable fact is about the LEDGER, not about the run record being empty. «No pods in
+    # results/pass1_window_run.json» is a CLOCK: true until the contract does the one thing it
+    # exists to do, then red with no code involved
+    # ([[the_absence_test_is_a_clock_and_flips_with_its_artifact]]). What the step sum claims is
+    # that nothing was billed to this step BEFORE its anchor — so that is what is asserted
+    ledger = json.loads((REPO_ROOT / "results" / "spend_pass1_window.json").read_text("utf-8"))
+    anchored = ledger["anchored_at"]
+    assert ledger["pass1-window_gpu_cap_usd"] == 1.50
+    run = REPO_ROOT / "results" / "pass1_window_run.json"
+    if run.exists():
+        for pod in json.loads(run.read_text("utf-8")).get("pods", []):
+            assert pod["created_at"] > anchored, (pod["pod_id"], pod["created_at"], anchored)
 
 
 # --- the bar -------------------------------------------------------------------------------------------
