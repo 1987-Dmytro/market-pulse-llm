@@ -1,0 +1,2313 @@
+{
+  "completeness": {
+    "answered": 901,
+    "duplicate_ids": [],
+    "file": "results/pass1_window_r2_v2.jsonl",
+    "ids_the_leg_never_asked": [],
+    "owed": 901,
+    "parse_refusal_rows": [],
+    "parse_refusals": 0,
+    "parse_refusals_by_cause": {},
+    "parsed": 901,
+    "replies_that_never_closed_their_object": 0,
+    "rows_in_the_file": 901,
+    "rule": "answered 901 / 901 · every row's `rendering_sha256` equals its pack item's · parse refusals ≤ 9 (1%). All three, or RED",
+    "rung": 7,
+    "sha_mismatches": 0,
+    "unanswered": 0,
+    "unanswered_ids": [],
+    "verdict": "GO"
+  },
+  "contract": "docs/PROMPT-pass1-window-r2.md D2",
+  "label_distribution": {
+    "answered": 1032,
+    "over_the_window": {
+      "None": 291,
+      "категория_личное": 207,
+      "молочный_бренд": 15,
+      "не_наш_рынок": 460,
+      "сеть_ритейлер": 59
+    },
+    "owed": 1032,
+    "refusals_by_cause": {},
+    "rule": "what v2 SAID over the whole window, in THREE states and not two. A row with no reply in EITHER half is UNANSWERED and not refused: folding never-asked rows into a refusal class would put a pod's death in the parser's column ([[the_empty_class_eats_the_parse_failures]] read the other way round, and the defect r1's census carried three times before it was caught). A distribution is not an accuracy either way"
+  },
+  "pass_2_filter": {
+    "entity_block_chars_total": 2785,
+    "filter": [
+      "категория_личное",
+      "молочный_бренд",
+      "сеть_ритейлер"
+    ],
+    "filtered_chars_total": 32756,
+    "filtered_rows_total": 281,
+    "per_thread": [
+      {
+        "by_label": {
+          "None": 12,
+          "категория_личное": 26,
+          "не_наш_рынок": 5
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 2024,
+        "filtered_rows": 26,
+        "payable_comments": 43,
+        "thread": "@klopotenkofood:6040",
+        "topic_chars": 76,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "None": 13,
+          "категория_личное": 18
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 4315,
+        "filtered_rows": 18,
+        "payable_comments": 31,
+        "thread": "@mandziak:3679",
+        "topic_chars": 55,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "None": 1,
+          "категория_личное": 15,
+          "не_наш_рынок": 1
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 1177,
+        "filtered_rows": 15,
+        "payable_comments": 17,
+        "thread": "@klopotenkofood:6032",
+        "topic_chars": 107,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "None": 6,
+          "категория_личное": 14
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 2004,
+        "filtered_rows": 14,
+        "payable_comments": 20,
+        "thread": "@mandziak:3718",
+        "topic_chars": 41,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "None": 12,
+          "категория_личное": 6,
+          "молочный_бренд": 2,
+          "не_наш_рынок": 6,
+          "сеть_ритейлер": 1
+        },
+        "entities": 1,
+        "entity_block_chars": 5,
+        "filtered_chars": 899,
+        "filtered_rows": 9,
+        "payable_comments": 27,
+        "thread": "@matusi_ukr:22158",
+        "topic_chars": 110,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "None": 4,
+          "категория_личное": 2,
+          "молочный_бренд": 4,
+          "сеть_ритейлер": 2
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 304,
+        "filtered_rows": 8,
+        "payable_comments": 12,
+        "thread": "@VARUS_channel:10367",
+        "topic_chars": 27,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "None": 1,
+          "категория_личное": 8
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 2138,
+        "filtered_rows": 8,
+        "payable_comments": 9,
+        "thread": "@mandziak:3703",
+        "topic_chars": 82,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "None": 8,
+          "категория_личное": 8,
+          "не_наш_рынок": 4
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 935,
+        "filtered_rows": 8,
+        "payable_comments": 20,
+        "thread": "@mandziak:3708",
+        "topic_chars": 34,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "None": 6,
+          "категория_личное": 7,
+          "молочный_бренд": 1,
+          "не_наш_рынок": 1
+        },
+        "entities": 2,
+        "entity_block_chars": 63,
+        "filtered_chars": 2796,
+        "filtered_rows": 8,
+        "payable_comments": 15,
+        "thread": "@matusi_ukr:22272",
+        "topic_chars": 120,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "None": 2,
+          "категория_личное": 7
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 425,
+        "filtered_rows": 7,
+        "payable_comments": 9,
+        "thread": "@VARUS_channel:10349",
+        "topic_chars": 70,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "None": 3,
+          "категория_личное": 3,
+          "сеть_ритейлер": 4
+        },
+        "entities": 10,
+        "entity_block_chars": 393,
+        "filtered_chars": 864,
+        "filtered_rows": 7,
+        "payable_comments": 10,
+        "thread": "@VARUS_channel:10613",
+        "topic_chars": 86,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "None": 1,
+          "сеть_ритейлер": 7
+        },
+        "entities": 1,
+        "entity_block_chars": 12,
+        "filtered_chars": 382,
+        "filtered_rows": 7,
+        "payable_comments": 8,
+        "thread": "@kopiyochka1:21720",
+        "topic_chars": 80,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "None": 3,
+          "категория_личное": 1,
+          "сеть_ритейлер": 5
+        },
+        "entities": 2,
+        "entity_block_chars": 57,
+        "filtered_chars": 308,
+        "filtered_rows": 6,
+        "payable_comments": 9,
+        "thread": "@VARUS_channel:10528",
+        "topic_chars": 72,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "None": 3,
+          "категория_личное": 6
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 850,
+        "filtered_rows": 6,
+        "payable_comments": 9,
+        "thread": "@klopotenkofood:6035",
+        "topic_chars": 76,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "None": 3,
+          "категория_личное": 6,
+          "не_наш_рынок": 1
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 1608,
+        "filtered_rows": 6,
+        "payable_comments": 10,
+        "thread": "@klopotenkofood:6060",
+        "topic_chars": 76,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "None": 28,
+          "категория_личное": 6,
+          "не_наш_рынок": 1
+        },
+        "entities": 1,
+        "entity_block_chars": 47,
+        "filtered_chars": 452,
+        "filtered_rows": 6,
+        "payable_comments": 35,
+        "thread": "@matusi_ukr:22092",
+        "topic_chars": 89,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "None": 1,
+          "сеть_ритейлер": 5
+        },
+        "entities": 3,
+        "entity_block_chars": 117,
+        "filtered_chars": 304,
+        "filtered_rows": 5,
+        "payable_comments": 6,
+        "thread": "@VARUS_channel:10470",
+        "topic_chars": 90,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "None": 2,
+          "категория_личное": 5,
+          "не_наш_рынок": 2
+        },
+        "entities": 2,
+        "entity_block_chars": 75,
+        "filtered_chars": 1333,
+        "filtered_rows": 5,
+        "payable_comments": 9,
+        "thread": "@mandziak:3676",
+        "topic_chars": 26,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "None": 3,
+          "категория_личное": 5,
+          "не_наш_рынок": 3
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 1185,
+        "filtered_rows": 5,
+        "payable_comments": 11,
+        "thread": "@mandziak:3707",
+        "topic_chars": 32,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "None": 2,
+          "не_наш_рынок": 1,
+          "сеть_ритейлер": 4
+        },
+        "entities": 2,
+        "entity_block_chars": 65,
+        "filtered_chars": 253,
+        "filtered_rows": 4,
+        "payable_comments": 7,
+        "thread": "@VARUS_channel:10348",
+        "topic_chars": 38,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "None": 8,
+          "сеть_ритейлер": 4
+        },
+        "entities": 1,
+        "entity_block_chars": 12,
+        "filtered_chars": 138,
+        "filtered_rows": 4,
+        "payable_comments": 12,
+        "thread": "@VARUS_channel:10366",
+        "topic_chars": 97,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "None": 1,
+          "не_наш_рынок": 1,
+          "сеть_ритейлер": 4
+        },
+        "entities": 3,
+        "entity_block_chars": 103,
+        "filtered_chars": 273,
+        "filtered_rows": 4,
+        "payable_comments": 6,
+        "thread": "@VARUS_channel:10466",
+        "topic_chars": 83,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "None": 1,
+          "категория_личное": 1,
+          "сеть_ритейлер": 3
+        },
+        "entities": 6,
+        "entity_block_chars": 200,
+        "filtered_chars": 231,
+        "filtered_rows": 4,
+        "payable_comments": 5,
+        "thread": "@VARUS_channel:10471",
+        "topic_chars": 103,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "None": 1,
+          "категория_личное": 2,
+          "сеть_ритейлер": 2
+        },
+        "entities": 1,
+        "entity_block_chars": 12,
+        "filtered_chars": 125,
+        "filtered_rows": 4,
+        "payable_comments": 5,
+        "thread": "@VARUS_channel:10525",
+        "topic_chars": 92,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "None": 1,
+          "категория_личное": 1,
+          "сеть_ритейлер": 3
+        },
+        "entities": 8,
+        "entity_block_chars": 382,
+        "filtered_chars": 209,
+        "filtered_rows": 4,
+        "payable_comments": 5,
+        "thread": "@VARUS_channel:10603",
+        "topic_chars": 90,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "молочный_бренд": 3
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 131,
+        "filtered_rows": 3,
+        "payable_comments": 3,
+        "thread": "@VARUS_channel:10452",
+        "topic_chars": 42,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "None": 2,
+          "категория_личное": 3
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 144,
+        "filtered_rows": 3,
+        "payable_comments": 5,
+        "thread": "@mandziak:3667",
+        "topic_chars": 126,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "None": 5,
+          "категория_личное": 3
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 296,
+        "filtered_rows": 3,
+        "payable_comments": 8,
+        "thread": "@mandziak:3689",
+        "topic_chars": 147,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "None": 9,
+          "категория_личное": 2,
+          "молочный_бренд": 1
+        },
+        "entities": 3,
+        "entity_block_chars": 103,
+        "filtered_chars": 738,
+        "filtered_rows": 3,
+        "payable_comments": 12,
+        "thread": "@matusi_ukr:22131",
+        "topic_chars": 161,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "категория_личное": 3
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 142,
+        "filtered_rows": 3,
+        "payable_comments": 3,
+        "thread": "@retsepty:7345",
+        "topic_chars": 65,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "None": 1,
+          "категория_личное": 3
+        },
+        "entities": 3,
+        "entity_block_chars": 105,
+        "filtered_chars": 308,
+        "filtered_rows": 3,
+        "payable_comments": 4,
+        "thread": "@tarilka_malyuka:715",
+        "topic_chars": 87,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "сеть_ритейлер": 2
+        },
+        "entities": 5,
+        "entity_block_chars": 203,
+        "filtered_chars": 157,
+        "filtered_rows": 2,
+        "payable_comments": 2,
+        "thread": "@VARUS_channel:10360",
+        "topic_chars": 101,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "None": 2,
+          "категория_личное": 1,
+          "молочный_бренд": 1
+        },
+        "entities": 1,
+        "entity_block_chars": 12,
+        "filtered_chars": 141,
+        "filtered_rows": 2,
+        "payable_comments": 4,
+        "thread": "@VARUS_channel:10451",
+        "topic_chars": 76,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "None": 3,
+          "сеть_ритейлер": 2
+        },
+        "entities": 3,
+        "entity_block_chars": 113,
+        "filtered_chars": 140,
+        "filtered_rows": 2,
+        "payable_comments": 5,
+        "thread": "@VARUS_channel:10465",
+        "topic_chars": 62,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "сеть_ритейлер": 2
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 121,
+        "filtered_rows": 2,
+        "payable_comments": 2,
+        "thread": "@VARUS_channel:10529",
+        "topic_chars": 161,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "сеть_ритейлер": 2
+        },
+        "entities": 1,
+        "entity_block_chars": 12,
+        "filtered_chars": 97,
+        "filtered_rows": 2,
+        "payable_comments": 2,
+        "thread": "@VARUS_channel:10593",
+        "topic_chars": 106,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "None": 2,
+          "категория_личное": 2,
+          "не_наш_рынок": 1
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 357,
+        "filtered_rows": 2,
+        "payable_comments": 5,
+        "thread": "@mandziak:3700",
+        "topic_chars": 57,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "None": 1,
+          "категория_личное": 1,
+          "молочный_бренд": 1,
+          "не_наш_рынок": 5
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 237,
+        "filtered_rows": 2,
+        "payable_comments": 8,
+        "thread": "@mandziak:3702",
+        "topic_chars": 62,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "None": 9,
+          "категория_личное": 2,
+          "не_наш_рынок": 2
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 37,
+        "filtered_rows": 2,
+        "payable_comments": 13,
+        "thread": "@mandziak:3753",
+        "topic_chars": 108,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "категория_личное": 2,
+          "не_наш_рынок": 3
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 103,
+        "filtered_rows": 2,
+        "payable_comments": 5,
+        "thread": "@mandziak:3765",
+        "topic_chars": 43,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "None": 1,
+          "категория_личное": 2
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 164,
+        "filtered_rows": 2,
+        "payable_comments": 3,
+        "thread": "@mandziak:3775",
+        "topic_chars": 88,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "категория_личное": 2
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 89,
+        "filtered_rows": 2,
+        "payable_comments": 2,
+        "thread": "@matusi_ukr:22292",
+        "topic_chars": 43,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "категория_личное": 1,
+          "сеть_ритейлер": 1
+        },
+        "entities": 5,
+        "entity_block_chars": 185,
+        "filtered_chars": 132,
+        "filtered_rows": 2,
+        "payable_comments": 2,
+        "thread": "@matusi_ukr:22303",
+        "topic_chars": 108,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "не_наш_рынок": 1,
+          "сеть_ритейлер": 2
+        },
+        "entities": 1,
+        "entity_block_chars": 27,
+        "filtered_chars": 168,
+        "filtered_rows": 2,
+        "payable_comments": 3,
+        "thread": "@msuaaaa:10651",
+        "topic_chars": 101,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "категория_личное": 2
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 71,
+        "filtered_rows": 2,
+        "payable_comments": 2,
+        "thread": "@retsepty:7326",
+        "topic_chars": 45,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "категория_личное": 1,
+          "не_наш_рынок": 3,
+          "сеть_ритейлер": 1
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 67,
+        "filtered_rows": 2,
+        "payable_comments": 5,
+        "thread": "@retsepty:7342",
+        "topic_chars": 71,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "None": 5,
+          "категория_личное": 2,
+          "не_наш_рынок": 3
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 130,
+        "filtered_rows": 2,
+        "payable_comments": 10,
+        "thread": "@tarilka_malyuka:695",
+        "topic_chars": 129,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "категория_личное": 2
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 537,
+        "filtered_rows": 2,
+        "payable_comments": 2,
+        "thread": "@tarilka_malyuka:825",
+        "topic_chars": 89,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "молочный_бренд": 1
+        },
+        "entities": 3,
+        "entity_block_chars": 138,
+        "filtered_chars": 13,
+        "filtered_rows": 1,
+        "payable_comments": 1,
+        "thread": "@VARUS_channel:10356",
+        "topic_chars": 61,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "None": 1,
+          "сеть_ритейлер": 1
+        },
+        "entities": 4,
+        "entity_block_chars": 126,
+        "filtered_chars": 165,
+        "filtered_rows": 1,
+        "payable_comments": 2,
+        "thread": "@VARUS_channel:10455",
+        "topic_chars": 126,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "категория_личное": 1
+        },
+        "entities": 2,
+        "entity_block_chars": 62,
+        "filtered_chars": 207,
+        "filtered_rows": 1,
+        "payable_comments": 1,
+        "thread": "@VARUS_channel:10496",
+        "topic_chars": 79,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "сеть_ритейлер": 1
+        },
+        "entities": 2,
+        "entity_block_chars": 66,
+        "filtered_chars": 24,
+        "filtered_rows": 1,
+        "payable_comments": 1,
+        "thread": "@VARUS_channel:10532",
+        "topic_chars": 65,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "категория_личное": 1
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 59,
+        "filtered_rows": 1,
+        "payable_comments": 1,
+        "thread": "@klopotenkofood:6024",
+        "topic_chars": 158,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "категория_личное": 1
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 97,
+        "filtered_rows": 1,
+        "payable_comments": 1,
+        "thread": "@klopotenkofood:6031",
+        "topic_chars": 50,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "категория_личное": 1,
+          "не_наш_рынок": 1
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 55,
+        "filtered_rows": 1,
+        "payable_comments": 2,
+        "thread": "@klopotenkofood:6036",
+        "topic_chars": 76,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "сеть_ритейлер": 1
+        },
+        "entities": 1,
+        "entity_block_chars": 12,
+        "filtered_chars": 3,
+        "filtered_rows": 1,
+        "payable_comments": 1,
+        "thread": "@kopiyochka1:21672",
+        "topic_chars": 81,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "None": 2,
+          "категория_личное": 1
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 412,
+        "filtered_rows": 1,
+        "payable_comments": 3,
+        "thread": "@mandziak:3666",
+        "topic_chars": 101,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "None": 1,
+          "категория_личное": 1,
+          "не_наш_рынок": 10
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 12,
+        "filtered_rows": 1,
+        "payable_comments": 12,
+        "thread": "@mandziak:3684",
+        "topic_chars": 105,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "None": 1,
+          "категория_личное": 1,
+          "не_наш_рынок": 1
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 121,
+        "filtered_rows": 1,
+        "payable_comments": 3,
+        "thread": "@mandziak:3701",
+        "topic_chars": 34,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "None": 3,
+          "молочный_бренд": 1
+        },
+        "entities": 1,
+        "entity_block_chars": 22,
+        "filtered_chars": 97,
+        "filtered_rows": 1,
+        "payable_comments": 4,
+        "thread": "@mandziak:3721",
+        "topic_chars": 96,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "None": 1,
+          "категория_личное": 1
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 131,
+        "filtered_rows": 1,
+        "payable_comments": 2,
+        "thread": "@matusi_ukr:22125",
+        "topic_chars": 46,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "категория_личное": 1
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 58,
+        "filtered_rows": 1,
+        "payable_comments": 1,
+        "thread": "@matusi_ukr:22208",
+        "topic_chars": 56,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "None": 7,
+          "категория_личное": 1,
+          "не_наш_рынок": 100
+        },
+        "entities": 2,
+        "entity_block_chars": 56,
+        "filtered_chars": 15,
+        "filtered_rows": 1,
+        "payable_comments": 108,
+        "thread": "@matusi_ukr:22295",
+        "topic_chars": 77,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "категория_личное": 1
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 115,
+        "filtered_rows": 1,
+        "payable_comments": 1,
+        "thread": "@retsepty:7281",
+        "topic_chars": 43,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "категория_личное": 1
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 98,
+        "filtered_rows": 1,
+        "payable_comments": 1,
+        "thread": "@retsepty:7284",
+        "topic_chars": 160,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "категория_личное": 1
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 36,
+        "filtered_rows": 1,
+        "payable_comments": 1,
+        "thread": "@retsepty:7288",
+        "topic_chars": 58,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "None": 1,
+          "категория_личное": 1,
+          "не_наш_рынок": 1
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 106,
+        "filtered_rows": 1,
+        "payable_comments": 3,
+        "thread": "@retsepty:7293",
+        "topic_chars": 62,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "None": 1,
+          "категория_личное": 1
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 82,
+        "filtered_rows": 1,
+        "payable_comments": 2,
+        "thread": "@retsepty:7294",
+        "topic_chars": 59,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "категория_личное": 1
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 22,
+        "filtered_rows": 1,
+        "payable_comments": 1,
+        "thread": "@retsepty:7296",
+        "topic_chars": 42,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "категория_личное": 1
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 116,
+        "filtered_rows": 1,
+        "payable_comments": 1,
+        "thread": "@retsepty:7301",
+        "topic_chars": 44,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "категория_личное": 1,
+          "не_наш_рынок": 1
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 137,
+        "filtered_rows": 1,
+        "payable_comments": 2,
+        "thread": "@retsepty:7302",
+        "topic_chars": 45,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "категория_личное": 1
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 44,
+        "filtered_rows": 1,
+        "payable_comments": 1,
+        "thread": "@retsepty:7340",
+        "topic_chars": 37,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "None": 1,
+          "категория_личное": 1
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 27,
+        "filtered_rows": 1,
+        "payable_comments": 2,
+        "thread": "@retsepty:7343",
+        "topic_chars": 64,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "категория_личное": 1
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 115,
+        "filtered_rows": 1,
+        "payable_comments": 1,
+        "thread": "@retsepty:7348",
+        "topic_chars": 58,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "категория_личное": 1
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 40,
+        "filtered_rows": 1,
+        "payable_comments": 1,
+        "thread": "@retsepty:7349",
+        "topic_chars": 53,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "категория_личное": 1
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 49,
+        "filtered_rows": 1,
+        "payable_comments": 1,
+        "thread": "@retsepty:7361",
+        "topic_chars": 57,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "None": 1,
+          "категория_личное": 1,
+          "не_наш_рынок": 2
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 174,
+        "filtered_rows": 1,
+        "payable_comments": 4,
+        "thread": "@tarilka_malyuka:747",
+        "topic_chars": 99,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "None": 1,
+          "категория_личное": 1
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 5,
+        "filtered_rows": 1,
+        "payable_comments": 2,
+        "thread": "@tarilka_malyuka:820",
+        "topic_chars": 47,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "None": 5,
+          "категория_личное": 1
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 82,
+        "filtered_rows": 1,
+        "payable_comments": 6,
+        "thread": "@ya_Nenka:836",
+        "topic_chars": 127,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "None": 1
+        },
+        "entities": 2,
+        "entity_block_chars": 66,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 1,
+        "thread": "@VARUS_channel:10358",
+        "topic_chars": 79,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "None": 1
+        },
+        "entities": 2,
+        "entity_block_chars": 69,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 1,
+        "thread": "@VARUS_channel:10375",
+        "topic_chars": 93,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "None": 1
+        },
+        "entities": 2,
+        "entity_block_chars": 65,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 1,
+        "thread": "@VARUS_channel:10450",
+        "topic_chars": 81,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "не_наш_рынок": 2
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 2,
+        "thread": "@mandziak:3685",
+        "topic_chars": 92,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "None": 3,
+          "не_наш_рынок": 2
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 5,
+        "thread": "@mandziak:3694",
+        "topic_chars": 52,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "None": 4,
+          "не_наш_рынок": 3
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 7,
+        "thread": "@mandziak:3736",
+        "topic_chars": 146,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "None": 1
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 1,
+        "thread": "@mandziak:3746",
+        "topic_chars": 128,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "None": 7
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 7,
+        "thread": "@mandziak:3768",
+        "topic_chars": 58,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "None": 9,
+          "не_наш_рынок": 116
+        },
+        "entities": 4,
+        "entity_block_chars": 122,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 125,
+        "thread": "@matusi_ukr:22058",
+        "topic_chars": 99,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "None": 1,
+          "не_наш_рынок": 8
+        },
+        "entities": 7,
+        "entity_block_chars": 336,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 9,
+        "thread": "@matusi_ukr:22111",
+        "topic_chars": 104,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "None": 11,
+          "не_наш_рынок": 94
+        },
+        "entities": 4,
+        "entity_block_chars": 138,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 105,
+        "thread": "@matusi_ukr:22133",
+        "topic_chars": 79,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "не_наш_рынок": 6
+        },
+        "entities": 3,
+        "entity_block_chars": 98,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 6,
+        "thread": "@matusi_ukr:22195",
+        "topic_chars": 89,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "None": 2,
+          "не_наш_рынок": 12
+        },
+        "entities": 4,
+        "entity_block_chars": 175,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 14,
+        "thread": "@matusi_ukr:22217",
+        "topic_chars": 138,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "не_наш_рынок": 12
+        },
+        "entities": 5,
+        "entity_block_chars": 207,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 12,
+        "thread": "@matusi_ukr:22242",
+        "topic_chars": 103,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "None": 11,
+          "не_наш_рынок": 2
+        },
+        "entities": 1,
+        "entity_block_chars": 15,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 13,
+        "thread": "@matusi_ukr:22263",
+        "topic_chars": 101,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "None": 16
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 16,
+        "thread": "@matusi_ukr:22265",
+        "topic_chars": 94,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "None": 1
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 1,
+        "thread": "@matusi_ukr:22307",
+        "topic_chars": 103,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "None": 12,
+          "не_наш_рынок": 5
+        },
+        "entities": 1,
+        "entity_block_chars": 26,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 17,
+        "thread": "@matusi_ukr:22308",
+        "topic_chars": 123,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "None": 3,
+          "не_наш_рынок": 1
+        },
+        "entities": 1,
+        "entity_block_chars": 22,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 4,
+        "thread": "@matusi_ukr:22327",
+        "topic_chars": 97,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "не_наш_рынок": 1
+        },
+        "entities": 1,
+        "entity_block_chars": 28,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 1,
+        "thread": "@polyakova_fitness:1143",
+        "topic_chars": 89,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "не_наш_рынок": 2
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 2,
+        "thread": "@retsepty:7278",
+        "topic_chars": 34,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "не_наш_рынок": 1
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 1,
+        "thread": "@retsepty:7280",
+        "topic_chars": 27,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "не_наш_рынок": 1
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 1,
+        "thread": "@retsepty:7289",
+        "topic_chars": 58,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "не_наш_рынок": 2
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 2,
+        "thread": "@retsepty:7305",
+        "topic_chars": 52,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "не_наш_рынок": 1
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 1,
+        "thread": "@retsepty:7310",
+        "topic_chars": 60,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "не_наш_рынок": 3
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 3,
+        "thread": "@retsepty:7312",
+        "topic_chars": 38,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "не_наш_рынок": 4
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 4,
+        "thread": "@retsepty:7313",
+        "topic_chars": 46,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "не_наш_рынок": 1
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 1,
+        "thread": "@retsepty:7317",
+        "topic_chars": 45,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "не_наш_рынок": 1
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 1,
+        "thread": "@retsepty:7318",
+        "topic_chars": 77,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "не_наш_рынок": 1
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 1,
+        "thread": "@retsepty:7320",
+        "topic_chars": 71,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "None": 1,
+          "не_наш_рынок": 1
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 2,
+        "thread": "@retsepty:7321",
+        "topic_chars": 64,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "None": 1,
+          "не_наш_рынок": 1
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 2,
+        "thread": "@retsepty:7323",
+        "topic_chars": 158,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "None": 2,
+          "не_наш_рынок": 1
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 3,
+        "thread": "@retsepty:7324",
+        "topic_chars": 70,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "не_наш_рынок": 2
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 2,
+        "thread": "@retsepty:7325",
+        "topic_chars": 46,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "не_наш_рынок": 1
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 1,
+        "thread": "@retsepty:7327",
+        "topic_chars": 35,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "не_наш_рынок": 2
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 2,
+        "thread": "@retsepty:7328",
+        "topic_chars": 66,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "None": 1,
+          "не_наш_рынок": 1
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 2,
+        "thread": "@retsepty:7331",
+        "topic_chars": 44,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "не_наш_рынок": 1
+        },
+        "entities": 1,
+        "entity_block_chars": 12,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 1,
+        "thread": "@retsepty:7335",
+        "topic_chars": 67,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "не_наш_рынок": 1
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 1,
+        "thread": "@retsepty:7337",
+        "topic_chars": 35,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "не_наш_рынок": 3
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 3,
+        "thread": "@retsepty:7350",
+        "topic_chars": 72,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "не_наш_рынок": 1
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 1,
+        "thread": "@retsepty:7354",
+        "topic_chars": 57,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "None": 1,
+          "не_наш_рынок": 1
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 2,
+        "thread": "@tarilka_malyuka:746",
+        "topic_chars": 85,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "None": 1
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 1,
+        "thread": "@tarilka_malyuka:764",
+        "topic_chars": 68,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "не_наш_рынок": 1
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 1,
+        "thread": "@tarilka_malyuka:827",
+        "topic_chars": 73,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "None": 1
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 1,
+        "thread": "@ya_Nenka:834",
+        "topic_chars": 103,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "None": 3
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 3,
+        "thread": "@ya_Nenka:838",
+        "topic_chars": 126,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "None": 3
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 3,
+        "thread": "@ya_Nenka:840",
+        "topic_chars": 77,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "None": 1,
+          "не_наш_рынок": 2
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 3,
+        "thread": "@ya_Nenka:844",
+        "topic_chars": 111,
+        "unanswered": 0,
+        "unreadable": 0
+      }
+    ],
+    "rule": "pass 2 is ONE call per THREAD over the rows pass 1 labelled категория_личное / молочный_бренд / сеть_ритейлер — the operator's ruling (г). This table is that call's input, per thread, and it is what `pass2-signals` prices its own registration from",
+    "threads_carrying_a_payable_comment": 127,
+    "threads_in_the_cell": 129,
+    "threads_pass_2_would_not_call": 48,
+    "threads_with_at_least_one_filtered_row": 79,
+    "what_this_does_NOT_price": "the per-call cost. These are the chars of a PASS-1 rendering; pass 2's prompt does not exist yet and will not render them the same way. This table sizes the input and `pass2-signals` prices its own call on its own renderer ([[the_smokes_rate_carries_the_smokes_transport]])",
+    "why_two_denominators": "2 threads of the cell carry no payable comment at all, so they produce no pass-1 request and pass 2 has nothing to call over them. The cell's count and the callable count are different questions",
+    "widest_thread_filtered_chars": 4315,
+    "widest_thread_filtered_rows": 26
+  },
+  "phase": "pass1-window-r2",
+  "producer": {
+    "imported": {
+      "rule": "the readings are r1's census functions, unedited — including the per-thread `labelled_reading` step 0.5 corrected. What is new here is the UNION view they are handed and the blocks this contract adds",
+      "scripts/census_pass1_window.py": "14571582bd969a345a069440cf65d7860bbc5910204e6009071f2956869e783f"
+    },
+    "script": "scripts/census_pass1_window_r2.py",
+    "sha256": "6c0bb86f545ffc4eadfc77530f219b38701d672cf9754ad51134c5b14b8250a6"
+  },
+  "registration": {
+    "record": "results/prereg_pass1_window_r2.json",
+    "sha256": "6ed7dbf53dbf623dcaa614d2fe0b0a30c68b8bbdebfd1882a9732de8985b052f"
+  },
+  "replies_the_mac_does_not_hold": {
+    "instrument": "results/pass1_window_r2_pod.log — the pod's own line, read and not typed",
+    "replies_named_by_the_log_and_absent_from_the_file": [],
+    "replies_the_pod_log_reports": 901,
+    "rows_in_the_copied_back_file": 901,
+    "rule": "the watch copies once a poll and a KILL happens inside the loop, so the log — copied by the same poll — can reach one row further than the out-file. An empty list here means the run ended with the file and the log agreeing, which is what a GO looks like"
+  },
+  "report_only": {
+    "keyed_on": "the PAIR (thread, msg_id), over the UNION of both out-files. Seven msg_ids of the 650 live in two threads each and the scorer's answer map is keyed on the msg_id alone, so every labelled reading is taken one THREAD at a time and summed — the step 0.5 correction, whose producer this file imports rather than copies",
+    "rule": "READINGS, each captioned «not a bar». None of them can pass, fail or close anything, and none of them may be quoted as a verdict on v2",
+    "the_450_not_in_dev_200": {
+      "absent": 0,
+      "agreed": 259,
+      "caption": "the labelled rows NO prompt was ever tuned against — and its «our» denominator is ZERO BY CONSTRUCTION and always will be (Dv652)",
+      "denominator_rule": "TWO rates, because the pod was killed at rung 4 with most of the population never asked. `rate` is over the 450 rows this reading was registered over and counts the 0 unasked ones as disagreements; `rate_over_the_rows_answered` is over the 450 rows that have a reply. Neither is comparable to a reading taken on a complete run, and the first is not comparable to anything at all ([[measure_on_the_rows_the_gate_scores]]). `our_agreed` / `our_n` carries the SAME absence: `our_n` is the registered count of «our» rows in this subset and `our_agreed` counts only the ones with a reply, so the pair is a floor and never a rate",
+      "instrument": "gate_pass1_fewshot.py::leg_table — the function D2's clause names",
+      "keyed_on": {
+        "colliding_msg_ids_in_this_subset": [
+          21209
+        ],
+        "how": "one `leg_table` call per thread, summed. Handed the whole subset at once it would score through `scorer.reader_comment_agreement`, whose answer map is keyed on msg_id ALONE and is last-wins, so a twin the pod never answered inherits the other thread's reply",
+        "identity": "the PAIR (thread, msg_id) — a msg_id is unique per CHANNEL, not per window",
+        "threads_scored": 107,
+        "what_the_id_only_key_would_have_said": "the 650 read 117 answered / 69 agreed / 23 «our», the 450 read 65 / 35 — the numbers in the body of docs/reports/pass1-window.md, corrected by its ADDENDUM"
+      },
+      "n": 450,
+      "not_a_bar": true,
+      "our_agreed": 0,
+      "our_n": 0,
+      "per_class": {
+        "null": {
+          "agreed": 118,
+          "n": 159
+        },
+        "не_наш_рынок": {
+          "agreed": 116,
+          "n": 255
+        },
+        "сеть_ритейлер": {
+          "agreed": 25,
+          "n": 36
+        }
+      },
+      "rate": 0.575556,
+      "rate_over_the_rows_answered": 0.575556,
+      "refused": 0,
+      "rows_the_pod_actually_answered": 450
+    },
+    "the_650_labelled_rows": {
+      "absent": 0,
+      "agreed": 395,
+      "caption": "every labelled row of the window — a reading, not a bar",
+      "denominator_rule": "TWO rates, because the pod was killed at rung 4 with most of the population never asked. `rate` is over the 650 rows this reading was registered over and counts the 0 unasked ones as disagreements; `rate_over_the_rows_answered` is over the 650 rows that have a reply. Neither is comparable to a reading taken on a complete run, and the first is not comparable to anything at all ([[measure_on_the_rows_the_gate_scores]]). `our_agreed` / `our_n` carries the SAME absence: `our_n` is the registered count of «our» rows in this subset and `our_agreed` counts only the ones with a reply, so the pair is a floor and never a rate",
+      "instrument": "gate_pass1_fewshot.py::leg_table — the function D2's clause names",
+      "keyed_on": {
+        "colliding_msg_ids_in_this_subset": [
+          21164,
+          21195,
+          21209,
+          21211,
+          21236,
+          21239,
+          21256
+        ],
+        "how": "one `leg_table` call per thread, summed. Handed the whole subset at once it would score through `scorer.reader_comment_agreement`, whose answer map is keyed on msg_id ALONE and is last-wins, so a twin the pod never answered inherits the other thread's reply",
+        "identity": "the PAIR (thread, msg_id) — a msg_id is unique per CHANNEL, not per window",
+        "threads_scored": 120,
+        "what_the_id_only_key_would_have_said": "the 650 read 117 answered / 69 agreed / 23 «our», the 450 read 65 / 35 — the numbers in the body of docs/reports/pass1-window.md, corrected by its ADDENDUM"
+      },
+      "n": 650,
+      "not_a_bar": true,
+      "our_agreed": 38,
+      "our_n": 49,
+      "per_class": {
+        "null": {
+          "agreed": 159,
+          "n": 213
+        },
+        "категория": {
+          "agreed": 36,
+          "n": 47
+        },
+        "молочный_бренд": {
+          "agreed": 2,
+          "n": 2
+        },
+        "не_наш_рынок": {
+          "agreed": 162,
+          "n": 340
+        },
+        "сеть_ритейлер": {
+          "agreed": 36,
+          "n": 48
+        }
+      },
+      "rate": 0.607692,
+      "rate_over_the_rows_answered": 0.607692,
+      "refused": 0,
+      "rows_the_pod_actually_answered": 650
+    },
+    "the_dev_200": {
+      "absent": 0,
+      "agreed": 136,
+      "caption": "the rows r2 measured. It should reproduce 136/200 and 38/49 up to decoding noise; a difference is STATED and not explained away",
+      "denominator_rule": "TWO rates, because the pod was killed at rung 4 with most of the population never asked. `rate` is over the 200 rows this reading was registered over and counts the 0 unasked ones as disagreements; `rate_over_the_rows_answered` is over the 200 rows that have a reply. Neither is comparable to a reading taken on a complete run, and the first is not comparable to anything at all ([[measure_on_the_rows_the_gate_scores]]). `our_agreed` / `our_n` carries the SAME absence: `our_n` is the registered count of «our» rows in this subset and `our_agreed` counts only the ones with a reply, so the pair is a floor and never a rate",
+      "instrument": "gate_pass1_fewshot.py::leg_table — the function D2's clause names",
+      "keyed_on": {
+        "colliding_msg_ids_in_this_subset": [],
+        "how": "one `leg_table` call per thread, summed. Handed the whole subset at once it would score through `scorer.reader_comment_agreement`, whose answer map is keyed on msg_id ALONE and is last-wins, so a twin the pod never answered inherits the other thread's reply",
+        "identity": "the PAIR (thread, msg_id) — a msg_id is unique per CHANNEL, not per window",
+        "threads_scored": 75,
+        "what_the_id_only_key_would_have_said": "the 650 read 117 answered / 69 agreed / 23 «our», the 450 read 65 / 35 — the numbers in the body of docs/reports/pass1-window.md, corrected by its ADDENDUM"
+      },
+      "n": 200,
+      "not_a_bar": true,
+      "our_agreed": 38,
+      "our_n": 49,
+      "per_class": {
+        "null": {
+          "agreed": 41,
+          "n": 54
+        },
+        "категория": {
+          "agreed": 36,
+          "n": 47
+        },
+        "молочный_бренд": {
+          "agreed": 2,
+          "n": 2
+        },
+        "не_наш_рынок": {
+          "agreed": 46,
+          "n": 85
+        },
+        "сеть_ритейлер": {
+          "agreed": 11,
+          "n": 12
+        }
+      },
+      "r2_reported": {
+        "agreed": 136,
+        "n": 200,
+        "our_agreed": 38,
+        "our_n": 49
+      },
+      "rate": 0.68,
+      "rate_over_the_rows_answered": 0.68,
+      "refused": 0,
+      "rows_the_pod_actually_answered": 200
+    },
+    "the_fourteen": {
+      "absent": 0,
+      "agreed": 11,
+      "agreed_among_those": 11,
+      "caption": "the fourteen — A CENSUS ROW AND NEVER A BAR. This is the FOURTH look at these same rows: the base (pass1-probe-b, 9/14), arm A of the LoRA line (lora-b, 9/14), v2 registered for a shot it never fired, and now v2 inside a production pass registered for transport. It cannot be promoted to «v2 takes N of 14» by this report, by the acceptance or by the next registration — a bar on the fourteen needs a NEW registration with its own attempt, its own threshold and the operator's word",
+      "denominator_rule": "the pod reached 14 of these fourteen before rung 4 killed it. `agreed` below is over all 14 and counts the 0 it never reached as disagreements; `agreed_among_those` is over the rows that have a reply. NEITHER is comparable to the base's 9/14 or arm A's 9/14, which were taken on complete runs — and neither is a bar",
+      "disagreed": 3,
+      "instrument": {
+        "collapse": "score_reader_probe_b.py::collapse",
+        "comparison": "market_pulse.scorer.reader_comment_agreement",
+        "why_not_bar_p1": "bar_p1 is the same comparison plus a THRESHOLD arm — `passed`, `minimum_agreed`, a loss budget. That arm is exactly what may not exist on this row",
+        "why_not_leg_table": "leg_table scores against the LABEL map, and 0 of 14 gold pairs are in it"
+      },
+      "multiplicity": 4,
+      "n": 14,
+      "not_a_bar": true,
+      "rate": 0.785714,
+      "rows": [
+        {
+          "agreed": true,
+          "gold": "сеть_ритейлер",
+          "id": "@VARUS_channel:10348#20664",
+          "state": "answered",
+          "v2": "сеть_ритейлер"
+        },
+        {
+          "agreed": true,
+          "gold": "категория",
+          "id": "@VARUS_channel:10613#21599",
+          "state": "answered",
+          "v2": "категория"
+        },
+        {
+          "agreed": true,
+          "gold": "категория",
+          "id": "@VARUS_channel:10613#21601",
+          "state": "answered",
+          "v2": "категория"
+        },
+        {
+          "agreed": true,
+          "gold": "сеть_ритейлер",
+          "id": "@VARUS_channel:10613#21626",
+          "state": "answered",
+          "v2": "сеть_ритейлер"
+        },
+        {
+          "agreed": false,
+          "gold": null,
+          "id": "@VARUS_channel:10613#21629",
+          "state": "answered",
+          "v2": "категория"
+        },
+        {
+          "agreed": true,
+          "gold": "категория",
+          "id": "@mandziak:3676#47899",
+          "state": "answered",
+          "v2": "категория"
+        },
+        {
+          "agreed": true,
+          "gold": "категория",
+          "id": "@mandziak:3676#47902",
+          "state": "answered",
+          "v2": "категория"
+        },
+        {
+          "agreed": true,
+          "gold": "категория",
+          "id": "@mandziak:3703#48276",
+          "state": "answered",
+          "v2": "категория"
+        },
+        {
+          "agreed": true,
+          "gold": "категория",
+          "id": "@mandziak:3703#48283",
+          "state": "answered",
+          "v2": "категория"
+        },
+        {
+          "agreed": true,
+          "gold": "не_наш_рынок",
+          "id": "@matusi_ukr:22242#578951",
+          "state": "answered",
+          "v2": "не_наш_рынок"
+        },
+        {
+          "agreed": true,
+          "gold": "категория",
+          "id": "@matusi_ukr:22272#579379",
+          "state": "answered",
+          "v2": "категория"
+        },
+        {
+          "agreed": false,
+          "gold": "категория",
+          "id": "@matusi_ukr:22272#579457",
+          "state": "answered",
+          "v2": "не_наш_рынок"
+        },
+        {
+          "agreed": false,
+          "gold": "молочный_бренд",
+          "id": "@matusi_ukr:22303#580124",
+          "state": "answered",
+          "v2": "сеть_ритейлер"
+        },
+        {
+          "agreed": true,
+          "gold": "категория",
+          "id": "@matusi_ukr:22303#580129",
+          "state": "answered",
+          "v2": "категория"
+        }
+      ],
+      "rows_the_pod_actually_reached": 14
+    }
+  },
+  "spans": {
+    "billed_seconds": 2765.0,
+    "billed_usd": 0.568361,
+    "card": "RTX 4090",
+    "charged": {
+      "generation_seconds": 5532.14,
+      "model_load_seconds": 450.0,
+      "overhead_seconds": 1300.0,
+      "pre_generation_seconds": 1100.0,
+      "seconds_per_call": 6.14,
+      "ssh_seconds": 500.0,
+      "stage_launch_seconds": 150.0,
+      "total_seconds": 7932.14,
+      "worst_case_usd_at_the_price_ceiling": 1.762698
+    },
+    "created_at": "2026-08-21T19:40:45+00:00",
+    "deleted_at": "2026-08-21T20:26:50+00:00",
+    "measured": {
+      "first_reply_at_create_elapsed_seconds": 233.0,
+      "generation_seconds": 2427.4,
+      "launch_to_first_reply_seconds": 146.042,
+      "launched_at": "2026-08-21T19:42:12+00:00",
+      "model_load_seconds": [
+        142.858
+      ],
+      "per_poll_copy_back": {
+        "bytes_copied_at_the_end": 480837,
+        "poll_seconds": 20.0,
+        "rows_at_the_end": 901,
+        "rule": "the loop's own watched_seconds less the sleeps it took, over the polls it can have taken. Both candidate poll counts are published because the record does not carry the count itself — a BOUND and not a measurement (Dv656)",
+        "seconds_per_poll_by_poll_count": {
+          "128": 0.31,
+          "129": 0.15
+        },
+        "watched_seconds": 2579.3,
+        "what_it_bounds": "a poll copied the out-file (480837 bytes at the end, 901 rows of 901), the launch stamp and the pod log, computed the fingerprint and ran the projection — all of it inside 0.31 s at worst. The registration charges 1 300 s of overhead for the copy-back of ≤ 901 rows plus the gate on the Mac plus the delete"
+      },
+      "seconds_per_call_fastest": 2.057,
+      "seconds_per_call_mean": 2.694083,
+      "seconds_per_call_slowest": 4.028,
+      "ssh_publish_seconds": 32.2,
+      "watch_gates_recorded": 1,
+      "watched_seconds": 2579.3
+    },
+    "pod": "fnlktbelhkmte5",
+    "rung_4_which_world_the_pod_was_in": {
+      "rule": "the knife edge depends on the pre-generation, and the record carries two values for it. This is the one the pod measured"
+    },
+    "usd_per_hour": 0.74
+  },
+  "the_rate_of_this_pod": {
+    "charged_here": 6.14,
+    "over_the_charge": 0.4388,
+    "rule": "a rate is a property of the POD (Dv647). This registration charged the TOP of the measured spread rather than a sibling run's figure, and this pod is one more reading of the class — not a rate the programme owns. If it came in under the charge, that is a third point on a spread with two, and the next registration still charges the top",
+    "the_readings_this_class_has": {
+      "pass1-fewshot r2, base (v1), 200 dev rows, pod 8tpx8lf05n6skc": 2.293075,
+      "pass1-fewshot r2, v2, 200 dev rows, pod 8tpx8lf05n6skc": 2.72578,
+      "pass1-probe-b, base (v1), 64 rows": 5.161578,
+      "pass1-window r1, v2, 131 window rows, pod xpz3zb7yxus5cw": 4.498473
+    },
+    "this_pod": {
+      "pod": "fnlktbelhkmte5",
+      "seconds_per_call": 2.694083
+    }
+  },
+  "the_volume_tail": {
+    "bought_twice_seconds": 8.08,
+    "every_one_of_them_is_inside_the_901": true,
+    "file": "results/pass1_window_volume_tail.jsonl",
+    "merged": false,
+    "rows_beyond_the_mac": 3,
+    "rows_beyond_the_mac_ids": [
+      "@klopotenkofood:6035#21205",
+      "@klopotenkofood:6035#21206",
+      "@klopotenkofood:6035#21207"
+    ],
+    "rows_on_the_volume": 134,
+    "rows_the_mac_already_held": 131,
+    "rule": "EVIDENCE, not input. Every row beyond the Mac's copy is inside the 901 this registration buys, so it is bought again here and the cost is named: `rows_beyond_the_mac × the measured s/call of THIS pod`. The file is never merged into the out-file — two answers for one id is an ambiguity this registration does not buy, and the second answer would come from a pod that was killed ([[a_retry_inherits_the_last_attempts_output]])",
+    "seconds_per_call_used": 2.694083,
+    "sha256": "f52f63f3adb726859815aad8379fa142f8f4ae54ecb52e7c2172108aa2d073ae"
+  },
+  "the_windows_completeness": {
+    "answered": 1032,
+    "answered_by_r1": 131,
+    "answered_here": 901,
+    "complete": true,
+    "not_a_bar_of_this_registration": true,
+    "owed": 1032,
+    "rule": "D2 reports the WINDOW's completeness — answered / 1032 over the UNION of r1's out-file and this one — BESIDE the bar above. It is the number pass 2 needs and it is not what this registration can pass or fail: this contract bought 901 comments and can only be graded on them. A GO here with the union short of 1032 is a GO on this contract and an open window, and the report says both"
+  },
+  "what_this_run_is_not": "an evaluation. Nothing in it is a bar on v2's quality, and no reading it produces may be promoted to one — not the fourteen, not the 650, not the 450 and not the dev-200. It is also NOT a re-run of r1: the 131 comments r1 bought are not re-asked and its out-file is not touched. And it is not a repair of the r1 pod's rate — the rate is re-CHARGED, not fixed; nobody has made a rented GPU faster"
+}

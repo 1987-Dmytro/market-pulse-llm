@@ -240,3 +240,91 @@ def test_the_log_names_what_the_out_file_does_not(tmp_path, monkeypatch):
     assert block["rows_in_the_copied_back_file"] == 901
     assert block["replies_the_pod_log_reports"] == 901
     assert block["replies_named_by_the_log_and_absent_from_the_file"] == []
+
+
+def test_the_shipped_census_is_what_the_producer_writes_today(tmp_path):
+    """The real artefact, regenerated — a census nobody can re-derive is a census nobody can check."""
+    assert census.main(["--out", str(tmp_path / "again.json")]) == 0
+    assert (tmp_path / "again.json").read_text("utf-8") == (
+        REPO_ROOT / "results" / "pass1_window_r2_census.json"
+    ).read_text("utf-8")
+
+
+def test_the_shipped_census_closes_the_window_and_carries_the_readings_as_readings():
+    out = json.loads((REPO_ROOT / "results" / "pass1_window_r2_census.json").read_text("utf-8"))
+    assert out["completeness"]["verdict"] == "GO"
+    assert out["completeness"]["answered"] == out["completeness"]["owed"] == 901
+    assert out["completeness"]["sha_mismatches"] == 0
+    assert out["completeness"]["parse_refusals"] == 0
+    window = out["the_windows_completeness"]
+    assert (window["answered"], window["owed"], window["complete"]) == (1032, 1032, True)
+    assert (window["answered_by_r1"], window["answered_here"]) == (131, 901)
+
+    # every report-only reading is over its FULL denominator and none of them is a bar
+    for name in ("the_650_labelled_rows", "the_450_not_in_dev_200", "the_dev_200"):
+        one = out["report_only"][name]
+        assert one["absent"] == 0, name
+        assert one["not_a_bar"] is True, name
+        assert "passed" not in one and "threshold" not in one, name
+    assert out["report_only"]["the_dev_200"]["agreed"] == 136
+    assert out["report_only"]["the_dev_200"]["our_agreed"] == 38
+    assert out["report_only"]["the_dev_200"]["r2_reported"] == {
+        "agreed": 136,
+        "n": 200,
+        "our_agreed": 38,
+        "our_n": 49,
+    }
+    assert out["report_only"]["the_450_not_in_dev_200"]["our_n"] == 0, "Dv652"
+    fourteen = out["report_only"]["the_fourteen"]
+    assert fourteen["rows_the_pod_actually_reached"] == 14
+    assert fourteen["agreed"] == 11
+    assert fourteen["not_a_bar"] is True
+    assert "never a bar" in fourteen["caption"].lower()
+
+    # the volume tail: counted, priced, NEVER merged
+    tail = out["the_volume_tail"]
+    assert (tail["rows_on_the_volume"], tail["rows_the_mac_already_held"]) == (134, 131)
+    assert tail["rows_beyond_the_mac"] == 3
+    assert tail["merged"] is False
+    assert tail["sha256"] == "f52f63f3adb726859815aad8379fa142f8f4ae54ecb52e7c2172108aa2d073ae"
+
+
+def test_the_dev_200_reproduces_r2_ROW_FOR_ROW_across_three_pods():
+    """Not the count — the rows. Greedy decoding on a pinned rendering is deterministic here.
+
+    r2 answered these 200 on pod 8tpx8lf05n6skc; r1's pod answered 48 of them and this run's the
+    other 152. If a single label differed the census's 136/200 would be a coincidence of counts, and
+    the whole reading of Dv647 — «the pod class varies in SECONDS and not in ANSWERS» — would be an
+    assertion instead of a measurement.
+    """
+    import score_reader_probe_b as probe_b
+
+    from market_pulse import prompts
+
+    window = json.loads((REPO_ROOT / "results" / "pass1_window_pack.json").read_text("utf-8"))
+    items = {one["id"]: one for one in window["legs"][0]["items"]}
+    dev = set(window["membership"]["dev_200"]["ids"])
+
+    dev_pack = json.loads((REPO_ROOT / "results" / "pass1_dev_pack.json").read_text("utf-8"))
+    leg = next(one for one in dev_pack["legs"] if one["name"] == "v2")
+    dev_items = {one["id"]: one for one in leg["items"]}
+
+    def labels(path: Path, keep=None, lookup=None):
+        out = {}
+        for line in path.read_text("utf-8").splitlines():
+            if not line.strip():
+                continue
+            row = json.loads(line)
+            if keep is not None and row["id"] not in keep:
+                continue
+            item = (lookup or items)[row["id"]]
+            answer = prompts.parse_pass1(row["reply"], msg_id=int(item["msg_id"]))
+            out[row["id"]] = probe_b.collapse(answer["subject_type"])
+        return out
+
+    on_the_dev_pod = labels(REPO_ROOT / "results" / "pass1_dev_v2.jsonl", lookup=dev_items)
+    union = labels(REPO_ROOT / "results" / "pass1_window_v2.jsonl", keep=dev)
+    union |= labels(REPO_ROOT / "results" / "pass1_window_r2_v2.jsonl", keep=dev)
+
+    assert len(on_the_dev_pod) == len(union) == 200 == len(dev)
+    assert union == on_the_dev_pod, "200 of 200, one for one, across three pods"
