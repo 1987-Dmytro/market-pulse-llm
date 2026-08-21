@@ -109,3 +109,58 @@ registration needs and two findings (consequences 4 and 6) it must absorb.
 
 The report is `docs/reports/pass1-fewshot.md`; the gate record is
 `results/pass1_fewshot_run.json`, append-only, seven gates over two pods.
+
+---
+
+## r2 — the re-registration, 2026-08-21 (D0′ committed before any pod)
+
+The operator's ruling of 21.08: **re-register; the STEP's budget stays $1.50 all-in.** r1's two pods
+already bought $0.117783 of it, so r2's cap is **$1.38** and the step sum is $1.497783.
+`results/prereg_pass1_fewshot_r2.json` is the new law, `docs/PROMPT-pass1-fewshot-r2.md` the
+contract, `docs/reports/pass1-fewshot-r2.md` the report. **r1 is sealed and never re-opened** — the
+file on disk is still byte for byte `c7cbfd1`, and a test asserts it against the commit.
+
+**What moved, and only this.** The question, the bars, the packs, the prompt, the holdout, the dev
+gate, the attempt and its multiplicity are COPIED out of r1's committed record, so «byte-identical»
+is true by construction; every pin inside them is re-checked against the live file it names and a
+divergence stops the producer. Two declared exceptions: `instruments.gate.sha256` (the one
+instrument r2 amends, so r1's pin is «moved since» and is not re-pinned) and the new
+`instruments.scorer_pass1_fewshot`, which is consequence 6 above, closed.
+
+1. **Rung 2 — 500 s of create-elapsed, and it is a SPREAD.** probe-b saw ssh at 14.5 s on this card
+   in this datacenter on 18.08; both pods of 20.08 were still `pod not ready` at 262.5 s and 231.9 s,
+   and both are LOWER bounds because ssh was never observed up. The two readings are taken out of
+   r1's own gate record, never typed. **500 and not 600** because the recovery clause must stay
+   REACHABLE: at 600 the worst case itself grows to 5 576.552 s, so one dead pod plus it is
+   6 176.552 s — past the 6 100 s hard stop. The dollars would still fit; the seconds do not, and the
+   platform holds seconds. That counterfactual is a registered H6 row, not a sentence.
+2. **Rung 3 — the ceiling did not move, its ANCHOR did.** 450 s is now measured from `launched_at`,
+   a stamp the POD writes into its run directory in the same command that execs the runner and
+   `--watch` copies back; the gate writes it into the pod's entry once and never moves it forward. A
+   create-anchored **backstop of 1 100 s** (ssh 500 + stage/launch 150 + load 450) sits beside it and
+   is what bounds a late stamp. Consequence 4 above, closed. A run record without the anchor cannot
+   report GO on this rung.
+3. **The money is re-derived, not re-quoted.** 5 476.552 s = 1.5213 h → worst $1.2170 at the $0.80/h
+   ceiling; hard stop 6 100 s = $1.3556 < $1.38; overhead 1 300 s because ssh and staging now have
+   their own lines, and H6 checks that the 650 s those lines add covers the 500 s the overhead lost.
+
+**Four defects were found by an adversarial review BEFORE the first `pod create`**, and two of them
+would have deleted a healthy pod with the attempt unspent:
+
+- **rung 4 was still charging r1's repealed 1 800 s overhead.** `projection_gate` had been copied
+  whole from r1, and `projection()` adds that number on every poll of the watch — against a hard stop
+  r2 had also lowered from 6 300 to 6 100. On the recovery path the shot's FIRST poll projects
+  6 476.6 s / 6 100 and kills. A block copied for its algorithm carried two numbers the amendment
+  repealed [[the-old-record-with-one-field-replaced]].
+- **the first reply was still being typed on r1's create-anchored recipe.** `create + boot_seconds`
+  subtracts the ssh wait and the staging twice under a launch anchor, so a 460 s load reads as 415 s
+  and rung 3 reports GO on the condition it was re-anchored to catch — Dv605 with the sign flipped.
+  `--boot` takes no stamp now; it reads `elapsed_since_start` off the out-file
+  [[a-flag-that-asserts-turns-a-poll-into-a-verdict]].
+- **the ssh poll was bounded by an iteration count annotated as seconds.** r1's own record prices a
+  turn at 6.65 s — 34 turns took 226 s of wall clock — so 95 turns is ~631 s, past the rung and past
+  the 623.448 s at which the ONE re-creation stops fitting. Bounded by the clock now.
+- **`--price` did not run the recovery clause** the runbook and the record both said it ran.
+
+Each fix carries a mutation that was watched to go red. `make check` **3 265 / 2** (3 239/2 at step
+0). The guard is anchored at `$16.4358` on `2026-08-21T11:36:55Z`, step spend `$0.0000 of $1.38`.
