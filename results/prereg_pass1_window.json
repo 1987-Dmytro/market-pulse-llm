@@ -309,11 +309,19 @@
       },
       {
         "agrees": true,
-        "formula": "rung 4 prices the remainder at the LARGER of the leg's mean and its LAST call, so one slow reply is priced as if every remaining call were that slow. Solved backwards at the tightest point of the run the edge is 4.833 s/call, and the slowest single call this stack has measured is 4.066 s — a factor of 1.189. The check is the DIRECTION: the edge must sit above the worst call, or a healthy pod dies on its first bad reply",
+        "formula": "the hard stop must pay for the run the money block PRICES: at the charged pre-generation the sustained rate it can afford is (6500 − 1300 − 1100) / 1032 = 3.9729 s/call, and the rate charged is 3.4075. This is the inequality that makes the budget self-consistent — and it is NOT the same question as whether one outlier call survives rung 4, which money.arithmetic.cumulative.projection_gate.single_call_sensitivity.the_headline answers and answers NO at this span",
         "mode": "at_least",
-        "name": "REASON — rung 4's single-call knife edge is above the slowest call measured",
-        "re_derived": 4.833,
-        "registered": 4.066
+        "name": "REASON — the budget's own sustained rate covers the rate it charges",
+        "re_derived": 3.9729,
+        "registered": 3.4075
+      },
+      {
+        "agrees": true,
+        "formula": "the record carries two values for one span: pre_generation_measured 254.6 s (r2's own reading) and pre_generation_seconds 1100 s (what the money block charges). The edge is 4.812 s/call at the first and 3.985 at the second, against a measured worst call of 4.066 s. The check is that BOTH are computed and that the CHARGED one is the smaller, so the headline cannot quote the flattering span",
+        "mode": "at_least",
+        "name": "REASON — rung 4's knife edge is reported at BOTH pre-generations and the worse is the headline",
+        "re_derived": 4.812,
+        "registered": 3.985
       },
       {
         "agrees": true,
@@ -342,9 +350,13 @@
       "moved_since_r2": true,
       "rule": "a SIBLING of scripts/gate_pass1_fewshot.py. It IMPORTS every rung computation that is pure — rungs 1, 2, 3, 4 and their clock — and re-declares the ones bound to r2's own module state (the record it writes, the launch stamp it reads, the leg it takes the first reply from) plus rung 7, which is a completeness bar here and a dev gate there. r2's gate is pinned by its own sealed record and is NEVER edited",
       "script": "scripts/gate_pass1_window.py",
-      "sha256": "95da0d2bb53c11b089036cd6b95850adcac295731ec4dbae3394b8e9a2be6d76"
+      "sha256": "8b812597c4ea3bf05b47084dff2a73618d0d2ccbb9097ad9af7c00fa3a24e489"
     },
     "gate_imported_from": {
+      "also_imported": {
+        "scripts/window_summary_5c2.py": "239d2d5fcc0f0c93158ca41383b5ce20beb7f8e9db38974913a302ea4831fdaf",
+        "why": "the gate hashes the pack through window_summary_5c2.sha256_of, so that file is an instrument of the pack guard. An IMPORTED instrument is an instrument — the same rule that put r2's gate in this block"
+      },
       "rule": "an IMPORTED instrument is an instrument. This is the file r2's sealed record pins at 07a5a07aa8e94d98…, unchanged; the sibling above calls into it and does not edit it",
       "script": "scripts/gate_pass1_fewshot.py",
       "sha256": "07a5a07aa8e94d980704b82dbddb4c58abe36b4c6fb3f4f4a42a4f3fcf4d02ff"
@@ -352,11 +364,12 @@
     "gold": {
       "collapse": "scripts/score_reader_probe_b.py::collapse",
       "collapse_sha256": "952a14dc8fc9d036f1dabb969ba7abb267282c40e0a62296d21f2015b3fae64c",
-      "judge": "scripts/score_pass1_probe.py::bar_p1",
-      "judge_sha256": "b433856dc9b102d38e072f9aa7226f6f5cce92a91960503e973562fb4c8d711c",
+      "comparison": "market_pulse.scorer.reader_comment_agreement",
       "record": "results/reader_gold_w1_r2.json",
-      "rule": "the fourteen are GOLD and not labels, so gate_pass1_fewshot.py::leg_table cannot score them — its comparison runs against results/labels_pass1_r*.jsonl, and NONE of the fourteen pairs is in that map. D2's census row over them goes through `bar_p1`, the same judge probe-b and r2 registered, over the same collapse. Pinned here because a reading D2 owes with no producer named at D0 is a producer invented after the money ([[a_registered_bar_may_have_no_producer]]). It scores a CENSUS ROW and never a bar — see return_to_the_operator",
-      "sha256": "716ff4174bdafa5957caa4d038a11241b6eb299df4035a5f0e983217ec2a46d9"
+      "rule": "a reading D2 owes with no producer named at D0 is a producer invented after the money ([[a_registered_bar_may_have_no_producer]]). This is the producer, and it yields a CENSUS ROW with the multiplicity of return_to_the_operator beside it",
+      "sha256": "716ff4174bdafa5957caa4d038a11241b6eb299df4035a5f0e983217ec2a46d9",
+      "why_not_bar_p1": "scripts/score_pass1_probe.py::bar_p1 is the right COMPARISON and the wrong INSTRUMENT. It returns `passed`, `minimum_agreed` and a `losses.budget` — it is a BAR, and this contract may not take a bar on the fourteen at all. D2 calls scorer.reader_comment_agreement with probe_b.collapse on both sides, which is exactly what bar_p1 computes BEFORE its threshold arm, and stops there. A `passed` field on this row would be the promotion the ADR forbids in the very shape it forbids it ([[a_flag_that_asserts_turns_a_poll_into_a_verdict]])",
+      "why_not_leg_table": "the fourteen are GOLD and not labels. gate_pass1_fewshot.py::leg_table compares against results/labels_pass1_r*.jsonl and NOT ONE of the fourteen pairs is in that map — 0 of 14, checked. The reading over the 650 labelled rows and the 450 outside dev-200 is leg_table's; the reading over the fourteen cannot be"
     },
     "packs": {
       "borrowed": {
@@ -366,7 +379,7 @@
       },
       "producer": "scripts/build_pass1_window_pack.py",
       "rule": "the window pack's producer. It IMPORTS build_pass1_fewshot_packs.neighbours / ::rendered_item / ::context and build_pass1_sft.request — the dev leg's own rendering path — so the window is asked exactly as dev-200 was asked. The three borrowed shas are pinned beside it because a rendering built through another file's function moves when that file moves",
-      "sha256": "175e901873278efd41022b0e37d859a3e24ed9b4cc3ac84d12a286d1dd310567"
+      "sha256": "cc8e2343dd012a2105d0cf060e5fb39b28ac4ceefd67c904103f40174317873f"
     },
     "parser": {
       "entry_point": "market_pulse.prompts.parse_pass1",
@@ -486,47 +499,100 @@
           "overhead_rule": "the SAME 1 300 s the money block charges, and it has to be: rung 4 prices the attempt with it on every poll, so a second copy here is a second budget. H6 asserts the two are one number",
           "overhead_seconds": 1300.0,
           "single_call_sensitivity": {
-            "curve": [
-              {
-                "at_call": 20,
-                "create_elapsed_seconds": 309.1,
-                "kill_above_seconds_per_call": 4.833
-              },
-              {
-                "at_call": 100,
-                "create_elapsed_seconds": 527.2,
-                "kill_above_seconds_per_call": 5.014
-              },
-              {
-                "at_call": 200,
-                "create_elapsed_seconds": 799.8,
-                "kill_above_seconds_per_call": 5.289
-              },
-              {
-                "at_call": 400,
-                "create_elapsed_seconds": 1344.9,
-                "kill_above_seconds_per_call": 6.1
-              },
-              {
-                "at_call": 700,
-                "create_elapsed_seconds": 2162.6,
-                "kill_above_seconds_per_call": 9.149
-              },
-              {
-                "at_call": 1000,
-                "create_elapsed_seconds": 2980.4,
-                "kill_above_seconds_per_call": 69.363
-              }
-            ],
-            "formula": "(hard_stop − overhead − pre_generation_measured − n × measured_mean) / (calls − n)",
-            "headroom_over_the_slowest_call_measured": 1.189,
+            "at_the_CHARGED_pre_generation": {
+              "curve": [
+                {
+                  "at_call": 10,
+                  "create_elapsed_seconds": 1127.3,
+                  "kill_above_seconds_per_call": 3.985
+                },
+                {
+                  "at_call": 20,
+                  "create_elapsed_seconds": 1154.5,
+                  "kill_above_seconds_per_call": 3.998
+                },
+                {
+                  "at_call": 100,
+                  "create_elapsed_seconds": 1372.6,
+                  "kill_above_seconds_per_call": 4.107
+                },
+                {
+                  "at_call": 200,
+                  "create_elapsed_seconds": 1645.2,
+                  "kill_above_seconds_per_call": 4.273
+                },
+                {
+                  "at_call": 400,
+                  "create_elapsed_seconds": 2190.3,
+                  "kill_above_seconds_per_call": 4.762
+                },
+                {
+                  "at_call": 700,
+                  "create_elapsed_seconds": 3008.0,
+                  "kill_above_seconds_per_call": 6.602
+                },
+                {
+                  "at_call": 1000,
+                  "create_elapsed_seconds": 3825.8,
+                  "kill_above_seconds_per_call": 42.944
+                }
+              ],
+              "headroom_over_the_slowest_call_measured": 0.98,
+              "pre_generation_seconds": 1100.0,
+              "source": "money.arithmetic.pre_generation_seconds — and rung 3's own backstop",
+              "tightest_kill_above_seconds_per_call": 3.985
+            },
+            "at_the_MEASURED_pre_generation": {
+              "curve": [
+                {
+                  "at_call": 10,
+                  "create_elapsed_seconds": 281.9,
+                  "kill_above_seconds_per_call": 4.812
+                },
+                {
+                  "at_call": 20,
+                  "create_elapsed_seconds": 309.1,
+                  "kill_above_seconds_per_call": 4.833
+                },
+                {
+                  "at_call": 100,
+                  "create_elapsed_seconds": 527.2,
+                  "kill_above_seconds_per_call": 5.014
+                },
+                {
+                  "at_call": 200,
+                  "create_elapsed_seconds": 799.8,
+                  "kill_above_seconds_per_call": 5.289
+                },
+                {
+                  "at_call": 400,
+                  "create_elapsed_seconds": 1344.9,
+                  "kill_above_seconds_per_call": 6.1
+                },
+                {
+                  "at_call": 700,
+                  "create_elapsed_seconds": 2162.6,
+                  "kill_above_seconds_per_call": 9.149
+                },
+                {
+                  "at_call": 1000,
+                  "create_elapsed_seconds": 2980.4,
+                  "kill_above_seconds_per_call": 69.363
+                }
+              ],
+              "headroom_over_the_slowest_call_measured": 1.183,
+              "pre_generation_seconds": 254.6,
+              "source": "r2's create-elapsed at its first reply, 2026-08-21",
+              "tightest_kill_above_seconds_per_call": 4.812
+            },
+            "formula": "(hard_stop − overhead − pre_generation − n × measured_mean) / (calls − n), and the pre_generation is the span this record carries two values for",
             "measured_mean_seconds_per_call": 2.72578,
-            "pre_generation_measured_seconds": 254.6,
             "slowest_call_in_the_sample": 4.066,
-            "tightest_kill_above_seconds_per_call": 4.833,
-            "what_fires_it": "ONE reply slower than 4.833 s landing as the most recent row at an early poll. The slowest single call this stack has measured is 4.066 s, so the edge sits 1.19× above it — margin, not comfort. The SECONDS bind here and not the dollars: the same projection at the live price is well inside the cap",
-            "what_it_costs_if_it_fires": "the boot and whatever was billed — not the leg. Every reply is flushed as it lands and the shipped resume skips every unit already answered, so a re-creation re-asks only what has no reply. The ONE re-creation the recovery clause buys is what pays for it, and after it there is no second",
-            "why_it_is_not_loosened": "`leg_state` and `projection` are scripts/gate_pass1_fewshot.py's, pinned by r2's sealed record and imported here unedited. Pricing the remainder at the mean alone would be a weaker gate in the PERMISSIVE direction, which is the one these rungs exist to close. So the sensitivity is REGISTERED rather than repaired"
+            "sustained_rate_the_charged_pre_generation_can_pay_for": 3.9729,
+            "the_headline": "at the pre-generation the budget CHARGES, the sustained rate the hard stop can pay for is 3.9729 s/call and the slowest call this stack has measured is 4.066 — the measured worst is ABOVE it. One such call landing as the most recent row at an early poll makes rung 4 project past 6500 s and KILL. At the pre-generation r2 actually MEASURED (254.6 s) the edge is 4.812 s/call and the same call is safe by 1.18×. The pod is in one world or the other by the time the first reply lands, and rung 3's GO is where the executor reads which",
+            "what_it_costs_if_it_fires": "the pod is deleted mid-run and the seconds already billed are gone. Every reply is flushed as it lands and the shipped resume skips every unit already answered — but `--pre-create-check` prices a re-creation at the FULL worst case ahead, so a KILL past 583.46 s of billed seconds refuses the re-creation too and the session closes with no verdict on a run that was working. That is the whole cost and it is named here rather than discovered",
+            "what_the_executor_can_do_about_it": "nothing after the create, and one thing before it: the charged 1 100 s is ssh 500 + stage/launch 150 + load 450, and the staging half is HAND-DRIVEN. probe-b bounds ssh + staging + launch together at ≤ 89.5 s and r2's whole pre-generation was 254.6 s, so a brisk staging keeps the pod in the safe world. Every second spent between the ssh GO and the launch is a second rung 4 will not lend to the rate",
+            "why_it_is_not_loosened": "`leg_state` and `projection` are scripts/gate_pass1_fewshot.py's, pinned by r2's sealed record and imported here unedited. Pricing the remainder at the mean alone would be a weaker gate in the PERMISSIVE direction, which is the one these rungs exist to close. Raising the hard stop is the operator's word: 6 500 s is the number docs/PROMPT-pass1-window.md prints, and 6 700 s would be $1.4889 — still inside the $1.50 cap and enough to put the charged-span edge at 4.167 s/call, above the measured worst. That trade is REPORTED to the operator and taken by nobody here"
           },
           "verdict": "KILL if the projection exceeds $1.50 at the LIVE price, or exceeds the 6500 s hard stop in seconds. The stricter binds",
           "why_one_leg": "r2 priced every leg still owed because its shot's 64 calls were what made the dev legs affordable. This contract has ONE leg, so «every leg still owed» and «the running leg» are the same set — the formula did not need weakening and was not weakened"
@@ -682,6 +748,67 @@
   "population": {
     "ceiling_chars": 12000,
     "cell": "narrow|varto_off|plus_spam+scam",
+    "gold": {
+      "rows": [
+        {
+          "msg_id": 20664,
+          "thread": "@VARUS_channel:10348"
+        },
+        {
+          "msg_id": 21599,
+          "thread": "@VARUS_channel:10613"
+        },
+        {
+          "msg_id": 21601,
+          "thread": "@VARUS_channel:10613"
+        },
+        {
+          "msg_id": 21626,
+          "thread": "@VARUS_channel:10613"
+        },
+        {
+          "msg_id": 21629,
+          "thread": "@VARUS_channel:10613"
+        },
+        {
+          "msg_id": 47899,
+          "thread": "@mandziak:3676"
+        },
+        {
+          "msg_id": 47902,
+          "thread": "@mandziak:3676"
+        },
+        {
+          "msg_id": 48276,
+          "thread": "@mandziak:3703"
+        },
+        {
+          "msg_id": 48283,
+          "thread": "@mandziak:3703"
+        },
+        {
+          "msg_id": 578951,
+          "thread": "@matusi_ukr:22242"
+        },
+        {
+          "msg_id": 579379,
+          "thread": "@matusi_ukr:22272"
+        },
+        {
+          "msg_id": 579457,
+          "thread": "@matusi_ukr:22272"
+        },
+        {
+          "msg_id": 580124,
+          "thread": "@matusi_ukr:22303"
+        },
+        {
+          "msg_id": 580129,
+          "thread": "@matusi_ukr:22303"
+        }
+      ],
+      "rule": "the fourteen by (thread, msg_id), taken from the pack's own membership block. D2 reads this list rather than re-joining the gold to the population after the money — and it is the pair key everywhere, because a msg_id is unique per CHANNEL and 13 of this population's are carried by two threads"
+    },
     "leg": "v2",
     "membership": {
       "dev_200": 200,
@@ -698,7 +825,7 @@
       "items_whose_own_thread_carries_labels": 968,
       "labels_withheld_from_those_items": 15583
     },
-    "sha256": "e591248490103101906155b343eeed94b2f45fb1649d28ac269956d3bad38b14",
+    "sha256": "799dbca9049a495c6cf31e4335c090d6e4c9d334e2b3204b93ed8dfa30de52da",
     "threads": 129,
     "widest_request_chars": 8562
   },
@@ -708,7 +835,7 @@
       "sha256": "b1f420c262e6de0effa3c6f961605d9e36a118da7ddef05ff65c5d9a82a7001f"
     },
     "script": "scripts/write_pass1_window_prereg.py",
-    "sha256": "cd04f45c8a8a68cf2ce592e7a0633eae272102437f0b01059c58e3efb9cba0a7",
+    "sha256": "de2c85cb8cfc10e2a07956ddaa714b27c4c2cd60e9205165e57659cda898ca23",
     "supersedes_nothing": "this is a NEW line, not a re-registration. `results/prereg_pass1_fewshot_r2.json` is the record its instruments and its kill clock are COPIED from, and it is sealed, closed and never re-opened"
   },
   "return_to_the_operator": "**The fourteen gold rows and probe-b's sixty-four are INSIDE this population and are answered like every other comment.** Their agreement with the gold is a REPORT-ONLY census row and it carries its multiplicity: this is the FOURTH look at the same fourteen — the base (pass1-probe-b, 9/14), arm A of the LoRA line (lora-b, 9/14), v2 which was registered for a shot it never fired because its dev gate went RED, and now v2 inside a production pass that was registered for transport. A reading taken on rows this program has already looked at three times is a reading and never a bar. It cannot be promoted to «v2 takes N of 14» by anyone — not by this report, not by the acceptance, not by the next registration — and a bar on the fourteen needs a NEW registration with its own attempt, its own pre-declared threshold and the operator's word ([[a_reproducible_probe_can_be_unrepresentative]]). The same holds for the 650 labelled rows and the 450 outside dev-200: larger readings, still readings",

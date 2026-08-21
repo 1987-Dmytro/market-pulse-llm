@@ -822,15 +822,19 @@ def test_a_duplicate_id_and_an_id_the_leg_never_asked_are_both_RED(run, tmp_path
 
 
 def test_the_gate_holds_the_shipped_pack_to_the_SHA_the_record_pins(run, tmp_path, monkeypatch):
-    """A count is not an identity. Rung 7 reads every reply's sha against THIS file.
+    """A count is not an identity, and neither is a path spelling.
 
     The population check compares one integer, and a pack rebuilt with the same 1 032 rows and a
-    different rendering would pass it — while silently becoming the reference the bar is read
-    against ([[the_guard_hashes_the_half_that_cannot_move]]).
+    different rendering would pass it while silently becoming the reference rung 7 reads every reply
+    against ([[the_guard_hashes_the_half_that_cannot_move]]). Both halves are driven: a tampered
+    pack refuses, and it refuses through a path that is NOT `==` the module constant — `--pack
+    results/pass1_window_pack.json` typed from the repo root is a RELATIVE Path, which is the
+    spelling a guard written on `==` skips.
     """
     shipped = REPO_ROOT / "results" / "pass1_window_pack.json"
     assert gate.PACK == shipped
     assert RECORD["population"]["sha256"] == gate.summary.sha256_of(shipped)
+
     impostor = tmp_path / "pass1_window_pack.json"
     impostor.write_text(
         json.dumps({**PACK, "self_exclusion": {"tampered": True}}, ensure_ascii=False), "utf-8"
@@ -839,6 +843,11 @@ def test_the_gate_holds_the_shipped_pack_to_the_SHA_the_record_pins(run, tmp_pat
     assert opened(run) == gate.GO
     with pytest.raises(SystemExit, match="have parted"):
         run.main(["--completeness", "--pack", str(impostor), "--outdir", str(tmp_path)], now=at(1))
+
+    detour = impostor.parent / ".." / impostor.parent.name / impostor.name
+    assert detour != impostor and detour.resolve() == impostor.resolve()
+    with pytest.raises(SystemExit, match="have parted"):
+        run.main(["--completeness", "--pack", str(detour), "--outdir", str(tmp_path)], now=at(1))
 
 
 def test_the_gate_refuses_a_pack_that_is_not_the_registered_population(run, tmp_path):

@@ -92108,6 +92108,7 @@
     "payable_comments": 1032,
     "rule": "pass 2 is ONE call per thread over the rows pass 1 labelled категория_личное / молочный_бренд / сеть_ритейлер. The FILTER cannot be known before this run — it is D2's census row. What `per_thread` carries is the denominator it comes out of",
     "threads": 129,
+    "what_entity_block_chars_is_NOT": "it is the marginal contribution of the entity block to a PASS-1 request, measured by rendering the same item with the block and without it. Pass 2's prompt does not exist yet and will not render the block the same way, so this number SIZES the context and does not price the call. A rate carries the transport it was measured on ([[the_smokes_rate_carries_the_smokes_transport]]), and so does a length: `pass2-signals` prices its own call on its own renderer",
     "widest_thread_payable": 125
   },
   "per_thread": [
@@ -93560,7 +93561,7 @@
       "src/market_pulse/prompts.py": "b70e2114b03a76dc2c8cfc9b559bf7ef22e9193d841b4fccc5ed8bd0a40294ab"
     },
     "script": "scripts/build_pass1_window_pack.py",
-    "sha256": "175e901873278efd41022b0e37d859a3e24ed9b4cc3ac84d12a286d1dd310567"
+    "sha256": "cc8e2343dd012a2105d0cf060e5fb39b28ac4ceefd67c904103f40174317873f"
   },
   "reading": "the pod renders each item itself, from the fields in it, and refuses unless its sha equals the one above. Shipping the rendered string would only prove the two machines agree about a string; what has to be true is that the model is shown what the registration registered",
   "registration": {

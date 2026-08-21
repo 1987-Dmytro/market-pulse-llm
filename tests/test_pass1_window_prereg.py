@@ -281,7 +281,7 @@ def test_every_number_the_contract_prints_re_derives():
 
 def test_H6_carries_rows_that_check_a_REASON_and_not_only_a_number():
     reasons = [one for one in RECORD["h6"]["rows"] if one["name"].startswith("REASON")]
-    assert len(reasons) == 6
+    assert len(reasons) == 7
     assert all(one["agrees"] for one in reasons)
     # the margin's own reason is MEASURED on the two packs, not asserted: the entity blocks nearly
     # double and the request they sit in grows ~1 %, so the margin is bought against a growth an
@@ -391,32 +391,60 @@ def test_the_recovery_clause_is_priced_with_the_MEASURED_deletion_tail():
     ]["agrees"]
 
 
-def test_rung_4s_single_call_knife_edge_is_computed_and_sits_above_the_worst_call():
-    """One slow reply is priced as if every remaining call were that slow — so the edge is registered.
+def test_rung_4s_knife_edge_is_computed_at_BOTH_spans_and_the_worse_one_is_the_headline():
+    """The record carries two values for one span, and the flattering one must not be the claim.
 
-    `leg_state` prices the remainder at max(mean, last call). The gate is r2's and is pinned, so the
-    sensitivity is REGISTERED rather than repaired: a KILL is then a foreseen outcome with a
-    recovery path and not a mystery on a billed pod.
+    At `pre_generation_measured` (254.6 s) the edge is ~4.81 s/call and the worst call this stack
+    has measured (4.066 s) is safe by 1.18x. At the `pre_generation_seconds` the money block CHARGES
+    (1 100 s) the edge is ~3.99 — BELOW the measured worst. A curve computed over one span and
+    quoted about a budget that pays for the other is the class this program keeps buying
+    ([[a_ceiling_derived_from_one_span_measured_over_another]]).
     """
     block = SUMS["cumulative"]["projection_gate"]["single_call_sensitivity"]
     stop = SUMS["cumulative"]["hard_stop_seconds"]
     overhead = SUMS["overhead_seconds"]
     mean = block["measured_mean_seconds_per_call"]
-    pre = block["pre_generation_measured_seconds"]
-    for row in block["curve"]:
-        at = row["at_call"]
-        assert row["kill_above_seconds_per_call"] == pytest.approx(
-            (stop - overhead - pre - at * mean) / (1032 - at), abs=0.001
+
+    for key, pre in (
+        (
+            "at_the_MEASURED_pre_generation",
+            block["at_the_MEASURED_pre_generation"]["pre_generation_seconds"],
+        ),
+        ("at_the_CHARGED_pre_generation", SUMS["pre_generation_seconds"]),
+    ):
+        arm = block[key]
+        assert arm["pre_generation_seconds"] == pre
+        for row in arm["curve"]:
+            at = row["at_call"]
+            assert row["kill_above_seconds_per_call"] == pytest.approx(
+                (stop - overhead - pre - at * mean) / (1032 - at), abs=0.001
+            )
+        assert arm["tightest_kill_above_seconds_per_call"] == min(
+            one["kill_above_seconds_per_call"] for one in arm["curve"]
         )
-    tightest = min(one["kill_above_seconds_per_call"] for one in block["curve"])
-    assert block["tightest_kill_above_seconds_per_call"] == tightest
-    assert tightest > block["slowest_call_in_the_sample"] == 4.066
-    assert block["headroom_over_the_slowest_call_measured"] == pytest.approx(
-        tightest / 4.066, abs=0.001
+
+    measured = block["at_the_MEASURED_pre_generation"]
+    charged = block["at_the_CHARGED_pre_generation"]
+    # the CHARGED span is the tighter one, and it does NOT clear the worst call measured
+    assert (
+        charged["tightest_kill_above_seconds_per_call"]
+        < measured["tightest_kill_above_seconds_per_call"]
     )
-    assert rows_by_name()[
-        "REASON — rung 4's single-call knife edge is above the slowest call measured"
-    ]["agrees"]
+    assert charged["headroom_over_the_slowest_call_measured"] < 1.0
+    assert measured["headroom_over_the_slowest_call_measured"] > 1.0
+    assert block["sustained_rate_the_charged_pre_generation_can_pay_for"] == pytest.approx(
+        (stop - overhead - SUMS["pre_generation_seconds"]) / 1032, abs=0.0001
+    )
+    assert (
+        block["sustained_rate_the_charged_pre_generation_can_pay_for"]
+        < block["slowest_call_in_the_sample"]
+    )
+    # and the headline quotes the WORSE arm, not the flattering one
+    assert "the measured worst is ABOVE it" in block["the_headline"]
+    assert "closes with no verdict" in block["what_it_costs_if_it_fires"]
+    assert rows_by_name()["REASON — the budget's own sustained rate covers the rate it charges"][
+        "agrees"
+    ]
 
 
 def test_the_entity_block_is_measured_as_RENDERED_and_not_as_a_python_repr():
@@ -452,16 +480,24 @@ def test_the_entity_block_is_measured_as_RENDERED_and_not_as_a_python_repr():
     assert all(one["entity_block_chars"] >= 0 for one in table.values())
 
 
-def test_the_fourteen_have_a_NAMED_producer_because_leg_table_cannot_score_them():
-    """`leg_table` compares against the LABEL map, and no gold pair is in it — checked, not argued.
+def test_the_fourteen_have_a_NAMED_producer_that_is_a_CENSUS_and_not_a_bar():
+    """The reading D2 owes over the gold, DRIVEN at $0 from what the record actually carries.
 
-    A reading D2 owes with no producer named at D0 is a producer invented after the money
-    ([[a_registered_bar_may_have_no_producer]]).
+    Two instruments are refused by name and the refusals are CHECKED, not asserted: `leg_table`
+    compares against the LABEL map and no gold pair is in it (0 of 14), and `bar_p1` returns
+    `passed` — it is a BAR, and this contract may not take one on the fourteen. What is left is the
+    comparison both of them use, run here on the record's own registered rows to prove D2 can
+    compute the census without inventing anything after the money.
     """
     import sys as _sys
 
     _sys.path.insert(0, str(REPO_ROOT / "scripts"))
+    _sys.path.insert(0, str(REPO_ROOT / "src"))
     import gate_pass1_fewshot as r2gate
+    import score_pass1_probe as bar
+    import score_reader_probe_b as probe_b
+
+    from market_pulse import scorer
 
     gold = json.loads((REPO_ROOT / "results" / "reader_gold_w1_r2.json").read_text("utf-8"))
     pairs = {
@@ -472,13 +508,40 @@ def test_the_fourteen_have_a_NAMED_producer_because_leg_table_cannot_score_them(
         for row in gold["per_comment"]
     }
     assert len(pairs) == 14
-    assert not (pairs & set(r2gate.labels())), "no gold pair may be in the label map"
+    assert not (pairs & set(r2gate.labels())), "leg_table's map holds none of the fourteen"
 
     block = RECORD["instruments"]["gold"]
     assert block["sha256"] == producer.sha(REPO_ROOT / "results" / "reader_gold_w1_r2.json")
-    assert block["judge"] == "scripts/score_pass1_probe.py::bar_p1"
-    assert block["judge_sha256"] == producer.sha(REPO_ROOT / "scripts" / "score_pass1_probe.py")
+    assert block["comparison"] == "market_pulse.scorer.reader_comment_agreement"
     assert block["collapse_sha256"] == producer.sha(
         REPO_ROOT / "scripts" / "score_reader_probe_b.py"
     )
-    assert "CENSUS ROW and never a bar" in block["rule"]
+    assert "CENSUS ROW" in block["rule"]
+
+    rows = RECORD["population"]["gold"]["rows"]
+    assert {(one["thread"], int(one["msg_id"])) for one in rows} == pairs
+
+    assert "P1_per_comment_agreement" not in RECORD["bars"]
+    with pytest.raises(KeyError):
+        bar.bar_p1(RECORD, [])
+
+    by_id = {int(row["msg_id"]): row for row in gold["per_comment"]}
+    wanted, said = [], []
+    for one in rows:
+        row = by_id[int(one["msg_id"])]
+        wanted.append(
+            {
+                "msg_id": int(one["msg_id"]),
+                "subject_type": probe_b.collapse(row.get("subject_type")),
+                "scored_fields": ["subject_type"],
+            }
+        )
+        said.append(
+            {
+                "msg_id": int(one["msg_id"]),
+                "subject_type": probe_b.collapse(row.get("subject_type")),
+            }
+        )
+    result = scorer.reader_comment_agreement(wanted, said)
+    assert (result["n"], result["agreed"], result["absent"]) == (14, 14, 0)
+    assert "passed" not in result and "minimum_agreed" not in result

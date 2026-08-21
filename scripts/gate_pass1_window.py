@@ -692,7 +692,10 @@ def main(argv: list[str] | None = None, now: datetime | None = None) -> int:
     # reply's `rendering_sha256` against this file, so a pack that is not the registered one moves
     # the reference the bar is read against — and a count is not an identity
     # ([[the_guard_hashes_the_half_that_cannot_move]])
-    if args.pack == PACK:
+    # `.resolve()` on BOTH: `--pack results/pass1_window_pack.json` is a relative Path and `==`
+    # against the absolute PACK is False, so a guard written on `==` would silently skip on the very
+    # spelling the runbook's own r2 predecessor used ([[the_subject_of_a_query_never_names_itself]])
+    if args.pack.resolve() == PACK.resolve():
         live = summary.sha256_of(args.pack)
         if live != record["population"]["sha256"]:
             raise SystemExit(

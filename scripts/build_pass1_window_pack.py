@@ -449,6 +449,14 @@ def build() -> dict:
                 " молочный_бренд / сеть_ритейлер. The FILTER cannot be known before this run — it"
                 " is D2's census row. What `per_thread` carries is the denominator it comes out of"
             ),
+            "what_entity_block_chars_is_NOT": (
+                "it is the marginal contribution of the entity block to a PASS-1 request, measured"
+                " by rendering the same item with the block and without it. Pass 2's prompt does"
+                " not exist yet and will not render the block the same way, so this number SIZES"
+                " the context and does not price the call. A rate carries the transport it was"
+                " measured on ([[the_smokes_rate_carries_the_smokes_transport]]), and so does a"
+                " length: `pass2-signals` prices its own call on its own renderer"
+            ),
             "threads": threads,
             "payable_comments": payable,
             "comment_chars": sum(len(one["text"]) for one in items),

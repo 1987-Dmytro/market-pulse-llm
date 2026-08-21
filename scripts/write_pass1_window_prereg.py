@@ -193,6 +193,14 @@ def instruments(r2: dict) -> dict:
     block["gate_imported_from"] = {
         "script": "scripts/gate_pass1_fewshot.py",
         "sha256": sha(REPO_ROOT / "scripts" / "gate_pass1_fewshot.py"),
+        "also_imported": {
+            "scripts/window_summary_5c2.py": sha(REPO_ROOT / "scripts" / "window_summary_5c2.py"),
+            "why": (
+                "the gate hashes the pack through window_summary_5c2.sha256_of, so that file is an"
+                " instrument of the pack guard. An IMPORTED instrument is an instrument — the same"
+                " rule that put r2's gate in this block"
+            ),
+        },
         "rule": (
             "an IMPORTED instrument is an instrument. This is the file r2's sealed record pins at"
             " 07a5a07aa8e94d98…, unchanged; the sibling above calls into it and does not edit it"
@@ -220,18 +228,28 @@ def instruments(r2: dict) -> dict:
     block["gold"] = {
         "record": "results/reader_gold_w1_r2.json",
         "sha256": sha(REPO_ROOT / "results" / "reader_gold_w1_r2.json"),
-        "judge": "scripts/score_pass1_probe.py::bar_p1",
-        "judge_sha256": sha(REPO_ROOT / "scripts" / "score_pass1_probe.py"),
+        "comparison": "market_pulse.scorer.reader_comment_agreement",
         "collapse": "scripts/score_reader_probe_b.py::collapse",
         "collapse_sha256": sha(REPO_ROOT / "scripts" / "score_reader_probe_b.py"),
+        "why_not_leg_table": (
+            "the fourteen are GOLD and not labels. gate_pass1_fewshot.py::leg_table compares against"
+            " results/labels_pass1_r*.jsonl and NOT ONE of the fourteen pairs is in that map — 0 of"
+            " 14, checked. The reading over the 650 labelled rows and the 450 outside dev-200 is"
+            " leg_table's; the reading over the fourteen cannot be"
+        ),
+        "why_not_bar_p1": (
+            "scripts/score_pass1_probe.py::bar_p1 is the right COMPARISON and the wrong INSTRUMENT."
+            " It returns `passed`, `minimum_agreed` and a `losses.budget` — it is a BAR, and this"
+            " contract may not take a bar on the fourteen at all. D2 calls"
+            " scorer.reader_comment_agreement with probe_b.collapse on both sides, which is exactly"
+            " what bar_p1 computes BEFORE its threshold arm, and stops there. A `passed` field on"
+            " this row would be the promotion the ADR forbids in the very shape it forbids it"
+            " ([[a_flag_that_asserts_turns_a_poll_into_a_verdict]])"
+        ),
         "rule": (
-            "the fourteen are GOLD and not labels, so gate_pass1_fewshot.py::leg_table cannot score"
-            " them — its comparison runs against results/labels_pass1_r*.jsonl, and NONE of the"
-            " fourteen pairs is in that map. D2's census row over them goes through `bar_p1`, the"
-            " same judge probe-b and r2 registered, over the same collapse. Pinned here because a"
-            " reading D2 owes with no producer named at D0 is a producer invented after the money"
-            " ([[a_registered_bar_may_have_no_producer]]). It scores a CENSUS ROW and never a bar —"
-            " see return_to_the_operator"
+            "a reading D2 owes with no producer named at D0 is a producer invented after the money"
+            " ([[a_registered_bar_may_have_no_producer]]). This is the producer, and it yields a"
+            " CENSUS ROW with the multiplicity of return_to_the_operator beside it"
         ),
     }
     block["population_producer"] = {
@@ -616,63 +634,105 @@ def arithmetic(rate: dict, calls: int, overhead: dict, tail: dict) -> dict:
 
 
 def rung_4_sensitivity(sums: dict, calls: int, rate: dict) -> dict:
-    """What a SINGLE slow call costs at rung 4 — computed, because the gate prices on the last row.
+    """What a SINGLE slow call costs at rung 4 — computed at BOTH pre-generations, worst first.
 
     `leg_state` prices the remainder at the LARGER of the leg's mean and its LAST call, so one slow
-    reply landing as the most recent row is priced as if every remaining call were that slow. That
-    is the pessimistic direction and it is correct — but it has a knife edge nobody had computed,
-    and a KILL nobody foresaw on a billed pod is a mystery rather than an outcome.
+    reply is priced as if every remaining call were that slow. That is the pessimistic direction and
+    it is correct — but the knife edge it creates depends on a span this record carries TWO values
+    for, and the two disagree about whether there is any margin at all:
 
-    Solve rung 4's own inequality backwards for the rate that flips it, at a pod running healthy:
+    * `pre_generation_measured` = 254.6 s, r2's create-elapsed at its first reply. At this span the
+      edge is ~4.8 s/call and the worst call this stack has measured (4.066 s) is comfortably under
+      it.
+    * `pre_generation_seconds` = 1 100 s, what the MONEY BLOCK CHARGES and what rung 3's backstop
+      allows. At this span the sustained rate the hard stop can pay for is only
+      (6 500 − 1 300 − 1 100) / 1 032 = **3.9729 s/call — BELOW the 4.066 s already measured**, and
+      one such call landing as the most recent row at an early poll KILLs the pod.
 
-        spike(n) = (hard_stop − overhead − pre_generation_measured − n × measured_mean) / (calls − n)
-
-    `pre_generation_measured` is r2's own reading — 254.6 s of create-elapsed at its first reply,
-    the whole of ssh + staging + launch + load on this stack. The generous overhead is what TIGHTENS
-    this: every second charged to the copy-back is a second rung 4 will not lend to the rate.
+    A curve computed over one span and quoted about a budget that pays for the other is the class
+    this program keeps buying ([[a_ceiling_derived_from_one_span_measured_over_another]]). Both are
+    computed here and the WORSE one is the headline. Nothing is loosened: `leg_state` and
+    `projection` are r2's, pinned, and pricing the remainder at the mean would be the permissive
+    direction. What this block buys is that a KILL is a FORESEEN outcome with an instruction, and
+    that the executor knows before the create which of the two worlds the pod is in.
     """
     stop = float(sums["cumulative"]["hard_stop_seconds"])
     overhead = float(sums["overhead_seconds"])
+    charged_pre = float(sums["pre_generation_seconds"])
     mean = float(rate["mean"])
-    curve = []
-    for at in (20, 100, 200, 400, 700, 1000):
-        spike = (stop - overhead - R2_PRE_GENERATION_MEASURED - at * mean) / (calls - at)
-        curve.append(
+    slowest = float(rate["slowest_call"])
+
+    def curve(pre: float) -> list[dict]:
+        return [
             {
                 "at_call": at,
-                "create_elapsed_seconds": round(R2_PRE_GENERATION_MEASURED + at * mean, 1),
-                "kill_above_seconds_per_call": round(spike, 3),
+                "create_elapsed_seconds": round(pre + at * mean, 1),
+                "kill_above_seconds_per_call": round(
+                    (stop - overhead - pre - at * mean) / (calls - at), 3
+                ),
             }
-        )
-    tightest = min(one["kill_above_seconds_per_call"] for one in curve)
+            for at in (10, 20, 100, 200, 400, 700, 1000)
+        ]
+
+    measured, charged = curve(R2_PRE_GENERATION_MEASURED), curve(charged_pre)
+    tight_measured = min(one["kill_above_seconds_per_call"] for one in measured)
+    tight_charged = min(one["kill_above_seconds_per_call"] for one in charged)
+    sustained = (stop - overhead - charged_pre) / calls
     return {
         "formula": (
-            "(hard_stop − overhead − pre_generation_measured − n × measured_mean) / (calls − n)"
+            "(hard_stop − overhead − pre_generation − n × measured_mean) / (calls − n), and the"
+            " pre_generation is the span this record carries two values for"
         ),
-        "pre_generation_measured_seconds": R2_PRE_GENERATION_MEASURED,
         "measured_mean_seconds_per_call": round(mean, 6),
-        "slowest_call_in_the_sample": rate["slowest_call"],
-        "curve": curve,
-        "tightest_kill_above_seconds_per_call": tightest,
-        "headroom_over_the_slowest_call_measured": round(tightest / rate["slowest_call"], 3),
-        "what_fires_it": (
-            f"ONE reply slower than {tightest} s landing as the most recent row at an early poll."
-            f" The slowest single call this stack has measured is {rate['slowest_call']} s, so the"
-            f" edge sits {round(tightest / rate['slowest_call'], 2)}× above it — margin, not"
-            " comfort. The SECONDS bind here and not the dollars: the same projection at the live"
-            " price is well inside the cap"
+        "slowest_call_in_the_sample": slowest,
+        "at_the_MEASURED_pre_generation": {
+            "pre_generation_seconds": R2_PRE_GENERATION_MEASURED,
+            "source": "r2's create-elapsed at its first reply, 2026-08-21",
+            "curve": measured,
+            "tightest_kill_above_seconds_per_call": tight_measured,
+            "headroom_over_the_slowest_call_measured": round(tight_measured / slowest, 3),
+        },
+        "at_the_CHARGED_pre_generation": {
+            "pre_generation_seconds": charged_pre,
+            "source": "money.arithmetic.pre_generation_seconds — and rung 3's own backstop",
+            "curve": charged,
+            "tightest_kill_above_seconds_per_call": tight_charged,
+            "headroom_over_the_slowest_call_measured": round(tight_charged / slowest, 3),
+        },
+        "sustained_rate_the_charged_pre_generation_can_pay_for": round(sustained, 4),
+        "the_headline": (
+            f"at the pre-generation the budget CHARGES, the sustained rate the hard stop can pay for"
+            f" is {round(sustained, 4)} s/call and the slowest call this stack has measured is"
+            f" {slowest} — the measured worst is ABOVE it. One such call landing as the most recent"
+            f" row at an early poll makes rung 4 project past {stop:.0f} s and KILL. At the"
+            f" pre-generation r2 actually MEASURED ({R2_PRE_GENERATION_MEASURED} s) the edge is"
+            f" {tight_measured} s/call and the same call is safe by"
+            f" {round(tight_measured / slowest, 2)}×. The pod is in one world or the other by the"
+            " time the first reply lands, and rung 3's GO is where the executor reads which"
         ),
         "what_it_costs_if_it_fires": (
-            "the boot and whatever was billed — not the leg. Every reply is flushed as it lands and"
-            " the shipped resume skips every unit already answered, so a re-creation re-asks only"
-            " what has no reply. The ONE re-creation the recovery clause buys is what pays for it,"
-            " and after it there is no second"
+            "the pod is deleted mid-run and the seconds already billed are gone. Every reply is"
+            " flushed as it lands and the shipped resume skips every unit already answered — but"
+            " `--pre-create-check` prices a re-creation at the FULL worst case ahead, so a KILL"
+            " past 583.46 s of billed seconds refuses the re-creation too and the session closes"
+            " with no verdict on a run that was working. That is the whole cost and it is named"
+            " here rather than discovered"
+        ),
+        "what_the_executor_can_do_about_it": (
+            "nothing after the create, and one thing before it: the charged 1 100 s is ssh 500 +"
+            " stage/launch 150 + load 450, and the staging half is HAND-DRIVEN. probe-b bounds ssh"
+            " + staging + launch together at ≤ 89.5 s and r2's whole pre-generation was 254.6 s, so"
+            " a brisk staging keeps the pod in the safe world. Every second spent between the ssh"
+            " GO and the launch is a second rung 4 will not lend to the rate"
         ),
         "why_it_is_not_loosened": (
             "`leg_state` and `projection` are scripts/gate_pass1_fewshot.py's, pinned by r2's sealed"
             " record and imported here unedited. Pricing the remainder at the mean alone would be a"
             " weaker gate in the PERMISSIVE direction, which is the one these rungs exist to close."
-            " So the sensitivity is REGISTERED rather than repaired"
+            " Raising the hard stop is the operator's word: 6 500 s is the number"
+            " docs/PROMPT-pass1-window.md prints, and 6 700 s would be $1.4889 — still inside the"
+            " $1.50 cap and enough to put the charged-span edge at 4.167 s/call, above the measured"
+            " worst. That trade is REPORTED to the operator and taken by nobody here"
         ),
     }
 
@@ -1150,19 +1210,47 @@ def h6(sums: dict, rate: dict, calls: int, threads: int) -> dict:
             "mode": "below",
         },
         {
-            "name": "REASON — rung 4's single-call knife edge is above the slowest call measured",
+            "name": "REASON — the budget's own sustained rate covers the rate it charges",
             "formula": (
-                "rung 4 prices the remainder at the LARGER of the leg's mean and its LAST call, so"
-                " one slow reply is priced as if every remaining call were that slow. Solved"
-                " backwards at the tightest point of the run the edge is"
-                f" {sensitivity['tightest_kill_above_seconds_per_call']} s/call, and the slowest"
-                f" single call this stack has measured is {sensitivity['slowest_call_in_the_sample']}"
-                f" s — a factor of {sensitivity['headroom_over_the_slowest_call_measured']}. The"
-                " check is the DIRECTION: the edge must sit above the worst call, or a healthy pod"
-                " dies on its first bad reply"
+                "the hard stop must pay for the run the money block PRICES: at the charged"
+                f" pre-generation the sustained rate it can afford is"
+                f" ({HARD_STOP_SECONDS:.0f} − {OVERHEAD_SECONDS:.0f} −"
+                f" {sums['pre_generation_seconds']:.0f}) / {calls} ="
+                f" {sensitivity['sustained_rate_the_charged_pre_generation_can_pay_for']} s/call,"
+                f" and the rate charged is {CHARGED_SECONDS_PER_CALL}. This is the inequality that"
+                " makes the budget self-consistent — and it is NOT the same question as whether one"
+                " outlier call survives rung 4, which"
+                " money.arithmetic.cumulative.projection_gate.single_call_sensitivity.the_headline"
+                " answers and answers NO at this span"
             ),
-            "registered": sensitivity["slowest_call_in_the_sample"],
-            "re_derived": sensitivity["tightest_kill_above_seconds_per_call"],
+            "registered": CHARGED_SECONDS_PER_CALL,
+            "re_derived": sensitivity["sustained_rate_the_charged_pre_generation_can_pay_for"],
+            "mode": "at_least",
+        },
+        {
+            "name": (
+                "REASON — rung 4's knife edge is reported at BOTH pre-generations and the worse is"
+                " the headline"
+            ),
+            "formula": (
+                "the record carries two values for one span: pre_generation_measured"
+                f" {R2_PRE_GENERATION_MEASURED} s (r2's own reading) and pre_generation_seconds"
+                f" {sums['pre_generation_seconds']:.0f} s (what the money block charges). The edge"
+                " is"
+                f" {sensitivity['at_the_MEASURED_pre_generation']['tightest_kill_above_seconds_per_call']}"
+                " s/call at the first and"
+                f" {sensitivity['at_the_CHARGED_pre_generation']['tightest_kill_above_seconds_per_call']}"
+                f" at the second, against a measured worst call of"
+                f" {sensitivity['slowest_call_in_the_sample']} s. The check is that BOTH are"
+                " computed and that the CHARGED one is the smaller, so the headline cannot quote"
+                " the flattering span"
+            ),
+            "registered": sensitivity["at_the_CHARGED_pre_generation"][
+                "tightest_kill_above_seconds_per_call"
+            ],
+            "re_derived": sensitivity["at_the_MEASURED_pre_generation"][
+                "tightest_kill_above_seconds_per_call"
+            ],
             "mode": "at_least",
         },
         {
@@ -1304,6 +1392,18 @@ def build() -> dict:
             "membership": {
                 name: pack["membership"][name]["n"]
                 for name in ("gold_14", "probe_64", "labelled_650", "dev_200")
+            },
+            "gold": {
+                "rows": [
+                    {"thread": one.rsplit("#", 1)[0], "msg_id": int(one.rsplit("#", 1)[1])}
+                    for one in pack["membership"]["gold_14"]["ids"]
+                ],
+                "rule": (
+                    "the fourteen by (thread, msg_id), taken from the pack's own membership block."
+                    " D2 reads this list rather than re-joining the gold to the population after"
+                    " the money — and it is the pair key everywhere, because a msg_id is unique per"
+                    " CHANNEL and 13 of this population's are carried by two threads"
+                ),
             },
             "widest_request_chars": pack["length"]["widest_request_chars"],
             "ceiling_chars": pack["length"]["ceiling_chars"],

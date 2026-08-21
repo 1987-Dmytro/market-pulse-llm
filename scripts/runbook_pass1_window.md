@@ -241,6 +241,29 @@ of the run record and the first reply out of `results/pass1_window_v2.jsonl`'s o
 PYTHONPATH=src python3.11 scripts/gate_pass1_window.py --boot
 ```
 
+**READ `first_reply_at_create_elapsed_seconds` OFF THAT GATE — it decides which run you are in.**
+Rung 4 prices every remaining call at the LARGER of the leg's mean and its LAST call, so one slow
+reply is priced as if all 1 032 were that slow, and the seconds the hard stop can lend depend on
+what the pre-generation already spent:
+
+| pre-generation at the first reply | one call KILLs above | the worst call this stack has measured |
+|---|---:|---:|
+| 254.6 s — what r2 actually measured | 4.81 s | 4.066 s — safe by 1.18× |
+| ~700 s | ~4.4 s | safe |
+| 1 100 s — what the budget CHARGES | **3.99 s** | **4.066 s — the measured worst is ABOVE it** |
+
+So a pod whose first reply lands near the 1 100 s backstop is one outlier call away from a rung-4
+KILL, and a KILL past 583.46 s of billed seconds also refuses the re-creation. Nothing after the
+create changes this. **What changes it is step 3:** the charged 1 100 is ssh 500 + stage/launch 150 +
+load 450, and the staging half is hand-driven — probe-b bounds ssh + staging + launch TOGETHER at
+≤ 89.5 s. Every second between the ssh GO and the launch is a second rung 4 will not lend to the
+rate, so stage without pause and do not read anything on the pod that is not on the list.
+
+The whole curve, both spans, is in the record at
+`money.arithmetic.cumulative.projection_gate.single_call_sensitivity` — including the trade the
+executor may NOT take: a 6 700 s hard stop would be $1.4889, still inside the $1.50 cap, and would
+put the charged-span edge at 4.167 s/call. That is the operator's word and nobody else's.
+
 It reports GO only with the launch anchor beside the reply. **A `--boot` with no `launched_at` in the
 run record is a KILL and not a WAIT**: a rung whose deadline cannot be demonstrated has not been
 passed. If that happens the stamp did not come back — check `results/pass1_window_launched_at` and
@@ -263,7 +286,9 @@ scp -i $SSHK -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogL
 scp -i $SSHK -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR \
   -P <PORT> root@<HOST>:/workspace/run/pod.log results/pass1_window_pod.log
 shasum -a 256 results/pass1_window_v2.jsonl results/pass1_window_launched_at \
-  results/pass1_window_pod.log        # three for three against the pod's listing
+  results/pass1_window_pod.log        # THREE for three — the contract says «four for four», which
+                                      # is r2's file count (two dev legs + stamp + log). One leg
+                                      # means three files. Named as a deviation, not silently done
 
 runpodctl pod delete <POD_ID>
 runpodctl pod list -a                # []
