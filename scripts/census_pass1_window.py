@@ -15,6 +15,13 @@ fourteen gold rows are the FOURTH look at the same rows, and a reading taken on 
 has looked at three times cannot be promoted to a verdict on v2. The same holds for the 650 labelled
 rows and the 450 outside dev-200 — bigger samples, still readings.
 
+**Comment identity in this window is the PAIR (thread, msg_id), everywhere.** A msg_id is unique per
+CHANNEL and not per window: seven of them inside `membership.labelled_650` live in two threads each.
+`scorer.reader_comment_agreement` keys its answers on the msg_id ALONE and `leg_table` derives its
+`agreed_ids` the same way, so the labelled readings are taken one THREAD at a time and summed —
+within a thread the collision cannot occur, and neither pinned function is touched. This binds
+`pass2-signals`: a table keyed on msg_id would merge two comments of two channels into one row.
+
 **Two comparisons, and they are the ones the registration names.** The labelled rows go through
 `gate_pass1_fewshot.py::leg_table` — the function D2's clause names — handed a view carrying
 `bars.report_only.our_readings` under the key it reads, because this contract has no dev gate. The
@@ -29,6 +36,7 @@ and the threshold arm is exactly what may not exist here.
 
 import argparse
 import json
+import re
 import sys
 import tempfile
 from collections import Counter
@@ -79,12 +87,25 @@ def subset(pack: dict, ids: set[str]) -> dict:
 
 
 def labelled_reading(record: dict, pack: dict, where: Path, ids: set[str], caption: str) -> dict:
-    """One report-only reading over labelled rows, through `leg_table` and nothing else.
+    """One report-only reading over labelled rows, through `leg_table` — scored one THREAD at a time.
 
     The out-file is FILTERED to the subset before `leg_table` reads it, because its `answers_of`
     refuses any row the leg it was handed never asked — a guard that is right for a gate reading one
     leg's own file and wrong for a census taking three overlapping readings out of one. The rows are
     not touched: what is written to the scratch copy is the same lines, selected.
+
+    **And the subset handed to it is ONE THREAD, because comment identity in this window is the PAIR
+    (thread, msg_id) and not the msg_id.** `scorer.reader_comment_agreement` keys its answers
+    `{int(msg_id): …}` and `leg_table` derives `agreed_ids` as a set of msg_ids, so two comments that
+    share a msg_id across two threads collapse onto one another: the map is last-wins, and a twin the
+    pod never answered inherits the twin's reply and is scored as present. Seven msg_ids inside
+    `membership.labelled_650` live in two threads each — 21164 · 21195 · 21209 · 21211 · 21236 ·
+    21239 · 21256, `@VARUS_channel` against `@klopotenkofood` — and five of them had exactly one
+    answered twin, which inflated the 650's answered rows by five and the 450's by one.
+
+    The scorer is PINNED by sealed records and is not edited; `leg_table` is pinned by three of them
+    and is not edited either. Within one thread a msg_id is unique, so the collision cannot occur and
+    the named instrument is still the one that scores every row ([[id_spaces_that_look_comparable]]).
     """
     view = {
         **record,
@@ -93,36 +114,71 @@ def labelled_reading(record: dict, pack: dict, where: Path, ids: set[str], capti
             "dev_gate": {"our_readings": record["bars"]["report_only"]["our_readings"]},
         },
     }
-    cut = subset(pack, ids)
-    name = cut["legs"][0]["out"]
+    name = pack["legs"][0]["out"]
+    lines = {}
+    for line in summary.read_text_or_refuse(where / name).splitlines():
+        if line.strip():
+            lines[json.loads(line)["id"]] = line
+    by_thread: dict[str, set[str]] = {}
+    for item in pack["legs"][0]["items"]:
+        if item["id"] in ids:
+            by_thread.setdefault(item["thread"], set()).add(item["id"])
+
+    total = dict(n=0, agreed=0, absent=0, refused=0, our_n=0, our_agreed=0)
+    per_class: dict[str, dict[str, int]] = {}
     with tempfile.TemporaryDirectory() as scratch:
         scratch = Path(scratch)
-        (scratch / name).write_text(
-            "".join(
-                line + "\n"
-                for line in summary.read_text_or_refuse(where / name).splitlines()
-                if line.strip() and json.loads(line).get("id") in ids
-            ),
-            encoding="utf-8",
-        )
-        table = r2gate.leg_table(view, cut, pack["legs"][0]["name"], scratch)
-    scored = table["n"] - table["absent"]
+        for thread in sorted(by_thread):
+            here = by_thread[thread]
+            cut = subset(pack, here)
+            (scratch / name).write_text(
+                "".join(lines[one] + "\n" for one in sorted(here) if one in lines), encoding="utf-8"
+            )
+            table = r2gate.leg_table(view, cut, pack["legs"][0]["name"], scratch)
+            for key in ("n", "agreed", "absent", "our_n", "our_agreed"):
+                total[key] += table[key]
+            total["refused"] += len(table["refused"])
+            for label, cell in table["per_class"].items():
+                into = per_class.setdefault(label, {"n": 0, "agreed": 0})
+                into["n"] += cell["n"]
+                into["agreed"] += cell["agreed"]
+
+    scored = total["n"] - total["absent"]
     return {
         "caption": caption,
         "not_a_bar": True,
-        "n": table["n"],
-        "agreed": table["agreed"],
-        "rate": table["rate"],
-        "our_n": table["our_n"],
-        "our_agreed": table["our_agreed"],
-        "refused": len(table["refused"]),
-        "absent": table["absent"],
+        "n": total["n"],
+        "agreed": total["agreed"],
+        "rate": round(total["agreed"] / total["n"], 6) if total["n"] else None,
+        "our_n": total["our_n"],
+        "our_agreed": total["our_agreed"],
+        "refused": total["refused"],
+        "absent": total["absent"],
         "rows_the_pod_actually_answered": scored,
-        "rate_over_the_rows_answered": round(table["agreed"] / scored, 6) if scored else None,
+        "rate_over_the_rows_answered": round(total["agreed"] / scored, 6) if scored else None,
+        "keyed_on": {
+            "identity": "the PAIR (thread, msg_id) — a msg_id is unique per CHANNEL, not per window",
+            "how": (
+                "one `leg_table` call per thread, summed. Handed the whole subset at once it would"
+                " score through `scorer.reader_comment_agreement`, whose answer map is keyed on"
+                " msg_id ALONE and is last-wins, so a twin the pod never answered inherits the other"
+                " thread's reply"
+            ),
+            "threads_scored": len(by_thread),
+            "colliding_msg_ids_in_this_subset": sorted(
+                msg_id
+                for msg_id, threads in _threads_by_msg_id(pack, ids).items()
+                if len(threads) > 1
+            ),
+            "what_the_id_only_key_would_have_said": (
+                "the 650 read 117 answered / 69 agreed / 23 «our», the 450 read 65 / 35 — the"
+                " numbers in the body of docs/reports/pass1-window.md, corrected by its ADDENDUM"
+            ),
+        },
         "denominator_rule": (
             "TWO rates, because the pod was killed at rung 4 with most of the population never"
-            f" asked. `rate` is over the {table['n']} rows this reading was registered over and"
-            f" counts the {table['absent']} unasked ones as disagreements;"
+            f" asked. `rate` is over the {total['n']} rows this reading was registered over and"
+            f" counts the {total['absent']} unasked ones as disagreements;"
             " `rate_over_the_rows_answered` is over the"
             f" {scored} rows that have a reply. Neither is comparable to a reading taken on a"
             " complete run, and the first is not comparable to anything at all"
@@ -131,9 +187,18 @@ def labelled_reading(record: dict, pack: dict, where: Path, ids: set[str], capti
             " `our_agreed` counts only the ones with a reply, so the pair is a floor and never a"
             " rate"
         ),
-        "per_class": table["per_class"],
+        "per_class": dict(sorted(per_class.items())),
         "instrument": "gate_pass1_fewshot.py::leg_table — the function D2's clause names",
     }
+
+
+def _threads_by_msg_id(pack: dict, ids: set[str]) -> dict[int, set[str]]:
+    """Which threads each msg_id of this subset lives in — the collision, named rather than assumed."""
+    out: dict[int, set[str]] = {}
+    for item in pack["legs"][0]["items"]:
+        if item["id"] in ids:
+            out.setdefault(int(item["msg_id"]), set()).add(item["thread"])
+    return out
 
 
 def the_fourteen(record: dict, parsed: dict[str, dict]) -> dict:
@@ -272,6 +337,45 @@ def pass_2_filter(pack: dict, parsed: dict[str, dict], refused_ids: set, threads
             " ([[the_smokes_rate_carries_the_smokes_transport]])"
         ),
         "per_thread": table,
+    }
+
+
+def replies_the_mac_does_not_hold(pack: dict, where: Path) -> dict:
+    """Dv657 made CONCRETE: the pod's own log names a reply that is not in the copied-back file.
+
+    `--watch` pulls the out-file once a poll and the KILL happens inside the loop, so every row the
+    runner wrote between the last copy and the deletion is on the network volume and nowhere else.
+    That made 131 a LOWER bound and left the difference unverifiable in the abstract. The pod log is
+    copied by the same poll, but the runner writes its line BEFORE the next row lands, so the log
+    reaches one reply further than the file it sits beside — and it names it.
+
+    Read from the log, never typed: the highest `reply N/TOTAL <id>` line and every id it carries
+    that the out-file does not ([[a_retry_inherits_the_last_attempts_output]]).
+    """
+    log = where / gate.POD_LOG.name
+    replies = re.findall(
+        r"^\[\s*([\d.]+)s\]\s+reply\s+(\d+)/(\d+)\s+(\S+)",
+        summary.read_text_or_refuse(log),
+        flags=re.M,
+    )
+    in_file = {row["id"] for row in gate.rows_of(where / pack["legs"][0]["out"])}
+    beyond = [
+        {"n": int(n), "id": one, "log_elapsed_seconds": float(at)}
+        for at, n, _total, one in replies
+        if one not in in_file
+    ]
+    return {
+        "rows_in_the_copied_back_file": len(in_file),
+        "replies_the_pod_log_reports": max((int(n) for _at, n, _t, _i in replies), default=0),
+        "replies_named_by_the_log_and_absent_from_the_file": beyond,
+        "rule": (
+            "131 is what the Mac HOLDS and a lower bound on what was PAID FOR. The log names one"
+            " more reply than the file; the log is itself copied once a poll, so even this count is"
+            " a lower bound and not a total. The rows themselves survive on the network volume"
+            " qw4nwleanc at /workspace/run/pass1_window_v2.jsonl — evidence a continuation copies"
+            " back and prices, never an input it merges (Dv657)"
+        ),
+        "instrument": f"{summary.rel(log)} — the pod's own line, read and not typed",
     }
 
 
@@ -453,6 +557,7 @@ def build() -> dict:
                 " distribution is not an accuracy either way"
             ),
         },
+        "replies_the_mac_does_not_hold": replies_the_mac_does_not_hold(pack, where),
         "pass_2_filter": pass_2_filter(pack, parsed, refused_ids, pack["population"]["threads"]),
         "report_only": {
             "rule": record["bars"]["report_only"]["rule"],

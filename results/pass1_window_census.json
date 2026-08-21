@@ -1882,27 +1882,49 @@
   "phase": "pass1-window",
   "producer": {
     "script": "scripts/census_pass1_window.py",
-    "sha256": "c4e1cb02e6967b566743166cd92f80ae3592514b1d951a1fcf6a315cc71078a4"
+    "sha256": "14571582bd969a345a069440cf65d7860bbc5910204e6009071f2956869e783f"
   },
   "registration": {
     "record": "results/prereg_pass1_window.json",
     "sha256": "879bf3852544364a22242d457f38102a452da10cc6daf72ec3c5077d67d45cea"
   },
+  "replies_the_mac_does_not_hold": {
+    "instrument": "results/pass1_window_pod.log — the pod's own line, read and not typed",
+    "replies_named_by_the_log_and_absent_from_the_file": [
+      {
+        "id": "@klopotenkofood:6035#21205",
+        "log_elapsed_seconds": 759.2,
+        "n": 132
+      }
+    ],
+    "replies_the_pod_log_reports": 132,
+    "rows_in_the_copied_back_file": 131,
+    "rule": "131 is what the Mac HOLDS and a lower bound on what was PAID FOR. The log names one more reply than the file; the log is itself copied once a poll, so even this count is a lower bound and not a total. The rows themselves survive on the network volume qw4nwleanc at /workspace/run/pass1_window_v2.jsonl — evidence a continuation copies back and prices, never an input it merges (Dv657)"
+  },
   "report_only": {
     "rule": "READINGS, each captioned «not a bar». None of them can pass, fail or close anything, and none of them may be quoted as a verdict on v2",
     "the_450_not_in_dev_200": {
-      "absent": 385,
-      "agreed": 35,
+      "absent": 386,
+      "agreed": 34,
       "caption": "the labelled rows NO prompt was ever tuned against — and its «our» denominator is ZERO BY CONSTRUCTION: build_pass1_fewshot_packs.py::dev_units takes ALL 49 «our» rows into dev-200 whole, so the 450 outside it contain none of the class this programme is about. It is a reading of overall agreement on untuned rows and it can say nothing about «our» rows, ever",
-      "denominator_rule": "TWO rates, because the pod was killed at rung 4 with most of the population never asked. `rate` is over the 450 rows this reading was registered over and counts the 385 unasked ones as disagreements; `rate_over_the_rows_answered` is over the 65 rows that have a reply. Neither is comparable to a reading taken on a complete run, and the first is not comparable to anything at all ([[measure_on_the_rows_the_gate_scores]]). `our_agreed` / `our_n` carries the SAME absence: `our_n` is the registered count of «our» rows in this subset and `our_agreed` counts only the ones with a reply, so the pair is a floor and never a rate",
+      "denominator_rule": "TWO rates, because the pod was killed at rung 4 with most of the population never asked. `rate` is over the 450 rows this reading was registered over and counts the 386 unasked ones as disagreements; `rate_over_the_rows_answered` is over the 64 rows that have a reply. Neither is comparable to a reading taken on a complete run, and the first is not comparable to anything at all ([[measure_on_the_rows_the_gate_scores]]). `our_agreed` / `our_n` carries the SAME absence: `our_n` is the registered count of «our» rows in this subset and `our_agreed` counts only the ones with a reply, so the pair is a floor and never a rate",
       "instrument": "gate_pass1_fewshot.py::leg_table — the function D2's clause names",
+      "keyed_on": {
+        "colliding_msg_ids_in_this_subset": [
+          21209
+        ],
+        "how": "one `leg_table` call per thread, summed. Handed the whole subset at once it would score through `scorer.reader_comment_agreement`, whose answer map is keyed on msg_id ALONE and is last-wins, so a twin the pod never answered inherits the other thread's reply",
+        "identity": "the PAIR (thread, msg_id) — a msg_id is unique per CHANNEL, not per window",
+        "threads_scored": 107,
+        "what_the_id_only_key_would_have_said": "the 650 read 117 answered / 69 agreed / 23 «our», the 450 read 65 / 35 — the numbers in the body of docs/reports/pass1-window.md, corrected by its ADDENDUM"
+      },
       "n": 450,
       "not_a_bar": true,
       "our_agreed": 0,
       "our_n": 0,
       "per_class": {
         "null": {
-          "agreed": 15,
+          "agreed": 14,
           "n": 159
         },
         "не_наш_рынок": {
@@ -1910,32 +1932,47 @@
           "n": 255
         },
         "сеть_ритейлер": {
-          "agreed": 21,
+          "agreed": 20,
           "n": 36
         }
       },
-      "rate": 0.077778,
-      "rate_over_the_rows_answered": 0.538462,
+      "rate": 0.075556,
+      "rate_over_the_rows_answered": 0.53125,
       "refused": 0,
-      "rows_the_pod_actually_answered": 65
+      "rows_the_pod_actually_answered": 64
     },
     "the_650_labelled_rows": {
-      "absent": 533,
-      "agreed": 69,
+      "absent": 538,
+      "agreed": 68,
       "caption": "every labelled row inside this population — a reading, not a bar",
-      "denominator_rule": "TWO rates, because the pod was killed at rung 4 with most of the population never asked. `rate` is over the 650 rows this reading was registered over and counts the 533 unasked ones as disagreements; `rate_over_the_rows_answered` is over the 117 rows that have a reply. Neither is comparable to a reading taken on a complete run, and the first is not comparable to anything at all ([[measure_on_the_rows_the_gate_scores]]). `our_agreed` / `our_n` carries the SAME absence: `our_n` is the registered count of «our» rows in this subset and `our_agreed` counts only the ones with a reply, so the pair is a floor and never a rate",
+      "denominator_rule": "TWO rates, because the pod was killed at rung 4 with most of the population never asked. `rate` is over the 650 rows this reading was registered over and counts the 538 unasked ones as disagreements; `rate_over_the_rows_answered` is over the 112 rows that have a reply. Neither is comparable to a reading taken on a complete run, and the first is not comparable to anything at all ([[measure_on_the_rows_the_gate_scores]]). `our_agreed` / `our_n` carries the SAME absence: `our_n` is the registered count of «our» rows in this subset and `our_agreed` counts only the ones with a reply, so the pair is a floor and never a rate",
       "instrument": "gate_pass1_fewshot.py::leg_table — the function D2's clause names",
+      "keyed_on": {
+        "colliding_msg_ids_in_this_subset": [
+          21164,
+          21195,
+          21209,
+          21211,
+          21236,
+          21239,
+          21256
+        ],
+        "how": "one `leg_table` call per thread, summed. Handed the whole subset at once it would score through `scorer.reader_comment_agreement`, whose answer map is keyed on msg_id ALONE and is last-wins, so a twin the pod never answered inherits the other thread's reply",
+        "identity": "the PAIR (thread, msg_id) — a msg_id is unique per CHANNEL, not per window",
+        "threads_scored": 120,
+        "what_the_id_only_key_would_have_said": "the 650 read 117 answered / 69 agreed / 23 «our», the 450 read 65 / 35 — the numbers in the body of docs/reports/pass1-window.md, corrected by its ADDENDUM"
+      },
       "n": 650,
       "not_a_bar": true,
-      "our_agreed": 23,
+      "our_agreed": 21,
       "our_n": 49,
       "per_class": {
         "null": {
-          "agreed": 21,
+          "agreed": 20,
           "n": 213
         },
         "категория": {
-          "agreed": 22,
+          "agreed": 20,
           "n": 47
         },
         "молочный_бренд": {
@@ -1943,18 +1980,18 @@
           "n": 2
         },
         "не_наш_рынок": {
-          "agreed": 2,
+          "agreed": 0,
           "n": 340
         },
         "сеть_ритейлер": {
-          "agreed": 29,
+          "agreed": 27,
           "n": 48
         }
       },
-      "rate": 0.106154,
-      "rate_over_the_rows_answered": 0.589744,
+      "rate": 0.104615,
+      "rate_over_the_rows_answered": 0.607143,
       "refused": 0,
-      "rows_the_pod_actually_answered": 117
+      "rows_the_pod_actually_answered": 112
     },
     "the_dev_200": {
       "absent": 152,
@@ -1962,6 +1999,13 @@
       "caption": "the rows r2 measured. It should reproduce 136/200 and 38/49 up to decoding noise; a difference is STATED and not explained away",
       "denominator_rule": "TWO rates, because the pod was killed at rung 4 with most of the population never asked. `rate` is over the 200 rows this reading was registered over and counts the 152 unasked ones as disagreements; `rate_over_the_rows_answered` is over the 48 rows that have a reply. Neither is comparable to a reading taken on a complete run, and the first is not comparable to anything at all ([[measure_on_the_rows_the_gate_scores]]). `our_agreed` / `our_n` carries the SAME absence: `our_n` is the registered count of «our» rows in this subset and `our_agreed` counts only the ones with a reply, so the pair is a floor and never a rate",
       "instrument": "gate_pass1_fewshot.py::leg_table — the function D2's clause names",
+      "keyed_on": {
+        "colliding_msg_ids_in_this_subset": [],
+        "how": "one `leg_table` call per thread, summed. Handed the whole subset at once it would score through `scorer.reader_comment_agreement`, whose answer map is keyed on msg_id ALONE and is last-wins, so a twin the pod never answered inherits the other thread's reply",
+        "identity": "the PAIR (thread, msg_id) — a msg_id is unique per CHANNEL, not per window",
+        "threads_scored": 75,
+        "what_the_id_only_key_would_have_said": "the 650 read 117 answered / 69 agreed / 23 «our», the 450 read 65 / 35 — the numbers in the body of docs/reports/pass1-window.md, corrected by its ADDENDUM"
+      },
       "n": 200,
       "not_a_bar": true,
       "our_agreed": 21,

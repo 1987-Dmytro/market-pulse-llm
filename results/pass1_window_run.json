@@ -278,6 +278,39 @@
       ],
       "usd_per_hour": null,
       "verdict": "RED"
+    },
+    {
+      "at": "2026-08-21T21:34:00+00:00",
+      "billed_by_closed_pods_seconds": 845.0,
+      "cap_usd_all_in": 1.5,
+      "fits_the_cap": true,
+      "fits_the_hard_stop": false,
+      "fits_the_re_creation_count": true,
+      "hard_stop_seconds": 6500.0,
+      "instrument": "scripts/gate_pass1_window.py --pre-create-check → gate_pass1_fewshot.py::pre_create",
+      "kind": "pre-create-check",
+      "next_registration_records_it": "the r2 sibling records this gate at the moment it runs — a guard whose verdict lives only in a terminal is not a record",
+      "next_step": "STOP: this create cannot be paid for by the registration. seconds 6761.5/6500 · usd 1.4885/1.50 · pod 2 of 2 allowed. The attempt is NOT spent — return it to the operator",
+      "pod": 1,
+      "pod_id": null,
+      "pods_opened": 1,
+      "projected_attempt_seconds": 6761.54,
+      "projected_attempt_usd": 1.488481,
+      "re_creations_allowed": 1,
+      "recorded_after_the_fact": true,
+      "rule": "ONE pod re-creation, and only after a deletion PROVEN by listing. Never two billing endpoints. `--pre-create-check` computes both bounds and refuses the create itself",
+      "rung": 0,
+      "spent_closed_pods_usd": 0.173694,
+      "stdout_as_the_command_printed_it": [
+        "KILL  ·  STOP: this create cannot be paid for by the registration. seconds 6761.5/6500 · usd 1.4885/1.50 · pod 2 of 2 allowed. The attempt is NOT spent — return it to the operator"
+      ],
+      "terminate_after_window_seconds": 5655.0,
+      "this_would_be_pod": 2,
+      "verdict": "KILL",
+      "why_this_entry_is_last_and_not_in_its_moment": "`--pre-create-check` printed this verdict to stdout and returned exit 2 without calling `append_gate`, so the refusal that ENDED the paid session existed only in a terminal and in the report's paste. The team lead's acceptance of pass1-window found it. This entry is appended by the step 0.5 addendum, recomputed by the same function on the same committed record and the same run state — `pre_create(registration(), run_state())` is pure in both arguments, so the numbers below are the ones the command printed and not a recollection of them. The moment it actually ran is NOT known to the second: it ran after the deletion of xpz3zb7yxus5cw at 15:46:23Z and before rung 7, and nothing recorded it",
+      "widest_dead_pod_that_still_fits_seconds": 583.46,
+      "worst_case_ahead_seconds": 5916.54,
+      "worst_case_ahead_usd_at_the_price_ceiling": 1.314787
     }
   ],
   "latest": {

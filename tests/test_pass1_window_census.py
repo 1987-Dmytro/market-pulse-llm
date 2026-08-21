@@ -133,3 +133,111 @@ def test_the_spans_are_MEASURED_beside_what_was_CHARGED():
     assert spans["deleted_at"] and spans["billed_seconds"] and spans["billed_usd"]
     assert spans["billed_seconds"] <= sums["cumulative"]["hard_stop_seconds"]
     assert spans["billed_usd"] <= RECORD["money"]["cap_usd_all_in"]
+
+
+def test_the_readings_are_keyed_on_the_PAIR_and_not_the_msg_id():
+    """The acceptance's finding: seven msg_ids of the 650 live in two threads each.
+
+    `scorer.reader_comment_agreement` keys its answers `{int(msg_id): …}` — last-wins — and
+    `leg_table` derives `agreed_ids` as a set of msg_ids while `our_rows` stays a LIST of them. Both
+    halves misread a collision, and five of the seven pairs had exactly one twin answered.
+    """
+    block = CENSUS["report_only"]
+    assert block["the_650_labelled_rows"]["keyed_on"]["colliding_msg_ids_in_this_subset"] == [
+        21164,
+        21195,
+        21209,
+        21211,
+        21236,
+        21239,
+        21256,
+    ]
+    assert block["the_450_not_in_dev_200"]["keyed_on"]["colliding_msg_ids_in_this_subset"] == [
+        21209
+    ]
+    assert block["the_dev_200"]["keyed_on"]["colliding_msg_ids_in_this_subset"] == []
+    # the corrected readings, and the dev-200 that never had a collision to correct
+    assert (
+        block["the_650_labelled_rows"]["rows_the_pod_actually_answered"],
+        block["the_650_labelled_rows"]["agreed"],
+        block["the_650_labelled_rows"]["our_agreed"],
+    ) == (112, 68, 21)
+    assert (
+        block["the_450_not_in_dev_200"]["rows_the_pod_actually_answered"],
+        block["the_450_not_in_dev_200"]["agreed"],
+    ) == (64, 34)
+    assert (
+        block["the_dev_200"]["rows_the_pod_actually_answered"],
+        block["the_dev_200"]["agreed"],
+        block["the_dev_200"]["our_agreed"],
+    ) == (48, 34, 21)
+
+
+def test_one_collision_scored_both_ways_gives_two_different_answers():
+    """The RED-on-the-old-path check, with the old path CALLED rather than described.
+
+    msg_id 21209 is in both threads of the 650: `@VARUS_channel:10465#21209` was answered and
+    `@klopotenkofood:6035#21209` never was. Its gold label is `null`, the answered twin's reply
+    collapses to `None`, so the id-only key hands the unanswered twin an agreement it never earned —
+    one phantom answered row and one phantom agreement out of a subset of two.
+    """
+    record = json.loads((REPO_ROOT / "results" / "prereg_pass1_window.json").read_text("utf-8"))
+    pair = {"@VARUS_channel:10465#21209", "@klopotenkofood:6035#21209"}
+    assert pair <= set(PACK["membership"]["labelled_650"]["ids"])
+
+    pair_keyed = census.labelled_reading(
+        record, PACK, REPO_ROOT / "results", pair, "the collision, one thread at a time"
+    )
+    assert pair_keyed["n"] == 2
+    assert pair_keyed["rows_the_pod_actually_answered"] == 1
+    assert pair_keyed["absent"] == 1
+    assert pair_keyed["agreed"] == 0
+    assert pair_keyed["keyed_on"]["threads_scored"] == 2
+
+    # the SAME pinned instrument, handed the whole subset at once — the path the census used to take
+    id_keyed = _the_old_path(record, PACK, REPO_ROOT / "results", pair)
+    assert id_keyed["n"] == 2
+    assert id_keyed["absent"] == 0, "the unanswered twin inherits its namesake's reply"
+    assert id_keyed["agreed"] == 1, "and the reply it inherits happens to match its gold"
+
+
+def _the_old_path(record: dict, pack: dict, where: Path, ids: set[str]) -> dict:
+    """One `leg_table` call over the WHOLE subset — what the census did before the correction."""
+    import tempfile
+
+    import gate_pass1_fewshot as r2gate
+
+    view = {
+        **record,
+        "bars": {
+            **record["bars"],
+            "dev_gate": {"our_readings": record["bars"]["report_only"]["our_readings"]},
+        },
+    }
+    cut = census.subset(pack, ids)
+    name = cut["legs"][0]["out"]
+    with tempfile.TemporaryDirectory() as scratch:
+        scratch = Path(scratch)
+        (scratch / name).write_text(
+            "".join(
+                line + "\n"
+                for line in (where / name).read_text("utf-8").splitlines()
+                if line.strip() and json.loads(line)["id"] in ids
+            ),
+            encoding="utf-8",
+        )
+        return r2gate.leg_table(view, cut, pack["legs"][0]["name"], scratch)
+
+
+def test_the_lower_bound_is_a_NAMED_row_and_not_an_argument():
+    """Dv657 made concrete: the pod's own log reaches one reply further than the file beside it."""
+    block = CENSUS["replies_the_mac_does_not_hold"]
+    assert block["rows_in_the_copied_back_file"] == 131 == CENSUS["completeness"]["answered"]
+    assert block["replies_the_pod_log_reports"] == 132
+    assert block["replies_named_by_the_log_and_absent_from_the_file"] == [
+        {"id": "@klopotenkofood:6035#21205", "log_elapsed_seconds": 759.2, "n": 132}
+    ]
+    # the id it names is a row of the population that the out-file does not carry
+    assert "@klopotenkofood:6035#21205" in {one["id"] for one in PACK["legs"][0]["items"]}
+    assert "@klopotenkofood:6035#21205" in set(CENSUS["completeness"]["unanswered_ids"])
+    assert "lower bound" in block["rule"] and "never an input it merges" in block["rule"]

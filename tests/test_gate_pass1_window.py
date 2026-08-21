@@ -1061,3 +1061,37 @@ def test_rung_7_and_D2s_reading_are_driven_on_r2s_REAL_replies(run, tmp_path):
     assert (table["agreed"], table["n"]) == (136, 200)
     assert (table["our_agreed"], table["our_n"]) == (38, 49)
     assert table["refused"] == [] and table["absent"] == 0
+
+
+def test_the_paid_sessions_pre_create_REFUSAL_is_in_the_run_record_and_recomputes():
+    """Step 0.5's second correction: the refusal that ended the session was only ever stdout.
+
+    `--pre-create-check` printed its verdict and returned exit 2 without calling `append_gate`, so
+    the guard that refused the re-creation left no entry anywhere in `results/pass1_window_run.json`.
+    The addendum appended it. This asserts it is really the command's own verdict and not a typed
+    recollection of one: `pre_create` is a pure function of the committed record and the recorded
+    state, so recomputing it today must reproduce every number in the entry
+    ([[gate_verdicts_need_an_artifact]]).
+    """
+    state = json.loads((REPO_ROOT / "results" / "pass1_window_run.json").read_text("utf-8"))
+    entries = [one for one in state["gates"] if one["kind"] == "pre-create-check"]
+    assert len(entries) == 1
+    entry = entries[0]
+    assert entry["verdict"] == "KILL"
+    assert entry["recorded_after_the_fact"] is True
+
+    # the state the refusal was computed against: this record's pods, none of them live
+    assert gate.live_pod(state) is None
+    fresh = gate.pre_create(RECORD, state)
+    for name, value in fresh.items():
+        assert entry[name] == value, name
+
+    # it refused on SECONDS while the money still fitted — the shape the registration predicted
+    assert entry["fits_the_hard_stop"] is False
+    assert entry["fits_the_cap"] is True
+    assert entry["projected_attempt_seconds"] > entry["hard_stop_seconds"]
+    assert entry["projected_attempt_usd"] <= entry["cap_usd_all_in"]
+    assert entry["next_step"] in entry["stdout_as_the_command_printed_it"][0]
+
+    # and it did not rewrite the session's ending
+    assert state["latest"] == {"kind": "completeness", "pod": 1, "verdict": "RED"}
