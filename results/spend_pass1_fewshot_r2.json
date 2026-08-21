@@ -1,0 +1,14 @@
+{
+  "runpod_balance_at_pass1-fewshot-r2_start": 16.4358234438,
+  "anchored_at": "2026-08-21T11:36:55+00:00",
+  "pass1-fewshot-r2_gpu_cap_usd": 1.38,
+  "gpu_sessions": [
+    {
+      "at": "2026-08-21T11:36:57+00:00",
+      "balance": 16.4358234438,
+      "step_spent_usd": 0.0,
+      "note": "pass1-fewshot-r2 anchor, session start, before any pod and before the D0' commits"
+    }
+  ],
+  "gpu_note": "RunPod account balance read before the first pod of pass1-fewshot-r2. Step spend = the pessimistic maximum of this anchor minus the balance now and the billing walk since `anchored_at` (SPEC 3.23 (4), Dv411), enforced against $1.38. The SPEC amendment 3.4 (4) phase cap is enforced separately, against results/spend_phase4.json, and neither anchor may be regenerated."
+}
