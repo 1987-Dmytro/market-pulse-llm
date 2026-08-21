@@ -188,6 +188,35 @@ The same acceptance found that `--pre-create-check` printed the refusal that end
 and recorded nothing. It is now an appended, recomputed gate in `results/pass1_window_run.json`, and
 from `pass1-window r2` on, that guard records its verdict at the moment it runs.
 
+## And then `pass1-window r2` bought the rest of it — the window is CLOSED
+
+The remainder was re-registered under the operator's ruling of 21.08 (evening) with a cap of $2.00
+and a rate charged on the POD CLASS rather than on a sibling run: probe-b's base leg 5.161578 s/call
+against r2's 2.293075 — one prompt, two pods, a 2.25× spread — times v2's measured uplift 1.188701 =
+6.135572, charged **6.14**. Pod `fnlktbelhkmte5` answered all 901 in **2 765.0 s = $0.568361**, 32 %
+of the registered worst case, at **2.694083 s/call**.
+
+**Pass 1 over window 1 is done: 1 032 of 1 032, with 0 sha mismatches, 0 parse refusals and 0
+duplicates across the whole population.** The out-file of r1 plus the out-file of r2 is the INPUT of
+pass 2, and `docs/reports/pass1-window-r2.md` carries the arithmetic.
+
+**And the rate question has an answer that was not available before.** The dev-200 rows reproduce
+r2's 136/200 · 38/49 **row for row — 200 of 200 — across three pods**, including 48 rows answered by
+r1's pod and 152 by r2's. Greedy decoding on a pinned rendering is deterministic on this stack: the
+pod class is a distribution over SECONDS and a constant over ANSWERS. That is the whole of Dv647's
+reading, and it is why charging the top of a measured spread costs headroom and can never cost
+correctness. The v2 spread now runs 2.694 → 4.498 across three pods; the next registration charges
+the top of four readings.
+
+**What (д)'s second contract can now be priced from.** The pass-2 filter table covers the WHOLE
+window: **281 filtered rows across 79 of 127 callable threads, 32 756 characters**, with 48 callable
+threads carrying nothing pass 2 would call over. r1's census covered 24 threads and the report said
+the extrapolation was not the executor's to make; it no longer has to be.
+
+**The fourteen took 11 of 14, on a complete run, and it is still a census row.** Their FIFTH look —
+the base 9/14, arm A 9/14, v2 registered for a shot it never fired, v2 reaching five inside r1's
+killed pass, and now all fourteen. Point 2 of «What binds» applies to it exactly as written.
+
 ## What binds, from here
 
 1. **v2 is the base.** A line that claims to improve on pass 1 measures against 136/200 and 38/49 on
