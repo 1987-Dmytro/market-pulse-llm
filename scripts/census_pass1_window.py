@@ -275,6 +275,47 @@ def pass_2_filter(pack: dict, parsed: dict[str, dict], refused_ids: set, threads
     }
 
 
+def per_poll_copy_back(watch: dict, where: Path, pack: dict) -> dict:
+    """D2 item 4 — what a poll cost, BOUNDED, because the loop records one gate and not one per poll.
+
+    `append_gate` is called once, after the loop returns, so «watch gates in the record» is 1 and
+    NOT the number of polls: a count named for one thing measuring another
+    ([[count_the_kind_not_the_rows]]). What the record does carry is the loop's own
+    `watched_seconds`, and the loop sleeps a fixed `--poll` between iterations and does not sleep
+    before returning. That pins the poll count to a two-value window and the per-poll cost with it.
+    """
+    watched = watch.get("watched_seconds")
+    out = where / pack["legs"][0]["out"]
+    if watched is None or not out.exists():
+        return {"reading": "no watch gate on this record — nothing to bound"}
+    poll = 20.0
+    bounds = {}
+    for polls in (int(watched // poll), int(watched // poll) + 1):
+        if polls > 0:
+            bounds[polls] = round((watched - (polls - 1) * poll) / polls, 2)
+    return {
+        "rule": (
+            "the loop's own watched_seconds less the sleeps it took, over the polls it can have"
+            " taken. Both candidate poll counts are published because the record does not carry the"
+            " count itself — this is a BOUND and not a measurement"
+        ),
+        "poll_seconds": poll,
+        "watched_seconds": watched,
+        "seconds_per_poll_by_poll_count": bounds,
+        "bytes_copied_at_the_end": out.stat().st_size,
+        "rows_at_the_end": len(gate.rows_of(out)),
+        "what_it_bounds": (
+            f"a poll copied the out-file ({out.stat().st_size} bytes at the end), the launch stamp"
+            " and the pod log, computed the fingerprint and ran the projection — all of it inside"
+            f" {max(bounds.values())} s at worst. The registration charges 1 300 s of overhead for"
+            " the copy-back of ≤ 1 032 rows plus the gate on the Mac plus the delete, and the"
+            " copy-back half of that is a per-poll cost of about a second on a file a fifth of the"
+            " final size. It is the number the overhead line was kept at 1 300 for, and this run"
+            " could only bound it — the file never reached 1 032 rows"
+        ),
+    }
+
+
 def spans(record: dict, state: dict, pack: dict, where: Path) -> dict:
     """What the pod actually did, beside what the registration charged for it."""
     rows = gate.rows_of(where / pack["legs"][0]["out"])
@@ -307,8 +348,11 @@ def spans(record: dict, state: dict, pack: dict, where: Path) -> dict:
             "seconds_per_call_slowest": max(seconds) if seconds else None,
             "seconds_per_call_fastest": min(seconds) if seconds else None,
             "generation_seconds": round(sum(seconds), 1) if seconds else None,
-            "watch_polls": len([one for one in state.get("gates", []) if one["kind"] == "watch"]),
+            "watch_gates_recorded": len(
+                [one for one in state.get("gates", []) if one["kind"] == "watch"]
+            ),
             "watched_seconds": gates.get("watch", {}).get("watched_seconds"),
+            "per_poll_copy_back": per_poll_copy_back(gates.get("watch", {}), where, pack),
         },
         "charged": {
             "ssh_seconds": sums["ssh_seconds_charged"],

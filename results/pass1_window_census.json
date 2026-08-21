@@ -1882,7 +1882,7 @@
   "phase": "pass1-window",
   "producer": {
     "script": "scripts/census_pass1_window.py",
-    "sha256": "cc82eec2f54cafb0f8b167a239642421df363a5b013f4db6da06c985765360c1"
+    "sha256": "c4e1cb02e6967b566743166cd92f80ae3592514b1d951a1fcf6a315cc71078a4"
   },
   "registration": {
     "record": "results/prereg_pass1_window.json",
@@ -2144,11 +2144,23 @@
       "model_load_seconds": [
         164.915
       ],
+      "per_poll_copy_back": {
+        "bytes_copied_at_the_end": 70704,
+        "poll_seconds": 20.0,
+        "rows_at_the_end": 131,
+        "rule": "the loop's own watched_seconds less the sleeps it took, over the polls it can have taken. Both candidate poll counts are published because the record does not carry the count itself — this is a BOUND and not a measurement",
+        "seconds_per_poll_by_poll_count": {
+          "37": 0.76,
+          "38": 0.22
+        },
+        "watched_seconds": 748.2,
+        "what_it_bounds": "a poll copied the out-file (70704 bytes at the end), the launch stamp and the pod log, computed the fingerprint and ran the projection — all of it inside 0.76 s at worst. The registration charges 1 300 s of overhead for the copy-back of ≤ 1 032 rows plus the gate on the Mac plus the delete, and the copy-back half of that is a per-poll cost of about a second on a file a fifth of the final size. It is the number the overhead line was kept at 1 300 for, and this run could only bound it — the file never reached 1 032 rows"
+      },
       "seconds_per_call_fastest": 3.78,
       "seconds_per_call_mean": 4.498473,
       "seconds_per_call_slowest": 5.798,
       "ssh_publish_seconds": 41.5,
-      "watch_polls": 1,
+      "watch_gates_recorded": 1,
       "watched_seconds": 748.2
     },
     "pod": "xpz3zb7yxus5cw",

@@ -332,10 +332,20 @@ $ PYTHONPATH=src python3.11 scripts/gate_pass1_window.py --pre-create-check
 It refused on SECONDS while the money still fitted — the shape the registration predicted. **No
 second pod was created.** Two of the three tests passed and the stricter bound.
 
-Worth stating exactly, because it is the cleanest form of the finding: at the rate this pod ran,
-**one pod doing the whole run fits** — 252.5 + 1 032 × 4.498 + 1 300 = **6 195 s of 6 500**, and
-$1.273 of $1.50. It is paying pod 1's 845 s out of the 583 s of slack that makes a second pod
-impossible. **The run was affordable; the restart was not.**
+**Whether one pod would have finished depends on the span the record carries two values for — and
+the answer reverses.** This is the same defect the review caught in `single_call_sensitivity`, so
+both arms are given:
+
+| pre-generation | total | at $0.80/h | at the $0.74 this pod cost | against 6 500 s |
+|---|---:|---:|---:|---|
+| **252.5 s** — what this pod MEASURED | 6 194.9 s | $1.3766 | $1.2734 | **fits, by 305 s** |
+| **1 100 s** — what the registration CHARGES | 7 042.4 s | **$1.5650** | $1.4476 | **does not fit — and $1.5650 is outside the cap** |
+
+So «the run was affordable» is true of the pod that ran and **false of the pod the registration
+priced**. A continuation's pre-generation is unknown, so the charged row is the one that governs
+it — and at the charged span the whole run does not fit in one pod at this rate, in seconds or in
+money. What killed THIS pod is narrower: it was paying pod 1's 845 s out of 305 s of remaining
+slack, so the restart was refused while the run itself was still inside the stop.
 
 ## D2 — the census ($0)
 
@@ -351,6 +361,12 @@ $ PYTHONPATH=src python3.11 scripts/gate_pass1_window.py --completeness
 
 131 replies, 131 parsed, not one transport defect. The instrument is sound; the bar failed on the
 one number the money model could not deliver.
+
+**131 is what the Mac holds and a LOWER BOUND on what was paid for.** The watch pulls the out-file
+once a poll and the kill happens inside the loop, so rows generated between the last copy and the
+deletion are on the network volume and not in this file. The pod is gone, so the difference is
+unverifiable without spending again — and `/workspace/run/pass1_window_v2.jsonl` survives on volume
+`qw4nwleanc`, which makes it an asset a continuation can RESUME from rather than re-buy.
 
 ### What v2 said, in THREE states
 
@@ -420,6 +436,22 @@ census.
 Every pre-generation line came in at a third to a half of its allowance. The one line that was
 UNDER-charged is the only one that mattered.
 
+**The per-poll copy-back, BOUNDED** — the fourth thing D2 owes, and this run could only bound it.
+`append_gate` records ONE watch gate however many times the loop polls, so «watch gates in the
+record» is 1 and is not a poll count; it is renamed in the census for exactly that reason. What the
+loop does carry is `watched_seconds` 748.2 and a fixed 20 s sleep it does not take before returning,
+which pins the poll count to 37 or 38 and the per-poll cost with it:
+
+| polls | seconds per poll, everything but the sleep |
+|---:|---:|
+| 37 | **0.76** |
+| 38 | **0.22** |
+
+A poll copied the out-file (70 704 bytes at the end), the launch stamp and the pod log, computed the
+fingerprint and ran the projection — under a second, on a file a fifth of the final size. That is
+the number the overhead line was kept at 1 300 s for, and it is a bound rather than a measurement
+because the file never reached 1 032 rows.
+
 ## Deviations added by the paid session
 
 | # | What | Tag |
@@ -430,6 +462,10 @@ UNDER-charged is the only one that mattered.
 | **Dv650** | **Found while writing the census, in my own code, three times.** The label distribution folded 901 never-asked rows into a `REFUSED` class; the pass-2 table carried one `threads_total` over two denominators (129 in the cell, 127 callable); and the fourteen's `v2` column printed `None` for both «answered null» and «never reached», on nine of fourteen rows. All three now carry the distinction explicitly. A run that ends early makes every count in a census ambiguous, and the census is written after the money. | `[cause: verify-gap]` `[[the_empty_class_eats_the_parse_failures]]` |
 | **Dv651** | Every report-only reading publishes TWO denominators — the registered rows and the rows the pod answered — because 83 % of the population was never asked. The dev-200 row is NOT a reproduction of r2's 136/200: it is 34/200 counting 152 unasked rows as disagreements, or 34/48 over what was reached. | `[cause: spec-gap]` `[[measure_on_the_rows_the_gate_scores]]` |
 | **Dv652** | The «450 not in dev-200» reading the contract asks for has **`our_n` = 0 by construction and always will**: `build_pass1_fewshot_packs.py::dev_units` takes all 49 «our» rows into dev-200 whole. It is a reading of overall agreement on untuned rows and can say nothing about the class the programme is about — on this run or any other. | `[cause: contract-gap]` `[[an_empty_class_is_the_definitions_answer]]` |
+| **Dv655** | **The same span defect, a third time, in the sentence the operator reads first.** «One pod doing the whole run fits — 6 195 s of 6 500» is true at THIS pod's measured 252.5 s of pre-generation and false at the 1 100 s the registration charges (7 042.4 s, $1.5650, outside the cap). I had documented the class in `single_call_sensitivity`, fixed it there by publishing both arms, and then wrote the headline off the flattering arm one section later. Both arms are given now, in the D1 table and in the operator's question, because a continuation's pre-generation is unknown and the CHARGED span is the one that governs it. | `[cause: verify-gap]` `[[a_ceiling_derived_from_one_span_measured_over_another]]` |
+| **Dv656** | **`watch_polls` counted GATES, not polls.** `append_gate` is called once, after the loop returns, so the census read 1 where the loop polled 37 or 38 times. Renamed `watch_gates_recorded`, and D2's fourth item — the per-poll copy-back — is now BOUNDED from the loop's own `watched_seconds` and its fixed sleep: **0.76 s a poll at 37 polls, 0.22 at 38**, copying a 70 704-byte out-file, the launch stamp and the pod log. A bound and not a measurement, because the file never reached 1 032 rows. | `[cause: verify-gap]` `[[count_the_kind_not_the_rows]]` |
+| **Dv657** | **131 is what the Mac holds, not what was bought.** The watch copies once a poll and the KILL happens inside the loop, so rows generated between the last copy and the deletion are on the network volume and not in the file. The pod is deleted, so the difference is unverifiable without spending — and `/workspace/run/pass1_window_v2.jsonl` SURVIVES on volume `qw4nwleanc`, which makes it an asset a continuation resumes from rather than re-buys. Reported as a lower bound. | `[cause: env]` `[[a_retry_inherits_the_last_attempts_output]]` |
+| **Dv658** | **Three money figures exist for one step and the report first quoted the wandering one.** The gate's clock says $0.173694 and is final; the guard's balance delta read $0.1599 at 15:48Z and $0.1938 at 16:22Z and goes on growing at the volume's rate; the billing WALK reports **`pods $0.0000`** for a pod that ran 845 s and was deleted. That last is the sharpest Dv504 instance this programme has — not «lags 32 minutes» but «reports nothing for a resource that ran». All four readings are tabled with their moment, the clock is named as the one to quote, and the step is left OPEN for `money-anchors`. | `[cause: env]` `[[unreadable_now_versus_never]]` |
 | **Dv654** | **The suite went red on a test of mine that had to flip.** `test_the_step_opens_with_no_pods_of_its_own` asserted that `results/pass1_window_run.json` holds no pods — true at D0 and false the moment the contract did the one thing it exists to do, with no code involved. This project has the class registered ([[the_absence_test_is_a_clock_and_flips_with_its_artifact]]) and I wrote another one anyway. It now asserts the DURABLE fact instead: the step ledger's cap is $1.50 and every pod in the run record was created AFTER `anchored_at` — which is what «the step opens with no pods of its own» actually means. | `[cause: verify-gap]` `[[the_absence_test_is_a_clock_and_flips_with_its_artifact]]` |
 | **Dv653** | `gate_pass1_fewshot.py::leg_table` refuses any out-file row its leg never asked, which is right for a gate reading one leg's own file and wrong for a census taking three overlapping readings out of one. The census FILTERS the out-file to each subset in a scratch directory and hands `leg_table` the same lines, selected — the function is not modified and the rows are not touched. | `[cause: process]` `[[a_consumer_list_is_not_a_meaning_list]]` |
 
@@ -453,13 +489,15 @@ UNDER-charged is the only one that mattered.
    behind it: 2.726 was real, reproducible and sourced. A review checks whether the arithmetic
    follows from the inputs; it cannot check whether the inputs will still be true on hardware nobody
    has rented yet.
-3. **Rung 4 was right and killing it was the correct outcome.** At 5.151 s/call the projection was
-   6 785.7 s against a 6 500 s stop, and a gate that let that run would have discovered the overrun
-   in a bill. The uncomfortable part is the counterfactual the arithmetic also proves: at the mean
-   the run fits in one pod — 6 195 s of 6 500, $1.273 of $1.50 — and it is paying pod 1's 845 s out
-   of 583 s of slack that makes a restart impossible. The run was affordable. The restart was not,
-   and that is a property of pricing a re-creation at the full worst case rather than at what
-   remains.
+3. **Rung 4 was right, and I reached for the flattering counterfactual one section after
+   documenting that exact mistake.** The gate was correct: 5.151 s/call projected 6 785.7 s against
+   a 6 500 s stop, and letting it run would have discovered the overrun in a bill. What I first
+   wrote beside it was «at the mean the run fits in one pod — 6 195 s of 6 500» — TRUE at this pod's
+   measured 252.5 s of pre-generation and FALSE at the 1 100 s the registration charges, where the
+   same arithmetic gives 7 042.4 s and $1.5650, outside the cap. Third instance of one span with two
+   values in this record, and the third time I quoted the kind one. The claim now carries both arms,
+   and the honest version is narrower: THIS pod was inside the stop and could not afford a restart,
+   because it was paying its own 845 s out of 305 s of remaining slack.
 4. **Writing the census found the same defect three times in my own code, after the money.** Never-
    asked rows folded into a refusal class, one `threads_total` over two denominators, and a `None`
    column meaning both «said null» and «never reached» on nine of fourteen gold rows. Each is the
@@ -475,17 +513,34 @@ UNDER-charged is the only one that mattered.
 
 ## What returns to the operator
 
-**The bar is RED and the reason is a rate, not a defect.** 131 of 1 032, 845.0 s, $0.173694 of
-$1.50. Step spend $0.1599 by the guard's balance delta; cycle 2 at $6.5436 of $20.00.
+**The bar is RED and the reason is a rate, not a defect.** 131 of 1 032, 845.0 s.
+
+**Three money figures exist for this step and only one is stable.** Say which reading, and when:
+
+| reading | figure | what it is |
+|---|---:|---|
+| the gate's CLOCK | **$0.173694** | 845.0 s × $0.74/h, exact and final. **This is the number to quote.** |
+| the guard's balance delta, 15:48Z | $0.1599 | the account moved by this much between the anchor and that moment |
+| the guard's balance delta, 16:22Z | $0.1938 | the same delta later — it goes on growing at the volume's ~$0.24/day |
+| the guard's billing WALK | $0.0097, **`pods $0.0000`** | the walk reports ZERO for a pod that demonstrably ran 845 s and was deleted |
+
+The walk's `pods $0.0000` is the sharpest instance of the Dv504 class this programme has: not «the
+billing history lags ~32 minutes» but «it reports nothing at all for a resource that ran and is
+gone» ([[unreadable_now_versus_never]] — unreadable NOW is not never). **The step is left OPEN**, as
+r2's was; `money-anchors` owns the settled close. Cycle 2 reads $6.5436 of $20.00 at the same moment
+as the $0.1599 row.
 
 **Three things need your word, and the first two are the same decision seen twice.**
 
-1. **The 901 comments still owed have to be re-priced before they are re-bought.** At the measured
-   4.498 s/call the remaining rows are 901 × 4.498 = 4 053 s of generation; with a fresh pod's
-   pre-generation and the registered overhead that is ≈ 5 606 s = **$1.2457 at the $0.80/h ceiling** ($1.1523 at the $0.74 this pod cost), and it does
-   NOT fit under this registration's 6 500 s stop once pod 1's 845 s are counted. A continuation
-   needs its own registration with a rate charged on the POD CLASS and not on a sibling run —
-   `pass1-window r2`, in the shape `pass1-fewshot r2` took.
+1. **The 901 comments still owed have to be re-priced before they are re-bought, and the price
+   depends on a span nobody can measure in advance.** At 4.498 s/call the remaining rows are
+   901 × 4.498 = **4 053 s of generation**. With THIS pod's measured pre-generation and the
+   registered overhead that is 5 606 s = **$1.2457 at the $0.80/h ceiling**; with the pre-generation
+   the registration CHARGES it is 6 453 s = **$1.4340**, and both of those sit under a 6 500 s stop
+   only because pod 1's 845 s are NOT counted against them — under this registration they are, and
+   nothing fits. A continuation needs its own registration, with a rate charged on the POD CLASS
+   rather than on a sibling run and a pre-generation charged as the spread it is: `pass1-window r2`,
+   in the shape `pass1-fewshot r2` took.
 2. **6 700 s was already the right question and it arrived through the other door.** Before the
    create I reported that 6 700 s = $1.4889 stays inside the $1.50 cap and moves rung 4's edge to
    4.167 s/call; you ruled «proceed as registered» on a risk described as one outlier call. The
