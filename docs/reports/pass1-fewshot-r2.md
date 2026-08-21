@@ -1,4 +1,11 @@
-# pass1-fewshot r2 — D0′: the same line re-registered, and four defects caught before the pod
+# pass1-fewshot r2 — the dev gate is RED at +7 of +10, and the attempt is intact
+
+**Verdict.** The paid session ran end to end for the first time on this line. One RTX 4090 in
+EU-RO-1, **1 359.0 s = $0.27935** of the $1.38 cap, every rung passed until the one that measures
+the question: **the dev gate is RED — `our_v2 − our_base = +7` against the registered `+10`** —
+so **no gold row was answered and the ONE attempt is NOT spent.** The sealed fourteen were never
+touched. `pass1_comment_gm4_v2` is a large improvement that is mostly **not the improvement the bar
+measures**, and the per-class table below is what returns to the operator.
 
 **Verdict on D0′.** Everything `docs/PROMPT-pass1-fewshot-r2.md` asks for at $0 is built, driven and
 committed: the r2 registration by a **sibling producer**, the gate amended on its four points, the
@@ -8,8 +15,10 @@ first `pod create` raised 21 findings, 7 survived refutation, and they collapse 
 two of them would have deleted a healthy pod with the attempt unspent.** A second pass over the
 transport found a fifth. All are fixed, each with a mutation that was watched to go red.
 
-*(This report is written at the D0′ boundary and is extended after D1/D2. The paid session's own
-section is below.)*
+The four amendments held on the pod: ssh came up at **50 s** against the new 500 s ceiling, the
+launch anchor gave **145.6 s** to the first reply against 450, and rung 4 — which the review had
+caught still charging r1's repealed overhead — projected $0.52 of $1.38 at the point it would have
+KILLed with the stale number.
 
 ## Read back first, one line each (the contract's own list)
 
@@ -309,4 +318,179 @@ PASS1-FEWSHOT-R2 SPENT      $0.0000 of $1.38  (anchor $16.44 from runpod_balance
 | **Dv618** | The guard anchor is taken at session start as the contract asks, so the volume drip across the whole D0′ window lands on r2's balance delta — Dv604's class, expected this time rather than discovered. The gate's own clock is the per-leg figure; the delta is the account's. | `[cause: env]` `[[a_balance_delta_is_not_a_per_leg_cost]]` |
 | **Dv620** | `first_reply_after_launch` took the minimum across BOTH dev legs. `pass1_fewshot_pod_runner` shares the model LOAD across the legs and calls the shipped `run()` once per leg, and `run()` re-zeros its own monotonic clock — so the v2 leg's first row is ~8 s after its own start and the minimum would have reported GO on any load whatever. Read from the FIRST registered leg, the one that pays the load. | `[cause: verify-gap]` `[[two_instruments_two_inputs]]` |
 | **Dv621** | The runbook's poll deadline is parsed by BSD `date`, which errors on a stamp carrying its `Z` and leaves an EMPTY variable — the `while` guard is then false on entry and the loop exits without one API call, silently, and the executor hand-polls. That is the class that cost r1 pod 1. The deadline is echoed and an empty parse refuses. Recovery also clears the Mac's copies of the dead pod's run directory: a stale `launched_at` makes `--watch` refuse with a live pod, and stale rows are a high-water mark the new pod never rises above. | `[cause: verify-gap]` `[[a_checker_whose_failure_is_silence]]` |
+| **Dv622** | Two operational readings the runbook's step 7 did not have. `scp root@…:'/workspace/run/*' results/` brings the launch stamp and the pod log back a SECOND time under their pod-side names (`results/launched_at`, `results/pod.log`) beside the canonical ones — byte-identical duplicates, deleted rather than committed. And the pod's `shasum` is perl, which dies on this image's `LC_ALL=ru_RU.UTF-8`: the listing needs `LC_ALL=C … sha256sum`, or the proof of the copy is a page of locale warnings. | `[cause: env]` `[[a_checker_whose_failure_is_silence]]` |
 | **Dv619** | The launch stamp's clock-skew allowance REUSES the registered backstop tolerance — one constant answering two questions. It is bounded and named rather than fixed: an accepted stale stamp makes rung 3 fire EARLIER, never later, and the create-anchored backstop reads `backstop_seconds` and never touches the tolerance, so no value of the field can buy a window nobody priced. | `[cause: process]` `[[one_constant_answering_two_questions]]` |
+
+
+## D1 — the paid session, rung by rung
+
+```
+pod 8tpx8lf05n6skc   created 2026-08-21T12:54:43Z   deleted 13:17:22Z   1 359.0 s   $0.27935
+                     RTX 4090, costPerHr 0.74, EU-RO-1, volume qw4nwleanc
+
+12:54:50Z  price     rung 1  GO    elapsed     8.0   0.74 ≤ 0.80; --terminate-after 14:36:23Z,
+                                                     overshoot 0 s of the registered 60
+12:55:41Z  gate0     rung 2  GO    elapsed    58.8   ssh answered at 50 s of create-elapsed
+13:15:59Z  watch     rung 5  GO    elapsed  1276.1   400/400 answered, the loop never left
+13:16:26Z  boot      rung 3  GO    elapsed  1303.9   launch → first reply 145.6 s of 450;
+                                                     254.6 s of create-elapsed of the 1 100 backstop
+13:16:41Z  dev-gate  rung 7  RED   elapsed  1318.5   our delta +7 of +10
+13:17:25Z  close             GO                      1 359.0 s billed, deletion proven by listing
+```
+
+**The environment, measured rather than assumed.** Three numbers this stack did not have:
+
+| span | r2, this pod | what the registration charged | what 20.08 read |
+|---|---|---|---|
+| ssh publish | **50.0 s** | 500 s (rung 2's ceiling) | > 262.5 s and > 231.9 s, both lower bounds |
+| model load | **142.709 s** | 450 s | 146.8 … 353 s, and 142.7 is a new floor |
+| base s/call | **2.293 s** | 5.162 (measured, probe-b) | — |
+| v2 s/call | **2.726 s** | 7.743 (a BOUND, 1.5 × base) | — |
+
+The ssh spread rung 2 was registered as — 14.5 s … > 262.5 s — now has a reading inside it, and the
+500 s ceiling was never approached. **v2's prefill costs +18.9 %, not the +50 % the bound charged**,
+so the whole generation took 1 147 s of a budget that priced 3 076.552.
+
+**Rung 3's anchor earned itself on this pod, and the record shows it.** The v2 leg's first row reads
+`elapsed_since_start 2.72` with `boot_seconds 0.009` — the shipped `run()` is called once per leg and
+re-zeros its own clock, exactly as Dv620 predicted from the transport's source. A minimum across
+both legs would have recorded 2.72 s against a 450 s ceiling and reported GO on any load whatever.
+The gate read the base leg's 145.6 s.
+
+**Nothing was hand-polled.** `--watch` was entered the moment the launch returned a pid and returned
+GO 1 276 s later with every unit answered; rungs 3, 4 and 6 were checked on every one of its polls.
+The projection tracked the pod down from $0.8230 at the first poll to $0.5254 as the measured rate
+replaced the registered bound.
+
+## Rung 7 — the dev gate, and the table that goes back
+
+```
+BASE  agreed  87/200 (0.4350)  ·  our 31/49  ·  refused 0  ·  absent 0
+V2    agreed 136/200 (0.6800)  ·  our 38/49  ·  refused 0  ·  absent 0
+
+our delta       +7   (minimum +10)   passed = False
+agreement delta +49  (minimum  −5)   passed = True
+reachability    base 31 of 49, highest that keeps the delta open 39  →  reachable = True
+
+VERDICT  RED
+```
+
+**RED and not STOP, and the distinction is the registration's.** The base answered 31 of the 49
+«our» rows, under the 39 above which no v2 could have met the delta. The gate was reachable and was
+not met, so this is a reading of the prompt and not a reading of the bar (Dv592's branch, taken the
+other way).
+
+| class | n | base | v2 | gained | lost | net |
+|---|---:|---:|---:|---:|---:|---:|
+| `не_наш_рынок` | 85 | 12 | **46** | 35 | 1 | **+34** |
+| `null` | 54 | 36 | 41 | 12 | 7 | +5 |
+| `категория_личное` | 47 | 30 | 36 | 13 | 7 | **+6** |
+| `сеть_ритейлер` | 12 | 8 | 11 | 3 | 0 | +3 |
+| `молочный_бренд` | 2 | 1 | 2 | 1 | 0 | +1 |
+| **the 49 «our» rows** | 49 | 31 | **38** | **14** | **7** | **+7** |
+
+**The clause moved a different boundary from the one the bar measures.** Three readings say so:
+
+1. **The base's error was silence, not mis-attribution.** 13 of the 14 «our» rows v2 gained were
+   rows the base answered `None`. The line was registered against «the base classifies by the
+   mention» — on this dev set the base mostly did not classify at all.
+2. **v2's remaining error on «our» rows runs the OPPOSITE way from the clause.** Five of the seven
+   losses are `категория_личное` answered **`не_наш_рынок`**: told that a retailer named inside a
+   personal habit is a category comment, the model pushed the comment out of the market instead.
+   The clause is **not monotone on the class it targets** — 13 fixed, 7 broken, net +6.
+3. **The mention-vs-about error class is still live, in the other direction.** v2's single largest
+   confusion cell over all 200 rows is `не_наш_рынок → категория`, **24 rows**: out-of-market
+   comments pulled INTO the category. The base's four gold misses were the same error with the
+   arrow reversed.
+
+So `+49` of overall agreement is real and large, and it is bought almost entirely on
+`не_наш_рынок` (12 → 46). The registered question — «does the definition fix the mention-vs-about
+confusion on the rows we care about» — is answered **no, not by 10 rows of 49**.
+
+## D2 — the verdict ($0)
+
+`results/pass1_fewshot_verdict.json`, written after the last append to the run record (Dv579).
+
+```
+VERDICT  CLOSED AT THE DEV GATE — RED
+DEV GATE our 31 → 38 (delta 7, needs ≥ 10) · agreement 87 → 136 (delta 49, needs ≥ -5)  →  RED
+GOLD 14  results/pass1_fewshot_shot.jsonl does not exist — no gold row was answered. The ONE
+         attempt is NOT spent and the question returns to the team lead. This is a STATE and is
+         never scored 0 of 14
+PAIRED   {'base': 9, 'arm_a': 9}     # the sealed columns, unchanged and not re-run
+CENSUS-50 v2 None                    # the census rows live in the shot pack, which never fired
+```
+
+## Verify — D1's outputs, not summaries
+
+```
+$ ssh … 'cd /workspace/run && find . -type f | sort | xargs sha256sum'   # on the POD
+acaf0c2f0b1515a0…  ./launched_at          b1a708d917a19cc4…  ./pass1_dev_base.jsonl
+979c8f8252ed9b1e…  ./pass1_dev_v2.jsonl   bf8eaf2544322b9d…  ./pod.log
+$ shasum -a 256 results/…                                                # on the MAC
+acaf0c2f0b1515a0…  b1a708d917a19cc4…  979c8f8252ed9b1e…  bf8eaf2544322b9d…   # four for four
+
+$ runpodctl pod delete 8tpx8lf05n6skc
+{"deleted": true, "id": "8tpx8lf05n6skc"}
+$ runpodctl pod list -a && runpodctl serverless list && runpodctl network-volume list
+[]
+[]
+[{"dataCenterId": "EU-RO-1", "id": "qw4nwleanc", "name": "mp-srv2", "size": 100}]   # the control
+
+$ PYTHONPATH=src python3.11 scripts/runpod_guard.py --step pass1-fewshot-r2 --step-cap 1.38
+CYCLE 2 SPENT     $6.3377 of $20.00
+REMAINING         $13.6623
+PASS1-FEWSHOT-R2 SPENT      $0.2637 of $1.38   (balance delta; the billing walk reads $0.0097,
+                                                which is volume drip from before the pod existed)
+
+$ make check
+3266 passed, 2 skipped in 518.58s
+```
+
+**STEP SUM.** r1's pods `$0.117783` (clock) + r2's pod `$0.27935` (clock) = **$0.397133** of the
+`$1.50` the ruling left the step. r2's cap was $1.38 and $1.100650 of it is unspent.
+
+## Process signals (five lines)
+
+1. **The review before the pod paid for itself again, and this time it was measurable.** Five
+   defects, two of which end the session at a cost — and rung 4's stale overhead would have deleted a
+   healthy pod on the shot's first poll, after the whole dev spend. The pod's own record shows the
+   projection at $0.52 where the repealed number would have read past the stop.
+2. **A block copied for its algorithm carries its numbers.** `projection_gate` was taken whole
+   because its formula had not moved; two of its fields had been repealed by the same amendment that
+   left the formula alone. The producer audits every PIN of every copied block and audited no
+   THRESHOLD — the sweep test that hunts repealed values as numbers is the fix.
+3. **A stamp the executor types is a stamp the executor gets wrong.** Both the first-reply recipe and
+   the poll bound were numbers a human was told to compute; both were wrong, in the permissive
+   direction, and both are readings now. r1 lost a pod to the same class.
+4. **The registered bounds were pessimistic by 2× on both rates and 3× on the load.** 2.293 and
+   2.726 s/call against 5.162 and 7.743; 142.7 s of load against 450. The registration was still
+   right to charge the maximum — the money it protected is exactly what let the run finish inside a
+   cap that was cut by 8 %.
+5. **The line closes on its own bar, in-session, with nothing iterated.** No prompt was re-worded, no
+   bar re-read, no gold row touched. What the operator gets is a table and an intact attempt.
+
+## What returns to the operator
+
+1. **The attempt is NOT spent.** `gold14(v2)` was never fired; `results/pass1_probe_b_pack_v2.json`
+   is unanswered and the sealed fourteen carry the same two columns they carried this morning.
+2. **The dev gate is RED at +7 of +10, and it was reachable.** The registration's own branch: RED
+   closes the line in-session and the table goes back for the next option of the menu.
+3. **The finding is not «v2 is worse» — it is «v2 fixes a different boundary».** +34 net on
+   `не_наш_рынок`, +6 on `категория_личное` with 7 rows broken inside it, and 24 rows still pulled
+   from out-of-market into the category. Whatever comes next — synthetic + LoRA, or
+   rationale-supervised LoRA — the codebook clause is a real and cheap gain on the market boundary
+   and is not, by itself, an answer to the mention-vs-about confusion.
+4. **$0.397133 of the step's $1.50 is spent** across both registrations, and the recovery clause of
+   r2 was never used: one pod, one create, no re-creation.
+5. **The environment has three new readings** — ssh 50 s, load 142.7 s, v2 at +18.9 % over base —
+   and the next registration should price the prefill from the measurement rather than the ×1.5 bound.
+
+**Tally.** contract-health (contract-gap + spec-gap + verify-gap) **12** · paid (process + env) **4**.
+Sixteen entries on a re-registration that moved four rungs, and **five of the twelve contract-health
+ones are defects the adversarial review found in work this session had already written** — the
+producer's copied thresholds, the typed first-reply recipe, the iteration-bounded poll, the bypassed
+recovery clause and the leg the reading came from. Every one of them was closed at $0, before the
+create, and each carries a mutation that was watched to go red. The paid four are the environment
+(three new spans, and a pod locale that eats a proof) and the process notes on the producer choice
+and the anchor's timing. **Nothing was found on the pod that was not found before it.**
