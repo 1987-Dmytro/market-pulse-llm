@@ -1,0 +1,1065 @@
+{
+  "attempt": "there is no ONE-ATTEMPT clause here and that is deliberate, exactly as in r1. This is a production population, and the exam rows inside it are answered BECAUSE they are in the population and not because anyone is taking a shot. The attempt `pass1-fewshot` left intact stays intact: it belongs to a bar on the fourteen, and no bar on the fourteen is being taken here",
+  "authority": "the operator's ruling of 2026-08-21 (evening) in the team-lead session, registered in docs/STATUS.md «Открытые решения» п. 1 (е): re-register the remainder as `pass1-window r2` with a cap of $2.00 (step ≤ $2.17); the alternatives — a pass-2 smoke on the 24 covered threads first, and stopping the line — were rejected. The pass-2 smoke on the covered threads enters `pass2-signals` as a rung BEFORE its full run",
+  "bars": {
+    "completeness": {
+      "answered_means": "a reply came back and was written into the out-file, counted by DISTINCT id. A parse refusal is an ANSWERED row whose reply the parser refused — the two counts are NOT disjoint, and up to 9 answered rows may be refusals without the bar moving. A gate that treated a refusal as unanswered would report RED at 892 / 901 on a run this bar accepts ([[measure_on_the_rows_the_gate_scores]])",
+      "answered_minimum": 901,
+      "owed": 901,
+      "parse_refusals_fraction": 0.01,
+      "parse_refusals_maximum": 9,
+      "refusals_are_counted_by_cause": "never dropped and never summed into a single «other». An unreadable reply is a disagreement with a name, and unreadable replies pile up wherever the answer is the quiet one ([[the_empty_class_eats_the_parse_failures]])",
+      "rule": "answered 901 / 901 · every row's `rendering_sha256` equals its pack item's · parse refusals ≤ 9 (1%). All three, or RED",
+      "sha_mismatches_maximum": 0,
+      "sha_rule": "the pod re-renders every item from its own fields and REFUSES the whole leg if one sha does not match, so a mismatch on the Mac means the out-file and the pack have parted after the run — a copy-back error or a rebuilt pack. Either is RED",
+      "why_the_count_moved_from_r1": "the FRACTION is r1's and the count is derived from it: 1 % of 901 is 9. Carrying r1's own count across a population that shrank by 131 rows would have been a threshold that quietly stopped meaning what it said ([[a_moved_constant_fails_green]])"
+    },
+    "report_only": {
+      "our_readings": [
+        "категория_личное",
+        "молочный_бренд"
+      ],
+      "our_readings_rule": "the two labels the «our rows» readings count, carried here because gate_pass1_fewshot.py::leg_table — the function D2's clause names — reads them from `bars.dev_gate.our_readings`, a key this record does not have and must not invent: this contract has NO dev gate. D2 hands leg_table a view carrying these readings under the name it reads, ONE THREAD AT A TIME, because within a thread a msg_id is unique and the scorer's answer map is keyed on the msg_id alone",
+      "rule": "READINGS, each captioned «not a bar». None of them can pass, fail or close anything, and none of them may be quoted as a verdict on v2",
+      "the_450_not_in_dev_200": "the same reading on the rows no prompt was ever tuned against. Its «our» denominator is ZERO BY CONSTRUCTION and always will be (Dv652)",
+      "the_650_labelled_rows": "agreement over every labelled row of the window, against results/labels_pass1_r1.jsonl + _r2.jsonl through scorer.reader_comment_agreement as gate_pass1_fewshot.py::leg_table computes it, scored per THREAD",
+      "the_dev_200": "should reproduce r2's 136/200 and 38/49 up to decoding noise, now over all 200 rows for the first time on this population. A difference is STATED and not explained away",
+      "the_fourteen": "the gold rows' agreement over the WHOLE window, with the multiplicity named — the FIFTH look at these fourteen rows. See `return_to_the_operator`",
+      "the_label_distribution": "what v2 said over the union 1 032, and per thread",
+      "the_pass_2_filter_table": "per thread, over the WHOLE window: the rows pass 1 labelled категория_личное / молочный_бренд / сеть_ритейлер, their characters and the entity block size. THIS is what prices `pass2-signals` — r1's census covered 24 of 127 callable threads and could not",
+      "the_rows_bought_twice": "the volume's surviving out-file is copied back as EVIDENCE and its rows beyond the Mac's 131 are counted and PRICED («N rows bought twice, N × the measured s/call»). It is never merged: two answers for one id is an ambiguity this registration does not buy"
+    },
+    "the_windows_completeness": {
+      "keyed_on": "the PAIR (thread, msg_id). Seven msg_ids of the 650 labelled rows live in two threads each and the union is taken across two files — a union keyed on the msg_id would silently merge them (the ADDENDUM of docs/reports/pass1-window.md)",
+      "not_a_bar_of_this_registration": true,
+      "owed": 1032,
+      "rule": "D2 reports the WINDOW's completeness — answered / 1032 over the UNION of r1's out-file and this one — BESIDE the bar above. It is the number pass 2 needs and it is not what this registration can pass or fail: this contract bought 901 comments and can only be graded on them. A GO here with the union short of 1032 is a GO on this contract and an open window, and the report says both"
+    }
+  },
+  "contract": "docs/PROMPT-pass1-window-r2.md",
+  "do_not": [
+    "no change to prompt v2, the neighbour rule, the labels, the gold or any sealed record",
+    "no change to results/pass1_window_pack.json, results/pass1_window_v2.jsonl or results/prereg_pass1_window.json — r1's pack, out-file and record are sealed inputs",
+    "no merge of the volume's surviving out-file — it is copied, counted and priced",
+    "no second leg, no dev gate, no bar on the fourteen",
+    "no re-purchase of reader context — the v5b / v4 / topup verdicts are read, never bought",
+    "no generation before H6 re-derives and the D0′ commits are in",
+    "never leave --watch while a pod is live",
+    "never two billing endpoints CONCURRENTLY; one re-creation after a PROVEN deletion",
+    "no third pod"
+  ],
+  "frozen_when_the_pod_exists": [
+    "docs/PROMPT-pass1-window-r2.md and every other docs/PROMPT-*.md — team-lead files",
+    "src/market_pulse/prompts.py — v2, v1, the renderer and the parser",
+    "src/market_pulse/scorer.py — the single judge, pinned by sealed records",
+    "results/pass1_window_pack.json and results/pass1_window_v2.jsonl — r1's pack and its replies, the two inputs this pack was subtracted from",
+    "results/prereg_pass1_window.json — r1's record, sealed and superseded",
+    "results/pass1_window_r2_pack.json — this pack, its items and their per-item shas",
+    "results/prereg_pass1_window_r2.json — this record",
+    "results/labels_pass1_r1.jsonl and _r2.jsonl — the team lead's labels",
+    "results/reader_gold_w1_r2.json — the gold",
+    "results/pass1_probe_b_rows.jsonl, results/pass1_dev_base.jsonl, results/pass1_dev_v2.jsonl — the three files the RATE is derived from",
+    "results/prereg_pass1_fewshot.json and _r2.json — sealed, superseded, never re-opened",
+    "scripts/gate_pass1_fewshot.py and scripts/gate_pass1_window.py — instruments this gate IMPORTS and EXECUTES, never edits",
+    "scripts/pass1_fewshot_pod_runner.py — the transport that runs ON the pod",
+    "results/spend_pass1_window_r2.json — the step anchor. Regenerating it re-zeroes the step at that day's balance, which is the one way this cap stops being a cap",
+    "scripts/gate_pass1_window_r2.py and scripts/build_pass1_window_r2_pack.py — pinned by this record; an edit after the create moves a pin the gate itself is read through"
+  ],
+  "h6": {
+    "mismatches": [],
+    "reading": "every registered number re-derives",
+    "rows": [
+      {
+        "agrees": true,
+        "formula": "results/pass1_window_r2_pack.json: the r1 pack's leg MINUS the ids of the r1 out-file",
+        "mode": "equals",
+        "name": "population_owed",
+        "re_derived": 901,
+        "registered": 901
+      },
+      {
+        "agrees": true,
+        "formula": "901 owed + 131 answered by r1 = the window's 1 032 payable comments",
+        "mode": "equals",
+        "name": "the_owed_plus_what_r1_bought_is_the_window",
+        "re_derived": 1032,
+        "registered": 1032
+      },
+      {
+        "agrees": true,
+        "formula": "mean of `seconds` over 64 rows of results/pass1_probe_b_rows.jsonl",
+        "mode": "equals",
+        "name": "slowest_base_pod_seconds_per_call",
+        "re_derived": 5.161578,
+        "registered": 5.162
+      },
+      {
+        "agrees": true,
+        "formula": "mean of `seconds` over 200 rows of results/pass1_dev_base.jsonl",
+        "mode": "equals",
+        "name": "fastest_base_pod_seconds_per_call",
+        "re_derived": 2.293075,
+        "registered": 2.293
+      },
+      {
+        "agrees": true,
+        "formula": "the slowest base pod over the fastest, ONE prompt, two pods",
+        "mode": "equals",
+        "name": "the_pod_class_spread",
+        "re_derived": 2.250942,
+        "registered": 2.25
+      },
+      {
+        "agrees": true,
+        "formula": "mean(results/pass1_dev_v2.jsonl) / mean(results/pass1_dev_base.jsonl)",
+        "mode": "equals",
+        "name": "v2_over_base_uplift",
+        "re_derived": 1.188701,
+        "registered": 1.189
+      },
+      {
+        "agrees": true,
+        "formula": "mean(probe-b) × the uplift",
+        "mode": "equals",
+        "name": "seconds_per_call_derived",
+        "re_derived": 6.135572,
+        "registered": 6.14
+      },
+      {
+        "agrees": true,
+        "formula": "the rounding of this line is UP, which is the conservative direction: a charge under the derived rate buys seconds the arithmetic does not have",
+        "mode": "at_least",
+        "name": "the_charged_rate_is_not_below_the_derivation",
+        "re_derived": 6.14,
+        "registered": 6.135572
+      },
+      {
+        "agrees": true,
+        "formula": "the charge over pod xpz3zb7yxus5cw's measured 4.498473 s/call — the only v2 rate this line has measured on a window pod",
+        "mode": "at_least",
+        "name": "the_charge_is_above_what_the_r1_window_pod_ran_at",
+        "re_derived": 6.14,
+        "registered": 4.498473
+      },
+      {
+        "agrees": true,
+        "formula": "901 calls × 6.14 s/call",
+        "mode": "equals",
+        "name": "generation_seconds",
+        "re_derived": 5532.14,
+        "registered": 5532.14
+      },
+      {
+        "agrees": true,
+        "formula": "ssh 500 + stage/launch 150 + load 450 + generation 5532.14 + overhead 1300",
+        "mode": "equals",
+        "name": "total_seconds",
+        "re_derived": 7932.14,
+        "registered": 7932.14
+      },
+      {
+        "agrees": true,
+        "formula": "7932.14 / 3600",
+        "mode": "equals",
+        "name": "hours",
+        "re_derived": 2.203372,
+        "registered": 2.2034
+      },
+      {
+        "agrees": true,
+        "formula": "2.203372 h × $0.8/h",
+        "mode": "equals",
+        "name": "worst_case_usd_at_the_price_ceiling",
+        "re_derived": 1.762698,
+        "registered": 1.7627
+      },
+      {
+        "agrees": true,
+        "formula": "2.203372 h × $0.53/h",
+        "mode": "equals",
+        "name": "worst_case_usd_at_the_lora_b_price",
+        "re_derived": 1.167787,
+        "registered": 1.1678
+      },
+      {
+        "agrees": true,
+        "formula": "worst case ≤ $2.00",
+        "mode": "below",
+        "name": "the_worst_case_is_inside_the_cap",
+        "re_derived": 1.762698,
+        "registered": 2.0
+      },
+      {
+        "agrees": true,
+        "formula": "8600 s / 3600 × $0.8/h",
+        "mode": "equals",
+        "name": "hard_stop_usd_at_the_price_ceiling",
+        "re_derived": 1.9111,
+        "registered": 1.9111
+      },
+      {
+        "agrees": true,
+        "formula": "hard stop in dollars ≤ $2.00",
+        "mode": "below",
+        "name": "the_hard_stop_sits_under_the_cap",
+        "re_derived": 1.9111,
+        "registered": 2.0
+      },
+      {
+        "agrees": true,
+        "formula": "8600 s ≥ the whole worst case in seconds",
+        "mode": "at_least",
+        "name": "the_hard_stop_is_above_the_worst_case",
+        "re_derived": 8600.0,
+        "registered": 7932.14
+      },
+      {
+        "agrees": true,
+        "formula": "$2.00 / $0.8/h × 3600",
+        "mode": "equals",
+        "name": "session_ceiling_seconds",
+        "re_derived": 9000.0,
+        "registered": 9000.0
+      },
+      {
+        "agrees": true,
+        "formula": "cap / price ceiling ≥ the hard stop, so the PLATFORM holds the binding one",
+        "mode": "at_least",
+        "name": "the_session_ceiling_is_not_below_the_hard_stop",
+        "re_derived": 9000.0,
+        "registered": 8600.0
+      },
+      {
+        "agrees": true,
+        "formula": "500 s / 3600 × $0.8/h",
+        "mode": "equals",
+        "name": "one_dead_pod_at_rung_2_usd",
+        "re_derived": 0.111111,
+        "registered": 0.1111
+      },
+      {
+        "agrees": true,
+        "formula": "500 + 7932.14",
+        "mode": "equals",
+        "name": "one_dead_pod_then_the_full_worst_case_seconds",
+        "re_derived": 8432.14,
+        "registered": 8432.14
+      },
+      {
+        "agrees": true,
+        "formula": "one dead pod + the full worst case ≤ 8600 s",
+        "mode": "below",
+        "name": "the_recovery_clause_fits_the_hard_stop",
+        "re_derived": 8432.14,
+        "registered": 8600.0
+      },
+      {
+        "agrees": true,
+        "formula": "8432.14 s / 3600 × $0.8/h",
+        "mode": "equals",
+        "name": "one_dead_pod_then_the_full_worst_case_usd",
+        "re_derived": 1.873809,
+        "registered": 1.8738
+      },
+      {
+        "agrees": true,
+        "formula": "one dead pod + the full worst case ≤ $2.00",
+        "mode": "below",
+        "name": "the_recovery_clause_fits_the_cap",
+        "re_derived": 1.873809,
+        "registered": 2.0
+      },
+      {
+        "agrees": true,
+        "formula": "8600 − 7932.14",
+        "mode": "equals",
+        "name": "widest_dead_pod_that_still_fits_seconds",
+        "re_derived": 667.86,
+        "registered": 667.86
+      },
+      {
+        "agrees": true,
+        "formula": "the widest dead pod that still fits ≥ rung 2's ceiling, so a pod killed by rung 2 can never be the one that closes the recovery clause",
+        "mode": "at_least",
+        "name": "the_knife_edge_is_wider_than_rung_2",
+        "re_derived": 667.86,
+        "registered": 500.0
+      },
+      {
+        "agrees": true,
+        "formula": "rung 2's ceiling is a create-elapsed and the meter stops at `pod delete`. r1 measured that span at {'7spsy61lpjumrz': 78.5, 'juupgp6y77jvuz': 0.1} and the worse is charged, so a real rung-2 death bills 578.5 s and not 500. That plus the full worst case must still fit the hard stop — it does, by 89.36 s, which is the honest margin and is 18× wider than r1's 4.96 s",
+        "mode": "below",
+        "name": "REASON — the recovery clause is reachable WITH the measured deletion tail",
+        "re_derived": 8510.64,
+        "registered": 8600.0
+      },
+      {
+        "agrees": true,
+        "formula": "widest_dead_pod_that_still_fits (BILLED) minus the charged deletion tail — the widest CREATE-ELAPSED at which a pod may be killed with the re-creation still reachable",
+        "mode": "equals",
+        "name": "the_widest_rate_KILL_that_stays_recoverable_seconds",
+        "re_derived": 589.36,
+        "registered": 589.36
+      },
+      {
+        "agrees": true,
+        "formula": "rung 2's ceiling 500 s plus the charged deletion tail 78.5 s, against the widest dead pod in BILLED seconds",
+        "mode": "below",
+        "name": "REASON — a rung-2 death is ALWAYS inside the recovery window",
+        "re_derived": 578.5,
+        "registered": 667.86
+      },
+      {
+        "agrees": true,
+        "formula": "rung 3's create-anchored backstop is the charged pre-generation, so a KILL there bills the backstop plus the tail. r1's recovery block carried «a KILL at rung 2 or rung 3 is inside that window» and the second half was never true at these spans. The check asserts the INEQUALITY that makes it false, so the sentence cannot come back ([[a_borrowed_rule_carries_an_unstated_population]])",
+        "mode": "at_least",
+        "name": "REASON — a rung-3 BACKSTOP death is NEVER inside it, and r1's record said it was",
+        "re_derived": 1178.5,
+        "registered": 667.86
+      },
+      {
+        "agrees": true,
+        "formula": "the charged pre-generation is already past the widest recoverable create-elapsed BEFORE the first call lands, so every rung-4 KILL in that world is a STOP. The contract's worked example («8 s/call, ≈ 20 calls in, ≈ $0.10, re-creation still reachable») holds at the 252.5 s r1 MEASURED and at no pre-generation above 429.36 s. Both arms are published; this row is the inequality that makes the flattering one unquotable",
+        "mode": "at_least",
+        "name": "REASON — at the CHARGED pre-generation NO rate KILL is recoverable, at any rate",
+        "re_derived": 1100.0,
+        "registered": 589.36
+      },
+      {
+        "agrees": true,
+        "formula": "450 s ≥ max(every boot this stack has measured)",
+        "mode": "at_least",
+        "name": "boot_ceiling_over_the_worst_measured_boot",
+        "re_derived": 450.0,
+        "registered": 353.0
+      },
+      {
+        "agrees": true,
+        "formula": "500 s ≥ the widest 2026-08-20 reading (262.5 s), and both readings that day are LOWER bounds",
+        "mode": "at_least",
+        "name": "ssh_deadman_over_the_widest_2026_08_20_reading",
+        "re_derived": 500.0,
+        "registered": 262.5
+      },
+      {
+        "agrees": true,
+        "formula": "rung 4 prices the attempt with the overhead on every poll, so a second copy would be a second budget",
+        "mode": "equals",
+        "name": "the_projection_gate_and_the_money_block_charge_ONE_overhead",
+        "re_derived": 1300.0,
+        "registered": 1300.0
+      },
+      {
+        "agrees": true,
+        "formula": "1% of 901 calls, floored",
+        "mode": "equals",
+        "name": "parse_refusals_maximum",
+        "re_derived": 9,
+        "registered": 9
+      },
+      {
+        "agrees": true,
+        "formula": "(8600 − 1300 − 1100) / 901",
+        "mode": "equals",
+        "name": "rung_4_knife_edge_at_the_CHARGED_pre_generation",
+        "re_derived": 6.8812,
+        "registered": 6.88
+      },
+      {
+        "agrees": true,
+        "formula": "(8600 − 1300 − 252.5) / 901",
+        "mode": "equals",
+        "name": "rung_4_knife_edge_at_the_MEASURED_pre_generation",
+        "re_derived": 7.8219,
+        "registered": 7.82
+      },
+      {
+        "agrees": true,
+        "formula": "the record carries two values for one span and the headline must quote the worse. r1 computed this curve at the measured span while its budget charged the other one, then wrote its headline off the flattering arm a section later (Dv655). The check is that the charged arm's edge is the SMALLER of the two",
+        "mode": "below",
+        "name": "REASON — the CHARGED span is the tighter arm and it is the headline",
+        "re_derived": 6.8812,
+        "registered": 7.8219
+      },
+      {
+        "agrees": true,
+        "formula": "at the charged pre-generation the sustained rate the hard stop can pay for is 6.8812 s/call and the rate charged is 6.14. This is the inequality that makes the budget self-consistent",
+        "mode": "at_least",
+        "name": "REASON — the budget's own sustained rate covers the rate it CHARGES",
+        "re_derived": 6.8812,
+        "registered": 6.14
+      },
+      {
+        "agrees": true,
+        "formula": "the slowest single reply ever measured here is 6.214 s (probe-b). Rung 4 prices the remainder at max(mean, last call), so one such call landing as the most recent row must NOT project past the stop. r1's charged-span edge was 3.9729 against a measured worst of 4.066 — BELOW it, headroom 0.98, and that was reported to the operator as the risk it was",
+        "mode": "at_least",
+        "name": "REASON — the charged edge is above the SLOWEST CALL this stack has measured",
+        "re_derived": 6.8812,
+        "registered": 6.214
+      },
+      {
+        "agrees": true,
+        "formula": "the two base pods are 2.250942× apart in seconds. Their requests are 1.05633× apart and their replies 1.01746× apart, so neither the prefill nor the decode explains it. The check is that the seconds ratio EXCEEDS the request ratio — if width explained the spread it would not",
+        "mode": "at_least",
+        "name": "REASON — the pod-class spread is not a WIDTH difference in disguise",
+        "re_derived": 2.250942,
+        "registered": 1.05633
+      },
+      {
+        "agrees": true,
+        "formula": "r2's pod was deleted 82.9 s after its last row landed, and that span carried the whole of what this line buys. Scaled by the 400 rows it MEASURED it is 186.7 s for 901, and 1300 s is charged. The scaling is generous: r2's gate ran the SCORER over its rows and rung 7 only parses them",
+        "mode": "at_least",
+        "name": "REASON — the overhead did not move when the rows it covers went 400 → 901",
+        "re_derived": 1300.0,
+        "registered": 186.7
+      },
+      {
+        "agrees": true,
+        "formula": "ssh, stage/launch, load, generation and overhead are five disjoint spans and their sum is total_seconds. The copy-back of the volume's surviving out-file is inside stage/launch and is not a sixth line",
+        "mode": "equals",
+        "name": "REASON — nothing is counted twice in the seconds line",
+        "re_derived": 7932.14,
+        "registered": 7932.14
+      },
+      {
+        "agrees": true,
+        "formula": "answered_minimum = owed = the pack's item count. A bar registered over a number the leg does not ask is a bar no run can take ([[an_absolute_bar_needs_a_reachability_state]])",
+        "mode": "equals",
+        "name": "REASON — the bar is reachable: the leg asks exactly what the bar owes",
+        "re_derived": 901,
+        "registered": 901
+      },
+      {
+        "agrees": true,
+        "formula": "r1's pod on the clock ($0.173694) + this contract's cap. r1's step ledger stays OPEN for `money-anchors`; this contract opens a FRESH step with its own cap",
+        "mode": "equals",
+        "name": "step_sum_usd",
+        "re_derived": 2.173694,
+        "registered": 2.1737
+      }
+    ],
+    "rule": "every number docs/PROMPT-pass1-window-r2.md prints, re-derived from the formula the contract names for it. `equals` allows 1 % — a rounding is not a finding; `below` and `at_least` check the DIRECTION. The rows that matter are the INPUT rows: the arithmetic of a money block is the same multiplication done twice and cannot disagree with itself, so what H6 catches is a population that moved, a rate whose file no longer says what it said, and an inequality that stopped holding"
+  },
+  "instruments": {
+    "dropped_from_r2": {
+      "scorer_pass1_fewshot": "r2's D2 judge scored the dev gate and the fourteen against a bar. This contract has neither — its D2 readings are report-only and go through src/market_pulse/scorer.py, which is pinned above as `scorer`. A pin naming a script this run never calls is a pin nobody checks"
+    },
+    "gate": {
+      "moved_since_r1": true,
+      "rule": "a SIBLING of scripts/gate_pass1_window.py, and a sibling of an unusual kind: it LOADS that file a second time under its own module object (importlib) and re-binds the six path globals — PHASE, PREREG, RECORD, PACK, POD_LOG, LAUNCH_STAMP. The rung logic is not copied and not re-implemented: it is r1's, executing, byte for byte, against this registration. r1's gate is pinned by ITS sealed record and is never edited, and this file refuses to run if its sha ever moves",
+      "script": "scripts/gate_pass1_window_r2.py",
+      "sha256": "11322f38e98599bf2163c24fb2d53acbaafd85310605c9e02fbec1f2df87b85b",
+      "what_changed_at_all": "one behaviour: `--pre-create-check` is intercepted and its verdict is APPENDED to the run record every time it runs, GO and KILL alike. r1's printed the refusal that ended its session and recorded nothing — step 0.5's second finding",
+      "why_not_a_flag_on_r1s_gate": "docs/PROMPT-pass1-window-r2.md allows `--revision r2` only if r1's pinned bytes stay untouched. scripts/gate_pass1_window.py is pinned by results/prereg_pass1_window.json::instruments.gate.sha256, a sealed record of a closed PAID session, so any flag added to it moves those bytes. Dv624's split stands"
+    },
+    "gate_imported_from": {
+      "also_imported": {
+        "scripts/window_summary_5c2.py": "239d2d5fcc0f0c93158ca41383b5ce20beb7f8e9db38974913a302ea4831fdaf",
+        "why": "the gate hashes the pack through window_summary_5c2.sha256_of, so that file is an instrument of the pack guard"
+      },
+      "rule": "every pure rung computation — rung, clock, pre_create, gate_zero, gate_boot, leg_state, projection, scp, pod_delete — comes from here, through r1's gate, unedited. This is the file r2's sealed record pins at 07a5a07aa8e94d98…",
+      "script": "scripts/gate_pass1_fewshot.py",
+      "sha256": "07a5a07aa8e94d980704b82dbddb4c58abe36b4c6fb3f4f4a42a4f3fcf4d02ff"
+    },
+    "gate_runs_the_bytes_of": {
+      "pinned_by": "results/prereg_pass1_window.json::instruments.gate.sha256",
+      "rule": "the sibling above holds this file to exactly this sha BEFORE it executes it. An imported instrument is an instrument, and an EXECUTED one is more so ([[the_guard_hashes_the_half_that_cannot_move]])",
+      "script": "scripts/gate_pass1_window.py",
+      "sha256": "8b812597c4ea3bf05b47084dff2a73618d0d2ccbb9097ad9af7c00fa3a24e489"
+    },
+    "gold": {
+      "collapse": "scripts/score_reader_probe_b.py::collapse",
+      "collapse_sha256": "952a14dc8fc9d036f1dabb969ba7abb267282c40e0a62296d21f2015b3fae64c",
+      "comparison": "market_pulse.scorer.reader_comment_agreement",
+      "record": "results/reader_gold_w1_r2.json",
+      "rule": "a reading D2 owes with no producer named at D0 is a producer invented after the money ([[a_registered_bar_may_have_no_producer]]). This is the producer, and it yields a CENSUS ROW with the multiplicity of return_to_the_operator beside it",
+      "sha256": "716ff4174bdafa5957caa4d038a11241b6eb299df4035a5f0e983217ec2a46d9",
+      "why_not_bar_p1": "scripts/score_pass1_probe.py::bar_p1 is the right COMPARISON and the wrong INSTRUMENT. It returns `passed`, `minimum_agreed` and a `losses.budget` — it is a BAR, and this contract may not take a bar on the fourteen at all. D2 calls scorer.reader_comment_agreement with probe_b.collapse on both sides, which is exactly what bar_p1 computes BEFORE its threshold arm, and stops there. A `passed` field on this row would be the promotion the ADR forbids in the very shape it forbids it ([[a_flag_that_asserts_turns_a_poll_into_a_verdict]])",
+      "why_not_leg_table": "the fourteen are GOLD and not labels. gate_pass1_fewshot.py::leg_table compares against results/labels_pass1_r*.jsonl and NOT ONE of the fourteen pairs is in that map — 0 of 14, checked. The reading over the 650 labelled rows and the 450 outside dev-200 is leg_table's; the reading over the fourteen cannot be"
+    },
+    "packs": {
+      "borrowed": {
+        "scripts/build_pass1_fewshot_packs.py": "8f52c8ae87bbc339049837ea5ace7e6ae933d331a73fce28ed24db5103cee69e"
+      },
+      "producer": "scripts/build_pass1_window_r2_pack.py",
+      "reads": {
+        "results/pass1_window_pack.json": "799dbca9049a495c6cf31e4335c090d6e4c9d334e2b3204b93ed8dfa30de52da",
+        "results/pass1_window_v2.jsonl": "e888d466d36e32a08fa13e5598700bc0cdfffd768eba761df3f51881375eb740"
+      },
+      "rule": "a THIN sibling of scripts/build_pass1_window_pack.py that subtracts and never renders. The items of this pack ARE r1's items — same fields, same neighbours, same rendering_sha256 — because a re-render would move the shas the pod's handshake, rung 7 and D2's union census all compare against. `ceiling_check` is the only borrowed function and it reads `rendered_chars`; the r1 pack's own length block is re-measured with it as a positive control before the 901's is published",
+      "sha256": "c8345df6b747e3ab45b5dabbd799caf34b2c43863c97daae2a6780d68caa3395",
+      "the_r1_producer_is_not_re_run": "scripts/build_pass1_window_pack.py stays exactly where r1's sealed record pins it. It is not called, not imported and not edited: calling it would re-enumerate the population and re-render 1 032 requests, and the only thing that could produce is a disagreement with the record that already registered them"
+    },
+    "parser": {
+      "entry_point": "market_pulse.prompts.parse_pass1",
+      "module": "src/market_pulse/prompts.py",
+      "sha256": "b70e2114b03a76dc2c8cfc9b559bf7ef22e9193d841b4fccc5ed8bd0a40294ab"
+    },
+    "population_producer": {
+      "rule": "population() is CALLED at build time; the counts below are what it returned",
+      "script": "scripts/gate_census_w1_reader.py",
+      "sha256": "42be312ef873a73f434b39cfa8060f6d110580ed1ace36ea2ee37b4d7c3e1c70"
+    },
+    "prompt_sha256": {
+      "pass1_comment_gm4_v1": "5a4a3cb6ce4db89adb304c04de41210fdabfde0c53addfdb75adba0f1d866650",
+      "pass1_comment_gm4_v2": "f5f6a5afdd8573ba52bde5cf79041cf9a01d8421ea402c0f39d2ea1c1d430aee"
+    },
+    "prompt_v1_did_not_move": true,
+    "renderer": "market_pulse.prompts.pass1_messages_gm4",
+    "scorer": {
+      "module": "src/market_pulse/scorer.py",
+      "sha256": "dbb5406a502f813ba1b4940e0914310efd632386a8da60e0c002cc8964a97d4f"
+    },
+    "transport": {
+      "rule": "it CALLS scripts/pass1_pod_runner.py, which calls the shipped v5 runner. One model load serves every leg of a pack, and each leg is answered into its own out-file",
+      "script": "scripts/pass1_fewshot_pod_runner.py",
+      "sha256": "84f15a148e63ea37123a5306336ebfb4bb10d104ef8790e347c2c505fd8b4982"
+    },
+    "v2_is_v1_plus_two_paragraphs": {
+      "codebook_clause_sha256": "178c30c6bcabc7b7eef2062d40cd76880a61e4d25682467fc2cbf80664c3f8c7",
+      "examples_slot_sha256": "c98e446d28f9b2c784144abd5b5d6e6ef155d966f89e890927a45e0c8b282a2a",
+      "rule": "PASS1_COMMENT_PROMPT_V2 == PASS1_COMMENT_PROMPT + the clause + the slot, and nothing else. tests/test_pass1_prompt.py asserts it in both directions"
+    }
+  },
+  "kill_clock": [
+    {
+      "before": "the endpoint exists",
+      "read": "costPerHr in the create response is the meter of record (Dv448)",
+      "rule": "live price > $0.8/h at create → STOP, no endpoint. The backstop stamp is checked against the cumulative hard stop in the same command, and `--price` runs the recovery clause on the state BEFORE this pod joins it (Dv615)",
+      "rung": 1
+    },
+    {
+      "before": "the model is loaded",
+      "read": "money.arithmetic.ssh_rule — the spread this ceiling is, and its five readings",
+      "rule": "ssh dead-man ≤ 500 s of this pod's create-elapsed or KILL. r2's ceiling, unmoved: two pods of 2026-08-20 were still unreachable past 230 s and both readings are LOWER bounds, so two fast days do not narrow it. One dead pod under it costs $0.1111",
+      "rung": 2
+    },
+    {
+      "anchor": "launched_at",
+      "and_it_is_where_the_executor_reads_the_MONEY_world": "this rung's GO carries `first_reply_at_create_elapsed_seconds`, and that number says which arm of money.arithmetic.cumulative.projection_gate.single_call_sensitivity the pod is in. r1 recorded it at 252.5 s of a 1 100 s backstop and never had to act on it; the runbook makes it a reading the executor takes deliberately",
+      "backstop_rule": "and a create-anchored BACKSTOP beside it: first reply ≤ 1100 s of create-elapsed or KILL — ssh 500 + stage/launch 150 + load 450. It bounds the launch anchor: a stamp taken late cannot buy a window the registration never priced",
+      "backstop_seconds": 1100.0,
+      "before": "the first reply",
+      "cannot_always_be_a_standalone_gate": "`--boot` needs a LIVE pod, and a watch KILL deletes the pod inside its own loop. On a killed run this rung is reported from the artifacts — the launch stamp, the first row's `boot_seconds` and `elapsed_since_start` — and never back-filled (Dv649, [[a_registered_bar_may_have_no_producer]])",
+      "read": "the `launched_at` stamp the runbook writes into the pod's run directory the moment the runner starts, copied back by --watch and recorded in results/pass1_window_r2_run.json. It is never typed",
+      "rule": "launch → first reply ≤ 450 s of the runner's OWN `launched_at` or KILL. A run record without `launched_at` cannot report GO on this rung — a deadline that cannot be demonstrated has not been passed (Dv605)",
+      "rung": 3
+    },
+    {
+      "before": "the run is allowed to continue past a call",
+      "read": "money.arithmetic.cumulative.projection_gate — the formula and its terms",
+      "rule": "projection gate every 20 calls: the projected attempt total at MEASURED rates, with the leg's remaining calls priced at max(mean, last call) and the registered overhead added, must fit the cap at the LIVE price AND the cumulative hard stop, else KILL. The registered interval is a FLOOR — the computation is local and free and --watch runs it on every poll",
+      "rung": 4,
+      "this_is_the_rate_rung": "and there is no other. It killed r1's pod correctly at 131 of 1 032 and it is the gate that makes charging a rate at all survivable: a pod slower than the charge is deleted at the first poll that shows it. See projection_gate.why_there_is_no_separate_rate_rung"
+    },
+    {
+      "before": "the executor may look away",
+      "read": "held by scripts/gate_pass1_window_r2.py --watch, a BLOCKING loop",
+      "rule": "liveness: 600 s with no new answered row and no new pod-log line → KILL. The deadline is measured from the LAST EVENT and never from create, and an event is a RISE — a failed copy that shortens a local file is not work and does not refresh it",
+      "rung": 5
+    },
+    {
+      "before": "anything",
+      "read": "the `--terminate-after` stamp, read back and refused on overshoot",
+      "rule": "cumulative hard stop 8600 s, PLATFORM-held. Each pod's --terminate-after is its own create plus what the stop has left, and the overshoot it forgives is the registered 60 s",
+      "rung": 6
+    },
+    {
+      "and_the_window_beside_it": "D2 reports the WINDOW's completeness — answered / 1032 over the UNION of r1's out-file and this one — BESIDE the bar above. It is the number pass 2 needs and it is not what this registration can pass or fail: this contract bought 901 comments and can only be graded on them. A GO here with the union short of 1032 is a GO on this contract and an open window, and the report says both",
+      "before": "the out-file is handed to pass 2",
+      "on_red": "RED does not delete anything already bought and does not re-run the pod: the out-file, its refusals by cause and its sha mismatches go back to the team lead with the census. A partial out-file is still the evidence, and the resume can re-ask only what has no reply — but a second pod is the recovery clause's, and the recovery clause allows one",
+      "read": "bars.completeness — all three numbers, on the Mac after scp",
+      "rule": "answered 901 / 901 · every row's `rendering_sha256` equals its pack item's · parse refusals ≤ 9 (1%). All three, or RED",
+      "rung": 7
+    }
+  ],
+  "money": {
+    "arithmetic": {
+      "boot_rule": "≥ the worst boot this stack has measured (353.0 s, lora-b) — r2's derivation, unmoved, and anchored on the runner's own `launched_at`. xpz3zb7yxus5cw loaded in 164.9 s, a sixth reading and another FLOOR: this stack's boot is not a constant and the ceiling is charged at the maximum",
+      "boot_seconds_charged": 450.0,
+      "boots_measured": {
+        "lora-b, A6000 + the same volume": [
+          267.0,
+          293.0,
+          353.0
+        ],
+        "pass1-fewshot r2, the 4090 and the same volume": [
+          142.709
+        ],
+        "pass1-probe-b, the 4090 this contract prefers": [
+          237.155
+        ],
+        "pass1-window r1, xpz3zb7yxus5cw": [
+          164.915
+        ],
+        "reader-v5b / pass1-probe stack, inference": [
+          146.8,
+          192.1,
+          237.155
+        ]
+      },
+      "calls": {
+        "v2": 901
+      },
+      "cumulative": {
+        "backstop_tolerance_rule": "how far the `--terminate-after` stamp actually handed to `pod create` may sit BEYOND the one the hard stop computes. Only overshoot is bounded — a window rounded DOWN shortens itself and is always safe. The gate READS it from here and a record without this field is a refusal, not a default",
+        "backstop_tolerance_seconds": 60.0,
+        "hard_stop_hours": 2.3889,
+        "hard_stop_rule": "cumulative billed ≤ 8600 s = $1.9111 at the $0.8/h ceiling. It sits UNDER the $2.00 cap it defends and it is the PLATFORM that enforces it, so it protects even a hung call no gate can see. r1's stop does not carry over: that number was computed for 1 032 calls at a rate this contract repeals, and a stop copied for its algorithm would have brought its number with it (Dv613)",
+        "hard_stop_seconds": 8600.0,
+        "hard_stop_usd_at_the_price_ceiling": 1.9111,
+        "projection_gate": {
+          "every": "20 calls",
+          "formula": "billed_by_closed_pods + elapsed_on_this_pod + the leg's remaining calls × its s/call + overhead_seconds. The leg is priced at its MEASURED rate — the larger of its mean and its last call — as soon as it has a reply, and at the registered rate before that",
+          "overhead_rule": "the SAME 1 300 s the money block charges, and it has to be: rung 4 prices the attempt with it on every poll, so a second copy here is a second budget. H6 asserts the two are one number",
+          "overhead_seconds": 1300.0,
+          "single_call_sensitivity": {
+            "at_the_CHARGED_pre_generation": {
+              "curve": [
+                {
+                  "at_call": 10,
+                  "create_elapsed_seconds": 1161.4,
+                  "kill_above_seconds_per_call": 6.89
+                },
+                {
+                  "at_call": 20,
+                  "create_elapsed_seconds": 1222.8,
+                  "kill_above_seconds_per_call": 6.898
+                },
+                {
+                  "at_call": 100,
+                  "create_elapsed_seconds": 1714.0,
+                  "kill_above_seconds_per_call": 6.974
+                },
+                {
+                  "at_call": 200,
+                  "create_elapsed_seconds": 2328.0,
+                  "kill_above_seconds_per_call": 7.093
+                },
+                {
+                  "at_call": 400,
+                  "create_elapsed_seconds": 3556.0,
+                  "kill_above_seconds_per_call": 7.473
+                },
+                {
+                  "at_call": 700,
+                  "create_elapsed_seconds": 5398.0,
+                  "kill_above_seconds_per_call": 9.463
+                },
+                {
+                  "at_call": 900,
+                  "create_elapsed_seconds": 6626.0,
+                  "kill_above_seconds_per_call": 674.0
+                }
+              ],
+              "headroom_over_the_slowest_call_measured": 1.107,
+              "pre_generation_seconds": 1100.0,
+              "source": "money.arithmetic.pre_generation_seconds — and rung 3's own create-anchored backstop",
+              "sustained_rate_the_hard_stop_can_pay_for": 6.8812
+            },
+            "at_the_MEASURED_pre_generation": {
+              "curve": [
+                {
+                  "at_call": 10,
+                  "create_elapsed_seconds": 313.9,
+                  "kill_above_seconds_per_call": 7.841
+                },
+                {
+                  "at_call": 20,
+                  "create_elapsed_seconds": 375.3,
+                  "kill_above_seconds_per_call": 7.86
+                },
+                {
+                  "at_call": 100,
+                  "create_elapsed_seconds": 866.5,
+                  "kill_above_seconds_per_call": 8.032
+                },
+                {
+                  "at_call": 200,
+                  "create_elapsed_seconds": 1480.5,
+                  "kill_above_seconds_per_call": 8.302
+                },
+                {
+                  "at_call": 400,
+                  "create_elapsed_seconds": 2708.5,
+                  "kill_above_seconds_per_call": 9.165
+                },
+                {
+                  "at_call": 700,
+                  "create_elapsed_seconds": 4550.5,
+                  "kill_above_seconds_per_call": 13.679
+                },
+                {
+                  "at_call": 900,
+                  "create_elapsed_seconds": 5778.5,
+                  "kill_above_seconds_per_call": 1521.5
+                }
+              ],
+              "headroom_over_the_slowest_call_measured": 1.259,
+              "pre_generation_seconds": 252.5,
+              "source": "pod xpz3zb7yxus5cw's create-elapsed at its first reply, 2026-08-21",
+              "sustained_rate_the_hard_stop_can_pay_for": 7.8219
+            },
+            "charged_rate_seconds_per_call": 6.14,
+            "formula": "(hard_stop − overhead − pre_generation − n × charged_rate) / (calls − n), and the pre_generation is the span this record carries two values for",
+            "slowest_call_in_the_stack": 6.214,
+            "the_headline": "at the pre-generation the budget CHARGES, the sustained rate the hard stop can pay for is 6.8812 s/call; the slowest single call this stack has ever measured is 6.214, so the edge sits 1.107× above it. At the pre-generation r1's pod actually MEASURED (252.5 s) the edge is 7.8219 s/call. BOTH arms are published and the WORSE is the headline — r1 computed this curve at the measured span while its budget charged the other one, and then wrote its headline off the flattering arm a section later (Dv630/655)",
+            "what_it_costs_if_it_fires": "the pod is deleted mid-run and the seconds already billed are gone. Every reply is flushed as it lands and the shipped resume skips every unit already answered — but `--pre-create-check` prices a re-creation at the FULL worst case ahead, so a KILL past the widest-dead-pod figure refuses the re-creation too. That is the whole cost, and it is what closed r1: its pod was paying its own 845 s out of the slack the stop had left",
+            "what_the_executor_can_do_about_it": "nothing after the create, and one thing before it: the charged pre-generation is ssh + stage/launch + load, and the staging half is HAND-DRIVEN. r1 measured ssh at 29 s, stage + launch at 54 s and the load at 164.9 s — 252.5 s against 1 100 charged. Every second between the ssh GO and the launch is a second rung 4 will not lend to the rate, and rung 3's GO is where the executor reads which world the pod is in"
+          },
+          "verdict": "KILL if the projection exceeds $2.00 at the LIVE price, or exceeds the 8600 s hard stop in seconds. The stricter binds",
+          "what_an_early_rate_KILL_costs_AT_BOTH_SPANS": "the contract's own worked example is «a pod at 8 s/call dies ≈ 20 calls in, ≈ $0.10, re-creation still reachable». That is TRUE at the pre-generation r1's pod measured (252.5 s: the kill lands at 412.5 s of create-elapsed, $0.0917 at the price ceiling, and the clause is reachable) and FALSE at the pre-generation this budget CHARGES (1100 s: the same kill lands at 1 260 s, $0.28, and the re-creation is REFUSED). See recovery_arithmetic.which_KILLS_stay_recoverable for the number that decides it. Both arms are published because a continuation's pre-generation is unknown and the CHARGED span is the one that governs the budget — the review found this record quoting the flattering arm, which is the very defect it indicts r1 for two keys above",
+          "why_one_leg": "one leg, so «every leg still owed» and «the running leg» are the same set. The formula is r2's, imported unedited and not weakened",
+          "why_there_is_no_separate_rate_rung": "this rung IS the rate rung. It re-prices the remainder on every poll at max(mean, last call) and kills any pod that cannot finish inside the hard stop at the FIRST poll that shows it. A separate rung reading the same number against the same stop would be the same check twice, and two gates on one number is how a threshold gets repealed in one of them"
+        },
+        "rule": "the hard stop and EVERY budget check count across ALL pods of this attempt, never per pod. `--terminate-after` on each pod is stamped at that pod's create plus the hard stop LESS what every closed pod already billed, so two pods cannot each be given a fresh window",
+        "session_ceiling_hours": 2.5,
+        "session_ceiling_rule": "cap / price ceiling — the longest session the cap can pay for. It is ≥ the hard stop, so the platform-held stop is the binding one and the cap is never what discovers an overrun",
+        "session_ceiling_seconds": 9000.0
+      },
+      "generation_seconds": 5532.14,
+      "hours": 2.203372,
+      "overhead_measured_on_r2": {
+        "billed_seconds": 1359.0,
+        "create_elapsed_at_the_watch_GO_seconds": 1276.1,
+        "measured_after_the_last_row_seconds": 82.9,
+        "pod": "8tpx8lf05n6skc",
+        "rows_answered": 400,
+        "rows_r2_registered": 464,
+        "what_that_stamp_is": "the create-elapsed of the poll on which --watch SAW every row answered, not the instant the last row landed. The loop polls at 20 s, so the true last row is somewhere in (at_go − 20, at_go] and this reading is the LATER end — which makes the span below a lower bound on the overhead measured, and therefore the conservative direction ([[a_paced_log_is_an_interleavable_clock]])",
+        "why_the_two_differ": "r2 budgeted the copy-back of 464 rows — 400 dev and the shot's 64 — and its shot never fired, so what its overhead line actually carried was the 400 answered. The scaling below divides by what was MEASURED, which is the smaller denominator and the more expensive per row ([[a_count_in_prose_is_not_the_enumeration]])"
+      },
+      "overhead_rule": "1300 s — the copy-back of ≤ 901 rows on every poll, the completeness gate on the Mac, and the deletion with its three listings. ssh and staging have their own lines above, so nothing here is counted twice",
+      "overhead_seconds": 1300.0,
+      "pre_generation_rule": "ssh 500 + stage/launch 150 + load 450 = 1100 s, and it is ALSO rung 3's create-anchored backstop. r1's pod MEASURED 252.5 s for the whole span — a third of what is charged — and this record publishes rung 4's knife edge at BOTH, because a continuation's pre-generation is unknown and the CHARGED span is the one that governs the budget (Dv655)",
+      "pre_generation_seconds": 1100.0,
+      "recovery_arithmetic": {
+        "a_second_dead_pod": "STOP. After a second dead pod nothing fits and the session closes with no verdict — a THIRD pod under this registration is refused by the arithmetic and by this record. `--pre-create-check` READS `re_creations_allowed` and refuses the create itself, because at two CHEAP deaths the seconds would still fit and only the count says no",
+        "deletion_tail": {
+          "charged_seconds": 78.5,
+          "measured_seconds": {
+            "7spsy61lpjumrz": 78.5,
+            "juupgp6y77jvuz": 0.1
+          },
+          "rule": "the span between rung 2 firing and `pod delete` stopping the meter, per pod of r1. The WORSE of the two is charged",
+          "source": "results/pass1_fewshot_run.json"
+        },
+        "margin_after_the_tail_seconds": 89.36,
+        "one_dead_pod_at_rung_2_seconds": 500.0,
+        "one_dead_pod_at_rung_2_usd": 0.111111,
+        "one_dead_pod_at_rung_2_with_the_measured_tail_seconds": 578.5,
+        "one_dead_pod_at_rung_2_with_the_measured_tail_usd": 0.128556,
+        "re_creations_allowed": 1,
+        "rule": "the recovery clause must stay REACHABLE after one dead pod. One dead pod at rung 2 plus the full worst case is 8432.14 s ≤ 8600 and $1.8738 ≤ $2.00, so ONE re-creation fits by the registered arithmetic. `--pre-create-check` computes both bounds before every create, the stricter binds, and its verdict is RECORDED whichever way it goes — r1's printed the refusal that ended its session and wrote nothing down",
+        "the_knife_edge": "the widest dead pod that still leaves the whole worst case inside the stop is 667.86 s of BILLED seconds, which is WIDER than rung 2's 500 s ceiling plus its measured deletion tail (578.5 s) — so a pod killed by rung 2 can never be the one that closes the recovery clause",
+        "the_tail_rule": "rung 2's ceiling is a CREATE-ELAPSED and the meter stops at `pod delete`, not when the rung fires. r1 measured that span twice — {'7spsy61lpjumrz': 78.5, 'juupgp6y77jvuz': 0.1} — and the worse is charged, so the clause is reachable at 8510.64 s ≤ 8600, a margin of 89.36 s. The runbook says «delete immediately» because of this number",
+        "then_the_full_worst_case_seconds": 8432.14,
+        "then_the_full_worst_case_usd": 1.873809,
+        "which_KILLS_stay_recoverable": {
+          "rung_2": "ALWAYS inside: its ceiling is 500 s and with the tail it bills 578.5 s ≤ 667.86",
+          "rung_3": "SOMETIMES. Its launch-anchored ceiling can fire early and be inside, but its CREATE-anchored backstop is 1100 s and a KILL there bills 1178.5 s — well outside 667.86. r1's record said «a KILL at rung 2 or rung 3 is inside that window» and that half of the sentence was never true at these spans",
+          "rung_4": "ONLY IN THE MEASURED WORLD, and this is the correction the five-lens review made to this record. A rate KILL is recoverable only while the create-elapsed at the kill is ≤ 589.36 s. At the pre-generation this budget CHARGES (1100 s) that is already past before the first call lands, so NO rung-4 kill is recoverable at any rate and any call count. At the pre-generation r1's pod MEASURED (252.5 s) an 8 s/call pod dies about 20 calls in having billed ≈ 412 s and the clause is reachable. Both arms, because a continuation's pre-generation is unknown ([[a_ceiling_derived_from_one_span_measured_over_another]])",
+          "rung_5_and_rung_6": "never recoverable in practice: rung 5 fires after 600 s of idle on top of whatever the pod had already billed, and rung 6 is the stop itself",
+          "the_number_that_decides_it": 589.36,
+          "what_it_is": "the widest CREATE-ELAPSED at which a pod may be killed and still leave the re-creation reachable. The clause is checked on BILLED seconds and the meter runs until `pod delete`, so the charged tail of 78.5 s comes off the 667.86 s before the rung sees it"
+        },
+        "widest_dead_pod_that_still_fits_seconds": 667.86,
+        "with_the_tail_then_the_full_worst_case_seconds": 8510.64,
+        "with_the_tail_then_the_full_worst_case_usd": 1.891253
+      },
+      "request_width": {
+        "mean_entities_population": 1.7236,
+        "mean_entities_sample": 0.96,
+        "mean_rendered_chars_population": 4765.4,
+        "mean_rendered_chars_sample": 4672.4,
+        "population": "results/pass1_window_r2_pack.json",
+        "ratio": 1.0199,
+        "rule": "this contract charges no margin for width, so this block is no longer a price — it is the CHECK that width is not what moved. The 901 are ~2 % wider than the rows the uplift was measured on, which is inside any reading of the rate and is why the rate is charged on the pod class instead",
+        "sample": "results/pass1_dev_pack.json leg v2 — the 200 rows the uplift was measured on",
+        "widest_population": 8562,
+        "widest_sample": 7939
+      },
+      "rows_copied_back": 901,
+      "seconds_per_call": {
+        "against_what_this_line_has_measured": {
+          "charged_over_the_r1_window_pod": 1.3649,
+          "r1_window_pod_measured_v2_seconds_per_call": 4.498473,
+          "rule": "the charge is 1.37× the rate the r1 window pod actually ran at and just UNDER the slowest single reply this stack has ever measured. A pod slower than this line is killed by rung 4's projection and not discovered in a bill",
+          "slowest_single_call_ever_measured": 6.214,
+          "slowest_single_call_source": "results/pass1_probe_b_rows.jsonl"
+        },
+        "charged": 6.14,
+        "derived": 6.135572,
+        "formula": "mean(probe-b) × mean(dev v2) / mean(dev base)",
+        "rounding_rule": "the derivation is 6.135572 and this record charges 6.14 — rounded UP, which is the conservative direction: a higher charge grows the worst case and SHRINKS the widest dead pod the recovery clause allows. It is also the figure docs/PROMPT-pass1-window-r2.md prints and every figure that contract prints is computed at it. Both values are here so no reader has to choose ([[two_values_for_one_input_get_quoted_kindly]])",
+        "the_pod_class": {
+          "fastest_base_pod_sample": "200 dev rows, results/pass1_dev_base.jsonl, pod 8tpx8lf05n6skc",
+          "fastest_base_pod_seconds_per_call": 2.293075,
+          "fastest_base_pod_sha256": "b1a708d917a19cc4bc3e95caca94dca17ef92bd92404b9dffc346b0f3a24e82f",
+          "one_prompt_two_pods": "both legs ran pass1_comment_gm4_v1 at prompt sha 5a4a3cb6ce4db89a…, checked above and a refusal if it ever stops being true. The requests differ in width by 5.6 % and the replies by 1.7 % — so the 2.25× between the two means is the silicon",
+          "rule": "the TOP of the measured spread is charged. r1 charged the bottom of it times a margin and the live pod came in 1.65× the sample; the sample was reproducible and it was not representative ([[a_reproducible_probe_can_be_unrepresentative]])",
+          "slowest_base_pod_sample": "64 rows, results/pass1_probe_b_rows.jsonl, 2026-08-18",
+          "slowest_base_pod_seconds_per_call": 5.161578,
+          "slowest_base_pod_sha256": "62507bd471877250d54febc0ce0a60369fb5b7cb87d94ff90617894155710069",
+          "spread": 2.250942
+        },
+        "the_uplift": {
+          "measured_on": "pod 8tpx8lf05n6skc — the ONE pod that ran both legs",
+          "the_assumption": "the uplift is charged as a property of the PROMPT and therefore transferable across pods, while the base rate is charged as a property of the pod. This is the one modelling assumption in this record and no run has tested it: no pod has ever run both legs at both ends of the spread. It is stated rather than hidden, and it is checkable against the r1 window pod — 4.498473 s/call on v2 implies a base of 3.784, which sits INSIDE the measured spread",
+          "v2_over_base": 1.188701,
+          "v2_sample": "200 dev rows, results/pass1_dev_v2.jsonl",
+          "v2_sample_sha256": "979c8f8252ed9b1e805663ac7941f8234adbb97fa76c14b81e65d639ceb35a2a",
+          "v2_seconds_per_call": 2.72578
+        },
+        "v2": 6.14,
+        "why_no_margin": "r1's margin — the multiplier quoted by name in supersedes.its_numbers_this_record_REPEALS is the rate it produced — was bought for the window's larger entity blocks, and the H6 row that measured its own reason found the growth an order of magnitude smaller than the margin. It was never what was missing. This line charges the SPREAD instead: a measured 2.25× between two pods, not a chosen multiplier"
+      },
+      "ssh_readings": {
+        "7spsy61lpjumrz, 2026-08-20 (a lower bound)": 262.5,
+        "8tpx8lf05n6skc, 2026-08-21 (an upper bound)": 50.0,
+        "juupgp6y77jvuz, 2026-08-20 (a lower bound)": 231.9,
+        "pass1-probe-b, 2026-08-18": 14.5,
+        "xpz3zb7yxus5cw, 2026-08-21 (measured)": 29.0
+      },
+      "ssh_rule": "rung 2's own ceiling, charged as a line of the budget. FIVE readings now and still no measurement of the worst case: 14.5 s on this card in this datacenter on 2026-08-18, two pods still `pod not ready` at 262.5 s and 231.9 s on 2026-08-20 (both LOWER bounds), ≤ 50 s on 2026-08-21 and xpz3zb7yxus5cw answering at 29 s the same day. The ceiling stays where r2 put it — a spread with two unbounded readings in it is not narrowed by two fast ones",
+      "ssh_seconds_charged": 500.0,
+      "stage_launch_rule": "scp of the bundle and the runners, the clone, the volume check and the detached launch — r2's line, unmoved. This contract ALSO copies the volume's surviving out-file back before the run directory is cleared, and that scp is inside this line: r1 measured stage + launch at 54 s against the 150 charged, and the file is 70 KB",
+      "stage_launch_seconds_charged": 150.0,
+      "the_pod_class_is_not_a_width": {
+        "dev_base_mean_emitted_chars": 100.3,
+        "dev_base_mean_request_chars": 2922.8,
+        "emitted_ratio": 1.01746,
+        "probe_b_mean_emitted_chars": 102.0,
+        "probe_b_mean_request_chars": 3087.5,
+        "request_ratio": 1.05633,
+        "rule": "the two base pods are 2.25× apart in seconds. Their requests are 5.6 % apart and their replies 1.7 % apart, so neither the prefill nor the decode length explains it. This is the row that makes «the spread is the pod» a measurement rather than an inference — the r1 report eliminated five causes AFTER the money and this one is eliminated before it"
+      },
+      "total_seconds": 7932.14,
+      "worst_case_usd_at_the_lora_b_price": 1.167787,
+      "worst_case_usd_at_the_price_ceiling": 1.762698
+    },
+    "cap_rule": "$2.00 all-in, frozen at the FIRST `pod create`. The guard step `pass1-window-r2` is FRESH and opens with no pods of its own, so the step cap and the contract cap are the same number. r1's step ledger is a different step and stays OPEN for `money-anchors`; its pod's $0.173694 is added in `step_sum` as the window's total cost and is NOT charged against this cap. Raising the cap is the operator's word BEFORE any endpoint exists, never after a reading",
+    "cap_usd_all_in": 2.0,
+    "guard": "PYTHONPATH=src python3.11 scripts/runpod_guard.py --step pass1-window-r2 --step-cap 2.00 — the anchor is committed BEFORE the pod exists, and the reading is what the rungs that name one act on",
+    "meter": {
+      "and_the_rate_is_NOT_a_property_of_the_price": "the r1 pod cost $0.74/h and ran at 4.498 s/call; probe-b's pod cost the same and ran its base leg at 5.162. The price ceiling bounds the dollars per second and says nothing about the seconds per call — that is what this record's rate block is for",
+      "card_preferred": "RTX 4090 at ≤ $0.8/h — the card probe-b, r2 and the r1 window pod all ran on. A6000 48 GB in EU-RO-1 has been `none` on every look",
+      "datacenter": "EU-RO-1, pinned by network volume qw4nwleanc — the volume decides",
+      "memory": "this line does NOT train, so lora-b's 48 GB constraint does not apply: three pods have served this base on a 24 GB 4090",
+      "price_ceiling_usd_per_hour": 0.8,
+      "price_rule": "**READ ON THE DAY.** `costPerHr` in the create response is the meter of record and every figure here is recomputed from it by rung 4 before the run is allowed to continue",
+      "resource": "ONE rented pod, billed for every second it EXISTS — from `pod create` to `pod delete`. `pod stop` does not stop the bill, so the run deletes and never stops",
+      "usd_per_second_at_the_ceiling": 0.000222222
+    },
+    "reading": {
+      "anchor_file": "results/spend_pass1_window_r2.json",
+      "rule": "money is read from the GUARD, never from a ledger and never from prose (Dv33)",
+      "step": "pass1-window-r2"
+    },
+    "recovery": {
+      "arithmetic": {
+        "a_second_dead_pod": "STOP. After a second dead pod nothing fits and the session closes with no verdict — a THIRD pod under this registration is refused by the arithmetic and by this record. `--pre-create-check` READS `re_creations_allowed` and refuses the create itself, because at two CHEAP deaths the seconds would still fit and only the count says no",
+        "deletion_tail": {
+          "charged_seconds": 78.5,
+          "measured_seconds": {
+            "7spsy61lpjumrz": 78.5,
+            "juupgp6y77jvuz": 0.1
+          },
+          "rule": "the span between rung 2 firing and `pod delete` stopping the meter, per pod of r1. The WORSE of the two is charged",
+          "source": "results/pass1_fewshot_run.json"
+        },
+        "margin_after_the_tail_seconds": 89.36,
+        "one_dead_pod_at_rung_2_seconds": 500.0,
+        "one_dead_pod_at_rung_2_usd": 0.111111,
+        "one_dead_pod_at_rung_2_with_the_measured_tail_seconds": 578.5,
+        "one_dead_pod_at_rung_2_with_the_measured_tail_usd": 0.128556,
+        "re_creations_allowed": 1,
+        "rule": "the recovery clause must stay REACHABLE after one dead pod. One dead pod at rung 2 plus the full worst case is 8432.14 s ≤ 8600 and $1.8738 ≤ $2.00, so ONE re-creation fits by the registered arithmetic. `--pre-create-check` computes both bounds before every create, the stricter binds, and its verdict is RECORDED whichever way it goes — r1's printed the refusal that ended its session and wrote nothing down",
+        "the_knife_edge": "the widest dead pod that still leaves the whole worst case inside the stop is 667.86 s of BILLED seconds, which is WIDER than rung 2's 500 s ceiling plus its measured deletion tail (578.5 s) — so a pod killed by rung 2 can never be the one that closes the recovery clause",
+        "the_tail_rule": "rung 2's ceiling is a CREATE-ELAPSED and the meter stops at `pod delete`, not when the rung fires. r1 measured that span twice — {'7spsy61lpjumrz': 78.5, 'juupgp6y77jvuz': 0.1} — and the worse is charged, so the clause is reachable at 8510.64 s ≤ 8600, a margin of 89.36 s. The runbook says «delete immediately» because of this number",
+        "then_the_full_worst_case_seconds": 8432.14,
+        "then_the_full_worst_case_usd": 1.873809,
+        "which_KILLS_stay_recoverable": {
+          "rung_2": "ALWAYS inside: its ceiling is 500 s and with the tail it bills 578.5 s ≤ 667.86",
+          "rung_3": "SOMETIMES. Its launch-anchored ceiling can fire early and be inside, but its CREATE-anchored backstop is 1100 s and a KILL there bills 1178.5 s — well outside 667.86. r1's record said «a KILL at rung 2 or rung 3 is inside that window» and that half of the sentence was never true at these spans",
+          "rung_4": "ONLY IN THE MEASURED WORLD, and this is the correction the five-lens review made to this record. A rate KILL is recoverable only while the create-elapsed at the kill is ≤ 589.36 s. At the pre-generation this budget CHARGES (1100 s) that is already past before the first call lands, so NO rung-4 kill is recoverable at any rate and any call count. At the pre-generation r1's pod MEASURED (252.5 s) an 8 s/call pod dies about 20 calls in having billed ≈ 412 s and the clause is reachable. Both arms, because a continuation's pre-generation is unknown ([[a_ceiling_derived_from_one_span_measured_over_another]])",
+          "rung_5_and_rung_6": "never recoverable in practice: rung 5 fires after 600 s of idle on top of whatever the pod had already billed, and rung 6 is the stop itself",
+          "the_number_that_decides_it": 589.36,
+          "what_it_is": "the widest CREATE-ELAPSED at which a pod may be killed and still leave the re-creation reachable. The clause is checked on BILLED seconds and the meter runs until `pod delete`, so the charged tail of 78.5 s comes off the 667.86 s before the rung sees it"
+        },
+        "widest_dead_pod_that_still_fits_seconds": 667.86,
+        "with_the_tail_then_the_full_worst_case_seconds": 8510.64,
+        "with_the_tail_then_the_full_worst_case_usd": 1.891253
+      },
+      "clear_the_mac_first": "the Mac's copies of a dead pod's run directory are cleared before the second pod is created (Dv621): a resume reads whatever out-file is on disk, and a previous attempt's rows would be counted as this one's",
+      "rule": "ONE pod re-creation, and only after a deletion PROVEN by listing. Never two billing endpoints. `--pre-create-check` computes both bounds, refuses the create itself, and RECORDS its verdict",
+      "the_window_the_clause_is_reachable_in": "`--pre-create-check` prices the FULL worst case ahead (7932.14 s) and not the calls that actually remain, so a re-creation is refused once the dead pod has billed more than 667.86 s — whatever the resume would have saved. A KILL at rung 2 or rung 3 is inside that window ONLY while the create-elapsed at the kill is inside recovery_arithmetic.which_KILLS_stay_recoverable.the_number_that_decides_it — rung 2's ceiling always is and rung 3's create-anchored backstop never is. A KILL deep inside the generation is NOT, and the clause is then a STOP and not a recovery. THIS IS EXACTLY WHAT CLOSED r1: its pod had billed 845 s against an allowance this record repeals and quotes by name in supersedes.its_numbers_this_record_REPEALS, so the refusal came on seconds while the money still fitted. The window is 667.86 s here and the shape is the same ([[the_contracts_scope_is_narrower_than_the_rulings]])",
+      "there_is_no_generation_checkpoint_to_lose": "every reply is flushed to its out-file as it lands and the shipped resume skips every unit already answered, so a re-creation re-asks only what has no reply. A KILL mid-leg costs the boot, not the leg — WHERE THE CLAUSE IS REACHABLE AT ALL, and the next field is where that is",
+      "two_meters_and_the_stricter_binds": "`--pre-create-check` computes from the GATE's own ledger — the closed pods' billed seconds at their own price, timely and exact to the pod clock. `scripts/runpod_guard.py` reads the BALANCE delta and the billing walk, which is what the cap is defined against and which LAGS (Dv504; on r1 the walk reported `pods $0.0000` for a pod that had demonstrably run 845 s). They are two meters and neither is the other. The runbook takes BOTH readings before a re-creation and the stricter binds",
+      "what_the_pod_keeps_and_what_it_clears": "on a re-creation the volume still holds /workspace/run/pass1_window_r2_v2.jsonl and it MUST be kept — it is the whole of «costs the boot, not the leg». What must go is every clock the dead pod owns: `launched_at`, which the gate refuses as older than the new pod, and `pod.log`, whose line count would be a high-water mark the new pod never rises above. The r1 file /workspace/run/pass1_window_v2.jsonl is copied back and then removed from the run directory by the FIRST pod's staging step, so it can never be mistaken for this leg's output"
+    },
+    "step_sum": {
+      "prior_pods_usd": 0.0,
+      "rule": "this step is FRESH and opens with no pods, so `prior_pods_usd` is 0 and the step cap is the contract cap. What the WINDOW has cost is a different question and its answer is $0.173694 (r1's pod, on the gate's clock) + this cap = $2.1737, which is the ≤ $2.17 the operator's ruling names. r1's step ledger stays OPEN for `money-anchors` and this record does not close it",
+      "step": "pass1-window-r2",
+      "step_budget_usd": 2.0,
+      "the_windows_total_cost_usd": 2.173694
+    }
+  },
+  "phase": "pass1-window-r2",
+  "population": {
+    "ceiling_chars": 12000,
+    "cell": "narrow|varto_off|plus_spam+scam",
+    "gold": {
+      "answered_by_r1": 5,
+      "multiplicity_note": "D2 reads these fourteen over the UNION and it is their FIFTH look: the base (pass1-probe-b, 9/14), arm A of the LoRA line (lora-b, 9/14), v2 registered for a shot it never fired, v2 inside r1's production pass (five reached, four agreeing) and now the rest of them. A census row, never a bar",
+      "owed_here": 9,
+      "rows": [
+        {
+          "msg_id": 20664,
+          "thread": "@VARUS_channel:10348"
+        },
+        {
+          "msg_id": 21599,
+          "thread": "@VARUS_channel:10613"
+        },
+        {
+          "msg_id": 21601,
+          "thread": "@VARUS_channel:10613"
+        },
+        {
+          "msg_id": 21626,
+          "thread": "@VARUS_channel:10613"
+        },
+        {
+          "msg_id": 21629,
+          "thread": "@VARUS_channel:10613"
+        },
+        {
+          "msg_id": 47899,
+          "thread": "@mandziak:3676"
+        },
+        {
+          "msg_id": 47902,
+          "thread": "@mandziak:3676"
+        },
+        {
+          "msg_id": 48276,
+          "thread": "@mandziak:3703"
+        },
+        {
+          "msg_id": 48283,
+          "thread": "@mandziak:3703"
+        },
+        {
+          "msg_id": 578951,
+          "thread": "@matusi_ukr:22242"
+        },
+        {
+          "msg_id": 579379,
+          "thread": "@matusi_ukr:22272"
+        },
+        {
+          "msg_id": 579457,
+          "thread": "@matusi_ukr:22272"
+        },
+        {
+          "msg_id": 580124,
+          "thread": "@matusi_ukr:22303"
+        },
+        {
+          "msg_id": 580129,
+          "thread": "@matusi_ukr:22303"
+        }
+      ],
+      "rule": "the fourteen by (thread, msg_id), taken from the pack's own membership block. D2 reads this list rather than re-joining the gold to the population after the money — and it is the pair key everywhere, because a msg_id is unique per CHANNEL and 13 of this population's are carried by two threads"
+    },
+    "leg": "v2",
+    "membership": {
+      "dev_200": 152,
+      "gold_14": 9,
+      "labelled_650": 538,
+      "probe_64": 47
+    },
+    "out_file": "pass1_window_r2_v2.jsonl",
+    "pack": "results/pass1_window_r2_pack.json",
+    "payable_comments": 901,
+    "rule": "the r1 pack's leg MINUS the 131 ids of results/pass1_window_v2.jsonl, each verified against its pack item's rendering_sha256 before it was subtracted. Nothing was re-enumerated and nothing was re-rendered",
+    "self_exclusion": {
+      "distinct_neighbours_used": 523,
+      "items_shown_a_neighbour_from_their_own_thread": 0
+    },
+    "sha256": "7ec190a9d70964b7d2ca8be14ccc7a410fca6008bfbf35f2fc478eff8da8bbc2",
+    "the_volume_tail": {
+      "and_then_the_clocks_are_cleared": "the dead pod's `launched_at` and `pod.log` are wiped by the staging step on THIS attempt's first pod — a stamp older than the pod is a refusal and a log's line count is a high-water mark the new pod never rises above (Dv621/632). The out-file itself is copied first, and only then",
+      "path": "/workspace/run/pass1_window_v2.jsonl",
+      "rows_the_mac_holds": 131,
+      "rows_the_r1_pod_log_names": 132,
+      "rule": "EVIDENCE, not input. It is scp'd to results/pass1_window_volume_tail.jsonl BEFORE the run directory is cleared, sha'd on both sides, and its rows beyond the Mac's 131 are COUNTED and PRICED («N rows bought twice, N × the measured s/call»). It is never merged: every one of its ids is inside the 901 and is bought again here, and two answers for one id is an ambiguity this registration does not buy ([[a_retry_inherits_the_last_attempts_output]])",
+      "the_named_row": "@klopotenkofood:6035#21205",
+      "volume": "qw4nwleanc"
+    },
+    "the_window_this_completes": {
+      "answered_by_r1": 131,
+      "membership_of_the_whole_window": {
+        "dev_200": 200,
+        "gold_14": 14,
+        "labelled_650": 650,
+        "probe_64": 64
+      },
+      "payable_comments": 1032,
+      "threads_in_the_cell": 129,
+      "threads_r1_finished": 27,
+      "union_key": "the PAIR (thread, msg_id). D2 censuses r1's out-file and this one together; seven msg_ids of the 650 labelled rows live in two threads each, so a union keyed on the msg_id would merge two channels' comments into one row (the ADDENDUM of docs/reports/pass1-window.md)"
+    },
+    "threads": 100,
+    "widest_request_chars": 8562
+  },
+  "producer": {
+    "copied_from": {
+      "results/prereg_pass1_window.json": "879bf3852544364a22242d457f38102a452da10cc6daf72ec3c5077d67d45cea",
+      "scripts/write_pass1_window_prereg.py": "de2c85cb8cfc10e2a07956ddaa714b27c4c2cd60e9205165e57659cda898ca23"
+    },
+    "copied_rule": "r1's producer is IMPORTED for the four helpers that are pure in their arguments — `sealed`, `dig`, `live_pins`, `deletion_tail`, `r2_overhead_reading` — and nothing else. Every number of the money block is computed here, because that is the half that moved",
+    "script": "scripts/write_pass1_window_prereg_r2.py",
+    "sha256": "9242c5f868b72d3f13e8f66c7b89a6af146a6e66c2c1a5a475480aff153d197d"
+  },
+  "return_to_the_operator": "THE FOURTEEN ARE A CENSUS ROW AND THIS IS THEIR FIFTH LOOK. The base took 9/14 (pass1-probe-b), arm A of the LoRA line took 9/14 (lora-b), v2 was registered for a shot it never fired, r1's production pass reached five of them and agreed on four, and this run answers the remaining nine. Their agreement over the union is REPORTED with that multiplicity beside it and it may not be promoted to «v2 takes N of 14» by this report, by the acceptance or by the next registration. A bar on the fourteen needs a NEW registration with its own attempt, its own threshold and the operator's word. The same holds for the 650, the 450 and the dev-200: bigger samples, still readings. AND THE RATE IS STILL NOT KNOWN — this record charges the TOP of a measured spread and the spread has two readings in it. If this pod comes in under the charge, that is one more reading of the class and not a rate the programme owns",
+  "run_record": "results/pass1_window_r2_run.json",
+  "supersedes": {
+    "closing_state": "closed RED at rung 7, 131 of 1 032, killed by rung 4 on the rate; recovery refused on seconds",
+    "its_numbers_this_record_REPEALS": {
+      "cap_usd_all_in": 1.5,
+      "hard_stop_seconds": 6500.0,
+      "rule": "these five are quoted HERE, by name, and appear as numbers nowhere else in this record's money block. A threshold copied for its algorithm brings its number with it, and that is how a repealed figure goes on gating a run nobody priced it for (Dv613). tests/test_pass1_window_r2_prereg.py sweeps the money block for them",
+      "seconds_per_call": 3.4075,
+      "total_seconds": 5916.54,
+      "widest_dead_pod_that_still_fits_seconds": 583.46
+    },
+    "record": "results/prereg_pass1_window.json",
+    "report": "docs/reports/pass1-window.md",
+    "run_record": "results/pass1_window_run.json",
+    "sha256": "879bf3852544364a22242d457f38102a452da10cc6daf72ec3c5077d67d45cea",
+    "what_is_UNCHANGED_from_it": [
+      "prompt v2, its sha and the renderer",
+      "the five neighbours and the self-exclusion rule",
+      "the topic / entity context and its bought verdicts",
+      "the shape of the completeness bar — answered, sha, refusals by cause",
+      "the kill-clock's seven rungs, by name and by algorithm",
+      "the fourteen-as-census-row rule and the multiplicity sentence",
+      "the population: these 901 items ARE r1's items"
+    ],
+    "what_it_bought": {
+      "answered": 131,
+      "billed_seconds": 845.0,
+      "billed_usd": 0.173694,
+      "out_file": "results/pass1_window_v2.jsonl",
+      "out_file_sha256": "e888d466d36e32a08fa13e5598700bc0cdfffd768eba761df3f51881375eb740",
+      "pod": "xpz3zb7yxus5cw",
+      "rule": "131 replies, 131 parsed, 0 sha mismatches, 0 refusals, 0 duplicates. The instrument was sound and the bar failed on the one number the money model could not deliver",
+      "transport_defects": 0
+    }
+  },
+  "what_this_run_is": "the REMAINDER of the r1 production pass: the payable comments of window-1 that the killed pod never reached. Same population, same prompt v2, same rendering, same neighbours — a smaller leg of the same run and not a new question. Nothing in it is a bar on v2's quality",
+  "what_this_run_is_not": "an evaluation. Nothing in it is a bar on v2's quality, and no reading it produces may be promoted to one — not the fourteen, not the 650, not the 450 and not the dev-200. It is also NOT a re-run of r1: the 131 comments r1 bought are not re-asked and its out-file is not touched. And it is not a repair of the r1 pod's rate — the rate is re-CHARGED, not fixed; nobody has made a rented GPU faster"
+}
