@@ -73,15 +73,25 @@ the money block, the completeness bar and the recovery arithmetic are all derive
 so a population that moved is a re-registration and not a re-run."""
 
 
-def gold_keys() -> tuple[set[int], set[str]]:
-    """The fourteen gold rows, by msg_id and by thread — the reference's own two spellings."""
+def gold_keys() -> tuple[set[tuple[str, int]], set[str]]:
+    """The fourteen gold rows as `(thread, msg_id)` — the SAME key the other three sets use.
+
+    A msg_id is a Telegram id and it is unique per CHANNEL, not per window: 13 msg_ids of this very
+    population are carried by two threads each. Keying the gold on the id alone would be a second id
+    space wearing the first one's name ([[id_spaces_that_look_comparable]]). It happens to select the
+    same fourteen rows here — no gold id collides — and `gold_id_collisions` records that the
+    agreement is a reading of this population and not a property of the key.
+    """
     gold = json.loads(summary.read_text_or_refuse(GOLD))
-    ids = {int(row["msg_id"]) for row in gold["per_comment"]}
-    threads = {
-        f"{row['channel']}:{(row.get('evidence_row') or {}).get('post_id_in_the_store')}"
+    pairs = {
+        (
+            f"{row['channel']}:{(row.get('evidence_row') or {}).get('post_id_in_the_store')}",
+            int(row["msg_id"]),
+        )
         for row in gold["per_comment"]
     }
-    return ids, threads
+    threads = {thread for thread, _ in pairs}
+    return pairs, threads
 
 
 def keys_of(path: Path, where: str) -> set[tuple[str, int]]:
@@ -182,6 +192,30 @@ def membership(items: list[dict]) -> dict:
     return out
 
 
+def rendered_entity_chars(item: dict) -> int:
+    """What the entity block costs IN THE REQUEST — the same item rendered with it and without it.
+
+    Not `len(str(entities))`: a Python dict repr carries quotes, braces and `: ` separators the
+    renderer never emits, and on this population it overstates the block by ~3x. This number prices
+    `pass2-signals`, whose call carries the entity context per thread, so it has to be the chars a
+    model will actually read ([[a_literal_below_the_minimum_is_a_unit_error]]).
+    """
+
+    def render(entities):
+        return prompts.pass1_messages_gm4(
+            item["channel"],
+            item["post_id"],
+            item["topic"],
+            entities,
+            item["msg_id"],
+            item["text"],
+            task=item["task"],
+            examples=item["examples"],
+        )[0]["content"]
+
+    return len(render(item["entities"])) - len(render([]))
+
+
 def per_thread(population: list[dict], items: list[dict]) -> list[dict]:
     """What prices `pass2-signals`: the shape of every thread pass 2 will make ONE call over.
 
@@ -203,9 +237,7 @@ def per_thread(population: list[dict], items: list[dict]) -> list[dict]:
                 "payable_comments": len(rows),
                 "comment_chars": sum(len(one["text"]) for one in rows),
                 "entities": len(rows[0]["entities"]) if rows else 0,
-                "entity_block_chars": sum(len(str(one)) for one in rows[0]["entities"])
-                if rows
-                else 0,
+                "entity_block_chars": rendered_entity_chars(rows[0]) if rows else 0,
                 "topic_chars": len(rows[0]["topic"]) if rows else 0,
                 "topic_from": rows[0]["topic_source"] if rows else None,
                 "silenced": thread["silenced"],
@@ -234,7 +266,7 @@ def build() -> dict:
         raise SystemExit(f"{len(labels)} labelled rows, and the contract registers 650 — stop.")
     found, limit = fewshot.context()
 
-    gold_ids, gold_threads = gold_keys()
+    gold_pairs, gold_threads = gold_keys()
     probe = keys_of(PROBE_PACK, "items")
     dev = keys_of(DEV_PACK, "legs")
     labelled = {(one["thread"], one["msg_id"]) for one in labels}
@@ -257,7 +289,7 @@ def build() -> dict:
             one["topic_source"] = built["topic_source"]
             one["verdict_source"] = built["verdict_source"]
             one["membership"] = {
-                "gold_14": comment["msg_id"] in gold_ids,
+                "gold_14": at in gold_pairs,
                 "probe_64": at in probe,
                 "labelled_650": at in labelled,
                 "dev_200": at in dev,
@@ -269,13 +301,13 @@ def build() -> dict:
     if len({one["id"] for one in items}) != payable:
         raise SystemExit("two items share an id — the leg's resume would answer fewer units. Stop.")
 
+    # The ceiling STOP the contract asks for is the RENDERER'S, and it has already fired by the time
+    # this runs: `prompts.pass1_messages_gm4` raises ValueError on an over-ceiling request rather
+    # than truncating it, so `rendered_item` above never returns one. A branch here on
+    # `headroom_chars < 0` would be unreachable code wearing a guard's clothes — the check that this
+    # is a real STOP is a test that DRIVES the renderer past the ceiling, and there is one
+    # ([[an_empty_class_is_the_definitions_answer]]). What this measures is the headroom that is left
     length = fewshot.ceiling_check(items)
-    if length["headroom_chars"] < 0:
-        raise SystemExit(
-            f"{length['widest_request']} renders {length['widest_request_chars']} chars against a"
-            f" {length['ceiling_chars']} ceiling. The renderer REFUSES rather than truncates, so"
-            " this is a stop at BUILD time and never a surprise on a billed pod — report it."
-        )
 
     exclusion = self_exclusion(items, labels)
     if exclusion["items_shown_a_neighbour_from_their_own_thread"]:
@@ -380,7 +412,33 @@ def build() -> dict:
         "membership": membership(items),
         "self_exclusion": exclusion,
         "balance": fewshot.balance(items),
-        "length": length,
+        "length": {
+            **length,
+            "stop_rule": (
+                "the STOP is prompts.pass1_messages_gm4's own ValueError, which fires inside"
+                " rendered_item and before any item reaches this record — so the build cannot"
+                " produce an over-ceiling request and there is no branch here that could catch one."
+                " tests/test_pass1_window_pack.py drives the renderer past the ceiling on the"
+                " widest real item and watches it refuse"
+            ),
+        },
+        "gold_id_collisions": {
+            "rule": (
+                "a msg_id is unique per CHANNEL and not per window. Membership is keyed on"
+                " (thread, msg_id) everywhere; this is what the id-only key would have done"
+            ),
+            "msg_ids_carried_by_more_than_one_thread": sorted(
+                one for one, n in Counter(int(item["msg_id"]) for item in items).items() if n > 1
+            ),
+            "gold_by_pair": sum(1 for one in items if one["membership"]["gold_14"]),
+            "gold_by_msg_id_alone": sum(
+                1 for one in items if int(one["msg_id"]) in {msg for _, msg in gold_pairs}
+            ),
+            "the_two_keys_agree_on_this_population": sum(
+                1 for one in items if one["membership"]["gold_14"]
+            )
+            == sum(1 for one in items if int(one["msg_id"]) in {msg for _, msg in gold_pairs}),
+        },
         "gold_threads_in_the_population": sorted(
             gold_threads & {f"{one['channel']}:{one['post_id']}" for one in population}
         ),

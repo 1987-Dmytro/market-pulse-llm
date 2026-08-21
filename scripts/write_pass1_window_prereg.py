@@ -52,7 +52,10 @@ R2 = REPO_ROOT / R2_NAME
 PACK = REPO_ROOT / PACK_NAME
 GATE = REPO_ROOT / "scripts" / "gate_pass1_window.py"
 DEV_V2_ROWS = REPO_ROOT / "results" / "pass1_dev_v2.jsonl"
+DEV_PACK = REPO_ROOT / "results" / "pass1_dev_pack.json"
 R2_RUN = REPO_ROOT / "results" / "pass1_fewshot_r2_run.json"
+R1_RUN_NAME = "results/pass1_fewshot_run.json"
+R1_RUN = REPO_ROOT / R1_RUN_NAME
 
 # --- what THIS contract sets. Everything else is r2's, copied ---------------------------------------
 
@@ -85,6 +88,11 @@ R2_SAMPLE = "200 dev rows, pod 8tpx8lf05n6skc"
 """A rate is a property of the sample it was measured on, so the sample is named beside the number
 (the 5c2 retro's rule). `results/pass1_dev_v2.jsonl` is that sample and the mean is re-derived from
 it below, never typed."""
+
+R2_PRE_GENERATION_MEASURED = 254.6
+"""r2's create-elapsed at its FIRST reply — the whole of ssh + staging + launch + load, measured on
+this stack on 2026-08-21 (its rung-3 gate: 145.6 s of launch-elapsed at 254.6 s of create-elapsed).
+Rung 4's sensitivity curve is computed against a pod that boots like that one."""
 
 R2_ROWS_COPIED_BACK = 464
 R2_WATCH_GO_ELAPSED = 1276.1
@@ -209,6 +217,23 @@ def instruments(r2: dict) -> dict:
             " when that file moves"
         ),
     }
+    block["gold"] = {
+        "record": "results/reader_gold_w1_r2.json",
+        "sha256": sha(REPO_ROOT / "results" / "reader_gold_w1_r2.json"),
+        "judge": "scripts/score_pass1_probe.py::bar_p1",
+        "judge_sha256": sha(REPO_ROOT / "scripts" / "score_pass1_probe.py"),
+        "collapse": "scripts/score_reader_probe_b.py::collapse",
+        "collapse_sha256": sha(REPO_ROOT / "scripts" / "score_reader_probe_b.py"),
+        "rule": (
+            "the fourteen are GOLD and not labels, so gate_pass1_fewshot.py::leg_table cannot score"
+            " them — its comparison runs against results/labels_pass1_r*.jsonl, and NONE of the"
+            " fourteen pairs is in that map. D2's census row over them goes through `bar_p1`, the"
+            " same judge probe-b and r2 registered, over the same collapse. Pinned here because a"
+            " reading D2 owes with no producer named at D0 is a producer invented after the money"
+            " ([[a_registered_bar_may_have_no_producer]]). It scores a CENSUS ROW and never a bar —"
+            " see return_to_the_operator"
+        ),
+    }
     block["population_producer"] = {
         "script": "scripts/gate_census_w1_reader.py",
         "sha256": sha(REPO_ROOT / "scripts" / "gate_census_w1_reader.py"),
@@ -247,6 +272,44 @@ def measured_v2_rate() -> dict:
     }
 
 
+def deletion_tail(run: dict) -> dict:
+    """How long a pod KEPT BILLING after rung 2 fired — read off r1's own gate record.
+
+    Rung 2's ceiling is 500 s of create-elapsed, and the meter does not stop when the rung fires: it
+    stops at `pod delete`. r1 killed two pods on this rung and the two tails are 78.5 s and 0.1 s.
+    The recovery clause is priced with the WORSE one, because a clause that is reachable only at the
+    faster of two observed deletions is a clause the stack has not shown it can meet
+    ([[a_ceiling_derived_from_one_span_measured_over_another]]).
+    """
+    tails = {}
+    for pod in run["pods"]:
+        killed = [
+            one
+            for one in run["gates"]
+            if one.get("kind") == "gate0"
+            and one.get("verdict") == "KILL"
+            and one.get("pod_id") == pod["pod_id"]
+        ]
+        for gate in killed:
+            tails[pod["pod_id"]] = round(
+                float(pod["billed_seconds"]) - float(gate["elapsed_on_this_pod_seconds"]), 1
+            )
+    if not tails:
+        raise SystemExit(
+            f"{R1_RUN_NAME} carries no rung-2 KILL, and the deletion tail is derived from one."
+            " Stop and report."
+        )
+    return {
+        "measured_seconds": tails,
+        "charged_seconds": max(tails.values()),
+        "source": R1_RUN_NAME,
+        "rule": (
+            "the span between rung 2 firing and `pod delete` stopping the meter, per pod of r1."
+            " The WORSE of the two is charged"
+        ),
+    }
+
+
 def r2_overhead_reading(run: dict) -> dict:
     """What r2's 1 300 s of overhead actually bought, measured — the reason row for keeping it.
 
@@ -276,19 +339,74 @@ def r2_overhead_reading(run: dict) -> dict:
             " denominator and the more expensive per row"
             " ([[a_count_in_prose_is_not_the_enumeration]])"
         ),
-        "create_elapsed_at_the_last_row_seconds": at_go,
+        "create_elapsed_at_the_watch_GO_seconds": at_go,
+        "what_that_stamp_is": (
+            "the create-elapsed of the poll on which --watch SAW every row answered, not the instant"
+            " the last row landed. The loop polls at 20 s, so the true last row is somewhere in"
+            " (at_go − 20, at_go] and this reading is the LATER end — which makes the span below a"
+            " lower bound on the overhead measured, and therefore the conservative direction"
+            " ([[a_paced_log_is_an_interleavable_clock]])"
+        ),
         "billed_seconds": billed,
         "measured_after_the_last_row_seconds": round(billed - at_go, 1),
     }
 
 
-def arithmetic(rate: dict, calls: int, overhead: dict) -> dict:
+def request_width() -> dict:
+    """What the ×1.25 margin is BOUGHT against, measured on the two packs rather than asserted.
+
+    The contract names the margin «for the window's larger entity blocks». The entity blocks ARE
+    larger — 0.96 entities a request on dev-200 against 1.80 here — and the request they sit in is
+    barely wider, because a v2 request is dominated by the five neighbour examples and the topic.
+    A reason nothing re-derives is how a bound that double-counted the ssh wait shipped in r1, so
+    the reason is a measurement here and H6 checks the DIRECTION: the margin must exceed the growth
+    it is bought against ([[a_borrowed_rule_carries_an_unstated_population]]).
+    """
+    dev = json.loads(summary.read_text_or_refuse(DEV_PACK))
+    sample = next(leg for leg in dev["legs"] if leg["name"] == "v2")["items"]
+    window = json.loads(summary.read_text_or_refuse(PACK))["legs"][0]["items"]
+
+    def mean(items, key):
+        return sum(key(one) for one in items) / len(items)
+
+    chars = mean(window, lambda one: one["rendered_chars"]) / mean(
+        sample, lambda one: one["rendered_chars"]
+    )
+    return {
+        "sample": summary.rel(DEV_PACK) + " leg v2 — the 200 rows the rate was measured on",
+        "population": PACK_NAME,
+        "mean_rendered_chars_sample": round(mean(sample, lambda one: one["rendered_chars"]), 1),
+        "mean_rendered_chars_population": round(mean(window, lambda one: one["rendered_chars"]), 1),
+        "ratio": round(chars, 6),
+        "mean_entities_sample": round(mean(sample, lambda one: len(one["entities"])), 4),
+        "mean_entities_population": round(mean(window, lambda one: len(one["entities"])), 4),
+        "widest_sample": max(one["rendered_chars"] for one in sample),
+        "widest_population": max(one["rendered_chars"] for one in window),
+        "dev_200_rows_rendered_identically_in_both_packs": sum(
+            1
+            for one in window
+            if one["rendering_sha256"]
+            in {two["rendering_sha256"] for two in sample if two["id"] == one["id"]}
+        ),
+        "rule": (
+            "the margin's own reason, measured. The entity blocks nearly DOUBLE (0.96 → 1.80 a"
+            " request) and the request they sit in grows by ~1 %, because a v2 request is mostly"
+            " the five neighbour examples and the topic. The margin is therefore bought against a"
+            " growth an order of magnitude smaller than itself — which is the direction that makes"
+            " it safe, and is now a checked row rather than a sentence"
+        ),
+    }
+
+
+def arithmetic(rate: dict, calls: int, overhead: dict, tail: dict) -> dict:
     """Every money figure of this contract, computed here and re-derived by H6 from the same terms."""
     generation = calls * CHARGED_SECONDS_PER_CALL
     pre_generation = SSH_DEADMAN_SECONDS + STAGE_LAUNCH_SECONDS + BOOT_SECONDS
     total = pre_generation + generation + OVERHEAD_SECONDS
     hours = total / 3600
+    dead_pod_seconds = SSH_DEADMAN_SECONDS + float(tail["charged_seconds"])
     dead_pod = SSH_DEADMAN_SECONDS * PRICE_CEILING / 3600
+    dead_pod_with_tail = dead_pod_seconds * PRICE_CEILING / 3600
     worst = hours * PRICE_CEILING
     after_last_row = overhead["measured_after_the_last_row_seconds"]
     scaled = after_last_row * calls / overhead["rows_answered"]
@@ -318,6 +436,7 @@ def arithmetic(rate: dict, calls: int, overhead: dict) -> dict:
                 " projection and not discovered in the bill"
             ),
         },
+        "request_width": request_width(),
         "generation_seconds": round(generation, 3),
         "ssh_seconds_charged": SSH_DEADMAN_SECONDS,
         "ssh_rule": (
@@ -453,6 +572,22 @@ def arithmetic(rate: dict, calls: int, overhead: dict) -> dict:
             "re_creations_allowed": 1,
             "one_dead_pod_at_rung_2_seconds": SSH_DEADMAN_SECONDS,
             "one_dead_pod_at_rung_2_usd": round(dead_pod, 6),
+            "deletion_tail": tail,
+            "one_dead_pod_at_rung_2_with_the_measured_tail_seconds": dead_pod_seconds,
+            "one_dead_pod_at_rung_2_with_the_measured_tail_usd": round(dead_pod_with_tail, 6),
+            "with_the_tail_then_the_full_worst_case_seconds": round(dead_pod_seconds + total, 3),
+            "with_the_tail_then_the_full_worst_case_usd": round(dead_pod_with_tail + worst, 6),
+            "margin_after_the_tail_seconds": round(HARD_STOP_SECONDS - dead_pod_seconds - total, 3),
+            "the_tail_rule": (
+                "rung 2's ceiling is a CREATE-ELAPSED, and the meter stops at `pod delete` and not"
+                " when the rung fires. r1 measured the span between them twice —"
+                f" {tail['measured_seconds']} — and the worse of the two is charged here. So the"
+                f" clause is reachable at {round(dead_pod_seconds + total, 2)} s ≤"
+                f" {HARD_STOP_SECONDS:.0f}, a margin of"
+                f" {round(HARD_STOP_SECONDS - dead_pod_seconds - total, 2)} s and NOT the"
+                f" {round(HARD_STOP_SECONDS - SSH_DEADMAN_SECONDS - total, 2)} s the ceiling alone"
+                " implies. The runbook says «delete immediately» because of this number"
+            ),
             "then_the_full_worst_case_seconds": round(SSH_DEADMAN_SECONDS + total, 3),
             "then_the_full_worst_case_usd": round(dead_pod + worst, 6),
             "widest_dead_pod_that_still_fits_seconds": round(HARD_STOP_SECONDS - total, 3),
@@ -477,6 +612,68 @@ def arithmetic(rate: dict, calls: int, overhead: dict) -> dict:
                 " count says no"
             ),
         },
+    }
+
+
+def rung_4_sensitivity(sums: dict, calls: int, rate: dict) -> dict:
+    """What a SINGLE slow call costs at rung 4 — computed, because the gate prices on the last row.
+
+    `leg_state` prices the remainder at the LARGER of the leg's mean and its LAST call, so one slow
+    reply landing as the most recent row is priced as if every remaining call were that slow. That
+    is the pessimistic direction and it is correct — but it has a knife edge nobody had computed,
+    and a KILL nobody foresaw on a billed pod is a mystery rather than an outcome.
+
+    Solve rung 4's own inequality backwards for the rate that flips it, at a pod running healthy:
+
+        spike(n) = (hard_stop − overhead − pre_generation_measured − n × measured_mean) / (calls − n)
+
+    `pre_generation_measured` is r2's own reading — 254.6 s of create-elapsed at its first reply,
+    the whole of ssh + staging + launch + load on this stack. The generous overhead is what TIGHTENS
+    this: every second charged to the copy-back is a second rung 4 will not lend to the rate.
+    """
+    stop = float(sums["cumulative"]["hard_stop_seconds"])
+    overhead = float(sums["overhead_seconds"])
+    mean = float(rate["mean"])
+    curve = []
+    for at in (20, 100, 200, 400, 700, 1000):
+        spike = (stop - overhead - R2_PRE_GENERATION_MEASURED - at * mean) / (calls - at)
+        curve.append(
+            {
+                "at_call": at,
+                "create_elapsed_seconds": round(R2_PRE_GENERATION_MEASURED + at * mean, 1),
+                "kill_above_seconds_per_call": round(spike, 3),
+            }
+        )
+    tightest = min(one["kill_above_seconds_per_call"] for one in curve)
+    return {
+        "formula": (
+            "(hard_stop − overhead − pre_generation_measured − n × measured_mean) / (calls − n)"
+        ),
+        "pre_generation_measured_seconds": R2_PRE_GENERATION_MEASURED,
+        "measured_mean_seconds_per_call": round(mean, 6),
+        "slowest_call_in_the_sample": rate["slowest_call"],
+        "curve": curve,
+        "tightest_kill_above_seconds_per_call": tightest,
+        "headroom_over_the_slowest_call_measured": round(tightest / rate["slowest_call"], 3),
+        "what_fires_it": (
+            f"ONE reply slower than {tightest} s landing as the most recent row at an early poll."
+            f" The slowest single call this stack has measured is {rate['slowest_call']} s, so the"
+            f" edge sits {round(tightest / rate['slowest_call'], 2)}× above it — margin, not"
+            " comfort. The SECONDS bind here and not the dollars: the same projection at the live"
+            " price is well inside the cap"
+        ),
+        "what_it_costs_if_it_fires": (
+            "the boot and whatever was billed — not the leg. Every reply is flushed as it lands and"
+            " the shipped resume skips every unit already answered, so a re-creation re-asks only"
+            " what has no reply. The ONE re-creation the recovery clause buys is what pays for it,"
+            " and after it there is no second"
+        ),
+        "why_it_is_not_loosened": (
+            "`leg_state` and `projection` are scripts/gate_pass1_fewshot.py's, pinned by r2's sealed"
+            " record and imported here unedited. Pricing the remainder at the mean alone would be a"
+            " weaker gate in the PERMISSIVE direction, which is the one these rungs exist to close."
+            " So the sensitivity is REGISTERED rather than repaired"
+        ),
     }
 
 
@@ -520,6 +717,16 @@ def bars(calls: int) -> dict:
             ),
         },
         "report_only": {
+            "our_readings": ["категория_личное", "молочный_бренд"],
+            "our_readings_rule": (
+                "the two labels the «our rows» readings count, carried here because"
+                " gate_pass1_fewshot.py::leg_table — the function D2's clause names — reads them"
+                " from `bars.dev_gate.our_readings`, a key this record does not have and must not"
+                " invent: this contract has NO dev gate. D2 hands leg_table a view carrying these"
+                " readings under the name it reads, and the proof that it is the same instrument is"
+                " that the dev-200 subset reproduces r2's 136/200 and 38/49 — checked at $0 in"
+                " tests/test_gate_pass1_window.py, on r2's own 200 replies"
+            ),
             "rule": (
                 "READINGS, each captioned «not a bar». None of them can pass, fail or close"
                 " anything, and none of them may be quoted as a verdict on v2"
@@ -670,6 +877,7 @@ def h6(sums: dict, rate: dict, calls: int, threads: int) -> dict:
     cumulative = sums["cumulative"]
     recovery = sums["recovery_arithmetic"]
     overhead = sums["overhead_measured_on_r2"]
+    sensitivity = cumulative["projection_gate"]["single_call_sensitivity"]
     rows = [
         # --- the inputs. This is the half a re-multiplication cannot catch ---
         {
@@ -909,6 +1117,55 @@ def h6(sums: dict, rate: dict, calls: int, threads: int) -> dict:
             "mode": "at_least",
         },
         {
+            "name": ("REASON — the ×1.25 margin exceeds the growth it is named for"),
+            "formula": (
+                "the contract buys the margin «for the window's larger entity blocks». Measured on"
+                " the two packs: mean entities per request"
+                f" {sums['request_width']['mean_entities_sample']} →"
+                f" {sums['request_width']['mean_entities_population']}, and the rendered request"
+                f" they sit in {sums['request_width']['mean_rendered_chars_sample']} →"
+                f" {sums['request_width']['mean_rendered_chars_population']} chars, a ratio of"
+                f" {sums['request_width']['ratio']}. The margin must be ≥ that ratio, and it is"
+                f" {round(RATE_MARGIN / sums['request_width']['ratio'], 2)}× it. A rate is a"
+                " property of the sample it was measured on, so the growth from that sample to this"
+                " population is measured and not assumed"
+            ),
+            "registered": sums["request_width"]["ratio"],
+            "re_derived": RATE_MARGIN,
+            "mode": "at_least",
+        },
+        {
+            "name": "REASON — the recovery clause is reachable WITH the measured deletion tail",
+            "formula": (
+                "rung 2's ceiling is a create-elapsed and the meter stops at `pod delete`. r1"
+                f" measured the span between them at {recovery['deletion_tail']['measured_seconds']}"
+                f" and the worse is charged, so a real rung-2 death bills"
+                f" {recovery['one_dead_pod_at_rung_2_with_the_measured_tail_seconds']} s and not"
+                f" {SSH_DEADMAN_SECONDS:.0f}. That plus the full worst case must still fit the hard"
+                f" stop — it does, by"
+                f" {recovery['margin_after_the_tail_seconds']} s, which is the honest margin"
+            ),
+            "registered": HARD_STOP_SECONDS,
+            "re_derived": recovery["with_the_tail_then_the_full_worst_case_seconds"],
+            "mode": "below",
+        },
+        {
+            "name": "REASON — rung 4's single-call knife edge is above the slowest call measured",
+            "formula": (
+                "rung 4 prices the remainder at the LARGER of the leg's mean and its LAST call, so"
+                " one slow reply is priced as if every remaining call were that slow. Solved"
+                " backwards at the tightest point of the run the edge is"
+                f" {sensitivity['tightest_kill_above_seconds_per_call']} s/call, and the slowest"
+                f" single call this stack has measured is {sensitivity['slowest_call_in_the_sample']}"
+                f" s — a factor of {sensitivity['headroom_over_the_slowest_call_measured']}. The"
+                " check is the DIRECTION: the edge must sit above the worst call, or a healthy pod"
+                " dies on its first bad reply"
+            ),
+            "registered": sensitivity["slowest_call_in_the_sample"],
+            "re_derived": sensitivity["tightest_kill_above_seconds_per_call"],
+            "mode": "at_least",
+        },
+        {
             "name": "REASON — nothing is counted twice in the seconds line",
             "formula": (
                 "the pre-generation lines and the overhead line are disjoint by construction: ssh"
@@ -974,14 +1231,23 @@ def h6(sums: dict, rate: dict, calls: int, threads: int) -> dict:
     }
 
 
+LEG_OUT_HINT = "pass1_window_v2.jsonl"
+
+
 def build() -> dict:
     r2 = sealed(R2, R2_NAME)
     pack = json.loads(summary.read_text_or_refuse(PACK))
     calls = len(pack["legs"][0]["items"])
     threads = pack["population"]["threads"]
     rate = measured_v2_rate()
-    overhead = r2_overhead_reading(sealed(R2_RUN, summary.rel(R2_RUN)))
-    sums = arithmetic(rate, calls, overhead)
+    r2_run = sealed(R2_RUN, summary.rel(R2_RUN))
+    overhead = r2_overhead_reading(r2_run)
+    tail = deletion_tail(sealed(R1_RUN, R1_RUN_NAME))
+    sums = arithmetic(rate, calls, overhead, tail)
+    sums["cumulative"]["projection_gate"]["single_call_sensitivity"] = rung_4_sensitivity(
+        sums, calls, rate
+    )
+    total_seconds = sums["total_seconds"]
     bar = bars(calls)
 
     return {
@@ -1071,11 +1337,20 @@ def build() -> dict:
             "recovery": {
                 "arithmetic": sums["recovery_arithmetic"],
                 "rule": (
-                    "ONE pod re-creation, and only after a deletion PROVEN by listing. It happens"
-                    " only if the guard READING plus the worst case remaining at MEASURED rates is"
-                    f" ≤ ${CAP_USD:.2f} and inside the cumulative stop. Never two billing"
-                    " endpoints. `--pre-create-check` computes both bounds and refuses the create"
-                    " itself"
+                    "ONE pod re-creation, and only after a deletion PROVEN by listing. Never two"
+                    " billing endpoints. `--pre-create-check` computes both bounds and refuses the"
+                    " create itself"
+                ),
+                "two_meters_and_the_stricter_binds": (
+                    "`--pre-create-check` computes from the GATE's own ledger — the closed pods'"
+                    " billed seconds at their own price, which is timely and exact to the pod"
+                    " clock. `scripts/runpod_guard.py` reads the BALANCE delta and the billing walk,"
+                    " which is what the cap is defined against and which LAGS by up to ~32 min"
+                    " (Dv504). They are two meters and neither is the other: the gate's refuses a"
+                    " create the seconds cannot pay for, the guard's refuses one the money cannot."
+                    " The runbook takes BOTH readings before a re-creation and the stricter binds —"
+                    " a clause that named one and computed the other would be true of neither"
+                    " ([[a_balance_delta_is_not_a_per_leg_cost]])"
                 ),
                 "clear_the_mac_first": (
                     "the Mac's copies of a dead pod's run directory are cleared before the second"
@@ -1085,7 +1360,30 @@ def build() -> dict:
                 "there_is_no_generation_checkpoint_to_lose": (
                     "every reply is flushed to its out-file as it lands and the shipped resume"
                     " skips every unit already answered, so a re-creation re-asks only what has no"
-                    " reply. A KILL mid-leg costs the boot, not the leg"
+                    " reply. A KILL mid-leg costs the boot, not the leg — WHERE THE CLAUSE IS"
+                    " REACHABLE AT ALL, and the next field is where that is"
+                ),
+                "the_window_the_clause_is_reachable_in": (
+                    f"`--pre-create-check` prices the FULL worst case ahead ({total_seconds} s) and"
+                    " not the calls that actually remain, so a re-creation is refused once the dead"
+                    f" pod has billed more than {round(HARD_STOP_SECONDS - total_seconds, 2)} s —"
+                    " whatever the resume would have saved. A KILL at rung 2 or rung 3 is inside"
+                    " that window; a KILL deep inside the generation is NOT, and the clause is then"
+                    " a STOP and not a recovery. This is the registered arithmetic and not a"
+                    " defect: the seconds are what the platform holds, and pricing a re-creation at"
+                    " «only what remains» would open a run the cap closes. It is written down"
+                    " because a clause that reads as unconditional is a clause somebody will lean"
+                    " on at the one moment it does not hold"
+                    " ([[the_contracts_scope_is_narrower_than_the_rulings]])"
+                ),
+                "what_the_pod_keeps_and_what_it_clears": (
+                    "on a re-creation the volume still holds /workspace/run/"
+                    + LEG_OUT_HINT
+                    + " and it MUST be kept — it is the whole of «costs the boot, not the leg»."
+                    " What must go is every clock the dead pod owns: `launched_at`, which the gate"
+                    " refuses as older than the new pod, and `pod.log`, whose line count would be a"
+                    " high-water mark the new pod never rises above. The runbook's staging step"
+                    " wipes the directory on the FIRST pod and only on the first"
                 ),
             },
             "meter": {
@@ -1144,6 +1442,14 @@ def build() -> dict:
             "results/prereg_pass1_fewshot.json and _r2.json — sealed, superseded, never re-opened",
             "results/pass1_dev_pack.json, pass1_dev_base.jsonl, pass1_dev_v2.jsonl — r2's evidence",
             "scripts/gate_pass1_fewshot.py — r2's instrument, IMPORTED here and never edited",
+            "scripts/pass1_fewshot_pod_runner.py, scripts/pass1_pod_runner.py,"
+            " scripts/reader_v5_pod_runner.py — the transport that runs ON the pod. The pack pins"
+            " the parser sha the handshake checks, so an edit here is refused by the pod and not by"
+            " a human",
+            "results/spend_pass1_window.json — the step anchor. Regenerating it re-zeroes the step"
+            " at that day's balance, which is the one way this cap stops being a cap",
+            "scripts/gate_pass1_window.py and scripts/build_pass1_window_pack.py — pinned by this"
+            " record; an edit after the create moves a pin the gate itself is read through",
         ],
         "do_not": [
             "no change to prompt v2, the neighbour rule, the labels, the gold or any sealed record",

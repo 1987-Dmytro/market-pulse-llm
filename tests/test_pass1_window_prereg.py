@@ -281,8 +281,16 @@ def test_every_number_the_contract_prints_re_derives():
 
 def test_H6_carries_rows_that_check_a_REASON_and_not_only_a_number():
     reasons = [one for one in RECORD["h6"]["rows"] if one["name"].startswith("REASON")]
-    assert len(reasons) == 3
+    assert len(reasons) == 6
     assert all(one["agrees"] for one in reasons)
+    # the margin's own reason is MEASURED on the two packs, not asserted: the entity blocks nearly
+    # double and the request they sit in grows ~1 %, so the margin is bought against a growth an
+    # order of magnitude smaller than itself
+    width = SUMS["request_width"]
+    margin = next(one for one in reasons if "margin exceeds" in one["name"])
+    assert margin["registered"] == width["ratio"] < margin["re_derived"] == 1.25
+    assert width["mean_entities_population"] > width["mean_entities_sample"]
+    assert width["dev_200_rows_rendered_identically_in_both_packs"] == 200
     overhead = next(one for one in reasons if "400 → 1032" in one["name"])
     measured = SUMS["overhead_measured_on_r2"]
     assert (measured["rows_answered"], measured["rows_r2_registered"]) == (400, 464)
@@ -297,7 +305,12 @@ def test_H6_REFUSES_a_number_that_stops_re_deriving(monkeypatch):
     overhead = producer.r2_overhead_reading(
         producer.sealed(producer.R2_RUN, "results/pass1_fewshot_r2_run.json")
     )
-    block = producer.h6(producer.arithmetic(rate, 1032, overhead), rate, 1032, 129)
+    tail = producer.deletion_tail(producer.sealed(producer.R1_RUN, producer.R1_RUN_NAME))
+    sums = producer.arithmetic(rate, 1032, overhead, tail)
+    sums["cumulative"]["projection_gate"]["single_call_sensitivity"] = producer.rung_4_sensitivity(
+        sums, 1032, rate
+    )
+    block = producer.h6(sums, rate, 1032, 129)
     assert block["mismatches"], "a rate that no longer matches the contract must be a STOP"
     assert "generation_seconds" in {one["name"] for one in block["mismatches"]}
     assert block["reading"].endswith("this is a STOP")
@@ -309,7 +322,12 @@ def test_H6_REFUSES_a_hard_stop_that_no_longer_covers_the_recovery_clause(monkey
     overhead = producer.r2_overhead_reading(
         producer.sealed(producer.R2_RUN, "results/pass1_fewshot_r2_run.json")
     )
-    block = producer.h6(producer.arithmetic(rate, 1032, overhead), rate, 1032, 129)
+    tail = producer.deletion_tail(producer.sealed(producer.R1_RUN, producer.R1_RUN_NAME))
+    sums = producer.arithmetic(rate, 1032, overhead, tail)
+    sums["cumulative"]["projection_gate"]["single_call_sensitivity"] = producer.rung_4_sensitivity(
+        sums, 1032, rate
+    )
+    block = producer.h6(sums, rate, 1032, 129)
     failed = {one["name"] for one in block["mismatches"]}
     assert "the_recovery_clause_fits_the_hard_stop" in failed
     assert "the_knife_edge_is_wider_than_rung_2" in failed
@@ -323,8 +341,144 @@ def test_the_overhead_reading_comes_from_r2s_OWN_gate_record():
     assert measured["pod"] == pod["pod_id"]
     assert measured["billed_seconds"] == pod["billed_seconds"]
     assert (
-        measured["create_elapsed_at_the_last_row_seconds"] == watch["elapsed_on_this_pod_seconds"]
+        measured["create_elapsed_at_the_watch_GO_seconds"] == watch["elapsed_on_this_pod_seconds"]
     )
     assert measured["measured_after_the_last_row_seconds"] == pytest.approx(
         pod["billed_seconds"] - watch["elapsed_on_this_pod_seconds"]
     )
+    # the stamp is the poll that SAW completion, not the instant the last row landed — which makes
+    # the measured span a LOWER bound and the scaling conservative
+    assert "not the instant the last row landed" in measured["what_that_stamp_is"]
+
+
+# --- the two readings the review before the pod added ------------------------------------------------
+
+
+def test_the_recovery_clause_is_priced_with_the_MEASURED_deletion_tail():
+    """Rung 2's ceiling is a create-elapsed; the meter stops at `pod delete`, not when it fires.
+
+    r1 killed two pods on that rung and kept billing 78.5 s and 0.1 s past it. Charging the ceiling
+    alone advertises 83.46 s of slack the stack has never achieved; the real margin is 4.96 s
+    ([[a_ceiling_derived_from_one_span_measured_over_another]]).
+    """
+    recovery = SUMS["recovery_arithmetic"]
+    tail = recovery["deletion_tail"]
+    run = json.loads((REPO_ROOT / "results" / "pass1_fewshot_run.json").read_text("utf-8"))
+    measured = {}
+    for pod in run["pods"]:
+        for gate in run["gates"]:
+            if (
+                gate.get("kind") == "gate0"
+                and gate.get("verdict") == "KILL"
+                and gate.get("pod_id") == pod["pod_id"]
+            ):
+                measured[pod["pod_id"]] = round(
+                    pod["billed_seconds"] - gate["elapsed_on_this_pod_seconds"], 1
+                )
+    assert tail["measured_seconds"] == measured
+    assert tail["charged_seconds"] == max(measured.values()) == 78.5
+    assert recovery["one_dead_pod_at_rung_2_with_the_measured_tail_seconds"] == 578.5
+    assert recovery["with_the_tail_then_the_full_worst_case_seconds"] == pytest.approx(
+        578.5 + SUMS["total_seconds"]
+    )
+    assert (
+        recovery["with_the_tail_then_the_full_worst_case_seconds"]
+        <= SUMS["cumulative"]["hard_stop_seconds"]
+    )
+    assert recovery["margin_after_the_tail_seconds"] == pytest.approx(4.96)
+    assert rows_by_name()[
+        "REASON — the recovery clause is reachable WITH the measured deletion tail"
+    ]["agrees"]
+
+
+def test_rung_4s_single_call_knife_edge_is_computed_and_sits_above_the_worst_call():
+    """One slow reply is priced as if every remaining call were that slow — so the edge is registered.
+
+    `leg_state` prices the remainder at max(mean, last call). The gate is r2's and is pinned, so the
+    sensitivity is REGISTERED rather than repaired: a KILL is then a foreseen outcome with a
+    recovery path and not a mystery on a billed pod.
+    """
+    block = SUMS["cumulative"]["projection_gate"]["single_call_sensitivity"]
+    stop = SUMS["cumulative"]["hard_stop_seconds"]
+    overhead = SUMS["overhead_seconds"]
+    mean = block["measured_mean_seconds_per_call"]
+    pre = block["pre_generation_measured_seconds"]
+    for row in block["curve"]:
+        at = row["at_call"]
+        assert row["kill_above_seconds_per_call"] == pytest.approx(
+            (stop - overhead - pre - at * mean) / (1032 - at), abs=0.001
+        )
+    tightest = min(one["kill_above_seconds_per_call"] for one in block["curve"])
+    assert block["tightest_kill_above_seconds_per_call"] == tightest
+    assert tightest > block["slowest_call_in_the_sample"] == 4.066
+    assert block["headroom_over_the_slowest_call_measured"] == pytest.approx(
+        tightest / 4.066, abs=0.001
+    )
+    assert rows_by_name()[
+        "REASON — rung 4's single-call knife edge is above the slowest call measured"
+    ]["agrees"]
+
+
+def test_the_entity_block_is_measured_as_RENDERED_and_not_as_a_python_repr():
+    """It prices pass2-signals, so it has to be the chars a model reads.
+
+    `len(str(entities))` carries quotes, braces and `: ` the renderer never emits and overstates
+    the block ~3x on this population.
+    """
+    import sys as _sys
+
+    _sys.path.insert(0, str(REPO_ROOT / "src"))
+    from market_pulse import prompts as _prompts
+
+    table = {one["thread"]: one for one in PACK["per_thread"]}
+    widest = max(PACK["per_thread"], key=lambda one: one["entity_block_chars"])
+    item = next(one for one in PACK["legs"][0]["items"] if one["thread"] == widest["thread"])
+
+    def render(entities):
+        return _prompts.pass1_messages_gm4(
+            item["channel"],
+            item["post_id"],
+            item["topic"],
+            entities,
+            item["msg_id"],
+            item["text"],
+            task=item["task"],
+            examples=item["examples"],
+        )[0]["content"]
+
+    rendered = len(render(item["entities"])) - len(render([]))
+    assert widest["entity_block_chars"] == rendered
+    assert rendered < sum(len(str(one)) for one in item["entities"])
+    assert all(one["entity_block_chars"] >= 0 for one in table.values())
+
+
+def test_the_fourteen_have_a_NAMED_producer_because_leg_table_cannot_score_them():
+    """`leg_table` compares against the LABEL map, and no gold pair is in it — checked, not argued.
+
+    A reading D2 owes with no producer named at D0 is a producer invented after the money
+    ([[a_registered_bar_may_have_no_producer]]).
+    """
+    import sys as _sys
+
+    _sys.path.insert(0, str(REPO_ROOT / "scripts"))
+    import gate_pass1_fewshot as r2gate
+
+    gold = json.loads((REPO_ROOT / "results" / "reader_gold_w1_r2.json").read_text("utf-8"))
+    pairs = {
+        (
+            f"{row['channel']}:{(row.get('evidence_row') or {}).get('post_id_in_the_store')}",
+            int(row["msg_id"]),
+        )
+        for row in gold["per_comment"]
+    }
+    assert len(pairs) == 14
+    assert not (pairs & set(r2gate.labels())), "no gold pair may be in the label map"
+
+    block = RECORD["instruments"]["gold"]
+    assert block["sha256"] == producer.sha(REPO_ROOT / "results" / "reader_gold_w1_r2.json")
+    assert block["judge"] == "scripts/score_pass1_probe.py::bar_p1"
+    assert block["judge_sha256"] == producer.sha(REPO_ROOT / "scripts" / "score_pass1_probe.py")
+    assert block["collapse_sha256"] == producer.sha(
+        REPO_ROOT / "scripts" / "score_reader_probe_b.py"
+    )
+    assert "CENSUS ROW and never a bar" in block["rule"]

@@ -31,6 +31,27 @@
     "why_two_counts": "two threads of the cell carry no payable comment, so the cell's 129 and the threads that actually produce a request are different denominators. One of those two HAS a bought verdict, which is why the two counts differ by one — a single field would have been true of one set and quoted about the other ([[count_the_kind_not_the_rows]])"
   },
   "contract": "docs/PROMPT-pass1-window.md D0",
+  "gold_id_collisions": {
+    "gold_by_msg_id_alone": 14,
+    "gold_by_pair": 14,
+    "msg_ids_carried_by_more_than_one_thread": [
+      21164,
+      21195,
+      21209,
+      21211,
+      21236,
+      21237,
+      21238,
+      21239,
+      21240,
+      21241,
+      21253,
+      21256,
+      21266
+    ],
+    "rule": "a msg_id is unique per CHANNEL and not per window. Membership is keyed on (thread, msg_id) everywhere; this is what the id-only key would have done",
+    "the_two_keys_agree_on_this_population": true
+  },
   "gold_threads_in_the_population": [
     "@VARUS_channel:10348",
     "@VARUS_channel:10613",
@@ -91115,6 +91136,7 @@
     "ceiling_chars": 12000,
     "headroom_chars": 3438,
     "median_chars": 4456,
+    "stop_rule": "the STOP is prompts.pass1_messages_gm4's own ValueError, which fires inside rendered_item and before any item reaches this record — so the build cannot produce an over-ceiling request and there is no branch here that could catch one. tests/test_pass1_window_pack.py drives the renderer past the ceiling on the widest real item and watches it refuse",
     "widest_request": "@matusi_ukr:22133#577621",
     "widest_request_chars": 8562
   },
@@ -92092,7 +92114,7 @@
     {
       "comment_chars": 363,
       "entities": 2,
-      "entity_block_chars": 295,
+      "entity_block_chars": 65,
       "payable_comments": 7,
       "silenced": 0,
       "text_less": 0,
@@ -92114,7 +92136,7 @@
     {
       "comment_chars": 13,
       "entities": 3,
-      "entity_block_chars": 404,
+      "entity_block_chars": 138,
       "payable_comments": 1,
       "silenced": 0,
       "text_less": 0,
@@ -92125,7 +92147,7 @@
     {
       "comment_chars": 2,
       "entities": 2,
-      "entity_block_chars": 252,
+      "entity_block_chars": 66,
       "payable_comments": 1,
       "silenced": 0,
       "text_less": 0,
@@ -92136,7 +92158,7 @@
     {
       "comment_chars": 157,
       "entities": 5,
-      "entity_block_chars": 697,
+      "entity_block_chars": 203,
       "payable_comments": 2,
       "silenced": 0,
       "text_less": 0,
@@ -92147,7 +92169,7 @@
     {
       "comment_chars": 300,
       "entities": 1,
-      "entity_block_chars": 143,
+      "entity_block_chars": 12,
       "payable_comments": 12,
       "silenced": 52,
       "text_less": 1,
@@ -92169,7 +92191,7 @@
     {
       "comment_chars": 1,
       "entities": 2,
-      "entity_block_chars": 256,
+      "entity_block_chars": 69,
       "payable_comments": 1,
       "silenced": 0,
       "text_less": 0,
@@ -92180,7 +92202,7 @@
     {
       "comment_chars": 52,
       "entities": 2,
-      "entity_block_chars": 249,
+      "entity_block_chars": 65,
       "payable_comments": 1,
       "silenced": 0,
       "text_less": 0,
@@ -92191,7 +92213,7 @@
     {
       "comment_chars": 148,
       "entities": 1,
-      "entity_block_chars": 128,
+      "entity_block_chars": 12,
       "payable_comments": 4,
       "silenced": 0,
       "text_less": 0,
@@ -92213,7 +92235,7 @@
     {
       "comment_chars": 249,
       "entities": 4,
-      "entity_block_chars": 551,
+      "entity_block_chars": 126,
       "payable_comments": 2,
       "silenced": 0,
       "text_less": 0,
@@ -92224,7 +92246,7 @@
     {
       "comment_chars": 195,
       "entities": 3,
-      "entity_block_chars": 384,
+      "entity_block_chars": 113,
       "payable_comments": 5,
       "silenced": 0,
       "text_less": 0,
@@ -92235,7 +92257,7 @@
     {
       "comment_chars": 373,
       "entities": 3,
-      "entity_block_chars": 389,
+      "entity_block_chars": 103,
       "payable_comments": 6,
       "silenced": 0,
       "text_less": 0,
@@ -92246,7 +92268,7 @@
     {
       "comment_chars": 337,
       "entities": 3,
-      "entity_block_chars": 399,
+      "entity_block_chars": 117,
       "payable_comments": 6,
       "silenced": 0,
       "text_less": 0,
@@ -92257,7 +92279,7 @@
     {
       "comment_chars": 267,
       "entities": 6,
-      "entity_block_chars": 795,
+      "entity_block_chars": 200,
       "payable_comments": 5,
       "silenced": 0,
       "text_less": 0,
@@ -92268,7 +92290,7 @@
     {
       "comment_chars": 207,
       "entities": 2,
-      "entity_block_chars": 265,
+      "entity_block_chars": 62,
       "payable_comments": 1,
       "silenced": 0,
       "text_less": 0,
@@ -92279,7 +92301,7 @@
     {
       "comment_chars": 127,
       "entities": 1,
-      "entity_block_chars": 128,
+      "entity_block_chars": 12,
       "payable_comments": 5,
       "silenced": 0,
       "text_less": 0,
@@ -92290,7 +92312,7 @@
     {
       "comment_chars": 369,
       "entities": 2,
-      "entity_block_chars": 284,
+      "entity_block_chars": 57,
       "payable_comments": 9,
       "silenced": 0,
       "text_less": 0,
@@ -92312,7 +92334,7 @@
     {
       "comment_chars": 24,
       "entities": 2,
-      "entity_block_chars": 282,
+      "entity_block_chars": 66,
       "payable_comments": 1,
       "silenced": 0,
       "text_less": 0,
@@ -92323,7 +92345,7 @@
     {
       "comment_chars": 97,
       "entities": 1,
-      "entity_block_chars": 122,
+      "entity_block_chars": 12,
       "payable_comments": 2,
       "silenced": 0,
       "text_less": 1,
@@ -92334,7 +92356,7 @@
     {
       "comment_chars": 214,
       "entities": 8,
-      "entity_block_chars": 1059,
+      "entity_block_chars": 382,
       "payable_comments": 5,
       "silenced": 0,
       "text_less": 1,
@@ -92345,7 +92367,7 @@
     {
       "comment_chars": 957,
       "entities": 10,
-      "entity_block_chars": 1268,
+      "entity_block_chars": 393,
       "payable_comments": 10,
       "silenced": 0,
       "text_less": 1,
@@ -92433,7 +92455,7 @@
     {
       "comment_chars": 3,
       "entities": 1,
-      "entity_block_chars": 132,
+      "entity_block_chars": 12,
       "payable_comments": 1,
       "silenced": 0,
       "text_less": 0,
@@ -92444,7 +92466,7 @@
     {
       "comment_chars": 406,
       "entities": 1,
-      "entity_block_chars": 134,
+      "entity_block_chars": 12,
       "payable_comments": 8,
       "silenced": 0,
       "text_less": 0,
@@ -92477,7 +92499,7 @@
     {
       "comment_chars": 1783,
       "entities": 2,
-      "entity_block_chars": 321,
+      "entity_block_chars": 75,
       "payable_comments": 9,
       "silenced": 0,
       "text_less": 0,
@@ -92620,7 +92642,7 @@
     {
       "comment_chars": 423,
       "entities": 1,
-      "entity_block_chars": 154,
+      "entity_block_chars": 22,
       "payable_comments": 4,
       "silenced": 0,
       "text_less": 0,
@@ -92697,7 +92719,7 @@
     {
       "comment_chars": 17116,
       "entities": 4,
-      "entity_block_chars": 492,
+      "entity_block_chars": 122,
       "payable_comments": 125,
       "silenced": 2,
       "text_less": 311,
@@ -92708,7 +92730,7 @@
     {
       "comment_chars": 4336,
       "entities": 1,
-      "entity_block_chars": 165,
+      "entity_block_chars": 47,
       "payable_comments": 35,
       "silenced": 0,
       "text_less": 0,
@@ -92719,7 +92741,7 @@
     {
       "comment_chars": 2077,
       "entities": 7,
-      "entity_block_chars": 996,
+      "entity_block_chars": 336,
       "payable_comments": 9,
       "silenced": 0,
       "text_less": 1,
@@ -92741,7 +92763,7 @@
     {
       "comment_chars": 4800,
       "entities": 3,
-      "entity_block_chars": 443,
+      "entity_block_chars": 103,
       "payable_comments": 12,
       "silenced": 0,
       "text_less": 0,
@@ -92752,7 +92774,7 @@
     {
       "comment_chars": 14607,
       "entities": 4,
-      "entity_block_chars": 514,
+      "entity_block_chars": 138,
       "payable_comments": 105,
       "silenced": 0,
       "text_less": 283,
@@ -92763,7 +92785,7 @@
     {
       "comment_chars": 3260,
       "entities": 1,
-      "entity_block_chars": 135,
+      "entity_block_chars": 5,
       "payable_comments": 27,
       "silenced": 0,
       "text_less": 0,
@@ -92774,7 +92796,7 @@
     {
       "comment_chars": 877,
       "entities": 3,
-      "entity_block_chars": 392,
+      "entity_block_chars": 98,
       "payable_comments": 6,
       "silenced": 0,
       "text_less": 0,
@@ -92796,7 +92818,7 @@
     {
       "comment_chars": 2502,
       "entities": 4,
-      "entity_block_chars": 611,
+      "entity_block_chars": 175,
       "payable_comments": 14,
       "silenced": 0,
       "text_less": 0,
@@ -92807,7 +92829,7 @@
     {
       "comment_chars": 1358,
       "entities": 5,
-      "entity_block_chars": 686,
+      "entity_block_chars": 207,
       "payable_comments": 12,
       "silenced": 0,
       "text_less": 0,
@@ -92818,7 +92840,7 @@
     {
       "comment_chars": 2921,
       "entities": 1,
-      "entity_block_chars": 187,
+      "entity_block_chars": 15,
       "payable_comments": 13,
       "silenced": 0,
       "text_less": 0,
@@ -92840,7 +92862,7 @@
     {
       "comment_chars": 4366,
       "entities": 2,
-      "entity_block_chars": 288,
+      "entity_block_chars": 63,
       "payable_comments": 15,
       "silenced": 0,
       "text_less": 0,
@@ -92862,7 +92884,7 @@
     {
       "comment_chars": 8924,
       "entities": 2,
-      "entity_block_chars": 289,
+      "entity_block_chars": 56,
       "payable_comments": 108,
       "silenced": 0,
       "text_less": 228,
@@ -92873,7 +92895,7 @@
     {
       "comment_chars": 132,
       "entities": 5,
-      "entity_block_chars": 643,
+      "entity_block_chars": 185,
       "payable_comments": 2,
       "silenced": 0,
       "text_less": 0,
@@ -92895,7 +92917,7 @@
     {
       "comment_chars": 5820,
       "entities": 1,
-      "entity_block_chars": 194,
+      "entity_block_chars": 26,
       "payable_comments": 17,
       "silenced": 0,
       "text_less": 0,
@@ -92906,7 +92928,7 @@
     {
       "comment_chars": 1975,
       "entities": 1,
-      "entity_block_chars": 141,
+      "entity_block_chars": 22,
       "payable_comments": 4,
       "silenced": 0,
       "text_less": 1,
@@ -92917,7 +92939,7 @@
     {
       "comment_chars": 215,
       "entities": 1,
-      "entity_block_chars": 161,
+      "entity_block_chars": 27,
       "payable_comments": 3,
       "silenced": 0,
       "text_less": 0,
@@ -92928,7 +92950,7 @@
     {
       "comment_chars": 44,
       "entities": 1,
-      "entity_block_chars": 152,
+      "entity_block_chars": 28,
       "payable_comments": 1,
       "silenced": 0,
       "text_less": 0,
@@ -93225,7 +93247,7 @@
     {
       "comment_chars": 74,
       "entities": 1,
-      "entity_block_chars": 124,
+      "entity_block_chars": 12,
       "payable_comments": 1,
       "silenced": 0,
       "text_less": 0,
@@ -93368,7 +93390,7 @@
     {
       "comment_chars": 370,
       "entities": 3,
-      "entity_block_chars": 385,
+      "entity_block_chars": 105,
       "payable_comments": 4,
       "silenced": 0,
       "text_less": 1,
@@ -93538,7 +93560,7 @@
       "src/market_pulse/prompts.py": "b70e2114b03a76dc2c8cfc9b559bf7ef22e9193d841b4fccc5ed8bd0a40294ab"
     },
     "script": "scripts/build_pass1_window_pack.py",
-    "sha256": "af07b1874c9efc9bac15043d63585397c4d5ac1328cd4223da1f502cad944590"
+    "sha256": "175e901873278efd41022b0e37d859a3e24ed9b4cc3ac84d12a286d1dd310567"
   },
   "reading": "the pod renders each item itself, from the fields in it, and refuses unless its sha equals the one above. Shipping the rendered string would only prove the two machines agree about a string; what has to be true is that the model is shown what the registration registered",
   "registration": {

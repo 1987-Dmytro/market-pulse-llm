@@ -119,15 +119,39 @@ def test_the_self_exclusion_has_a_DENOMINATOR_and_the_rule_really_bites():
     }
 
 
+def test_gold_membership_is_keyed_on_the_pair_and_a_COLLIDING_id_proves_it(monkeypatch):
+    """A msg_id is unique per channel, not per window — 13 of them here are carried by two threads.
+
+    The id-only key selects the same fourteen on THIS population and that is a reading, not a
+    property of the key. The mutation is the proof: hand `gold_keys` a pair whose msg_id belongs to
+    a second thread as well, and the pair key marks ONE row where the id key would mark two
+    ([[id_spaces_that_look_comparable]]).
+    """
+    block = PACK["gold_id_collisions"]
+    assert len(block["msg_ids_carried_by_more_than_one_thread"]) == 13
+    assert block["gold_by_pair"] == block["gold_by_msg_id_alone"] == 14
+    assert block["the_two_keys_agree_on_this_population"] is True
+
+    colliding = block["msg_ids_carried_by_more_than_one_thread"][0]
+    threads = sorted({one["thread"] for one in ITEMS if int(one["msg_id"]) == colliding})
+    assert len(threads) == 2, threads
+    monkeypatch.setattr(window, "gold_keys", lambda: ({(threads[0], colliding)}, {threads[0]}))
+    rebuilt = window.build()
+    marked = [one["id"] for one in rebuilt["legs"][0]["items"] if one["membership"]["gold_14"]]
+    by_id = sorted(one["id"] for one in ITEMS if int(one["msg_id"]) == colliding)
+    assert len(by_id) == 2
+    assert marked == [f"{threads[0]}#{colliding}"] != by_id
+
+
 def test_membership_is_recorded_per_item_and_is_the_four_real_sets():
-    gold_ids, _ = window.gold_keys()
+    gold_pairs, _ = window.gold_keys()
     probe = window.keys_of(window.PROBE_PACK, "items")
     dev = window.keys_of(window.DEV_PACK, "legs")
     labelled = {(one["thread"], one["msg_id"]) for one in sft.labelled_units()}
     for item in ITEMS:
         at = (item["thread"], int(item["msg_id"]))
         assert item["membership"] == {
-            "gold_14": int(item["msg_id"]) in gold_ids,
+            "gold_14": at in gold_pairs,
             "probe_64": at in probe,
             "labelled_650": at in labelled,
             "dev_200": at in dev,
@@ -207,3 +231,37 @@ def test_the_per_thread_table_prices_pass_2s_denominator():
 def test_the_store_and_the_census_are_asserted_to_be_the_same_thread():
     block = PACK["population"]["store_agreement"]
     assert (block["threads"], block["comments"]) == (129, 1032)
+
+
+def test_all_three_store_refusals_FIRE_and_none_of_them_is_decoration():
+    """A refusal nobody has watched fire is a refusal nobody has.
+
+    `store_agrees` is the join between the census's membership and the store the render comes from,
+    and all three of its branches can be deleted without the suite noticing unless they are driven
+    ([[guard_selftest_negative_control]]).
+    """
+    import copy
+
+    import build_pass1_label_pack_r2 as r2pack
+
+    population = census.population()
+    store = r2pack.raw_threads()
+    assert window.store_agrees(population, store)["comments"] == 1032  # the GREEN path first
+
+    name = f"{population[0]['channel']}:{population[0]['post_id']}"
+
+    missing = {key: value for key, value in store.items() if key != name}
+    with pytest.raises(SystemExit, match="in the census cell and not in the store"):
+        window.store_agrees(population, missing)
+
+    moved_post = copy.deepcopy(store)
+    moved_post[name] = {**moved_post[name], "post_text": moved_post[name]["post_text"] + " …"}
+    with pytest.raises(SystemExit, match="disagree on the post"):
+        window.store_agrees(population, moved_post)
+
+    # the comment leg is mutated on the CENSUS side: the store keeps its text inside the row's own
+    # recorded `rendering`, and the refusal fires on the two sides disagreeing whichever one moves
+    moved_comment = copy.deepcopy(population)
+    moved_comment[0]["comments"][0]["text"] = "a text the store never held"
+    with pytest.raises(SystemExit, match="disagree on the comment text"):
+        window.store_agrees(moved_comment, store)

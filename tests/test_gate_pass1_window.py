@@ -242,6 +242,29 @@ def test_the_price_gate_records_the_pod_and_refuses_a_window_longer_than_the_har
         )
 
 
+def test_a_REFUSED_terminate_after_still_leaves_the_billing_pod_RECORDED(run):
+    """The refusal fires when the pod already exists. Recording after it loses a live endpoint.
+
+    `terminate_after` raises on an overshooting window — and by then `pod create` has returned, the
+    meter is running and nothing in `results/pass1_window_run.json` knows the pod is there. So the
+    pod is written FIRST, the refusal is recorded as a rung-1 KILL carrying the delete command, and
+    only then does it re-raise.
+    """
+    over = at(HARD_STOP + gate.tolerance(RECORD) + 1).isoformat(timespec="seconds")
+    with pytest.raises(SystemExit, match="beyond the"):
+        opened(run, terminate_after=over, pod_id="pod-live")
+    state = json.loads(run.RECORD.read_text("utf-8"))
+    assert [one["pod_id"] for one in state["pods"]] == ["pod-live"]
+    assert state["pods"][-1]["terminate_after"] == over
+    assert "terminate_after_computed" not in state["pods"][-1]
+    assert state["gates"][-1]["kind"] == "price-refused"
+    assert state["gates"][-1]["verdict"] == "KILL"
+    assert "runpodctl pod delete pod-live" in state["gates"][-1]["next_step"]
+    # and the pod is LIVE in the record, so the next --pre-create-check refuses a second endpoint
+    assert gate.live_pod(state)["pod_id"] == "pod-live"
+    assert run.main(["--pre-create-check"]) == gate.KILL
+
+
 def test_a_price_over_the_registered_ceiling_is_a_KILL_and_the_pod_is_still_recorded(run):
     ceiling = RECORD["money"]["meter"]["price_ceiling_usd_per_hour"]
     assert opened(run, usd_per_hour=ceiling + 0.01) == gate.KILL
@@ -352,6 +375,33 @@ def test_rung_3_reads_the_leg_the_RECORD_names_and_not_whatever_is_in_the_direct
     replied(where, 2.72, name="pass1_dev_base.jsonl")
     assert gate.first_reply_after_launch(RECORD, where) == CEILING + 100
     assert run.main(["--boot", "--outdir", str(where)], now=at(600)) == gate.KILL
+
+
+def test_rung_3_reads_the_FIRST_reply_and_not_the_last(run, tmp_path):
+    """`min` and `max` over `elapsed_since_start` differ only when the file has more than one row.
+
+    Every other test here writes ONE row, so `min -> max` survives all of them — and `max` is the
+    permissive direction on a long run: an out-file 400 rows deep would report the LAST reply's
+    elapsed against a 450 s ceiling and KILL a pod that booted in 140 s. Three rows decide it.
+    """
+    where = tmp_path / "run"
+    where.mkdir(parents=True, exist_ok=True)
+    (where / LEG_OUT).write_text(
+        "\n".join(
+            json.dumps({"id": f"x{i}", "elapsed_since_start": e, "seconds": 2.7})
+            for i, e in enumerate((140.0, 260.0, 900.0))
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    assert gate.first_reply_after_launch(RECORD, where) == 140.0
+
+    assert opened(run) == gate.GO
+    launch_stamp(where, 200.0)
+    # the boot was 140 s of a 450 s ceiling — GO. Under `max` this same file reads 900 s and KILLs
+    assert run.main(["--boot", "--outdir", str(where)], now=at(1200)) == gate.GO
+    state = json.loads(run.RECORD.read_text("utf-8"))
+    assert state["gates"][-1]["first_reply_at_launch_elapsed_seconds"] == 140.0
 
 
 def test_the_create_anchored_BACKSTOP_kills_a_pod_with_a_FRESH_launch_stamp(run, tmp_path):
@@ -771,6 +821,26 @@ def test_a_duplicate_id_and_an_id_the_leg_never_asked_are_both_RED(run, tmp_path
     assert unknown["ids_the_leg_never_asked"] == ["@nobody:1#1"]
 
 
+def test_the_gate_holds_the_shipped_pack_to_the_SHA_the_record_pins(run, tmp_path, monkeypatch):
+    """A count is not an identity. Rung 7 reads every reply's sha against THIS file.
+
+    The population check compares one integer, and a pack rebuilt with the same 1 032 rows and a
+    different rendering would pass it — while silently becoming the reference the bar is read
+    against ([[the_guard_hashes_the_half_that_cannot_move]]).
+    """
+    shipped = REPO_ROOT / "results" / "pass1_window_pack.json"
+    assert gate.PACK == shipped
+    assert RECORD["population"]["sha256"] == gate.summary.sha256_of(shipped)
+    impostor = tmp_path / "pass1_window_pack.json"
+    impostor.write_text(
+        json.dumps({**PACK, "self_exclusion": {"tampered": True}}, ensure_ascii=False), "utf-8"
+    )
+    monkeypatch.setattr(gate, "PACK", impostor)
+    assert opened(run) == gate.GO
+    with pytest.raises(SystemExit, match="have parted"):
+        run.main(["--completeness", "--pack", str(impostor), "--outdir", str(tmp_path)], now=at(1))
+
+
 def test_the_gate_refuses_a_pack_that_is_not_the_registered_population(run, tmp_path):
     assert opened(run) == gate.GO
     path = pack_file(tmp_path, small(units=8))
@@ -804,6 +874,13 @@ def test_every_threshold_the_gate_acts_on_is_READ_out_of_the_registration():
     # and the gate types none of them: no threshold appears as a literal in its source
     source = (REPO_ROOT / "scripts" / "gate_pass1_window.py").read_text("utf-8")
     for value in ("180", "500", "450", "1100", "600", "6100", "6500", "1.38", "1.50", "0.80"):
+        assert f"= {value}" not in source, value
+    # the bar's own three numbers are the ones rung 7 acts on, and a grep for `= <value>` would miss
+    # them entirely — they reach the gate as `int(bar[...])` and never as a literal. Assert the
+    # SHAPE instead: every number rung 7 compares is read out of the record's bar
+    for name in ("owed", "answered_minimum", "sha_mismatches_maximum", "parse_refusals_maximum"):
+        assert f'bar["{name}"]' in source, name
+    for value in ("1032", "10", "0.01"):
         assert f"= {value}" not in source, value
 
 
@@ -909,3 +986,69 @@ def test_the_runner_REFUSES_the_pack_when_this_checkout_renders_something_else(t
             ],
             loader=lambda p, r: FakeClient(),
         )
+
+
+# --- D2's clause, verified at D0 on r2's own replies ---------------------------------------------------
+
+
+def test_the_window_renders_the_dev_200_byte_for_byte_as_the_dev_pack_did():
+    """The 200 rows r2 measured are IN this population, and they are asked the same request.
+
+    Not a convenience: the report-only reading D2 owes — «the dev-200 should reproduce r2's 136/200
+    and 38/49 up to decoding noise» — only means anything if the request did not move. It did not,
+    for all 200, sha for sha ([[the_fixture_and_the_artifact_share_anchors]]).
+    """
+    dev = json.loads((REPO_ROOT / "results" / "pass1_dev_pack.json").read_text("utf-8"))
+    v2 = {
+        one["id"]: one for one in next(one for one in dev["legs"] if one["name"] == "v2")["items"]
+    }
+    window = {one["id"]: one for one in PACK["legs"][0]["items"]}
+    common = set(v2) & set(window)
+    assert len(common) == 200 == len(v2)
+    assert all(v2[one]["rendering_sha256"] == window[one]["rendering_sha256"] for one in common)
+
+
+def test_rung_7_and_D2s_reading_are_driven_on_r2s_REAL_replies(run, tmp_path):
+    """The completeness bar and the report-only reading, on 200 replies a pod actually generated.
+
+    Fabricated rows prove the gate's branches; these prove the gate against the transport. r2's
+    `results/pass1_dev_v2.jsonl` is 200 real replies to requests this pack asks byte for byte, so
+    they are valid rows of this contract's out-file — and D2's own clause («scored through
+    scorer.reader_comment_agreement exactly as gate_pass1_fewshot.py::leg_table does») is checked
+    HERE, at $0, rather than discovered after the money.
+    """
+    where = tmp_path / "run"
+    where.mkdir(parents=True, exist_ok=True)
+    dev_ids = set(PACK["membership"]["dev_200"]["ids"])
+    leg = PACK["legs"][0]
+    subset = {
+        **PACK,
+        "legs": [{**leg, "items": [one for one in leg["items"] if one["id"] in dev_ids]}],
+        "population": {**PACK["population"], "payable_comments": 200},
+    }
+    assert len(subset["legs"][0]["items"]) == 200
+    (where / leg["out"]).write_text(
+        (REPO_ROOT / "results" / "pass1_dev_v2.jsonl").read_text("utf-8"), encoding="utf-8"
+    )
+
+    record = registered_for(subset)
+    assert opened(run) == gate.GO
+    state = json.loads(run.RECORD.read_text("utf-8"))
+    bar = gate.completeness(record, state, subset, where, at(4000))
+    assert bar["verdict"] == "GO"
+    assert (bar["answered"], bar["parsed"], bar["sha_mismatches"], bar["parse_refusals"]) == (
+        200,
+        200,
+        0,
+        0,
+    )
+
+    # the report-only reading, through r2's OWN leg_table — the function D2's clause names. It reads
+    # `bars.dev_gate.our_readings`, a key this record does not carry because this contract has no dev
+    # gate, so D2 hands it the readings the record DOES carry under `bars.report_only.our_readings`
+    ours = RECORD["bars"]["report_only"]["our_readings"]
+    view = {**record, "bars": {**record["bars"], "dev_gate": {"our_readings": ours}}}
+    table = r2gate.leg_table(view, subset, "v2", where)
+    assert (table["agreed"], table["n"]) == (136, 200)
+    assert (table["our_agreed"], table["our_n"]) == (38, 49)
+    assert table["refused"] == [] and table["absent"] == 0

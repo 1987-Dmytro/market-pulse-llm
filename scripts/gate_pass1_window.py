@@ -64,6 +64,7 @@ sys.path.insert(0, str(REPO_ROOT / "src"))
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 import gate_pass1_fewshot as r2gate  # noqa: E402
+import window_summary_5c2 as summary  # noqa: E402
 
 from market_pulse import prompts  # noqa: E402
 
@@ -581,20 +582,48 @@ def main(argv: list[str] | None = None, now: datetime | None = None) -> int:
                 " endpoints at once — close it with --close first."
             )
         ceiling = float(record["money"]["meter"]["price_ceiling_usd_per_hour"])
-        # the recovery clause, read on the state BEFORE this pod joins it (Dv615). The pod is
-        # RECORDED either way — a pod that exists against no counter is a pod nothing is measuring
+        # the recovery clause, read on the state BEFORE this pod joins it (Dv615)
         recovery = pre_create(record, state)
-        backstop = terminate_after(record, state, args.created_at, args.terminate_after)
+        # THE POD IS RECORDED FIRST, and that ordering is the whole of this block. `terminate_after`
+        # REFUSES an overshooting window by raising — and at the moment it raises the pod already
+        # exists and is already billing. Recording after the check leaves a live endpoint that no
+        # ledger, no rung and no `--pre-create-check` can see, which is the one state this whole
+        # instrument exists to make impossible ([[a_guard_that_runs_after_the_write]] read the other
+        # way round: here the write must come FIRST, because the thing being guarded is already real)
         state.setdefault("pods", []).append(
             {
                 "pod_id": args.pod_id,
                 "created_at": args.created_at,
                 "usd_per_hour": args.usd_per_hour,
                 "card": args.card,
-                "terminate_after": backstop["given"],
-                "terminate_after_computed": backstop["computed"],
+                "terminate_after": args.terminate_after,
             }
         )
+        save(state)
+        try:
+            backstop = terminate_after(record, state, args.created_at, args.terminate_after)
+        except SystemExit as refusal:
+            append_gate(
+                state,
+                {
+                    "rung": 1,
+                    "verdict": "KILL",
+                    "cause": f"the backstop stamp was refused: {refusal}",
+                    "verdict_is_an_instruction": True,
+                    "next_step": (
+                        f"POD {args.pod_id} IS LIVE AND BILLING and its platform backstop is not the"
+                        f" one rung 6 allows — delete it NOW: `runpodctl pod delete {args.pod_id}`,"
+                        " then --close and prove it by listing"
+                    ),
+                    **clock(record, state, now),
+                },
+                "price-refused",
+            )
+            print(f"\n!!! POD {args.pod_id} IS RECORDED AND STILL BILLING !!!\n", flush=True)
+            raise
+        pod = state["pods"][-1]
+        pod["terminate_after"] = backstop["given"]
+        pod["terminate_after_computed"] = backstop["computed"]
         save(state)
         gate = {
             "rung": 1,
@@ -659,6 +688,18 @@ def main(argv: list[str] | None = None, now: datetime | None = None) -> int:
             f" {rel(PREREG)} registers {record['population']['payable_comments']}. The gate would"
             " be measuring a population nobody priced — stop and report."
         )
+    # and the pack is held to the SHA the record pins, not only to its count. Rung 7 compares every
+    # reply's `rendering_sha256` against this file, so a pack that is not the registered one moves
+    # the reference the bar is read against — and a count is not an identity
+    # ([[the_guard_hashes_the_half_that_cannot_move]])
+    if args.pack == PACK:
+        live = summary.sha256_of(args.pack)
+        if live != record["population"]["sha256"]:
+            raise SystemExit(
+                f"{rel(args.pack)} hashes to {live[:16]}… and {rel(PREREG)} pins"
+                f" {record['population']['sha256'][:16]}…. The pack the pod was given and the pack"
+                " this gate scores against have parted — stop and report."
+            )
 
     if args.projection:
         gate = projection(record, state, leg_state(record, [pack], args.outdir), now)

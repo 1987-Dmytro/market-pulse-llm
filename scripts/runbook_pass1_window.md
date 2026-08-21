@@ -151,9 +151,29 @@ cd /workspace && rm -rf repo && git clone -q market-pulse-pass1-window.bundle re
 cd repo && git rev-parse HEAD && git status --short      # equals the Mac's HEAD, empty
 ls -l results/pass1_window_pack.json                     # the pack arrived with the bundle
 ls -d /workspace/venv /workspace/hf && du -sh /workspace/hf   # the volume is warm, or STOP
-rm -rf /workspace/run && mkdir -p /workspace/run         # the volume REMEMBERS a previous attempt
+
+# FIRST POD of this registration — nothing on the volume is this attempt's
+rm -rf /workspace/run && mkdir -p /workspace/run
 ls /workspace/run                                        # empty — the proof, not the hope
 ```
+
+**On a RE-CREATION this step is DIFFERENT, and the difference is the recovery clause.** The volume is
+the same one, so `/workspace/run/pass1_window_v2.jsonl` still holds every reply the dead pod bought —
+and «a KILL mid-leg costs the boot, not the leg» is exactly that file. Wiping the directory would
+delete what the clause promises and re-ask 1 032 comments the registration cannot afford twice. What
+must go is every clock that belongs to the DEAD pod; what must stay is the answers:
+
+```bash
+# RE-CREATION ONLY — never on the first pod
+ls -l /workspace/run                                     # what the dead pod left
+rm -f /workspace/run/launched_at /workspace/run/pod.log  # rung 3's anchor and rung 5's event count
+wc -l /workspace/run/pass1_window_v2.jsonl               # the replies that survive, COUNTED
+ls /workspace/run                                        # exactly one file, the out-file
+```
+
+`launched_at` must go or the gate refuses it as older than this pod; `pod.log` must go or its line
+count is a high-water mark the new pod's real progress never rises above, and the watch would either
+kill a working pod on the liveness rung or return GO having watched nothing.
 
 If `/workspace/hf` is not there the weights are not on the volume, the boot is a 59 GB download and
 this registration priced no such thing: delete and STOP. The `rm -rf /workspace/run` is not
@@ -302,6 +322,28 @@ ls results/pass1_window_v2.jsonl results/pass1_window_launched_at 2>&1   # "No s
 git status --porcelain results/                # r2's evidence is untouched: nothing of it listed
 PYTHONPATH=src python3.11 scripts/gate_pass1_window.py --pre-create-check   # then step 1 again
 ```
+
+**The Mac's copies go and the POD's out-file stays.** They are not the same file: the local one is a
+copy the watch pulls and the pod's is what the resume reads. Clearing the local one costs one scp;
+clearing the pod's costs the whole leg.
+
+**Take BOTH readings and let the stricter bind.** `--pre-create-check` computes from the gate's own
+ledger — the closed pods' billed seconds on the pod clock, timely and exact. The guard reads the
+balance delta and the billing walk, which is what the cap is defined against and which lags by up to
+~32 min. Two meters, neither one the other:
+
+```bash
+PYTHONPATH=src python3.11 scripts/runpod_guard.py --step pass1-window --step-cap 1.50 \
+  --note "before the re-creation — the MONEY reading beside the gate's clock"
+PYTHONPATH=src python3.11 scripts/gate_pass1_window.py --pre-create-check
+```
+
+**And read `--pre-create-check`'s own arithmetic before believing the clause.** It prices the FULL
+worst case ahead — 5 916.54 s — and not the calls that actually remain, so a re-creation is refused
+once the dead pod billed more than **583.46 s**, whatever the resume would have saved. A KILL at rung
+2 or rung 3 is inside that window; a KILL deep inside the generation is NOT, and the clause is then a
+STOP rather than a recovery. That is the registration's arithmetic and not a bug to work around: the
+seconds are what the platform holds.
 
 A stale `launched_at` makes `--watch` refuse with a live pod («BEFORE this pod was created»), and
 stale out-file rows are a high-water mark the new pod's real progress never rises above — it would
