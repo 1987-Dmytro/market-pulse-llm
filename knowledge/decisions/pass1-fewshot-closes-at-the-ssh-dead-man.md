@@ -164,3 +164,52 @@ would have deleted a healthy pod with the attempt unspent:
 
 Each fix carries a mutation that was watched to go red. `make check` **3 265 / 2** (3 239/2 at step
 0). The guard is anchored at `$16.4358` on `2026-08-21T11:36:55Z`, step spend `$0.0000 of $1.38`.
+
+### r2's outcome — the dev gate is RED at +7 of +10, and the attempt is still intact
+
+One RTX 4090 in EU-RO-1, **1 359.0 s = $0.27935** of the $1.38 cap, six gates over one pod, deletion
+proven by three listings with the volume as the positive control. **Every rung passed except the one
+that measures the question.** `our_v2 − our_base = +7` against the registered `+10`; the second
+inequality passed by a mile (`+49` against `−5`); the base answered 31 of the 49 «our» rows, under
+the 39 above which the delta would have been unreachable — so this is a **RED and not a STOP**, a
+reading of the prompt rather than of the bar. **No gold row was answered. The ONE attempt is NOT
+spent** and `results/pass1_probe_b_pack_v2.json` is unanswered.
+
+**The finding, and it is not «v2 is worse».** v2 lifts overall agreement 87 → 136 of 200, and buys
+almost all of it on `не_наш_рынок` (12 → 46, net +34). The 49 «our» rows move 31 → 38 — **13 fixed
+and 7 broken**, so the codebook clause is *not monotone on the class it targets*. Three readings say
+what actually happened:
+
+- **the base's error was silence.** 13 of the 14 «our» rows v2 gained were rows the base answered
+  `None`. The line was registered against «the base classifies by the mention»; on this dev set the
+  base mostly did not classify at all.
+- **v2's remaining error on «our» rows runs the OPPOSITE way from the clause.** Five of the seven
+  losses are `категория_личное` answered `не_наш_рынок` — told that a retailer named inside a
+  personal habit is a category comment, the model pushed the comment out of the market instead.
+- **the mention-vs-about class is still live, with the arrow reversed.** v2's largest confusion cell
+  over all 200 rows is `не_наш_рынок → категория`, **24 rows**.
+
+So the clause is a real and cheap gain on the MARKET boundary and is not, by itself, an answer to
+the mention-vs-about confusion. That is what goes to the operator with the table.
+
+**Three environment readings the next registration should price from.** ssh published at **50 s** of
+create-elapsed — a reading inside the spread rung 2 was registered as (14.5 s … > 262.5 s), and the
+500 s ceiling was never approached. The model load was **142.709 s**, a new floor for this stack
+(the old range was 146.8 … 353). And **v2's prefill costs +18.9 %, not the +50 %** the bound charged:
+2.293 s/call base against 2.726 s/call v2, where the registration charged 5.162 and 7.743. The whole
+generation took 1 147 s of a budget that priced 3 076.552.
+
+**Rung 3's new anchor earned itself on the pod.** The v2 leg's first row reads
+`elapsed_since_start 2.72` with `boot_seconds 0.009` — the shipped `run()` is called once per leg and
+re-zeros its own monotonic clock. A minimum across both legs would have recorded 2.72 s against a
+450 s ceiling and reported GO on any load whatever; the gate read the base leg's **145.6 s**. That
+defect was found by reading the transport before the create, not after it
+[[two-instruments-two-inputs]].
+
+**Money.** Step sum r1 `$0.117783` + r2 `$0.27935` = **$0.397133** of the `$1.50` the ruling left the
+step; r2's cap was $1.38 and $1.10065 of it is unspent, and its recovery clause was never used — one
+pod, one create. The guard's balance delta reads `$0.2637`, which carries $0.0097 of volume drip from
+before the pod existed. Cycle 2: **$6.3377 of $20.00, remaining $13.6623**.
+
+Report `docs/reports/pass1-fewshot-r2.md`; gate record `results/pass1_fewshot_r2_run.json`; verdict
+`results/pass1_fewshot_verdict.json`. **Nothing was found on the pod that was not found before it.**
