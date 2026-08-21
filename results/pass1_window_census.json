@@ -1,0 +1,2163 @@
+{
+  "completeness": {
+    "answered": 131,
+    "duplicate_ids": [],
+    "file": "results/pass1_window_v2.jsonl",
+    "ids_the_leg_never_asked": [],
+    "owed": 1032,
+    "parse_refusal_rows": [],
+    "parse_refusals": 0,
+    "parse_refusals_by_cause": {},
+    "parsed": 131,
+    "replies_that_never_closed_their_object": 0,
+    "rows_in_the_file": 131,
+    "rule": "answered 1032 / 1032 · every row's `rendering_sha256` equals its pack item's · parse refusals ≤ 10 (1%). All three, or RED",
+    "rung": 7,
+    "sha_mismatches": 0,
+    "unanswered": 901,
+    "unanswered_ids": [
+      "@klopotenkofood:6035#21205",
+      "@klopotenkofood:6035#21206",
+      "@klopotenkofood:6035#21207",
+      "@klopotenkofood:6035#21208",
+      "@klopotenkofood:6035#21209",
+      "@klopotenkofood:6035#21210",
+      "@klopotenkofood:6035#21211",
+      "@klopotenkofood:6035#21221",
+      "@klopotenkofood:6035#21229",
+      "@klopotenkofood:6036#21222",
+      "@klopotenkofood:6036#21269",
+      "@klopotenkofood:6040#21231",
+      "@klopotenkofood:6040#21232",
+      "@klopotenkofood:6040#21233",
+      "@klopotenkofood:6040#21234",
+      "@klopotenkofood:6040#21235",
+      "@klopotenkofood:6040#21236",
+      "@klopotenkofood:6040#21237",
+      "@klopotenkofood:6040#21238",
+      "@klopotenkofood:6040#21239"
+    ],
+    "verdict": "RED"
+  },
+  "contract": "docs/PROMPT-pass1-window.md D2",
+  "label_distribution": {
+    "answered": 131,
+    "over_the_population": {
+      "None": 37,
+      "UNANSWERED — the pod was killed before this row": 901,
+      "категория_личное": 36,
+      "молочный_бренд": 9,
+      "не_наш_рынок": 3,
+      "сеть_ритейлер": 46
+    },
+    "owed": 1032,
+    "refusals_by_cause": {},
+    "rule": "what v2 SAID, in THREE states and not two. A row with no reply is UNANSWERED and not refused: this run was killed at rung 4 with 901 rows never asked, and folding them into a refusal class would put the pod's death in the parser's column ([[the_empty_class_eats_the_parse_failures]] read the other way round). A distribution is not an accuracy either way"
+  },
+  "pass_2_filter": {
+    "entity_block_chars_total": 2073,
+    "filter": [
+      "категория_личное",
+      "молочный_бренд",
+      "сеть_ритейлер"
+    ],
+    "filtered_chars_total": 5963,
+    "filtered_rows_total": 91,
+    "per_thread": [
+      {
+        "by_label": {
+          "None": 1,
+          "категория_личное": 15,
+          "не_наш_рынок": 1
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 1177,
+        "filtered_rows": 15,
+        "payable_comments": 17,
+        "thread": "@klopotenkofood:6032",
+        "topic_chars": 107,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "None": 4,
+          "категория_личное": 2,
+          "молочный_бренд": 4,
+          "сеть_ритейлер": 2
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 304,
+        "filtered_rows": 8,
+        "payable_comments": 12,
+        "thread": "@VARUS_channel:10367",
+        "topic_chars": 27,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "None": 2,
+          "категория_личное": 7
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 425,
+        "filtered_rows": 7,
+        "payable_comments": 9,
+        "thread": "@VARUS_channel:10349",
+        "topic_chars": 70,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "None": 3,
+          "категория_личное": 3,
+          "сеть_ритейлер": 4
+        },
+        "entities": 10,
+        "entity_block_chars": 393,
+        "filtered_chars": 864,
+        "filtered_rows": 7,
+        "payable_comments": 10,
+        "thread": "@VARUS_channel:10613",
+        "topic_chars": 86,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "None": 3,
+          "категория_личное": 1,
+          "сеть_ритейлер": 5
+        },
+        "entities": 2,
+        "entity_block_chars": 57,
+        "filtered_chars": 308,
+        "filtered_rows": 6,
+        "payable_comments": 9,
+        "thread": "@VARUS_channel:10528",
+        "topic_chars": 72,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "None": 1,
+          "сеть_ритейлер": 5
+        },
+        "entities": 3,
+        "entity_block_chars": 117,
+        "filtered_chars": 304,
+        "filtered_rows": 5,
+        "payable_comments": 6,
+        "thread": "@VARUS_channel:10470",
+        "topic_chars": 90,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "None": 2,
+          "не_наш_рынок": 1,
+          "сеть_ритейлер": 4
+        },
+        "entities": 2,
+        "entity_block_chars": 65,
+        "filtered_chars": 253,
+        "filtered_rows": 4,
+        "payable_comments": 7,
+        "thread": "@VARUS_channel:10348",
+        "topic_chars": 38,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "None": 8,
+          "сеть_ритейлер": 4
+        },
+        "entities": 1,
+        "entity_block_chars": 12,
+        "filtered_chars": 138,
+        "filtered_rows": 4,
+        "payable_comments": 12,
+        "thread": "@VARUS_channel:10366",
+        "topic_chars": 97,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "None": 1,
+          "не_наш_рынок": 1,
+          "сеть_ритейлер": 4
+        },
+        "entities": 3,
+        "entity_block_chars": 103,
+        "filtered_chars": 273,
+        "filtered_rows": 4,
+        "payable_comments": 6,
+        "thread": "@VARUS_channel:10466",
+        "topic_chars": 83,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "None": 1,
+          "категория_личное": 1,
+          "сеть_ритейлер": 3
+        },
+        "entities": 6,
+        "entity_block_chars": 200,
+        "filtered_chars": 231,
+        "filtered_rows": 4,
+        "payable_comments": 5,
+        "thread": "@VARUS_channel:10471",
+        "topic_chars": 103,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "None": 1,
+          "категория_личное": 2,
+          "сеть_ритейлер": 2
+        },
+        "entities": 1,
+        "entity_block_chars": 12,
+        "filtered_chars": 125,
+        "filtered_rows": 4,
+        "payable_comments": 5,
+        "thread": "@VARUS_channel:10525",
+        "topic_chars": 92,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "None": 1,
+          "категория_личное": 1,
+          "сеть_ритейлер": 3
+        },
+        "entities": 8,
+        "entity_block_chars": 382,
+        "filtered_chars": 209,
+        "filtered_rows": 4,
+        "payable_comments": 5,
+        "thread": "@VARUS_channel:10603",
+        "topic_chars": 90,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "молочный_бренд": 3
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 131,
+        "filtered_rows": 3,
+        "payable_comments": 3,
+        "thread": "@VARUS_channel:10452",
+        "topic_chars": 42,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "сеть_ритейлер": 2
+        },
+        "entities": 5,
+        "entity_block_chars": 203,
+        "filtered_chars": 157,
+        "filtered_rows": 2,
+        "payable_comments": 2,
+        "thread": "@VARUS_channel:10360",
+        "topic_chars": 101,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "None": 2,
+          "категория_личное": 1,
+          "молочный_бренд": 1
+        },
+        "entities": 1,
+        "entity_block_chars": 12,
+        "filtered_chars": 141,
+        "filtered_rows": 2,
+        "payable_comments": 4,
+        "thread": "@VARUS_channel:10451",
+        "topic_chars": 76,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "None": 3,
+          "сеть_ритейлер": 2
+        },
+        "entities": 3,
+        "entity_block_chars": 113,
+        "filtered_chars": 140,
+        "filtered_rows": 2,
+        "payable_comments": 5,
+        "thread": "@VARUS_channel:10465",
+        "topic_chars": 62,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "сеть_ритейлер": 2
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 121,
+        "filtered_rows": 2,
+        "payable_comments": 2,
+        "thread": "@VARUS_channel:10529",
+        "topic_chars": 161,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "сеть_ритейлер": 2
+        },
+        "entities": 1,
+        "entity_block_chars": 12,
+        "filtered_chars": 97,
+        "filtered_rows": 2,
+        "payable_comments": 2,
+        "thread": "@VARUS_channel:10593",
+        "topic_chars": 106,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "молочный_бренд": 1
+        },
+        "entities": 3,
+        "entity_block_chars": 138,
+        "filtered_chars": 13,
+        "filtered_rows": 1,
+        "payable_comments": 1,
+        "thread": "@VARUS_channel:10356",
+        "topic_chars": 61,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "None": 1,
+          "сеть_ритейлер": 1
+        },
+        "entities": 4,
+        "entity_block_chars": 126,
+        "filtered_chars": 165,
+        "filtered_rows": 1,
+        "payable_comments": 2,
+        "thread": "@VARUS_channel:10455",
+        "topic_chars": 126,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "категория_личное": 1
+        },
+        "entities": 2,
+        "entity_block_chars": 62,
+        "filtered_chars": 207,
+        "filtered_rows": 1,
+        "payable_comments": 1,
+        "thread": "@VARUS_channel:10496",
+        "topic_chars": 79,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "сеть_ритейлер": 1
+        },
+        "entities": 2,
+        "entity_block_chars": 66,
+        "filtered_chars": 24,
+        "filtered_rows": 1,
+        "payable_comments": 1,
+        "thread": "@VARUS_channel:10532",
+        "topic_chars": 65,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "категория_личное": 1
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 59,
+        "filtered_rows": 1,
+        "payable_comments": 1,
+        "thread": "@klopotenkofood:6024",
+        "topic_chars": 158,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "категория_личное": 1
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 97,
+        "filtered_rows": 1,
+        "payable_comments": 1,
+        "thread": "@klopotenkofood:6031",
+        "topic_chars": 50,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "None": 1
+        },
+        "entities": 2,
+        "entity_block_chars": 66,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 1,
+        "thread": "@VARUS_channel:10358",
+        "topic_chars": 79,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "None": 1
+        },
+        "entities": 2,
+        "entity_block_chars": 69,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 1,
+        "thread": "@VARUS_channel:10375",
+        "topic_chars": 93,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "None": 1
+        },
+        "entities": 2,
+        "entity_block_chars": 65,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 1,
+        "thread": "@VARUS_channel:10450",
+        "topic_chars": 81,
+        "unanswered": 0,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "UNANSWERED": 9
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 9,
+        "thread": "@klopotenkofood:6035",
+        "topic_chars": 76,
+        "unanswered": 9,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "UNANSWERED": 2
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 2,
+        "thread": "@klopotenkofood:6036",
+        "topic_chars": 76,
+        "unanswered": 2,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "UNANSWERED": 43
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 43,
+        "thread": "@klopotenkofood:6040",
+        "topic_chars": 76,
+        "unanswered": 43,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "UNANSWERED": 10
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 10,
+        "thread": "@klopotenkofood:6060",
+        "topic_chars": 76,
+        "unanswered": 10,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "UNANSWERED": 1
+        },
+        "entities": 1,
+        "entity_block_chars": 12,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 1,
+        "thread": "@kopiyochka1:21672",
+        "topic_chars": 81,
+        "unanswered": 1,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "UNANSWERED": 8
+        },
+        "entities": 1,
+        "entity_block_chars": 12,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 8,
+        "thread": "@kopiyochka1:21720",
+        "topic_chars": 80,
+        "unanswered": 8,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "UNANSWERED": 3
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 3,
+        "thread": "@mandziak:3666",
+        "topic_chars": 101,
+        "unanswered": 3,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "UNANSWERED": 5
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 5,
+        "thread": "@mandziak:3667",
+        "topic_chars": 126,
+        "unanswered": 5,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "UNANSWERED": 9
+        },
+        "entities": 2,
+        "entity_block_chars": 75,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 9,
+        "thread": "@mandziak:3676",
+        "topic_chars": 26,
+        "unanswered": 9,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "UNANSWERED": 31
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 31,
+        "thread": "@mandziak:3679",
+        "topic_chars": 55,
+        "unanswered": 31,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "UNANSWERED": 12
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 12,
+        "thread": "@mandziak:3684",
+        "topic_chars": 105,
+        "unanswered": 12,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "UNANSWERED": 2
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 2,
+        "thread": "@mandziak:3685",
+        "topic_chars": 92,
+        "unanswered": 2,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "UNANSWERED": 8
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 8,
+        "thread": "@mandziak:3689",
+        "topic_chars": 147,
+        "unanswered": 8,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "UNANSWERED": 5
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 5,
+        "thread": "@mandziak:3694",
+        "topic_chars": 52,
+        "unanswered": 5,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "UNANSWERED": 5
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 5,
+        "thread": "@mandziak:3700",
+        "topic_chars": 57,
+        "unanswered": 5,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "UNANSWERED": 3
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 3,
+        "thread": "@mandziak:3701",
+        "topic_chars": 34,
+        "unanswered": 3,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "UNANSWERED": 8
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 8,
+        "thread": "@mandziak:3702",
+        "topic_chars": 62,
+        "unanswered": 8,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "UNANSWERED": 9
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 9,
+        "thread": "@mandziak:3703",
+        "topic_chars": 82,
+        "unanswered": 9,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "UNANSWERED": 11
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 11,
+        "thread": "@mandziak:3707",
+        "topic_chars": 32,
+        "unanswered": 11,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "UNANSWERED": 20
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 20,
+        "thread": "@mandziak:3708",
+        "topic_chars": 34,
+        "unanswered": 20,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "UNANSWERED": 20
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 20,
+        "thread": "@mandziak:3718",
+        "topic_chars": 41,
+        "unanswered": 20,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "UNANSWERED": 4
+        },
+        "entities": 1,
+        "entity_block_chars": 22,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 4,
+        "thread": "@mandziak:3721",
+        "topic_chars": 96,
+        "unanswered": 4,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "UNANSWERED": 7
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 7,
+        "thread": "@mandziak:3736",
+        "topic_chars": 146,
+        "unanswered": 7,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "UNANSWERED": 1
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 1,
+        "thread": "@mandziak:3746",
+        "topic_chars": 128,
+        "unanswered": 1,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "UNANSWERED": 13
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 13,
+        "thread": "@mandziak:3753",
+        "topic_chars": 108,
+        "unanswered": 13,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "UNANSWERED": 5
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 5,
+        "thread": "@mandziak:3765",
+        "topic_chars": 43,
+        "unanswered": 5,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "UNANSWERED": 7
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 7,
+        "thread": "@mandziak:3768",
+        "topic_chars": 58,
+        "unanswered": 7,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "UNANSWERED": 3
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 3,
+        "thread": "@mandziak:3775",
+        "topic_chars": 88,
+        "unanswered": 3,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "UNANSWERED": 125
+        },
+        "entities": 4,
+        "entity_block_chars": 122,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 125,
+        "thread": "@matusi_ukr:22058",
+        "topic_chars": 99,
+        "unanswered": 125,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "UNANSWERED": 35
+        },
+        "entities": 1,
+        "entity_block_chars": 47,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 35,
+        "thread": "@matusi_ukr:22092",
+        "topic_chars": 89,
+        "unanswered": 35,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "UNANSWERED": 9
+        },
+        "entities": 7,
+        "entity_block_chars": 336,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 9,
+        "thread": "@matusi_ukr:22111",
+        "topic_chars": 104,
+        "unanswered": 9,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "UNANSWERED": 2
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 2,
+        "thread": "@matusi_ukr:22125",
+        "topic_chars": 46,
+        "unanswered": 2,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "UNANSWERED": 12
+        },
+        "entities": 3,
+        "entity_block_chars": 103,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 12,
+        "thread": "@matusi_ukr:22131",
+        "topic_chars": 161,
+        "unanswered": 12,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "UNANSWERED": 105
+        },
+        "entities": 4,
+        "entity_block_chars": 138,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 105,
+        "thread": "@matusi_ukr:22133",
+        "topic_chars": 79,
+        "unanswered": 105,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "UNANSWERED": 27
+        },
+        "entities": 1,
+        "entity_block_chars": 5,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 27,
+        "thread": "@matusi_ukr:22158",
+        "topic_chars": 110,
+        "unanswered": 27,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "UNANSWERED": 6
+        },
+        "entities": 3,
+        "entity_block_chars": 98,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 6,
+        "thread": "@matusi_ukr:22195",
+        "topic_chars": 89,
+        "unanswered": 6,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "UNANSWERED": 1
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 1,
+        "thread": "@matusi_ukr:22208",
+        "topic_chars": 56,
+        "unanswered": 1,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "UNANSWERED": 14
+        },
+        "entities": 4,
+        "entity_block_chars": 175,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 14,
+        "thread": "@matusi_ukr:22217",
+        "topic_chars": 138,
+        "unanswered": 14,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "UNANSWERED": 12
+        },
+        "entities": 5,
+        "entity_block_chars": 207,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 12,
+        "thread": "@matusi_ukr:22242",
+        "topic_chars": 103,
+        "unanswered": 12,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "UNANSWERED": 13
+        },
+        "entities": 1,
+        "entity_block_chars": 15,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 13,
+        "thread": "@matusi_ukr:22263",
+        "topic_chars": 101,
+        "unanswered": 13,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "UNANSWERED": 16
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 16,
+        "thread": "@matusi_ukr:22265",
+        "topic_chars": 94,
+        "unanswered": 16,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "UNANSWERED": 15
+        },
+        "entities": 2,
+        "entity_block_chars": 63,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 15,
+        "thread": "@matusi_ukr:22272",
+        "topic_chars": 120,
+        "unanswered": 15,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "UNANSWERED": 2
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 2,
+        "thread": "@matusi_ukr:22292",
+        "topic_chars": 43,
+        "unanswered": 2,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "UNANSWERED": 108
+        },
+        "entities": 2,
+        "entity_block_chars": 56,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 108,
+        "thread": "@matusi_ukr:22295",
+        "topic_chars": 77,
+        "unanswered": 108,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "UNANSWERED": 2
+        },
+        "entities": 5,
+        "entity_block_chars": 185,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 2,
+        "thread": "@matusi_ukr:22303",
+        "topic_chars": 108,
+        "unanswered": 2,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "UNANSWERED": 1
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 1,
+        "thread": "@matusi_ukr:22307",
+        "topic_chars": 103,
+        "unanswered": 1,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "UNANSWERED": 17
+        },
+        "entities": 1,
+        "entity_block_chars": 26,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 17,
+        "thread": "@matusi_ukr:22308",
+        "topic_chars": 123,
+        "unanswered": 17,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "UNANSWERED": 4
+        },
+        "entities": 1,
+        "entity_block_chars": 22,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 4,
+        "thread": "@matusi_ukr:22327",
+        "topic_chars": 97,
+        "unanswered": 4,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "UNANSWERED": 3
+        },
+        "entities": 1,
+        "entity_block_chars": 27,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 3,
+        "thread": "@msuaaaa:10651",
+        "topic_chars": 101,
+        "unanswered": 3,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "UNANSWERED": 1
+        },
+        "entities": 1,
+        "entity_block_chars": 28,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 1,
+        "thread": "@polyakova_fitness:1143",
+        "topic_chars": 89,
+        "unanswered": 1,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "UNANSWERED": 2
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 2,
+        "thread": "@retsepty:7278",
+        "topic_chars": 34,
+        "unanswered": 2,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "UNANSWERED": 1
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 1,
+        "thread": "@retsepty:7280",
+        "topic_chars": 27,
+        "unanswered": 1,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "UNANSWERED": 1
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 1,
+        "thread": "@retsepty:7281",
+        "topic_chars": 43,
+        "unanswered": 1,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "UNANSWERED": 1
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 1,
+        "thread": "@retsepty:7284",
+        "topic_chars": 160,
+        "unanswered": 1,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "UNANSWERED": 1
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 1,
+        "thread": "@retsepty:7288",
+        "topic_chars": 58,
+        "unanswered": 1,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "UNANSWERED": 1
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 1,
+        "thread": "@retsepty:7289",
+        "topic_chars": 58,
+        "unanswered": 1,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "UNANSWERED": 3
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 3,
+        "thread": "@retsepty:7293",
+        "topic_chars": 62,
+        "unanswered": 3,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "UNANSWERED": 2
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 2,
+        "thread": "@retsepty:7294",
+        "topic_chars": 59,
+        "unanswered": 2,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "UNANSWERED": 1
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 1,
+        "thread": "@retsepty:7296",
+        "topic_chars": 42,
+        "unanswered": 1,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "UNANSWERED": 1
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 1,
+        "thread": "@retsepty:7301",
+        "topic_chars": 44,
+        "unanswered": 1,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "UNANSWERED": 2
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 2,
+        "thread": "@retsepty:7302",
+        "topic_chars": 45,
+        "unanswered": 2,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "UNANSWERED": 2
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 2,
+        "thread": "@retsepty:7305",
+        "topic_chars": 52,
+        "unanswered": 2,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "UNANSWERED": 1
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 1,
+        "thread": "@retsepty:7310",
+        "topic_chars": 60,
+        "unanswered": 1,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "UNANSWERED": 3
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 3,
+        "thread": "@retsepty:7312",
+        "topic_chars": 38,
+        "unanswered": 3,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "UNANSWERED": 4
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 4,
+        "thread": "@retsepty:7313",
+        "topic_chars": 46,
+        "unanswered": 4,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "UNANSWERED": 1
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 1,
+        "thread": "@retsepty:7317",
+        "topic_chars": 45,
+        "unanswered": 1,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "UNANSWERED": 1
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 1,
+        "thread": "@retsepty:7318",
+        "topic_chars": 77,
+        "unanswered": 1,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "UNANSWERED": 1
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 1,
+        "thread": "@retsepty:7320",
+        "topic_chars": 71,
+        "unanswered": 1,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "UNANSWERED": 2
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 2,
+        "thread": "@retsepty:7321",
+        "topic_chars": 64,
+        "unanswered": 2,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "UNANSWERED": 2
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 2,
+        "thread": "@retsepty:7323",
+        "topic_chars": 158,
+        "unanswered": 2,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "UNANSWERED": 3
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 3,
+        "thread": "@retsepty:7324",
+        "topic_chars": 70,
+        "unanswered": 3,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "UNANSWERED": 2
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 2,
+        "thread": "@retsepty:7325",
+        "topic_chars": 46,
+        "unanswered": 2,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "UNANSWERED": 2
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 2,
+        "thread": "@retsepty:7326",
+        "topic_chars": 45,
+        "unanswered": 2,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "UNANSWERED": 1
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 1,
+        "thread": "@retsepty:7327",
+        "topic_chars": 35,
+        "unanswered": 1,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "UNANSWERED": 2
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 2,
+        "thread": "@retsepty:7328",
+        "topic_chars": 66,
+        "unanswered": 2,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "UNANSWERED": 2
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 2,
+        "thread": "@retsepty:7331",
+        "topic_chars": 44,
+        "unanswered": 2,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "UNANSWERED": 1
+        },
+        "entities": 1,
+        "entity_block_chars": 12,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 1,
+        "thread": "@retsepty:7335",
+        "topic_chars": 67,
+        "unanswered": 1,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "UNANSWERED": 1
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 1,
+        "thread": "@retsepty:7337",
+        "topic_chars": 35,
+        "unanswered": 1,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "UNANSWERED": 1
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 1,
+        "thread": "@retsepty:7340",
+        "topic_chars": 37,
+        "unanswered": 1,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "UNANSWERED": 5
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 5,
+        "thread": "@retsepty:7342",
+        "topic_chars": 71,
+        "unanswered": 5,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "UNANSWERED": 2
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 2,
+        "thread": "@retsepty:7343",
+        "topic_chars": 64,
+        "unanswered": 2,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "UNANSWERED": 3
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 3,
+        "thread": "@retsepty:7345",
+        "topic_chars": 65,
+        "unanswered": 3,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "UNANSWERED": 1
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 1,
+        "thread": "@retsepty:7348",
+        "topic_chars": 58,
+        "unanswered": 1,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "UNANSWERED": 1
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 1,
+        "thread": "@retsepty:7349",
+        "topic_chars": 53,
+        "unanswered": 1,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "UNANSWERED": 3
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 3,
+        "thread": "@retsepty:7350",
+        "topic_chars": 72,
+        "unanswered": 3,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "UNANSWERED": 1
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 1,
+        "thread": "@retsepty:7354",
+        "topic_chars": 57,
+        "unanswered": 1,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "UNANSWERED": 1
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 1,
+        "thread": "@retsepty:7361",
+        "topic_chars": 57,
+        "unanswered": 1,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "UNANSWERED": 10
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 10,
+        "thread": "@tarilka_malyuka:695",
+        "topic_chars": 129,
+        "unanswered": 10,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "UNANSWERED": 4
+        },
+        "entities": 3,
+        "entity_block_chars": 105,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 4,
+        "thread": "@tarilka_malyuka:715",
+        "topic_chars": 87,
+        "unanswered": 4,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "UNANSWERED": 2
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 2,
+        "thread": "@tarilka_malyuka:746",
+        "topic_chars": 85,
+        "unanswered": 2,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "UNANSWERED": 4
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 4,
+        "thread": "@tarilka_malyuka:747",
+        "topic_chars": 99,
+        "unanswered": 4,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "UNANSWERED": 1
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 1,
+        "thread": "@tarilka_malyuka:764",
+        "topic_chars": 68,
+        "unanswered": 1,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "UNANSWERED": 2
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 2,
+        "thread": "@tarilka_malyuka:820",
+        "topic_chars": 47,
+        "unanswered": 2,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "UNANSWERED": 2
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 2,
+        "thread": "@tarilka_malyuka:825",
+        "topic_chars": 89,
+        "unanswered": 2,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "UNANSWERED": 1
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 1,
+        "thread": "@tarilka_malyuka:827",
+        "topic_chars": 73,
+        "unanswered": 1,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "UNANSWERED": 1
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 1,
+        "thread": "@ya_Nenka:834",
+        "topic_chars": 103,
+        "unanswered": 1,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "UNANSWERED": 6
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 6,
+        "thread": "@ya_Nenka:836",
+        "topic_chars": 127,
+        "unanswered": 6,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "UNANSWERED": 3
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 3,
+        "thread": "@ya_Nenka:838",
+        "topic_chars": 126,
+        "unanswered": 3,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "UNANSWERED": 3
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 3,
+        "thread": "@ya_Nenka:840",
+        "topic_chars": 77,
+        "unanswered": 3,
+        "unreadable": 0
+      },
+      {
+        "by_label": {
+          "UNANSWERED": 3
+        },
+        "entities": 0,
+        "entity_block_chars": 0,
+        "filtered_chars": 0,
+        "filtered_rows": 0,
+        "payable_comments": 3,
+        "thread": "@ya_Nenka:844",
+        "topic_chars": 111,
+        "unanswered": 3,
+        "unreadable": 0
+      }
+    ],
+    "rule": "pass 2 is ONE call per THREAD over the rows pass 1 labelled категория_личное / молочный_бренд / сеть_ритейлер — the operator's ruling (г). This table is that call's input, per thread, and it is what `pass2-signals` prices its own registration from",
+    "threads_carrying_a_payable_comment": 127,
+    "threads_in_the_cell": 129,
+    "threads_pass_2_would_not_call": 103,
+    "threads_with_at_least_one_filtered_row": 24,
+    "what_this_does_NOT_price": "the per-call cost. These are the chars of a PASS-1 rendering; pass 2's prompt does not exist yet and will not render them the same way. This table sizes the input and `pass2-signals` prices its own call on its own renderer ([[the_smokes_rate_carries_the_smokes_transport]])",
+    "why_two_denominators": "2 threads of the cell carry no payable comment at all, so they produce no pass-1 request and pass 2 has nothing to call over them. The cell's count and the callable count are different questions",
+    "widest_thread_filtered_chars": 1177,
+    "widest_thread_filtered_rows": 15
+  },
+  "phase": "pass1-window",
+  "producer": {
+    "script": "scripts/census_pass1_window.py",
+    "sha256": "cc82eec2f54cafb0f8b167a239642421df363a5b013f4db6da06c985765360c1"
+  },
+  "registration": {
+    "record": "results/prereg_pass1_window.json",
+    "sha256": "879bf3852544364a22242d457f38102a452da10cc6daf72ec3c5077d67d45cea"
+  },
+  "report_only": {
+    "rule": "READINGS, each captioned «not a bar». None of them can pass, fail or close anything, and none of them may be quoted as a verdict on v2",
+    "the_450_not_in_dev_200": {
+      "absent": 385,
+      "agreed": 35,
+      "caption": "the labelled rows NO prompt was ever tuned against — and its «our» denominator is ZERO BY CONSTRUCTION: build_pass1_fewshot_packs.py::dev_units takes ALL 49 «our» rows into dev-200 whole, so the 450 outside it contain none of the class this programme is about. It is a reading of overall agreement on untuned rows and it can say nothing about «our» rows, ever",
+      "denominator_rule": "TWO rates, because the pod was killed at rung 4 with most of the population never asked. `rate` is over the 450 rows this reading was registered over and counts the 385 unasked ones as disagreements; `rate_over_the_rows_answered` is over the 65 rows that have a reply. Neither is comparable to a reading taken on a complete run, and the first is not comparable to anything at all ([[measure_on_the_rows_the_gate_scores]]). `our_agreed` / `our_n` carries the SAME absence: `our_n` is the registered count of «our» rows in this subset and `our_agreed` counts only the ones with a reply, so the pair is a floor and never a rate",
+      "instrument": "gate_pass1_fewshot.py::leg_table — the function D2's clause names",
+      "n": 450,
+      "not_a_bar": true,
+      "our_agreed": 0,
+      "our_n": 0,
+      "per_class": {
+        "null": {
+          "agreed": 15,
+          "n": 159
+        },
+        "не_наш_рынок": {
+          "agreed": 0,
+          "n": 255
+        },
+        "сеть_ритейлер": {
+          "agreed": 21,
+          "n": 36
+        }
+      },
+      "rate": 0.077778,
+      "rate_over_the_rows_answered": 0.538462,
+      "refused": 0,
+      "rows_the_pod_actually_answered": 65
+    },
+    "the_650_labelled_rows": {
+      "absent": 533,
+      "agreed": 69,
+      "caption": "every labelled row inside this population — a reading, not a bar",
+      "denominator_rule": "TWO rates, because the pod was killed at rung 4 with most of the population never asked. `rate` is over the 650 rows this reading was registered over and counts the 533 unasked ones as disagreements; `rate_over_the_rows_answered` is over the 117 rows that have a reply. Neither is comparable to a reading taken on a complete run, and the first is not comparable to anything at all ([[measure_on_the_rows_the_gate_scores]]). `our_agreed` / `our_n` carries the SAME absence: `our_n` is the registered count of «our» rows in this subset and `our_agreed` counts only the ones with a reply, so the pair is a floor and never a rate",
+      "instrument": "gate_pass1_fewshot.py::leg_table — the function D2's clause names",
+      "n": 650,
+      "not_a_bar": true,
+      "our_agreed": 23,
+      "our_n": 49,
+      "per_class": {
+        "null": {
+          "agreed": 21,
+          "n": 213
+        },
+        "категория": {
+          "agreed": 22,
+          "n": 47
+        },
+        "молочный_бренд": {
+          "agreed": 1,
+          "n": 2
+        },
+        "не_наш_рынок": {
+          "agreed": 2,
+          "n": 340
+        },
+        "сеть_ритейлер": {
+          "agreed": 29,
+          "n": 48
+        }
+      },
+      "rate": 0.106154,
+      "rate_over_the_rows_answered": 0.589744,
+      "refused": 0,
+      "rows_the_pod_actually_answered": 117
+    },
+    "the_dev_200": {
+      "absent": 152,
+      "agreed": 34,
+      "caption": "the rows r2 measured. It should reproduce 136/200 and 38/49 up to decoding noise; a difference is STATED and not explained away",
+      "denominator_rule": "TWO rates, because the pod was killed at rung 4 with most of the population never asked. `rate` is over the 200 rows this reading was registered over and counts the 152 unasked ones as disagreements; `rate_over_the_rows_answered` is over the 48 rows that have a reply. Neither is comparable to a reading taken on a complete run, and the first is not comparable to anything at all ([[measure_on_the_rows_the_gate_scores]]). `our_agreed` / `our_n` carries the SAME absence: `our_n` is the registered count of «our» rows in this subset and `our_agreed` counts only the ones with a reply, so the pair is a floor and never a rate",
+      "instrument": "gate_pass1_fewshot.py::leg_table — the function D2's clause names",
+      "n": 200,
+      "not_a_bar": true,
+      "our_agreed": 21,
+      "our_n": 49,
+      "per_class": {
+        "null": {
+          "agreed": 6,
+          "n": 54
+        },
+        "категория": {
+          "agreed": 20,
+          "n": 47
+        },
+        "молочный_бренд": {
+          "agreed": 1,
+          "n": 2
+        },
+        "не_наш_рынок": {
+          "agreed": 0,
+          "n": 85
+        },
+        "сеть_ритейлер": {
+          "agreed": 7,
+          "n": 12
+        }
+      },
+      "r2_reported": {
+        "agreed": 136,
+        "n": 200,
+        "our_agreed": 38,
+        "our_n": 49
+      },
+      "rate": 0.17,
+      "rate_over_the_rows_answered": 0.708333,
+      "refused": 0,
+      "rows_the_pod_actually_answered": 48
+    },
+    "the_fourteen": {
+      "absent": 9,
+      "agreed": 4,
+      "agreed_among_those": 4,
+      "caption": "the fourteen — A CENSUS ROW AND NEVER A BAR. This is the FOURTH look at these same rows: the base (pass1-probe-b, 9/14), arm A of the LoRA line (lora-b, 9/14), v2 registered for a shot it never fired, and now v2 inside a production pass registered for transport. It cannot be promoted to «v2 takes N of 14» by this report, by the acceptance or by the next registration — a bar on the fourteen needs a NEW registration with its own attempt, its own threshold and the operator's word",
+      "denominator_rule": "the pod reached 5 of these fourteen before rung 4 killed it. `agreed` below is over all 14 and counts the 9 it never reached as disagreements; `agreed_among_those` is over the rows that have a reply. NEITHER is comparable to the base's 9/14 or arm A's 9/14, which were taken on complete runs — and neither is a bar",
+      "disagreed": 1,
+      "instrument": {
+        "collapse": "score_reader_probe_b.py::collapse",
+        "comparison": "market_pulse.scorer.reader_comment_agreement",
+        "why_not_bar_p1": "bar_p1 is the same comparison plus a THRESHOLD arm — `passed`, `minimum_agreed`, a loss budget. That arm is exactly what may not exist on this row",
+        "why_not_leg_table": "leg_table scores against the LABEL map, and 0 of 14 gold pairs are in it"
+      },
+      "multiplicity": 4,
+      "n": 14,
+      "not_a_bar": true,
+      "rate": 0.285714,
+      "rows": [
+        {
+          "agreed": true,
+          "gold": "сеть_ритейлер",
+          "id": "@VARUS_channel:10348#20664",
+          "state": "answered",
+          "v2": "сеть_ритейлер"
+        },
+        {
+          "agreed": true,
+          "gold": "категория",
+          "id": "@VARUS_channel:10613#21599",
+          "state": "answered",
+          "v2": "категория"
+        },
+        {
+          "agreed": true,
+          "gold": "категория",
+          "id": "@VARUS_channel:10613#21601",
+          "state": "answered",
+          "v2": "категория"
+        },
+        {
+          "agreed": true,
+          "gold": "сеть_ритейлер",
+          "id": "@VARUS_channel:10613#21626",
+          "state": "answered",
+          "v2": "сеть_ритейлер"
+        },
+        {
+          "agreed": false,
+          "gold": null,
+          "id": "@VARUS_channel:10613#21629",
+          "state": "answered",
+          "v2": "категория"
+        },
+        {
+          "agreed": false,
+          "gold": "категория",
+          "id": "@mandziak:3676#47899",
+          "state": "UNANSWERED — never reached",
+          "v2": null
+        },
+        {
+          "agreed": false,
+          "gold": "категория",
+          "id": "@mandziak:3676#47902",
+          "state": "UNANSWERED — never reached",
+          "v2": null
+        },
+        {
+          "agreed": false,
+          "gold": "категория",
+          "id": "@mandziak:3703#48276",
+          "state": "UNANSWERED — never reached",
+          "v2": null
+        },
+        {
+          "agreed": false,
+          "gold": "категория",
+          "id": "@mandziak:3703#48283",
+          "state": "UNANSWERED — never reached",
+          "v2": null
+        },
+        {
+          "agreed": false,
+          "gold": "не_наш_рынок",
+          "id": "@matusi_ukr:22242#578951",
+          "state": "UNANSWERED — never reached",
+          "v2": null
+        },
+        {
+          "agreed": false,
+          "gold": "категория",
+          "id": "@matusi_ukr:22272#579379",
+          "state": "UNANSWERED — never reached",
+          "v2": null
+        },
+        {
+          "agreed": false,
+          "gold": "категория",
+          "id": "@matusi_ukr:22272#579457",
+          "state": "UNANSWERED — never reached",
+          "v2": null
+        },
+        {
+          "agreed": false,
+          "gold": "молочный_бренд",
+          "id": "@matusi_ukr:22303#580124",
+          "state": "UNANSWERED — never reached",
+          "v2": null
+        },
+        {
+          "agreed": false,
+          "gold": "категория",
+          "id": "@matusi_ukr:22303#580129",
+          "state": "UNANSWERED — never reached",
+          "v2": null
+        }
+      ],
+      "rows_the_pod_actually_reached": 5
+    }
+  },
+  "spans": {
+    "billed_seconds": 845.0,
+    "billed_usd": 0.173694,
+    "card": "RTX 4090",
+    "charged": {
+      "generation_seconds": 3516.54,
+      "model_load_seconds": 450.0,
+      "overhead_seconds": 1300.0,
+      "pre_generation_seconds": 1100.0,
+      "seconds_per_call": 3.4075,
+      "ssh_seconds": 500.0,
+      "stage_launch_seconds": 150.0,
+      "total_seconds": 5916.54,
+      "worst_case_usd_at_the_price_ceiling": 1.314787
+    },
+    "created_at": "2026-08-21T15:32:18+00:00",
+    "deleted_at": "2026-08-21T15:46:23+00:00",
+    "measured": {
+      "first_reply_at_create_elapsed_seconds": null,
+      "generation_seconds": 589.3,
+      "launch_to_first_reply_seconds": 169.505,
+      "launched_at": "2026-08-21T15:33:41+00:00",
+      "model_load_seconds": [
+        164.915
+      ],
+      "seconds_per_call_fastest": 3.78,
+      "seconds_per_call_mean": 4.498473,
+      "seconds_per_call_slowest": 5.798,
+      "ssh_publish_seconds": 41.5,
+      "watch_polls": 1,
+      "watched_seconds": 748.2
+    },
+    "pod": "xpz3zb7yxus5cw",
+    "rung_4_which_world_the_pod_was_in": {
+      "rule": "the knife edge depends on the pre-generation, and the record carries two values for it. This is the one the pod measured",
+      "slowest_call_in_the_sample": 4.066,
+      "sustained_rate_the_charged_pre_generation_can_pay_for": 3.9729
+    },
+    "usd_per_hour": 0.74
+  },
+  "what_this_run_is_not": "**NOT an evaluation.** There is no dev gate, no paired arm, no bar on v2's quality and no attempt to spend. v2 was measured in `pass1-fewshot r2` and its dev gate answered RED at +7 of +10; the operator's ruling ships it as the PROVISIONAL filter for an end-to-end measurement, not as an accepted deliverable. Nothing in this record, this run or its report may be read as v2 passing anything"
+}
