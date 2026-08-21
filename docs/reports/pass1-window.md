@@ -482,7 +482,7 @@ $1.50. Step spend $0.1599 by the guard's balance delta; cycle 2 at $6.5436 of $2
 
 1. **The 901 comments still owed have to be re-priced before they are re-bought.** At the measured
    4.498 s/call the remaining rows are 901 × 4.498 = 4 053 s of generation; with a fresh pod's
-   pre-generation and the registered overhead that is ≈ 5 600 s = **$1.15 at $0.80/h**, and it does
+   pre-generation and the registered overhead that is ≈ 5 606 s = **$1.2457 at the $0.80/h ceiling** ($1.1523 at the $0.74 this pod cost), and it does
    NOT fit under this registration's 6 500 s stop once pod 1's 845 s are counted. A continuation
    needs its own registration with a rate charged on the POD CLASS and not on a sibling run —
    `pass1-window r2`, in the shape `pass1-fewshot r2` took.

@@ -131,6 +131,35 @@ to ITS step ledger, which is closed, so the step cap and the contract cap are th
 `категория_личное` / `молочный_бренд` / `сеть_ритейлер`, their characters and each thread's entity
 block — which is why the pack records the denominator that table comes out of.
 
+## What (д) bought, measured — `pass1-window` closed RED and the reason is a rate
+
+The first of the two contracts ran on 2026-08-21 and **closed RED at rung 7: 131 of 1 032 answered**
+(`docs/reports/pass1-window.md`). One pod, 845.0 s, **$0.173694 of the $1.50 the ruling gave it**.
+Rung 4 deleted it because the projection left the 6 500 s hard stop; the cap was never near it
+($1.3948 of $1.50), and the recovery clause then refused on seconds, so there is no second pod.
+
+**Nothing about (а), (б) or (г) is disturbed by this.** No bar on v2 was taken, no gold row was
+scored against a threshold, and the fourteen the pod did reach — five of them, four agreeing — are
+a census row with the multiplicity this record already binds. The transport was clean on every row
+it bought: 131 replies, 131 parsed, 0 sha mismatches, 0 refusals, 0 duplicates.
+
+**What failed is a number, and it is the number the next registration has to fix.** The run was
+priced at 3.4075 s/call — r2's measured 2.726 over 200 dev rows on pod `8tpx8lf05n6skc`, times a
+1.25 margin. The pod that ran it, `xpz3zb7yxus5cw`, went at **4.498 s/call: 1.65× the sample.**
+Request width (+1.14 %), a cold leg (r2's own base leg ran 2.199 cold), the prompt, the card model,
+the datacenter and the population were each eliminated with numbers. A rate measured on one rented
+pod does not describe another, even at the same card model in the same datacenter, and this is now
+a reading the programme owns rather than a surprise it can have twice.
+
+**The consequence for (д), and it is the operator's to take.** `pass2-signals` is priced «from THIS
+run's census», and the census covers **24 of 127 callable threads — 91 filtered rows of an unknown
+whole**. The per-thread shape is sound and the extrapolation is not the executor's to make. The 901
+comments still owed need their own registration with a rate charged on the POD CLASS: at 4.498 s/call
+they are ≈ 5 600 s ≈ $1.15, which does not fit under this registration's stop once pod 1's seconds
+are counted, and a hard stop that would carry the whole run at the measured rate is $1.5556 —
+OUTSIDE the $1.50 cap. So the next step is a cap-and-rate decision together, not an amendment to
+this one.
+
 ## What binds, from here
 
 1. **v2 is the base.** A line that claims to improve on pass 1 measures against 136/200 and 38/49 on
