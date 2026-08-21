@@ -1,9 +1,16 @@
-# Runbook — pass1-fewshot D1: two dev legs, one dev gate, one shot, and a loop you do not leave
+# Runbook — pass1-fewshot r2 D1: two dev legs, one dev gate, one shot, and a loop you do not leave
 
-The order below is the money. `results/prereg_pass1_fewshot.json` is the law; every deadline here
+The order below is the money. `results/prereg_pass1_fewshot_r2.json` is the law; every deadline here
 comes out of it through `scripts/gate_pass1_fewshot.py`, and **nothing in this file may add a number
 the record does not carry**. Where a number appears below it is an illustration of the instrument's
 output, never a value to type.
+
+**What r2 moved, and it is only this.** Rung 2's ssh dead-man is 500 s of create-elapsed, not 180 —
+180 was pass1-probe's reading of one night and it failed on both pods of 2026-08-20. Rung 3's 450 s
+ceiling is anchored on the **runner's own launch**, a stamp the pod writes in step 3 and `--watch`
+copies back, with a create-anchored **backstop at 1 100 s** beside it. `--pre-create-check` now
+holds the recovery clause itself and refuses a create that will not fit. The step's budget is
+unchanged at $1.50 all-in: r1's two pods bought $0.117783 of it, and **r2's cap is $1.38**.
 
 **The one rule this runbook exists for:** the meter starts at `pod create` and stops at
 `pod delete`. Not at ssh, not at the model load, not at the first reply — a pod bills for existing.
@@ -23,7 +30,7 @@ gate closes the session with the attempt NOT spent, and the dev table goes back 
 **Guard reading at every rung, pasted:**
 
 ```bash
-PYTHONPATH=src python3.11 scripts/runpod_guard.py --step pass1-fewshot --step-cap 1.50 \
+PYTHONPATH=src python3.11 scripts/runpod_guard.py --step pass1-fewshot-r2 --step-cap 1.38 \
   --note "<what this rung is>"
 ```
 
@@ -33,14 +40,22 @@ PYTHONPATH=src python3.11 scripts/runpod_guard.py --step pass1-fewshot --step-ca
 runpodctl pod list -a && runpodctl serverless list && runpodctl network-volume list
 git status --porcelain                       # the prereg must NOT be in it
 PYTHONPATH=src python3.11 scripts/gate_pass1_fewshot.py --pre-create-check
-PYTHONPATH=src python3.11 scripts/runpod_guard.py --step pass1-fewshot --step-cap 1.50 \
-  --note "pass1-fewshot anchor, before the pod"
+PYTHONPATH=src python3.11 scripts/runpod_guard.py --step pass1-fewshot-r2 --step-cap 1.38 \
+  --note "pass1-fewshot-r2 anchor, before the pod"
 ```
 
 The three listings are the before-state the deletion proof is read against — the volume must appear
 in all three readings, before and after, as the positive control that the listing works at all.
-`gate_pass1_fewshot.py` refuses to run at all while `results/prereg_pass1_fewshot.json` is untracked
-or differs from HEAD: the git clock is what proves the plan predates the money.
+`gate_pass1_fewshot.py` refuses to run at all while `results/prereg_pass1_fewshot_r2.json` is
+untracked or differs from HEAD: the git clock is what proves the plan predates the money.
+
+**`--pre-create-check` IS the recovery clause.** It prints the whole arithmetic and returns KILL when
+the create cannot be paid for — the seconds against the hard stop, the dollars against the cap, and
+the number of pods against the ONE re-creation the registration buys. r1 did this by hand and it
+worked because a person did it; here it is a gate, and **`--price` runs the same check again**: a
+pod created without step 0 is still RECORDED (a pod nothing counts is worse than a pod that should
+not exist) and `--price` then returns KILL with the delete instruction. Its
+`terminate_after_window_seconds` is the number step 1 puts in `--terminate-after`.
 
 ## 1 — create (the meter starts here)
 
@@ -69,15 +84,23 @@ PYTHONPATH=src python3.11 scripts/gate_pass1_fewshot.py --price \
 the only thing that enforces rung 6. `--price` re-derives it and REFUSES a window longer than the
 cumulative hard stop allows.
 
-## 2 — rung 2, the ssh dead-man (≤ 180 s of this pod's create-elapsed)
+## 2 — rung 2, the ssh dead-man (≤ 500 s of this pod's create-elapsed)
 
 `runpodctl ssh info` answers `{"error": "pod not ready"}` until the port mapping is published and
 then a JSON object carrying `"ip"` and `"port"`. **Poll on `"port"`, and BOUND the loop below the
 dead-man**, so a poller that is looking for the wrong thing cannot spend the deadline being blind:
 
+**BOUND THE LOOP BY THE CLOCK, NOT BY AN ITERATION COUNT.** Each turn pays for a `runpodctl ssh
+info` API call on top of its sleep: r1's pod 2 ran a nominally 170 s loop (34 × 5 s) and took
+**226 s** of wall clock — 6.65 s a turn, not 5. Ninety-five turns would be ~631 s, past the 500 s
+rung AND past the 623 s at which the ONE re-creation stops fitting. The deadline below is rung 2's
+own ceiling, read out of the record so it cannot drift:
+
 ```bash
-runpodctl ssh info <POD_ID>          # "pod not ready" for a minute or two is normal
-for i in $(seq 1 34); do            # 34 x 5 s = 170 s, inside the 180 s rung
+CEIL=$(python3.11 -c "import json;print(int(json.load(open('results/prereg_pass1_fewshot_r2.json'))['money']['arithmetic']['ssh_seconds_charged']))")
+CREATED=$(date -u -j -f '%Y-%m-%dT%H:%M:%S' '<the create response stamp, UTC, no zone>' +%s)
+runpodctl ssh info <POD_ID>          # "pod not ready" for FOUR minutes was normal on 2026-08-20
+while [ "$(date -u +%s)" -lt $((CREATED + CEIL)) ]; do
   runpodctl ssh info <POD_ID> | grep -q '"port"' && break
   sleep 5
 done
@@ -85,11 +108,16 @@ runpodctl ssh info <POD_ID>          # the reading the next command asserts
 PYTHONPATH=src python3.11 scripts/gate_pass1_fewshot.py --gate0 --ssh-ok   # it answered
 ```
 
-**`--gate0` without `--ssh-ok` asserts that the endpoint has NOT answered.** Run it as a poll only
-while you are inside the deadline; past 180 s it is a KILL, and it is a KILL whether the endpoint is
-up or not, because what the gate records is the reading you gave it. On 2026-08-20 this cost a pod:
+**`--gate0` run WITHOUT `--ssh-ok` asserts that the endpoint has NOT answered** — that form is a
+KILL past 500 s of create-elapsed whether or not the pod is actually up, because what the gate
+records is the reading you gave it. Run it as a poll only while you are inside the deadline. On 2026-08-20 this cost a pod:
 the loop grepped `"host"`, a key `runpodctl` never emits, spun for 240 s, and the `--gate0` after it
 recorded a dead-man nobody could prove either way ([[a_checker_whose_failure_is_silence]]).
+
+The ceiling is a SPREAD, not a measurement: probe-b saw ssh at 14.5 s on this card in this
+datacenter on 2026-08-18, and on 2026-08-20 two pods were still `pod not ready` at 262.5 s and
+231.9 s — both LOWER bounds, because ssh was never seen up on either. One dead pod under this rung
+costs $0.1111 and the registration is built so that ONE re-creation still fits.
 
 ## 3 — stage, and launch BOTH dev legs in one process
 
@@ -124,16 +152,26 @@ this registration priced no such thing: delete and STOP. The `rm -rf /workspace/
 tidiness — a replacement pod mounts the same network volume, and an out-file left by a killed leg
 would be RESUMED over, so the run would answer fewer units and look complete.
 
-The launch is DETACHED and its stdout is the pod log the watch loop tails:
+The launch is DETACHED, its stdout is the pod log the watch loop tails, and **it stamps rung 3's
+anchor in the same command**. `/workspace/run/launched_at` is written by the POD, in the foreground,
+the instant before the runner is exec'd — the `;` is load-bearing, an `&&` before an `&` would put
+the stamp inside the backgrounded list:
 
 ```bash
 ssh ... -p <PORT> root@<HOST> \
-  'cd /workspace && HF_HOME=/workspace/hf PYTHONPATH=/workspace/repo/src nohup \
+  'cd /workspace && date -u +%Y-%m-%dT%H:%M:%S+00:00 > /workspace/run/launched_at; \
+   HF_HOME=/workspace/hf PYTHONPATH=/workspace/repo/src nohup \
    /workspace/venv/bin/python -u /workspace/repo/scripts/pass1_fewshot_pod_runner.py \
      --pack /workspace/repo/results/pass1_dev_pack.json \
      --outdir /workspace/run --repo /workspace/repo \
      > /workspace/run/pod.log 2>&1 & echo $!'
 ```
+
+**Why the stamp is a file the pod writes and not a flag you type.** Rung 3 measures 450 s from the
+runner's launch, and a stamp taken late can only ever move that deadline OUTWARD. A number the
+executor types is an assertion; this one is a reading, and `--watch` copies it back with the
+out-files. The `rm -rf /workspace/run` above is what keeps a previous attempt's stamp from being
+read as this one's — and the gate refuses a stamp older than the pod anyway.
 
 **Both dev legs, one invocation, one model load.** The base leg runs first and the v2 leg second;
 each answers into its own file (`pass1_dev_base.jsonl`, `pass1_dev_v2.jsonl`) because the shipped
@@ -149,22 +187,33 @@ PYTHONPATH=src python3.11 scripts/gate_pass1_fewshot.py --watch \
 
 **Enter it the moment the launch returns a pid — do not hand-poll `--boot` first.** Polling a gate
 by hand through a 350 s model load is the habit rung 5 was bought to remove, and the loop arms rung
-3 itself: not one reply at 450 s of this pod's create-elapsed is a KILL it makes. The runner's own
-progress lines land in the log before the load starts, so the silent `load_captioner` window sits
-comfortably inside the 600 s liveness deadline.
+3 itself, on BOTH of its spans: not one reply 450 s after the launch stamp is a KILL it makes, and
+so is not one reply at 1 100 s of create-elapsed even when the stamp is fresh. If the stamp never
+arrives at all — a pod that died during staging — the backstop is the only bound left and it fires
+on its own. The runner's own progress lines land in the log before the load starts, so the silent
+`load_captioner` window sits comfortably inside the 600 s liveness deadline.
 
 The watch prints one line per poll and returns only on GO (every unit answered) or KILL. On KILL it
 has ALREADY deleted the pod — go to step 7 and prove it by listing. If the loop ends any other way
 it records a gate and prints the pod id with the delete command: run it immediately, because at that
 moment nothing is watching a billed pod except the platform backstop.
 
-Once the watch returns GO, record rung 3 with the reply the run actually produced — it is the gate
-whose reading the report quotes, and the boot it measures is the number the next contract prices:
+Once the watch returns GO, record rung 3. **It takes no stamp**: the gate reads the launch anchor
+out of the run record and the first reply out of `results/pass1_dev_base.jsonl`'s own
+`elapsed_since_start`, which the runner measures from its own start. r1 asked the executor to type
+`create + the first row's boot_seconds`, and under a launch anchor that recipe subtracts the ssh
+wait and the staging a second time — a 460 s load would have read as 415 s and this rung would have
+reported GO on the very condition it was re-anchored to catch.
 
 ```bash
-PYTHONPATH=src python3.11 scripts/gate_pass1_fewshot.py --boot \
-  --first-reply-at <create + the first row's boot_seconds, off results/pass1_dev_base.jsonl>
+PYTHONPATH=src python3.11 scripts/gate_pass1_fewshot.py --boot
 ```
+
+It reports GO only with the launch anchor beside the reply. **A `--boot` with no `launched_at` in
+the run record is a KILL and not a WAIT**: a rung whose deadline cannot be demonstrated has not been
+passed, which is the ruling r1 closed its first pod under. If that happens the stamp did not come
+back — check `results/pass1_fewshot_r2_launched_at` and the pod's `/workspace/run/` before anything
+else.
 
 ## 5 — rung 7, the dev gate (on the Mac, $0)
 
@@ -172,7 +221,7 @@ PYTHONPATH=src python3.11 scripts/gate_pass1_fewshot.py --boot \
 scp -i $SSHK -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR \
   -P <PORT> root@<HOST>:/workspace/run/pod.log results/pass1_fewshot_pod.log
 PYTHONPATH=src python3.11 scripts/gate_pass1_fewshot.py --dev-gate
-PYTHONPATH=src python3.11 scripts/runpod_guard.py --step pass1-fewshot --step-cap 1.50 \
+PYTHONPATH=src python3.11 scripts/runpod_guard.py --step pass1-fewshot-r2 --step-cap 1.38 \
   --note "dev legs answered, before the shot"
 ```
 
@@ -196,8 +245,9 @@ PYTHONPATH=src python3.11 scripts/gate_pass1_fewshot.py --watch \
   --pack results/pass1_probe_b_pack_v2.json --ssh root@<HOST> --ssh-port <PORT>
 ```
 
-The shot's watch does NOT re-arm rung 3 — the model is already loaded and the ceiling is anchored on
-create — so a stalled shot dies on the liveness rung, which is the right rung for it.
+The shot's watch does NOT re-arm rung 3 — the model is already loaded and rung 3 went GO on this pod
+once already — so a stalled shot dies on the liveness rung, which is the right rung for it. The shot
+does not re-stamp `launched_at` either: the pod's entry keeps the first stamp it was given.
 
 Its own out-file (`pass1_fewshot_shot.jsonl`), never a dev leg's — the pack names it and the runner
 obeys the pack.
@@ -218,7 +268,7 @@ runpodctl network-volume list        # the volume, unchanged: the POSITIVE CONTR
 
 PYTHONPATH=src python3.11 scripts/gate_pass1_fewshot.py --close \
   --deleted-at <the deletion stamp> --outcome '<why this pod ended>'
-PYTHONPATH=src python3.11 scripts/runpod_guard.py --step pass1-fewshot --step-cap 1.50 \
+PYTHONPATH=src python3.11 scripts/runpod_guard.py --step pass1-fewshot-r2 --step-cap 1.38 \
   --note "pod deleted, the step is closed"
 ```
 
@@ -235,13 +285,18 @@ It REFUSES while the run record says a shot happened and its replies are not on 
 
 ## Recovery — ONE re-creation, and never two endpoints
 
-Only after a deletion PROVEN by listing, and only if the guard reading plus the worst case remaining
-at MEASURED rates is inside the cap and the cumulative stop. Every reply already on disk is kept: the
-shipped resume re-asks only what has no answer, so a KILL mid-leg costs the boot and not the leg.
+Only after a deletion PROVEN by listing, and only if the arithmetic still closes. It is no longer
+yours to paste: `--pre-create-check` computes both bounds and the count, and returns KILL when the
+create cannot be paid for. Every reply already on disk is kept — the shipped resume re-asks only
+what has no answer, so a KILL mid-leg costs the load and not the leg.
 
 ```bash
 PYTHONPATH=src python3.11 scripts/gate_pass1_fewshot.py --pre-create-check   # then step 1 again
 ```
+
+**A THIRD pod is a STOP.** The registration buys ONE re-creation, and after a second dead pod
+nothing fits: the session closes with the attempt NOT spent and the question goes back to the
+operator. Paste the check's output either way — it is the reading the report quotes.
 
 ## DO NOT
 
@@ -250,4 +305,5 @@ PYTHONPATH=src python3.11 scripts/gate_pass1_fewshot.py --pre-create-check   # t
   labels or the base verdict. The base is NOT re-run on the fourteen.
 * Never touch the sealed fourteen before the dev gate says GO.
 * Never leave `--watch` while a pod is billing.
-* Never two billing endpoints; delete, never stop; no cap raise.
+* Never two billing endpoints; delete, never stop; no cap raise; no third pod.
+* Never edit `results/prereg_pass1_fewshot.json` — r1 is sealed, superseded and never re-opened.
