@@ -1,0 +1,3630 @@
+{
+  "gates": [
+    {
+      "at": "2026-08-21T12:54:50+00:00",
+      "backstop": {
+        "billed_by_closed_pods_seconds": 0,
+        "computed": "2026-08-21T14:36:23+00:00",
+        "given": "2026-08-21T14:36:23Z",
+        "overshoot_seconds": 0.0,
+        "tolerance_seconds": 60.0,
+        "window_seconds": 6100.0
+      },
+      "billed_seconds_closed_pods": 0,
+      "cap_left_usd": 1.378363,
+      "cap_usd_all_in": 1.38,
+      "card": "NVIDIA GeForce RTX 4090",
+      "cumulative_billed_seconds": 8.0,
+      "cumulative_seconds_left": 6092.0,
+      "cumulative_spent_usd": 0.001637,
+      "elapsed_on_this_pod_seconds": 8.0,
+      "hard_stop_seconds": 6100.0,
+      "kind": "price",
+      "next_step": "the backstop the platform holds is inside the cumulative stop; poll --gate0",
+      "pod": 1,
+      "pod_id": "8tpx8lf05n6skc",
+      "pod_is_live": true,
+      "pods_opened": 1,
+      "price_ceiling_usd_per_hour": 0.8,
+      "reading_rule": "these are the CLOCK's numbers. The rungs that name a guard reading act on `scripts/runpod_guard.py`'s reading and never on this projection",
+      "recovery": {
+        "billed_by_closed_pods_seconds": 0,
+        "cap_usd_all_in": 1.38,
+        "fits_the_cap": true,
+        "fits_the_hard_stop": true,
+        "fits_the_re_creation_count": true,
+        "hard_stop_seconds": 6100.0,
+        "next_step": "no pod is open and the whole worst case still fits — create with --terminate-after = create + 6100 s",
+        "pods_opened": 0,
+        "projected_attempt_seconds": 5476.552,
+        "projected_attempt_usd": 1.217012,
+        "re_creations_allowed": 1,
+        "rule": "ONE pod re-creation, and only after a deletion PROVEN by listing. It happens only if the guard READING plus the worst case remaining at MEASURED rates is ≤ $1.38 and inside the cumulative stop. Never two billing endpoints. `--pre-create-check` computes both bounds and refuses the create itself",
+        "rung": 0,
+        "spent_closed_pods_usd": 0,
+        "terminate_after_window_seconds": 6100.0,
+        "this_would_be_pod": 1,
+        "verdict": "GO",
+        "widest_dead_pod_that_still_fits_seconds": 623.448,
+        "worst_case_ahead_seconds": 5476.552,
+        "worst_case_ahead_usd_at_the_price_ceiling": 1.217012
+      },
+      "rule": "live price > $0.8/h at create → STOP, no endpoint. The backstop stamp is checked against the cumulative hard stop in the same command",
+      "rung": 1,
+      "spent_closed_pods_usd": 0,
+      "spent_this_pod_usd": 0.001637,
+      "terminate_after_rule": "cumulative hard stop 6100 s, PLATFORM-held. Each pod's --terminate-after is its own create plus what the stop has left, and the overshoot it forgives is the registered 60 s",
+      "usd_per_hour": 0.74,
+      "verdict": "GO"
+    },
+    {
+      "at": "2026-08-21T12:55:41+00:00",
+      "billed_seconds_closed_pods": 0,
+      "cap_left_usd": 1.367915,
+      "cap_usd_all_in": 1.38,
+      "cumulative_billed_seconds": 58.8,
+      "cumulative_seconds_left": 6041.2,
+      "cumulative_spent_usd": 0.012085,
+      "elapsed_on_this_pod_seconds": 58.8,
+      "hard_stop_seconds": 6100.0,
+      "kind": "gate0",
+      "next_step": "stage the repo and launch the dev legs",
+      "pod": 1,
+      "pod_id": "8tpx8lf05n6skc",
+      "pod_is_live": true,
+      "pods_opened": 1,
+      "reading_rule": "these are the CLOCK's numbers. The rungs that name a guard reading act on `scripts/runpod_guard.py`'s reading and never on this projection",
+      "rule": "ssh dead-man ≤ 500 s of this pod's create-elapsed or KILL. r1's 180 s was pass1-probe's reading of one night: it passed on 2026-08-18 and failed on BOTH pods of 2026-08-20, on the same card in the same datacenter (Dv602). The new ceiling is a spread, and one dead pod under it costs $0.1111",
+      "rung": 2,
+      "seconds_left": 441.2,
+      "spent_closed_pods_usd": 0,
+      "spent_this_pod_usd": 0.012085,
+      "ssh_endpoint_answered": true,
+      "threshold_seconds": 500.0,
+      "usd_per_hour": 0.74,
+      "verdict": "GO"
+    },
+    {
+      "answered": 400,
+      "at": "2026-08-21T13:15:59+00:00",
+      "billed_seconds_closed_pods": 0,
+      "boot_backstop_seconds": 1100.0,
+      "boot_ceiling_armed": true,
+      "cap_left_usd": 1.117695,
+      "cap_usd_all_in": 1.38,
+      "copied_back_this_poll": {
+        "log_lines": 683,
+        "rows": 400
+      },
+      "cumulative_billed_seconds": 1276.1,
+      "cumulative_seconds_left": 4823.9,
+      "cumulative_spent_usd": 0.262305,
+      "elapsed_on_this_pod_seconds": 1276.1,
+      "hard_stop_seconds": 6100.0,
+      "idle_deadline_seconds": 600.0,
+      "idle_seconds": 0.0,
+      "kind": "watch",
+      "launched_at": "2026-08-21T12:56:32+00:00",
+      "legs": [
+        {
+          "answered": 200,
+          "measured_seconds_per_call": 2.485,
+          "name": "base",
+          "out": "pass1_dev_base.jsonl",
+          "rate_source": "measured",
+          "remaining": 0,
+          "seconds_per_call_used": 2.485,
+          "task": "pass1_comment_gm4_v1",
+          "units": 200
+        },
+        {
+          "answered": 200,
+          "measured_seconds_per_call": 2.7257800000000003,
+          "name": "v2",
+          "out": "pass1_dev_v2.jsonl",
+          "rate_source": "measured",
+          "remaining": 0,
+          "seconds_per_call_used": 2.7258,
+          "task": "pass1_comment_gm4_v2",
+          "units": 200
+        }
+      ],
+      "next_step": "every unit is answered — scp the log, then the next gate on the Mac",
+      "owed": 400,
+      "pod": 1,
+      "pod_id": "8tpx8lf05n6skc",
+      "pod_is_live": true,
+      "pod_log_lines": 683,
+      "pods_opened": 1,
+      "projection_every": "EVERY poll. The registration's «20 calls» is the floor and this is strictly stronger — the computation is local and free",
+      "reading_rule": "these are the CLOCK's numbers. The rungs that name a guard reading act on `scripts/runpod_guard.py`'s reading and never on this projection",
+      "rule": "liveness: 600 s with no new answered row and no new pod-log line → KILL. The deadline is measured from the LAST EVENT and never from create. The executor does not poll by hand and does not leave the loop — lora-b lost 9 720 s and an arm because every rung there watched the training log and none watched a pod that had stopped working",
+      "rung": 5,
+      "seconds_before_kill": 600.0,
+      "seconds_since_launch": 1167.1,
+      "spent_closed_pods_usd": 0,
+      "spent_this_pod_usd": 0.262305,
+      "usd_per_hour": 0.74,
+      "verdict": "GO",
+      "watched_seconds": 1157.2
+    },
+    {
+      "anchor": "launched_at",
+      "at": "2026-08-21T13:16:26+00:00",
+      "backstop_rule": "and a create-anchored BACKSTOP beside it: first reply ≤ 1100 s of create-elapsed or KILL — ssh 500 + stage/launch 150 + load 450. It is what bounds the launch anchor: a stamp taken late cannot buy a window the registration never priced, and the backstop fires with no human in the path",
+      "backstop_seconds": 1100.0,
+      "billed_seconds_closed_pods": 0,
+      "cap_left_usd": 1.111973,
+      "cap_usd_all_in": 1.38,
+      "cause": null,
+      "cumulative_billed_seconds": 1303.9,
+      "cumulative_seconds_left": 4796.1,
+      "cumulative_spent_usd": 0.268027,
+      "elapsed_on_this_pod_seconds": 1303.9,
+      "first_reply_at_create_elapsed_seconds": 254.6,
+      "first_reply_at_launch_elapsed_seconds": 145.6,
+      "hard_stop_seconds": 6100.0,
+      "kind": "boot",
+      "launched_at": "2026-08-21T12:56:32+00:00",
+      "next_step": "the dev legs are generating — stay inside --watch",
+      "pod": 1,
+      "pod_id": "8tpx8lf05n6skc",
+      "pod_is_live": true,
+      "pods_opened": 1,
+      "reading_rule": "these are the CLOCK's numbers. The rungs that name a guard reading act on `scripts/runpod_guard.py`'s reading and never on this projection",
+      "rule": "launch → first reply ≤ 450 s of the runner's OWN `launched_at` or KILL. r1 derived this ceiling from the model-LOAD window and measured it from create, and the two spans are not the same one: create-elapsed also carries the ssh wait, the staging and the launch, and the two spans this stack has MEASURED already exceed it together (Dv605). A run record without `launched_at` cannot report GO on this rung — a deadline that cannot be demonstrated has not been passed",
+      "rung": 3,
+      "seconds_left_on_the_anchor": -744.9,
+      "seconds_left_on_the_backstop": -203.9,
+      "seconds_since_launch": 1194.9,
+      "spent_closed_pods_usd": 0,
+      "spent_this_pod_usd": 0.268027,
+      "threshold_seconds": 450.0,
+      "usd_per_hour": 0.74,
+      "verdict": "GO"
+    },
+    {
+      "agreement_delta": 49,
+      "agreement_delta_minimum": -5,
+      "agreement_delta_passed": true,
+      "at": "2026-08-21T13:16:41+00:00",
+      "base": {
+        "absent": 0,
+        "agreed": 87,
+        "answered": 200,
+        "disagreed": 113,
+        "file": "results/pass1_dev_base.jsonl",
+        "leg": "base",
+        "n": 200,
+        "our_agreed": 31,
+        "our_n": 49,
+        "per_class": {
+          "null": {
+            "agreed": 36,
+            "n": 54
+          },
+          "категория": {
+            "agreed": 30,
+            "n": 47
+          },
+          "молочный_бренд": {
+            "agreed": 1,
+            "n": 2
+          },
+          "не_наш_рынок": {
+            "agreed": 12,
+            "n": 85
+          },
+          "сеть_ритейлер": {
+            "agreed": 8,
+            "n": 12
+          }
+        },
+        "rate": 0.435,
+        "refused": [],
+        "rows": [
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 20649
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "категория",
+                "reader": null
+              }
+            },
+            "msg_id": 20651
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "категория",
+                "reader": null
+              }
+            },
+            "msg_id": 20655
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "категория",
+                "reader": null
+              }
+            },
+            "msg_id": 20675
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "категория",
+                "reader": null
+              }
+            },
+            "msg_id": 20678
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 20679
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "категория",
+                "reader": null
+              }
+            },
+            "msg_id": 20680
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": null,
+                "reader": "сеть_ритейлер"
+              }
+            },
+            "msg_id": 20884
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 20919
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 20922
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": null,
+                "reader": "сеть_ритейлер"
+              }
+            },
+            "msg_id": 20939
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "молочный_бренд",
+                "reader": "категория"
+              }
+            },
+            "msg_id": 20766
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 20979
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": null
+              }
+            },
+            "msg_id": 20983
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "молочный_бренд"
+              }
+            },
+            "msg_id": 20985
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": null
+              }
+            },
+            "msg_id": 21005
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21113
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21125
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": null,
+                "reader": "сеть_ритейлер"
+              }
+            },
+            "msg_id": 21127
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21393
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21238
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория"
+              }
+            },
+            "msg_id": 21253
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "сеть_ритейлер"
+              }
+            },
+            "msg_id": 21266
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "сеть_ритейлер"
+              }
+            },
+            "msg_id": 21377
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "сеть_ритейлер",
+                "reader": null
+              }
+            },
+            "msg_id": 21383
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21403
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21409
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21420
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21504
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "сеть_ритейлер",
+                "reader": null
+              }
+            },
+            "msg_id": 21509
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "сеть_ритейлер",
+                "reader": "категория"
+              }
+            },
+            "msg_id": 21576
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория"
+              }
+            },
+            "msg_id": 21164
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21177
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "категория",
+                "reader": null
+              }
+            },
+            "msg_id": 21180
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21181
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21182
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "категория",
+                "reader": null
+              }
+            },
+            "msg_id": 21183
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21184
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "категория",
+                "reader": null
+              }
+            },
+            "msg_id": 21186
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21187
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21188
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21189
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "категория",
+                "reader": null
+              }
+            },
+            "msg_id": 21190
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21191
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "категория",
+                "reader": null
+              }
+            },
+            "msg_id": 21192
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21193
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "категория",
+                "reader": null
+              }
+            },
+            "msg_id": 21194
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21195
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21205
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21206
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21207
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21210
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21211
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21221
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21229
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": null
+              }
+            },
+            "msg_id": 21236
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": null
+              }
+            },
+            "msg_id": 21239
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": null
+              }
+            },
+            "msg_id": 21245
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": null
+              }
+            },
+            "msg_id": 21246
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": null
+              }
+            },
+            "msg_id": 21251
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "категория",
+                "reader": null
+              }
+            },
+            "msg_id": 21256
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория"
+              }
+            },
+            "msg_id": 21286
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория"
+              }
+            },
+            "msg_id": 21289
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21346
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория"
+              }
+            },
+            "msg_id": 21351
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 391532
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 391772
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 391774
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 47833
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "категория",
+                "reader": null
+              }
+            },
+            "msg_id": 47838
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "категория",
+                "reader": null
+              }
+            },
+            "msg_id": 47839
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 47859
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "категория",
+                "reader": null
+              }
+            },
+            "msg_id": 47860
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория"
+              }
+            },
+            "msg_id": 47943
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": null,
+                "reader": "категория"
+              }
+            },
+            "msg_id": 47957
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": null
+              }
+            },
+            "msg_id": 47987
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 47995
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": null,
+                "reader": "категория"
+              }
+            },
+            "msg_id": 48004
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": null
+              }
+            },
+            "msg_id": 48047
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория"
+              }
+            },
+            "msg_id": 48045
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 48081
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": null,
+                "reader": "категория"
+              }
+            },
+            "msg_id": 48268
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": null,
+                "reader": "категория"
+              }
+            },
+            "msg_id": 48107
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 48160
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 48336
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 48214
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 48217
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 48227
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория"
+              }
+            },
+            "msg_id": 48240
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": null
+              }
+            },
+            "msg_id": 48244
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория"
+              }
+            },
+            "msg_id": 48279
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория"
+              }
+            },
+            "msg_id": 48313
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 48397
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория"
+              }
+            },
+            "msg_id": 48398
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": null
+              }
+            },
+            "msg_id": 48399
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": null
+              }
+            },
+            "msg_id": 48405
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 48423
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 48445
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": null,
+                "reader": "категория"
+              }
+            },
+            "msg_id": 48530
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": null,
+                "reader": "категория"
+              }
+            },
+            "msg_id": 48535
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 48853
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 48854
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": null,
+                "reader": "категория"
+              }
+            },
+            "msg_id": 48855
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": null,
+                "reader": "категория"
+              }
+            },
+            "msg_id": 48881
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": null,
+                "reader": "категория"
+              }
+            },
+            "msg_id": 49013
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": null,
+                "reader": "категория"
+              }
+            },
+            "msg_id": 49014
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 49015
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": null,
+                "reader": "категория"
+              }
+            },
+            "msg_id": 49072
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": null
+              }
+            },
+            "msg_id": 576359
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": null
+              }
+            },
+            "msg_id": 576371
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": null
+              }
+            },
+            "msg_id": 576472
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": null
+              }
+            },
+            "msg_id": 576514
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": null
+              }
+            },
+            "msg_id": 576723
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": null
+              }
+            },
+            "msg_id": 576949
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": null
+              }
+            },
+            "msg_id": 576877
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория"
+              }
+            },
+            "msg_id": 576878
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 576879
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 576899
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 576968
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 577084
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 577089
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 577159
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 577220
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": null
+              }
+            },
+            "msg_id": 577262
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория"
+              }
+            },
+            "msg_id": 577264
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": null
+              }
+            },
+            "msg_id": 577282
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": null
+              }
+            },
+            "msg_id": 577623
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": null
+              }
+            },
+            "msg_id": 577333
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": null
+              }
+            },
+            "msg_id": 577719
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "категория",
+                "reader": "не_наш_рынок"
+              }
+            },
+            "msg_id": 578032
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 578037
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория"
+              }
+            },
+            "msg_id": 578050
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": null
+              }
+            },
+            "msg_id": 578064
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория"
+              }
+            },
+            "msg_id": 578075
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 578098
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория"
+              }
+            },
+            "msg_id": 578383
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 578384
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 578836
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 578838
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 578839
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 578841
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 578842
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 578845
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 578895
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 579250
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 579251
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 579293
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": null
+              }
+            },
+            "msg_id": 579295
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория"
+              }
+            },
+            "msg_id": 579314
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": null
+              }
+            },
+            "msg_id": 579642
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": null
+              }
+            },
+            "msg_id": 579646
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": null
+              }
+            },
+            "msg_id": 579699
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": null
+              }
+            },
+            "msg_id": 579780
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": null
+              }
+            },
+            "msg_id": 579786
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": null
+              }
+            },
+            "msg_id": 579885
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": null
+              }
+            },
+            "msg_id": 579994
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": null
+              }
+            },
+            "msg_id": 580014
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 580146
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 580147
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 580170
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": null
+              }
+            },
+            "msg_id": 580336
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "сеть_ритейлер",
+                "reader": "категория"
+              }
+            },
+            "msg_id": 13583
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 13584
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 2421
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": null
+              }
+            },
+            "msg_id": 49364
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": null
+              }
+            },
+            "msg_id": 49365
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория"
+              }
+            },
+            "msg_id": 49374
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 49401
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория"
+              }
+            },
+            "msg_id": 49418
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": null
+              }
+            },
+            "msg_id": 49541
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 49524
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": null
+              }
+            },
+            "msg_id": 49532
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": null
+              }
+            },
+            "msg_id": 49542
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": null
+              }
+            },
+            "msg_id": 49586
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 49588
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 49593
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": null
+              }
+            },
+            "msg_id": 49626
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория"
+              }
+            },
+            "msg_id": 49630
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": null
+              }
+            },
+            "msg_id": 49642
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория"
+              }
+            },
+            "msg_id": 49678
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": null
+              }
+            },
+            "msg_id": 49707
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 49740
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": null
+              }
+            },
+            "msg_id": 49749
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": null
+              }
+            },
+            "msg_id": 49750
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": null,
+                "reader": "категория"
+              }
+            },
+            "msg_id": 8
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 9
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": null,
+                "reader": "категория"
+              }
+            },
+            "msg_id": 10
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": null,
+                "reader": "категория"
+              }
+            },
+            "msg_id": 16
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 19
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 45
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": null
+              }
+            },
+            "msg_id": 47
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "категория",
+                "reader": null
+              }
+            },
+            "msg_id": 48
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 85
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория"
+              }
+            },
+            "msg_id": 171
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": null
+              }
+            },
+            "msg_id": 179
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 2579
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 2580
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 2595
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 2589
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": null,
+                "reader": "категория"
+              }
+            },
+            "msg_id": 2590
+          }
+        ],
+        "task": "pass1_comment_gm4_v1"
+      },
+      "billed_seconds_closed_pods": 0,
+      "cap_left_usd": 1.108982,
+      "cap_usd_all_in": 1.38,
+      "cumulative_billed_seconds": 1318.5,
+      "cumulative_seconds_left": 4781.5,
+      "cumulative_spent_usd": 0.271018,
+      "elapsed_on_this_pod_seconds": 1318.5,
+      "hard_stop_seconds": 6100.0,
+      "kind": "dev-gate",
+      "next_step": "RED: the line closes. Delete, prove it by listing, and the attempt is NOT spent — no gold row was answered. The dev table goes back to the team lead",
+      "our_delta": 7,
+      "our_delta_minimum": 10,
+      "our_delta_passed": false,
+      "pod": 1,
+      "pod_id": "8tpx8lf05n6skc",
+      "pod_is_live": true,
+      "pods_opened": 1,
+      "reachability": {
+        "base_correct": 31,
+        "highest_base_that_leaves_the_delta_reachable": 39,
+        "our_rows": 49,
+        "reachable": true,
+        "rule": "our_v2 ≤ 49, so the delta is unreachable whenever our_base > 39. That is a STOP, not a RED: the gate could not have been met by any v2 whatever, the attempt is NOT spent, and the table goes to the operator with the reading"
+      },
+      "reading_rule": "these are the CLOCK's numbers. The rungs that name a guard reading act on `scripts/runpod_guard.py`'s reading and never on this projection",
+      "rule": "paired on the same 200 rows: our_v2 − our_base ≥ 10 (correct rows among the 49 категория_личное/молочный_бренд labels) AND agree_v2 − agree_base ≥ -5 (over all 200). BOTH or no shot",
+      "rung": 7,
+      "spent_closed_pods_usd": 0,
+      "spent_this_pod_usd": 0.271018,
+      "usd_per_hour": 0.74,
+      "v2": {
+        "absent": 0,
+        "agreed": 136,
+        "answered": 200,
+        "disagreed": 64,
+        "file": "results/pass1_dev_v2.jsonl",
+        "leg": "v2",
+        "n": 200,
+        "our_agreed": 38,
+        "our_n": 49,
+        "per_class": {
+          "null": {
+            "agreed": 41,
+            "n": 54
+          },
+          "категория": {
+            "agreed": 36,
+            "n": 47
+          },
+          "молочный_бренд": {
+            "agreed": 2,
+            "n": 2
+          },
+          "не_наш_рынок": {
+            "agreed": 46,
+            "n": 85
+          },
+          "сеть_ритейлер": {
+            "agreed": 11,
+            "n": 12
+          }
+        },
+        "rate": 0.68,
+        "refused": [],
+        "rows": [
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 20649
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 20651
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 20655
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 20675
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 20678
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "категория",
+                "reader": null
+              }
+            },
+            "msg_id": 20679
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 20680
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 20884
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": null,
+                "reader": "сеть_ритейлер"
+              }
+            },
+            "msg_id": 20919
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 20922
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 20939
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 20766
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 20979
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": null
+              }
+            },
+            "msg_id": 20983
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "молочный_бренд"
+              }
+            },
+            "msg_id": 20985
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": null
+              }
+            },
+            "msg_id": 21005
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21113
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "категория",
+                "reader": "молочный_бренд"
+              }
+            },
+            "msg_id": 21125
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21127
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": null,
+                "reader": "не_наш_рынок"
+              }
+            },
+            "msg_id": 21393
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21238
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория"
+              }
+            },
+            "msg_id": 21253
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "сеть_ритейлер"
+              }
+            },
+            "msg_id": 21266
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "сеть_ритейлер"
+              }
+            },
+            "msg_id": 21377
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "сеть_ритейлер",
+                "reader": "категория"
+              }
+            },
+            "msg_id": 21383
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21403
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21409
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21420
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21504
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21509
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21576
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория"
+              }
+            },
+            "msg_id": 21164
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21177
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21180
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "категория",
+                "reader": "не_наш_рынок"
+              }
+            },
+            "msg_id": 21181
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21182
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21183
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21184
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "категория",
+                "reader": null
+              }
+            },
+            "msg_id": 21186
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21187
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21188
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21189
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21190
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21191
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21192
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21193
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21194
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21195
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21205
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21206
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21207
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21210
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21211
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21221
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21229
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21236
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория"
+              }
+            },
+            "msg_id": 21239
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория"
+              }
+            },
+            "msg_id": 21245
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория"
+              }
+            },
+            "msg_id": 21246
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория"
+              }
+            },
+            "msg_id": 21251
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21256
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория"
+              }
+            },
+            "msg_id": 21286
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория"
+              }
+            },
+            "msg_id": 21289
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21346
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория"
+              }
+            },
+            "msg_id": 21351
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 391532
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 391772
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 391774
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 47833
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "категория",
+                "reader": null
+              }
+            },
+            "msg_id": 47838
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "категория",
+                "reader": null
+              }
+            },
+            "msg_id": 47839
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 47859
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 47860
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория"
+              }
+            },
+            "msg_id": 47943
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 47957
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория"
+              }
+            },
+            "msg_id": 47987
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 47995
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": null,
+                "reader": "категория"
+              }
+            },
+            "msg_id": 48004
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 48047
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 48045
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 48081
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 48268
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 48107
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 48160
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 48336
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 48214
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 48217
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 48227
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 48240
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория"
+              }
+            },
+            "msg_id": 48244
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория"
+              }
+            },
+            "msg_id": 48279
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория"
+              }
+            },
+            "msg_id": 48313
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 48397
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория"
+              }
+            },
+            "msg_id": 48398
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": null
+              }
+            },
+            "msg_id": 48399
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": null
+              }
+            },
+            "msg_id": 48405
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 48423
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 48445
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 48530
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 48535
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": null,
+                "reader": "не_наш_рынок"
+              }
+            },
+            "msg_id": 48853
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": null,
+                "reader": "не_наш_рынок"
+              }
+            },
+            "msg_id": 48854
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 48855
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": null,
+                "reader": "категория"
+              }
+            },
+            "msg_id": 48881
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 49013
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 49014
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 49015
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": null,
+                "reader": "категория"
+              }
+            },
+            "msg_id": 49072
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 576359
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 576371
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 576472
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 576514
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": null
+              }
+            },
+            "msg_id": 576723
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 576949
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория"
+              }
+            },
+            "msg_id": 576877
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория"
+              }
+            },
+            "msg_id": 576878
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 576879
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 576899
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 576968
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 577084
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 577089
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 577159
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 577220
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": null
+              }
+            },
+            "msg_id": 577262
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория"
+              }
+            },
+            "msg_id": 577264
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": null
+              }
+            },
+            "msg_id": 577282
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": null
+              }
+            },
+            "msg_id": 577623
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 577333
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 577719
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "категория",
+                "reader": "не_наш_рынок"
+              }
+            },
+            "msg_id": 578032
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 578037
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория"
+              }
+            },
+            "msg_id": 578050
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 578064
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 578075
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 578098
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 578383
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 578384
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 578836
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 578838
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": null
+              }
+            },
+            "msg_id": 578839
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 578841
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 578842
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 578845
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 578895
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 579250
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 579251
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 579293
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": null
+              }
+            },
+            "msg_id": 579295
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": null
+              }
+            },
+            "msg_id": 579314
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 579642
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 579646
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 579699
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 579780
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 579786
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 579885
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 579994
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 580014
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 580146
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 580147
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 580170
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": null
+              }
+            },
+            "msg_id": 580336
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 13583
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "категория",
+                "reader": "не_наш_рынок"
+              }
+            },
+            "msg_id": 13584
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 2421
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 49364
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 49365
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория"
+              }
+            },
+            "msg_id": 49374
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "категория",
+                "reader": "не_наш_рынок"
+              }
+            },
+            "msg_id": 49401
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория"
+              }
+            },
+            "msg_id": 49418
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 49541
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "категория",
+                "reader": "не_наш_рынок"
+              }
+            },
+            "msg_id": 49524
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 49532
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 49542
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 49586
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 49588
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "категория",
+                "reader": "не_наш_рынок"
+              }
+            },
+            "msg_id": 49593
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 49626
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория"
+              }
+            },
+            "msg_id": 49630
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 49642
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 49678
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 49707
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 49740
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 49749
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 49750
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": null,
+                "reader": "не_наш_рынок"
+              }
+            },
+            "msg_id": 8
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": null,
+                "reader": "не_наш_рынок"
+              }
+            },
+            "msg_id": 9
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": null,
+                "reader": "категория"
+              }
+            },
+            "msg_id": 10
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": null,
+                "reader": "категория"
+              }
+            },
+            "msg_id": 16
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": null,
+                "reader": "не_наш_рынок"
+              }
+            },
+            "msg_id": 19
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 45
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория"
+              }
+            },
+            "msg_id": 47
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 48
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 85
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория"
+              }
+            },
+            "msg_id": 171
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 179
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": null,
+                "reader": "категория"
+              }
+            },
+            "msg_id": 2579
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 2580
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 2595
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 2589
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 2590
+          }
+        ],
+        "task": "pass1_comment_gm4_v2"
+      },
+      "verdict": "RED"
+    },
+    {
+      "at": "2026-08-21T13:17:25+00:00",
+      "billed_seconds": 1359.0,
+      "billed_seconds_closed_pods": 1359.0,
+      "billed_usd": 0.27935,
+      "cap_left_usd": 1.10065,
+      "cap_usd_all_in": 1.38,
+      "cumulative_billed_seconds": 1359.0,
+      "cumulative_seconds_left": 4741.0,
+      "cumulative_spent_usd": 0.27935,
+      "elapsed_on_this_pod_seconds": 0.0,
+      "hard_stop_seconds": 6100.0,
+      "kind": "close",
+      "next_step": "prove the deletion by LISTING, with the volume as the positive control",
+      "outcome": "rung 7 RED: the dev gate is paired and reachable, our_v2 - our_base = +7 against the registered +10, agreement delta +49 against -5. Both or no shot, so no gold row was answered and the ONE attempt is NOT spent.",
+      "pod": 1,
+      "pod_id": "8tpx8lf05n6skc",
+      "pod_is_live": false,
+      "pods_opened": 1,
+      "reading_rule": "these are the CLOCK's numbers. The rungs that name a guard reading act on `scripts/runpod_guard.py`'s reading and never on this projection",
+      "spent_closed_pods_usd": 0.27935,
+      "spent_this_pod_usd": 0.0,
+      "usd_per_hour": null,
+      "verdict": "GO"
+    }
+  ],
+  "latest": {
+    "kind": "close",
+    "pod": 1,
+    "verdict": "GO"
+  },
+  "pods": [
+    {
+      "billed_seconds": 1359.0,
+      "billed_usd": 0.27935,
+      "card": "NVIDIA GeForce RTX 4090",
+      "created_at": "2026-08-21T12:54:43Z",
+      "deleted_at": "2026-08-21T13:17:22Z",
+      "launched_at": "2026-08-21T12:56:32+00:00",
+      "outcome": "rung 7 RED: the dev gate is paired and reachable, our_v2 - our_base = +7 against the registered +10, agreement delta +49 against -5. Both or no shot, so no gold row was answered and the ONE attempt is NOT spent.",
+      "pod_id": "8tpx8lf05n6skc",
+      "terminate_after": "2026-08-21T14:36:23Z",
+      "terminate_after_computed": "2026-08-21T14:36:23+00:00",
+      "usd_per_hour": 0.74
+    }
+  ]
+}
