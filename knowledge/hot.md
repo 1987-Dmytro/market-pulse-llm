@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-22 10:18:48 (every SessionStart)
+**Auto-refreshed:** 2026-08-22 11:08:42 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
+974a33f chore(vault): the Stop hook's tail
+49660d7 docs(report): the money, three readings again -- and the step stays open
+67e08ab docs(report): three clarifications an acceptance would otherwise have to ask for
+b3c10c4 chore(vault): pass2-signals closed STOP -- the ADR records it, hot.md carries the reading
 fdf059c docs(adr): the outcome -- rung S' said STOP, and the three readings beside the verdict
-312bec2 docs(report): D1 and D2 -- the STOP, the measured decode, and what the five threads say
-611aa88 feat(pass2-signals): the paid session -- rung S' said STOP at 5 of 79, and the five are the answer
-b09fe0a test(pass2-signals): drive --price, the command that runs while a pod is billing
-b6b0231 docs(report): the review's real tally -- 13 distinct defects, and its skeptics read a moving tree
 ```
 
 ## 📋 Recent decisions
@@ -30,9 +30,10 @@ b6b0231 docs(report): the review's real tally -- 13 distinct defects, and its sk
 <!-- AUTO-GEN END (everything below preserved across refreshes) -->
 # Hot Cache — curated
 
-**Last update:** 2026-08-22, закрыт `pass2-signals`. **Рунг S′ сказал STOP на 5 из 79** — и это
-зарегистрированный исход, а не провал: контракт покупал ИЗМЕРЕНИЕ, измерение получено. Один под,
-**526.0 с = $0.108122** из капа $1.50. Слой сигналов стоит **$0.850177** (проход 1 $0.742055 + это).
+**Last update:** 2026-08-22 11:05 `/save`. Закрыт `pass2-signals`: **рунг S′ сказал STOP на 5 из
+79** — зарегистрированный исход, а не провал, контракт покупал ИЗМЕРЕНИЕ и измерение получено. Один
+под, **526.0 с = $0.108122** из капа $1.50. Слой сигналов стоит **$0.850177** (проход 1 $0.742055 +
+это). Верификатор 3 518 passed / 2 skipped, подов нет.
 
 > Этот блок курируется руками. Археология закрытых контрактов живёт в отчётах, ADR и логах дня — не
 > восстанавливать сюда то, у чего есть дом. Ценз буста мерить ДО и ПОСЛЕ каждой правки.
@@ -85,10 +86,15 @@ mention-vs-about, которую v2 не сдвинул. **0 переразме�
    зарегистрированное плоское 68.373 с/звонок → 6 876.9 с, и строково-взвешенное 27.485 → 3 851.2 с.
    По ИЗМЕРЕННОЙ ставке весь остаток ≈ 2 000–5 000 с ≈ **$0.41–$1.03**. Какое плечо регистрировать —
    не выбор исполнителя.
-2. **Денежная гигиена (`money-anchors`, $0)** — открытые шаги `pass1-window`, `pass1-window-r2` и
-   теперь `pass2-signals` (walk `UNAVAILABLE`, дельта баланса $0.1057 как нижняя граница против
-   часов $0.108122), дисциплина `anchored_at`. По слову оператора.
-3. **Коммит хвоста вальта** — лог дня и `knowledge/index.md` от Stop-хука.
+2. **Денежная гигиена (`money-anchors`, $0)** — ТРИ открытых шага подряд: `pass1-window`,
+   `pass1-window-r2` и `pass2-signals`. У последнего walk `UNAVAILABLE`, а дельта баланса уползла
+   $0.1057 → **$0.1180 ВЫШЕ часов** ($0.108122): без биллинговых строк дельта тянет всегда-включённый
+   том, который иначе исключается ПО ВИДУ. Цитировать часы. По слову оператора.
+3. **Коммит хвоста вальта** — лог дня и `knowledge/index.md` от Stop-хука. Хук переписывает свой
+   штамп после каждого коммита, поэтому хвост всегда висит: первый коммит следующей сессии, по путям.
+4. **Аппарат ревью почини до следующего запуска.** Скептики пяти линз читали дерево, которое я правил
+   под ними: «3 подтверждено, 12 опровергнуто» означало «12 уже починено на HEAD». Штамповать коммит
+   в каждой находке и сливать верификацию ДО правок [[a-review-that-verifies-a-moving-tree]].
 
 ## 🚧 Blockers
 
