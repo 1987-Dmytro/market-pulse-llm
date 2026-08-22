@@ -8,6 +8,12 @@
       "balance": 15.2155719552,
       "step_spent_usd": 0.0,
       "note": "pass2-signals, before the pod"
+    },
+    {
+      "at": "2026-08-22T08:10:54+00:00",
+      "balance": 15.1098605941,
+      "step_spent_usd": 0.1057,
+      "note": "pass2-signals, pod deleted after rung S-prime STOP"
     }
   ],
   "gpu_note": "RunPod account balance read before the first pod of pass2-signals. Step spend = the pessimistic maximum of this anchor minus the balance now and the billing walk since `anchored_at` (SPEC 3.23 (4), Dv411), enforced against $1.50. The SPEC amendment 3.4 (4) phase cap is enforced separately, against results/spend_phase4.json, and neither anchor may be regenerated."

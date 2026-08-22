@@ -363,6 +363,16 @@
       "billing_since_usd": 7.284467,
       "billing_read": "read",
       "note": "pass2-signals, before the pod"
+    },
+    {
+      "at": "2026-08-22T08:10:54+00:00",
+      "balance": 15.1098605941,
+      "spent_usd": 7.3999,
+      "remaining_usd": 12.6001,
+      "balance_delta_usd": 7.3999,
+      "billing_since_usd": 7.29419,
+      "billing_read": "read",
+      "note": "pass2-signals, pod deleted after rung S-prime STOP"
     }
   ]
 }
