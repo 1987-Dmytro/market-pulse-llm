@@ -137,6 +137,42 @@ they measure is charged on the remaining 74 as registered, which is the SAFE dir
 row-weighted reading is published beside it and never gates
 ([[a_reproducible_probe_can_be_unrepresentative]]).
 
+## What the registration BOUGHT — rung S′ said STOP at 5 of 79
+
+The paid session ran on 2026-08-22. One pod, `9rquj8p0lelct3`, **526.0 s = $0.108122** of the $1.50
+cap; ssh in 38 s, boot in **139.5 s** — a new floor for this stack — and 135 s of pre-generation
+against 1 100 charged. `docs/reports/pass2-signals.md` carries the arithmetic.
+
+**The measurement the registration could not price is now a number.** A pass-2 decode:
+58.07 · 15.80 · 40.85 · 56.46 · 56.70 → **mean 45.582, max 58.07**, which is **0.53 of what the
+one-shot reader took on the same five threads**. Nothing on this stack had it before.
+
+**And rung S′ refused the remainder, on the `1.5 × mean` arm.** `charged_full = 68.373`, projected
+6 876.9 against the 6 600 s stop, over by 276.9 — **3.74 seconds a call**. Three readings sit beside
+that verdict and all three belong in this record, because the next registration is a cap-and-rate
+decision:
+
+* the **live** knife edge was **64.63** s/call and not the registered 48.6486, because the pod
+  reached the decision at 517.3 s of create-elapsed rather than the ~1 700 the worked arm assumes;
+* the **max arm alone** (58.07) would have passed with 6.5 s a call to spare — it is the `1.5 ×`
+  multiplier, applied to a mean drawn from the five richest threads, that closed it;
+* the **row-weighted arm**, computed live and gating nothing, predicted the remaining 74 at
+  **27.485 s/call** and 3 851.2 s, and **would have said GO**.
+
+So the STOP is correct under the law as registered and is, on this evidence, a STOP about the
+SAMPLE. Point 4 of «What binds» held — the authorisation was the smoke and the rest was a rung with
+a recorded verdict — and the design's own honesty clause is what makes the reading available.
+
+**Strict authority held on every reply that parsed: 0 relabellings.** And `subject_doubt` did the
+job ruling (б) bought it for — 4 of 23 `категория_личное` rows doubted, each with a reason, one of
+them the АТБ/творог row that IS the mention-vs-about cell v2 did not move (22 → 24).
+
+**One refusal, and it is a rule for the next registration.** `@matusi_ukr:22303` — F2 — died on
+`per_comment.note is not a non-empty string`: the model wrote `"note": ""` for a row it did not
+doubt. That is the THIRD report-only field found to carry whole-thread refusal power, after
+`subject_doubt` and an omitted `subject_type` — both caught at $0 by the five-lens review — and the
+first to fire. **A report-only field may not be able to refuse. Build it so it cannot.**
+
 ## What binds, from here
 
 1. **Pass 2 never relabels.** A reply that does is a refusal by cause; a design that does is the
@@ -146,7 +182,12 @@ row-weighted reading is published beside it and never gates
    before the run, the registration carries the value.
 3. **No bar on the fourteen.** Sixth look, still a census row, in this report and in its acceptance.
 4. **A registration that cannot price its run buys the measurement and registers the guard.** The
-   authorisation is the smoke; the rest is a rung with a recorded verdict, never a plan.
+   authorisation is the smoke; the rest is a rung with a recorded verdict, never a plan. And the
+   guard must publish the arm it did NOT use: a STOP that comes out of the sampling rather than out
+   of the rate is only visible if the honest reading was computed beside the binding one.
+5. **A report-only field may not be able to refuse.** Three were found with that power in one
+   registration and the third one fired. A field the contract says changes nothing downstream is
+   built so that nothing it can contain costs a thread.
 
 Related: [[v2-is-the-base-and-pass-2-is-not-a-one-shot-reader]] (what pass 2 may not be) ·
 [[reader-programme-closed-and-the-architecture-sitting-17-08]] (the stop-rule both read) ·
