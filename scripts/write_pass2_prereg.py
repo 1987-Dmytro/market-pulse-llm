@@ -36,7 +36,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import score_reader_probe_b as readerscore  # noqa: E402
 import window_summary_5c2 as summary  # noqa: E402
 
-from market_pulse import pass2  # noqa: E402
+from market_pulse import pass2, prompts  # noqa: E402
 
 RESULTS = REPO_ROOT / "results"
 OUT = RESULTS / "prereg_pass2_signals.json"
@@ -291,9 +291,13 @@ def reachability(held: dict) -> dict:
         "rule": (
             "strict authority makes a flagship signal reachable only where the pass-1 label of a"
             " row it cites IS the gold's subject_type — `scorer.reader_signal_found` matches on"
-            " EVIDENCE and then compares `subject_type` where the gold states one. A signal whose"
-            " every cited row pass 1 labelled something else cannot be answered without a"
-            " relabelling, and a relabelling is a parse refusal"
+            " EVIDENCE and then compares `subject_type` AND `aspect`, each where the gold states"
+            " one. A signal whose every cited row pass 1 labelled something else cannot be answered"
+            " without a relabelling, and a relabelling is a parse refusal. **REACHABLE is a"
+            " statement about CONSTRUCTION and not a prediction:** the aspect is the model's to"
+            " answer, and exactly three of the seven gold signals state one — F1's three, which is"
+            " an all-or-nothing case, which is why `prompts.READER_ASPECT_V5` is spliced into the"
+            " pass-2 text rather than retyped from the pre-v3 wording"
         ),
         "flagship_signals": flagships,
         "entity_cases": entity,
@@ -450,9 +454,9 @@ def bars(held: dict, reach: dict) -> dict:
         },
         "completeness": {
             "rule": (
-                "answered N / N · every row's `rendering_sha256` equals its pack item's · parse"
-                " refusals ≤ 1 % of N. All three, or RED — with N chosen by the ARM the go/no-go"
-                " landed on"
+                "answered N / N · every row's `rendering_sha256` equals its pack item's ·"
+                f" UNREADABLE replies ≤ {REFUSALS_FRACTION:.1%} of N (ceil), relabellings excluded."
+                " All three, or RED — with N chosen by the ARM the go/no-go landed on"
             ),
             "arms": {
                 "GO": {
@@ -701,9 +705,10 @@ def kill_clock(people: dict) -> list[dict]:
             "name": "completeness",
             "deadline_seconds": None,
             "rule": (
-                "answered N / N · every row's `rendering_sha256` equals its pack item's · parse"
-                " refusals ≤ 1 % of N, with N read off the arm the go/no-go landed on. All three,"
-                " or RED"
+                "answered N / N · every row's `rendering_sha256` equals its pack item's ·"
+                f" UNREADABLE replies ≤ {REFUSALS_FRACTION:.1%} of N (ceil) — 14 of 79 on the GO arm"
+                " and 1 of 5 on the STOP arm, relabellings excluded and counted by cause. N is read"
+                " off the arm the go/no-go landed on. All three, or RED"
             ),
             "read": "`--completeness` on the Mac, after the pod is deleted",
             "on_red": (
@@ -1252,6 +1257,31 @@ def h6(held: dict, people: dict, sums: dict, clock: list[dict]) -> dict:
             " a budget of one and not of none",
             1,
             math.ceil(people["smoke_units"] * REFUSALS_FRACTION),
+        ),
+        row(
+            "the_bars_prose_carries_the_number_it_enforces",
+            "the percent printed in bars.completeness.rule, against the fraction that decides"
+            " ([[two_values_for_one_input_get_quoted_kindly]])",
+            REFUSALS_FRACTION,
+            round(
+                float(
+                    bars(pack(), reachability(pack()))["completeness"]["rule"]
+                    .split("≤ ")[1]
+                    .split("%")[0]
+                )
+                / 100,
+                4,
+            ),
+        ),
+        row(
+            "the_prompt_carries_the_two_clauses_the_reader_line_paid_for",
+            "prompts.READER_ASPECT_V5 and prompts.READER_NOT_A_SIGNAL_V3, spliced not retyped",
+            2,
+            sum(
+                1
+                for clause in (prompts.READER_ASPECT_V5, prompts.READER_NOT_A_SIGNAL_V3)
+                if clause in pass2.PASS2_THREAD_PROMPT
+            ),
         ),
         row(
             "pass_1s_fraction_would_have_allowed_no_refusal_at_all",

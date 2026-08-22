@@ -75,7 +75,7 @@ quality, availability, service; (3) the same about the competing trade marks and
 labels; (4) which flavours and which kinds of dairy people want; (5) where it is said; (6) that the \
 talk about a brand has turned sharply positive or negative; (7) what a chain promotes, at what \
 price and at what discount. One signal can be read from several comments and one comment can carry \
-several signals; comments that carry none are a normal answer and get an empty list.
+several signals. @PRAISE@
 
 THE ATTRIBUTION IS NOT YOURS TO CHANGE. Every comment arrives with a "subject_type" — one of \
 "молочный_бренд", "сеть_ритейлер", "категория_личное" — and inside this answer that word is fixed:
@@ -100,10 +100,9 @@ Return ONE JSON object with exactly these keys.
 - "signals" — one object per signal: {"signal_type": one of "спрос", "жалоба", "похвала", \
 "привычка", "тренд"; "subject_type": the word carried by one of the comments in "evidence"; \
 "subject_id": the trade mark, the chain or the kind of product as one lowercase word or phrase, or \
-null; "aspect": one of "taste", "price", "packaging", "quality", "availability", "service"; \
-"stance": "positive", "negative" or "neutral"; "reading": one sentence in Ukrainian for the \
-director; "evidence": the msg_ids you read it from, at least one; "quote": copied from one of \
-them}. No signal_type in the list fits what you found? Write the word you need and put \
+null; @ASPECT@ "stance": "positive", "negative" or "neutral"; "reading": one sentence in Ukrainian \
+for the director; "evidence": the msg_ids you read it from, at least one; "quote": copied from one \
+of them}. No signal_type in the list fits what you found? Write the word you need and put \
 "proposed": true beside it — a word of your own without that flag is an error.
 - "per_comment" — one object per comment you were given and did NOT drop: {"msg_id"; \
 "subject_type": the word that comment carries; "subject_id": as it was given, or your own reading \
@@ -131,6 +130,11 @@ the language they were written in.
 
 Answer with the JSON object alone: no explanation, no code fence, nothing before the first brace.\
 """
+# the two clauses this line PAID for, spliced in rather than retyped. `.replace` and not `.format`,
+# because the schema this prompt spells out is full of JSON braces and `str.format` reads them
+PASS2_THREAD_PROMPT = PASS2_THREAD_PROMPT.replace(
+    "@PRAISE@", prompts.READER_NOT_A_SIGNAL_V3
+).replace("@ASPECT@", prompts.READER_ASPECT_V5)
 """pass 2's own text — a NEW instrument, and deliberately not a variant of the reader's.
 
 Three things are different and each is the ruling read literally. The INPUT is filtered and
@@ -143,7 +147,17 @@ the rows the first pass handed in, and a schema that let a comment fall out of b
 
 `from_post` and `entities` are the two reader fields this text does NOT offer. Both are refusals in
 :func:`parse_pass2` rather than silent omissions — see there for why a signal citing no comment is
-the hole the relabelling refusal would otherwise be walked around through."""
+the hole the relabelling refusal would otherwise be walked around through.
+
+**Two clauses are INTERPOLATED from `prompts` and not retyped, and they are the ones this programme
+paid for.** :data:`prompts.READER_ASPECT_V5` was bought because `scorer.reader_signal_found` compares
+``aspect`` wherever the gold states one, and the only gold signals that state one are F1's three —
+so F1, an all-or-nothing case, turns on it; the clause says in as many words that «а є морозиво без
+цукру?» is `availability` and never `taste`, which IS F1(б).
+:data:`prompts.READER_NOT_A_SIGNAL_V3` was bought because a two-word «дуже смачне» is a `похвала`
+however short the comment is, which IS F1(в). A pass-2 text that carried the pre-v3 wording would
+have un-learned both on the very case the smoke leg opens with, and interpolating them means the
+next edit to either cannot leave this prompt behind ([[a_moved_constant_fails_green]])."""
 
 PASS2 = {PASS2_TASK_V1: PASS2_THREAD_PROMPT}
 """The registered pass-2 texts. `prompts.PROMPTS` is pinned and this is its sibling map, so the pod
@@ -287,6 +301,24 @@ def _given(unit: dict) -> dict[int, dict]:
     return {int(one["msg_id"]): one for one in unit["comments"]}
 
 
+SUBJECT_SYNONYMS = {"категория_личное": "категория"}
+"""The one vocabulary collapse this programme already owns — `score_reader_probe_b.COLLAPSE`.
+
+`prompts.READER_SUBJECT_TYPES` carries BOTH words because `docs/PLAN-comment-signals.md` §3's schema
+example used «категория» while the ratified taxonomy says «категория_личное», and the reader's own
+scorer folds them precisely because «a reader answering either is answering one of two words two
+authorities disagree about, and that is a finding for the sitting rather than a reading error».
+
+So a reply writing «категория» where pass 1 wrote «категория_личное» is NOT a relabelling, and
+refusing it as one would report the ADR's cardinal violation on a synonym the project itself
+collapses — on three of the five flagship cases, whose gold subject is that word. It is accepted and
+COUNTED. The two maps are asserted equal by test; this module may not import from `scripts/`."""
+
+
+def collapse(value):
+    return SUBJECT_SYNONYMS.get(value, value)
+
+
 def _authority(said, msg_ids: list[int], given: dict[int, dict], where: str) -> None:
     """Strict authority — `said` must be the pass-1 label of one of the rows `msg_ids` names.
 
@@ -301,7 +333,7 @@ def _authority(said, msg_ids: list[int], given: dict[int, dict], where: str) -> 
             f"{where} names msg_id {unknown[0]}, which was not in this request"
         )
     labels = sorted({given[one]["subject_type"] for one in msg_ids})
-    if said not in labels:
+    if collapse(said) not in {collapse(one) for one in labels}:
         raise RelabelError(
             f"{where} says {said!r} and pass 1 labelled the rows it cites {labels} — pass 2 has no"
             " authority to relabel a subject"
@@ -328,7 +360,9 @@ def parse_pass2(reply: str, *, unit: dict) -> dict:
        pass 2's text and is refused here, because strict authority keys on the pass-1 label of a
        CITED row: a signal citing none carries a `subject_type` nothing authorises, and it is the
        hole the relabelling refusal would otherwise be walked around through;
-    4. **a relabelling**, in `per_comment` or in `signals` — :class:`RelabelError`.
+    4. **a relabelling**, in `per_comment` or in `signals` — :class:`RelabelError`. Compared through
+       :data:`SUBJECT_SYNONYMS`, so «категория» against a pass-1 «категория_личное» is the reader's
+       own two-authorities finding and not an architecture violation.
 
     What is COUNTED rather than refused: a comment in both lists (the reader's own parser calls that
     a bookkeeping slip whose two rows are each readable, and this file does not overrule it), and a
@@ -380,6 +414,13 @@ def parse_pass2(reply: str, *, unit: dict) -> dict:
     for one in verdict["per_comment"]:
         one["subject_doubt"] = doubts.get(one["msg_id"], False)
 
+    synonyms = sorted(
+        {
+            one["subject_type"]
+            for one in (*verdict["signals"], *verdict["per_comment"])
+            if one["subject_type"] in SUBJECT_SYNONYMS.values()
+        }
+    )
     kept = [one["msg_id"] for one in verdict["per_comment"]]
     dropped = [one["msg_id"] for one in verdict["noise"]]
     return verdict | {
@@ -389,6 +430,7 @@ def parse_pass2(reply: str, *, unit: dict) -> dict:
             " two halves. pass 2 was not asked for it and never re-resolved it"
         ),
         "subject_doubt_unreadable": sorted(unreadable),
+        "vocabulary_synonyms_used": synonyms,
         "accounting": {
             "given": sorted(given),
             "in_both_lists": sorted(set(kept) & set(dropped)),

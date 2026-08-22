@@ -157,7 +157,7 @@
       "parse_refusals_fraction_rule": "MEASURED on this schema and not carried from pass 1: results/reader_v5b_w1.jsonl refused 4 of 23 leg-A threads through the same parser after the same repairs. Pass 1's 1 % was derived for an answer of four scalars, and `int(0.01 × 79)` is ZERO — a transport bar an instrument measured at 17 % cannot pass. Rounded UP with ceil, so the STOP arm's five units carry a budget of one rather than none",
       "refusals_are_counted_by_cause": "never dropped and never summed into one «other». A RELABELLING is its own cause and its own finding: it is the ADR's line, and a run whose refusals are all relabellings is a different result from one whose refusals are torn objects",
       "relabellings_are_outside_the_budget": "a reply that rewrote a pass-1 subject is READABLE. It says something this pass has no authority to say, which is the ADR's line arriving as a measurement, and it is counted by its own cause and reported beside the bar rather than spending a budget that exists to price a transport",
-      "rule": "answered N / N · every row's `rendering_sha256` equals its pack item's · parse refusals ≤ 1 % of N. All three, or RED — with N chosen by the ARM the go/no-go landed on",
+      "rule": "answered N / N · every row's `rendering_sha256` equals its pack item's · UNREADABLE replies ≤ 17.4% of N (ceil), relabellings excluded. All three, or RED — with N chosen by the ARM the go/no-go landed on",
       "sha_rule": "the pod re-renders every item from its own fields and REFUSES the whole leg if one sha does not match, so a mismatch on the Mac means the out-file and the pack parted AFTER the run",
       "what_this_bar_is": "TRANSPORT. Every unit answered, every sha matching, no duplicate and no unknown id, and the replies readable at the rate this schema is readable at. Whether the answers are RIGHT is bars 1/2/3, and they are a different question"
     },
@@ -442,7 +442,7 @@
         "formula": "the pack's own length block — headroom is what is left of 12 000",
         "mode": "at_least",
         "name": "widest_request_fits_the_ceiling",
-        "re_derived": 603,
+        "re_derived": 144,
         "registered": 0
       },
       {
@@ -519,6 +519,22 @@
       },
       {
         "agrees": true,
+        "formula": "the percent printed in bars.completeness.rule, against the fraction that decides ([[two_values_for_one_input_get_quoted_kindly]])",
+        "mode": "equals",
+        "name": "the_bars_prose_carries_the_number_it_enforces",
+        "re_derived": 0.174,
+        "registered": 0.174
+      },
+      {
+        "agrees": true,
+        "formula": "prompts.READER_ASPECT_V5 and prompts.READER_NOT_A_SIGNAL_V3, spliced not retyped",
+        "mode": "equals",
+        "name": "the_prompt_carries_the_two_clauses_the_reader_line_paid_for",
+        "re_derived": 2,
+        "registered": 2
+      },
+      {
+        "agrees": true,
         "formula": "int(0.01 × 79) — the number this record does NOT carry",
         "mode": "equals",
         "name": "pass_1s_fraction_would_have_allowed_no_refusal_at_all",
@@ -548,7 +564,7 @@
     },
     "module": {
       "path": "src/market_pulse/pass2.py",
-      "sha256": "a89629414a40d73babccb5271fe8ddd07e447357918d2eb62d4910276fee18fd"
+      "sha256": "1b4857bf6fd51f3f9b0e884893a79325a3696b3e0ed5d37f87f300c2755fffa0"
     },
     "pack_builder": {
       "path": "scripts/build_pass2_pack.py",
@@ -566,14 +582,14 @@
     },
     "population": {
       "record": "results/pass2_pack.json",
-      "sha256": "8a9caf5cf2c2eed174551071b9df72086eff8a85e27a55a4ad0577bdf3cd2e22"
+      "sha256": "d7b9f4237308acb10387f00f823342fc4782d8fd297cdccdb8fa0ef4b059387c"
     },
     "producer": {
       "path": "scripts/write_pass2_prereg.py",
-      "sha256": "f65726bd3a39eed5ccd8d23add2ac9903327b53daafbe06e105dc5e5ae4ee93a"
+      "sha256": "23a1516cc70bfc2d688e90578d7ff88214d03310e87b5217d47a131d1a74e56d"
     },
     "prompt_sha256": {
-      "pass2_thread_gm4_v1": "34a5d2857b4d256fe69f66b6cf82dbf57ad1e9e1afd78dc5c0fcfed2825e8b3c"
+      "pass2_thread_gm4_v1": "a674f284085d43c54df590ce943fb8c02d6ac28b7832c05f2e4b7a54879f61f8"
     },
     "reference": {
       "path": "docs/REFERENCE-signals-w1.md",
@@ -717,7 +733,7 @@
       "name": "completeness",
       "on_red": "the out-file goes back to the team lead WITH its refusals by cause. Nothing already bought is deleted and nothing is re-asked without the recovery clause",
       "read": "`--completeness` on the Mac, after the pod is deleted",
-      "rule": "answered N / N · every row's `rendering_sha256` equals its pack item's · parse refusals ≤ 1 % of N, with N read off the arm the go/no-go landed on. All three, or RED",
+      "rule": "answered N / N · every row's `rendering_sha256` equals its pack item's · UNREADABLE replies ≤ 17.4% of N (ceil) — 14 of 79 on the GO arm and 1 of 5 on the STOP arm, relabellings excluded and counted by cause. N is read off the arm the go/no-go landed on. All three, or RED",
       "rung": 7
     }
   ],
@@ -841,10 +857,10 @@
     "filtered_rows": 281,
     "input_ceiling": {
       "ceiling_chars": 12000,
-      "headroom_chars": 603,
-      "median_chars": 6253,
+      "headroom_chars": 144,
+      "median_chars": 6712,
       "widest_request": "@mandziak:3679",
-      "widest_request_chars": 11397
+      "widest_request_chars": 11856
     },
     "keyed_on": "the PAIR (thread, msg_id). The ADR's acceptance correction, and this registration is where it was required to be said: seven msg_ids of window 1 live in two threads each",
     "leg": "v1",
@@ -854,7 +870,7 @@
     "payable_comments_is_the_UNIT_count": "the same aliasing the pack carries, and for the same reason: `gate_pass1_window.main` hard-subscripts `population.payable_comments` in BOTH files before every rung that reads a pack, and that file is pinned by a sealed record of a closed paid session. A pass-2 unit is a THREAD. Without this key `--projection`, `--watch`, `--completeness` and `--close` all die on a KeyError — on a pod that is already billing, with nothing watching it",
     "record": "results/pass2_pack.json",
     "remaining_after_the_smoke": 74,
-    "sha256": "8a9caf5cf2c2eed174551071b9df72086eff8a85e27a55a4ad0577bdf3cd2e22",
+    "sha256": "d7b9f4237308acb10387f00f823342fc4782d8fd297cdccdb8fa0ef4b059387c",
     "smoke_units": 5,
     "threads_pass_2_would_not_call": 48,
     "units": 79,
@@ -870,7 +886,7 @@
   "producer": {
     "rule": "the constants are typed once at the top of this file with their derivations; every other number here is computed. H6 re-derives the ones that have a file behind them",
     "script": "scripts/write_pass2_prereg.py",
-    "sha256": "f65726bd3a39eed5ccd8d23add2ac9903327b53daafbe06e105dc5e5ae4ee93a"
+    "sha256": "23a1516cc70bfc2d688e90578d7ff88214d03310e87b5217d47a131d1a74e56d"
   },
   "reachability": {
     "entity_cases": [
@@ -1049,7 +1065,7 @@
       "N1",
       "N2"
     ],
-    "rule": "strict authority makes a flagship signal reachable only where the pass-1 label of a row it cites IS the gold's subject_type — `scorer.reader_signal_found` matches on EVIDENCE and then compares `subject_type` where the gold states one. A signal whose every cited row pass 1 labelled something else cannot be answered without a relabelling, and a relabelling is a parse refusal",
+    "rule": "strict authority makes a flagship signal reachable only where the pass-1 label of a row it cites IS the gold's subject_type — `scorer.reader_signal_found` matches on EVIDENCE and then compares `subject_type` AND `aspect`, each where the gold states one. A signal whose every cited row pass 1 labelled something else cannot be answered without a relabelling, and a relabelling is a parse refusal. **REACHABLE is a statement about CONSTRUCTION and not a prediction:** the aspect is the model's to answer, and exactly three of the seven gold signals state one — F1's three, which is an all-or-nothing case, which is why `prompts.READER_ASPECT_V5` is spliced into the pass-2 text rather than retyped from the pre-v3 wording",
     "unreachable_entity_cases": [
       "E1"
     ],

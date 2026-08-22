@@ -913,6 +913,52 @@ def test_the_refusal_budget_is_derived_from_the_only_measurement_this_schema_has
     assert round(measured, 3) == 0.174
 
 
+def test_the_bars_PROSE_carries_the_number_it_enforces():
+    """[[two_values_for_one_input_get_quoted_kindly]] — the record said «≤ 1 % of N» in two places
+    while enforcing 14 of 79, and the report pastes the rung-7 JSON."""
+    blob = json.dumps(RECORD, ensure_ascii=False)
+    assert "≤ 1 % of N" not in blob
+    for rule in (
+        RECORD["bars"]["completeness"]["rule"],
+        next(one["rule"] for one in RECORD["kill_clock"] if int(one["rung"]) == 7),
+    ):
+        assert "17.4%" in rule
+        assert "relabellings excluded" in rule or "relabellings excluded and counted" in rule
+
+
+def test_the_prompt_carries_the_two_clauses_the_reader_line_PAID_for():
+    """`READER_ASPECT_V5` IS F1(б) — «а є морозиво без цукру?» is availability and never taste —
+    and `READER_NOT_A_SIGNAL_V3` IS F1(в), a two-word «дуже смачне» that still counts as похвала.
+    F1 is all-or-nothing and its three signals are the only gold signals that state an aspect."""
+    assert prompts.READER_ASPECT_V5 in pass2.PASS2_THREAD_PROMPT
+    assert prompts.READER_NOT_A_SIGNAL_V3 in pass2.PASS2_THREAD_PROMPT
+    assert prompts.READER_ASPECT_V3 not in pass2.PASS2_THREAD_PROMPT
+    assert "@PRAISE@" not in pass2.PASS2_THREAD_PROMPT
+    gold = json.loads((RESULTS / "reader_gold_w1_r2.json").read_text(encoding="utf-8"))
+    stated = [one["id"] for case in gold["flagships"] for one in case["signals"] if one["aspect"]]
+    assert stated == ["F1a", "F1b", "F1c", "F2a"], "aspect is compared where the gold states one"
+
+
+def test_a_vocabulary_SYNONYM_is_not_a_relabelling():
+    """«категория» and «категория_личное» are the two words two authorities disagree about, and the
+    project's own scorer folds them. Refusing one as the ADR's cardinal violation would report an
+    architecture breach on three of the five flagship cases."""
+    import score_reader_probe_b as readerscore
+
+    assert pass2.SUBJECT_SYNONYMS == readerscore.COLLAPSE
+    said = json.loads(reply())
+    for row in said["per_comment"]:
+        row["subject_type"] = "категория"
+    said["signals"][0]["subject_type"] = "категория"
+    verdict = pass2.parse_pass2(json.dumps(said, ensure_ascii=False), unit=unit())
+    assert verdict["vocabulary_synonyms_used"] == ["категория"]
+    assert verdict["signals"][0]["subject_type"] == "категория", "the word is not rewritten"
+    # and the collapse folds ONE pair and no other: сеть_ритейлер is still a relabelling
+    said["signals"][0]["subject_type"] = "сеть_ритейлер"
+    with pytest.raises(pass2.RelabelError):
+        pass2.parse_pass2(json.dumps(said, ensure_ascii=False), unit=unit())
+
+
 def test_an_unreadable_reply_does_spend_the_budget(tmp_path, monkeypatch):
     """The negative control: the budget still exists and still bites."""
     record = tmp_path / "run.json"
