@@ -33,7 +33,9 @@ sys.path.insert(0, str(REPO_ROOT / "src"))
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 import build_lora_c_data as data  # noqa: E402
+import build_lora_c_eval_pack as evalpack  # noqa: E402
 import train_qlora as trainer  # noqa: E402
+import window_summary_5c2 as summary  # noqa: E402
 from market_pulse import pass1_v3, pass2_r2, prompts  # noqa: E402
 
 OUT = REPO_ROOT / "results" / "prereg_lora_c.json"
@@ -104,7 +106,7 @@ def quoted(text: str) -> str:
 
 def legs(eval_pack: dict, train_rows: int, synthetic_rows: int) -> dict:
     """Four legs, paired on identical instances. Only two of them take a bar."""
-    calls = eval_pack["legs"]["v2"]["n"]
+    calls = evalpack.leg_of(eval_pack, "v2")["n"]
     return {
         "base_v2": {
             "adapter": None,
@@ -257,7 +259,7 @@ def money(eval_pack: dict, data_record: dict, train_rows: int, synthetic_rows: i
         settings["grad_accum"],
         settings["epochs"],
     )
-    calls = eval_pack["legs"]["v2"]["n"]
+    calls = evalpack.leg_of(eval_pack, "v2")["n"]
     steps = {
         "arm_a": math.floor(math.ceil(train_rows / micro) / accum) * epochs,
         "arm_b": math.floor(math.ceil((train_rows + synthetic_rows) / micro) / accum) * epochs,
@@ -481,7 +483,7 @@ def build() -> dict:
             },
             "eval_set_E": {
                 "n": eval_pack["made"]["e"],
-                "rendered": eval_pack["legs"]["v2"]["n"],
+                "rendered": evalpack.leg_of(eval_pack, "v2")["n"],
                 "arithmetic": eval_pack["made"]["arithmetic"],
                 "file": "results/lora_c_eval_pack.json",
                 "sha256": sha(EVAL_PACK),
@@ -608,7 +610,7 @@ def build() -> dict:
             "rule": "every number here comes from a file this contract built, at $0",
             "train_rows": train_rows,
             "train_rows_arm_b": train_rows + synthetic_rows,
-            "eval_calls_per_leg": eval_pack["legs"]["v2"]["n"],
+            "eval_calls_per_leg": evalpack.leg_of(eval_pack, "v2")["n"],
             "legs": 4,
             "pass_2_threads_per_leg": pass2_pack["population"][
                 "threads_with_at_least_one_filtered_row"
@@ -655,7 +657,7 @@ def main(argv: list[str] | None = None) -> int:
     args.out.write_text(
         json.dumps(record, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8"
     )
-    print(f"wrote {args.out.relative_to(REPO_ROOT)}  sha256 {sha(args.out)[:16]}…  DRAFT")
+    print(f"wrote {summary.rel(args.out)}  sha256 {sha(args.out)[:16]}…  DRAFT")
     print(
         f"  cap ${record['money']['cap_usd_all_in']:.2f} · money block {record['money']['state']}"
     )

@@ -28,8 +28,8 @@
     "rationales_sha256": "ed817668b02bf1bb174003a2983108beaae4045c3fdd5b09fb76032a64c08a55",
     "renderer": "market_pulse.prompts.pass1_messages_gm4"
   },
-  "legs": {
-    "v2": {
+  "legs": [
+    {
       "items": [
         {
           "channel": "@VARUS_channel",
@@ -17539,10 +17539,11 @@
         }
       ],
       "n": 198,
+      "name": "v2",
       "out": "lora_c_eval_v2.jsonl",
       "task": "pass1_comment_gm4_v2"
     },
-    "v3": {
+    {
       "items": [
         {
           "channel": "@VARUS_channel",
@@ -36042,10 +36043,11 @@
         }
       ],
       "n": 198,
+      "name": "v3",
       "out": "lora_c_eval_v3.jsonl",
       "task": "pass1_comment_gm4_v3"
     }
-  },
+  ],
   "length": {
     "v2": {
       "ceiling": 12000,
@@ -36189,7 +36191,7 @@
   },
   "produced_by": {
     "script": "scripts/build_lora_c_eval_pack.py",
-    "sha256": "ceb7da92e6c7a8637d42d51888840f5100f7e5da39af183a978e440e290d1225"
+    "sha256": "1849b7212f0f8ed0775340f26d41f076b35646a3b4dfff22aacfdcf105be3953"
   },
   "reading": "the pod renders each item itself, from the fields in it, and refuses unless its sha equals the one above. Shipping the rendered string would only prove the two machines agree about a string; what has to be true is that the model is shown what the registration registered",
   "refused": [

@@ -38,6 +38,7 @@ import build_pass1_fewshot_packs as fewshot  # noqa: E402
 import build_pass1_label_pack_r2 as r2pack  # noqa: E402
 import build_pass1_sft as sft  # noqa: E402
 import gate_census_w1_reader as reader_gate  # noqa: E402
+import window_summary_5c2 as summary  # noqa: E402
 from market_pulse import pass1_v3, prompts  # noqa: E402
 
 OUT = REPO_ROOT / "results" / "lora_c_eval_pack.json"
@@ -45,6 +46,17 @@ PROBE_PACK = REPO_ROOT / "results" / "pass1_probe_b_pack.json"
 DEV_PACK = REPO_ROOT / "results" / "pass1_dev_pack.json"
 
 LEGS = {"v2": "lora_c_eval_v2.jsonl", "v3": "lora_c_eval_v3.jsonl"}
+
+
+def leg_of(pack: dict, name: str) -> dict:
+    """One named leg of a pack whose `legs` is a LIST.
+
+    A list and not a dict because every pack in this repo carries one — `pass1_dev_pack.json`, the
+    window packs, the pass-2 packs — and every pod runner reaches for `pack["legs"][0]` or unpacks
+    it positionally. A dict here would be a shape only this file knows, and `lora-c-run`'s runner
+    would be the thing that discovered it ([[a_fixture_on_disk_pins_yesterdays_schema]]).
+    """
+    return next(one for one in pack["legs"] if one["name"] == name)
 
 
 def texts() -> dict[tuple[str, int], str]:
@@ -138,6 +150,12 @@ def render_pair(fields: dict, chosen: list[dict], by_key: dict) -> dict:
 
 def build() -> dict:
     pool, census = data.shared_pool()
+    # FIRST, because `data.joined` would otherwise refuse a synthetic row for want of a rationale
+    # and the isolation guard below could never fire. A guard placed after a stricter one is a
+    # guard nobody can see ([[an_empty_class_is_the_definitions_answer]])
+    reached = sorted({one["thread"] for one in pool if one["thread"].startswith("synthetic:")})
+    if reached:
+        raise SystemExit(f"synthetic threads reached the neighbour pool: {reached}. Stop.")
     joined = data.joined(pool)
     by_key = {(one["thread"], one["msg_id"]): one for one in joined}
     pairs, made = eval_pairs()
@@ -244,15 +262,16 @@ def build() -> dict:
             "rule": "the SHARED pool — one neighbour set for every leg of every arm",
             "record": "results/lora_c_data.json",
         },
-        "legs": {
-            name: {
+        "legs": [
+            {
+                "name": name,
                 "task": items[name][0]["task"],
                 "out": LEGS[name],
                 "items": items[name],
                 "n": len(items[name]),
             }
             for name in ("v2", "v3")
-        },
+        ],
         "refused": refused,
         "membership": {
             "gold_14": sorted(one["id"] for one in items["v2"] if one["membership"]["gold_14"]),
@@ -324,17 +343,17 @@ def main(argv: list[str] | None = None) -> int:
         json.dumps(record, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8"
     )
     print(
-        f"wrote {args.out.relative_to(REPO_ROOT)}  sha256"
+        f"wrote {summary.rel(args.out)}  sha256"
         f" {hashlib.sha256(args.out.read_bytes()).hexdigest()[:16]}…"
     )
     print(f"  E: {record['made']['arithmetic']}")
-    print(f"  rendered {record['legs']['v2']['n']} per leg · refused {len(record['refused'])}")
+    print(f"  rendered {leg_of(record, 'v2')['n']} per leg · refused {len(record['refused'])}")
     for name in ("v2", "v3"):
         cell = record["length"][name]
         print(f"  {name}: widest {cell['widest']} chars, headroom {cell['headroom']}")
     counts = Counter(
         "gold_14" if one["membership"]["gold_14"] else "other"
-        for one in record["legs"]["v2"]["items"]
+        for one in leg_of(record, "v2")["items"]
     )
     print(f"  gold-14 inside E: {counts['gold_14']} — REPORT-ONLY, the sixth look")
     return 0

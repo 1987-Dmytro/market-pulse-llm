@@ -15,7 +15,7 @@
 
 | axis | the window's 515 rows | these 160 |
 |---|---|---|
-| alphabet mix % | {'ua': 66, 'neutral': 19, 'ru': 14, 'both': 0} | {'ua': 71, 'neutral': 18, 'ru': 11} |
+| alphabet mix % (ua/ru/neutral) | {'ua': 66, 'neutral': 19, 'ru': 14, 'both': 0} | {'ua': 71, 'neutral': 18, 'ru': 11} |
 | words, median | 11 | 7.0 |
 | words, max | 192 | 20 |
 | characters, median | 68 | 40 |
@@ -24,7 +24,7 @@
 | opens lowercase % | 6 | 6 |
 | carries a question mark % | 13 | 8 |
 
-> **The axis that does NOT match.** median 7.0 words against the window's 11, and max 20 against 192. DELIBERATE: the contract asks for «short, colloquial» rows, and the window's tail is recipes and advice posts of 40-190 words — writing those synthetically would be a different instrument, not a longer version of this one. Named rather than smoothed
+> **Four of the six axes do NOT match at ±3, and none of them is smoothed.** *Length:* median 7.0 words against the window's 11, and max 20 against 192. DELIBERATE: the contract asks for «short, colloquial» rows, and the window's tail is recipes and advice posts of 40-190 words — writing those synthetically would be a different instrument, not a longer version of this one. Named rather than smoothed. `chars_median` 40 against 68 is the same fact in the other unit *Questions:* 8 % against 13 %. Under-represented because three of the four error classes are statements about a subject and only one is naturally a question. *Terminal punctuation:* 54 % against 59 %. Within five points and set by a seeded pass, not by hand.
 
 ## `brand_vs_retailer` — 40 rows
 

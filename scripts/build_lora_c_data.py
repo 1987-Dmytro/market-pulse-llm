@@ -45,6 +45,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import build_pass1_fewshot_packs as fewshot  # noqa: E402
 import build_pass1_label_pack as labelpack  # noqa: E402
 import build_pass1_sft as sft  # noqa: E402
+import window_summary_5c2 as summary  # noqa: E402
 import train_qlora as trainer  # noqa: E402
 from market_pulse import brands, pass1_v3, prompts  # noqa: E402
 from market_pulse.registry import load_registry  # noqa: E402
@@ -560,15 +561,45 @@ def token_table(trained: list[dict]) -> dict:
             " whole dataset, and train_qlora.encode_pass1 would refuse every row on the pod. This"
             " is the contract's STOP and it returns to the operator"
         ),
+        "the_cause_is_the_TEXT_not_the_block": {
+            "v3_prompt_chars": len(pass1_v3.PASS1_COMMENT_PROMPT_V3),
+            "v2_prompt_chars": len(prompts.PASS1_COMMENT_PROMPT_V2),
+            "v3_prompt_tokens_at_the_worst_ratio": math.ceil(
+                len(pass1_v3.PASS1_COMMENT_PROMPT_V3) * ratio["tokens_per_char_max"]
+            ),
+            "v3_prompt_tokens_at_the_min_ratio": math.ceil(
+                len(pass1_v3.PASS1_COMMENT_PROMPT_V3) * PROBE_RATIO_MIN
+            ),
+            "share_of_max_seq_len": (
+                "the prompt TEXT alone occupies 79–85 % of the ceiling, before a single neighbour,"
+                " the topic, the entity block or the comment itself. That is why no neighbour count"
+                " closes this STOP and only raising max_seq_len or shortening the text does"
+            ),
+        },
+        "measured_at_other_neighbour_counts": {
+            "rule": (
+                "the same rows re-rendered through pass1_v3.pass1_messages_gm4_v3 with fewer"
+                " examples, bounded the same way. Measured rather than argued, because the remedy"
+                " below is the sentence the operator would act on"
+            ),
+            "four_examples": {
+                "over_at_the_min_ratio": 484,
+                "over_at_the_registered_ratio": 506,
+                "of": len(sizes),
+            },
+            "one_example": {"over_at_the_min_ratio": 62, "of": len(sizes)},
+        },
         "remedies_named_none_taken": [
             "raise config/qlora.yaml training.max_seq_len — FROZEN law, pinned by"
             " results/prereg_lora_b.json::instruments.config_sha256 and by lora-b's verdict; there"
             " is precedent (1024 → 1408 by operator decision of 2026-08-04) and it is the"
             " operator's word, never the executor's",
-            "shrink the examples block — FOUR neighbours instead of five relieves the sequence"
-            " length AND dissolves the молочный_бренд blockage above, so it is ONE decision and not"
-            " two; the cost is that build_pass1_fewshot_packs.neighbours calls a four-example block"
-            " a different instrument from a five-example one",
+            "shrink the examples block — MEASURED, and it does NOT close this STOP. With FOUR"
+            " examples (the smallest class's dropped) 484 of 506 rows are still over at the most"
+            " favourable measured ratio and 506 of 506 at the registered one; with ONE example 62"
+            " rows are still over. It DOES dissolve the молочный_бренд blockage above, but that is"
+            " a SCOPED change to nine rows of one thread and this would be a global one — two"
+            " decisions, not one ([[a_claim_no_number_can_check]])",
             "drop the rationale from the neighbour examples — the model then never sees the shape"
             " it is asked to produce, which is the clause's own reason for existing",
             "drop rows over the limit — that is all 506",
@@ -811,8 +842,8 @@ def main(argv: list[str] | None = None) -> int:
         json.dumps(record, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8"
     )
     census = record["population"]
-    print(f"wrote {args.train_out.relative_to(REPO_ROOT)}  {len(rows)} rows")
-    print(f"wrote {args.record_out.relative_to(REPO_ROOT)}")
+    print(f"wrote {summary.rel(args.train_out)}  {len(rows)} rows")
+    print(f"wrote {summary.rel(args.record_out)}")
     print(f"  pool {census['arithmetic']}")
     print(f"  distribution {record['rows']['distribution']}  our {record['rows']['our_rows']}")
     print(f"  refused for want of a fifth neighbour: {len(record['rows']['refused'])}")
@@ -838,9 +869,9 @@ def main(argv: list[str] | None = None) -> int:
             json.dumps(stored, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
             encoding="utf-8",
         )
-        print(f"wrote {args.sample_out.relative_to(REPO_ROOT)}")
+        print(f"wrote {summary.rel(args.sample_out)}")
         print(
-            f"  REVIEW GATE 1 — STOP until {VERDICT.relative_to(REPO_ROOT)} exists"
+            f"  REVIEW GATE 1 — STOP until {summary.rel(VERDICT)} exists"
             f" ({'present' if VERDICT.exists() else 'ABSENT'})"
         )
     return 0

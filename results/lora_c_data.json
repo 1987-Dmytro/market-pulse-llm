@@ -70,7 +70,7 @@
   },
   "produced_by": {
     "script": "scripts/build_lora_c_data.py",
-    "sha256": "cf021da94e314ca699f5e25fc7f02a0c8a951142bb5a4055493abb3b4f5eda03"
+    "sha256": "0bb24cf2672d3e20636d3ff52023d9ad8c842b85a2eb2be91dd10a21bbe2f49d"
   },
   "rationales": {
     "author": "claude-code",
@@ -254,6 +254,18 @@
     },
     "max_seq_len": 1408,
     "max_seq_len_source": "config/qlora.yaml training.max_seq_len — FROZEN law",
+    "measured_at_other_neighbour_counts": {
+      "four_examples": {
+        "of": 506,
+        "over_at_the_min_ratio": 484,
+        "over_at_the_registered_ratio": 506
+      },
+      "one_example": {
+        "of": 506,
+        "over_at_the_min_ratio": 62
+      },
+      "rule": "the same rows re-rendered through pass1_v3.pass1_messages_gm4_v3 with fewer examples, bounded the same way. Measured rather than argued, because the remedy below is the sentence the operator would act on"
+    },
     "measured_on": "@VARUS_channel:10613#21601",
     "observed_ratio_range": [
       0.269618,
@@ -262,11 +274,18 @@
     ],
     "remedies_named_none_taken": [
       "raise config/qlora.yaml training.max_seq_len — FROZEN law, pinned by results/prereg_lora_b.json::instruments.config_sha256 and by lora-b's verdict; there is precedent (1024 → 1408 by operator decision of 2026-08-04) and it is the operator's word, never the executor's",
-      "shrink the examples block — FOUR neighbours instead of five relieves the sequence length AND dissolves the молочный_бренд blockage above, so it is ONE decision and not two; the cost is that build_pass1_fewshot_packs.neighbours calls a four-example block a different instrument from a five-example one",
+      "shrink the examples block — MEASURED, and it does NOT close this STOP. With FOUR examples (the smallest class's dropped) 484 of 506 rows are still over at the most favourable measured ratio and 506 of 506 at the registered one; with ONE example 62 rows are still over. It DOES dissolve the молочный_бренд blockage above, but that is a SCOPED change to nine rows of one thread and this would be a global one — two decisions, not one ([[a_claim_no_number_can_check]])",
       "drop the rationale from the neighbour examples — the model then never sees the shape it is asked to produce, which is the clause's own reason for existing",
       "drop rows over the limit — that is all 506"
     ],
     "rule": "the maximum over probe-b's 64 paid rows of prompt_tokens / rendered_chars. The numerator counts the chat template the pod wraps the request in, so the bound is conservative by construction",
+    "the_cause_is_the_TEXT_not_the_block": {
+      "share_of_max_seq_len": "the prompt TEXT alone occupies 79–85 % of the ceiling, before a single neighbour, the topic, the entity block or the comment itself. That is why no neighbour count closes this STOP and only raising max_seq_len or shortening the text does",
+      "v2_prompt_chars": 3455,
+      "v3_prompt_chars": 4112,
+      "v3_prompt_tokens_at_the_min_ratio": 1109,
+      "v3_prompt_tokens_at_the_worst_ratio": 1200
+    },
     "verdict": "EVERY one of the 506 rows is over max_seq_len 1408 at all three measured ratios. build_pass1_sft's own drop rule (bound > max_seq_len) would drop the whole dataset, and train_qlora.encode_pass1 would refuse every row on the pod. This is the contract's STOP and it returns to the operator"
   },
   "train_file": "results/pass1_sft_v3_train.jsonl",

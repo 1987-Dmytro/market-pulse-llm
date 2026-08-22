@@ -149,15 +149,69 @@
   "produced_by": {
     "note": "this file VALIDATES the rows; it does not write them",
     "script": "scripts/build_lora_c_synthetic.py",
-    "sha256": "0b8654521180fcd5fb09bb9fff05ec5bae00612af59bd9d3e7592998da833196"
+    "sha256": "8425b13b8c8b13cfe05d4cc7d031659fbcca9da63e8fa86b2aa0f88b7a6b0139"
   },
   "register": {
+    "alphabet": {
+      "synthetic": {
+        "neutral": 18,
+        "ru": 11,
+        "ua": 71
+      },
+      "window": {
+        "both": 0,
+        "neutral": 19,
+        "ru": 14,
+        "ua": 66
+      }
+    },
     "matched": [
       "emoji_pct",
       "lowercase_opening_pct"
     ],
     "not_matched": {
-      "length": "median 7.0 words against the window's 11, and max 20 against 192. DELIBERATE: the contract asks for «short, colloquial» rows, and the window's tail is recipes and advice posts of 40-190 words — writing those synthetically would be a different instrument, not a longer version of this one. Named rather than smoothed"
+      "how_many": "FOUR of the six axes miss the ±3 tolerance. Named, not smoothed",
+      "length": "median 7.0 words against the window's 11, and max 20 against 192. DELIBERATE: the contract asks for «short, colloquial» rows, and the window's tail is recipes and advice posts of 40-190 words — writing those synthetically would be a different instrument, not a longer version of this one. Named rather than smoothed. `chars_median` 40 against 68 is the same fact in the other unit",
+      "no_terminal_punctuation_pct": "54 % against 59 %. Within five points and set by a seeded pass, not by hand",
+      "question_pct": "8 % against 13 %. Under-represented because three of the four error classes are statements about a subject and only one is naturally a question"
+    },
+    "per_axis": {
+      "chars_median": {
+        "delta": -28,
+        "matched": false,
+        "synthetic": 40,
+        "window": 68
+      },
+      "emoji_pct": {
+        "delta": 0,
+        "matched": true,
+        "synthetic": 19,
+        "window": 19
+      },
+      "lowercase_opening_pct": {
+        "delta": 0,
+        "matched": true,
+        "synthetic": 6,
+        "window": 6
+      },
+      "no_terminal_punctuation_pct": {
+        "delta": -5,
+        "matched": false,
+        "synthetic": 54,
+        "window": 59
+      },
+      "question_pct": {
+        "delta": -5,
+        "matched": false,
+        "synthetic": 8,
+        "window": 13
+      },
+      "words_median": {
+        "delta": -4.0,
+        "matched": false,
+        "synthetic": 7.0,
+        "window": 11
+      }
     },
     "rule": "«in the register of the window's comments» is a distribution, not an adjective. Measured over the 515 real pool rows and over these 160, same code both sides",
     "synthetic": {
@@ -192,7 +246,8 @@
       "words_max": 192,
       "words_median": 11,
       "words_p90": 44
-    }
+    },
+    "tolerance_points": 3
   },
   "review_gate_2": {
     "sample": "docs/reviews/lora-c-synthetic.md",

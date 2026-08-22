@@ -46,6 +46,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import build_lora_c_data as data  # noqa: E402
 import build_pass1_sft as sft  # noqa: E402
 import gate_census_w1_reader as reader_gate  # noqa: E402
+import window_summary_5c2 as summary  # noqa: E402
 from market_pulse import prompts, synthetic  # noqa: E402
 
 ROWS = REPO_ROOT / "results" / "synthetic_pass1_v1.jsonl"
@@ -56,6 +57,9 @@ VERDICT = REPO_ROOT / "docs" / "reviews" / "lora-c-synthetic-verdict.md"
 PREFIX = "synthetic:"
 SHINGLE = 6
 BALANCE_TOLERANCE = 2
+REGISTER_TOLERANCE = 3
+"""Percentage points, or units where the axis is a median. Stated because «matched» without a
+tolerance is an opinion, and because two of the six axes below do NOT clear it."""
 CLASSES = (
     (
         "brand_vs_retailer",
@@ -283,20 +287,54 @@ def build() -> dict:
             ),
             "the_window": theirs,
             "synthetic": mine,
+            "tolerance_points": REGISTER_TOLERANCE,
+            "per_axis": {
+                axis: {
+                    "window": theirs[axis],
+                    "synthetic": mine[axis],
+                    "delta": round(mine[axis] - theirs[axis], 2),
+                    "matched": abs(mine[axis] - theirs[axis]) <= REGISTER_TOLERANCE,
+                }
+                for axis in (
+                    "emoji_pct",
+                    "lowercase_opening_pct",
+                    "no_terminal_punctuation_pct",
+                    "question_pct",
+                    "words_median",
+                    "chars_median",
+                )
+            },
+            "alphabet": {"window": theirs["alphabet_pct"], "synthetic": mine["alphabet_pct"]},
             "matched": [
                 axis
-                for axis in ("emoji_pct", "lowercase_opening_pct", "question_pct")
-                if abs(theirs[axis] - mine[axis]) <= 3
+                for axis in (
+                    "emoji_pct",
+                    "lowercase_opening_pct",
+                    "no_terminal_punctuation_pct",
+                    "question_pct",
+                    "words_median",
+                    "chars_median",
+                )
+                if abs(theirs[axis] - mine[axis]) <= REGISTER_TOLERANCE
             ],
             "not_matched": {
+                "how_many": "FOUR of the six axes miss the ±3 tolerance. Named, not smoothed",
+                "question_pct": (
+                    "8 % against 13 %. Under-represented because three of the four error classes"
+                    " are statements about a subject and only one is naturally a question"
+                ),
+                "no_terminal_punctuation_pct": (
+                    "54 % against 59 %. Within five points and set by a seeded pass, not by hand"
+                ),
                 "length": (
                     f"median {mine['words_median']} words against the window's"
                     f" {theirs['words_median']}, and max {mine['words_max']} against"
                     f" {theirs['words_max']}. DELIBERATE: the contract asks for «short, colloquial»"
                     " rows, and the window's tail is recipes and advice posts of 40-190 words —"
                     " writing those synthetically would be a different instrument, not a longer"
-                    " version of this one. Named rather than smoothed"
-                )
+                    " version of this one. Named rather than smoothed. `chars_median` 40 against"
+                    " 68 is the same fact in the other unit"
+                ),
             },
         },
         "isolation": {
@@ -358,7 +396,7 @@ def sample(record: dict) -> str:
         "|---|---|---|",
     ]
     for axis, label in (
-        ("alphabet_pct", "alphabet mix %"),
+        ("alphabet_pct", "alphabet mix % (ua/ru/neutral)"),
         ("words_median", "words, median"),
         ("words_max", "words, max"),
         ("chars_median", "characters, median"),
@@ -373,7 +411,11 @@ def sample(record: dict) -> str:
         )
     lines += [
         "",
-        f"> **The axis that does NOT match.** {record['register']['not_matched']['length']}",
+        "> **Four of the six axes do NOT match at ±"
+        f"{record['register']['tolerance_points']}, and none of them is smoothed.**"
+        f" *Length:* {record['register']['not_matched']['length']}"
+        f" *Questions:* {record['register']['not_matched']['question_pct']}."
+        f" *Terminal punctuation:* {record['register']['not_matched']['no_terminal_punctuation_pct']}.",
         "",
     ]
     for name, what in CLASSES:
@@ -416,7 +458,7 @@ def main(argv: list[str] | None = None) -> int:
     args.record_out.write_text(
         json.dumps(record, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8"
     )
-    print(f"wrote {args.record_out.relative_to(REPO_ROOT)}  {record['rows']} rows")
+    print(f"wrote {summary.rel(args.record_out)}  {record['rows']} rows")
     for cell in record["error_classes"]:
         print(
             f"  {cell['name']:<20} {cell['rows']:3d}"
@@ -436,9 +478,9 @@ def main(argv: list[str] | None = None) -> int:
     if args.sample:
         args.sample_out.parent.mkdir(parents=True, exist_ok=True)
         args.sample_out.write_text(sample(record), encoding="utf-8")
-        print(f"wrote {args.sample_out.relative_to(REPO_ROOT)}")
+        print(f"wrote {summary.rel(args.sample_out)}")
         print(
-            f"  REVIEW GATE 2 — STOP until {VERDICT.relative_to(REPO_ROOT)} exists"
+            f"  REVIEW GATE 2 — STOP until {summary.rel(VERDICT)} exists"
             f" ({'present' if VERDICT.exists() else 'ABSENT'})"
         )
     return 0
