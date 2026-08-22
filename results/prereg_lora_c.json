@@ -1,0 +1,570 @@
+{
+  "authority": {
+    "quotation_rule": "both strings are grepped back into docs/STATUS.md on every build of this file, whitespace-normalised. A ruling quoted from memory is a paraphrase in quotation marks",
+    "record": "docs/STATUS.md «Открытые решения» п. 1",
+    "ruling_k": "(к) **РУЛИНГ 22.08 (вечер) — дизайн `lora-c`:** промпт v3 = v2 + поле `rationale` ПЕРЕД меткой, одним рендерингом для обучения и инференса; таблица парно в четыре колонки (база v2 · база v3 · адаптер A · адаптер B) на одном пуле соседей; рационали для обучающих строк пишет Claude Code по кодбуку и метке тимлида, тимлид ревьюит все «наши» + ~40 пограничных; синтетика ~160 (по 40 на класс ошибки) — арм B, тег в provenance, абляция армом A, никогда в холдаут/голд; из обучения и из пула соседей исключены холдаут-100 и ВСЕ строки 16 референсных тредов; **бар на арм (один выстрел): холдаут-100 ≥ 64 И сквозной бар 1 = 5/5 И бар 3 = 0 — все три или КРАСНЫЙ**; отчётно: ячейка «упоминание → категория» на холдауте (18 → ?), dev-200 (fit), 14 золотых (шестой взгляд). Два контракта: `lora-c-prep` ($0, с ревью-гейтом тимлида) → `lora-c-run` (один A6000, кап **$4.00**).",
+    "ruling_v": "(в) **Затем — (4) LoRA «рассуждение→метка» поверх v2 с (3) синтетикой как армом B** одной регистрации; цель обучения — из (б)."
+  },
+  "bars": {
+    "P1_holdout_agreement": {
+      "before_column": "base v2 RE-MEASURED on the shared pool. The 64/100 the ruling names was read on the WINDOW pool; the bar is the registered integer regardless of what the re-measurement says, and both numbers are reported",
+      "gating": true,
+      "minimum_agreed": 64,
+      "n": 100,
+      "population": "results/pass1_holdout_100.json",
+      "population_sha256": "5a62c957addfa7211702f38414d6fd2f3d3382ca6dfdb46c92c459c45f0ae647",
+      "reachable_maximum": "98 of 100 as this pack stands: two holdout rows of @VARUS_channel:10367 cannot be rendered (see reachability.the_smallest_class_has_no_fifth_neighbour), so a perfect run scores 98 and the bar of 64 is still reachable with 34 to spare",
+      "scored_field": "subject_type",
+      "threshold": "≥ 64 of 100"
+    },
+    "P2_bar_1_flagships": {
+      "before": "4 of 5 — pass2-signals-r2, and the one miss is F2a",
+      "gating": true,
+      "input": "results/lora_c_pass2_pack.json, rebuilt per leg from that leg's pass-1 out-file",
+      "reachability": "F2a was UNREACHABLE in r2 by construction: pass 1 labelled its only cited row `сеть_ритейлер`, so the filter never handed pass 2 the comment the signal is made of. THIS line is the one that can move it — a pass-1 adapter that relabels that row is exactly what would make 5 of 5 reachable. That is why the bar is registered at 5 and not at 4",
+      "scored_by": "score_pass2_signals.bar_states, through results/prereg_pass2_signals_r2.json",
+      "threshold": "5 of 5 cases"
+    },
+    "P2_bar_3_noise": {
+      "before": "2 signals — pass2-signals-r2, both from @VARUS_channel:10366",
+      "gating": true,
+      "scored_by": "score_pass2_signals.bar_states, through results/prereg_pass2_signals_r2.json",
+      "the_case": "N2 carries four rows pass 1 labelled `сеть_ритейлер` in a giveaway thread. Pass 2 under strict authority cannot drop them, so the bar is a reading of PASS 1 — which is what makes it a legitimate bar for this line and not for the last one",
+      "threshold": "0 signals"
+    },
+    "attempt": "ONE. No retry, no second draw, no tuning after any eval output is seen. Two arms against one bar is the multiplicity, and it is the multiplicity the ruling accepted",
+    "bar_2_entity_cases": {
+      "gating": false,
+      "state": "INHERITED and reported «held»",
+      "why": "its cases are resolved from the READER's bought verdicts, which no pass-1 adapter moves. Re-scoring it would publish a number this line did not measure"
+    },
+    "consequence": "a red bar is an ANSWER. If no arm takes all three, the line closes on the pre-registered consequence and nothing ships — the shape lora-b's registration used",
+    "reachability_note": "build_pass1_fewshot_packs.neighbours raises when a class has no candidate outside the query's own thread. The shared pool holds ONE молочный_бренд row and the exclusion that removed the other is holdout-100, which the ruling puts out of the pool",
+    "report_only": {
+      "arm_a_vs_arm_b": "the ablation, on the same instruments",
+      "dev_200": "TRAINING FIT only. dev-200's «our» rows are the training set's «our» rows now, so its agreement is not an eval reading and may never be quoted as one",
+      "gold_14": "the SIXTH look. A census row with multiplicity, NEVER a bar — docs/STATUS.md п. 1 (д). All 14 are inside E because they are inside the reference threads",
+      "our_on_holdout": "6 of 8 before",
+      "pass_2_tables": "the DROP table and the subject_doubt table, per leg",
+      "per_class_tables": "агreement by subject_type, both arms and both bases",
+      "the_mention_cell": "`не_наш_рынок → категория_личное` on holdout-100. 18 of the 52 `не_наш_рынок` rows before; this is the cell the line targets and it is REPORTED, not gated"
+    },
+    "rule": "holdout-100 agreement ≥ 64 AND end-to-end bar 1 = 5 of 5 AND bar 3 = 0 signals. ALL THREE or RED. Registered per ARM; base v3 takes no bar and is a control column"
+  },
+  "contract": "docs/PROMPT-lora-c-prep.md",
+  "frozen_when_the_pod_exists": [
+    "results/prereg_lora_c.json",
+    "results/pass1_sft_v3_train.jsonl",
+    "results/rationales_pass1_v1.jsonl",
+    "results/synthetic_pass1_v1.jsonl",
+    "results/lora_c_eval_pack.json",
+    "results/lora_c_pass2_pack.json",
+    "src/market_pulse/pass1_v3.py",
+    "config/qlora.yaml"
+  ],
+  "instruments": {
+    "gold": {
+      "record": "results/reader_gold_w1_r2.json",
+      "sha256": "716ff4174bdafa5957caa4d038a11241b6eb299df4035a5f0e983217ec2a46d9"
+    },
+    "holdout": {
+      "record": "results/pass1_holdout_100.json",
+      "sha256": "5a62c957addfa7211702f38414d6fd2f3d3382ca6dfdb46c92c459c45f0ae647"
+    },
+    "module_v3": {
+      "path": "src/market_pulse/pass1_v3.py",
+      "sha256": "9baab0e92078c137d17d5275158ef6360b9f349213a671b9249f3d4433b680c7"
+    },
+    "packs": {
+      "results/lora_c_eval_pack.json": "7cf18620d8a00353bdfd05ce1a601e6d3314bf48c37e29098873c2813a979047",
+      "results/lora_c_pass2_pack.json": "4438ab0b4c9f6e9a7ec59639a3ae1fef982735d583409f04ce7aa529d704fcaa",
+      "results/pass1_sft_v3_train.jsonl": "0821f4aedef78ee476a993664f75feb113afdcc77551f43c82f50d887c4f40a0"
+    },
+    "parser": {
+      "note": "PINNED and untouched — parse_pass1_v3 wraps it, never edits it",
+      "path": "src/market_pulse/prompts.py",
+      "sha256": "b70e2114b03a76dc2c8cfc9b559bf7ef22e9193d841b4fccc5ed8bd0a40294ab"
+    },
+    "pass_2": {
+      "module": "src/market_pulse/pass2_r2.py",
+      "prompt_sha256": {
+        "pass2_thread_gm4_v1": "a674f284085d43c54df590ce943fb8c02d6ac28b7832c05f2e4b7a54879f61f8"
+      },
+      "registration": "results/prereg_pass2_signals_r2.json",
+      "registration_sha256": "cd3f6dca32468ed1d41e8aa3a57c76a0bb24093fceec5aec55961ecaaf498701",
+      "scorer": "scripts/score_pass2_signals.py::bar_states",
+      "sha256": "b0356e73cc4bc98a1baa5928559878ed752eb560311bac029b51a67e65f1af46"
+    },
+    "prompt_sha256": {
+      "pass1_comment_gm4_v1": "5a4a3cb6ce4db89adb304c04de41210fdabfde0c53addfdb75adba0f1d866650",
+      "pass1_comment_gm4_v2": "f5f6a5afdd8573ba52bde5cf79041cf9a01d8421ea402c0f39d2ea1c1d430aee",
+      "pass1_comment_gm4_v3": "b9b27a53f8f56140657d682f49dd4e8cd1fb1364a915adb888ca999083d5a49c"
+    },
+    "scorer": {
+      "path": "src/market_pulse/scorer.py",
+      "sha256": "dbb5406a502f813ba1b4940e0914310efd632386a8da60e0c002cc8964a97d4f"
+    },
+    "trainer": {
+      "path": "scripts/train_qlora.py",
+      "sha256": "1a1a0b5983db60d8e17d86a14fb1410af35d31d0dbbb14e66f81a382072e7907",
+      "state": "PINNED and it REFUSES a v3 dataset — see reachability"
+    },
+    "v3_extends_v2": true,
+    "written_inputs": {
+      "results/rationales_pass1_v1.jsonl": {
+        "author": "claude-code",
+        "review_gate": "docs/reviews/lora-c-rationales-verdict.md",
+        "reviewed": [
+          false
+        ],
+        "sha256": "ed817668b02bf1bb174003a2983108beaae4045c3fdd5b09fb76032a64c08a55",
+        "verdict_present": false
+      },
+      "results/synthetic_pass1_v1.jsonl": {
+        "author": "claude-code",
+        "review_gate": "docs/reviews/lora-c-synthetic-verdict.md",
+        "reviewed": [
+          false
+        ],
+        "sha256": "9b049bc2046360a811169f45a669f802a8676c643aa9eb647563b636c20c195d",
+        "verdict_present": false
+      }
+    }
+  },
+  "legs": {
+    "arm_a": {
+      "adapter": "QLoRA on the real rows with their rationales",
+      "bar": "the registered three, all-or-RED",
+      "eval_calls": 198,
+      "prompt": "pass1_comment_gm4_v3",
+      "reads": "results/lora_c_eval_pack.json::legs.v3",
+      "train_rows": 506
+    },
+    "arm_b": {
+      "ablation": "arm A's rows are a SUBSET of arm B's, so the one variable is the synthetic top-up — the same shape lora-b used for its r2 top-up. And the asymmetry is named: with zero real молочный_бренд rows rendered, arm B's 40 non-dairy-«brand» rows teach only the NEGATIVE of that class. Synthetic does not repair the positive side",
+      "adapter": "QLoRA on arm A's rows PLUS the synthetic rows",
+      "bar": "the registered three, all-or-RED",
+      "eval_calls": 198,
+      "prompt": "pass1_comment_gm4_v3",
+      "reads": "results/lora_c_eval_pack.json::legs.v3",
+      "train_rows": 666
+    },
+    "base_v2": {
+      "adapter": null,
+      "bar": null,
+      "eval_calls": 198,
+      "prompt": "pass1_comment_gm4_v2",
+      "reads": "results/lora_c_eval_pack.json::legs.v2",
+      "role": "the BEFORE column, RE-MEASURED on the shared pool. The window's v2 numbers were taken on the FULL 650-row pool and are report-only context here — a different neighbour set is a different instrument"
+    },
+    "base_v3": {
+      "adapter": null,
+      "bar": null,
+      "eval_calls": 198,
+      "prompt": "pass1_comment_gm4_v3",
+      "reads": "results/lora_c_eval_pack.json::legs.v3",
+      "role": "the CONTROL. Without it nothing separates «the adapter learned» from «a sentence of reasoning helped», and the two have different consequences for the next line"
+    }
+  },
+  "money": {
+    "cap_rule": "the operator's ruling (к): «один A6000, кап $4.00». Raising it is the operator's word BEFORE any endpoint exists, never after a reading",
+    "cap_usd_all_in": 4.0,
+    "formulas": {
+      "eval_calls_per_leg": 198,
+      "eval_seconds_per_leg": "198 calls × <pass-1 s/call>",
+      "legs": 4,
+      "pass_2_seconds_per_leg": "<threads with at least one filtered row> × 97 s/thread",
+      "steps": {
+        "arm_a": 62,
+        "arm_b": 82
+      },
+      "steps_rule": "floor(ceil(n / micro_batch_size) / grad_accum) × epochs. NOT the registered `ceil(n / (micro × accum)) × epochs`: optimizer.step() fires only on a whole grad_accum of MICRO-batches, and lora-b measured 62 steps where 64 were registered. This record uses the arithmetic the trainer actually runs",
+      "training_seconds_per_arm": "<steps> × <s/step>"
+    },
+    "hard_stop_seconds": "TO BE DERIVED in lora-c-run's contract, from the cap and the live price at create. Registering one here would be a number with no run behind it",
+    "rates_and_what_would_invalidate_them": {
+      "pass_1_seconds_per_call": {
+        "derivation": "mean(probe-b) × mean(dev v2) / mean(dev base) = 6.135572, rounded up",
+        "invalidating_condition": "this rate was measured on v2 requests. Three of the four legs send V3, whose widest E request is 8894 characters against v2's 7781. Carrying it unchanged for v3 is the same class of error as the training rate below ([[the_smokes_rate_carries_the_smokes_transport]]). It is safe as a FLOOR and wrong as a ratio",
+        "measured_on": "v2 requests",
+        "source": "results/prereg_pass1_window_r2.json::money.arithmetic.seconds_per_call.charged",
+        "the_window_pod_measured": 2.694083,
+        "value": 6.14
+      },
+      "pass_2_seconds_per_thread": {
+        "derivation": "ceil(58.07 × 1.67) = 97 — the smoke MAX × pass 1's pod-class spread",
+        "invalidating_condition": "r2 realised 23.760 s/thread against 97 charged — 0.245 of the charge — and it measured the pod-class spread on this decode DIRECTLY at 1.008, not the 1.67 borrowed from pass 1. lora-c-run has a direct reading available and should use it; 97 is carried here because it is what is REGISTERED, and a lower charge is a decision that belongs in that contract",
+        "source": "results/prereg_pass2_signals_r2.json::money.arithmetic.seconds_per_call",
+        "the_run_measured": 23.76,
+        "value": 97
+      },
+      "training_seconds_per_step": {
+        "compliant_slow_ceiling": 121.0,
+        "compliant_slow_rule": "121.0 s/step is the slowest rate that never trips lora-b's registered 122 s watchdog — its own worked example, and the worst case a run can be in while every rung says GO",
+        "invalidating_condition": "ALL THREE are readings on sequences of at most 1 222 tokens (results/prereg_lora_b.json::dropped_for_length.longest_kept). v3's rows are 1435–2759 tokens at the measured ratio range. config/qlora.yaml's own comment says raising max_seq_len «changes no step time and no memory except on the batches that need it» — here EVERY batch needs it, so none of the three is this line's rate. Named as inherited readings, never used as the formula's input",
+        "measured_on_arm_a": 68.442,
+        "registered_by_lora_b": 61.047,
+        "source": "results/prereg_lora_b.json — both numbers, by name"
+      }
+    },
+    "state": "OPEN — no price is registered here. lora-c-run derives it and seals it",
+    "what_this_record_deliberately_does_NOT_carry": "a worst_case_usd, a total_seconds and a projected price. r1 of pass1-window registered a rate it had not measured and the number outlived the correction"
+  },
+  "phase": "lora-c",
+  "population": {
+    "eval_set_E": {
+      "arithmetic": "100 + 106 − 6 = 200",
+      "file": "results/lora_c_eval_pack.json",
+      "n": 200,
+      "rendered": 198,
+      "sha256": "7cf18620d8a00353bdfd05ce1a601e6d3314bf48c37e29098873c2813a979047"
+    },
+    "pool": {
+      "arithmetic": "650 − 100 − 41 + 6 = 515 — the two exclusions overlap and the overlap is added back once",
+      "distribution": {
+        "null": 165,
+        "категория_личное": 40,
+        "молочный_бренд": 1,
+        "не_наш_рынок": 272,
+        "сеть_ритейлер": 37
+      },
+      "record": "results/lora_c_data.json",
+      "rows": 515,
+      "rule": "ONE pool for every leg — the paired table compares prompts and adapters"
+    },
+    "reference_threads": [
+      "@VARUS_channel:10348",
+      "@VARUS_channel:10360",
+      "@VARUS_channel:10366",
+      "@VARUS_channel:10529",
+      "@VARUS_channel:10613",
+      "@mandziak:3676",
+      "@mandziak:3684",
+      "@mandziak:3689",
+      "@mandziak:3703",
+      "@matusi_ukr:22242",
+      "@matusi_ukr:22272",
+      "@matusi_ukr:22303",
+      "@retsepty:7312",
+      "@retsepty:7325",
+      "@retsepty:7327",
+      "@sashafitnesslife:3939"
+    ],
+    "reference_threads_carrying_labelled_rows": [
+      "@VARUS_channel:10360",
+      "@VARUS_channel:10366",
+      "@VARUS_channel:10529",
+      "@mandziak:3684",
+      "@mandziak:3689",
+      "@retsepty:7312",
+      "@retsepty:7325",
+      "@retsepty:7327"
+    ],
+    "synthetic": {
+      "balance": {
+        "brand_vs_retailer": {
+          "labels": {
+            "null": 8,
+            "категория_личное": 8,
+            "молочный_бренд": 8,
+            "не_наш_рынок": 8,
+            "сеть_ритейлер": 8
+          },
+          "rows": 40,
+          "spread": 0
+        },
+        "mention_vs_about": {
+          "labels": {
+            "null": 8,
+            "категория_личное": 8,
+            "молочный_бренд": 8,
+            "не_наш_рынок": 8,
+            "сеть_ритейлер": 8
+          },
+          "rows": 40,
+          "spread": 0
+        },
+        "non_dairy_brand": {
+          "labels": {
+            "null": 8,
+            "категория_личное": 8,
+            "молочный_бренд": 8,
+            "не_наш_рынок": 8,
+            "сеть_ритейлер": 8
+          },
+          "rows": 40,
+          "spread": 0
+        },
+        "retailer_non_dairy": {
+          "labels": {
+            "null": 8,
+            "категория_личное": 8,
+            "молочный_бренд": 8,
+            "не_наш_рынок": 8,
+            "сеть_ритейлер": 8
+          },
+          "rows": 40,
+          "spread": 0
+        }
+      },
+      "contamination_is_empty": true,
+      "file": "results/synthetic_pass1_v1.jsonl",
+      "rows": 160,
+      "sha256": "9b049bc2046360a811169f45a669f802a8676c643aa9eb647563b636c20c195d"
+    },
+    "train": {
+      "distribution": {
+        "null": 165,
+        "категория_личное": 40,
+        "не_наш_рынок": 267,
+        "сеть_ритейлер": 34
+      },
+      "file": "results/pass1_sft_v3_train.jsonl",
+      "refused": [
+        {
+          "id": "@VARUS_channel:10367#20766",
+          "why": "no fifth neighbour"
+        },
+        {
+          "id": "@VARUS_channel:10367#20945",
+          "why": "no fifth neighbour"
+        },
+        {
+          "id": "@VARUS_channel:10367#20947",
+          "why": "no fifth neighbour"
+        },
+        {
+          "id": "@VARUS_channel:10367#20979",
+          "why": "no fifth neighbour"
+        },
+        {
+          "id": "@VARUS_channel:10367#20981",
+          "why": "no fifth neighbour"
+        },
+        {
+          "id": "@VARUS_channel:10367#20982",
+          "why": "no fifth neighbour"
+        },
+        {
+          "id": "@VARUS_channel:10367#20983",
+          "why": "no fifth neighbour"
+        },
+        {
+          "id": "@VARUS_channel:10367#20984",
+          "why": "no fifth neighbour"
+        },
+        {
+          "id": "@VARUS_channel:10367#21006",
+          "why": "no fifth neighbour"
+        }
+      ],
+      "rows": 506,
+      "sha256": "0821f4aedef78ee476a993664f75feb113afdcc77551f43c82f50d887c4f40a0"
+    }
+  },
+  "producer": {
+    "script": "scripts/write_lora_c_prereg.py",
+    "sha256": "ad8b4bebfa7d349ea12576ed47fc84160f970b28d87ad15d853f32a806d31bba"
+  },
+  "question": "does rationale-supervised QLoRA on pass 1 fix the subject-attribution errors pass 2 measured — brand ↔ retailer, a retailer in a non-dairy context, non-dairy «brands», and mention-vs-about — WITHOUT learning the prior the way line B did",
+  "reachability": {
+    "no_row_fits_max_seq_len": {
+      "by_ratio": {
+        "median_observed": {
+          "max": 2675,
+          "median": 1643,
+          "min": 1505,
+          "of": 506,
+          "over_max_seq_len": 506,
+          "pods_own_count_of_the_shortest": 1489,
+          "tokens_per_char": 0.282802
+        },
+        "min_observed": {
+          "max": 2551,
+          "median": 1567,
+          "min": 1435,
+          "of": 506,
+          "over_max_seq_len": 506,
+          "pods_own_count_of_the_shortest": 1419,
+          "tokens_per_char": 0.269618
+        },
+        "registered_bound_max": {
+          "max": 2759,
+          "median": 1694,
+          "min": 1552,
+          "of": 506,
+          "over_max_seq_len": 506,
+          "pods_own_count_of_the_shortest": 1536,
+          "tokens_per_char": 0.291741
+        }
+      },
+      "chars_prompt_plus_target": {
+        "max": 9402,
+        "median": 5750,
+        "min": 5262
+      },
+      "lora_b_v1_rows_for_comparison": {
+        "chars_max": 4132,
+        "chars_median": 2950,
+        "longest_kept_tokens": 1222,
+        "source": "results/pass1_sft_arm_b.jsonl and results/prereg_lora_b.json::dropped_for_length.longest_kept"
+      },
+      "max_seq_len": 1408,
+      "max_seq_len_source": "config/qlora.yaml training.max_seq_len — FROZEN law",
+      "remedies_named_none_taken": [
+        "raise config/qlora.yaml training.max_seq_len — FROZEN law, pinned by results/prereg_lora_b.json::instruments.config_sha256 and by lora-b's verdict; there is precedent (1024 → 1408 by operator decision of 2026-08-04) and it is the operator's word, never the executor's",
+        "shrink the examples block — FOUR neighbours instead of five relieves the sequence length AND dissolves the молочный_бренд blockage above, so it is ONE decision and not two; the cost is that build_pass1_fewshot_packs.neighbours calls a four-example block a different instrument from a five-example one",
+        "drop the rationale from the neighbour examples — the model then never sees the shape it is asked to produce, which is the clause's own reason for existing",
+        "drop rows over the limit — that is all 506"
+      ],
+      "the_pods_own_count": "train_qlora.encode_pass1 tokenizes apply_chat_template(...) and refuses on len(context) + len(target); build_pass1_sft.ratio() measured tokens-per-character against served prompt_tokens, which counts the same template. So the pod's number is this bound minus TEMPLATE_SLACK = 16, and at the MINIMUM observed ratio the SHORTEST row still needs 1419 against 1408. Both the Mac-side drop rule and the pod-side refusal fire, on every row",
+      "verdict": "EVERY one of the 506 rows is over max_seq_len 1408 at all three measured ratios. build_pass1_sft's own drop rule (bound > max_seq_len) would drop the whole dataset, and train_qlora.encode_pass1 would refuse every row on the pod. This is the contract's STOP and it returns to the operator"
+    },
+    "the_pinned_trainer_refuses_a_v3_dataset": {
+      "instrument": "scripts/train_qlora.py",
+      "pinned_by": [
+        "results/prereg_lora_b.json::instruments.trainer.sha256",
+        "results/lora_b_verdict.json"
+      ],
+      "refusals_driven_at_zero_dollars": [
+        {
+          "message": "@VARUS_channel:10367#20766: task 'pass1_comment_gm4_v3' is not 'pass1_comment_gm4_v1'",
+          "where": "train_qlora.load_sft"
+        },
+        {
+          "message": "…hashes 58718596d2dc909c… and pass1_sft.json registers ['79988046f96c981f', 'dc7c8390c3fff439'] — this is not a registered dataset. Stop rather than train on bytes nobody pre-registered.",
+          "where": "train_qlora.build_pass1"
+        }
+      ],
+      "remedy_named_not_taken": "a SIBLING trainer that imports train_qlora and re-binds the two guards, the way scripts/gate_pass2_signals_r2.py is a sibling of the r1 gate. Editing the pinned file turns `make check` red on lora-b's own sealed artifacts. lora-c-run's FIRST $0 deliverable, and registering train_qlora.py as THE trainer without saying this would be a bar with no producer",
+      "sha256": "1a1a0b5983db60d8e17d86a14fb1410af35d31d0dbbb14e66f81a382072e7907",
+      "what_PASSES": "the learn_chars guard and the prompt_sha256 equality both pass. The v3 target's supervised head still ends at the subject_type value plus its separator — the prefix arithmetic in build_lora_c_data.target_v3 preserves the +1 END-offset rule — and the sha the trainer compares is v1's prompt, which has not moved"
+    },
+    "the_smallest_class_has_no_fifth_neighbour": {
+      "blocked_pool_rows": [
+        [
+          "@VARUS_channel:10367",
+          20766,
+          "молочный_бренд"
+        ],
+        [
+          "@VARUS_channel:10367",
+          20945,
+          "не_наш_рынок"
+        ],
+        [
+          "@VARUS_channel:10367",
+          20947,
+          "сеть_ритейлер"
+        ],
+        [
+          "@VARUS_channel:10367",
+          20979,
+          "сеть_ритейлер"
+        ],
+        [
+          "@VARUS_channel:10367",
+          20981,
+          "сеть_ритейлер"
+        ],
+        [
+          "@VARUS_channel:10367",
+          20982,
+          "не_наш_рынок"
+        ],
+        [
+          "@VARUS_channel:10367",
+          20983,
+          "не_наш_рынок"
+        ],
+        [
+          "@VARUS_channel:10367",
+          20984,
+          "не_наш_рынок"
+        ],
+        [
+          "@VARUS_channel:10367",
+          21006,
+          "не_наш_рынок"
+        ]
+      ],
+      "blocked_pool_rows_n": 9,
+      "cause": "build_pass1_fewshot_packs.neighbours raises when a class has no candidate outside the query's own thread. The shared pool holds ONE молочный_бренд row and the exclusion that removed the other is holdout-100, which the ruling puts out of the pool",
+      "remedies_named_none_taken": [
+        "render those rows with FOUR examples — neighbours() itself says a four-example block is a different instrument, so the arm would be two instruments",
+        "allow the query's own thread as a candidate for that class alone — a per-class rule, and for the молочный_бренд row itself it would hand the model its own answer",
+        "draw the example from the EXCLUDED set — it leaks a holdout or reference-thread comment into a training and an inference request",
+        "drop the eleven rows — arm A then has ZERO real молочный_бренд positives and the holdout denominator moves off the registered 100, taking the ≥64 bar with it"
+      ],
+      "rows_in_the_650": 2,
+      "rows_in_the_pool": 1,
+      "ruling": "the operator's — this file renders what it can and names the rest",
+      "smallest_class": "молочный_бренд",
+      "the_other_one": "@mandziak:3721:48445 — a holdout row",
+      "threads": [
+        "@VARUS_channel:10367"
+      ]
+    }
+  },
+  "ready_to_price": {
+    "chars_per_sft_row": {
+      "max": 9402,
+      "median": 5750
+    },
+    "eval_calls_per_leg": 198,
+    "legs": 4,
+    "pass_2_threads_per_leg": 11,
+    "pass_2_threads_rule": "measured on the WINDOW's own out-file. Each leg rebuilds its own pack, so an arm that relabels a thread into or out of the filter moves this number",
+    "rule": "every number here comes from a file this contract built, at $0",
+    "tokens_per_sft_row": {
+      "bound": "build_pass1_sft.bound_tokens at the worst measured tokens-per-character",
+      "max": 2759,
+      "median": 1694,
+      "min": 1552
+    },
+    "train_rows": 506,
+    "train_rows_arm_b": 666
+  },
+  "state": "DRAFT — frozen only by lora-c-run's first `pod create`",
+  "training": {
+    "alpha": 32,
+    "config": "config/qlora.yaml — FROZEN law",
+    "config_agrees_with_lora_b": true,
+    "config_sha256": "6771ed373f9e7c52b3180a45506fe0dfef4446bc89b2c3ff6c1b39992f2d00ff",
+    "epochs": 2,
+    "inherited_from": "results/prereg_lora_b.json — by NAME, and every number says so",
+    "learning_rate": 0.0001,
+    "rank": 16,
+    "read_not_typed": "every one of these is READ from config/qlora.yaml at build time. lora-b's record quotes the same file, and two spellings of a frozen constant are two answers the day one of them moves ([[a_moved_constant_fails_green]])",
+    "sampler": {
+      "classes_under_the_floor": [],
+      "expected_draws_per_epoch": {
+        "null": 101.1999,
+        "категория_личное": 101.2,
+        "не_наш_рынок": 101.1999,
+        "сеть_ритейлер": 101.2
+      },
+      "floor": 8,
+      "rows_per_class": {
+        "null": 165,
+        "категория_личное": 40,
+        "не_наш_рынок": 267,
+        "сеть_ритейлер": 34
+      },
+      "rule": "w_c = N/(5·n_c) capped at 8.0 — results/prereg_lora_b.json's arms.*.sampler_weights, by calling train_qlora.class_weights, the function the trainer samples with",
+      "second_rule": "«no class under 8 rows per epoch-equivalent». Expected draws are n_c·w_c = min(N/5, 8·n_c), so the majority class is capped at N/5 by the first rule and the floor can only bind on a class with fewer than 8 rows. APPLIED: none — the first rule already satisfies it, and the smallest class lands exactly on the floor",
+      "weights": {
+        "null": 0.613333,
+        "категория_личное": 2.53,
+        "не_наш_рынок": 0.379026,
+        "сеть_ритейлер": 2.976471
+      }
+    },
+    "supervision": {
+      "boundary": "build_pass1_sft.target_for, CALLED. The rationale is written FIRST and the supervised span runs from the object's opening brace through the separator after the subject_type value — so the loss lands on the reasoning before it lands on the class, which is the whole of the line",
+      "field": "the rationale AND `subject_type`",
+      "not_supervised": "subject_id and stance — the team lead labelled neither",
+      "vs_lora_b": "line B supervised `subject_type` ALONE on a set that is 52 % `не_наш_рынок` and the adapter learned the marginal. That is the failure this design is a response to, and the cue-in-text rule is what keeps the rationale from being the label wearing a sentence"
+    }
+  }
+}
