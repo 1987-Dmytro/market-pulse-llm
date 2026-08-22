@@ -1,0 +1,207 @@
+{
+  "author": "claude-code",
+  "balance": {
+    "by_class": {
+      "brand_vs_retailer": {
+        "labels": {
+          "null": 8,
+          "категория_личное": 8,
+          "молочный_бренд": 8,
+          "не_наш_рынок": 8,
+          "сеть_ритейлер": 8
+        },
+        "rows": 40,
+        "spread": 0
+      },
+      "mention_vs_about": {
+        "labels": {
+          "null": 8,
+          "категория_личное": 8,
+          "молочный_бренд": 8,
+          "не_наш_рынок": 8,
+          "сеть_ритейлер": 8
+        },
+        "rows": 40,
+        "spread": 0
+      },
+      "non_dairy_brand": {
+        "labels": {
+          "null": 8,
+          "категория_личное": 8,
+          "молочный_бренд": 8,
+          "не_наш_рынок": 8,
+          "сеть_ритейлер": 8
+        },
+        "rows": 40,
+        "spread": 0
+      },
+      "retailer_non_dairy": {
+        "labels": {
+          "null": 8,
+          "категория_личное": 8,
+          "молочный_бренд": 8,
+          "не_наш_рынок": 8,
+          "сеть_ритейлер": 8
+        },
+        "rows": 40,
+        "spread": 0
+      }
+    },
+    "classes_over_tolerance": [],
+    "tolerance": 2
+  },
+  "contamination": {
+    "gold_quotes": [],
+    "gold_quotes_n": 67,
+    "holdout_rows": [],
+    "holdout_rows_n": 100,
+    "labelled_rows": [],
+    "labelled_rows_n": 650,
+    "reference_thread_comments": [],
+    "reference_thread_comments_n": 106,
+    "rule": "word n-grams over casefolded \\w+ tokens, market_pulse.synthetic",
+    "shingle": 6
+  },
+  "contract": "docs/PROMPT-lora-c-prep.md — D0, synthetic rows for arm B",
+  "error_classes": [
+    {
+      "name": "brand_vs_retailer",
+      "rows": 40,
+      "what": "brand ↔ retailer — F2 (`580124`) read the brand where the reading is the chain, and back"
+    },
+    {
+      "name": "retailer_non_dairy",
+      "rows": 40,
+      "what": "a retailer named in a NON-DAIRY context — N2, `@VARUS_channel:10366`, four rows pass 1 called `сеть_ритейлер` and the team lead called `null`"
+    },
+    {
+      "name": "non_dairy_brand",
+      "rows": 40,
+      "what": "a non-dairy «brand» that must be `не_наш_рынок` — the café, the stationery and the throat spray pass 2 measured at `молочный_бренд` 21.4 %"
+    },
+    {
+      "name": "mention_vs_about",
+      "rows": 40,
+      "what": "mention-vs-about — 18 of the 52 `не_наш_рынок` rows on holdout-100 pulled into `категория_личное`"
+    }
+  ],
+  "file": "results/synthetic_pass1_v1.jsonl",
+  "frames": {
+    "rule": "synthetic.frame_counts over two-word openings and closings",
+    "top_closings": [
+      [
+        "так зрозуміли",
+        2
+      ],
+      [
+        "не моє",
+        2
+      ],
+      [
+        "в магазині",
+        1
+      ],
+      [
+        "не брала",
+        1
+      ],
+      [
+        "те саме",
+        1
+      ]
+    ],
+    "top_openings": [
+      [
+        "у варусі",
+        8
+      ],
+      [
+        "в атб",
+        5
+      ],
+      [
+        "еко маркет",
+        5
+      ],
+      [
+        "селянське масло",
+        2
+      ],
+      [
+        "а хто",
+        2
+      ]
+    ],
+    "worst_closing_share_pct": 1,
+    "worst_opening_share_pct": 5
+  },
+  "isolation": {
+    "prefix": "synthetic:",
+    "rule": "a synthetic row is NEVER in the neighbour pool, never in an eval set and never in arm A. The `synthetic:` thread prefix cannot collide with a real thread, so every downstream refusal is one string comparison",
+    "threads": [
+      "synthetic:brand_vs_retailer",
+      "synthetic:mention_vs_about",
+      "synthetic:non_dairy_brand",
+      "synthetic:retailer_non_dairy"
+    ]
+  },
+  "phase": "lora-c-prep",
+  "produced_by": {
+    "note": "this file VALIDATES the rows; it does not write them",
+    "script": "scripts/build_lora_c_synthetic.py",
+    "sha256": "0b8654521180fcd5fb09bb9fff05ec5bae00612af59bd9d3e7592998da833196"
+  },
+  "register": {
+    "matched": [
+      "emoji_pct",
+      "lowercase_opening_pct"
+    ],
+    "not_matched": {
+      "length": "median 7.0 words against the window's 11, and max 20 against 192. DELIBERATE: the contract asks for «short, colloquial» rows, and the window's tail is recipes and advice posts of 40-190 words — writing those synthetically would be a different instrument, not a longer version of this one. Named rather than smoothed"
+    },
+    "rule": "«in the register of the window's comments» is a distribution, not an adjective. Measured over the 515 real pool rows and over these 160, same code both sides",
+    "synthetic": {
+      "alphabet_pct": {
+        "neutral": 18,
+        "ru": 11,
+        "ua": 71
+      },
+      "chars_median": 40,
+      "emoji_pct": 19,
+      "lowercase_opening_pct": 6,
+      "n": 160,
+      "no_terminal_punctuation_pct": 54,
+      "question_pct": 8,
+      "words_max": 20,
+      "words_median": 7.0,
+      "words_p90": 14
+    },
+    "the_window": {
+      "alphabet_pct": {
+        "both": 0,
+        "neutral": 19,
+        "ru": 14,
+        "ua": 66
+      },
+      "chars_median": 68,
+      "emoji_pct": 19,
+      "lowercase_opening_pct": 6,
+      "n": 515,
+      "no_terminal_punctuation_pct": 59,
+      "question_pct": 13,
+      "words_max": 192,
+      "words_median": 11,
+      "words_p90": 44
+    }
+  },
+  "review_gate_2": {
+    "sample": "docs/reviews/lora-c-synthetic.md",
+    "verdict": "docs/reviews/lora-c-synthetic-verdict.md",
+    "verdict_present": false
+  },
+  "reviewed": [
+    false
+  ],
+  "rows": 160,
+  "sha256": "9b049bc2046360a811169f45a669f802a8676c643aa9eb647563b636c20c195d"
+}
