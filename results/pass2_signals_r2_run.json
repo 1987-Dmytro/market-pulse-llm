@@ -1,0 +1,979 @@
+{
+  "gates": [
+    {
+      "at": "2026-08-22T12:02:06+00:00",
+      "billed_by_closed_pods_seconds": 0,
+      "cap_usd_all_in": 2.5,
+      "carried_rows_in_the_file": 4,
+      "fits_the_cap": true,
+      "fits_the_hard_stop": true,
+      "fits_the_re_creation_count": true,
+      "fits_the_recovery_clause": true,
+      "hard_stop_seconds": 11000.0,
+      "kind": "pre-create-check",
+      "next_step": "no pod is open and the whole worst case still fits — create with --terminate-after = create + 11000 s",
+      "pod": 0,
+      "pod_id": null,
+      "pods_opened": 0,
+      "projected_attempt_seconds": 9675.0,
+      "projected_attempt_usd": 2.15,
+      "re_creations_allowed": 1,
+      "recovery_clause": "a KILL closes the session. The rows already bought stand in the out-file as evidence, nothing is deleted and nothing is re-asked, and the remainder is a new registration — never a third pod",
+      "replies_bought_by_this_session": 0,
+      "rule": "ONE re-creation after a proven deletion, and only for a death before the first NEW reply. `pre_create` computes both bounds on every create — reading + the worst case ≤ cap, and billed + the worst case ≤ the hard stop — and the stricter binds",
+      "rung": 0,
+      "spent_closed_pods_usd": 0,
+      "terminate_after_window_seconds": 11000.0,
+      "the_carried_rows_are_not_a_reply": "the out-file carries four rows before the pod exists. A recovery clause that counted rows in the file would refuse the FIRST create of this session",
+      "this_would_be_pod": 1,
+      "verdict": "GO",
+      "what_this_authorises": "**the WHOLE run, all in** — 75 × 97 + 1100 + 1300 = 9675 s. Unlike r1's, this number authorises the whole population: the rate is registered, so rung 0 authorises a create against what the run actually costs and no rung in the middle has to re-decide it",
+      "widest_dead_pod_that_still_fits_seconds": 1325.0,
+      "worst_case_ahead_seconds": 9675.0,
+      "worst_case_ahead_usd_at_the_price_ceiling": 2.15
+    },
+    {
+      "at": "2026-08-22T12:07:30+00:00",
+      "backstop": {
+        "billed_by_closed_pods_seconds": 0,
+        "computed": "2026-08-22T15:10:43+00:00",
+        "given": "2026-08-22T15:10:42Z",
+        "overshoot_seconds": -1.0,
+        "tolerance_seconds": 60.0,
+        "window_seconds": 11000.0
+      },
+      "billed_seconds_closed_pods": 0,
+      "cap_left_usd": 2.498546,
+      "cap_usd_all_in": 2.5,
+      "card": "RTX 4090",
+      "cumulative_billed_seconds": 7.1,
+      "cumulative_seconds_left": 10992.9,
+      "cumulative_spent_usd": 0.001454,
+      "elapsed_on_this_pod_seconds": 7.1,
+      "hard_stop_seconds": 11000.0,
+      "kind": "price",
+      "next_step": "the backstop the platform holds is inside the cumulative stop; poll --gate0",
+      "pod": 1,
+      "pod_id": "dusd807citw8d7",
+      "pod_is_live": true,
+      "pods_opened": 1,
+      "price_ceiling_usd_per_hour": 0.8,
+      "reading_rule": "these are the CLOCK's numbers. The rungs that name a guard reading act on `scripts/runpod_guard.py`'s reading and never on this projection",
+      "recovery": {
+        "billed_by_closed_pods_seconds": 0,
+        "cap_usd_all_in": 2.5,
+        "carried_rows_in_the_file": 4,
+        "fits_the_cap": true,
+        "fits_the_hard_stop": true,
+        "fits_the_re_creation_count": true,
+        "fits_the_recovery_clause": true,
+        "hard_stop_seconds": 11000.0,
+        "next_step": "no pod is open and the whole worst case still fits — create with --terminate-after = create + 11000 s",
+        "pods_opened": 0,
+        "projected_attempt_seconds": 9675.0,
+        "projected_attempt_usd": 2.15,
+        "re_creations_allowed": 1,
+        "recovery_clause": "a KILL closes the session. The rows already bought stand in the out-file as evidence, nothing is deleted and nothing is re-asked, and the remainder is a new registration — never a third pod",
+        "replies_bought_by_this_session": 0,
+        "rule": "ONE re-creation after a proven deletion, and only for a death before the first NEW reply. `pre_create` computes both bounds on every create — reading + the worst case ≤ cap, and billed + the worst case ≤ the hard stop — and the stricter binds",
+        "rung": 0,
+        "spent_closed_pods_usd": 0,
+        "terminate_after_window_seconds": 11000.0,
+        "the_carried_rows_are_not_a_reply": "the out-file carries four rows before the pod exists. A recovery clause that counted rows in the file would refuse the FIRST create of this session",
+        "this_would_be_pod": 1,
+        "verdict": "GO",
+        "widest_dead_pod_that_still_fits_seconds": 1325.0,
+        "worst_case_ahead_seconds": 9675.0,
+        "worst_case_ahead_usd_at_the_price_ceiling": 2.15
+      },
+      "rule": "live price > $0.8/h at create → STOP, no endpoint. The backstop stamp is checked against the cumulative hard stop in the same command",
+      "rung": 1,
+      "spent_closed_pods_usd": 0,
+      "spent_this_pod_usd": 0.001454,
+      "terminate_after_rule": "11000.0 s — cumulative billed seconds, PLATFORM-held. Each pod's `--terminate-after` is its own create plus what the stop has left, and the overshoot it forgives is 60 s",
+      "usd_per_hour": 0.74,
+      "verdict": "GO"
+    },
+    {
+      "at": "2026-08-22T12:07:52+00:00",
+      "billed_seconds_closed_pods": 0,
+      "cap_left_usd": 2.493888,
+      "cap_usd_all_in": 2.5,
+      "cumulative_billed_seconds": 29.7,
+      "cumulative_seconds_left": 10970.3,
+      "cumulative_spent_usd": 0.006112,
+      "elapsed_on_this_pod_seconds": 29.7,
+      "hard_stop_seconds": 11000.0,
+      "kind": "gate0",
+      "next_step": "stage the repo and launch the dev legs",
+      "pod": 1,
+      "pod_id": "dusd807citw8d7",
+      "pod_is_live": true,
+      "pods_opened": 1,
+      "reading_rule": "these are the CLOCK's numbers. The rungs that name a guard reading act on `scripts/runpod_guard.py`'s reading and never on this projection",
+      "rule": "500.0 s — the ssh endpoint has to answer inside this pod's create-elapsed deadline or KILL. Unmoved: six readings run 14.5 → 262.5 and two pods of 2026-08-20 were still unreachable past 230 s",
+      "rung": 2,
+      "seconds_left": 470.3,
+      "spent_closed_pods_usd": 0,
+      "spent_this_pod_usd": 0.006112,
+      "ssh_endpoint_answered": true,
+      "threshold_seconds": 500.0,
+      "usd_per_hour": 0.74,
+      "verdict": "GO"
+    },
+    {
+      "answered": 75,
+      "at": "2026-08-22T12:41:00+00:00",
+      "billed_seconds_closed_pods": 0,
+      "boot_backstop_seconds": 1100.0,
+      "boot_ceiling_armed": true,
+      "cap_left_usd": 2.085369,
+      "cap_usd_all_in": 2.5,
+      "copied_back_this_poll": {
+        "log_lines": 356,
+        "rows": 75
+      },
+      "cumulative_billed_seconds": 2017.1,
+      "cumulative_seconds_left": 8982.9,
+      "cumulative_spent_usd": 0.414631,
+      "elapsed_on_this_pod_seconds": 2017.1,
+      "hard_stop_seconds": 11000.0,
+      "idle_deadline_seconds": 600.0,
+      "idle_seconds": 0.0,
+      "kind": "watch",
+      "launched_at": "2026-08-22T12:08:47+00:00",
+      "legs": [
+        {
+          "answered": 75,
+          "answered_means": "rows THIS pod bought; the carried rows are excluded",
+          "carried_rows_in_the_file": 4,
+          "carried_rows_the_pack_names": 4,
+          "measured_seconds_per_call": 23.760293333333337,
+          "name": "r2",
+          "out": "pass2_signals_r2_v1.jsonl",
+          "rate_source": "measured",
+          "remaining": 0,
+          "seconds_per_call_used": 23.7603,
+          "task": "pass2_thread_gm4_v1",
+          "units": 75
+        }
+      ],
+      "next_step": "every unit is answered — scp the log, then rung 7 on the Mac",
+      "owed": 75,
+      "pod": 1,
+      "pod_id": "dusd807citw8d7",
+      "pod_is_live": true,
+      "pod_log_lines": 356,
+      "pods_opened": 1,
+      "projection_every": "EVERY poll. The registration's «20 calls» is the floor and this is strictly stronger — the computation is local and free",
+      "reading_rule": "these are the CLOCK's numbers. The rungs that name a guard reading act on `scripts/runpod_guard.py`'s reading and never on this projection",
+      "rule": "600.0 s — 600.0 s — no new answered row AND no new pod-log line for this many seconds → KILL. The deadline is measured from the LAST EVENT and never from create, and an event is a RISE: a failed scp can shorten a local file and a drop is never work",
+      "rung": 5,
+      "seconds_before_kill": 600.0,
+      "seconds_since_launch": 1933.1,
+      "spent_closed_pods_usd": 0,
+      "spent_this_pod_usd": 0.414631,
+      "usd_per_hour": 0.74,
+      "verdict": "GO",
+      "watched_seconds": 1915.6
+    },
+    {
+      "anchor": "the runner's own `pass2_signals_r2_launched_at`, copied back by --watch",
+      "at": "2026-08-22T12:41:25+00:00",
+      "backstop_rule": "create-anchored, and it equals the charged pre-generation. Without an anchor there is no GO: a rung whose deadline cannot be demonstrated has not been passed",
+      "backstop_seconds": 1100.0,
+      "billed_seconds_closed_pods": 0,
+      "cap_left_usd": 2.080208,
+      "cap_usd_all_in": 2.5,
+      "cause": null,
+      "cumulative_billed_seconds": 2042.2,
+      "cumulative_seconds_left": 8957.8,
+      "cumulative_spent_usd": 0.419792,
+      "elapsed_on_this_pod_seconds": 2042.2,
+      "first_reply_at_create_elapsed_seconds": 240.6,
+      "first_reply_at_launch_elapsed_seconds": 156.6,
+      "hard_stop_seconds": 11000.0,
+      "kind": "boot",
+      "launched_at": "2026-08-22T12:08:47+00:00",
+      "next_step": "the dev legs are generating — stay inside --watch",
+      "pod": 1,
+      "pod_id": "dusd807citw8d7",
+      "pod_is_live": true,
+      "pods_opened": 1,
+      "reading_rule": "these are the CLOCK's numbers. The rungs that name a guard reading act on `scripts/runpod_guard.py`'s reading and never on this projection",
+      "rule": "450.0 s — the first NEW reply has to land inside this many seconds of the runner's OWN launch stamp, or KILL. The four carried rows are in the out-file before the pod starts and are not a first reply — the gate counts rows that are not carried",
+      "rung": 3,
+      "seconds_left_on_the_anchor": -1508.2,
+      "seconds_left_on_the_backstop": -942.2,
+      "seconds_since_launch": 1958.2,
+      "spent_closed_pods_usd": 0,
+      "spent_this_pod_usd": 0.419792,
+      "threshold_seconds": 450.0,
+      "usd_per_hour": 0.74,
+      "verdict": "GO"
+    },
+    {
+      "at": "2026-08-22T12:41:50+00:00",
+      "billed_seconds": 2061.0,
+      "billed_seconds_closed_pods": 2061.0,
+      "billed_usd": 0.42365,
+      "cap_left_usd": 2.07635,
+      "cap_usd_all_in": 2.5,
+      "cumulative_billed_seconds": 2061.0,
+      "cumulative_seconds_left": 8939.0,
+      "cumulative_spent_usd": 0.42365,
+      "elapsed_on_this_pod_seconds": 0.0,
+      "hard_stop_seconds": 11000.0,
+      "kind": "close",
+      "next_step": "prove the deletion by LISTING, with the volume as the positive control",
+      "outcome": "the 75 owed threads answered, all 79 rows on the Mac with matching digests",
+      "pod": 1,
+      "pod_id": "dusd807citw8d7",
+      "pod_is_live": false,
+      "pods_opened": 1,
+      "reading_rule": "these are the CLOCK's numbers. The rungs that name a guard reading act on `scripts/runpod_guard.py`'s reading and never on this projection",
+      "spent_closed_pods_usd": 0.42365,
+      "spent_this_pod_usd": 0.0,
+      "usd_per_hour": null,
+      "verdict": "GO"
+    },
+    {
+      "answered": 79,
+      "answered_means": "a reply is in the out-file, counted by DISTINCT id. A parse refusal is an ANSWERED row whose reply the parser refused — the two counts are NOT disjoint ([[measure_on_the_rows_the_gate_scores]])",
+      "answered_minimum": 79,
+      "answered_passed": true,
+      "arm": "GO",
+      "arm_rule": "one arm. There is no rung whose verdict could choose another, and a record with a second arm nothing selects would be a bar that reads its own arm off a field no instrument writes",
+      "at": "2026-08-22T12:42:06+00:00",
+      "billed_seconds_closed_pods": 2061.0,
+      "bought_by_this_pod": 75,
+      "budget_rule": "v5b's 4 of 23 through the same parser after the same repairs, carried from r1. r2's tolerant reader removes the whole class of refusal that fired in r1, so the realised rate should come in far under this. The bar is NOT lowered for that: a budget is a transport allowance and tightening it because the parser improved would price a hope",
+      "cap_left_usd": 2.07635,
+      "cap_usd_all_in": 2.5,
+      "carried": [
+        "@VARUS_channel:10613",
+        "@mandziak:3676",
+        "@mandziak:3703",
+        "@matusi_ukr:22272"
+      ],
+      "carried_count": 4,
+      "carried_disagreement": [],
+      "carried_rule": "counted on the row's own `carried_from` field. A disagreement with the pack's list is RED: it means either the seed never reached the pod (and those threads were RE-BOUGHT against the contract) or a row was hand-edited",
+      "carried_the_pack_names": [
+        "@VARUS_channel:10613",
+        "@mandziak:3676",
+        "@mandziak:3703",
+        "@matusi_ukr:22272"
+      ],
+      "cumulative_billed_seconds": 2061.0,
+      "cumulative_seconds_left": 8939.0,
+      "cumulative_spent_usd": 0.42365,
+      "duplicate_ids": [],
+      "elapsed_on_this_pod_seconds": 0.0,
+      "file": "results/pass2_signals_r2_v1.jsonl",
+      "hard_stop_seconds": 11000.0,
+      "ids_the_leg_never_asked": [],
+      "kind": "completeness",
+      "next_step": "GO: the out-file is complete — score it with scripts/score_pass2_signals_r2.py and write the report",
+      "overwritten_is_not_unreadable": "a field this parser CHANGED for its own reasons is counted here and NOT above. The Dv702 census answers «what could the reader not read»; an overwrite the reader made is a different question and one number cannot answer both",
+      "overwritten_report_only_fields": 0,
+      "overwritten_report_only_fields_by_name": {},
+      "owed": 79,
+      "parse_refusal_rows": [],
+      "parse_refusals": 0,
+      "parse_refusals_by_cause": {},
+      "parse_refusals_maximum": 14,
+      "parse_refusals_passed": true,
+      "parsed": 79,
+      "pod": 1,
+      "pod_id": "dusd807citw8d7",
+      "pod_is_live": false,
+      "pods_opened": 1,
+      "reading_rule": "these are the CLOCK's numbers. The rungs that name a guard reading act on `scripts/runpod_guard.py`'s reading and never on this projection",
+      "relabellings_are_outside_the_budget": "a reply that rewrote a pass-1 subject is READABLE. It says something this pass has no authority to say, which is the ADR's line arriving as a measurement, and it is counted by its own cause and reported beside the bar rather than spending a budget that exists to price a transport",
+      "relabellings_refused": 0,
+      "replies_that_never_closed_their_object": 0,
+      "rows_in_the_file": 79,
+      "rule": "answered N / N · every row's `rendering_sha256` equals its pack item's · UNREADABLE replies ≤ 17.4% of N (ceil), relabellings excluded · no unknown id and no duplicate · **and the rows carrying `carried_from` are exactly the four the pack names as carried**. All FIVE, or RED",
+      "rung": 7,
+      "sha_mismatch_ids": [],
+      "sha_mismatches": 0,
+      "sha_mismatches_maximum": 0,
+      "sha_passed": true,
+      "spent_closed_pods_usd": 0.42365,
+      "spent_this_pod_usd": 0.0,
+      "unanswered": 0,
+      "unanswered_ids": [],
+      "unreadable_fields_are_not_refusals": "a report-only field the parser could not read is COUNTED here and the reply is kept. In r1 the first such field refused the whole thread and took bar 1's hardest case with it (Dv702). This number is what that fix measures",
+      "unreadable_replies": 0,
+      "unreadable_replies_maximum": 14,
+      "unreadable_report_only_field_rows": [
+        {
+          "field": "per_comment.note",
+          "id": "@matusi_ukr:22303",
+          "value": "\"\"",
+          "where": "per_comment[0].note",
+          "why": "per_comment.note is not a non-empty string"
+        },
+        {
+          "field": "per_comment.note",
+          "id": "@matusi_ukr:22303",
+          "value": "\"\"",
+          "where": "per_comment[1].note",
+          "why": "per_comment.note is not a non-empty string"
+        },
+        {
+          "field": "per_comment.note",
+          "id": "@VARUS_channel:10348",
+          "value": "\"\"",
+          "where": "per_comment[0].note",
+          "why": "per_comment.note is not a non-empty string"
+        },
+        {
+          "field": "per_comment.note",
+          "id": "@VARUS_channel:10348",
+          "value": "\"\"",
+          "where": "per_comment[1].note",
+          "why": "per_comment.note is not a non-empty string"
+        },
+        {
+          "field": "per_comment.note",
+          "id": "@VARUS_channel:10348",
+          "value": "\"\"",
+          "where": "per_comment[2].note",
+          "why": "per_comment.note is not a non-empty string"
+        },
+        {
+          "field": "per_comment.note",
+          "id": "@VARUS_channel:10348",
+          "value": "\"\"",
+          "where": "per_comment[3].note",
+          "why": "per_comment.note is not a non-empty string"
+        },
+        {
+          "field": "per_comment.note",
+          "id": "@VARUS_channel:10349",
+          "value": "\"\"",
+          "where": "per_comment[0].note",
+          "why": "per_comment.note is not a non-empty string"
+        },
+        {
+          "field": "per_comment.note",
+          "id": "@VARUS_channel:10349",
+          "value": "\"\"",
+          "where": "per_comment[1].note",
+          "why": "per_comment.note is not a non-empty string"
+        },
+        {
+          "field": "per_comment.note",
+          "id": "@VARUS_channel:10349",
+          "value": "\"\"",
+          "where": "per_comment[2].note",
+          "why": "per_comment.note is not a non-empty string"
+        },
+        {
+          "field": "per_comment.note",
+          "id": "@VARUS_channel:10349",
+          "value": "\"\"",
+          "where": "per_comment[3].note",
+          "why": "per_comment.note is not a non-empty string"
+        },
+        {
+          "field": "per_comment.note",
+          "id": "@VARUS_channel:10349",
+          "value": "\"\"",
+          "where": "per_comment[4].note",
+          "why": "per_comment.note is not a non-empty string"
+        },
+        {
+          "field": "per_comment.note",
+          "id": "@VARUS_channel:10349",
+          "value": "\"\"",
+          "where": "per_comment[5].note",
+          "why": "per_comment.note is not a non-empty string"
+        },
+        {
+          "field": "per_comment.note",
+          "id": "@VARUS_channel:10349",
+          "value": "\"\"",
+          "where": "per_comment[6].note",
+          "why": "per_comment.note is not a non-empty string"
+        },
+        {
+          "field": "per_comment.note",
+          "id": "@VARUS_channel:10360",
+          "value": "\"\"",
+          "where": "per_comment[0].note",
+          "why": "per_comment.note is not a non-empty string"
+        },
+        {
+          "field": "per_comment.note",
+          "id": "@VARUS_channel:10360",
+          "value": "\"\"",
+          "where": "per_comment[1].note",
+          "why": "per_comment.note is not a non-empty string"
+        },
+        {
+          "field": "per_comment.note",
+          "id": "@VARUS_channel:10366",
+          "value": "\"\"",
+          "where": "per_comment[0].note",
+          "why": "per_comment.note is not a non-empty string"
+        },
+        {
+          "field": "per_comment.note",
+          "id": "@VARUS_channel:10366",
+          "value": "\"\"",
+          "where": "per_comment[1].note",
+          "why": "per_comment.note is not a non-empty string"
+        },
+        {
+          "field": "per_comment.note",
+          "id": "@VARUS_channel:10366",
+          "value": "\"\"",
+          "where": "per_comment[2].note",
+          "why": "per_comment.note is not a non-empty string"
+        },
+        {
+          "field": "per_comment.note",
+          "id": "@VARUS_channel:10366",
+          "value": "\"\"",
+          "where": "per_comment[3].note",
+          "why": "per_comment.note is not a non-empty string"
+        },
+        {
+          "field": "per_comment.note",
+          "id": "@VARUS_channel:10367",
+          "value": "\"\"",
+          "where": "per_comment[0].note",
+          "why": "per_comment.note is not a non-empty string"
+        },
+        {
+          "field": "per_comment.note",
+          "id": "@VARUS_channel:10367",
+          "value": "\"\"",
+          "where": "per_comment[2].note",
+          "why": "per_comment.note is not a non-empty string"
+        },
+        {
+          "field": "per_comment.note",
+          "id": "@VARUS_channel:10367",
+          "value": "\"\"",
+          "where": "per_comment[3].note",
+          "why": "per_comment.note is not a non-empty string"
+        },
+        {
+          "field": "per_comment.note",
+          "id": "@VARUS_channel:10367",
+          "value": "\"\"",
+          "where": "per_comment[4].note",
+          "why": "per_comment.note is not a non-empty string"
+        },
+        {
+          "field": "per_comment.note",
+          "id": "@VARUS_channel:10367",
+          "value": "\"\"",
+          "where": "per_comment[5].note",
+          "why": "per_comment.note is not a non-empty string"
+        },
+        {
+          "field": "per_comment.note",
+          "id": "@VARUS_channel:10451",
+          "value": "\"\"",
+          "where": "per_comment[0].note",
+          "why": "per_comment.note is not a non-empty string"
+        },
+        {
+          "field": "per_comment.note",
+          "id": "@VARUS_channel:10451",
+          "value": "\"\"",
+          "where": "per_comment[1].note",
+          "why": "per_comment.note is not a non-empty string"
+        },
+        {
+          "field": "per_comment.note",
+          "id": "@VARUS_channel:10455",
+          "value": "\"\"",
+          "where": "per_comment[0].note",
+          "why": "per_comment.note is not a non-empty string"
+        },
+        {
+          "field": "per_comment.note",
+          "id": "@VARUS_channel:10465",
+          "value": "\"\"",
+          "where": "per_comment[0].note",
+          "why": "per_comment.note is not a non-empty string"
+        },
+        {
+          "field": "per_comment.note",
+          "id": "@VARUS_channel:10466",
+          "value": "\"\"",
+          "where": "per_comment[0].note",
+          "why": "per_comment.note is not a non-empty string"
+        },
+        {
+          "field": "per_comment.note",
+          "id": "@VARUS_channel:10466",
+          "value": "\"\"",
+          "where": "per_comment[1].note",
+          "why": "per_comment.note is not a non-empty string"
+        },
+        {
+          "field": "per_comment.note",
+          "id": "@VARUS_channel:10466",
+          "value": "\"\"",
+          "where": "per_comment[2].note",
+          "why": "per_comment.note is not a non-empty string"
+        },
+        {
+          "field": "per_comment.note",
+          "id": "@VARUS_channel:10466",
+          "value": "\"\"",
+          "where": "per_comment[3].note",
+          "why": "per_comment.note is not a non-empty string"
+        },
+        {
+          "field": "per_comment.note",
+          "id": "@VARUS_channel:10470",
+          "value": "\"\"",
+          "where": "per_comment[0].note",
+          "why": "per_comment.note is not a non-empty string"
+        },
+        {
+          "field": "per_comment.note",
+          "id": "@VARUS_channel:10470",
+          "value": "\"\"",
+          "where": "per_comment[1].note",
+          "why": "per_comment.note is not a non-empty string"
+        },
+        {
+          "field": "per_comment.note",
+          "id": "@VARUS_channel:10470",
+          "value": "\"\"",
+          "where": "per_comment[2].note",
+          "why": "per_comment.note is not a non-empty string"
+        },
+        {
+          "field": "per_comment.note",
+          "id": "@VARUS_channel:10470",
+          "value": "\"\"",
+          "where": "per_comment[3].note",
+          "why": "per_comment.note is not a non-empty string"
+        },
+        {
+          "field": "per_comment.note",
+          "id": "@VARUS_channel:10471",
+          "value": "\"\"",
+          "where": "per_comment[1].note",
+          "why": "per_comment.note is not a non-empty string"
+        },
+        {
+          "field": "per_comment.note",
+          "id": "@VARUS_channel:10496",
+          "value": "\"\"",
+          "where": "per_comment[0].note",
+          "why": "per_comment.note is not a non-empty string"
+        },
+        {
+          "field": "per_comment.note",
+          "id": "@VARUS_channel:10525",
+          "value": "\"\"",
+          "where": "per_comment[0].note",
+          "why": "per_comment.note is not a non-empty string"
+        },
+        {
+          "field": "per_comment.note",
+          "id": "@VARUS_channel:10525",
+          "value": "\"\"",
+          "where": "per_comment[1].note",
+          "why": "per_comment.note is not a non-empty string"
+        }
+      ],
+      "unreadable_report_only_fields": 169,
+      "unreadable_report_only_fields_by_name": {
+        "per_comment.note": 169
+      },
+      "usd_per_hour": null,
+      "verdict": "GO"
+    },
+    {
+      "answered": 79,
+      "answered_means": "a reply is in the out-file, counted by DISTINCT id. A parse refusal is an ANSWERED row whose reply the parser refused — the two counts are NOT disjoint ([[measure_on_the_rows_the_gate_scores]])",
+      "answered_minimum": 79,
+      "answered_passed": true,
+      "arm": "GO",
+      "arm_rule": "one arm. There is no rung whose verdict could choose another, and a record with a second arm nothing selects would be a bar that reads its own arm off a field no instrument writes",
+      "at": "2026-08-22T12:42:06+00:00",
+      "billed_seconds_closed_pods": 2061.0,
+      "bought_by_this_pod": 75,
+      "budget_rule": "v5b's 4 of 23 through the same parser after the same repairs, carried from r1. r2's tolerant reader removes the whole class of refusal that fired in r1, so the realised rate should come in far under this. The bar is NOT lowered for that: a budget is a transport allowance and tightening it because the parser improved would price a hope",
+      "cap_left_usd": 2.07635,
+      "cap_usd_all_in": 2.5,
+      "carried": [
+        "@VARUS_channel:10613",
+        "@mandziak:3676",
+        "@mandziak:3703",
+        "@matusi_ukr:22272"
+      ],
+      "carried_count": 4,
+      "carried_disagreement": [],
+      "carried_rule": "counted on the row's own `carried_from` field. A disagreement with the pack's list is RED: it means either the seed never reached the pod (and those threads were RE-BOUGHT against the contract) or a row was hand-edited",
+      "carried_the_pack_names": [
+        "@VARUS_channel:10613",
+        "@mandziak:3676",
+        "@mandziak:3703",
+        "@matusi_ukr:22272"
+      ],
+      "cumulative_billed_seconds": 2061.0,
+      "cumulative_seconds_left": 8939.0,
+      "cumulative_spent_usd": 0.42365,
+      "duplicate_ids": [],
+      "elapsed_on_this_pod_seconds": 0.0,
+      "file": "results/pass2_signals_r2_v1.jsonl",
+      "hard_stop_seconds": 11000.0,
+      "ids_the_leg_never_asked": [],
+      "kind": "completeness",
+      "next_step": "GO: the out-file is complete — score it with scripts/score_pass2_signals_r2.py and write the report",
+      "overwritten_is_not_unreadable": "a field this parser CHANGED for its own reasons is counted here and NOT above. The Dv702 census answers «what could the reader not read»; an overwrite the reader made is a different question and one number cannot answer both",
+      "overwritten_report_only_fields": 0,
+      "overwritten_report_only_fields_by_name": {},
+      "owed": 79,
+      "parse_refusal_rows": [],
+      "parse_refusals": 0,
+      "parse_refusals_by_cause": {},
+      "parse_refusals_maximum": 14,
+      "parse_refusals_passed": true,
+      "parsed": 79,
+      "pod": 1,
+      "pod_id": "dusd807citw8d7",
+      "pod_is_live": false,
+      "pods_opened": 1,
+      "reading_rule": "these are the CLOCK's numbers. The rungs that name a guard reading act on `scripts/runpod_guard.py`'s reading and never on this projection",
+      "relabellings_are_outside_the_budget": "a reply that rewrote a pass-1 subject is READABLE. It says something this pass has no authority to say, which is the ADR's line arriving as a measurement, and it is counted by its own cause and reported beside the bar rather than spending a budget that exists to price a transport",
+      "relabellings_refused": 0,
+      "replies_that_never_closed_their_object": 0,
+      "rows_in_the_file": 79,
+      "rule": "answered N / N · every row's `rendering_sha256` equals its pack item's · UNREADABLE replies ≤ 17.4% of N (ceil), relabellings excluded · no unknown id and no duplicate · **and the rows carrying `carried_from` are exactly the four the pack names as carried**. All FIVE, or RED",
+      "rung": 7,
+      "sha_mismatch_ids": [],
+      "sha_mismatches": 0,
+      "sha_mismatches_maximum": 0,
+      "sha_passed": true,
+      "spent_closed_pods_usd": 0.42365,
+      "spent_this_pod_usd": 0.0,
+      "unanswered": 0,
+      "unanswered_ids": [],
+      "unreadable_fields_are_not_refusals": "a report-only field the parser could not read is COUNTED here and the reply is kept. In r1 the first such field refused the whole thread and took bar 1's hardest case with it (Dv702). This number is what that fix measures",
+      "unreadable_replies": 0,
+      "unreadable_replies_maximum": 14,
+      "unreadable_report_only_field_rows": [
+        {
+          "field": "per_comment.note",
+          "id": "@matusi_ukr:22303",
+          "value": "\"\"",
+          "where": "per_comment[0].note",
+          "why": "per_comment.note is not a non-empty string"
+        },
+        {
+          "field": "per_comment.note",
+          "id": "@matusi_ukr:22303",
+          "value": "\"\"",
+          "where": "per_comment[1].note",
+          "why": "per_comment.note is not a non-empty string"
+        },
+        {
+          "field": "per_comment.note",
+          "id": "@VARUS_channel:10348",
+          "value": "\"\"",
+          "where": "per_comment[0].note",
+          "why": "per_comment.note is not a non-empty string"
+        },
+        {
+          "field": "per_comment.note",
+          "id": "@VARUS_channel:10348",
+          "value": "\"\"",
+          "where": "per_comment[1].note",
+          "why": "per_comment.note is not a non-empty string"
+        },
+        {
+          "field": "per_comment.note",
+          "id": "@VARUS_channel:10348",
+          "value": "\"\"",
+          "where": "per_comment[2].note",
+          "why": "per_comment.note is not a non-empty string"
+        },
+        {
+          "field": "per_comment.note",
+          "id": "@VARUS_channel:10348",
+          "value": "\"\"",
+          "where": "per_comment[3].note",
+          "why": "per_comment.note is not a non-empty string"
+        },
+        {
+          "field": "per_comment.note",
+          "id": "@VARUS_channel:10349",
+          "value": "\"\"",
+          "where": "per_comment[0].note",
+          "why": "per_comment.note is not a non-empty string"
+        },
+        {
+          "field": "per_comment.note",
+          "id": "@VARUS_channel:10349",
+          "value": "\"\"",
+          "where": "per_comment[1].note",
+          "why": "per_comment.note is not a non-empty string"
+        },
+        {
+          "field": "per_comment.note",
+          "id": "@VARUS_channel:10349",
+          "value": "\"\"",
+          "where": "per_comment[2].note",
+          "why": "per_comment.note is not a non-empty string"
+        },
+        {
+          "field": "per_comment.note",
+          "id": "@VARUS_channel:10349",
+          "value": "\"\"",
+          "where": "per_comment[3].note",
+          "why": "per_comment.note is not a non-empty string"
+        },
+        {
+          "field": "per_comment.note",
+          "id": "@VARUS_channel:10349",
+          "value": "\"\"",
+          "where": "per_comment[4].note",
+          "why": "per_comment.note is not a non-empty string"
+        },
+        {
+          "field": "per_comment.note",
+          "id": "@VARUS_channel:10349",
+          "value": "\"\"",
+          "where": "per_comment[5].note",
+          "why": "per_comment.note is not a non-empty string"
+        },
+        {
+          "field": "per_comment.note",
+          "id": "@VARUS_channel:10349",
+          "value": "\"\"",
+          "where": "per_comment[6].note",
+          "why": "per_comment.note is not a non-empty string"
+        },
+        {
+          "field": "per_comment.note",
+          "id": "@VARUS_channel:10360",
+          "value": "\"\"",
+          "where": "per_comment[0].note",
+          "why": "per_comment.note is not a non-empty string"
+        },
+        {
+          "field": "per_comment.note",
+          "id": "@VARUS_channel:10360",
+          "value": "\"\"",
+          "where": "per_comment[1].note",
+          "why": "per_comment.note is not a non-empty string"
+        },
+        {
+          "field": "per_comment.note",
+          "id": "@VARUS_channel:10366",
+          "value": "\"\"",
+          "where": "per_comment[0].note",
+          "why": "per_comment.note is not a non-empty string"
+        },
+        {
+          "field": "per_comment.note",
+          "id": "@VARUS_channel:10366",
+          "value": "\"\"",
+          "where": "per_comment[1].note",
+          "why": "per_comment.note is not a non-empty string"
+        },
+        {
+          "field": "per_comment.note",
+          "id": "@VARUS_channel:10366",
+          "value": "\"\"",
+          "where": "per_comment[2].note",
+          "why": "per_comment.note is not a non-empty string"
+        },
+        {
+          "field": "per_comment.note",
+          "id": "@VARUS_channel:10366",
+          "value": "\"\"",
+          "where": "per_comment[3].note",
+          "why": "per_comment.note is not a non-empty string"
+        },
+        {
+          "field": "per_comment.note",
+          "id": "@VARUS_channel:10367",
+          "value": "\"\"",
+          "where": "per_comment[0].note",
+          "why": "per_comment.note is not a non-empty string"
+        },
+        {
+          "field": "per_comment.note",
+          "id": "@VARUS_channel:10367",
+          "value": "\"\"",
+          "where": "per_comment[2].note",
+          "why": "per_comment.note is not a non-empty string"
+        },
+        {
+          "field": "per_comment.note",
+          "id": "@VARUS_channel:10367",
+          "value": "\"\"",
+          "where": "per_comment[3].note",
+          "why": "per_comment.note is not a non-empty string"
+        },
+        {
+          "field": "per_comment.note",
+          "id": "@VARUS_channel:10367",
+          "value": "\"\"",
+          "where": "per_comment[4].note",
+          "why": "per_comment.note is not a non-empty string"
+        },
+        {
+          "field": "per_comment.note",
+          "id": "@VARUS_channel:10367",
+          "value": "\"\"",
+          "where": "per_comment[5].note",
+          "why": "per_comment.note is not a non-empty string"
+        },
+        {
+          "field": "per_comment.note",
+          "id": "@VARUS_channel:10451",
+          "value": "\"\"",
+          "where": "per_comment[0].note",
+          "why": "per_comment.note is not a non-empty string"
+        },
+        {
+          "field": "per_comment.note",
+          "id": "@VARUS_channel:10451",
+          "value": "\"\"",
+          "where": "per_comment[1].note",
+          "why": "per_comment.note is not a non-empty string"
+        },
+        {
+          "field": "per_comment.note",
+          "id": "@VARUS_channel:10455",
+          "value": "\"\"",
+          "where": "per_comment[0].note",
+          "why": "per_comment.note is not a non-empty string"
+        },
+        {
+          "field": "per_comment.note",
+          "id": "@VARUS_channel:10465",
+          "value": "\"\"",
+          "where": "per_comment[0].note",
+          "why": "per_comment.note is not a non-empty string"
+        },
+        {
+          "field": "per_comment.note",
+          "id": "@VARUS_channel:10466",
+          "value": "\"\"",
+          "where": "per_comment[0].note",
+          "why": "per_comment.note is not a non-empty string"
+        },
+        {
+          "field": "per_comment.note",
+          "id": "@VARUS_channel:10466",
+          "value": "\"\"",
+          "where": "per_comment[1].note",
+          "why": "per_comment.note is not a non-empty string"
+        },
+        {
+          "field": "per_comment.note",
+          "id": "@VARUS_channel:10466",
+          "value": "\"\"",
+          "where": "per_comment[2].note",
+          "why": "per_comment.note is not a non-empty string"
+        },
+        {
+          "field": "per_comment.note",
+          "id": "@VARUS_channel:10466",
+          "value": "\"\"",
+          "where": "per_comment[3].note",
+          "why": "per_comment.note is not a non-empty string"
+        },
+        {
+          "field": "per_comment.note",
+          "id": "@VARUS_channel:10470",
+          "value": "\"\"",
+          "where": "per_comment[0].note",
+          "why": "per_comment.note is not a non-empty string"
+        },
+        {
+          "field": "per_comment.note",
+          "id": "@VARUS_channel:10470",
+          "value": "\"\"",
+          "where": "per_comment[1].note",
+          "why": "per_comment.note is not a non-empty string"
+        },
+        {
+          "field": "per_comment.note",
+          "id": "@VARUS_channel:10470",
+          "value": "\"\"",
+          "where": "per_comment[2].note",
+          "why": "per_comment.note is not a non-empty string"
+        },
+        {
+          "field": "per_comment.note",
+          "id": "@VARUS_channel:10470",
+          "value": "\"\"",
+          "where": "per_comment[3].note",
+          "why": "per_comment.note is not a non-empty string"
+        },
+        {
+          "field": "per_comment.note",
+          "id": "@VARUS_channel:10471",
+          "value": "\"\"",
+          "where": "per_comment[1].note",
+          "why": "per_comment.note is not a non-empty string"
+        },
+        {
+          "field": "per_comment.note",
+          "id": "@VARUS_channel:10496",
+          "value": "\"\"",
+          "where": "per_comment[0].note",
+          "why": "per_comment.note is not a non-empty string"
+        },
+        {
+          "field": "per_comment.note",
+          "id": "@VARUS_channel:10525",
+          "value": "\"\"",
+          "where": "per_comment[0].note",
+          "why": "per_comment.note is not a non-empty string"
+        },
+        {
+          "field": "per_comment.note",
+          "id": "@VARUS_channel:10525",
+          "value": "\"\"",
+          "where": "per_comment[1].note",
+          "why": "per_comment.note is not a non-empty string"
+        }
+      ],
+      "unreadable_report_only_fields": 169,
+      "unreadable_report_only_fields_by_name": {
+        "per_comment.note": 169
+      },
+      "usd_per_hour": null,
+      "verdict": "GO"
+    }
+  ],
+  "latest": {
+    "kind": "completeness",
+    "pod": 1,
+    "verdict": "GO"
+  },
+  "pods": [
+    {
+      "billed_seconds": 2061.0,
+      "billed_usd": 0.42365,
+      "card": "RTX 4090",
+      "created_at": "2026-08-22T12:07:23+00:00",
+      "deleted_at": "2026-08-22T12:41:44+00:00",
+      "launched_at": "2026-08-22T12:08:47+00:00",
+      "outcome": "the 75 owed threads answered, all 79 rows on the Mac with matching digests",
+      "pod_id": "dusd807citw8d7",
+      "terminate_after": "2026-08-22T15:10:42Z",
+      "terminate_after_computed": "2026-08-22T15:10:43+00:00",
+      "usd_per_hour": 0.74
+    }
+  ]
+}

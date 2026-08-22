@@ -383,6 +383,36 @@
       "billing_since_usd": 7.421951,
       "billing_read": "read",
       "note": "pass2-signals-r2, D0' anchor before any pod"
+    },
+    {
+      "at": "2026-08-22T12:02:17+00:00",
+      "balance": 15.0683659386,
+      "spent_usd": 7.4414,
+      "remaining_usd": 12.5586,
+      "balance_delta_usd": 7.4414,
+      "billing_since_usd": 7.441396,
+      "billing_read": "read",
+      "note": "pass2-signals-r2, rung 0 GO, before the create"
+    },
+    {
+      "at": "2026-08-22T12:42:00+00:00",
+      "balance": 14.661899472,
+      "spent_usd": 7.8479,
+      "remaining_usd": 12.1521,
+      "balance_delta_usd": 7.8479,
+      "billing_since_usd": 7.441396,
+      "billing_read": "read",
+      "note": "pass2-signals-r2, pod deleted, 75 of 75 answered"
+    },
+    {
+      "at": "2026-08-22T12:43:42+00:00",
+      "balance": 14.661899472,
+      "spent_usd": 7.8479,
+      "remaining_usd": 12.1521,
+      "balance_delta_usd": 7.8479,
+      "billing_since_usd": 7.441396,
+      "billing_read": "read",
+      "note": "pass2-signals-r2, money reading after rung 7 GO"
     }
   ]
 }
