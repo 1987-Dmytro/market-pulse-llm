@@ -149,7 +149,7 @@
   "produced_by": {
     "note": "this file VALIDATES the rows; it does not write them",
     "script": "scripts/build_lora_c_synthetic.py",
-    "sha256": "8425b13b8c8b13cfe05d4cc7d031659fbcca9da63e8fa86b2aa0f88b7a6b0139"
+    "sha256": "2822e73fb99eaee5bdc81ac672f776f3e898cc579f11722de78538fb73243314"
   },
   "register": {
     "alphabet": {
@@ -258,5 +258,34 @@
     false
   ],
   "rows": 160,
+  "self_flagged": {
+    "action_taken": "NONE — review gate 2 is a STOP and the verdict decides",
+    "codebook_clause": "«A comment about the retailer's service, stock, prices or stores is `сеть_ритейлер`» — prompts.PASS1_CODEBOOK_CLAUSE_V2, carried into the labeller's codebook",
+    "concern": "labelled `не_наш_рынок` because the THING is non-dairy, while the comment makes a stock / price / assortment claim about a NAMED chain — which the codebook rules `сеть_ритейлер`",
+    "n": 15,
+    "of": 160,
+    "rows": [
+      "synthetic:brand_vs_retailer:25",
+      "synthetic:brand_vs_retailer:27",
+      "synthetic:brand_vs_retailer:28",
+      "synthetic:brand_vs_retailer:29",
+      "synthetic:brand_vs_retailer:30",
+      "synthetic:brand_vs_retailer:31",
+      "synthetic:brand_vs_retailer:32",
+      "synthetic:retailer_non_dairy:9",
+      "synthetic:retailer_non_dairy:10",
+      "synthetic:retailer_non_dairy:11",
+      "synthetic:retailer_non_dairy:12",
+      "synthetic:retailer_non_dairy:13",
+      "synthetic:retailer_non_dairy:14",
+      "synthetic:retailer_non_dairy:15",
+      "synthetic:retailer_non_dairy:16"
+    ],
+    "the_team_leads_own_labels_on_this_shape": {
+      "@VARUS_channel:10367:20979": "сеть_ритейлер — «Коли буде знижка?»",
+      "@VARUS_channel:10470:21236": "сеть_ритейлер — «кубок ковбасний … там сказали, що нема»",
+      "@VARUS_channel:10470:21240": "сеть_ритейлер — «І в нас теж такого нема»"
+    }
+  },
   "sha256": "9b049bc2046360a811169f45a669f802a8676c643aa9eb647563b636c20c195d"
 }

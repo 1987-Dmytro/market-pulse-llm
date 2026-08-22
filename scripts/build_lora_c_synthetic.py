@@ -79,6 +79,16 @@ CLASSES = (
     ),
 )
 EMOJI = re.compile("[\U0001f300-\U0001faff☀-➿←-⇿️]")
+
+RETAILER_NAMED = re.compile(r"варус|сільпо|сильпо|атб|фора|новус|еко маркет|эко маркет", re.I)
+RETAILER_CLAIM = re.compile(
+    r"закінчив|нема\b|немає|завіз|завез|продає|продаёт|по акці|акці|дешевш|дорожч|дороже"
+    r"|дешевле|тримає ціну|є \b",
+    re.I,
+)
+"""The shape the codebook rules `сеть_ритейлер`: «A comment about the retailer's service, stock,
+prices or stores is `сеть_ритейлер`». Named here so a synthetic row that CONTRADICTS the codebook
+can be counted rather than argued about."""
 UA = set("іїєґІЇЄҐ")
 RU = set("ыэъёЫЭЪЁ")
 
@@ -110,6 +120,52 @@ def register(texts: list[str]) -> dict:
             100 * len([one for one in texts if one[:1].islower()]) / len(texts)
         ),
         "question_pct": round(100 * len([one for one in texts if "?" in one]) / len(texts)),
+    }
+
+
+def self_flagged(written: list[dict]) -> dict:
+    """Synthetic rows this file believes may be labelled AGAINST the codebook — a finding, not a fix.
+
+    `build_pass1_label_pack.codebook()` rules: «A comment about the retailer's service, stock, prices
+    or stores is `сеть_ритейлер`». Fifteen of these rows name a chain AND make a stock, price or
+    assortment claim about it, and are labelled `не_наш_рынок` because the THING is non-dairy. The
+    team lead's own labels on exactly that shape say otherwise —
+    `@VARUS_channel:10470:21236` («кубок ковбасний … там сказали, що нема»),
+    `@VARUS_channel:10470:21240` and `@VARUS_channel:10367:20979` are all `сеть_ритейлер`, and the
+    first of those is a NON-DAIRY item out of stock at a chain.
+
+    **Nothing is rewritten here.** Review gate 2 is a STOP and the verdict names what changes; a
+    draft that quietly corrected itself after its own sample path was reported would hand the team
+    lead a file different from the one they were sent. So the rows stand and the concern is carried
+    beside them ([[an_exclusion_rule_built_from_failures]] read the other way: the executor may not
+    grade its own sample — SPEC §10).
+    """
+    hits = [
+        one
+        for one in written
+        if one["subject_type"] == "не_наш_рынок"
+        and RETAILER_NAMED.search(one["text"])
+        and RETAILER_CLAIM.search(one["text"])
+    ]
+    return {
+        "concern": (
+            "labelled `не_наш_рынок` because the THING is non-dairy, while the comment makes a"
+            " stock / price / assortment claim about a NAMED chain — which the codebook rules"
+            " `сеть_ритейлер`"
+        ),
+        "codebook_clause": (
+            "«A comment about the retailer's service, stock, prices or stores is `сеть_ритейлер`»"
+            " — prompts.PASS1_CODEBOOK_CLAUSE_V2, carried into the labeller's codebook"
+        ),
+        "the_team_leads_own_labels_on_this_shape": {
+            "@VARUS_channel:10470:21236": "сеть_ритейлер — «кубок ковбасний … там сказали, що нема»",
+            "@VARUS_channel:10470:21240": "сеть_ритейлер — «І в нас теж такого нема»",
+            "@VARUS_channel:10367:20979": "сеть_ритейлер — «Коли буде знижка?»",
+        },
+        "rows": [f"{one['thread']}:{one['msg_id']}" for one in hits],
+        "n": len(hits),
+        "of": len(written),
+        "action_taken": "NONE — review gate 2 is a STOP and the verdict decides",
     }
 
 
@@ -337,6 +393,7 @@ def build() -> dict:
                 ),
             },
         },
+        "self_flagged": self_flagged(written),
         "isolation": {
             "rule": (
                 "a synthetic row is NEVER in the neighbour pool, never in an eval set and never in"
@@ -366,6 +423,9 @@ def sample(record: dict) -> str:
         f"**{record['rows']} rows**, written by Claude Code, `reviewed: false` on every one until"
         " the verdict lands. The verdict names rows to **drop** or **rewrite**; only those are"
         " acted on, and the counts go into `docs/reports/lora-c-prep.md`.",
+        "",
+        "> ⚠️ **THE EXECUTOR FLAGS ITS OWN ROWS — see «What this file believes may be wrong»"
+        " below before you read the tables.**",
         "",
         "**Arm B is arm A's rows plus these.** They are never in the neighbour pool, never in an"
         f" eval set and never in arm A — the `{PREFIX}` thread prefix is what makes that checkable.",
@@ -416,6 +476,32 @@ def sample(record: dict) -> str:
         f" *Length:* {record['register']['not_matched']['length']}"
         f" *Questions:* {record['register']['not_matched']['question_pct']}."
         f" *Terminal punctuation:* {record['register']['not_matched']['no_terminal_punctuation_pct']}.",
+        "",
+    ]
+    flag = record["self_flagged"]
+    lines += [
+        "## What this file believes may be wrong — the executor flagging its own sample",
+        "",
+        f"**{flag['n']} of {flag['of']} rows.** {flag['concern']}.",
+        "",
+        f"The clause: {flag['codebook_clause']}.",
+        "",
+        "**And the team lead's own labels on exactly that shape say `сеть_ритейлер`:**",
+        "",
+        *[
+            f"- `{key}` — {value}"
+            for key, value in flag["the_team_leads_own_labels_on_this_shape"].items()
+        ],
+        "",
+        "The first of those is a NON-DAIRY item out of stock at a chain and it is `сеть_ритейлер`,"
+        " which is the case these rows are labelled against. If the team lead agrees, the verdict"
+        " should name the pattern and these rows are the ones it covers:",
+        "",
+        *[f"- `{one}`" for one in flag["rows"]],
+        "",
+        f"**Nothing was rewritten.** {flag['action_taken']}. The executor does not grade its own"
+        " sample (SPEC §10), and a draft that quietly corrected itself after its sample path was"
+        " reported would hand you a file different from the one you were sent.",
         "",
     ]
     for name, what in CLASSES:

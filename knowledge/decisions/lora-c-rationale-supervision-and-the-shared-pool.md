@@ -5,7 +5,7 @@ status: accepted
 tags: [decision, phase6, pass1, lora, prompt, registration, review-gate, reachability]
 ---
 
-# Rationale supervision, one shared neighbour pool — and three things the design cannot reach
+# Rationale supervision, one shared neighbour pool — and four things the design cannot reach
 
 `lora-c-prep` executed at $0 on 2026-08-22. Everything below is measured; nothing here was bought.
 The two team-lead review gates are **OPEN** and the registration is a **DRAFT**.
@@ -80,7 +80,7 @@ filtered row, returns **bar 1 = 4 of 5 and bar 3 = 2 signals** — exactly the r
 `results/pass2_signals_r2_verdict.json` holds. Both bars read only reference threads, so the cut may
 not move them, and that is now a measurement rather than an argument.
 
-## The three things this design cannot reach — and they are rulings, not fixes
+## The four things this design cannot reach — and they are rulings, not fixes
 
 **1. The smallest class has no fifth neighbour.** The pool holds ONE `молочный_бренд` row: the 650
 hold two and the holdout took the other. `build_pass1_fewshot_packs.neighbours` refuses a query
@@ -98,7 +98,15 @@ ratio this repo has measured** — at the MINIMUM observed tokens-per-character 
 needs 1 419 of the pod's own count. Both the Mac-side drop rule and `train_qlora.encode_pass1`'s
 refusal fire, on every row.
 
-**3. The pinned trainer refuses a v3 dataset by name.** Two guards, driven at $0 and quoted in the
+**3. Arm A has no `молочный_бренд` target at all.** The pool's single row of that class is one of
+the nine that cannot be rendered, so arm A's 506 rows carry **zero** targets of it and
+`train_qlora.class_weights` returns four classes, not five — `sampling_order` can never draw one.
+Arm B has **32** (8 per error class) at a weight of 4.1625. **Bar 1 = 5 of 5 turns on relabelling
+msg `580124` to `молочный_бренд`**, so the bar is near-unreachable for arm A and reachable for arm
+B, by the same arithmetic. The bar is not lowered — it is registered per arm at 5 of 5 — and this
+block is why a RED on arm A would say something different from a RED on arm B.
+
+**4. The pinned trainer refuses a v3 dataset by name.** Two guards, driven at $0 and quoted in the
 registration: `load_sft`'s task-name check and `build_pass1`'s registered-dataset-sha check. What
 PASSES is named beside them — the `learn_chars` guard and the prompt-sha equality both do, so the
 `+1` END-offset boundary survived being prefixed with a rationale. `train_qlora.py` is pinned live
@@ -131,6 +139,15 @@ The step count uses the arithmetic the trainer actually runs — `floor(ceil(n/m
 Until they do: no rationale is rewritten, no synthetic row is dropped, `rationale_reviewed` and
 `reviewed` stay `false` on every row, and the registration stays a draft.
 
+**And the executor flags 15 of its own 160 synthetic rows.** They name a chain and make a stock,
+price or assortment claim about it — «У варусі корм для котів закінчився», «В АТБ шампунь дешевший
+ніж в аптеці» — and are labelled `не_наш_рынок` because the THING is non-dairy. The codebook rules
+that shape `сеть_ритейлер`, and the team lead's own labels agree on three real rows of it, one of
+which is a NON-DAIRY item out of stock at a chain (`@VARUS_channel:10470:21236`). **Nothing was
+rewritten** — the gate is a STOP and the executor does not grade its own sample (SPEC §10) — and
+`docs/reviews/lora-c-synthetic.md` now opens with the concern, the clause, the precedents and the
+fifteen ids, computed by the producer rather than typed.
+
 **And the boundary draw found the instrument before it found the rows.** The shipped
 registry-and-watchlist matchers find **zero** retailer or brand mentions across all 466 non-«our»
 rows: `config/registry.yaml` spells the chain `Varus` in Latin and the comments write «Варус»,
@@ -146,8 +163,12 @@ occurs in the comment. Nine rows, and they are the four error classes exactly �
 
 - **Nothing is trained and nothing is measured about v3's quality.** Every number here is about the
   DATA and the instruments. The four-column table does not exist yet.
-- **Synthetic does not repair the `молочный_бренд` positive side.** With zero real positives
-  rendered, arm B's 40 non-dairy-«brand» rows teach only the negative of that class. Named in the
-  registration's ablation block so the reading is not made later by someone counting rows.
+- **Synthetic IS the `молочный_бренд` positive side, and only arm B has it.** The synthetic rows
+  carry **32** targets of that class — 8 in each of the four error classes — while arm A's 506 rows
+  carry **zero**, and `train_qlora.class_weights` does not even contain the key for arm A, so
+  `sampling_order` can never draw one. **Bar 1 = 5 of 5 turns on relabelling msg `580124` to
+  `молочный_бренд`**, so the bar is near-unreachable for arm A and reachable for arm B by the same
+  arithmetic. Registered as a fourth reachability block; the bar is NOT lowered for arm A, and this
+  is why a RED there would mean something different from a RED on arm B.
 - **The bar of ≥ 64 on holdout is reachable, and its maximum is 98 and not 100** — the two
   unrenderable holdout rows.

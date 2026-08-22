@@ -4,6 +4,8 @@
 
 **160 rows**, written by Claude Code, `reviewed: false` on every one until the verdict lands. The verdict names rows to **drop** or **rewrite**; only those are acted on, and the counts go into `docs/reports/lora-c-prep.md`.
 
+> ⚠️ **THE EXECUTOR FLAGS ITS OWN ROWS — see «What this file believes may be wrong» below before you read the tables.**
+
 **Arm B is arm A's rows plus these.** They are never in the neighbour pool, never in an eval set and never in arm A — the `synthetic:` thread prefix is what makes that checkable.
 
 ## What the instruments say before you read a row
@@ -25,6 +27,38 @@
 | carries a question mark % | 13 | 8 |
 
 > **Four of the six axes do NOT match at ±3, and none of them is smoothed.** *Length:* median 7.0 words against the window's 11, and max 20 against 192. DELIBERATE: the contract asks for «short, colloquial» rows, and the window's tail is recipes and advice posts of 40-190 words — writing those synthetically would be a different instrument, not a longer version of this one. Named rather than smoothed. `chars_median` 40 against 68 is the same fact in the other unit *Questions:* 8 % against 13 %. Under-represented because three of the four error classes are statements about a subject and only one is naturally a question. *Terminal punctuation:* 54 % against 59 %. Within five points and set by a seeded pass, not by hand.
+
+## What this file believes may be wrong — the executor flagging its own sample
+
+**15 of 160 rows.** labelled `не_наш_рынок` because the THING is non-dairy, while the comment makes a stock / price / assortment claim about a NAMED chain — which the codebook rules `сеть_ритейлер`.
+
+The clause: «A comment about the retailer's service, stock, prices or stores is `сеть_ритейлер`» — prompts.PASS1_CODEBOOK_CLAUSE_V2, carried into the labeller's codebook.
+
+**And the team lead's own labels on exactly that shape say `сеть_ритейлер`:**
+
+- `@VARUS_channel:10470:21236` — сеть_ритейлер — «кубок ковбасний … там сказали, що нема»
+- `@VARUS_channel:10470:21240` — сеть_ритейлер — «І в нас теж такого нема»
+- `@VARUS_channel:10367:20979` — сеть_ритейлер — «Коли буде знижка?»
+
+The first of those is a NON-DAIRY item out of stock at a chain and it is `сеть_ритейлер`, which is the case these rows are labelled against. If the team lead agrees, the verdict should name the pattern and these rows are the ones it covers:
+
+- `synthetic:brand_vs_retailer:25`
+- `synthetic:brand_vs_retailer:27`
+- `synthetic:brand_vs_retailer:28`
+- `synthetic:brand_vs_retailer:29`
+- `synthetic:brand_vs_retailer:30`
+- `synthetic:brand_vs_retailer:31`
+- `synthetic:brand_vs_retailer:32`
+- `synthetic:retailer_non_dairy:9`
+- `synthetic:retailer_non_dairy:10`
+- `synthetic:retailer_non_dairy:11`
+- `synthetic:retailer_non_dairy:12`
+- `synthetic:retailer_non_dairy:13`
+- `synthetic:retailer_non_dairy:14`
+- `synthetic:retailer_non_dairy:15`
+- `synthetic:retailer_non_dairy:16`
+
+**Nothing was rewritten.** NONE — review gate 2 is a STOP and the verdict decides. The executor does not grade its own sample (SPEC §10), and a draft that quietly corrected itself after its sample path was reported would hand you a file different from the one you were sent.
 
 ## `brand_vs_retailer` — 40 rows
 

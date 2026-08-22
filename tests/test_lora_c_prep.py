@@ -485,16 +485,53 @@ def test_the_registration_is_a_draft_while_the_verdicts_are_absent():
             assert cell["reviewed"] == [False]
 
 
-def test_the_three_reachability_blocks_are_registered():
+def test_the_four_reachability_blocks_are_registered():
+    """Four blocks, and each carries either its own remedies or a pointer to the block that does."""
     registration = json.loads(PREREG.read_text(encoding="utf-8"))
     reach = registration["reachability"]
     assert set(reach) == {
         "the_smallest_class_has_no_fifth_neighbour",
         "no_row_fits_max_seq_len",
+        "arm_a_has_no_молочный_бренд_target",
         "the_pinned_trainer_refuses_a_v3_dataset",
     }
-    for cell in reach.values():
-        assert any("remed" in key for key in cell)
+    for name, cell in reach.items():
+        assert any("remed" in key for key in cell), name
+
+
+def test_arm_a_has_no_dairy_brand_target_and_arm_b_has_thirty_two():
+    """The fourth block, re-derived from the two datasets — and from the sampler's own table.
+
+    A class absent from `train_qlora.class_weights` cannot be drawn by `sampling_order` at all, so
+    «arm A has zero targets» is a statement about what the run CAN emit and not only about a count.
+    """
+    train = jsonl(TRAIN)
+    synthetic = jsonl(SYNTHETIC)
+    assert not [one for one in train if one["subject_type"] == "молочный_бренд"]
+    assert len([one for one in synthetic if one["subject_type"] == "молочный_бренд"]) == 32
+    assert "молочный_бренд" not in trainer.class_weights(train)
+    assert "молочный_бренд" in trainer.class_weights(
+        train + [{"subject_type": one["subject_type"]} for one in synthetic]
+    )
+    block = json.loads(PREREG.read_text(encoding="utf-8"))["reachability"][
+        "arm_a_has_no_молочный_бренд_target"
+    ]
+    assert block["arm_a_targets"] == 0
+    assert block["arm_b_targets"] == 32
+
+
+def test_the_synthetic_sample_carries_the_executors_own_concern():
+    """The 15 rows flagged against the codebook reach the gate-2 file, and none was rewritten."""
+    record = json.loads(
+        (REPO_ROOT / "results" / "lora_c_synthetic.json").read_text(encoding="utf-8")
+    )
+    flag = record["self_flagged"]
+    assert flag["n"] == len(flag["rows"]) > 0
+    assert flag["action_taken"].startswith("NONE")
+    text = SAMPLE_2.read_text(encoding="utf-8")
+    assert "What this file believes may be wrong" in text
+    for one in flag["rows"]:
+        assert one in text
 
 
 # --- the two review gates -------------------------------------------------------------------------

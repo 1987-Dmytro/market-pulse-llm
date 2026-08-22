@@ -141,7 +141,7 @@
       "train_rows": 506
     },
     "arm_b": {
-      "ablation": "arm A's rows are a SUBSET of arm B's, so the one variable is the synthetic top-up — the same shape lora-b used for its r2 top-up. And the asymmetry is named: with zero real молочный_бренд rows rendered, arm B's 40 non-dairy-«brand» rows teach only the NEGATIVE of that class. Synthetic does not repair the positive side",
+      "ablation": "arm A's rows are a SUBSET of arm B's, so the one variable is the synthetic top-up — the same shape lora-b used for its r2 top-up. And the asymmetry is the OPPOSITE of what it looks like: the synthetic rows carry 32 молочный_бренд targets (8 in each of the four error classes), so synthetic is the ONLY positive supervision that class gets anywhere in this line. Arm A has none — see reachability.arm_a_has_no_молочный_бренд_target",
       "adapter": "QLoRA on arm A's rows PLUS the synthetic rows",
       "bar": "the registered three, all-or-RED",
       "eval_calls": 198,
@@ -373,10 +373,20 @@
   },
   "producer": {
     "script": "scripts/write_lora_c_prereg.py",
-    "sha256": "d82ee23ba5c0d3b0d7b8af75f74b43e848b386e644d056699542b80e1025a001"
+    "sha256": "9fd2fc0beefa9a725e8a1cd0117d2d9ac98d3a22fd0abae6286f9972269ae174"
   },
   "question": "does rationale-supervised QLoRA on pass 1 fix the subject-attribution errors pass 2 measured — brand ↔ retailer, a retailer in a non-dairy context, non-dairy «brands», and mention-vs-about — WITHOUT learning the prior the way line B did",
   "reachability": {
+    "arm_a_has_no_молочный_бренд_target": {
+      "arm_a_class_weights": "null · категория_личное · не_наш_рынок · сеть_ритейлер — FOUR",
+      "arm_a_targets": 0,
+      "arm_b_rule": "8 in each of the four error classes, by the ±2 balance rule",
+      "arm_b_targets": 32,
+      "arm_b_weight_on_the_class": 4.1625,
+      "cause": "the pool's single молочный_бренд row is one of the nine that cannot be rendered (see the_smallest_class_has_no_fifth_neighbour), so arm A's 506 rows carry ZERO targets of that class and `train_qlora.class_weights` does not even contain the key — `sampling_order` can never draw one",
+      "reported_not_remedied": "the remedies are the ones listed under the_smallest_class_has_no_fifth_neighbour — this is that fact read forward into the bars, not a second decision",
+      "what_it_does_to_bar_1": "bar 1 = 5 of 5 turns on F2a, and F2a turns on relabelling msg 580124 from `сеть_ритейлер` to `молочный_бренд` — the reading the gold gives it. An adapter with no training target carrying that label cannot learn to emit it, so **bar 1 is near-unreachable for arm A and reachable for arm B**, by the same arithmetic. The bar is NOT lowered for arm A: it is registered per arm at 5 of 5 and this block is why a RED there would say something different from a RED on arm B ([[an_absolute_bar_needs_a_reachability_state]])"
+    },
     "no_row_fits_max_seq_len": {
       "by_ratio": {
         "median_observed": {

@@ -11,10 +11,11 @@ the cap the ruling set, and — for every rate — the condition that would inva
 `pass1-window` is what that rule is made of: a number without a run behind it reads as a
 measurement forever after ([[projected_rate_versus_measured_rate]]).
 
-**Three reachability blocks, because three things are unreachable as registered** — the smallest
-class has no fifth neighbour, no v3 row fits the frozen `max_seq_len`, and the pinned trainer
-refuses a v3 dataset by name. Each carries its arithmetic and its remedies, and takes none of them:
-they are the operator's ([[a_registered_bar_may_have_no_producer]]).
+**Four reachability blocks, because four things are unreachable as registered** — the smallest class
+has no fifth neighbour; no v3 row fits the frozen `max_seq_len`; ARM A has no `молочный_бренд`
+target at all, which is what bar 1 turns on; and the pinned trainer refuses a v3 dataset by name.
+Each carries its arithmetic and its remedies, and takes none of them: they are the operator's
+([[a_registered_bar_may_have_no_producer]], [[an_absolute_bar_needs_a_reachability_state]]).
 
     PYTHONPATH=src python3.11 scripts/write_lora_c_prereg.py
 """
@@ -148,9 +149,11 @@ def legs(eval_pack: dict, train_rows: int, synthetic_rows: int) -> dict:
             "bar": "the registered three, all-or-RED",
             "ablation": (
                 "arm A's rows are a SUBSET of arm B's, so the one variable is the synthetic top-up"
-                " — the same shape lora-b used for its r2 top-up. And the asymmetry is named: with"
-                " zero real молочный_бренд rows rendered, arm B's 40 non-dairy-«brand» rows teach"
-                " only the NEGATIVE of that class. Synthetic does not repair the positive side"
+                " — the same shape lora-b used for its r2 top-up. And the asymmetry is the OPPOSITE"
+                " of what it looks like: the synthetic rows carry 32 молочный_бренд targets (8 in"
+                " each of the four error classes), so synthetic is the ONLY positive supervision"
+                " that class gets anywhere in this line. Arm A has none — see"
+                " reachability.arm_a_has_no_молочный_бренд_target"
             ),
         },
     }
@@ -394,6 +397,32 @@ def reachability(data_record: dict) -> dict:
                 f" {tokens['by_ratio']['min_observed']['pods_own_count_of_the_shortest']} against"
                 f" {tokens['max_seq_len']}. Both the Mac-side drop rule and the pod-side refusal"
                 " fire, on every row"
+            ),
+        },
+        "arm_a_has_no_молочный_бренд_target": {
+            "cause": (
+                "the pool's single молочный_бренд row is one of the nine that cannot be rendered"
+                " (see the_smallest_class_has_no_fifth_neighbour), so arm A's 506 rows carry ZERO"
+                " targets of that class and `train_qlora.class_weights` does not even contain the"
+                " key — `sampling_order` can never draw one"
+            ),
+            "arm_a_targets": 0,
+            "arm_b_targets": 32,
+            "arm_b_rule": "8 in each of the four error classes, by the ±2 balance rule",
+            "arm_a_class_weights": "null · категория_личное · не_наш_рынок · сеть_ритейлер — FOUR",
+            "arm_b_weight_on_the_class": round(666 / (5 * 32), 6),
+            "what_it_does_to_bar_1": (
+                "bar 1 = 5 of 5 turns on F2a, and F2a turns on relabelling msg 580124 from"
+                " `сеть_ритейлер` to `молочный_бренд` — the reading the gold gives it. An adapter"
+                " with no training target carrying that label cannot learn to emit it, so **bar 1"
+                " is near-unreachable for arm A and reachable for arm B**, by the same arithmetic."
+                " The bar is NOT lowered for arm A: it is registered per arm at 5 of 5 and this"
+                " block is why a RED there would say something different from a RED on arm B"
+                " ([[an_absolute_bar_needs_a_reachability_state]])"
+            ),
+            "reported_not_remedied": (
+                "the remedies are the ones listed under the_smallest_class_has_no_fifth_neighbour"
+                " — this is that fact read forward into the bars, not a second decision"
             ),
         },
         "the_pinned_trainer_refuses_a_v3_dataset": {

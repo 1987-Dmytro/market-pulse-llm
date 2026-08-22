@@ -245,6 +245,12 @@ against synthetic's 20). Writing those synthetically would be a different instru
 version of this one. Questions are under-represented because three of the four error classes are
 statements about a subject and only one is naturally a question.
 
+### The executor flags 15 of its own 160 rows
+
+See «Lens 2's substitute» below: 15 rows label a stock/price/assortment claim about a named chain as
+`не_наш_рынок` where the codebook rules `сеть_ритейлер`, and the team lead's own labels on that shape
+agree with the codebook. Nothing was rewritten; the gate-2 sample opens with the finding.
+
 ### REVIEW GATE 2 — STOP
 
 `docs/reviews/lora-c-synthetic.md`: all 160 rows with a blank verdict column, grouped by error class
@@ -335,11 +341,35 @@ Cap **$4.00**, the ruling's own number. The hard stop is TO BE DERIVED in `lora-
 carries no `worst_case_usd`, no `total_seconds` and no projection, and a test asserts those three
 field names are absent from the money block's keys.
 
-### The three reachability blocks
+### The four reachability blocks
 
 1. **`the_smallest_class_has_no_fifth_neighbour`** — above.
 2. **`no_row_fits_max_seq_len`** — below.
-3. **`the_pinned_trainer_refuses_a_v3_dataset`** — below.
+3. **`arm_a_has_no_молочный_бренд_target`** — next.
+4. **`the_pinned_trainer_refuses_a_v3_dataset`** — below.
+
+### The fourth: arm A cannot reach bar 1, and arm B can — by the same arithmetic
+
+The pool's single `молочный_бренд` row is one of the nine that cannot be rendered, so **arm A's 506
+rows carry ZERO targets of that class** and `train_qlora.class_weights` returns four classes, not
+five — `sampling_order` can never draw one. **Arm B carries 32** (8 in each of the four error
+classes, by the ±2 balance rule) at a weight of `666/(5·32)` = 4.1625.
+
+| | arm A | arm B |
+|---|---|---|
+| `молочный_бренд` training targets | **0** | **32** |
+| the class in `class_weights` | absent | 4.1625 |
+
+**Bar 1 = 5 of 5 turns on F2a, and F2a turns on relabelling msg `580124` from `сеть_ритейлер` to
+`молочный_бренд`** — the reading the gold gives it. An adapter with no training target carrying that
+label cannot learn to emit it. So the bar is **near-unreachable for arm A and reachable for arm B**,
+and the bar is NOT lowered for arm A: it stays registered per arm at 5 of 5, and this block is why a
+RED there would say something different from a RED on arm B
+([[an_absolute_bar_needs_a_reachability_state]]).
+
+It also inverts the ablation reading: **synthetic is the ONLY positive supervision that class gets
+anywhere in this line**, not — as this report said in its first draft — a set of rows that teaches
+only the negative of it.
 
 ## The second STOP: no v3 row fits `max_seq_len`
 
@@ -459,7 +489,42 @@ What DID verify this work, and it is not nothing:
   `ceil(n/(micro·accum)) × epochs` = **64 and 84**. Two real numbers of one run, and the money
   formula wants the first. Both are now in the record.
 
-### Two defects that self-review found, fixed in the closing commit
+### Lens 2's substitute — the one lens nothing automated can stand in for
+
+Nothing in this contract checks whether a rationale READS its comment right; only that its cue
+occurs and its length holds. So the content was sampled by hand: **29 rationale rows** (all nine of
+boundary tier A plus 20 drawn across `не_наш_рынок` and `null`) and **12 synthetic rows**, 3 per
+error class, judged against `build_pass1_label_pack.codebook()`.
+
+**The rationales: no misread found in 29, and no systematic pattern.** All nine tier-A rows read
+their comment correctly, including the three the whole line is about — «1 вересня» as stationery,
+«Гамета» as a clinic, «Кола Зеро» as a soft drink. One observation that is not a defect: the
+`не_наш_рынок` rationales share a near-identical frame («коментар ПРО X, поза нашою категорією»), so
+the information those rows carry is in the CUE and not in the sentence — which is why the
+distinct-CUE rate (267 of 272) is the number that matters and not the distinct-rationale rate.
+
+**The synthetic rows: one SYSTEMATIC defect, 15 of 160, and it is flagged rather than fixed.**
+
+| | |
+|---|---|
+| the shape | the comment names a chain AND makes a stock / price / assortment claim about it, and is labelled `не_наш_рынок` because the THING is non-dairy |
+| the codebook | «A comment about the retailer's service, stock, prices or stores is `сеть_ритейлер`» |
+| the team lead's own labels on that shape | `@VARUS_channel:10470:21236` «кубок ковбасний … там сказали, що нема» → **`сеть_ритейлер`**; `21240` → `сеть_ритейлер`; `@VARUS_channel:10367:20979` «Коли буде знижка?» → `сеть_ритейлер` |
+| the first precedent | a **non-dairy** item out of stock at a chain, and the team lead calls it `сеть_ритейлер` — which is exactly the case these 15 rows are labelled against |
+| rows | `synthetic:brand_vs_retailer` 25, 27–32 · `synthetic:retailer_non_dairy` 9–16 |
+| action | **NONE.** Review gate 2 is a STOP and the verdict decides |
+
+They are **not rewritten**, and the reason is the gate: the executor does not grade its own sample
+(SPEC §10), and a draft that quietly corrected itself after its sample path was reported would hand
+the team lead a file different from the one they were sent. What changed instead is that
+`docs/reviews/lora-c-synthetic.md` now opens with the concern, the clause, the three precedents and
+the fifteen row ids, computed by the producer rather than typed — so the verdict can rule on a
+pattern instead of discovering it.
+
+If the team lead agrees, this is 15 rows teaching the OPPOSITE of the codebook on the very axis the
+line exists to fix, and it would have gone into arm B unnoticed.
+
+### Three defects that self-review found, fixed in the closing commits
 
 1. **Two checks in the eval builder are INVARIANT ASSERTIONS and not guards, and calling them guards
    is what the unreachable-guard defect was made of.** `synthetic rows reached E` cannot fire: E is
@@ -477,7 +542,7 @@ What DID verify this work, and it is not nothing:
 
 ```
 $ make check
-3654 passed, 2 skipped in 550.81s (0:09:10)          exit 0
+3656 passed, 2 skipped in 551.35s (0:09:11)          exit 0
 
 $ make preflight ARGS='pass1_v3.py prereg_lora_c.json'
 pin registry: 1559 paths pinned by results/*.json
@@ -493,8 +558,9 @@ QUERY  prereg_lora_c.json
     4 of 4 pinned paths match every digest on them
 ```
 
-The suite opened this contract at **3 608 passed / 2 skipped** and closes at **3 654 / 2** — the 46
-tests of `tests/test_lora_c_prep.py`, at a cost of **1.2 s** against the opening run's 549.57 s. The
+The suite opened this contract at **3 608 passed / 2 skipped** and closes at **3 656 / 2** — the 48
+tests of `tests/test_lora_c_prep.py`, at a cost **within noise** of the opening run's 549.57 s —
+the two figures are wall clocks of two different trees and their difference is not a measurement. The
 pin registry grew 1 547 → 1 559 paths.
 
 
@@ -529,6 +595,8 @@ $0; there is no money on this contract.**
 | **Dv749** | `[cause: verify-gap]` [[an-empty-class-is-the-definitions-answer]] | **Two checks in the eval builder can never fire, and they were written as guards.** `synthetic rows reached E` is unreachable — E is `holdout_units() ∪ payable_of_reference()` and neither can yield a `synthetic:` thread; so is the identical-sha check between the two legs, whose texts differ by a whole paragraph. Both are kept as the invariants the paired table rests on, and both now SAY in the code that they have never fired and cannot, and what would make them reachable. The same defect one layer down had already been found by a negative control (Dv734) — the difference is that its twin above the rationale join is a real guard. |
 | **Dv750** | `[cause: contract-gap]` [[two_values_for_one_input_get_quoted_kindly]] | **`steps` has two right answers and the record carried one.** `train_qlora.train` steps only on a whole `grad_accum` of micro-batches, so the optimizer takes 62 and 82; its own `planned` — which drives the cosine schedule's total and its warmup — is `ceil(n/(micro·accum)) × epochs` = 64 and 84. Both are real numbers of the same run and the money formula wants the first. This is the SIXTH instance of one input with two values on this line, and the record now names both. |
 | **Dv751** | `[cause: process]` [[a_claim_no_number_can_check]] | **A commit message claimed a change that had not been applied.** `1be8676` says two checks in the eval builder «now say in the code that they have never fired» — the patch that would have written them aborted on an assert BEFORE its write, and I read the surviving prereg half as the whole. Caught by grepping the file for the comment I had just claimed to add. Landed for real in the commit after it. Second instance on this contract of a commit message being wrong where the record was right (Dv738), and the same remedy applies: **the report is the authority and the commit message is prose**. |
+| **Dv752** | `[cause: verify-gap]` [[an_absolute_bar_needs_a_reachability_state]] | **The ablation claim was exactly backwards, and it lands on a registered bar.** The registration and this report both said «with zero real молочный_бренд rows rendered, arm B's 40 non-dairy-«brand» rows teach only the NEGATIVE of that class; synthetic does not repair the positive side». Counted: the synthetic file carries **32** `молочный_бренд` targets — 8 in each of the four error classes, which is what the ±2 balance rule produces — so synthetic is the ONLY positive supervision that class gets anywhere in this line, and **arm A has none**: `train_qlora.class_weights` on arm A returns four classes, not five, so `sampling_order` can never draw one. Since **bar 1 = 5 of 5 turns on relabelling msg 580124 to `молочный_бренд`**, the bar is near-unreachable for arm A and reachable for arm B by the same arithmetic. Registered as a FOURTH reachability block; the bar is not lowered. Written from the shape of the batch instead of from `collections.Counter`. |
+| **Dv753** | `[cause: model]` [[a_borrowed_rule_carries_an_unstated_population]] | **Fifteen synthetic rows are labelled against the codebook, and the pattern is one clause.** They name a chain and make a stock / price / assortment claim about it — «У варусі корм для котів закінчився», «В АТБ шампунь дешевший ніж в аптеці» — and are labelled `не_наш_рынок` because the THING is non-dairy. The codebook says «A comment about the retailer's service, stock, prices or stores is `сеть_ритейлер`», and the team lead's own labels agree on three real rows of exactly that shape, one of which is a NON-DAIRY item out of stock. Found by sampling the content by hand when the review lens for it did not return. **Not rewritten** — gate 2 is a STOP — but `docs/reviews/lora-c-synthetic.md` now opens with the concern, the clause, the precedents and the fifteen ids, computed by the producer. |
 
 **The tally, by the grep the template names:**
 
@@ -539,10 +607,10 @@ tag = {}
 for chunk in re.split(r"(?=\*\*Dv\d+)", flat):
     if (m := re.match(r"\*\*Dv(\d+)", chunk)) and (t := re.findall(r"\[cause:\s*([a-z-]+)\]", chunk)):
         tag.setdefault(int(m.group(1)), t[0])
-inr = {d: t for d, t in tag.items() if 728 <= d <= 751}
+inr = {d: t for d, t in tag.items() if 728 <= d <= 753}
 health = sum(1 for t in inr.values() if t in ("contract-gap", "spec-gap", "verify-gap"))
 print(len(inr), dict(collections.Counter(inr.values()).most_common()))
-print("contract health", health, "· paid", len(inr) - health, "· enum canonicity", len(inr), "of 24")
+print("contract health", health, "· paid", len(inr) - health, "· enum canonicity", len(inr), "of 26")
 ```
 
 ## Process signals
