@@ -20,6 +20,14 @@ here for a reason this contract created:
   4 pricing 79 units at the registered 120 s/call would kill the pod at the first poll — the full
   run at that rate is 11 880 s against a 6 600 s stop, and it is supposed to be: this registration
   buys a measurement and registers the guard that decides on the rest.
+* **`gate_zero`, `gate_boot` and `watch`**, each handed a record whose rung rules already carry
+  their deadline at the head. Rebinding `rung` alone reaches only `watch` — the other two are
+  DEFINED in `gate_pass1_fewshot` and resolve that module's own global, which is a `sys.modules`
+  entry every other instrument here imports. The five-lens review found this by driving the
+  COMMANDS, where every test so far had driven the functions behind them.
+* **`pre_create`**, because «one re-creation, ONLY for a death before the smoke's first reply» was
+  in the record and in no instrument: the shipped computation counts pods and seconds, and after a
+  rung-4 KILL the seconds still fit.
 * **`completeness`**, because rung 7 parses replies and pass 2's parser is not pass 1's — and
   because its bar has two arms, one for each way rung S′ can go.
 
@@ -69,6 +77,7 @@ RECORD = REPO_ROOT / "results" / "pass2_signals_run.json"
 PACK = REPO_ROOT / "results" / "pass2_pack.json"
 POD_LOG = REPO_ROOT / "results" / "pass2_signals_pod.log"
 GO_TOKEN = REPO_ROOT / "results" / "pass2_signals_go.json"
+OUT_FILE = REPO_ROOT / "results" / "pass2_signals_v1.jsonl"
 LAUNCH_STAMP = "pass2_signals_launched_at"
 """This attempt's OWN names for every file a rung reads or writes. `results/` already holds three
 closed sessions' stamps and logs, and a rung that read one of them would be reading a dead pod's
@@ -112,7 +121,19 @@ def _load() -> object:
 r1 = _load()
 
 GO, KILL, WAIT = r1.GO, r1.KILL, r1.WAIT
-_SHIPPED = {name: getattr(r1, name) for name in ("rung", "legs_of", "leg_state", "completeness")}
+_SHIPPED = {
+    name: getattr(r1, name)
+    for name in (
+        "rung",
+        "legs_of",
+        "leg_state",
+        "completeness",
+        "gate_zero",
+        "gate_boot",
+        "watch",
+        "pre_create",
+    )
+}
 
 
 def rung(record: dict, number: int) -> dict:
@@ -137,6 +158,65 @@ def rung(record: dict, number: int) -> dict:
             " defect Dv669 registered and it goes green in a suite. Stop and report."
         )
     return {**one, "rule": f"{float(one['deadline_seconds'])} s — {one['rule']}"}
+
+
+def pre_create(record: dict, state: dict) -> dict:
+    """Rung 0 — r1's arithmetic, plus the clause the record states and nothing was checking.
+
+    `money.recovery` says ONE re-creation and ONLY for a death BEFORE the smoke's first reply. The
+    shipped computation counts PODS, SECONDS and DOLLARS; whether a reply landed is a fact about the
+    out-file, and after a rung-4 or rung-5 KILL the seconds can still fit while the clause forbids
+    the pod. A rule written into a record and enforced nowhere is a rule that goes green
+    ([[a_claim_no_number_can_check]], [[gate_verdicts_need_an_artifact]]).
+
+    Both callers get it: `--pre-create-check` reaches this through `r1.pre_create`, and the shipped
+    `--price` branch reaches the same module global before it will report GO on rung 1.
+    """
+    gate = _SHIPPED["pre_create"](record, state)
+    answered = len(r1.rows_of(OUT_FILE))
+    fits = not (answered and state.get("pods"))
+    gate["replies_already_bought"] = answered
+    gate["fits_the_recovery_clause"] = fits
+    gate["recovery_clause"] = record["money"]["recovery"]["after_the_first_reply"]
+    if not fits:
+        gate["verdict"] = "KILL"
+        gate["next_step"] = (
+            f"STOP: {answered} repl(ies) of this attempt are already on the Mac, so the death that"
+            " ended the last pod happened AFTER the first reply. The recovery clause allows one"
+            " re-creation only for a death at rungs 1–3; what follows this is a new registration"
+            " with the measured rate in it, never a second pod."
+        )
+    return gate
+
+
+def by_key(record: dict) -> dict:
+    """The record with every clock rung's rule already prefixed by its own `deadline_seconds`.
+
+    **Rebinding `rung` is not enough, and the five-lens review is how that was found out.** Python
+    resolves a global in the module where the FUNCTION is defined, so `watch` — defined in
+    `gate_pass1_window` — reaches the `rung` re-bound there, and `gate_zero` and `gate_boot` —
+    defined in `gate_pass1_fewshot` — reach that module's own. Rebinding the second module would
+    mutate a `sys.modules` entry every other instrument in this repo imports, so the record is
+    transformed instead and handed in. Idempotent by construction: a second prefix leaves the first
+    number at the head, which is the one `first_number` returns
+    ([[a_proof_can_cover_the_sibling_branch]]).
+    """
+    return {
+        **record,
+        "kill_clock": [rung(record, int(one["rung"])) for one in record["kill_clock"]],
+    }
+
+
+def gate_zero(record: dict, state: dict, elapsed: float, ssh_ok: bool, now=None) -> dict:
+    return _SHIPPED["gate_zero"](by_key(record), state, elapsed, ssh_ok, now)
+
+
+def gate_boot(record: dict, state: dict, elapsed, at_launch, launched, now=None) -> dict:
+    return _SHIPPED["gate_boot"](by_key(record), state, elapsed, at_launch, launched, now)
+
+
+def watch(record: dict, state: dict, packs: list[dict], **kw) -> dict:
+    return _SHIPPED["watch"](by_key(record), state, packs, **kw)
 
 
 def go_recorded() -> dict | None:
@@ -497,6 +577,15 @@ def run_go_no_go(argv: list[str]) -> int:
     where = REPO_ROOT / "results"
     if "--outdir" in argv:
         where = Path(argv[argv.index("--outdir") + 1])
+    taken = go_recorded()
+    if taken is not None:
+        raise SystemExit(
+            f"rung S′ has already recorded a GO on pod {taken.get('pod_id')} at {taken.get('at')}."
+            " The decision is taken ONCE: running it again would append a second verdict, and"
+            " `go_recorded` reads the LAST one — a second STOP would de-authorise a run that is"
+            " still generating and collapse the completeness arm back to the smoke. If the pod died"
+            " after the GO, that is a KILL and the session closes; it is not a re-decision."
+        )
     gate = go_no_go(where)
     state = r1.run_state()
     r1.append_gate(state, gate, GO_KIND)
@@ -516,7 +605,16 @@ def run_go_no_go(argv: list[str]) -> int:
     return GO if gate["verdict"] == "GO" else (WAIT if gate["verdict"] == "WAIT" else KILL)
 
 
-for _name in ("rung", "legs_of", "leg_state", "completeness"):
+for _name in (
+    "rung",
+    "legs_of",
+    "leg_state",
+    "completeness",
+    "gate_zero",
+    "gate_boot",
+    "watch",
+    "pre_create",
+):
     setattr(r1, _name, globals()[_name])
 
 

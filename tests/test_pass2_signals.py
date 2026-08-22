@@ -457,15 +457,63 @@ def test_every_clock_rung_carries_its_deadline_by_key():
             assert isinstance(one["deadline_seconds"], int | float)
 
 
-def test_the_prose_of_a_rung_can_no_longer_move_its_deadline():
-    """Dv669: `first_number("rung 5 of 7 — 600 s …")` is 5, and the suite stays green."""
+def poisoned_record() -> dict:
+    """Every rung's prose prefixed with its own index — Dv669's exact mutation."""
     poisoned = json.loads(json.dumps(RECORD))
     for one in poisoned["kill_clock"]:
         one["rule"] = f"rung {one['rung']} of 9 — {one['rule']}"
+    return poisoned
+
+
+def test_the_prose_of_a_rung_can_no_longer_move_its_deadline():
+    """Dv669: `first_number("rung 5 of 7 — 600 s …")` is 5, and the suite stays green."""
+    poisoned = poisoned_record()
     assert gate.r1.first_number(gate._SHIPPED["rung"](poisoned, 5)["rule"]) == 5
     assert gate.r1.first_number(gate.rung(poisoned, 5)["rule"]) == 600.0
     assert gate.r1.first_number(gate.rung(poisoned, 2)["rule"]) == 500.0
     assert gate.r1.first_number(gate.rung(poisoned, 3)["rule"]) == 450.0
+
+
+def test_the_RUNGS_THEMSELVES_read_the_key_and_not_the_prose(tmp_path, monkeypatch):
+    """Rebinding `rung` reaches `watch` and NOT `gate_zero`/`gate_boot`, which are defined in
+    another module — so every one of the three is driven here, on a poisoned record."""
+    poisoned = poisoned_record()
+    state = state_with_pod()
+    # rung 2: 500 s is the deadline, and the poisoned prose leads with a 2
+    early = gate.gate_zero(poisoned, state, 400.0, False)
+    late = gate.gate_zero(poisoned, state, 501.0, False)
+    assert early["threshold_seconds"] == 500.0 and early["verdict"] == "WAIT"
+    assert late["verdict"] == "KILL"
+    # rung 3: 450 s from the launch anchor
+    boot = gate.gate_boot(poisoned, state, 600.0, 460.0, "2026-08-22T10:04:00+00:00")
+    assert boot["threshold_seconds"] == 450.0 and boot["verdict"] == "KILL"
+    assert (
+        gate.gate_boot(poisoned, state, 600.0, 440.0, "2026-08-22T10:04:00+00:00")["verdict"]
+        == "GO"
+    )
+    # rung 5: 600 s of idle, through the watch loop itself
+    record = tmp_path / "run.json"
+    monkeypatch.setattr(gate.r1, "RECORD", record)
+    record.write_text(json.dumps(state), encoding="utf-8")
+    log = tmp_path / "pod.log"
+    log.write_text("boot\n", encoding="utf-8")
+    out_rows(tmp_path / "pass2_signals_v1.jsonl", list(PACK["smoke"]["ids"])[:3], 30.0)
+    clock = {"now": 0.0}
+    verdict = gate.watch(
+        poisoned,
+        state,
+        [PACK],
+        where=tmp_path,
+        log=log,
+        pull=lambda: None,
+        kill=lambda: {"deleted": True},
+        sleep=lambda _s: clock.__setitem__("now", clock["now"] + 100.0),
+        clock_now=lambda: clock["now"],
+        now=gate.r1.stamp("2026-08-22T10:05:00+00:00"),
+        poll_seconds=0,
+    )
+    assert verdict["idle_deadline_seconds"] == 600.0, "not 5, which is what the prose leads with"
+    assert verdict["verdict"] == "KILL" and "rung 5" in verdict["cause"]
 
 
 def test_a_clock_rung_with_no_deadline_key_is_REFUSED_and_never_defaulted():
@@ -926,6 +974,127 @@ def test_a_stale_GO_token_beside_a_STOP_verdict_is_refused(tmp_path, monkeypatch
     out_rows(tmp_path / "pass2_signals_v1.jsonl", list(PACK["smoke"]["ids"]), 300.0)
     with pytest.raises(SystemExit, match="exists and this verdict is"):
         gate.run_go_no_go(["--go-no-go", "--outdir", str(tmp_path)])
+
+
+def test_EVERY_gate_command_runs_end_to_end(tmp_path, monkeypatch, capsys):
+    """The COMMANDS, not the functions behind them.
+
+    `gate_pass1_window.main` hard-subscripts `pack["population"]["payable_comments"]` and the same
+    key in the record before every rung that reads a pack, and that file is pinned by a sealed
+    record. Driving `watch`/`completeness`/`projection` directly walks straight past that line: the
+    five-lens review found the KeyError it raises, and it would have landed on `--watch`, on a pod
+    that was already billing, with nothing watching it ([[a_proof_can_cover_the_sibling_branch]],
+    [[drive_the_consumer_not_only_the_producer]]).
+    """
+    record = tmp_path / "run.json"
+    monkeypatch.setattr(gate.r1, "RECORD", record)
+    monkeypatch.setattr(gate.r1, "registration", lambda: RECORD)
+    record.write_text(json.dumps(state_with_pod()), encoding="utf-8")
+    out_rows(tmp_path / "pass2_signals_v1.jsonl", list(PACK["smoke"]["ids"]), 30.0)
+    (tmp_path / "pass2_signals_launched_at").write_text(
+        "2026-08-22T10:04:00+00:00\n", encoding="utf-8"
+    )
+    now = gate.r1.stamp("2026-08-22T10:20:00+00:00")
+    common = ["--outdir", str(tmp_path)]
+    for argv in (
+        ["--clock", *common],
+        ["--gate0", "--ssh-ok", *common],
+        ["--boot", *common],
+        ["--projection", *common],
+        ["--completeness", *common],
+    ):
+        code = gate.main(argv, now)
+        assert code in (gate.GO, gate.KILL, gate.WAIT), argv
+        assert "Traceback" not in capsys.readouterr().out
+    # and --close, which ends the pod
+    assert (
+        gate.main(
+            ["--close", "--deleted-at", "2026-08-22T10:30:00+00:00", "--outcome", "test"], now
+        )
+        == gate.GO
+    )
+    state = json.loads(record.read_text(encoding="utf-8"))
+    assert [one["kind"] for one in state["gates"]][-1] == "close"
+    assert state["pods"][0]["billed_seconds"] == 1800.0
+
+
+def test_the_pack_and_the_record_agree_on_the_key_the_pinned_gate_compares():
+    assert PACK["population"]["payable_comments"] == RECORD["population"]["payable_comments"] == 79
+    source = (REPO_ROOT / "scripts" / "gate_pass1_window.py").read_text(encoding="utf-8")
+    assert 'pack["population"]["payable_comments"]' in source
+
+
+def test_a_half_copied_go_token_is_KEEP_WAITING_and_never_a_STOP(tmp_path):
+    """scp writes into place over seconds and a poll can land in the middle of it."""
+    token = tmp_path / "pass2_go"
+    for body in ('{"verdict": "G', "", "not json", '{"verdict": "MAYBE"}', "[]"):
+        token.write_text(body, encoding="utf-8")
+        assert runner.read_token(token) is None, body
+    token.write_text('{"verdict": "GO"}', encoding="utf-8")
+    assert runner.read_token(token)["verdict"] == "GO"
+    token.write_text('{"verdict": "STOP"}', encoding="utf-8")
+    assert runner.read_token(token)["verdict"] == "STOP"
+
+
+def test_the_wait_keeps_polling_through_a_truncated_token(tmp_path, capsys):
+    token = tmp_path / "pass2_go"
+    token.write_text('{"verdict": "G', encoding="utf-8")
+    ticks = {"n": 0}
+
+    def sleep(_seconds):
+        ticks["n"] += 1
+        if ticks["n"] == 2:
+            token.write_text('{"verdict": "GO"}', encoding="utf-8")
+
+    assert runner.wait_for_go(token, 600.0, 0.0, sleep=sleep)["verdict"] == "GO"
+    assert capsys.readouterr().out.count("WAIT for the go") == 2
+
+
+def test_the_recovery_clause_refuses_a_pod_after_the_first_reply(tmp_path, monkeypatch):
+    """«ONE re-creation, ONLY for a death BEFORE the smoke's first reply» — enforced, not written.
+
+    After a rung-4 or rung-5 KILL the seconds still fit, so the shipped pod-and-seconds arithmetic
+    reports GO on a create the record forbids ([[a_claim_no_number_can_check]]).
+    """
+    out = tmp_path / "pass2_signals_v1.jsonl"
+    monkeypatch.setattr(gate, "OUT_FILE", out)
+    dead = {
+        **state_with_pod()["pods"][0],
+        "deleted_at": "2026-08-22T10:20:00+00:00",
+        "billed_seconds": 1200.0,
+        "billed_usd": 0.2467,
+    }
+    state = {"pods": [dead], "gates": []}
+    # a death BEFORE the first reply: one re-creation, and the arithmetic still fits
+    out.write_text("", encoding="utf-8")
+    clean = gate.pre_create(RECORD, state)
+    assert clean["replies_already_bought"] == 0
+    assert clean["fits_the_recovery_clause"] is True
+    assert clean["verdict"] == "GO"
+    # the same seconds, with three replies bought: the clause refuses what the arithmetic allows
+    out_rows(out, list(PACK["smoke"]["ids"])[:3], 30.0)
+    after = gate.pre_create(RECORD, state)
+    assert after["replies_already_bought"] == 3
+    assert after["fits_the_hard_stop"] is True, "the SECONDS still fit — that is the whole point"
+    assert after["fits_the_cap"] is True
+    assert after["fits_the_recovery_clause"] is False
+    assert after["verdict"] == "KILL"
+    assert "new registration" in after["next_step"]
+    # and the first create of all is untouched: no pod, no reply
+    assert gate.pre_create(RECORD, {"pods": [], "gates": []})["verdict"] == "GO"
+
+
+def test_a_second_go_no_go_is_REFUSED_once_a_GO_is_recorded(tmp_path, monkeypatch):
+    """`go_recorded` reads the LAST verdict, so a second STOP would de-authorise a live run."""
+    record = tmp_path / "run.json"
+    monkeypatch.setattr(gate.r1, "RECORD", record)
+    monkeypatch.setattr(gate, "GO_TOKEN", tmp_path / "go.json")
+    monkeypatch.setattr(gate.r1, "registration", lambda: RECORD)
+    record.write_text(json.dumps(with_go(state_with_pod())), encoding="utf-8")
+    out_rows(tmp_path / "pass2_signals_v1.jsonl", list(PACK["smoke"]["ids"]), 300.0)
+    with pytest.raises(SystemExit, match="already recorded a GO"):
+        gate.run_go_no_go(["--go-no-go", "--outdir", str(tmp_path)])
+    assert gate.legs_of(PACK)[0]["units"] == 79, "the authorisation is untouched"
 
 
 def test_the_gate_refuses_to_load_if_r1s_gate_has_moved(monkeypatch):

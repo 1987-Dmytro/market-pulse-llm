@@ -4165,6 +4165,8 @@
       "refused": 0,
       "rule": "a pass-1 reply that could not be read carries no label, so its row is not in the filter and its thread is called only if another row of it is. That is a state of the INPUT and it is counted here rather than discovered later"
     },
+    "payable_comments": 79,
+    "payable_comments_is_the_UNIT_count": "pass 1's word for «how many things this pack asks», carried because `gate_pass1_window.main` compares this key in the pack against the same key in the record before every rung that reads a pack. A pass-2 unit is a THREAD and not a comment, so the NAME is pass 1's and the number is this pack's units. The inherited guard is pinned by a sealed record and cannot be renamed",
     "producer": "census_pass1_window.pass_2_filter, CALLED over the union view",
     "producer_sha256": "14571582bd969a345a069440cf65d7860bbc5910204e6009071f2956869e783f",
     "threads_carrying_a_payable_comment": 127,
@@ -4182,7 +4184,7 @@
     },
     "borrowed_rule": "the filter, the union view, the sealed-pack guard, the store, the bought verdicts and the ceiling check. Everything this pack is made of already existed",
     "script": "scripts/build_pass2_pack.py",
-    "sha256": "05274bc36877620a17b3c08f56ed4e3beee0a279a64b6e12be59740560abbf2c"
+    "sha256": "ba19cc6fbef0b6cd07497f2db73164dbd4a421ed4834d375a7176b985a3deb37"
   },
   "registration": {
     "record": "results/prereg_pass2_signals.json"

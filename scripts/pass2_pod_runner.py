@@ -186,6 +186,31 @@ def smoke_leg(pack: dict, leg: dict) -> list[dict]:
     return items
 
 
+VERDICTS = ("GO", "STOP")
+"""The only two words this runner will ACT on. Anything else is «not yet»."""
+
+
+def read_token(token: Path) -> dict | None:
+    """The go token, or None while it is not a verdict yet — and a half-copied file is not one.
+
+    `scp` writes into place over some seconds and the poll can land in the middle of it, so a token
+    that does not parse, or parses without one of the two registered verdicts in it, means KEEP
+    WAITING. Reading a truncated GO as a STOP would throw away 74 units the guard had just
+    authorised, on one unlucky poll, with no way to tell afterwards that it happened
+    ([[a_retry_inherits_the_last_attempts_output]] read forwards: the file on shared storage is not
+    necessarily the file somebody finished writing).
+    """
+    if not token.exists():
+        return None
+    try:
+        gate = json.loads(token.read_text(encoding="utf-8"))
+    except (json.JSONDecodeError, UnicodeDecodeError, OSError):
+        return None
+    if not isinstance(gate, dict) or str(gate.get("verdict")) not in VERDICTS:
+        return None
+    return gate
+
+
 def wait_for_go(token: Path, deadline: float, started: float, sleep=time.sleep) -> dict:
     """BLOCK until the Mac writes the go, or give up after the registered deadline.
 
@@ -196,13 +221,9 @@ def wait_for_go(token: Path, deadline: float, started: float, sleep=time.sleep) 
     """
     began = time.monotonic()
     while True:
-        if token.exists():
-            body = token.read_text(encoding="utf-8")
-            try:
-                gate = json.loads(body)
-            except json.JSONDecodeError:
-                gate = {"verdict": body.strip()}
-            runner.say(started, f"GO token read at {token}: {gate.get('verdict')}")
+        gate = read_token(token)
+        if gate is not None:
+            runner.say(started, f"GO token read at {token}: {gate['verdict']}")
             return gate
         left = deadline - (time.monotonic() - began)
         if left <= 0:

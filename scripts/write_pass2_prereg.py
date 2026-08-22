@@ -198,6 +198,15 @@ def population(held: dict) -> dict:
     widest_chars = max(items, key=lambda one: sum(len(row["text"]) for row in one["comments"]))
     return {
         "units": len(items),
+        "payable_comments": len(items),
+        "payable_comments_is_the_UNIT_count": (
+            "the same aliasing the pack carries, and for the same reason:"
+            " `gate_pass1_window.main` hard-subscripts `population.payable_comments` in BOTH files"
+            " before every rung that reads a pack, and that file is pinned by a sealed record of a"
+            " closed paid session. A pass-2 unit is a THREAD. Without this key `--projection`,"
+            " `--watch`, `--completeness` and `--close` all die on a KeyError — on a pod that is"
+            " already billing, with nothing watching it"
+        ),
         "smoke_units": held["smoke"]["units"],
         "remaining_after_the_smoke": len(items) - held["smoke"]["units"],
         "filtered_rows": held["population"]["filtered_rows"],

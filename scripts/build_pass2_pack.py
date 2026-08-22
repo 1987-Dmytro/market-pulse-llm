@@ -284,6 +284,14 @@ def build() -> dict:
         ),
         "population": {
             "units": len(items),
+            "payable_comments": len(items),
+            "payable_comments_is_the_UNIT_count": (
+                "pass 1's word for «how many things this pack asks», carried because"
+                " `gate_pass1_window.main` compares this key in the pack against the same key in"
+                " the record before every rung that reads a pack. A pass-2 unit is a THREAD and not"
+                " a comment, so the NAME is pass 1's and the number is this pack's units. The"
+                " inherited guard is pinned by a sealed record and cannot be renamed"
+            ),
             "filtered_rows": sum(mine.values()),
             "filtered_chars": sum(len(row["text"]) for one in items for row in one["comments"]),
             "threads_carrying_a_payable_comment": table["threads_carrying_a_payable_comment"],
