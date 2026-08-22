@@ -173,6 +173,67 @@ doubt. That is the THIRD report-only field found to carry whole-thread refusal p
 `subject_doubt` and an omitted `subject_type` — both caught at $0 by the five-lens review — and the
 first to fire. **A report-only field may not be able to refuse. Build it so it cannot.**
 
+## r2 — the ruling (з), the 75 owed, and a parser no report-only field can refuse
+
+**The operator's ruling of 2026-08-22 (day), verbatim from `docs/STATUS.md` «Открытые решения»
+п. 1 (з):**
+
+> **РУЛИНГ 22.08 (день):** `pass2-signals r2` — докупить 75 тредов, кап **$2.50** (арм по максимуму
+> смока × разброс подов); альтернативы (кап $2.00 с армом по строкам; стоп → LoRA) отклонены.
+
+**75 and not 74.** The 74 rung S′ never authorised, plus `@matusi_ukr:22303` — F2 — whose reply was
+ANSWERED by r1's pod and REFUSED by r1's parser. A refused reply is a transport outcome and not a
+verdict, so the thread is owed. The four replies that parsed are COPIED into r2's out-file and never
+re-bought: decoding is greedy and pass 1 answered 200 of 200 identically across three pods, so
+re-asking them would buy the same strings twice.
+
+**Which makes the prompt text immovable, and that is the whole of r2's construction.** A carried
+reply is an answer to r2's request only if r2's request is r1's request, byte for byte. So
+`pass2_thread_gm4_v1`, its renderer and its blocks are r1's — imported, never restated — every unit
+is re-rendered at build time and held to r1's own `rendering_sha256`, and a moved rendering is a
+STOP before any pod rather than a finding at scoring time.
+
+**A SIBLING module, not an edit.** `src/market_pulse/pass2.py` is pinned by
+`results/pass2_pack.json::instruments.module.sha256`, and that pack is pinned by r1's sealed record;
+r1's own test re-runs the pack builder and compares. One character in that file turns `make check`
+red on a closed paid session's artifacts. The contract states the rule for the gate — «if r1's
+pinned bytes stay untouched, otherwise a sibling (say which)» — and the same rule decides the
+module, the gate, the runner and the scorer. All four are siblings and all four say so.
+
+**Report-only means it cannot refuse — by construction.** Every field the record marks report-only
+is read through a tolerant reader that runs the PINNED validator that owns it and repairs only where
+that validator raises, recording `unreadable` beside the value. The domains are never
+re-implemented. The reply's refusal set is CLOSED at six: a relabel · an id that was not in the
+request · a signal citing no comment · a reply about another thread · an unbalanced or unreadable
+object · a domain violation on a SCORED field. What «scored» means is read off the scorer and not
+asserted — `scorer.reader_signal_found` compares evidence, `subject_type` and `aspect` and says in
+its own docstring that `signal_type` and `subject_id` are deliberately NOT compared.
+
+**A ceiling derived instead of aliased.** r1 aliased pass 1's 12 000 characters, a number sized for
+a request whose prompt is ~2 300; pass 2's is 5 480 and the widest unit renders to 11 856 — 144
+characters of headroom, 1.2 %. r2 derives its own from what this stack can PROVE: the widest prompt
+the READER serving config has been observed to serve (`@matusi_ukr:22272`, 4 510 prompt tokens,
+`finish_reason: stop`, under the same `serving.output_tokens` reservation of 4 000), converted at
+pass 2's own worst measured density of 3.4523 characters per prompt token → **15 569**. No record on
+this stack carries a context length for the model, and the derivation says so rather than importing
+a number from outside.
+
+**The rate is registered, so there is no rung to decide it.** `ceil(58.07 × 1.67) = 97 s/thread` —
+the smoke's MAXIMUM times v2's measured pod-class spread over three pods. The MAX and not a
+row-weighted fit: the population's widest unit carries 26 filtered rows against the smoke's widest
+EIGHT, so a fit over the five smoke points extrapolates 3.25× beyond its own range on exactly the
+units most likely to be slow. r1's row-weighted arm would have said GO; this registration declines
+to bet on it and publishes both.
+
+**And the carried rows created a class of defect the review had to find by driving.** Four rows sit
+in the out-file before the pod exists, and every inherited rung that COUNTS ROWS then answers a
+different question than it thinks: `watch`'s boot branch is `if not cleared and not answered`, so
+rung 3 could never fire; `first_reply_after_launch` returns 197.6 s measured on r1's pod; the rate
+rung 4 multiplies by 75 would be a blend of two pods; and the recovery clause would refuse this
+session's FIRST create. The rule that came out of it: **rungs 3, 4 and 5 count the rows THIS POD
+bought; rung 7 counts the whole file.** Neither count is wrong — using one where the other belongs
+is.
+
 ## What binds, from here
 
 1. **Pass 2 never relabels.** A reply that does is a refusal by cause; a design that does is the
@@ -187,7 +248,16 @@ first to fire. **A report-only field may not be able to refuse. Build it so it c
    of the rate is only visible if the honest reading was computed beside the binding one.
 5. **A report-only field may not be able to refuse.** Three were found with that power in one
    registration and the third one fired. A field the contract says changes nothing downstream is
-   built so that nothing it can contain costs a thread.
+   built so that nothing it can contain costs a thread — and r2 makes it structural: a CLOSED
+   refusal set, and every other field read through the pinned validator that owns it and repaired
+   where it raises.
+6. **A run that carries rows it did not buy has two counts, and every rung has to say which.** The
+   pod's rungs count what the pod bought; the transport bar counts the file. A carried row is
+   evidence, not work, and no rate may average one in.
+7. **A pinned file is not edited to grow a parameter.** The sibling is the construction: load the
+   pinned module, re-bind what changed, and name the re-binding in the record. r2 does it four
+   times — module, gate, runner, scorer — and the gate's own docstring lists which globals move and
+   why each one had to.
 
 Related: [[v2-is-the-base-and-pass-2-is-not-a-one-shot-reader]] (what pass 2 may not be) ·
 [[reader-programme-closed-and-the-architecture-sitting-17-08]] (the stop-rule both read) ·
