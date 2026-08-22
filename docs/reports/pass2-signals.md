@@ -146,20 +146,30 @@ than a reader's (no `entities`, only the filtered rows in `per_comment`) and how
 exactly what the smoke is bought to find out. **A STOP is a likely and registered outcome**, the
 row-weighted arm is computed at the go/no-go and published beside the verdict, and it gates nothing.
 
-### The five-lens review — seven defects, two of them fatal
+### The five-lens review — 13 distinct defects, two of them fatal
 
-Run before the create, with an independent skeptic behind each finding.
+Five lenses (money · strict authority · population · bars · transport), each finding handed to an
+independent skeptic. **15 filings, 13 distinct defects, and every one of them real.** Three more came
+out of my own re-reading — two before the review, one after.
 
-| # | lens | what it was |
+| # | found by | what it was |
 |---|---|---|
-| 1 | transport · money | **`--watch`, `--projection`, `--completeness` and `--close` all died on `KeyError: 'payable_comments'`** — `gate_pass1_window.main` hard-subscripts that key in both the pack and the record, and that file is pinned by a sealed record and cannot be renamed |
+| 1 | transport, money | **`--watch`, `--projection`, `--completeness` and `--close` all died on `KeyError: 'payable_comments'`** — `gate_pass1_window.main` hard-subscripts that key in both the pack and the record, and that file is pinned by a sealed record and cannot be renamed. It would have landed on `--watch`, on a pod already billing, with nothing watching it |
 | 2 | money | **Rungs 2 and 3 had no enforcement at all** — rebinding `rung` reaches `watch` (defined in `gate_pass1_window`) and not `gate_zero`/`gate_boot` (defined in `gate_pass1_fewshot`); `--gate0` raised `ValueError: could not convert string to float: '.'` |
 | 3 | money | **The recovery clause was in the record and in no instrument** — the shipped `pre_create` counts pods, seconds and dollars, and after a rung-4 KILL the seconds still fit |
 | 4 | transport | **A half-copied go token read as a STOP** — scp truncates the destination at the start of the transfer, and one unlucky poll would have thrown away 74 units the guard had just authorised |
-| 5 | transport | **A second `--go-no-go` recorded before anything stopped it**, and `go_recorded` reads the LAST verdict — a second STOP would de-authorise a run that was still generating |
-| 6 | bars | **A REFUSED reply was scored as an unread thread** — a relabelling on N2 deleted bar 3 instead of failing it, and gave «the go/no-go stopped the run before the population was bought» as the reason for a unit the pod had answered |
-| 7 | bars | **`subject_doubt` — a field the contract calls report-only — could refuse a whole thread**: `prompts._flag` raises on `0`, on `null` and on a Ukrainian yes |
-| 8 | bars | **The request itself invited a RelabelError on F2** — the entity block rendered pass 1's four-word taxonomy above comments carrying one of three, so a SMOKE thread showed `Ласунка → молочный_бренд` over the only comment naming Ласунка, which pass 1 labelled `категория_личное` |
+| 5 | transport, money | **A second `--go-no-go` recorded before anything stopped it**, and `go_recorded` reads the LAST verdict — a second STOP would de-authorise a run that was still generating |
+| 6 | authority | **A REFUSED reply was scored as an unread thread** — a relabelling on N2 deleted bar 3 instead of failing it, and gave «the go/no-go stopped the run before the population was bought» as the reason for a unit the pod had answered |
+| 7 | authority | **`subject_doubt` — report-only by contract — could refuse a whole thread**: `prompts._flag` raises on `0`, on `null` and on a Ukrainian yes |
+| 8 | authority | **The request itself invited a RelabelError on F2** — the entity block rendered pass 1's four-word taxonomy above comments carrying one of three, so a SMOKE thread showed `Ласунка → молочный_бренд` over the only comment naming Ласунка, which pass 1 labelled `категория_личное` |
+| 9 | bars | **The prompt shipped the pre-v3 signal text** — `READER_ASPECT_V5` and `READER_NOT_A_SIGNAL_V3` are F1(б) and F1(в) in as many words, F1 is all-or-nothing, and its three signals are the only gold signals that state an aspect |
+| 10 | bars | **«parse refusals ≤ 1 % of N» printed in two places beside an enforced 14 of 79** |
+| 11 | bars | **«категория» was refused as the ADR's cardinal violation** — a synonym `READER_SUBJECT_TYPES` carries and `score_reader_probe_b.COLLAPSE` folds, on three of the five flagship cases |
+| 12 | population | **A null `subject_type` was called a relabelling** — an omission reported as an architecture breach, and exempt from the transport budget, so unbounded |
+| 13 | population | **The record carried two values for one input** — F5a published `{"579457": null}` two blocks from prose naming that row `не_наш_рынок` |
+| 14 | mine, before | **The completeness bar allowed ZERO refusals** — `int(0.01 × 79)` is 0, against a schema measured at 17.4 % |
+| 15 | mine, before | **Under a STOP, bar 3 read GREEN over zero threads and bar 2 RED at 0 of 4** — `reader_noise_count({})` returns `signals: 0` |
+| 16 | mine, after | **The knife edge omitted the go wait it is billed for** — the third instance of #13's class inside this one registration |
 
 **Defects 1 and 2 were fatal and both live in the COMMANDS.** Every test written before the review
 drove the FUNCTIONS behind them — `watch(...)`, `completeness(...)` — and walked straight past the
@@ -167,8 +177,14 @@ line that crashes. `test_EVERY_gate_command_runs_end_to_end` now drives all six,
 by-key property is proven by driving rungs 2, 3 and 5 on a poisoned record rather than by calling
 `rung` directly.
 
-Defect 8 is the one worth reading twice: it was not in an instrument, it was in the REQUEST, and the
-thread it was set up on is the one whose expected-RED the registration had already written down.
+**Defect 8 is the one worth reading twice:** it was not in an instrument, it was in the REQUEST, on
+the thread whose expected-RED the registration had already written down.
+
+**One honest note about the review's own numbers.** Its skeptic stage reports 3 confirmed and 12
+refuted, and that split is not a judgement of the findings: I was fixing the tree while the skeptics
+read it, so twelve of them refute with «already fixed at HEAD» and name the commit that fixed it.
+Every finding was verified by me first — driven, not reasoned — before anything was changed. If this
+shape is run again, the finders and the verifiers should read a frozen tree.
 
 ## Deviations from Dv680
 
