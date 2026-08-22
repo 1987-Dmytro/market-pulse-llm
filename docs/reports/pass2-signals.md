@@ -194,6 +194,7 @@ delete `08:10:25Z` — **526.0 s = $0.108122** of the $1.50 cap. The last D0 com
 
 | rung | reading |
 |---|---|
+| 0 pre-create | GO, recorded. **The run record was started CLEAN at the create**: three earlier `pre-create-check` gates from D0 were produced by code the five-lens review then replaced, so `results/pass2_signals_run.json` is shorter than r2's and begins at rung 0 of the pod that ran |
 | 1 price | $0.74/h ≤ $0.80, backstop `09:51:39Z` = create + 6 600 s exactly, overshoot 0 s |
 | 2 ssh | **38 s** of create-elapsed against 500 — the fastest of six readings (14.5 · 38 · 231.9 · 262.5 · ≤50 · 29) |
 | 3 boot | **139.5 s**, a NEW FLOOR for this stack (142.7 · 146.8 · 164.9 · 192.1 · 237.2 · 267 · 293 · 353) |
@@ -258,8 +259,13 @@ unchanged as the positive control.
 
 ```
 arm STOP · owed 5 · answered 5 · sha_mismatches 0 · relabellings_refused 0
-unreadable_replies 1 of a budget of 1 · verdict GO
+parse_refusals 1 · unreadable_replies 1 of a budget of 1 · verdict GO
 ```
+
+**Two counts, equal only by accident here.** `parse_refusals` is every reply the parser refused;
+`unreadable_replies` is that count MINUS the relabellings, and it is the one the budget is on. They
+are both 1 in this run because `relabellings_refused` is 0 — do not quote the budget as being on
+`parse_refusals` next time.
 
 **The budget is the finding.** `ceil(0.174 × 5)` is 1; `int(0.01 × 5)` — pass 1's fraction, which
 this registration refused to carry — is **0**, and a transport with five answers, zero sha
@@ -331,6 +337,12 @@ notes are the answer:
 | `@mandziak:3676#47902` | `категория_личное` | «Коментар стосується конкретного бренду та мережі, а не особистої категорії» |
 | `@mandziak:3703#48177` | `категория_личное` | «Суб'єктом є автор відео, а не категорія продуктів» |
 | `@matusi_ukr:22272#580340` | `категория_личное` | «Коментар стосується бренду суміші, але має subject_type "категория_личное"» |
+
+**And `@VARUS_channel:10613#21601` appears in two tables at once, consistently.** It is F1b's second
+evidence row AND a doubted row: pass 2 read the `спрос` signal from **21599** alone and flagged
+**21601** — the chain's own admin reply listing Рудь and Лімо SKUs — as «відповідь адміністрації/бота,
+а не особистий досвід споживача». The signal is found from the consumer's question; the doubt is
+about the provenance of the shop's answer. One reply, two readings, no contradiction.
 
 Row 47902 is the АТБ/творог comment — **the mention-vs-about cell that pass 1's v2 prompt did not
 move (22 → 24)**, named by hand by the pass that is forbidden to relabel it. And **0 relabellings**
