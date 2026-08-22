@@ -180,7 +180,7 @@
         "signals[].stance",
         "signals[].subject_id"
       ],
-      "rule": "answered N / N · every row's `rendering_sha256` equals its pack item's · UNREADABLE replies ≤ 17.4% of N (ceil), relabellings excluded. All three, or RED",
+      "rule": "answered N / N · every row's `rendering_sha256` equals its pack item's · UNREADABLE replies ≤ 17.4% of N (ceil), relabellings excluded · no unknown id and no duplicate · **and the rows carrying `carried_from` are exactly the four the pack names as carried**. All FIVE, or RED",
       "scored_fields": {
         "per_comment[].msg_id / noise[].msg_id": "identity. An id that was not in the request is the one field that can make a bar answer by accident, so it is a refusal and not a repair",
         "per_comment[].subject_type": "the ADR's line: rewriting a pass-1 subject is what pass 2 may not do",
@@ -191,6 +191,7 @@
         "thread.channel / thread.post_id": "the reply is scored against ONE thread's gold and this is what says which"
       },
       "sha_rule": "the pod re-renders every item from its own fields and REFUSES the whole leg if one sha does not match, so a mismatch on the Mac means the out-file and the pack parted AFTER the run",
+      "the_fifth_condition": "registered here because a bar may not go RED for a reason the record does not carry. A row without `carried_from` for a thread the pack calls carried means the SEED never reached the pod and those threads were RE-BOUGHT — the one thing the DO NOT names in as many words — and the count would otherwise be attributed to r1 ([[a_registered_bar_may_have_no_producer]] read forwards: the producer exists, so the bar is registered)",
       "what_this_bar_is": "TRANSPORT. Every unit answered, every sha matching, no duplicate and no unknown id, and the replies readable at the rate this schema is readable at. Whether the answers are RIGHT is bars 1/2/3, and they are a different question"
     },
     "report_only": {
@@ -198,7 +199,7 @@
       "subject_doubt_rate": "by pass-1 label — the FP/FN reading ruling (б) asked for",
       "the_DROP_table": "the filtered rows pass 2 sent to `noise`, by thread and by pass-1 label — the FP reading of the filter, and the answer this contract was bought for",
       "the_comparison_row": "v5b (bar-1 2/5, $0.312592, 23 threads) vs pass 2 over 79 threads at pass 1 $0.742055 + r1 $0.108122 + r2's spend",
-      "the_cost_of_the_signal_layer": "pass 1 $0.742055 + this step, beside v5b's $0.312592",
+      "the_cost_of_the_signal_layer": "pass 1 $0.742055 + pass 2 r1 $0.108122 + this step, beside v5b's $0.312592. r1's sentence said «pass 1 + this step» and meant ITS step; inherited unchanged it would drop the $0.108122 r1 spent, which is the leg D2 is required to report",
       "the_scorecard": "per flagship: found / missing / why, citing the pass-1 label of the row it names",
       "the_unreadable_field_table": "NEW in r2, and it is the measurement Dv702 bought: every report-only field the tolerant reader could not read, by field and by thread. In r1 that table did not exist because the first such field killed the whole reply",
       "the_v5b_comparison_row": {
@@ -441,6 +442,22 @@
         "name": "smoke_mean_seconds",
         "re_derived": 45.582,
         "registered": 45.582
+      },
+      {
+        "agrees": true,
+        "formula": "every one of the five seconds, in the file's own order — D2 QUOTES this list now",
+        "mode": "equals",
+        "name": "smoke_seconds_are_five_and_element_wise_the_files_own",
+        "re_derived": 5,
+        "registered": 5
+      },
+      {
+        "agrees": true,
+        "formula": "results/pass2_signals_v1.jsonl against money.arithmetic.seconds_per_call.smoke.sha256",
+        "mode": "equals",
+        "name": "the_smokes_own_file_hashes_to_what_the_record_pins",
+        "re_derived": 1,
+        "registered": 1
       },
       {
         "agrees": true,
@@ -854,7 +871,7 @@
     },
     "gate": {
       "path": "scripts/gate_pass2_signals_r2.py",
-      "sha256": "b70be97a3a344ade22019dfe60614b0722c05ef7b5b2a226ae30b20283b11194"
+      "sha256": "a7c06de8d8d654ad3b8c72af5294e79c808d4f83e67114f3b55bb6d88ee7c1b1"
     },
     "gate_r1": {
       "path": "scripts/gate_pass2_signals.py",
@@ -874,7 +891,7 @@
     "module_r2": {
       "path": "src/market_pulse/pass2_r2.py",
       "rule": "the derived ceiling and the tolerant parser. A SIBLING and not an edit: `results/pass2_pack.json` pins `pass2.py` and that pack is pinned by `results/prereg_pass2_signals.json`, a sealed record of a closed paid session",
-      "sha256": "1737f2eddf8925db1e239094eb43461d3cf1971b8c6d80c1aa3e523173d42cb4"
+      "sha256": "b0356e73cc4bc98a1baa5928559878ed752eb560311bac029b51a67e65f1af46"
     },
     "pack_builder": {
       "path": "scripts/build_pass2_r2_pack.py",
@@ -910,11 +927,11 @@
     },
     "population": {
       "record": "results/pass2_r2_pack.json",
-      "sha256": "0c1fffa1184f4d8702d83215b584dbda51a699e09d7d8bb0e0a11dee226a0ee8"
+      "sha256": "d058fe1955268e02ddb14fdb936befe90747438e76497fe44b1b0a774881e4ea"
     },
     "producer": {
       "path": "scripts/write_pass2_prereg_r2.py",
-      "sha256": "298677c698a41ced17cb168a77e5e0fd6a50db2cf9572bc23cb89eb3ea6ce1aa"
+      "sha256": "4880cc34cd4cfdbe777326c952305fc5899ef5c7f3d3a34a5b561b61e2e4b1fe"
     },
     "prompt_rule": "BYTE-IDENTICAL to r1's. Four replies r1 paid for are carried into this run's out-file, and a copied reply is an answer to this request only if this request is that request",
     "prompt_sha256": {
@@ -927,7 +944,7 @@
     },
     "runner": {
       "path": "scripts/pass2_r2_pod_runner.py",
-      "sha256": "7648962a9be0d9dfd4fa9ffd471818153a00d6b7744210bac908050c2463d6b4"
+      "sha256": "80641f37f09062c0c7cb5c40c41448aeac1288a40013263ab762aecc2bbbc002"
     },
     "scorer": {
       "functions": [
@@ -975,7 +992,7 @@
     "task": "pass2_thread_gm4_v1",
     "verdict_producer": {
       "path": "scripts/score_pass2_signals_r2.py",
-      "sha256": "f527aa17ba5f233bf92c6c9863ad62a59ce515249e14aa739f245dcacf5884d5"
+      "sha256": "ac2d0b3f577d022879fab230d29e38a59460578b9fdc6cbb5a9a301fea8f9b90"
     }
   },
   "kill_clock": [
@@ -1309,7 +1326,7 @@
     "rows_per_thread_population": 3.557,
     "rows_per_thread_smoke": 6.0,
     "rule": "r1's 79 units, r1's order, r1's renderings — checked at build time by re-rendering every one of them. r2 does not re-derive the population and does not re-buy the four threads whose replies parsed",
-    "sha256": "0c1fffa1184f4d8702d83215b584dbda51a699e09d7d8bb0e0a11dee226a0ee8",
+    "sha256": "d058fe1955268e02ddb14fdb936befe90747438e76497fe44b1b0a774881e4ea",
     "sha256_rule": "the PACK's own sha. `gate_pass1_window.main` subscripts `record.population.sha256` before every rung that reads a pack and a record without it raises `KeyError` inside `--watch`, on a pod that is already billing. Found by driving the COMMAND ([[the_entry_points_preamble_is_untested_code]])",
     "unit": "one THREAD",
     "units": 79,
@@ -1327,7 +1344,7 @@
   "producer": {
     "rule": "the constants are typed once at the top of this file with their derivations; every other number here is computed. H6 re-derives the ones that have a file behind them",
     "script": "scripts/write_pass2_prereg_r2.py",
-    "sha256": "298677c698a41ced17cb168a77e5e0fd6a50db2cf9572bc23cb89eb3ea6ce1aa"
+    "sha256": "4880cc34cd4cfdbe777326c952305fc5899ef5c7f3d3a34a5b561b61e2e4b1fe"
   },
   "reachability": {
     "entity_cases": [

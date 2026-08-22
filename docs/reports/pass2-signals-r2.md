@@ -168,8 +168,11 @@ two-copies state one of the two files moves out of silently.
 **What «scored» means is read off the scorer, not asserted.** `scorer.reader_signal_found` compares
 evidence, `subject_type` and `aspect` — and says in its own docstring that `signal_type` and
 `subject_id` are *deliberately NOT compared*. So `signals.signal_type` is report-only, and a reply
-that invents a sixth signal word keeps its thread, its evidence and its aspect, and is recorded as
-unreadable in that one field.
+that invents a sixth signal word keeps its thread, its evidence and its aspect. It is recorded as
+unreadable in that field — and, because carrying the word past the pinned domain check means
+forcing `proposed` to True, the OVERWRITE is recorded too, in its own census with the model's own
+flag beside it. (Both of those sentences are corrections the second skeptic pass made; see the
+review section below.)
 
 Eleven fields can no longer refuse: `post_summary` · `discussion_summary` · `signals.signal_type` ·
 `signals.subject_id` · `signals.stance` · `signals.reading` · `signals.quote` ·
@@ -288,3 +291,80 @@ The runbook is r1's minus the go/no-go and **plus one scp**: the seeded out-file
 finds an empty directory and the pod re-buys four threads the registration forbids re-buying —
 and `check_requests` cannot catch it, because the renderings match by construction. A test greps
 the runbook for that scp.
+
+### The five-lens review on a FROZEN tree — and this time the tally is a tally
+
+D0′ was committed first (`d71a93d`), and every lens was given that sha, told the tree would not
+move, and told to quote it. **All five quoted it back.**
+
+```
+filed 12 · confirmed 10 · refuted 1 · 1 over the per-lens cap and listed unverified (fixed anyway)
+```
+
+r1's review reported **3 confirmed and 12 refuted**, and that split measured nothing but the timing
+of my own commits — twelve skeptics refuted with «already fixed at HEAD» and named the commit that
+fixed it. One structural change, a commit before the finders start, and the same apparatus returns
+10 of 11. That is the whole of Process signal 4 of r1, closed.
+
+**Ten confirmed findings, eight distinct defects.** Two were found twice by different lenses, which
+is itself a reading: `money` and `bars` both landed on the smoke mean, `population` and `transport`
+both landed on the seed.
+
+| # | lens(es) | what it was | what it would have cost |
+|---|---|---|---|
+| **1** | authority, bars | **`parse_pass2` wrote `None` into fields the pinned reader guarantees are non-empty STRINGS, and two of them are GROUPED ON.** `score_pass2_signals.drop_table` — a SEALED file — does `sorted(Counter(noise.class))`, and r2's own verdict producer does the same over `signals.signal_type` | **the whole run.** 75 threads, $2.15, rung 7 GO — and `TypeError: '<' not supported between 'NoneType' and 'str'`, so D2 produces no verdict, no bars, no scorecard. Triggered by ONE unreadable report-only field in any of 79 threads: the exact repair r2 exists to make |
+| **2** | population, transport | **an ABSENT seed file returned «no carried rows» and skipped the whole guard.** Staging does `rm -rf /workspace/run`, so absence is the DEFAULT state | four threads re-bought — the one thing the contract's DO NOT names in as many words — ≈388 s, ≈$0.08, and r1's $0.108122 of paid evidence discarded |
+| **3** | population | **rung 7 and D2 split carried-vs-bought on the PACK'S ID LIST**, so the four re-bought threads would be reported as carried and rung 7 would say GO | it is what makes #2 invisible after the money is spent |
+| **4** | money, bars | **D2 published r1's smoke mean as 53.027** — the four CARRIED rows. r1's smoke was FIVE calls and the fifth (`@matusi_ukr:22303`, 15.801 s, the fastest) is refused and re-bought | the one reading D2 exists to publish, inflated 16.3 %, on a line the record, the contract and r1's report all state at 45.582 |
+| **5** | transport | **the `pod create` line was a hybrid of two CLIs** — `--gpuType` / `--networkVolumeId` / `--imageName` do not exist; `runpodctl pod create --help` is the authority | it cannot parse. And the natural repair of a create that will not parse is a retyped line without `--terminate-after`, which is the whole of rung 6 |
+| **6** | authority | **a present-but-not-a-list `per_comment`/`noise` was rewritten to `[]` and the thread COUNTED as parsed** | the false GREEN this module's own `SCORED_FIELDS` table forbids two screens above — seven answered rows thrown away and the thread reported as read |
+| **7** | authority | **`proposed` was forced True to carry an unreadable `signal_type` past the pinned domain check, and the invention was never recorded** | a value the model explicitly denied, published in the verdict as its answer |
+| **8** | bars (over the cap, verified by me) | **r2's record republished r1's `under_a_STOP` clause** on bars 2 and 3 — prose about a rung `main()` now raises on | the operator reads a verdict block describing a STOP arm `arm_rule` says nothing can select |
+
+**The one refutation is worth reading.** `bars` filed «an unreadable `subject_doubt` is counted as
+*not doubted*, so the published rate is a lower bound printed as a rate». The mechanism reproduces —
+`doubt_table` is falsy-tested — and the skeptic drove two 79-row out-files differing only in that
+field and showed the published tables DO carry the denominator caveat. Mechanism real, defect not.
+
+**And one that was nobody's finding, isolated by driving.** `tests/test_pass2_signals.py`'s go-token
+test was a **CLOCK**: `run_go_no_go` projects from `datetime.now()`, so with a fixed `created_at` its
+GO half stopped passing at `created_at + 1 970 s` — **10:32:50Z today** — and went red with no commit
+behind it. Found because `make check` failed on r1's file while I was fixing r2's, and isolated by
+stashing everything and re-running at the committed tree. The pod's create stamp moves with the
+clock it is measured against now.
+
+### The second skeptic pass — on the FIXED commit, and it read the fixes as new code
+
+The fixes landed as `7843d50`; the tree was frozen again and eight skeptics were given that sha,
+one per fix, each with two jobs: **does the fix close its defect, and did the fix OPEN something.**
+All eight quoted `7843d50`.
+
+```
+fixes checked 8 · closed 8 · NOT closed 0 · new defects filed 24 (19 distinct)
+```
+
+**Every fix closed. And the second half is where the value was: 19 distinct defects the FIXES
+introduced or left behind**, 18 of them corrected in the commit that follows this section. The five
+that matter:
+
+| what the fix opened | why it matters |
+|---|---|
+| **the `proposed` overwrite was filed in the census of UNREADABLE fields** — and its recorded `value` was the parser's own repaired flag, not the model's | it inflates the Dv702 measurement this whole contract was bought to take, with a field the reader read perfectly well. It now has its OWN list, its own name, the model's RAW value (captured before the repair), and it fires only when something actually changed |
+| **`unreadable_table.on_carried_rows` was the one census the carried-field fix did not re-key** | one verdict would say `units_carried_from_r1: 0` and four keys later attribute rows to `on_carried_rows` — the same defect class, inside the deliverable that reports it |
+| **the fourth and fifth RED causes of rung 7 were registered nowhere** — the record still said «All three, or RED» and the runbook enumerated three | a bar may not go RED for a reason the pre-registration does not carry. Registered now, in both |
+| **D2 still published a sixth signal type the model DENIED** — `proposed_signal_types` listed the sentinel | recording the overwrite was not enough; the consumer had to stop reading the parser's flag as the model's |
+| **an untracked `results/pass2_signals_r2_run.json` was sitting in the working tree**, holding a TEST fixture pod `p1` with no `deleted_at` | **rung 0 would have returned KILL before the first legitimate create**, with an instruction to delete a pod that never existed. Written as a SIDE EFFECT of a read-only-looking gate command: `launched_at_of` stamps the record and `save()`s it. Deleted, and step 0 of the runbook now looks for it |
+
+Three more the pass found that are r1 inheritances rather than r2's: `$SSHK` is used six times in
+the runbook and defined nowhere (fixed — step 0 defines it and every use is quoted); nothing in the
+runbook or the suite ever asks the CLI whether its flags still exist (fixed — step 0 greps
+`pod create --help`); and the create-line test compared flag NAMES only, so a drifted `--image` or
+`--network-volume-id` would parse, create a pod and fail on a cold volume at ≈$0.10 of billed time
+(fixed — it compares values too, and asserts the only one that moved is `--name`).
+
+**One is named as a bound rather than fixed.** The sentinel `"(unreadable)"` is FORGEABLE where
+`None` was not: a model that writes that exact string is indistinguishable from a repair *in the
+value*. It is distinguishable everywhere it matters — `unreadable_fields` names every field the
+parser repaired and is the authority, no bar reads `signal_type` or `noise.class`, and both rule
+strings now point at that census. The alternative is a sentinel no model can produce, which is more
+machinery for a case no reply has ever shown.

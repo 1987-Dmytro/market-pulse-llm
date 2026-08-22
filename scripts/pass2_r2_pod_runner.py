@@ -149,18 +149,37 @@ def carried(out: Path, pack: dict) -> list[str]:
     contract's DO NOT names in as many words. Staging does `rm -rf /workspace/run`, so absence is
     the DEFAULT state and the guard has to survive it ([[a_file_guard_is_not_a_row_filter]]).
     """
-    rows = (
-        [json.loads(one) for one in out.read_text(encoding="utf-8").splitlines() if one.strip()]
-        if out.exists()
-        else []
-    )
+    lines = out.read_text(encoding="utf-8").splitlines() if out.exists() else []
+    rows = []
+    for index, line in enumerate(lines):
+        if not line.strip():
+            continue
+        try:
+            rows.append(json.loads(line))
+        except json.JSONDecodeError:
+            # a TORN LAST line is the mid-write race the shipped `already_answered` also tolerates:
+            # its unit is simply not answered yet. Any earlier line is a damaged file
+            # ([[the_hardening_did_not_reach_the_sibling_reader]])
+            if index != len(lines) - 1:
+                raise SystemExit(
+                    f"{out} line {index + 1} is not JSON and it is not the last one. That is a"
+                    " damaged file, not the mid-write race — stop before the model is loaded."
+                ) from None
     named = set(pack["carried"]["ids"])
     seeded = [one["id"] for one in rows if one.get("carried_from")]
     if sorted(seeded) != sorted(named):
+        state = (
+            "does not exist"
+            if not out.exists()
+            else "is empty"
+            if not rows
+            else f"carries {sorted(seeded)} as carried rows"
+        )
         raise SystemExit(
-            f"{out} carries {sorted(seeded)} as carried rows and the pack names {sorted(named)}."
-            " The out-file this pod would resume into is not the one the registration seeded."
-            " Stop before the model is loaded."
+            f"{out} {state} and the pack names {sorted(named)}. The out-file this pod would resume"
+            " into is not the one the registration seeded — the seed did not reach this pod, and"
+            " the run would RE-BUY the threads r1 already paid for. Stop before the model is"
+            " loaded."
         )
     for one in rows:
         if one.get("carried_from") and one["rendering_sha256"] != next(

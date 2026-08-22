@@ -1369,7 +1369,8 @@ def test_the_runbook_scps_the_seeded_out_file_to_the_pod():
     """The step with money on it: without the seed on the pod, four threads are re-bought."""
     assert f"results/{OUT_NAME} \\" in RUNBOOK or f"results/{OUT_NAME}" in RUNBOOK
     assert f"root@<HOST>:/workspace/run/{OUT_NAME}" in RUNBOOK
-    assert "re-buys four threads" in RUNBOOK
+    assert "REFUSES to start without it" in RUNBOOK
+    assert "re-buy" in RUNBOOK
 
 
 def test_the_runbook_launches_the_r2_runner_with_the_pack():
@@ -1505,39 +1506,103 @@ def test_the_verdict_SURVIVES_r1s_SEALED_tables_when_a_report_only_field_is_unre
     ]
 
 
-def test_an_OVERWRITTEN_proposed_flag_is_RECORDED_and_not_asserted_silently():
-    """`proposed` is forced True to carry the unreadable word past the pinned domain check."""
-    said_false = reply(
-        signals=[
-            {
-                "signal_type": "не_бывает_такого",
-                "subject_type": "категория_личное",
-                "subject_id": None,
-                "aspect": "taste",
-                "reading": "r",
-                "proposed": False,
-                "evidence": [7],
-                "quote": "q",
-            }
-        ],
-        noise=[],
-    )
-    verdict = pass2_r2.parse_pass2(said_false, unit=unit())
-    assert verdict["signals"][0]["proposed"] is True, "the pinned reader needs it to accept the row"
-    assert "signals.proposed" in verdict["unreadable_field_names"]
-    row = next(one for one in verdict["unreadable_fields"] if one["field"] == "signals.proposed")
-    assert row["value"] == "false", "the model's own flag is kept beside the overwrite"
-    assert "overwritten to True" in row["why"]
-    # a legal `proposed: true` with a sixth word is untouched and records nothing
-    legal = json.loads(said_false)
-    legal["signals"][0]["proposed"] = True
-    clean = pass2_r2.parse_pass2(json.dumps(legal, ensure_ascii=False), unit=unit())
+def test_an_OVERWRITTEN_proposed_flag_is_RECORDED_in_its_OWN_census():
+    """`proposed` is forced True to carry an unreadable word past the pinned domain check.
+
+    Its own list, its own name, the MODEL's raw value, and only when something actually changed.
+    Filing it under `unreadable_fields` would inflate the Dv702 measurement this contract was
+    bought to take with a field the reader read perfectly well.
+    """
+
+    def signal(**kw):
+        one = {
+            "signal_type": "не_бывает_такого",
+            "subject_type": "категория_личное",
+            "subject_id": None,
+            "aspect": "taste",
+            "reading": "r",
+            "evidence": [7],
+            "quote": "q",
+        }
+        return pass2_r2.parse_pass2(reply(signals=[{**one, **kw}], noise=[]), unit=unit())
+
+    for label, kw, raw in (
+        ("the flag is absent", {}, "null"),
+        ("the model said false", {"proposed": False}, "false"),
+        ("the model wrote 0, which is not a boolean", {"proposed": 0}, "0"),
+    ):
+        verdict = signal(**kw)
+        assert verdict["signals"][0]["proposed"] is True, label
+        assert verdict["signals"][0]["signal_type"] == pass2_r2.UNREADABLE, label
+        assert verdict["overwritten_field_names"] == ["signals.proposed"], label
+        row = verdict["overwritten_fields"][0]
+        assert row["value"] == raw, (label, row)
+        assert "overwritten to True" in row["why"], label
+        # and the OVERWRITE is not filed as an unreadable field
+        assert "signals.proposed" not in [
+            one["field"] for one in verdict["unreadable_fields"] if one["why"].startswith("over")
+        ], label
+
+    # the model wrote `0`: the flag itself IS unreadable AND it was overwritten — two facts, two
+    # lists, and the unreadable row carries the validator's own message
+    both = signal(proposed=0)
+    assert "signals.proposed" in both["unreadable_field_names"]
+    assert [
+        one["why"] for one in both["unreadable_fields"] if one["field"] == "signals.proposed"
+    ] == ["signals.proposed is not a boolean"]
+
+    # a legitimate `proposed: true` with a sixth word changes nothing and records nothing
+    clean = signal(proposed=True)
     assert clean["signals"][0]["signal_type"] == "не_бывает_такого"
-    assert clean["unreadable_field_names"] == []
+    assert clean["signals"][0]["proposed"] is True
+    assert clean["unreadable_field_names"] == [] and clean["overwritten_field_names"] == []
+
+
+def test_D2_does_not_publish_a_sixth_signal_type_the_model_DENIED(tmp_path, monkeypatch):
+    """`proposed_signal_types` is the model's list, and the parser's forced True is not in it."""
+    out = tmp_path / OUT_NAME
+    whole_run(out)
+    rows = [json.loads(one) for one in out.read_text(encoding="utf-8").splitlines() if one.strip()]
+    target = next(one for one in rows if one["id"] == OWED[1])
+    answer = json.loads(target["reply"])
+    answer["signals"] = [
+        {
+            "signal_type": "не_бывает_такого",
+            "subject_type": answer["per_comment"][0]["subject_type"],
+            "subject_id": None,
+            "aspect": "taste",
+            "reading": "r",
+            "proposed": False,
+            "evidence": [answer["per_comment"][0]["msg_id"]],
+            "quote": "q",
+        }
+    ]
+    target["reply"] = json.dumps(answer, ensure_ascii=False)
+    out.write_text(
+        "".join(json.dumps(one, ensure_ascii=False) + "\n" for one in rows), encoding="utf-8"
+    )
+    monkeypatch.setattr(scoring, "EVIDENCE", out)
+    monkeypatch.setattr(scoring, "RUN", tmp_path / "run.json")
+    (tmp_path / "run.json").write_text(json.dumps({"pods": [], "gates": []}), encoding="utf-8")
+    verdict = scoring.build()
+    assert verdict["replies"]["proposed_signal_types"] == []
+    assert verdict["replies"]["signal_types_the_parser_could_not_read"] == 1
+    assert verdict["overwritten_report_only_fields"]["by_field"] == {"signals.proposed": 1}
+    assert "signals.proposed" not in verdict["unreadable_report_only_fields"]["by_field"]
+    assert verdict["unreadable_report_only_fields"]["by_field"] == {
+        "per_comment.note": len(BY_ID[OWED[0]]["comments"]),
+        "signals.signal_type": 1,
+    }
 
 
 def test_a_container_that_is_PRESENT_and_not_a_list_still_REFUSES():
-    """Rewriting it to `[]` would answer «this thread dropped nothing» over an unreadable answer."""
+    """Rewriting it to `[]` would answer «this thread dropped nothing» over an unreadable answer.
+
+    Only the `per_comment` and `noise` legs are regressions of the fix — `_tolerate` never rewrote
+    `signals`, which has no drop loop, so its leg passes at the pre-fix sha too. It is here because
+    the closed refusal set is a claim about ALL THREE containers and a test of two of them is a
+    test of two of them ([[a_consumer_list_is_not_a_meaning_list]]).
+    """
     for field in ("per_comment", "noise", "signals"):
         payload = json.loads(reply())
         payload[field] = {"a": {"msg_id": 7}}  # a map keyed by something that is not a msg_id
@@ -1553,12 +1618,45 @@ def test_the_runner_REFUSES_an_ABSENT_seed_file(tmp_path):
     The first version returned `[]` for a missing out-file and skipped the whole check, so a seed
     whose scp failed left a pod that bought all 79 and re-bought the four r1 paid for.
     """
-    with pytest.raises(SystemExit, match="not the one the registration seeded"):
+    with pytest.raises(SystemExit, match="does not exist and the pack names"):
         runner.carried(tmp_path / "never-copied.jsonl", PACK)
     empty = tmp_path / "empty.jsonl"
     empty.write_text("", encoding="utf-8")
-    with pytest.raises(SystemExit, match="not the one the registration seeded"):
+    with pytest.raises(SystemExit, match="is empty and the pack names"):
         runner.carried(empty, PACK)
+    # the two states say DIFFERENT things: from the pod log alone, «the scp silently failed» and
+    # «the seed is there but empty» need different next steps
+
+    # and the refusal happens through main(), BEFORE the loader is ever called
+    pack = tmp_path / "pack.json"
+    pack.write_text(json.dumps(PACK, ensure_ascii=False), encoding="utf-8")
+    loaded = []
+    with pytest.raises(SystemExit, match="does not exist and the pack names"):
+        runner.main(
+            [
+                "--pack",
+                str(pack),
+                "--outdir",
+                str(tmp_path / "empty-run"),
+                "--repo",
+                str(REPO_ROOT),
+            ],
+            loader=lambda *a, **kw: loaded.append(1),
+        )
+    assert loaded == [], "the model must not be loaded — that is 450 s and about $0.09"
+
+    # a TORN LAST line is the mid-write race and not a damaged file
+    torn = tmp_path / "torn.jsonl"
+    torn.write_text(
+        (RESULTS / OUT_NAME).read_text(encoding="utf-8") + '{"id": "@x:1", "sec', encoding="utf-8"
+    )
+    assert runner.carried(torn, PACK) == sorted(CARRIED)
+    damaged = tmp_path / "damaged.jsonl"
+    damaged.write_text(
+        '{"id": "@x:1", "sec\n' + (RESULTS / OUT_NAME).read_text(encoding="utf-8"), encoding="utf-8"
+    )
+    with pytest.raises(SystemExit, match="damaged file"):
+        runner.carried(damaged, PACK)
 
 
 def test_rung_7_is_RED_when_the_carried_split_disagrees_with_the_pack(tmp_path, monkeypatch):
@@ -1641,10 +1739,21 @@ def test_the_WATCH_command_runs_end_to_end_on_a_fake_transport(tmp_path, monkeyp
     capsys.readouterr()
 
 
-def test_the_runbook_create_line_uses_the_CLIs_own_flag_names():
+def create_line(text: str) -> str:
+    """The `pod create` COMMAND, and not the `--help` line step 0 uses to check the CLI's flags."""
+    return next(
+        one for one in text.split("runpodctl pod create")[1:] if one.lstrip().startswith("--name")
+    ).split("```", 1)[0]
+
+
+def test_the_runbook_create_line_is_r1s_OWN_line_flags_AND_values():
     """`runpodctl pod create` rejects a camelCase spelling at parse time, and the natural repair
-    of a create that will not parse is a retyped line without `--terminate-after` — rung 6."""
-    create = RUNBOOK.split("runpodctl pod create", 1)[1].split("```", 1)[0]
+    of a create that will not parse is a retyped line without `--terminate-after` — rung 6.
+
+    Names AND values: a drifted `--image` or `--network-volume-id` parses cleanly, the pod is
+    created, the meter starts, and the failure surfaces as a cold volume at ~$0.10 of billed time.
+    """
+    create = create_line(RUNBOOK)
     for flag in (
         "--gpu-id",
         "--gpu-count",
@@ -1666,10 +1775,42 @@ def test_the_runbook_create_line_uses_the_CLIs_own_flag_names():
         "--containerDiskSize",
     ):
         assert invented not in RUNBOOK, invented
-    # and it is r1's line, changed only in the pod's name
-    r1 = (REPO_ROOT / "scripts" / "runbook_pass2_signals.md").read_text(encoding="utf-8")
-    r1_create = r1.split("runpodctl pod create", 1)[1].split("```", 1)[0]
-    assert set(re.findall(r"--[a-z-]+", create)) == set(re.findall(r"--[a-z-]+", r1_create))
+
+    r1 = create_line(
+        (REPO_ROOT / "scripts" / "runbook_pass2_signals.md").read_text(encoding="utf-8")
+    )
+
+    def pairs(line: str) -> dict:
+        found, tokens = {}, re.findall(r"--[a-z-]+(?:\s+'[^']*'|\s+[^\s\\]+)?", line)
+        for token in tokens:
+            flag, _, value = token.partition(" ")
+            found[flag] = value.strip().strip("'")
+        return found
+
+    mine, theirs = pairs(create), pairs(r1)
+    assert set(mine) == set(theirs)
+    moved = {flag for flag in mine if mine[flag] != theirs[flag]}
+    assert moved == {"--name"}, (
+        f"«changed only in the pod's name» — these also moved: {sorted(moved)}"
+    )
+    assert mine["--name"] == "mp-pass2-signals-r2"
+    # and the volume and the card are the ones r1's pod actually ran on
+    ran = json.loads((RESULTS / "pass2_signals_run.json").read_text(encoding="utf-8"))["pods"][0]
+    assert ran["card"] in mine["--gpu-id"]
+
+
+def test_step_0_makes_the_operator_ask_the_CLI_and_look_for_a_stray_run_record():
+    """Two $0 checks the review paid for: CLI drift is silent, and a driver can leave a run record.
+
+    A leftover `results/pass2_signals_r2_run.json` holding a TEST fixture pod with no `deleted_at`
+    makes rung 0 return KILL before the first legitimate create, with an instruction to delete a
+    pod that never existed.
+    """
+    step_zero = RUNBOOK.split("## 0 —", 1)[1].split("## 1 —", 1)[0]
+    assert "runpodctl pod create --help" in step_zero
+    assert "results/pass2_signals_r2_run.json" in step_zero
+    assert "SSHK" in step_zero, 'six scp/ssh lines spell -i "$SSHK" and nothing defined it'
+    assert "-i $SSHK" not in RUNBOOK, "unquoted, an unset $SSHK makes -i swallow the next -o"
 
 
 def test_the_record_carries_no_clause_about_a_rung_r2_REPEALED():
@@ -1679,3 +1820,85 @@ def test_the_record_carries_no_clause_about_a_rung_r2_REPEALED():
         assert "REPEALED WITH THE RUNG" in clause, bar
         assert "rung 7 is RED" in clause, bar
     assert list(RECORD["bars"]["completeness"]["arms"]) == ["GO"]
+
+
+def test_EVERY_census_in_D2_is_keyed_on_the_carried_FIELD(tmp_path, monkeypatch):
+    """`unreadable_table.on_carried_rows` was the last one still asking the pack's id list."""
+    out = tmp_path / OUT_NAME
+    whole_run(out)
+    rows = [json.loads(one) for one in out.read_text(encoding="utf-8").splitlines() if one.strip()]
+    for one in rows:
+        one.pop("carried_from", None)  # the seed never landed: the pod bought all 79
+    out.write_text(
+        "".join(json.dumps(one, ensure_ascii=False) + "\n" for one in rows), encoding="utf-8"
+    )
+    monkeypatch.setattr(scoring, "EVIDENCE", out)
+    monkeypatch.setattr(scoring, "RUN", tmp_path / "run.json")
+    (tmp_path / "run.json").write_text(json.dumps({"pods": [], "gates": []}), encoding="utf-8")
+    verdict = scoring.build()
+    assert verdict["evidence"]["units_carried_from_r1"] == 0
+    assert verdict["evidence"]["carried_disagreement"] == sorted(CARRIED)
+    assert verdict["unreadable_report_only_fields"]["rows"] > 0, "there is something to attribute"
+    assert verdict["unreadable_report_only_fields"]["on_carried_rows"] == 0, (
+        "one verdict may not say «0 carried» in one table and attribute rows to r1 in the next"
+    )
+    assert verdict["non_gating"]["units_bought"] == 79
+
+
+def test_the_FIFTH_red_cause_of_rung_7_is_REGISTERED_and_not_only_coded():
+    """A bar may not go RED for a reason the pre-registration does not carry."""
+    rule = RECORD["bars"]["completeness"]["rule"]
+    assert "All FIVE, or RED" in rule
+    assert "carried_from" in rule
+    assert RECORD["bars"]["completeness"]["the_fifth_condition"]
+    runbook = RUNBOOK.split("## 6 —", 1)[1]
+    assert "FIVE conditions" in runbook
+    assert "carried_from" in runbook
+
+
+def test_the_cost_sentence_carries_r1s_own_step_and_not_only_pass_1s():
+    """r1's sentence said «pass 1 + this step» and meant ITS step."""
+    line = RECORD["bars"]["report_only"]["the_cost_of_the_signal_layer"]
+    assert "0.742055" in line and "0.108122" in line and "0.312592" in line
+
+
+def test_leg_state_prints_BOTH_carried_counts_so_a_missing_seed_is_visible(tmp_path, monkeypatch):
+    """`legs_of` cannot ask `carried_from` — it is handed a pack. The watch line shows both."""
+    record = tmp_path / "run.json"
+    monkeypatch.setattr(gate.window, "RECORD", record)
+    record.write_text(json.dumps(state_with_pod()), encoding="utf-8")
+    out = tmp_path / OUT_NAME
+    bought_rows(out, OWED[:3], 20.0)
+    legs = gate.leg_state(RECORD, [PACK], tmp_path)
+    assert legs[0]["carried_rows_in_the_file"] == 4
+    assert legs[0]["carried_rows_the_pack_names"] == 4
+    # the same file with the carried rows stripped: the two counts part, on every poll
+    rows = [json.loads(one) for one in out.read_text(encoding="utf-8").splitlines() if one.strip()]
+    out.write_text(
+        "".join(
+            json.dumps({k: v for k, v in one.items() if k != "carried_from"}, ensure_ascii=False)
+            + "\n"
+            for one in rows
+        ),
+        encoding="utf-8",
+    )
+    legs = gate.leg_state(RECORD, [PACK], tmp_path)
+    assert legs[0]["carried_rows_in_the_file"] == 0 and legs[0]["carried_rows_the_pack_names"] == 4
+
+
+def test_D2_publishes_the_smokes_per_thread_seconds_and_the_ONE_paired_thread(
+    tmp_path, monkeypatch
+):
+    """The two means are over different threads; the paired thread is the size-free reading."""
+    out = tmp_path / OUT_NAME
+    whole_run(out)
+    monkeypatch.setattr(scoring, "EVIDENCE", out)
+    monkeypatch.setattr(scoring, "RUN", tmp_path / "run.json")
+    (tmp_path / "run.json").write_text(json.dumps({"pods": [], "gates": []}), encoding="utf-8")
+    ng = scoring.build()["non_gating"]
+    assert set(ng["r1_smoke_per_thread"]) == set(CARRIED) | {F2}
+    paired = ng["the_one_paired_thread"]
+    assert paired["id"] == F2
+    assert paired["r1_seconds"] == 15.801
+    assert paired["this_pod_seconds"] is not None, "r2 re-buys it, so both sides have a reading"
+    assert "composition" in ng["the_two_means_are_over_different_threads"]

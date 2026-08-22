@@ -337,8 +337,17 @@ def bars(held: dict, reach: dict) -> dict:
         "completeness": {
             "rule": (
                 "answered N / N · every row's `rendering_sha256` equals its pack item's ·"
-                f" UNREADABLE replies ≤ {REFUSALS_FRACTION:.1%} of N (ceil), relabellings excluded."
-                " All three, or RED"
+                f" UNREADABLE replies ≤ {REFUSALS_FRACTION:.1%} of N (ceil), relabellings excluded ·"
+                " no unknown id and no duplicate · **and the rows carrying `carried_from` are"
+                " exactly the four the pack names as carried**. All FIVE, or RED"
+            ),
+            "the_fifth_condition": (
+                "registered here because a bar may not go RED for a reason the record does not"
+                " carry. A row without `carried_from` for a thread the pack calls carried means the"
+                " SEED never reached the pod and those threads were RE-BOUGHT — the one thing the"
+                " DO NOT names in as many words — and the count would otherwise be attributed to r1"
+                " ([[a_registered_bar_may_have_no_producer]] read forwards: the producer exists, so"
+                " the bar is registered)"
             ),
             "arms": {
                 "GO": {
@@ -390,6 +399,12 @@ def bars(held: dict, reach: dict) -> dict:
                 "NEW in r2, and it is the measurement Dv702 bought: every report-only field the"
                 " tolerant reader could not read, by field and by thread. In r1 that table did not"
                 " exist because the first such field killed the whole reply"
+            ),
+            "the_cost_of_the_signal_layer": (
+                f"pass 1 ${SIGNAL_LAYER_PASS_1_USD} + pass 2 r1 ${R1_CLOCK_USD} + this step, beside"
+                f" v5b's ${ONE_SHOT_READER_USD}. r1's sentence said «pass 1 + this step» and meant"
+                " ITS step; inherited unchanged it would drop the $0.108122 r1 spent, which is the"
+                " leg D2 is required to report"
             ),
             "the_comparison_row": (
                 "v5b (bar-1 2/5, $0.312592, 23 threads) vs pass 2 over 79 threads at pass 1"
@@ -1042,6 +1057,26 @@ def h6(held: dict, people: dict, sums: dict, clock: list[dict]) -> dict:
             "mean seconds over the same file",
             45.582,
             smoke["mean"],
+        ),
+        row(
+            "smoke_seconds_are_five_and_element_wise_the_files_own",
+            "every one of the five seconds, in the file's own order — D2 QUOTES this list now",
+            5,
+            sum(
+                1
+                for one, two in zip(
+                    smoke["seconds"],
+                    [float(x["seconds"]) for x in rows(R1_OUT)],
+                    strict=True,
+                )
+                if one == two
+            ),
+        ),
+        row(
+            "the_smokes_own_file_hashes_to_what_the_record_pins",
+            "results/pass2_signals_v1.jsonl against money.arithmetic.seconds_per_call.smoke.sha256",
+            1,
+            int(smoke["sha256"] == summary.sha256_of(R1_OUT)),
         ),
         row(
             "pod_class_spread_v2",

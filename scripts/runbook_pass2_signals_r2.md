@@ -12,9 +12,12 @@ pod-class spread. There is no rung to decide anything mid-session: price → ssh
 
 **The one new step, and it is the one with money attached.** `results/pass2_signals_r2_v1.jsonl` is
 SEEDED with the four replies r1 paid for, and it must be **ON THE POD** before the launch.
-`reader_v5_pod_runner.already_answered` reads that file to decide what not to re-ask; a pod that
-starts with an empty run directory re-buys four threads the registration forbids re-buying, and
-`check_requests` will not catch it because the renderings match by construction.
+`reader_v5_pod_runner.already_answered` reads that file to decide what not to re-ask, and
+`check_requests` cannot catch its absence because the renderings match by construction. **The
+runner REFUSES to start without it** — `carried()` compares the file's `carried_from` rows against
+the pack's list before the model is loaded, so a seed that did not land costs 0 s of generation and
+a pod that exits at once. Without that guard it would silently re-buy four threads the registration
+forbids re-buying, which is what this step exists to make impossible.
 
 **What the numbers are:**
 
@@ -60,6 +63,11 @@ PYTHONPATH=src python3.11 scripts/runpod_guard.py --step pass2-signals-r2 --step
 
 ```bash
 git status --short                       # clean; the record is COMMITTED or the gate refuses it
+ls results/pass2_signals_r2_run.json 2>/dev/null && \
+  echo "STOP: a run record exists before the first pod. A test or a driver wrote it -- rung 0 will
+        read its fixture pod, find no deleted_at and KILL. Delete it and re-run step 0."
+: "${SSHK:=$HOME/.ssh/id_ed25519}"; ls -l "$SSHK"   # every scp/ssh below spells -i "$SSHK"
+runpodctl pod create --help | grep -E -- "--gpu-id|--network-volume-id|--container-disk-in-gb|--terminate-after"
 PYTHONPATH=src python3.11 scripts/build_pass2_r2_pack.py          # 79 units, 4 carried, 75 owed
 PYTHONPATH=src python3.11 scripts/build_pass2_r2_pack.py --seed   # the four rows into the out-file
 wc -l results/pass2_signals_r2_v1.jsonl  # 4 — and every one carries `carried_from`
@@ -132,7 +140,7 @@ no remote; the transport is a git bundle.
 
 ```bash
 git bundle create /tmp/market-pulse-pass2-signals-r2.bundle HEAD
-scp -i $SSHK -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR \
+scp -i "$SSHK" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR \
   -P <PORT> /tmp/market-pulse-pass2-signals-r2.bundle \
   scripts/pass2_r2_pod_runner.py scripts/pass1_fewshot_pod_runner.py \
   scripts/reader_v5_pod_runner.py scripts/reader_v4_pod_runner.py \
@@ -140,7 +148,7 @@ scp -i $SSHK -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogL
 ```
 
 ```bash
-ssh -i $SSHK -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR \
+ssh -i "$SSHK" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR \
   -p <PORT> root@<HOST>
 # on the pod:
 cd /workspace && rm -rf repo && git clone -q market-pulse-pass2-signals-r2.bundle repo
@@ -157,7 +165,7 @@ ls /workspace/run                                        # empty — the proof, 
 run directory, and their digest is compared on both sides before the launch:
 
 ```bash
-scp -i $SSHK -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR \
+scp -i "$SSHK" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR \
   -P <PORT> results/pass2_signals_r2_v1.jsonl \
   root@<HOST>:/workspace/run/pass2_signals_r2_v1.jsonl
 shasum -a 256 results/pass2_signals_r2_v1.jsonl
@@ -165,8 +173,10 @@ ssh ... -p <PORT> root@<HOST> 'sha256sum /workspace/run/pass2_signals_r2_v1.json
   wc -l /workspace/run/pass2_signals_r2_v1.jsonl'        # same digest, 4 lines
 ```
 
-**Without this file on the pod the run re-buys four threads.** `already_answered` reads it; the
-runner prints the carried ids and refuses if they are not exactly the ones the pack names.
+**Without this file on the pod the runner REFUSES and the pod generates nothing.** It prints the
+carried ids and the state it found (`does not exist` / `is empty` / the ids it did find) and exits
+before the model is loaded — so the symptom of a failed seed is an immediate exit and a rung-3 KILL
+at 451 s, not an over-spend. `already_answered` is what then skips the four.
 
 **On a RE-CREATION** — allowed only for a death at rungs 1–3, so no BOUGHT reply can exist yet — the
 dead pod's clocks must go and the seed must be copied again:
@@ -247,11 +257,11 @@ the Mac. One command per artifact, so a failed copy is visible rather than avera
 ssh ... -p <PORT> root@<HOST> 'cd /workspace/run && find . -type f | sort | xargs sha256sum'
 # LC_ALL=C sha256sum on the pod; shasum -a 256 on the Mac. Same digest, two tools
 
-scp -i $SSHK -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR \
+scp -i "$SSHK" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR \
   -P <PORT> root@<HOST>:/workspace/run/pass2_signals_r2_v1.jsonl results/pass2_signals_r2_v1.jsonl
-scp -i $SSHK -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR \
+scp -i "$SSHK" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR \
   -P <PORT> root@<HOST>:/workspace/run/launched_at results/pass2_signals_r2_launched_at
-scp -i $SSHK -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR \
+scp -i "$SSHK" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR \
   -P <PORT> root@<HOST>:/workspace/run/pod.log results/pass2_signals_r2_pod.log
 shasum -a 256 results/pass2_signals_r2_v1.jsonl results/pass2_signals_r2_launched_at \
   results/pass2_signals_r2_pod.log      # THREE for three
@@ -279,11 +289,18 @@ PYTHONPATH=src python3.11 scripts/gate_pass2_signals_r2.py --completeness \
 PYTHONPATH=src python3.11 scripts/score_pass2_signals_r2.py
 ```
 
-`--completeness` has ONE arm: 79 answered of 79, every `rendering_sha256` matching, and unreadable
-replies ≤ 14. It counts a **RELABELLING** as its own refusal cause, because a reply that rewrote a
-pass-1 subject is not a transport failure — it is pass 2 doing the one thing the ADR says it may not.
-It also counts every REPORT-ONLY field the tolerant reader could not read, and none of those is a
-refusal: that count is the measurement Dv702 bought.
+`--completeness` has ONE arm and **FIVE conditions, all of which must hold**: 79 answered of 79 ·
+every `rendering_sha256` matching · unreadable replies ≤ 14 · no unknown id and no duplicate · and
+the rows carrying `carried_from` are exactly the four the pack names as carried. The last is new in
+r2 and it is registered in `results/prereg_pass2_signals_r2.json::bars.completeness`: a
+disagreement means the SEED never reached the pod and those four threads were RE-BOUGHT.
+
+It counts a **RELABELLING** as its own refusal cause, because a reply that rewrote a pass-1 subject
+is not a transport failure — it is pass 2 doing the one thing the ADR says it may not. It also
+counts every REPORT-ONLY field the tolerant reader could not read, and none of those is a refusal:
+that count is the measurement Dv702 bought. A field the parser OVERWROTE for its own reasons is
+counted separately — «what could the reader not read» and «what did the reader write» are two
+questions and one number answers neither.
 
 `score_pass2_signals_r2.py` writes `results/pass2_signals_r2_verdict.json`: bars 1/2/3 through the
 reader's own scorer over all 79 threads, the per-flagship scorecard citing the pass-1 label of every

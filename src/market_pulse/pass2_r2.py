@@ -222,24 +222,37 @@ def _tolerate(payload: dict) -> tuple[dict, list[dict], list[tuple], list[dict]]
     second spelling of a domain is the two-copies state one of the two files moves out of silently
     ([[a_moved_constant_fails_green]]).
 
-    Returns the sanitised payload, the `unreadable_fields` rows, the (container, index, key) triples
-    whose value must read :data:`UNREADABLE` in the verdict, and the rows dropped for having no
-    readable id.
+    Returns the sanitised payload, the `unreadable_fields` rows, the `overwritten_fields` rows, the
+    (container, index, key) triples whose value must read :data:`UNREADABLE` in the verdict, and the
+    rows dropped for having no readable id.
     """
     unreadable: list[dict] = []
+    overwritten: list[dict] = []
     nulled: list[tuple] = []
     dropped: list[dict] = []
 
-    def note(where: tuple, value, why: str) -> None:
+    def _row(where: tuple, value, why: str) -> dict:
         container, index, key = where
-        unreadable.append(
-            {
-                "where": f"{container}[{index}].{key}" if container else key,
-                "field": f"{container}.{key}" if container else key,
-                "value": json.dumps(value, ensure_ascii=False)[:120],
-                "why": why,
-            }
-        )
+        return {
+            "where": f"{container}[{index}].{key}" if container else key,
+            "field": f"{container}.{key}" if container else key,
+            "value": json.dumps(value, ensure_ascii=False)[:120],
+            "why": why,
+        }
+
+    def note(where: tuple, value, why: str) -> None:
+        """A field the pinned validator REFUSED. This list is the Dv702 measurement and nothing
+        else goes in it — a field the parser overwrote for its own reasons was READ fine, and
+        filing it here would inflate the very census the contract was bought to take."""
+        unreadable.append(_row(where, value, why))
+
+    def overwrite(where: tuple, raw, why: str) -> None:
+        """A field this parser CHANGED for its own reasons, with the model's own value beside it.
+
+        Its own list, because it is its own kind: `unreadable_fields` answers «what could the
+        reader not read» and this answers «what did the reader write». One list holding both would
+        make the first question unanswerable ([[count_the_kind_not_the_rows]])."""
+        overwritten.append(_row(where, raw, why))
 
     def text(row: dict, key: str, field: str, where: tuple, *, nullable: bool) -> None:
         value = row.get(key)
@@ -281,6 +294,9 @@ def _tolerate(payload: dict) -> tuple[dict, list[dict], list[tuple], list[dict]]
     for index, row in enumerate(payload.get("signals") or []):
         if not isinstance(row, dict):
             continue
+        # captured BEFORE `flag()` can repair it: the overwrite below promises to publish the
+        # MODEL's own flag, and after the repair the value in the row is this parser's
+        raw_proposed = row.get("proposed", None)
         flag(row, "proposed", "signals.proposed", ("signals", index, "proposed"))
         flag(row, "from_post", "signals.from_post", ("signals", index, "from_post"))
         where = ("signals", index, "signal_type")
@@ -293,14 +309,17 @@ def _tolerate(payload: dict) -> tuple[dict, list[dict], list[tuple], list[dict]]
             note(where, row.get("signal_type"), why)
             # `proposed` is OVERWRITTEN to carry the unreadable word past the pinned domain check,
             # and an overwrite nobody records is a value the model never gave being published as
-            # its answer. It is noted under its own field name, so `unreadable_field_names` says
-            # so whenever it happened ([[an_abstention_is_an_answer]])
-            note(
-                ("signals", index, "proposed"),
-                row.get("proposed"),
-                "overwritten to True so the unreadable signal_type could pass the pinned domain"
-                " check. The model's own flag is the `value` beside this line",
-            )
+            # its answer. Recorded ONLY when it actually changed, with the value the MODEL wrote —
+            # `raw`, captured before `flag()` above could repair it — and in its own list, because
+            # a field the reader WROTE is not a field the reader could not READ
+            # ([[an_abstention_is_an_answer]])
+            if raw_proposed is not True:
+                overwrite(
+                    ("signals", index, "proposed"),
+                    raw_proposed,
+                    "overwritten to True so the unreadable signal_type could pass the pinned"
+                    " domain check. The model's own flag is the `value` beside this line",
+                )
             row["signal_type"], row["proposed"] = UNREADABLE, True
             nulled.append(where)
         text(row, "reading", "signals.reading", ("signals", index, "reading"), nullable=False)
@@ -318,10 +337,13 @@ def _tolerate(payload: dict) -> tuple[dict, list[dict], list[tuple], list[dict]]
         )
 
     kept: list[dict] = []
-    # a container that is PRESENT and not a list is left exactly as it is, so `prompts._objects`
-    # refuses it under closed-set cause 5. Rewriting it to `[]` would answer «this thread dropped
-    # nothing» over an answer nobody could read — the false GREEN this module's own SCORED_FIELDS
-    # table forbids two screens above ([[a_structural_stop_accepts_a_structural_non_answer]])
+    # a container that is PRESENT and not a LIST is left exactly as it is, so `prompts._objects`
+    # refuses it under closed-set cause 5 — rewriting it to `[]` would answer «this thread dropped
+    # nothing» over a container nobody could read. A container that IS a list and whose rows are
+    # individually unreadable is a DIFFERENT state and is not this guard's: those rows are dropped
+    # one by one into `rows_without_a_readable_id`, which is a receipt a reader can count, and the
+    # accounting's `in_neither_list` shows every comment they left unplaced
+    # ([[a_structural_stop_accepts_a_structural_non_answer]], [[count_the_kind_not_the_rows]])
     for row in payload.get("per_comment") if isinstance(payload.get("per_comment"), list) else []:
         if (
             not isinstance(row, dict)
@@ -397,7 +419,7 @@ def _tolerate(payload: dict) -> tuple[dict, list[dict], list[tuple], list[dict]]
             nullable=False,
         )
 
-    return payload, unreadable, nulled, dropped
+    return payload, unreadable, overwritten, nulled, dropped
 
 
 def parse_pass2(reply: str, *, unit: dict) -> dict:
@@ -415,7 +437,7 @@ def parse_pass2(reply: str, *, unit: dict) -> dict:
     """
     payload, repairs = prompts._reader_object(reply)
     payload["entities"] = unit["entities"]
-    payload, unreadable, nulled, dropped_rows = _tolerate(payload)
+    payload, unreadable, overwritten, nulled, dropped_rows = _tolerate(payload)
     verdict = prompts._reader(payload)
     for container, index, key in nulled:
         # :data:`UNREADABLE` and never `None` — see the constant. Two of these fields are grouped on
@@ -494,6 +516,8 @@ def parse_pass2(reply: str, *, unit: dict) -> dict:
         ),
         "unreadable_fields": unreadable,
         "unreadable_field_names": sorted({one["field"] for one in unreadable}),
+        "overwritten_fields": overwritten,
+        "overwritten_field_names": sorted({one["field"] for one in overwritten}),
         "rows_without_a_readable_id": dropped_rows,
         "subject_doubt_unreadable": sorted(doubt_unreadable),
         "per_comment_subject_omitted": sorted(omitted),

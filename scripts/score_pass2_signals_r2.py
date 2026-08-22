@@ -53,7 +53,7 @@ def read(path: Path) -> list[dict]:
     return [json.loads(one) for one in path.read_text(encoding="utf-8").splitlines() if one.strip()]
 
 
-def answers(pack: dict, rows: list[dict]) -> tuple[dict, list[dict], list[dict]]:
+def answers(pack: dict, rows: list[dict]) -> tuple[dict, list[dict], list[dict], list[dict]]:
     """Every reply parsed against the UNIT it was asked about — r2's parser, r1's rule.
 
     The unit is what makes strict authority checkable: the pass-1 labels a reply is held to are in
@@ -62,7 +62,7 @@ def answers(pack: dict, rows: list[dict]) -> tuple[dict, list[dict], list[dict]]
     thread.
     """
     by_id = {one["id"]: one for one in pack["legs"][0]["items"]}
-    parsed, refused, unreadable = {}, [], []
+    parsed, refused, unreadable, overwritten = {}, [], [], []
     for row in rows:
         item = by_id.get(row.get("id"))
         if item is None:
@@ -76,24 +76,44 @@ def answers(pack: dict, rows: list[dict]) -> tuple[dict, list[dict], list[dict]]
         parsed[row["id"]] = verdict
         for one in verdict["unreadable_fields"]:
             unreadable.append({"id": row["id"], **one})
-    return parsed, refused, unreadable
+        for one in verdict["overwritten_fields"]:
+            overwritten.append({"id": row["id"], **one})
+    return parsed, refused, unreadable, overwritten
 
 
-def unreadable_table(rows: list[dict], carried: set[str]) -> dict:
-    """The measurement Dv702 bought: every report-only field no bar reads, and no thread lost."""
+def unreadable_table(rows: list[dict], carried_rows: set[str], rule: str) -> dict:
+    """A census of fields, by field and by thread. `carried_rows` is keyed on `carried_from`."""
     return {
         "rows": len(rows),
-        "threads": len(sorted({one["id"] for one in rows})),
+        "threads": len({one["id"] for one in rows}),
         "by_field": dict(sorted(Counter(one["field"] for one in rows).items())),
         "by_thread": dict(sorted(Counter(one["id"] for one in rows).items())),
-        "on_carried_rows": sum(1 for one in rows if one["id"] in carried),
-        "sample": rows[:40],
-        "rule": (
-            "each of these would have refused its whole thread under r1's parser. `per_comment.note`"
-            " did exactly that to F2 and cost bar 1 its hardest case; the rest are the same class"
-            " caught before it could fire. A field here is READ and RECORDED, never a refusal"
+        "on_carried_rows": sum(1 for one in rows if one["id"] in carried_rows),
+        "on_carried_rows_rule": (
+            "counted on the row's own `carried_from` field and never on the pack's id list — the"
+            " same key every other census in this file uses, so a thread the pod RE-BOUGHT cannot"
+            " be attributed to r1 in one table and to this pod in the next"
         ),
+        "sample": rows[:40],
+        "rule": rule,
     }
+
+
+UNREADABLE_RULE = (
+    "each of these would have refused its whole thread under r1's parser. `per_comment.note` did"
+    " exactly that to F2 and cost bar 1 its hardest case; the rest are the same class caught before"
+    " it could fire. A field here is READ and RECORDED, never a refusal. **Only fields the pinned"
+    " validator REFUSED are in it** — a field this parser overwrote for its own reasons is in"
+    " `overwritten_report_only_fields`, because «what could the reader not read» and «what did the"
+    " reader write» are two questions and one list would answer neither"
+)
+
+OVERWRITTEN_RULE = (
+    "a field this parser CHANGED, with the value the MODEL wrote beside it. Today there is exactly"
+    " one: `signals.proposed` is forced True so an unreadable `signal_type` can pass the pinned"
+    " domain check, and a reply that said `false` would otherwise be published as having proposed a"
+    " sixth signal type. It is NOT counted as unreadable — the model answered it fine"
+)
 
 
 def rate_table(rows: list[dict], record: dict) -> dict:
@@ -114,6 +134,7 @@ def rate_table(rows: list[dict], record: dict) -> dict:
     seconds = [float(one["seconds"]) for one in mine if one.get("seconds") is not None]
     (leg_name,) = record["money"]["arithmetic"]["calls"]
     smoke = record["money"]["arithmetic"]["seconds_per_call"]["smoke"]
+    paired = record["population"]["re_asked_after_a_refusal"]
     charged = float(record["money"]["arithmetic"]["seconds_per_call"][leg_name])
     return {
         "units_bought": len(mine),
@@ -128,7 +149,27 @@ def rate_table(rows: list[dict], record: dict) -> dict:
         "r1_smoke_mean": smoke["mean"],
         "r1_smoke_max": smoke["max"],
         "r1_smoke_units": len(smoke["seconds"]),
+        "r1_smoke_per_thread": smoke["per_thread"],
         "r1_smoke_source": smoke["record"],
+        "the_one_paired_thread": {
+            "id": paired,
+            "r1_seconds": smoke["per_thread"].get(paired),
+            "this_pod_seconds": next(
+                (float(one["seconds"]) for one in mine if one["id"] == paired), None
+            ),
+            "rule": (
+                "the ONE thread both pods answered: r1's parser refused its reply, so r2 re-buys"
+                " it. Same request, same bytes, greedy decoding — this is the only reading in the"
+                " run that prices the POD CLASS directly instead of inferring it from a mean over"
+                " different threads ([[a_rate_is_a_property_of_the_pod]])"
+            ),
+        },
+        "the_two_means_are_over_different_threads": (
+            "the smoke's five carry 6.0 filtered rows a thread and the 75 carry 3.44, so a ratio of"
+            " the two means is part pod and part composition. `completion_tokens` is beside both"
+            " for the reader who wants the size-free reading; the paired thread above is the"
+            " size-free one"
+        ),
         "r1_smoke_rule": (
             "quoted from the registration, which H6 re-derives from that file. It is FIVE calls;"
             " only four are carried, because the fifth was refused by r1's parser and r2 re-buys"
@@ -159,9 +200,10 @@ def build() -> dict:
     state = json.loads(RUN.read_text(encoding="utf-8")) if RUN.exists() else {}
     v5b = json.loads(summary.read_text_or_refuse(V5B))
     carried = set(pack["carried"]["ids"])
+    carried_rows = {one["id"] for one in rows if one.get("carried_from")}
 
     by_id = {one["id"]: one for one in pack["legs"][0]["items"]}
-    parsed, refused, unreadable = answers(pack, rows)
+    parsed, refused, unreadable, overwritten = answers(pack, rows)
     seen = set(parsed)
     causes = Counter(one["cause"] for one in refused)
     units = len(pack["legs"][0]["items"])
@@ -211,7 +253,12 @@ def build() -> dict:
         "drop_table": r1score.drop_table(pack, parsed),
         "subject_doubt": r1score.doubt_table(pack, parsed),
         "accounting": r1score.accounting(parsed),
-        "unreadable_report_only_fields": unreadable_table(unreadable, carried),
+        "unreadable_report_only_fields": unreadable_table(
+            unreadable, carried_rows, UNREADABLE_RULE
+        ),
+        "overwritten_report_only_fields": unreadable_table(
+            overwritten, carried_rows, OVERWRITTEN_RULE
+        ),
         "replies": {
             "parsed": len(parsed),
             "refused": len(refused),
@@ -226,7 +273,18 @@ def build() -> dict:
             "no_signal_units": sum(1 for one in parsed.values() if not one["signals"]),
             "signal_types": dict(sorted(Counter(one["signal_type"] for one in signals).items())),
             "proposed_signal_types": sorted(
-                {one["signal_type"] for one in signals if one.get("proposed")}
+                {
+                    one["signal_type"]
+                    for one in signals
+                    # `proposed` is forced True by the parser to carry an UNREADABLE word past the
+                    # pinned domain check, so a sentinel here is this parser's flag and not the
+                    # model's. Publishing it would assert a sixth signal type a reply may have
+                    # explicitly denied — see `overwritten_report_only_fields` for who said what
+                    if one.get("proposed") and one["signal_type"] != pass2_r2.UNREADABLE
+                }
+            ),
+            "signal_types_the_parser_could_not_read": sum(
+                1 for one in signals if one["signal_type"] == pass2_r2.UNREADABLE
             ),
             "subject_types": dict(sorted(Counter(one["subject_type"] for one in signals).items())),
             "per_comment_subject_omitted": sum(

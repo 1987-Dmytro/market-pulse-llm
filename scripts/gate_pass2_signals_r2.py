@@ -161,7 +161,15 @@ def legs_of(pack: dict) -> list[dict]:
     `watch` compares its answered count against this, and `leg_state` prices the remainder from it.
     Both are questions about the pod, and the four rows it starts with are not its work
     ([[the_fix_widened_the_denominator]] read the other way: a denominator that quietly grew by four
-    would report the run complete four units early)."""
+    would report the run complete four units early).
+
+    **This is the one count in the file still taken from the pack's id list, and it has to be.**
+    `legs_of` is handed a pack and never an out-file, so it cannot ask `carried_from`. If the seed
+    never reached the pod, the pod buys 79 while this says 75 and `--watch` would return GO four
+    units early. Two guards close that before it can happen and both are driven by tests:
+    `pass2_r2_pod_runner.carried` refuses an absent or wrong seed BEFORE the model is loaded, and
+    rung 7 is RED on the same disagreement afterwards. `leg_state` prints both counts on every poll
+    so the watch line shows it too."""
     carried = carried_ids(pack)
     return [
         {
@@ -196,6 +204,7 @@ def leg_state(record: dict, packs: list[dict], where: Path) -> list[dict]:
                     "answered": len(rows),
                     "answered_means": "rows THIS pod bought; the carried rows are excluded",
                     "carried_rows_in_the_file": len(window.rows_of(where / one["out"])) - len(rows),
+                    "carried_rows_the_pack_names": len(carried_ids(pack)),
                     "measured_seconds_per_call": measured,
                 }
             )
@@ -288,7 +297,7 @@ def completeness(record: dict, state: dict, pack: dict, where: Path, now=None) -
 
     seen: dict[str, dict] = {}
     duplicates, unknown, mismatched = [], [], []
-    refusals, not_balanced, unreadable_fields = [], [], []
+    refusals, not_balanced, unreadable_fields, overwritten_fields = [], [], [], []
     parsed = 0
     for row in rows:
         row_id = row.get("id")
@@ -312,6 +321,8 @@ def completeness(record: dict, state: dict, pack: dict, where: Path, now=None) -
         parsed += 1
         for one in verdict["unreadable_fields"]:
             unreadable_fields.append({"id": row_id, **one})
+        for one in verdict["overwritten_fields"]:
+            overwritten_fields.append({"id": row_id, **one})
 
     owed = int(bar["owed"])
     # the split is keyed on the FIELD the seeder writes and never on the pack's id list. A pod that
@@ -370,6 +381,15 @@ def completeness(record: dict, state: dict, pack: dict, where: Path, now=None) -
             sorted(Counter(one["field"] for one in unreadable_fields).items())
         ),
         "unreadable_report_only_field_rows": unreadable_fields[:40],
+        "overwritten_report_only_fields": len(overwritten_fields),
+        "overwritten_report_only_fields_by_name": dict(
+            sorted(Counter(one["field"] for one in overwritten_fields).items())
+        ),
+        "overwritten_is_not_unreadable": (
+            "a field this parser CHANGED for its own reasons is counted here and NOT above. The"
+            " Dv702 census answers «what could the reader not read»; an overwrite the reader made"
+            " is a different question and one number cannot answer both"
+        ),
         "unreadable_fields_are_not_refusals": (
             "a report-only field the parser could not read is COUNTED here and the reply is kept."
             " In r1 the first such field refused the whole thread and took bar 1's hardest case"
