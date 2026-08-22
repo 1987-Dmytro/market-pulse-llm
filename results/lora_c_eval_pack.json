@@ -36191,7 +36191,7 @@
   },
   "produced_by": {
     "script": "scripts/build_lora_c_eval_pack.py",
-    "sha256": "1849b7212f0f8ed0775340f26d41f076b35646a3b4dfff22aacfdcf105be3953"
+    "sha256": "712bcbc27caaa7a8a3ff3c773f767777b9c13dcda9ab8481570c6f4172c21b24"
   },
   "reading": "the pod renders each item itself, from the fields in it, and refuses unless its sha equals the one above. Shipping the rendered string would only prove the two machines agree about a string; what has to be true is that the model is shown what the registration registered",
   "refused": [

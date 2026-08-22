@@ -217,6 +217,10 @@ def build() -> dict:
             "the two legs do not carry the same instances in the same order. The table is PAIRED —"
             " a leg that answers a different set is a different measurement. Stop."
         )
+    # INVARIANT ASSERTION, not a guard: v3's text is v2's plus a whole paragraph, so two renderings
+    # of one item cannot collide. Kept because it is the property the paired table RESTS on and it
+    # costs one comparison — but it has never fired and cannot, and saying so is the difference
+    # between a guard and an assertion ([[an_empty_class_is_the_definitions_answer]])
     if any(
         one["rendering_sha256"] == other["rendering_sha256"]
         for one, other in zip(items["v2"], items["v3"])
@@ -240,6 +244,10 @@ def build() -> dict:
         raise SystemExit(
             f"synthetic threads reached the neighbour pool: {synthetic_in_pool}. Stop."
         )
+    # INVARIANT ASSERTION and NOT a guard, unlike its twin above the rationale join: E is built from
+    # `sft.holdout_units()` ∪ `payable_of_reference()` and neither enumeration can yield a
+    # `synthetic:` thread, so this cannot fire as the pack stands. It becomes a real guard the day E
+    # draws from anything else — which is exactly when someone would need it
     synthetic_in_e = sorted(
         one["id"] for one in items["v2"] if one["thread"].startswith("synthetic:")
     )

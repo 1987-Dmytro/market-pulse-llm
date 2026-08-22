@@ -76,7 +76,7 @@
       "sha256": "9baab0e92078c137d17d5275158ef6360b9f349213a671b9249f3d4433b680c7"
     },
     "packs": {
-      "results/lora_c_eval_pack.json": "98e8bf825359b457502efd0fbb1c3581731274da9f50662cfaddf2085315009f",
+      "results/lora_c_eval_pack.json": "72c52637f1bc630e228b3c8cbc8bf3e7d3cf2a53878c426f54e3f0b39dd4b888",
       "results/lora_c_pass2_pack.json": "4438ab0b4c9f6e9a7ec59639a3ae1fef982735d583409f04ce7aa529d704fcaa",
       "results/pass1_sft_v3_train.jsonl": "0821f4aedef78ee476a993664f75feb113afdcc77551f43c82f50d887c4f40a0"
     },
@@ -226,7 +226,7 @@
       "file": "results/lora_c_eval_pack.json",
       "n": 200,
       "rendered": 198,
-      "sha256": "98e8bf825359b457502efd0fbb1c3581731274da9f50662cfaddf2085315009f"
+      "sha256": "72c52637f1bc630e228b3c8cbc8bf3e7d3cf2a53878c426f54e3f0b39dd4b888"
     },
     "pool": {
       "arithmetic": "650 − 100 − 41 + 6 = 515 — the two exclusions overlap and the overlap is added back once",
