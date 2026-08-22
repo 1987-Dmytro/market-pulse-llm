@@ -295,6 +295,15 @@ def bars(held: dict, reach: dict) -> dict:
         " run did not finish and rung 7 is RED. The four carried rows are part of that population"
         " and their replies are the ones r1 bought"
     )
+    no_stop_arm = (
+        "REPEALED WITH THE RUNG. r1's clause here described what this bar reports under a rung-S′"
+        " STOP; r2 abolished that rung — `gate_pass2_signals_r2.main` raises on `--go-no-go` — and"
+        " `arm_rule` says nothing can select a second arm. What replaces it: if the pod dies before"
+        " the leg is answered, rung 7 is RED and every bar is UNSCORED with the threads it never"
+        " read named beside it. Carrying r1's sentence forward would put a clause about a rung that"
+        " does not exist into this run's own verdict"
+        " ([[an_audit_of_pins_is_not_an_audit_of_thresholds]])"
+    )
     return {
         "1_flagships": {
             **inherited["1_flagships"],
@@ -311,11 +320,13 @@ def bars(held: dict, reach: dict) -> dict:
         "2_entity_cases": {
             **inherited["2_entity_cases"],
             "one_arm": one_arm,
+            "under_a_STOP": no_stop_arm,
             "computed": r1producer.bar_two_at_zero(held),
         },
         "3_noise": {
             **inherited["3_noise"],
             "one_arm": one_arm,
+            "under_a_STOP": no_stop_arm,
             "scored_over": scored_noise,
             "N2_is_bought_this_time": (
                 "@VARUS_channel:10366 is one of the 75 owed, so bar 3 has a case in the evidence"

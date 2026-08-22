@@ -410,28 +410,28 @@ def test_every_report_only_field_can_be_unreadable_and_the_thread_survives():
     assert len(verdict["signals"]) == 1, "a scored field was readable, so the signal survives"
     assert verdict["signals"][0]["evidence"] == [7]
     assert verdict["signals"][0]["aspect"] == "taste"
-    assert verdict["signals"][0]["signal_type"] is None
-    assert verdict["signals"][0]["reading"] is None
-    assert verdict["signals"][0]["quote"] is None
-    assert verdict["post_summary"] is None
-    assert verdict["discussion_summary"] is None
+    # every NON-nullable string keeps a STRING: `prompts._reader` guarantees the type, and two of
+    # them are grouped on by consumers -- one of which is a SEALED file
+    assert verdict["signals"][0]["signal_type"] == pass2_r2.UNREADABLE
+    assert verdict["signals"][0]["reading"] == pass2_r2.UNREADABLE
+    assert verdict["signals"][0]["quote"] == pass2_r2.UNREADABLE
+    assert verdict["post_summary"] == pass2_r2.UNREADABLE
+    assert verdict["discussion_summary"] == pass2_r2.UNREADABLE
+    assert verdict["noise"][0]["class"] == pass2_r2.UNREADABLE
+    # the nullable ones keep None, which is what the pinned reader returns for an absent value
     assert verdict["per_comment"][0]["note"] is None
+    assert verdict["per_comment"][0]["subject_id"] is None
+    assert verdict["per_comment"][0]["stance"] is None
     assert verdict["per_comment"][0]["aspects"] == []
     assert verdict["per_comment"][0]["subject_doubt"] is None
-    assert verdict["noise"][0]["class"] is None
+    assert verdict["signals"][0]["subject_id"] is None
+    assert verdict["signals"][0]["stance"] is None
     assert verdict["subject_doubt_unreadable"] == [7]
     named = set(verdict["unreadable_field_names"])
-    assert named == set(REPORT_ONLY_POISON) | {"per_comment.subject_doubt"}, named
-    # and every one of them is a field the record calls report-only
-    assert (
-        named
-        <= set(pass2_r2.REPORT_ONLY_FIELDS)
-        | {
-            "signals.proposed / signals.from_post",
-            "per_comment[].subject_id / .stance / .aspects",
-        }
-        | named
-    )
+    assert named == set(REPORT_ONLY_POISON) | {
+        "per_comment.subject_doubt",
+        "signals.proposed",
+    }, named
 
 
 def test_a_domain_violation_on_a_SCORED_field_still_refuses():
@@ -1426,3 +1426,256 @@ def test_the_runbook_forbids_what_the_contract_forbids():
         "No bar on the fourteen",
     ):
         assert clause in RUNBOOK, clause
+
+
+# --- the five-lens review's findings, each pinned so it cannot come back ------------------------
+
+
+def test_the_verdict_SURVIVES_r1s_SEALED_tables_when_a_report_only_field_is_unreadable():
+    """The fatal one: `None` in a field a consumer groups on crashes D2 AFTER the money is spent.
+
+    `score_pass2_signals.drop_table` — a SEALED file — does `sorted(Counter(noise.class).items())`,
+    and r2's own verdict producer does the same over `signals.signal_type`. One unreadable field in
+    any of 79 threads raised `TypeError: '<' not supported between 'NoneType' and 'str'`, with rung
+    7 already GO. The tolerant reader had moved the refusal, not removed it.
+    """
+    import score_pass2_signals as r1score
+
+    two = unit(
+        comments=[
+            {
+                "msg_id": 7,
+                "text": "t",
+                "subject_type": "категория_личное",
+                "subject_id": None,
+                "stance": None,
+            },
+            {
+                "msg_id": 8,
+                "text": "u",
+                "subject_type": "сеть_ритейлер",
+                "subject_id": None,
+                "stance": None,
+            },
+        ]
+    )
+    good = pass2_r2.parse_pass2(reply(noise=[{"msg_id": 8, "class": "оффтоп"}]), unit=two)
+    bad_class = pass2_r2.parse_pass2(reply(noise=[{"msg_id": 8, "class": "не_сигнал"}]), unit=two)
+    bad_word = pass2_r2.parse_pass2(
+        reply(
+            signals=[
+                {
+                    "signal_type": "не_бывает_такого",
+                    "subject_type": "категория_личное",
+                    "subject_id": None,
+                    "aspect": "taste",
+                    "reading": "r",
+                    "evidence": [7],
+                    "quote": "q",
+                }
+            ],
+            noise=[{"msg_id": 8, "class": "оффтоп"}],
+        ),
+        unit=two,
+    )
+    assert bad_class["noise"][0]["class"] == pass2_r2.UNREADABLE
+    assert bad_word["signals"][0]["signal_type"] == pass2_r2.UNREADABLE
+
+    # r1's SEALED table, over a verdict carrying an unreadable class
+    fake_pack = {
+        "legs": [
+            {
+                "items": [
+                    {"id": "@x:1", "comments": two["comments"]},
+                    {"id": "@y:1", "comments": two["comments"]},
+                ]
+            }
+        ]
+    }
+    table = r1score.drop_table(fake_pack, {"@x:1": good, "@y:1": bad_class})
+    assert pass2_r2.UNREADABLE in table["by_noise_class"]
+
+    # and r2's own two Counter/sorted lines over an unreadable signal_type
+    from collections import Counter
+
+    signals = [*good["signals"], *bad_word["signals"]]
+    assert dict(sorted(Counter(one["signal_type"] for one in signals).items()))
+    assert sorted({one["signal_type"] for one in signals if one.get("proposed")}) == [
+        pass2_r2.UNREADABLE
+    ]
+
+
+def test_an_OVERWRITTEN_proposed_flag_is_RECORDED_and_not_asserted_silently():
+    """`proposed` is forced True to carry the unreadable word past the pinned domain check."""
+    said_false = reply(
+        signals=[
+            {
+                "signal_type": "не_бывает_такого",
+                "subject_type": "категория_личное",
+                "subject_id": None,
+                "aspect": "taste",
+                "reading": "r",
+                "proposed": False,
+                "evidence": [7],
+                "quote": "q",
+            }
+        ],
+        noise=[],
+    )
+    verdict = pass2_r2.parse_pass2(said_false, unit=unit())
+    assert verdict["signals"][0]["proposed"] is True, "the pinned reader needs it to accept the row"
+    assert "signals.proposed" in verdict["unreadable_field_names"]
+    row = next(one for one in verdict["unreadable_fields"] if one["field"] == "signals.proposed")
+    assert row["value"] == "false", "the model's own flag is kept beside the overwrite"
+    assert "overwritten to True" in row["why"]
+    # a legal `proposed: true` with a sixth word is untouched and records nothing
+    legal = json.loads(said_false)
+    legal["signals"][0]["proposed"] = True
+    clean = pass2_r2.parse_pass2(json.dumps(legal, ensure_ascii=False), unit=unit())
+    assert clean["signals"][0]["signal_type"] == "не_бывает_такого"
+    assert clean["unreadable_field_names"] == []
+
+
+def test_a_container_that_is_PRESENT_and_not_a_list_still_REFUSES():
+    """Rewriting it to `[]` would answer «this thread dropped nothing» over an unreadable answer."""
+    for field in ("per_comment", "noise", "signals"):
+        payload = json.loads(reply())
+        payload[field] = {"a": {"msg_id": 7}}  # a map keyed by something that is not a msg_id
+        with pytest.raises(prompts.ParseError, match=f"{field} is not a list"):
+            pass2_r2.parse_pass2(json.dumps(payload, ensure_ascii=False), unit=unit())
+    # and the sitting's own `{}` -> `[]` repair is untouched
+    assert pass2_r2.parse_pass2(reply(noise={}), unit=unit())["noise"] == []
+
+
+def test_the_runner_REFUSES_an_ABSENT_seed_file(tmp_path):
+    """Staging does `rm -rf /workspace/run`, so absence is the DEFAULT state of the run directory.
+
+    The first version returned `[]` for a missing out-file and skipped the whole check, so a seed
+    whose scp failed left a pod that bought all 79 and re-bought the four r1 paid for.
+    """
+    with pytest.raises(SystemExit, match="not the one the registration seeded"):
+        runner.carried(tmp_path / "never-copied.jsonl", PACK)
+    empty = tmp_path / "empty.jsonl"
+    empty.write_text("", encoding="utf-8")
+    with pytest.raises(SystemExit, match="not the one the registration seeded"):
+        runner.carried(empty, PACK)
+
+
+def test_rung_7_is_RED_when_the_carried_split_disagrees_with_the_pack(tmp_path, monkeypatch):
+    """A thread the pod RE-BOUGHT carries no `carried_from`, and the census must say so."""
+    record = tmp_path / "run.json"
+    monkeypatch.setattr(gate.window, "RECORD", record)
+    record.write_text(json.dumps(state_with_pod()), encoding="utf-8")
+    out = tmp_path / OUT_NAME
+    whole_run(out)
+    rows = [json.loads(one) for one in out.read_text(encoding="utf-8").splitlines() if one.strip()]
+    for one in rows:
+        one.pop("carried_from", None)  # the seed never landed: the pod bought all 79
+    out.write_text(
+        "".join(json.dumps(one, ensure_ascii=False) + "\n" for one in rows), encoding="utf-8"
+    )
+    verdict = gate.completeness(
+        RECORD,
+        json.loads(record.read_text(encoding="utf-8")),
+        PACK,
+        tmp_path,
+        gate.window.stamp("2026-08-22T12:00:00+00:00"),
+    )
+    assert verdict["verdict"] == "RED"
+    assert verdict["carried_count"] == 0
+    assert verdict["bought_by_this_pod"] == 79
+    assert verdict["carried_disagreement"] == sorted(CARRIED)
+
+
+def test_the_smoke_D2_publishes_is_the_RECORDs_five_calls_and_not_the_four_carried_rows(
+    tmp_path, monkeypatch
+):
+    """r1's smoke was FIVE calls and only four are carried — the fifth is the one r2 re-buys."""
+    out = tmp_path / OUT_NAME
+    whole_run(out)
+    monkeypatch.setattr(scoring, "EVIDENCE", out)
+    monkeypatch.setattr(scoring, "RUN", tmp_path / "run.json")
+    (tmp_path / "run.json").write_text(json.dumps({"pods": [], "gates": []}), encoding="utf-8")
+    ng = scoring.build()["non_gating"]
+    assert ng["r1_smoke_units"] == 5
+    assert ng["r1_smoke_mean"] == 45.582
+    assert ng["r1_smoke_max"] == 58.07
+    assert 15.801 in ng["r1_smoke_seconds"], "the fastest of the five, and the one not carried"
+    assert (
+        ng["r1_smoke_seconds"]
+        == RECORD["money"]["arithmetic"]["seconds_per_call"]["smoke"]["seconds"]
+    )
+
+
+def test_the_WATCH_command_runs_end_to_end_on_a_fake_transport(tmp_path, monkeypatch, capsys):
+    """The last gate COMMAND, and it needed only a fake `scp` to be drivable at $0."""
+    record = tmp_path / "run.json"
+    monkeypatch.setattr(gate.window, "RECORD", record)
+    monkeypatch.setattr(gate.window, "registration", lambda: RECORD)
+    monkeypatch.setattr(gate, "POD_LOG", tmp_path / "pod.log")
+    monkeypatch.setattr(gate.window, "POD_LOG", tmp_path / "pod.log")
+    record.write_text(json.dumps(state_with_pod()), encoding="utf-8")
+    (tmp_path / "pod.log").write_text("boot\n", encoding="utf-8")
+    bought_rows(tmp_path / OUT_NAME, OWED, 30.0)
+    copied = []
+    monkeypatch.setattr(
+        gate.window,
+        "scp",
+        lambda ssh, port, remote, local: copied.append((remote, Path(local).name)),
+    )
+    monkeypatch.setattr(gate.window, "pod_delete", lambda pod_id: {"deleted": pod_id})
+    code = gate.main(
+        ["--watch", "--ssh", "root@h", "--ssh-port", "1", "--outdir", str(tmp_path), "--poll", "0"],
+        gate.window.stamp("2026-08-22T10:20:00+00:00"),
+    )
+    assert code == gate.GO
+    state = json.loads(record.read_text(encoding="utf-8"))
+    assert state["gates"][-1]["kind"] == "watch"
+    assert state["gates"][-1]["answered"] == 75 and state["gates"][-1]["owed"] == 75
+    assert state["gates"][-1]["legs"][0]["carried_rows_in_the_file"] == 4
+    assert copied == [
+        ("/workspace/run/pass2_signals_r2_v1.jsonl", OUT_NAME),
+        ("/workspace/run/launched_at", gate.LAUNCH_STAMP),
+        ("/workspace/run/pod.log", "pod.log"),
+    ], "the launch stamp is RENAMED on the way back and the gate is what fixes both names"
+    capsys.readouterr()
+
+
+def test_the_runbook_create_line_uses_the_CLIs_own_flag_names():
+    """`runpodctl pod create` rejects a camelCase spelling at parse time, and the natural repair
+    of a create that will not parse is a retyped line without `--terminate-after` — rung 6."""
+    create = RUNBOOK.split("runpodctl pod create", 1)[1].split("```", 1)[0]
+    for flag in (
+        "--gpu-id",
+        "--gpu-count",
+        "--network-volume-id",
+        "--image",
+        "--container-disk-in-gb",
+        "--data-center-ids",
+        "--cloud-type",
+        "--ports",
+        "--ssh",
+        "--terminate-after",
+    ):
+        assert flag in create, flag
+    for invented in (
+        "--gpuType",
+        "--gpuCount",
+        "--networkVolumeId",
+        "--imageName",
+        "--containerDiskSize",
+    ):
+        assert invented not in RUNBOOK, invented
+    # and it is r1's line, changed only in the pod's name
+    r1 = (REPO_ROOT / "scripts" / "runbook_pass2_signals.md").read_text(encoding="utf-8")
+    r1_create = r1.split("runpodctl pod create", 1)[1].split("```", 1)[0]
+    assert set(re.findall(r"--[a-z-]+", create)) == set(re.findall(r"--[a-z-]+", r1_create))
+
+
+def test_the_record_carries_no_clause_about_a_rung_r2_REPEALED():
+    """r1's `under_a_STOP` text described a rung `main()` now raises on."""
+    for bar in ("2_entity_cases", "3_noise"):
+        clause = RECORD["bars"][bar]["under_a_STOP"]
+        assert "REPEALED WITH THE RUNG" in clause, bar
+        assert "rung 7 is RED" in clause, bar
+    assert list(RECORD["bars"]["completeness"]["arms"]) == ["GO"]

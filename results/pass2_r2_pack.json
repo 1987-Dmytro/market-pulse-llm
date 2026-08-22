@@ -41,7 +41,7 @@
   "module_r2": {
    "path": "src/market_pulse/pass2_r2.py",
    "rule": "the ceiling and the tolerant parser. A sibling because r1's pack pins `pass2.py` and that pack is pinned by a sealed record",
-   "sha256": "2de35a2684d96b72260d75a4c36a57d9e83f07521095a50c8205624e40d90ef1"
+   "sha256": "1737f2eddf8925db1e239094eb43461d3cf1971b8c6d80c1aa3e523173d42cb4"
   },
   "parser": {
    "entry_point": "market_pulse.pass2_r2.parse_pass2",

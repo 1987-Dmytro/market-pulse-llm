@@ -76,10 +76,17 @@ runpodctl pod list -a                    # [] — nothing of ours is billing
 ## 1 — create (the meter starts here)
 
 ```bash
-runpodctl pod create --gpuType 'NVIDIA GeForce RTX 4090' --gpuCount 1 \
-  --networkVolumeId <VOLUME_ID> --imageName <IMAGE> --containerDiskSize 20 \
-  --ports '22/tcp' --terminate-after '<create + what --pre-create-check printed>'
+runpodctl pod create --name mp-pass2-signals-r2 --gpu-id 'NVIDIA GeForce RTX 4090' --gpu-count 1 \
+  --network-volume-id qw4nwleanc --data-center-ids EU-RO-1 --cloud-type SECURE \
+  --image runpod/pytorch:1.0.2-cu1281-torch280-ubuntu2404 --container-disk-in-gb 30 \
+  --ports '22/tcp' --ssh --terminate-after '<create + the seconds --pre-create-check left>'
 ```
+
+**Every flag above is r1's, changed only in the pod's name.** `runpodctl pod create` takes
+`--gpu-id` / `--gpu-count` / `--network-volume-id` / `--image` / `--container-disk-in-gb` —
+`runpodctl pod create --help` is the authority and a camelCase spelling of any of them is rejected
+at parse time. **`--terminate-after` is what enforces rung 6**, the platform-held hard stop, and a
+create that fails to parse invites a retyped line without it.
 
 Read `costPerHr`, the card and the create stamp back OUT of the response and hand them to the gate.
 **Rung 1 refuses a price above $0.80/h and a backstop window longer than the hard stop allows.**

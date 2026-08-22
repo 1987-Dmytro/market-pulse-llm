@@ -6,6 +6,7 @@ rung nobody ever saw fire is a rung nobody has ([[guard_selftest_negative_contro
 
 import json
 import sys
+from datetime import UTC, datetime, timedelta
 from pathlib import Path
 
 import pytest
@@ -598,6 +599,27 @@ def state_with_pod(**kw) -> dict:
     return {"pods": [{**pod, **kw}], "gates": []}
 
 
+def state_created_now(**kw) -> dict:
+    """A pod created NOW — for the tests that drive a command which reads the REAL clock.
+
+    `run_go_no_go` calls `go_no_go(where)` with no `now`, so rung S′ projects from
+    `datetime.now(UTC)` minus the pod's `created_at`. With a FIXED create stamp that elapsed term
+    grows every minute the suite is not run: at 30 s/call the charge is 45, `74 × 45 + 1 300 =
+    4 630`, and the GO half of `test_the_go_token_is_written_only_after_the_verdict_is_recorded`
+    stopped passing at `created_at + 1 970 s` — **10:32:50Z on 2026-08-22**, which is when it went
+    red with no commit behind it. The STOP halves are safe in the other direction, so only the GO
+    needed a stamp that moves with the clock it is measured against
+    ([[a_git_clock_proof_needs_more_than_a_minute]] read the other way round: an assertion whose
+    truth depends on WHEN it runs is a clock, not a test).
+    """
+    now = datetime.now(UTC)
+    return state_with_pod(
+        created_at=now.isoformat(timespec="seconds"),
+        terminate_after=(now + timedelta(seconds=6600)).isoformat(timespec="seconds"),
+        **kw,
+    )
+
+
 def with_go(state: dict, verdict: str = "GO") -> dict:
     return {
         **state,
@@ -1049,7 +1071,7 @@ def test_the_go_token_is_written_only_after_the_verdict_is_recorded(tmp_path, mo
     monkeypatch.setattr(gate.r1, "RECORD", record)
     monkeypatch.setattr(gate, "GO_TOKEN", token)
     monkeypatch.setattr(gate.r1, "registration", lambda: RECORD)
-    record.write_text(json.dumps(state_with_pod()), encoding="utf-8")
+    record.write_text(json.dumps(state_created_now()), encoding="utf-8")
     out_rows(tmp_path / "pass2_signals_v1.jsonl", list(PACK["smoke"]["ids"]), 300.0)
     assert gate.run_go_no_go(["--go-no-go", "--outdir", str(tmp_path)]) == gate.KILL
     state = json.loads(record.read_text(encoding="utf-8"))

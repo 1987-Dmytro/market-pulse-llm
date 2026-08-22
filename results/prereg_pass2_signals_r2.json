@@ -118,7 +118,7 @@
       ],
       "scorer": "score_reader_probe_b.entity_cases, through scorer.reader_entity_found",
       "threshold": "4 of 4 cases",
-      "under_a_STOP": "UNSCORED. None of E2/E3/E4's threads is one of the five F threads, so a STOP leaves `entity_cases` counting 0 of 4 against a registration that says 3 of 4 — a false RED where bar 3's is a false GREEN. Both are the same defect and both are answered by asking whether the cases were READ before reporting a number"
+      "under_a_STOP": "REPEALED WITH THE RUNG. r1's clause here described what this bar reports under a rung-S′ STOP; r2 abolished that rung — `gate_pass2_signals_r2.main` raises on `--go-no-go` — and `arm_rule` says nothing can select a second arm. What replaces it: if the pod dies before the leg is answered, rung 7 is RED and every bar is UNSCORED with the threads it never read named beside it. Carrying r1's sentence forward would put a clause about a rung that does not exist into this run's own verdict ([[an_audit_of_pins_is_not_an_audit_of_thresholds]])"
     },
     "3_noise": {
       "N2_is_bought_this_time": "@VARUS_channel:10366 is one of the 75 owed, so bar 3 has a case in the evidence for the first time. Its four `сеть_ритейлер` rows in a plus-spam thread are the mention-vs-about confusion arriving as pass 2's own question",
@@ -140,7 +140,7 @@
       "scorer": "score_reader_probe_b.noise, through scorer.reader_noise_count",
       "the_case_this_bar_is_really_about": "N2 (@VARUS_channel:10366) carries FOUR rows pass 1 labelled `сеть_ритейлер` in a plus-spam thread. Pass 2 must DROP them into `noise`. This is the mention-vs-about confusion the whole line has been carrying, arriving as pass 2's own question",
       "threshold": "0 signals",
-      "under_a_STOP": "UNSCORED, and it is registered here rather than discovered afterwards. N2 (@VARUS_channel:10366) is NOT one of the five F threads, so a STOP at rung S′ leaves this bar with no case in the evidence at all. The contract's «bars 1/3 on the five» reaches bar 1 — the five F threads ARE the smoke — and does not reach bar 3. `scorer.reader_noise_count({})` returns `signals: 0`, so a scorer that did not ask whether the cases were READ would report this bar GREEN over zero threads ([[a_pre_filter_cannot_certify_the_population]], [[a_checker_whose_failure_is_silence]])"
+      "under_a_STOP": "REPEALED WITH THE RUNG. r1's clause here described what this bar reports under a rung-S′ STOP; r2 abolished that rung — `gate_pass2_signals_r2.main` raises on `--go-no-go` — and `arm_rule` says nothing can select a second arm. What replaces it: if the pod dies before the leg is answered, rung 7 is RED and every bar is UNSCORED with the threads it never read named beside it. Carrying r1's sentence forward would put a clause about a rung that does not exist into this run's own verdict ([[an_audit_of_pins_is_not_an_audit_of_thresholds]])"
     },
     "completeness": {
       "answered_means": "a reply is in the out-file, counted by DISTINCT id. A parse refusal is an ANSWERED row whose reply the parser refused — the two counts are NOT disjoint ([[measure_on_the_rows_the_gate_scores]])",
@@ -854,7 +854,7 @@
     },
     "gate": {
       "path": "scripts/gate_pass2_signals_r2.py",
-      "sha256": "a69cddadee71249502c059fd511a3d1535307767aa401e59a3859941ab031f71"
+      "sha256": "b70be97a3a344ade22019dfe60614b0722c05ef7b5b2a226ae30b20283b11194"
     },
     "gate_r1": {
       "path": "scripts/gate_pass2_signals.py",
@@ -874,7 +874,7 @@
     "module_r2": {
       "path": "src/market_pulse/pass2_r2.py",
       "rule": "the derived ceiling and the tolerant parser. A SIBLING and not an edit: `results/pass2_pack.json` pins `pass2.py` and that pack is pinned by `results/prereg_pass2_signals.json`, a sealed record of a closed paid session",
-      "sha256": "2de35a2684d96b72260d75a4c36a57d9e83f07521095a50c8205624e40d90ef1"
+      "sha256": "1737f2eddf8925db1e239094eb43461d3cf1971b8c6d80c1aa3e523173d42cb4"
     },
     "pack_builder": {
       "path": "scripts/build_pass2_r2_pack.py",
@@ -910,11 +910,11 @@
     },
     "population": {
       "record": "results/pass2_r2_pack.json",
-      "sha256": "90d0623f13f7110b54a673eec03261ed64133d40ccecf76da986bcc3767ef41e"
+      "sha256": "0c1fffa1184f4d8702d83215b584dbda51a699e09d7d8bb0e0a11dee226a0ee8"
     },
     "producer": {
       "path": "scripts/write_pass2_prereg_r2.py",
-      "sha256": "285a5c21f7d3bd5115d678604221da152e36bc88a671a614839fad1da5f8e521"
+      "sha256": "298677c698a41ced17cb168a77e5e0fd6a50db2cf9572bc23cb89eb3ea6ce1aa"
     },
     "prompt_rule": "BYTE-IDENTICAL to r1's. Four replies r1 paid for are carried into this run's out-file, and a copied reply is an answer to this request only if this request is that request",
     "prompt_sha256": {
@@ -927,7 +927,7 @@
     },
     "runner": {
       "path": "scripts/pass2_r2_pod_runner.py",
-      "sha256": "ad908c076a5416226e93250703460c6eba43cc1e880666d93cb16ae9e6689c2c"
+      "sha256": "7648962a9be0d9dfd4fa9ffd471818153a00d6b7744210bac908050c2463d6b4"
     },
     "scorer": {
       "functions": [
@@ -975,7 +975,7 @@
     "task": "pass2_thread_gm4_v1",
     "verdict_producer": {
       "path": "scripts/score_pass2_signals_r2.py",
-      "sha256": "f64815dfd040ce5ca7a1f42782598fa9795a1582b8e5cd6cefca6f69362f631a"
+      "sha256": "f527aa17ba5f233bf92c6c9863ad62a59ce515249e14aa739f245dcacf5884d5"
     }
   },
   "kill_clock": [
@@ -1309,7 +1309,7 @@
     "rows_per_thread_population": 3.557,
     "rows_per_thread_smoke": 6.0,
     "rule": "r1's 79 units, r1's order, r1's renderings — checked at build time by re-rendering every one of them. r2 does not re-derive the population and does not re-buy the four threads whose replies parsed",
-    "sha256": "90d0623f13f7110b54a673eec03261ed64133d40ccecf76da986bcc3767ef41e",
+    "sha256": "0c1fffa1184f4d8702d83215b584dbda51a699e09d7d8bb0e0a11dee226a0ee8",
     "sha256_rule": "the PACK's own sha. `gate_pass1_window.main` subscripts `record.population.sha256` before every rung that reads a pack and a record without it raises `KeyError` inside `--watch`, on a pod that is already billing. Found by driving the COMMAND ([[the_entry_points_preamble_is_untested_code]])",
     "unit": "one THREAD",
     "units": 79,
@@ -1327,7 +1327,7 @@
   "producer": {
     "rule": "the constants are typed once at the top of this file with their derivations; every other number here is computed. H6 re-derives the ones that have a file behind them",
     "script": "scripts/write_pass2_prereg_r2.py",
-    "sha256": "285a5c21f7d3bd5115d678604221da152e36bc88a671a614839fad1da5f8e521"
+    "sha256": "298677c698a41ced17cb168a77e5e0fd6a50db2cf9572bc23cb89eb3ea6ce1aa"
   },
   "reachability": {
     "entity_cases": [

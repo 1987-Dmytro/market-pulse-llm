@@ -142,10 +142,18 @@ def carried(out: Path, pack: dict) -> list[str]:
     A run that silently skipped four units because a file happened to contain them would look
     exactly like a run whose pack was wrong. This prints them and refuses if the file carries a row
     the pack does not name as carried and the pod did not write.
+
+    **An ABSENT file is the same refusal as an empty one.** The first version returned `[]` for a
+    missing out-file and the whole check was skipped — so a seed whose scp silently failed left a
+    pod that bought all 79 units and re-bought the four r1 paid for, which is the one thing the
+    contract's DO NOT names in as many words. Staging does `rm -rf /workspace/run`, so absence is
+    the DEFAULT state and the guard has to survive it ([[a_file_guard_is_not_a_row_filter]]).
     """
-    if not out.exists():
-        return []
-    rows = [json.loads(one) for one in out.read_text(encoding="utf-8").splitlines() if one.strip()]
+    rows = (
+        [json.loads(one) for one in out.read_text(encoding="utf-8").splitlines() if one.strip()]
+        if out.exists()
+        else []
+    )
     named = set(pack["carried"]["ids"])
     seeded = [one["id"] for one in rows if one.get("carried_from")]
     if sorted(seeded) != sorted(named):

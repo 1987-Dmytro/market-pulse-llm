@@ -186,11 +186,23 @@ REFUSALS = (
 )
 """The closed set. A cause outside it is a defect in this module, not a finding about a reply."""
 
-UNREADABLE = "—"
-"""The placeholder a NON-nullable report-only string is given so the pinned reader will accept its
-row. It never survives: every field given it is set back to `None` in the verdict and named in
-`unreadable_fields`, so «the model wrote something we could not read» and «the model wrote nothing»
-stay two different readings ([[an_empty_field_hides_several_states]])."""
+UNREADABLE = "(unreadable)"
+"""What a NON-nullable report-only string becomes when its pinned validator refuses it.
+
+**It SURVIVES into the verdict, and that is a correction the five-lens review paid for.** The first
+version nulled every repaired field, and `prompts._reader` guarantees five of them are non-empty
+STRINGS: `post_summary`, `discussion_summary`, `signals.signal_type`, `signals.reading`,
+`signals.quote` and `noise.class`. Consumers group on two of those —
+`score_pass2_signals.drop_table` does `sorted(Counter(noise.class).items())` and is a SEALED file,
+and r2's own verdict producer does the same over `signals.signal_type` — so ONE unreadable field
+anywhere in 79 threads raised `TypeError: '<' not supported between 'NoneType' and 'str'` **after
+the whole run was paid for and rung 7 had said GO**. A tolerant reader that hands the next stage a
+type its contract forbids has moved the refusal, not removed it
+([[a_consumer_list_is_not_a_meaning_list]]).
+
+«Unreadable» and «absent» stay two readings because the field is ALSO named in `unreadable_fields`
+with the validator's own message and the raw value beside it. Nullable fields keep `None`: that is
+what the pinned reader itself returns for an absent one, so no consumer can be surprised by it."""
 
 
 def _refused(validator, *args) -> str | None:
@@ -211,7 +223,8 @@ def _tolerate(payload: dict) -> tuple[dict, list[dict], list[tuple], list[dict]]
     ([[a_moved_constant_fails_green]]).
 
     Returns the sanitised payload, the `unreadable_fields` rows, the (container, index, key) triples
-    whose value must be nulled in the verdict, and the rows dropped for having no readable id.
+    whose value must read :data:`UNREADABLE` in the verdict, and the rows dropped for having no
+    readable id.
     """
     unreadable: list[dict] = []
     nulled: list[tuple] = []
@@ -278,6 +291,16 @@ def _tolerate(payload: dict) -> tuple[dict, list[dict], list[tuple], list[dict]]
                 why = "signal_type outside its domain and not flagged proposed"
         if why is not None:
             note(where, row.get("signal_type"), why)
+            # `proposed` is OVERWRITTEN to carry the unreadable word past the pinned domain check,
+            # and an overwrite nobody records is a value the model never gave being published as
+            # its answer. It is noted under its own field name, so `unreadable_field_names` says
+            # so whenever it happened ([[an_abstention_is_an_answer]])
+            note(
+                ("signals", index, "proposed"),
+                row.get("proposed"),
+                "overwritten to True so the unreadable signal_type could pass the pinned domain"
+                " check. The model's own flag is the `value` beside this line",
+            )
             row["signal_type"], row["proposed"] = UNREADABLE, True
             nulled.append(where)
         text(row, "reading", "signals.reading", ("signals", index, "reading"), nullable=False)
@@ -295,7 +318,11 @@ def _tolerate(payload: dict) -> tuple[dict, list[dict], list[tuple], list[dict]]
         )
 
     kept: list[dict] = []
-    for row in payload.get("per_comment") or []:
+    # a container that is PRESENT and not a list is left exactly as it is, so `prompts._objects`
+    # refuses it under closed-set cause 5. Rewriting it to `[]` would answer «this thread dropped
+    # nothing» over an answer nobody could read — the false GREEN this module's own SCORED_FIELDS
+    # table forbids two screens above ([[a_structural_stop_accepts_a_structural_non_answer]])
+    for row in payload.get("per_comment") if isinstance(payload.get("per_comment"), list) else []:
         if (
             not isinstance(row, dict)
             or _refused(prompts._msg_id, row.get("msg_id"), "x") is not None
@@ -305,7 +332,7 @@ def _tolerate(payload: dict) -> tuple[dict, list[dict], list[tuple], list[dict]]
             )
             continue
         kept.append(row)
-    if "per_comment" in payload:
+    if isinstance(payload.get("per_comment"), list):
         payload["per_comment"] = kept
     for index, row in enumerate(kept):
         # a MISSING `subject_type` is the same omission a `null` one is (Dv699) — it rewrote
@@ -350,7 +377,7 @@ def _tolerate(payload: dict) -> tuple[dict, list[dict], list[tuple], list[dict]]
             row["aspects"] = []
 
     kept = []
-    for row in payload.get("noise") or []:
+    for row in payload.get("noise") if isinstance(payload.get("noise"), list) else []:
         if (
             not isinstance(row, dict)
             or _refused(prompts._msg_id, row.get("msg_id"), "x") is not None
@@ -358,7 +385,7 @@ def _tolerate(payload: dict) -> tuple[dict, list[dict], list[tuple], list[dict]]
             dropped.append({"list": "noise", "row": json.dumps(row, ensure_ascii=False)[:120]})
             continue
         kept.append(row)
-    if "noise" in payload:
+    if isinstance(payload.get("noise"), list):
         payload["noise"] = kept
     for index, row in enumerate(kept):
         choice(
@@ -391,10 +418,12 @@ def parse_pass2(reply: str, *, unit: dict) -> dict:
     payload, unreadable, nulled, dropped_rows = _tolerate(payload)
     verdict = prompts._reader(payload)
     for container, index, key in nulled:
+        # :data:`UNREADABLE` and never `None` — see the constant. Two of these fields are grouped on
+        # by a SEALED consumer, and a `None` in them crashes D2 after the run is paid for
         if container:
-            verdict[container][index][key] = None
+            verdict[container][index][key] = UNREADABLE
         else:
-            verdict[key] = None
+            verdict[key] = UNREADABLE
 
     said = verdict["thread"]
     if said["channel"] != unit["channel"] or said["post_id"] != int(unit["post_id"]):

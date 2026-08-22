@@ -314,6 +314,13 @@ def completeness(record: dict, state: dict, pack: dict, where: Path, now=None) -
             unreadable_fields.append({"id": row_id, **one})
 
     owed = int(bar["owed"])
+    # the split is keyed on the FIELD the seeder writes and never on the pack's id list. A pod that
+    # never got the seed re-buys those four and writes rows with no `carried_from`; keyed on the
+    # list, the census would report them as carried and rung 7 would say GO over a run that bought
+    # 79 ([[a_reading_is_not_an_identity]]). The pack's list is kept — as an ASSERTION
+    carried_rows = sorted(one for one, row in seen.items() if row.get(CARRIED))
+    named = sorted(carried)
+    disagreement = sorted(set(named) ^ set(carried_rows))
     unanswered = [one["id"] for one in items if one["id"] not in seen]
     by_cause = Counter(one["cause"] for one in refusals)
     relabels = sum(count for cause, count in by_cause.items() if "RelabelError" in cause)
@@ -321,7 +328,7 @@ def completeness(record: dict, state: dict, pack: dict, where: Path, now=None) -
     answered_ok = len(seen) >= int(bar["answered_minimum"])
     sha_ok = len(mismatched) <= int(bar["sha_mismatches_maximum"])
     refusals_ok = unreadable <= int(bar["parse_refusals_maximum"])
-    clean = not unknown and not duplicates
+    clean = not unknown and not duplicates and not disagreement
     verdict = "GO" if answered_ok and sha_ok and refusals_ok and clean else "RED"
     return {
         "rung": 7,
@@ -329,9 +336,16 @@ def completeness(record: dict, state: dict, pack: dict, where: Path, now=None) -
         "arm_rule": record["bars"]["completeness"]["arm_rule"],
         "file": window.rel(where / leg["out"]),
         "rows_in_the_file": len(rows),
-        "carried": sorted(one for one in seen if one in carried),
-        "carried_count": sum(1 for one in seen if one in carried),
-        "bought_by_this_pod": len(seen) - sum(1 for one in seen if one in carried),
+        "carried": carried_rows,
+        "carried_count": len(carried_rows),
+        "bought_by_this_pod": len(seen) - len(carried_rows),
+        "carried_the_pack_names": named,
+        "carried_disagreement": disagreement,
+        "carried_rule": (
+            "counted on the row's own `carried_from` field. A disagreement with the pack's list is"
+            " RED: it means either the seed never reached the pod (and those threads were RE-BOUGHT"
+            " against the contract) or a row was hand-edited"
+        ),
         "owed": owed,
         "answered": len(seen),
         "answered_minimum": int(bar["answered_minimum"]),

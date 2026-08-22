@@ -96,12 +96,24 @@ def unreadable_table(rows: list[dict], carried: set[str]) -> dict:
     }
 
 
-def rate_table(rows: list[dict], carried: set[str], record: dict) -> dict:
-    """This pod's seconds — over the rows it BOUGHT, beside r1's smoke on r1's pod."""
-    mine = [one for one in rows if one["id"] not in carried]
+def rate_table(rows: list[dict], record: dict) -> dict:
+    """This pod's seconds — over the rows it BOUGHT, beside r1's smoke as the RECORD states it.
+
+    **r1's smoke was FIVE calls and only FOUR are carried.** `@matusi_ukr:22303` was refused by r1's
+    parser at 15.801 s — the fastest of the five — so it is OWED and r2 re-buys it. The first
+    version averaged the carried rows and published 53.027 s where the registration, the contract
+    and r1's own report all say 45.582: a fifth value for one input, on the very line D2 exists to
+    print. The smoke is quoted from `money.arithmetic.seconds_per_call.smoke`, which H6 re-derives
+    from `results/pass2_signals_v1.jsonl` with that file's sha pinned beside it
+    ([[two_values_for_one_input_get_quoted_kindly]], [[trace_the_producer_not_the_result]]).
+
+    And «this pod's rows» is the `carried_from` FIELD and never the pack's id list — a thread the
+    pod re-bought because the seed never landed carries no such field and must count as bought.
+    """
+    mine = [one for one in rows if not one.get("carried_from")]
     seconds = [float(one["seconds"]) for one in mine if one.get("seconds") is not None]
-    theirs = [float(one["seconds"]) for one in rows if one["id"] in carried]
     (leg_name,) = record["money"]["arithmetic"]["calls"]
+    smoke = record["money"]["arithmetic"]["seconds_per_call"]["smoke"]
     charged = float(record["money"]["arithmetic"]["seconds_per_call"][leg_name])
     return {
         "units_bought": len(mine),
@@ -112,12 +124,21 @@ def rate_table(rows: list[dict], carried: set[str], record: dict) -> dict:
         "charged_seconds_per_call": charged,
         "charged_generation_seconds": round(charged * len(mine), 1),
         "ratio_measured_over_charged": round((sum(seconds) / max(1, len(seconds))) / charged, 4),
-        "r1_smoke_seconds": theirs,
-        "r1_smoke_mean": round(sum(theirs) / max(1, len(theirs)), 3),
-        "r1_smoke_max": round(max(theirs, default=0.0), 3),
+        "r1_smoke_seconds": list(smoke["seconds"]),
+        "r1_smoke_mean": smoke["mean"],
+        "r1_smoke_max": smoke["max"],
+        "r1_smoke_units": len(smoke["seconds"]),
+        "r1_smoke_source": smoke["record"],
+        "r1_smoke_rule": (
+            "quoted from the registration, which H6 re-derives from that file. It is FIVE calls;"
+            " only four are carried, because the fifth was refused by r1's parser and r2 re-buys"
+            " it. Averaging the carried rows would publish 53.027 for a smoke the record, the"
+            " contract and r1's report all state at 45.582"
+        ),
         "the_carried_rows_are_excluded": (
-            "their seconds were spent on pod 9rquj8p0lelct3 in r1's session. A mean over all 79"
-            " would be a rate no pod ever ran at ([[a_rate_is_a_property_of_the_pod]])"
+            "their seconds were spent on pod 9rquj8p0lelct3 in r1's session, and «this pod's rows»"
+            " is the `carried_from` field and never the pack's id list. A mean over all 79 would be"
+            " a rate no pod ever ran at ([[a_rate_is_a_property_of_the_pod]])"
         ),
         "completion_tokens": sum(
             int((one.get("usage") or {}).get("completion_tokens") or 0) for one in mine
@@ -162,10 +183,19 @@ def build() -> dict:
             "sha256": summary.sha256_of(EVIDENCE),
             "units_read": len(rows),
             "units_registered": units,
-            "units_bought_by_this_pod": len([one for one in rows if one["id"] not in carried]),
-            "units_carried_from_r1": len([one for one in rows if one["id"] in carried]),
-            "carried_ids": sorted(carried),
+            "units_bought_by_this_pod": len([one for one in rows if not one.get("carried_from")]),
+            "units_carried_from_r1": len([one for one in rows if one.get("carried_from")]),
+            "carried_ids": sorted(one["id"] for one in rows if one.get("carried_from")),
+            "carried_ids_the_pack_names": sorted(carried),
+            "carried_disagreement": sorted(
+                carried ^ {one["id"] for one in rows if one.get("carried_from")}
+            ),
             "carried_rule": pack["carried"]["rule"],
+            "carried_is_keyed_on_the_field": (
+                "the row's own `carried_from`, never the pack's id list. A thread the pod re-bought"
+                " because the seed never landed carries no such field, and keyed on the list it"
+                " would be reported as carried — hiding the one thing the contract forbids"
+            ),
             "arm": "GO",
             "arm_rule": record["bars"]["completeness"]["arm_rule"],
         },
@@ -248,7 +278,7 @@ def build() -> dict:
                 " is reconciled in the report, never quoted as the step's number"
             ),
         },
-        "non_gating": rate_table(rows, carried, record),
+        "non_gating": rate_table(rows, record),
         "what_this_is_not": record["what_this_run_is_not"],
         "scorer": {
             "module": "src/market_pulse/scorer.py",
