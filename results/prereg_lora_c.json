@@ -178,7 +178,16 @@
         "arm_a": 62,
         "arm_b": 82
       },
-      "steps_rule": "floor(ceil(n / micro_batch_size) / grad_accum) × epochs. NOT the registered `ceil(n / (micro × accum)) × epochs`: optimizer.step() fires only on a whole grad_accum of MICRO-batches, and lora-b measured 62 steps where 64 were registered. This record uses the arithmetic the trainer actually runs",
+      "steps_rule": "floor(ceil(n / micro_batch_size) / grad_accum) × epochs — the number of optimizer.step() calls. `train_qlora.train` steps only when `seen % accum == 0` over MICRO-batches, so each epoch's leftover micro-batches never complete a group and their gradients carry into the next epoch's first step (lora-b's Dv576: 62 run against 64 registered)",
+      "steps_the_other_number": {
+        "rule": "ceil(n / (micro × accum)) × epochs — `train_qlora.train`'s own `planned`",
+        "value": {
+          "arm_a": 64,
+          "arm_b": 84
+        },
+        "what_it_drives": "the cosine schedule's total and its warmup, and the progress display. It is a REAL number of this run and it is NOT the step count the money formula wants",
+        "why_both_are_here": "one input with two values gets quoted kindly, and this line has already made that mistake five times. Both are named so no reader has to choose ([[two_values_for_one_input_get_quoted_kindly]])"
+      },
       "training_seconds_per_arm": "<steps> × <s/step>"
     },
     "hard_stop_seconds": "TO BE DERIVED in lora-c-run's contract, from the cap and the live price at create. Registering one here would be a number with no run behind it",
@@ -364,7 +373,7 @@
   },
   "producer": {
     "script": "scripts/write_lora_c_prereg.py",
-    "sha256": "aee97aa9c2355939c3cca6526e2db2c4f7ce7fc09ddf1c21c0390a6b3bc5ba49"
+    "sha256": "d82ee23ba5c0d3b0d7b8af75f74b43e848b386e644d056699542b80e1025a001"
   },
   "question": "does rationale-supervised QLoRA on pass 1 fix the subject-attribution errors pass 2 measured — brand ↔ retailer, a retailer in a non-dairy context, non-dairy «brands», and mention-vs-about — WITHOUT learning the prior the way line B did",
   "reachability": {

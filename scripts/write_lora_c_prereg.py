@@ -282,12 +282,29 @@ def money(eval_pack: dict, data_record: dict, train_rows: int, synthetic_rows: i
             ),
             "training_seconds_per_arm": "<steps> × <s/step>",
             "steps_rule": (
-                "floor(ceil(n / micro_batch_size) / grad_accum) × epochs. NOT the registered"
-                " `ceil(n / (micro × accum)) × epochs`: optimizer.step() fires only on a whole"
-                " grad_accum of MICRO-batches, and lora-b measured 62 steps where 64 were"
-                " registered. This record uses the arithmetic the trainer actually runs"
+                "floor(ceil(n / micro_batch_size) / grad_accum) × epochs — the number of"
+                " optimizer.step() calls. `train_qlora.train` steps only when `seen % accum == 0`"
+                " over MICRO-batches, so each epoch's leftover micro-batches never complete a group"
+                " and their gradients carry into the next epoch's first step (lora-b's Dv576: 62"
+                " run against 64 registered)"
             ),
             "steps": steps,
+            "steps_the_other_number": {
+                "value": {
+                    "arm_a": math.ceil(train_rows / (micro * accum)) * epochs,
+                    "arm_b": math.ceil((train_rows + synthetic_rows) / (micro * accum)) * epochs,
+                },
+                "rule": "ceil(n / (micro × accum)) × epochs — `train_qlora.train`'s own `planned`",
+                "what_it_drives": (
+                    "the cosine schedule's total and its warmup, and the progress display. It is a"
+                    " REAL number of this run and it is NOT the step count the money formula wants"
+                ),
+                "why_both_are_here": (
+                    "one input with two values gets quoted kindly, and this line has already made"
+                    " that mistake five times. Both are named so no reader has to choose"
+                    " ([[two_values_for_one_input_get_quoted_kindly]])"
+                ),
+            },
             "eval_calls_per_leg": calls,
             "legs": 4,
         },
