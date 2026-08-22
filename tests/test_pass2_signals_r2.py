@@ -12,6 +12,7 @@ import datetime
 import json
 import re
 import sys
+import tempfile
 from pathlib import Path
 
 import pytest
@@ -44,6 +45,30 @@ R1_ROWS = {
 }
 F2 = PACK["owed"]["re_asked_after_a_refusal"]
 OUT_NAME = PACK["legs"][0]["out"]
+
+
+def _seed_text() -> str:
+    """The seed as `--seed` writes it, BUILT here and never read off `results/`.
+
+    `results/pass2_signals_r2_v1.jsonl` is the run's OUT-FILE: before the pod it is four carried
+    rows and after the pod it is 79. A fixture that copied it was a fixture whose meaning changed
+    the moment the run wrote into it — seventeen tests went red at the commit that added the paid
+    evidence, none of them because anything they test had moved
+    ([[a_test_that_reads_a_shipped_artifact]], read the other way round: the artifact GREW).
+
+    Built by driving the real producer, so a change to `seed()` still reaches every fixture.
+    """
+    with tempfile.TemporaryDirectory() as where:
+        keep = builder.SEED
+        builder.SEED = Path(where) / OUT_NAME
+        try:
+            builder.main(["--seed"])
+            return builder.SEED.read_text(encoding="utf-8")
+        finally:
+            builder.SEED = keep
+
+
+SEED_TEXT = _seed_text()
 
 
 # --- the prompt, the renderings and the ceiling -------------------------------------------------
@@ -584,7 +609,11 @@ def test_the_seed_is_the_four_carried_rows_and_never_the_refused_one(tmp_path, m
         assert one["carried_from"]["file"] == "results/pass2_signals_v1.jsonl"
         assert one["rendering_sha256"] == BY_ID[one["id"]]["rendering_sha256"]
         assert one["index"] == [item["id"] for item in ITEMS].index(one["id"])
-    assert seed.read_text(encoding="utf-8") == (RESULTS / OUT_NAME).read_text(encoding="utf-8")
+    assert seed.read_text(encoding="utf-8") == SEED_TEXT
+    # and the run APPENDED to the seed rather than rewriting it: the live out-file's first four
+    # lines are still the four rows this producer writes
+    live = (RESULTS / OUT_NAME).read_text(encoding="utf-8").splitlines(keepends=True)
+    assert "".join(live[: len(SEED_TEXT.splitlines())]) == SEED_TEXT
 
 
 def test_the_seed_REFUSES_to_overwrite_a_file_that_carries_a_bought_reply(tmp_path, monkeypatch):
@@ -735,13 +764,13 @@ def state_with_pod(**kw) -> dict:
 
 
 def seeded(path: Path) -> None:
-    path.write_text((RESULTS / OUT_NAME).read_text(encoding="utf-8"), encoding="utf-8")
+    path.write_text(SEED_TEXT, encoding="utf-8")
 
 
 def bought_rows(path: Path, ids: list[str], seconds, elapsed_base: float = 300.0) -> None:
     """The seeded file plus N rows this pod bought."""
     values = [seconds] * len(ids) if isinstance(seconds, int | float) else seconds
-    text = (RESULTS / OUT_NAME).read_text(encoding="utf-8")
+    text = SEED_TEXT
     text += "".join(
         json.dumps(
             {
@@ -1002,7 +1031,7 @@ def test_the_watch_returns_GO_when_the_75_are_bought(tmp_path, monkeypatch):
 
 def whole_run(path: Path) -> None:
     """The out-file a complete run leaves: the four carried rows plus 75 real replies."""
-    text = (RESULTS / OUT_NAME).read_text(encoding="utf-8")
+    text = SEED_TEXT
     for index, name in enumerate(OWED):
         item = BY_ID[name]
         answer = {
@@ -1647,14 +1676,10 @@ def test_the_runner_REFUSES_an_ABSENT_seed_file(tmp_path):
 
     # a TORN LAST line is the mid-write race and not a damaged file
     torn = tmp_path / "torn.jsonl"
-    torn.write_text(
-        (RESULTS / OUT_NAME).read_text(encoding="utf-8") + '{"id": "@x:1", "sec', encoding="utf-8"
-    )
+    torn.write_text(SEED_TEXT + '{"id": "@x:1", "sec', encoding="utf-8")
     assert runner.carried(torn, PACK) == sorted(CARRIED)
     damaged = tmp_path / "damaged.jsonl"
-    damaged.write_text(
-        '{"id": "@x:1", "sec\n' + (RESULTS / OUT_NAME).read_text(encoding="utf-8"), encoding="utf-8"
-    )
+    damaged.write_text('{"id": "@x:1", "sec\n' + SEED_TEXT, encoding="utf-8")
     with pytest.raises(SystemExit, match="damaged file"):
         runner.carried(damaged, PACK)
 

@@ -234,6 +234,64 @@ session's FIRST create. The rule that came out of it: **rungs 3, 4 and 5 count t
 bought; rung 7 counts the whole file.** Neither count is wrong — using one where the other belongs
 is.
 
+## r2's outcome — 79 of 79, all three bars scored, and what the carry proved
+
+**The run.** Pod `dusd807citw8d7`, RTX 4090 EU-RO-1, create `2026-08-22T12:07:23Z` → delete
+`12:41:44Z`: **2 061 s = $0.42365** of a $2.50 cap. 75 threads bought at **23.760 s/thread mean**
+against 97 charged — **0.245 of the charge**. Rung 7 GO: 79 answered, 79 parsed, **0 refusals, 0
+relabellings, 0 sha mismatches, 0 unbalanced replies**, carried 4 / bought 75 with no disagreement.
+
+**The bars, scored for the first time.** Bar 1 **4 of 5 cases and 6 of 7 signals** — the only miss
+is F2a, registered UNREACHABLE before the pod because pass 1 labelled its only cited row
+`сеть_ритейлер` and the gold reads a `молочный_бренд` signal from it. **F2 was ANSWERED and READ
+this time** and still does not take the case, which is the expectation proving itself: the RED is
+about AUTHORITY and never was about the transport. Bar 2 **3 of 4**, exactly the value computed at
+$0 before the pod. Bar 3 **RED at 2 signals**.
+
+**Bar 3's two signals are this line's own question arriving as a measurement.**
+`@VARUS_channel:10366` is a giveaway thread the reference calls noise; pass 2 was handed its four
+`сеть_ритейлер` rows, dropped none of them, and read `похвала · service` from «Класні призи, все
+хочу)» and `жалоба · service` from «Де умови?!». Both are about the chain's giveaway and neither is
+about dairy. Under STRICT authority that is the honest outcome — pass 2 may drop a row and here it
+judged there was something to say — and the bar is 0 and reads RED at 2. It was registered in
+advance as «the case this bar is really about».
+
+**The FP reading ruling (б) bought.** DROP **21 of 281 = 7.47 %**, and `сеть_ритейлер` drops at
+**11.86 %** against `категория_личное`'s 6.28 %. `subject_doubt` **15 of 260**, and its highest rate
+is **`молочный_бренд` at 21.4 %** — a café, a stationery brand and a throat spray, all labelled a
+dairy brand by pass 1. r1's five threads doubted only `категория_личное`; over the population the
+smallest and most valuable class is where the precision problem is.
+
+**What the carry proved, and it is the reading to keep.** `@matusi_ukr:22303` is the one thread BOTH
+pods answered — r1's parser refused its reply, so r2 re-bought it — and the reply came back
+**byte-identical**: 815 characters, the same sha256, 304 completion tokens, 15.801 s → 15.934 s.
+Greedy decoding on the same request gives the same string on two different pods. That is the
+empirical answer to «may four paid replies be carried into a new registration», and it is the only
+SIZE-FREE pod-class reading this stack owns: **1.008**, against the 1.67 the registration borrowed
+from pass 1.
+
+**And what Dv702 was worth.** r1's parser, driven over r2's out-file, refuses **52 of 79 threads —
+65.8 %**, every one on `per_comment.note is not a non-empty string`. r1's F2 refusal was not a
+fluke; it was the MODAL outcome. Two thirds of the population would have come back unreadable and
+the run would have bought a verdict nobody could compute. One structural rule — a report-only field
+may not be able to refuse — was worth 52 threads.
+
+**Three things the r2 construction learned that the ADR did not have.**
+
+1. **A tolerant reader can MOVE a refusal instead of removing it.** Nulling every repaired field
+   satisfied the parser and broke the consumer: `prompts._reader` guarantees six report-only fields
+   are non-empty STRINGS, two of them are `Counter`-sorted downstream, and one of those consumers is
+   a SEALED file. The repair has to satisfy the CONSUMER's contract and not only the producer's.
+2. **A run that carries rows it did not buy has two counts and every rung has to declare which.**
+   Rungs 3, 4 and 5 count what the POD bought; rung 7 counts the FILE. Four different rungs read the
+   wrong one before the review; the fatal one was `fingerprint`, which made `watch`'s boot branch
+   dead and meant rung 3 could never fire.
+3. **A review of a FROZEN tree is a different instrument.** r1's five lenses returned 3 confirmed
+   and 12 refuted, and every refutation named the commit that had just fixed it. r2 committed D0′
+   first, gave every lens the sha, fixed in one commit, and ran a SECOND pass on that sha asking a
+   second question — did the fix open something. 10 of 11 confirmed, 8 of 8 closed, and 19 further
+   distinct defects **inside the fixes**, one of them fatal.
+
 ## What binds, from here
 
 1. **Pass 2 never relabels.** A reply that does is a refusal by cause; a design that does is the
@@ -258,6 +316,14 @@ is.
    pinned module, re-bind what changed, and name the re-binding in the record. r2 does it four
    times — module, gate, runner, scorer — and the gate's own docstring lists which globals move and
    why each one had to.
+8. **A repair satisfies the CONSUMER's contract, not only the producer's.** A field's TYPE is part
+   of what the next stage was promised, and «it is report-only» says nothing about what may be
+   written into it. Every repaired non-nullable string keeps a string, and the census beside it is
+   what makes «unreadable» and «absent» two readings.
+9. **A carried reply is legitimate only if the request is byte-identical, and r2 measured that
+   rather than assuming it.** The prompt did not move, every unit was re-rendered to r1's own
+   `rendering_sha256` at build time, and the one carried-class thread that WAS re-bought came back
+   byte for byte. A registration that carries paid evidence forward owes that proof.
 
 Related: [[v2-is-the-base-and-pass-2-is-not-a-one-shot-reader]] (what pass 2 may not be) ·
 [[reader-programme-closed-and-the-architecture-sitting-17-08]] (the stop-rule both read) ·

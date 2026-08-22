@@ -57,6 +57,24 @@ on a committed tree → D1 paid, cap $2.50 → D2 at $0 over all 79 units.
   quote it, the fixes land on top, and a second skeptic pass reads the fixed sha with the tree
   frozen — so the tally is a tally.
 
+## Step 0 — baselines and the team lead's files
+
+```
+## Baselines — instrument output, 2026-08-22T09:37:31+00:00
+- head: 974a33fcfdde on main
+- porcelain:
+     M docs/STATUS.md · M knowledge/daily_logs/2026-08-22.md · M knowledge/hot.md
+     M knowledge/index.md · ?? docs/PROMPT-pass2-signals-r2.md
+- census: brain-census: 10.4Ktok boot tax
+- suite: 3518 passed / 2 skipped — whole suite, stamped 2026-08-22T09:15:24+00:00 at 974a33fcfdde
+- boot files: CLAUDE.md 4581 B · knowledge/hot.md 12262 B · MEMORY.md 22818 B = 175 lines
+- preflight: 1538 pinned paths · 2702 pins · 122 records — 1502 match every pin on them, 36 carry an older pin
+```
+
+Committed first, by path, verbatim and unedited: `docs/STATUS.md`, `docs/PROMPT-pass2-signals-r2.md`
+and the vault tail (`knowledge/hot.md`, `knowledge/index.md`, the 22.08 daily log — last session's
+`/save`, held for the operator's word) as **`b45bf44`**.
+
 ## Step 0.5 — the acceptance addendum of r1 ($0, its own commit, before D0′)
 
 `docs/reports/pass2-signals.md` gained an **ADDENDUM** section; nothing above it was rewritten.
@@ -292,6 +310,22 @@ finds an empty directory and the pod re-buys four threads the registration forbi
 and `check_requests` cannot catch it, because the renderings match by construction. A test greps
 the runbook for that scp.
 
+### `make preflight` at the closing tree
+
+```
+$ make preflight ARGS='pass2.py prereg_pass2_signals_r2.json'
+pin registry: 1547 paths pinned by results/*.json
+QUERY pass2.py
+  [4] digests — 11 of 11 pinned paths match every digest on them
+QUERY prereg_pass2_signals_r2.json
+  [4] digests — 6 of 6 pinned paths match every digest on them
+```
+
+Eleven pinned paths and six, and **not one carries an older pin** — including
+`src/market_pulse/pass2.py`, which r1's pack pins and r2 never touched. The verdict's own four
+pins re-checked at the same tree: `registration cd3f6dca…` · `gold 716ff417…` ·
+`evidence d3c147ac…` · `scorer dbb5406a…`, all matching.
+
 ### The five-lens review on a FROZEN tree — and this time the tally is a tally
 
 D0′ was committed first (`d71a93d`), and every lens was given that sha, told the tree would not
@@ -418,10 +452,16 @@ r1  815 chars · sha a336b6cea3aa1379… · 304 completion tokens · 15.801 s
 r2  815 chars · sha a336b6cea3aa1379… · 304 completion tokens · 15.934 s      1.008×
 ```
 
-Same request, same bytes, greedy decoding, two different pods. **That is the empirical answer to
-«may the four carried replies be carried»** — the one carried-class thread that WAS re-bought
-returned the same string. And it is the only size-free pod-class reading in the run: on this decode
-the spread between two pods is **1.008**, against the **1.67** the registration charged.
+Same request, same bytes, greedy decoding, two different pods. **It is one direct sample and it is
+the shortest of the five** — 304 completion tokens against F1's 2 056 — so it is not on its own a
+proof that a 2 000-token reply reproduces. The other half of the argument is the one the pack's own
+rule cites: pass 1 answered **200 of 200 identically across three pods** on the same serving config.
+One direct sample here plus 200/200 there is what the carry rests on, and this report states both
+rather than letting the one measurement carry the claim alone.
+
+For the SECONDS it is a measurement without a caveat: 15.801 → 15.934 is the only size-free
+pod-class reading in the run, and on this decode the spread between two pods is **1.008** against
+the **1.67** the registration borrowed from pass 1.
 
 **2 — the heavy tail is real, and the smoke never contained it.** The population's widest unit,
 `@klopotenkofood:6040` (26 filtered rows), took **135.232 s** — **2.33× the smoke's maximum** and
@@ -431,6 +471,14 @@ onto units carrying twenty-six; the run says that argument was right in KIND, an
 would have under-priced this tail whatever arm was drawn over it.
 
 ## D2 — what 79 threads say
+
+**The verdict in one sentence: all three registered bars are RED, and the three REDs are three
+different kinds.** Bar 1 at **4 of 5** — the miss registered UNREACHABLE by construction before the
+pod. Bar 2 at **3 of 4** — the value computed at $0 before the pod, inherited from v5b and never
+pass 2's own. Bar 3 at **2 signals against 0** — the only one of the three that is a reading the
+layer produced, and it is the finding of the run. A bar registered above what construction allows
+and a bar the layer failed are not the same result, and the operator's next decision turns on which
+is which.
 
 ### The bars, SCORED for the first time
 
@@ -559,9 +607,12 @@ falls. **The number to quote is the clock: $0.42365.** The step joins the three 
 ## What returns to the operator
 
 1. **The window's signal layer is complete: 79 of 79 threads, all three bars SCORED for the first
-   time.** Bar 1 **4 of 5** cases and **6 of 7 signals** — double v5b's flagship count over 3.4×
-   the threads. The one miss was registered UNREACHABLE before the pod and is about authority, not
-   about the model.
+   time — and ALL THREE ARE RED.** Bar 1 **4 of 5**, bar 2 **3 of 4**, bar 3 **2 signals against
+   0**. Two of those REDs were known before the pod: bar 1's single miss is UNREACHABLE by
+   construction (pass 1 labelled F2a's only cited row `сеть_ритейлер`) and bar 2's value was
+   computed at $0 and agrees exactly. **Only bar 3 is a RED the layer produced.** On the readings
+   the layer did reach: bar 1 took **6 of 7 gold signals** — double v5b's flagship count over 3.4×
+   the threads.
 2. **Bar 3 is RED at 2 signals, and the two are the mention-vs-about cell.** `@VARUS_channel:10366`,
    a giveaway thread: pass 2 dropped none of its four `сеть_ритейлер` rows and read `похвала` and
    `жалоба` about the giveaway itself. That is a question for the reference or for pass 1's filter,
@@ -574,7 +625,9 @@ falls. **The number to quote is the clock: $0.42365.** The step joins the three 
    capped, $0.42365 spent. The MAX × the pod-class spread is a safe arm and this is how safe.
 5. **The pod-class spread on THIS decode is 1.008, not 1.67** — measured on the one thread both pods
    answered, whose reply came back byte-identical. The next registration that needs a spread for a
-   pass-2 call has a direct reading instead of a borrowed one.
+   pass-2 call has a direct reading instead of a borrowed one. **n = 1, and it is the shortest of
+   the five replies** (304 completion tokens): quote it with pass 1's 200/200 across three pods
+   beside it, never alone.
 6. **Dv702 was worth 52 threads.** r1's parser over this out-file refuses 65.8 % of the population,
    every one on `per_comment.note`. A report-only field that can refuse is not a rare hazard on this
    prompt; it is the modal outcome.
@@ -610,10 +663,11 @@ decided at $0, before the create.
 
 | # | cause | what |
 |---|---|---|
-| **Dv722** | `[cause: env]` [[a-rate-is-a-property-of-the-pod]] | **The pod-class spread on a pass-2 call is 1.008, measured directly.** `@matusi_ukr:22303` is the one thread both pods answered — r1's parser refused its reply, so r2 re-bought it — and it came back BYTE-IDENTICAL: 815 chars, the same sha256, 304 completion tokens, 15.801 → 15.934 s. Greedy decoding on the same request gives the same string on two pods. That is the carry's own proof AND the only size-free spread reading this stack has; the registration charged 1.67, borrowed from pass 1. |
+| **Dv722** | `[cause: env]` [[a-rate-is-a-property-of-the-pod]] | **The pod-class spread on a pass-2 call is 1.008, measured directly.** `@matusi_ukr:22303` is the one thread both pods answered — r1's parser refused its reply, so r2 re-bought it — and it came back BYTE-IDENTICAL: 815 chars, the same sha256, 304 completion tokens, 15.801 → 15.934 s. Greedy decoding on the same request gives the same string on two pods. **n = 1, and it is the shortest of the five replies** — pass 1's 200/200 across three pods is the other half of the argument and belongs beside it. For the SECONDS it needs no caveat: it is the only size-free spread reading this stack has, and the registration charged 1.67, borrowed from pass 1. |
 | **Dv723** | `[cause: model]` [[a-report-only-field-can-refuse-the-whole-row]] | **r1's parser refuses 65.8 % of this out-file** — 52 of 79 threads, every one on `per_comment.note is not a non-empty string`. The model writes `"note": ""` habitually. r1's F2 was the modal outcome, not a fluke, and the tolerant reader bought 52 threads with one construction. |
 | **Dv724** | `[cause: contract-gap]` [[a-smoke-drawn-from-the-exam-is-not-a-rate-sample]] | **The heavy tail is real and no smoke could have contained it.** `@klopotenkofood:6040`, 26 filtered rows, **135.232 s — 2.33× the smoke's maximum** and 1.39× the charge. The three next slowest are the next three widest units. The registration's reason for the MAX was right in kind; its size (4.08× the realised run) is the price of a sample whose widest thread carries eight rows against a population's twenty-six. |
 | **Dv725** | `[cause: process]` [[a-gate-command-is-a-write]] | **Two `--completeness` runs appended two identical rung-7 snapshots** to `results/pass2_signals_r2_run.json` — I ran it twice to read two halves of its output. No verdict moves and both snapshots agree, but a gate command is a WRITE and reading it twice writes it twice. |
+| **Dv727** | `[cause: verify-gap]` [[a-test-that-reads-a-shipped-artifact]] | **Seventeen tests went red at the commit that added the paid evidence, and not one of them because anything they test had moved.** The fixtures copied `results/pass2_signals_r2_v1.jsonl` as «the seed» — a file that is four rows before the pod and 79 after it, and the run wrote 75 rows into it. r1's lesson is a test that reads an artifact which does not exist yet; this is the same test after the artifact GROWS. Every fixture now BUILDS the seed by driving `--seed` into a temporary directory, so a change to the producer still reaches them and the live out-file reaches none of them. The one assertion that still reads the live file is the honest one: its first four lines are the seed, which says the run appended rather than rewrote. |
 | **Dv726** | `[cause: tooling]` [[a-step-meter-on-a-balance-delta-never-stops]] | **The money's three readings again, and this time the delta is UNDER the clock.** Clock $0.42365 (2 061 s) · balance delta $0.4162 · walk `pods $0.0000`. r1's delta came in ABOVE its clock; both are the same fact — the delta carries the always-on volume and the settlement lag in whichever direction the sampling moment falls. The clock is what is quoted, and the step joins three already waiting on `money-anchors`. |
 
 **The tally, by the grep the template names:**
@@ -625,19 +679,18 @@ tag = {}
 for chunk in re.split(r"(?=\*\*Dv\d+)", flat):
     if (m := re.match(r"\*\*Dv(\d+)", chunk)) and (t := re.findall(r"\[cause:\s*([a-z-]+)\]", chunk)):
         tag.setdefault(int(m.group(1)), t[0])
-inr = {d: t for d, t in tag.items() if 704 <= d <= 726}
+inr = {d: t for d, t in tag.items() if 704 <= d <= 727}
 health = sum(1 for t in inr.values() if t in ("contract-gap", "spec-gap", "verify-gap"))
 print(len(inr), dict(collections.Counter(inr.values()).most_common()))
-print("contract health", health, "· paid", len(inr) - health, "· enum canonicity", len(inr), "of 23")
+print("contract health", health, "· paid", len(inr) - health, "· enum canonicity", len(inr), "of 24")
 ```
 
 ```
-23 {'tooling': 7, 'contract-gap': 6, 'verify-gap': 4, 'process': 3, 'spec-gap': 1, 'env': 1, 'model': 1}
-contract health 11 · paid 12 · enum canonicity 23 of 23
+24 {'tooling': 7, 'contract-gap': 6, 'verify-gap': 5, 'process': 3, 'spec-gap': 1, 'env': 1, 'model': 1}
+contract health 12 · paid 12 · enum canonicity 24 of 24
 ```
 
-**Split tally: contract health 11, paid lessons 12, enum canonicity 23 of 23.** r1's split was 16/7
-the other way. The difference is where the work went: r1 was the first pass-2 registration on this
+**Split tally: contract health 12, paid lessons 12, enum canonicity 24 of 24.** r1's split was 16/7 the other way. The difference is where the work went: r1 was the first pass-2 registration on this
 stack and spent itself amending its own contract, while r2 inherited a working contract and spent
 itself on the INSTRUMENTS — seven `tooling`, four `verify-gap`, and every one of the eleven found by
 driving a command rather than reading a file.
