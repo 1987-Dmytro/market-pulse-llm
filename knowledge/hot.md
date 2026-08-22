@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-22 15:10:45 (every SessionStart)
+**Auto-refreshed:** 2026-08-22 15:34:54 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
+664c3ae chore(vault): pass2-signals-r2 closed -- hot.md's headline was false, the log carries the run
 a8a024a docs(adr): the INDEX row carries r2's outcome
 58be9d0 docs(adr): r2's outcome -- and the fixtures stop reading the artifact the run writes
 b7b2799 docs(report): pass2-signals r2 -- D1, D2, 23 Deviations and five Process signals
 ea44e10 feat(pass2-signals-r2): the paid run -- 75 bought, 79 read, all three bars SCORED
-01c716f fix(runbook): $SSHK is the runpod key five other runbooks name, not an id_ed25519 guess
 ```
 
 ## 📋 Recent decisions
@@ -30,7 +30,7 @@ ea44e10 feat(pass2-signals-r2): the paid run -- 75 bought, 79 read, all three ba
 <!-- AUTO-GEN END (everything below preserved across refreshes) -->
 # Hot Cache — curated
 
-**Last update:** 2026-08-22 (день), закрыт `pass2-signals-r2`. **Сигнальный слой окна-1 СОБРАН:
+**Last update:** 2026-08-22 15:29 `/save`, закрыт `pass2-signals-r2`. **Сигнальный слой окна-1 СОБРАН:
 79 из 79 тредов прочитаны, все три бара впервые ПОСЧИТАНЫ — и все три КРАСНЫЕ, но красноты разного
 рода.** Один под, **2 061 с = $0.42365** из капа $2.50. Слой окна-1 стоит **$1.273827** (проход 1
 $0.742055 + проход 2 r1 $0.108122 + r2 $0.42365) против $0.312592 однопроходного читателя.
