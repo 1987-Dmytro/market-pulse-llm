@@ -353,12 +353,18 @@ across all four parsed replies: strict authority held everywhere it was tested.
 | | |
 |---|---:|
 | this pod, on the gate's clock | **$0.108122** (526.0 s) |
-| the guard's balance delta | $0.1057 — a LOWER BOUND; the billing walk was `UNAVAILABLE` |
+| the guard's balance delta, at the deletion | $0.1057 |
+| the same delta, ~25 minutes later | **$0.1180** — ABOVE the clock, because with no billing rows the delta carries the always-on volume it normally excludes BY KIND |
+| the billing walk | `UNAVAILABLE (no billing rows yet)` — the third contract in a row where the endpoint lags past the session |
 | the step | $0.108122 of **$1.50** |
 | pass 1 over window 1 | $0.742055 |
 | the signal layer so far | **$0.850177** |
 | the one-shot reader, for comparison | $0.312592 |
-| cycle 2 | $7.3999 of $20.00 |
+| cycle 2 | $7.4122 of $20.00 |
+
+**The step stays OPEN**, as `pass1-window` and `pass1-window-r2` do: the number to quote is the
+gate's clock, **$0.108122**, and the walk that would settle it has not appeared. Three steps now
+wait on `money-anchors` for the same reason ([[a_step_meter_on_a_balance_delta_never_stops]]).
 
 ## What returns to the operator
 
