@@ -1117,6 +1117,65 @@ def test_EVERY_gate_command_runs_end_to_end(tmp_path, monkeypatch, capsys):
     assert state["pods"][0]["billed_seconds"] == 1800.0
 
 
+def test_the_PRICE_command_runs_and_its_backstop_guard_bites_both_ways(
+    tmp_path, monkeypatch, capsys
+):
+    """`--price` is the command that runs while a pod is already billing, so a crash in it is the
+    most expensive kind there is. Driven at $0: an accepted window, an over-long one, and a price
+    above the ceiling."""
+    record = tmp_path / "run.json"
+    monkeypatch.setattr(gate.r1, "RECORD", record)
+    monkeypatch.setattr(gate.r1, "registration", lambda: RECORD)
+    monkeypatch.setattr(gate, "OUT_FILE", tmp_path / "pass2_signals_v1.jsonl")
+    created = "2026-08-22T10:00:00+00:00"
+    stop = RECORD["money"]["arithmetic"]["cumulative"]["hard_stop_seconds"]
+    good = (gate.r1.stamp(created) + __import__("datetime").timedelta(seconds=stop)).isoformat(
+        timespec="seconds"
+    )
+    now = gate.r1.stamp("2026-08-22T10:01:00+00:00")
+
+    def price(usd, terminate):
+        record.write_text(json.dumps({"pods": [], "gates": []}), encoding="utf-8")
+        return gate.main(
+            [
+                "--price",
+                "--pod-id",
+                "p1",
+                "--created-at",
+                created,
+                "--usd-per-hour",
+                str(usd),
+                "--card",
+                "NVIDIA GeForce RTX 4090",
+                "--terminate-after",
+                terminate,
+                "--outdir",
+                str(tmp_path),
+            ],
+            now,
+        )
+
+    assert price(0.74, good) == gate.GO
+    state = json.loads(record.read_text(encoding="utf-8"))
+    assert state["gates"][-1]["rung"] == 1
+    assert state["gates"][-1]["backstop"]["window_seconds"] == stop
+    assert state["gates"][-1]["recovery"]["fits_the_recovery_clause"] is True
+    capsys.readouterr()
+
+    # a window longer than rung 6 allows, beyond the registered tolerance
+    far = (gate.r1.stamp(created) + __import__("datetime").timedelta(seconds=stop + 600)).isoformat(
+        timespec="seconds"
+    )
+    with pytest.raises(SystemExit, match="beyond the"):
+        price(0.74, far)
+    state = json.loads(record.read_text(encoding="utf-8"))
+    assert state["gates"][-1]["verdict"] == "KILL"
+    assert "IS LIVE AND BILLING" in state["gates"][-1]["next_step"], "the pod is already real"
+
+    # a price over the registered ceiling
+    assert price(0.95, good) == gate.KILL
+
+
 def test_the_pack_and_the_record_agree_on_the_key_the_pinned_gate_compares():
     assert PACK["population"]["payable_comments"] == RECORD["population"]["payable_comments"] == 79
     source = (REPO_ROOT / "scripts" / "gate_pass1_window.py").read_text(encoding="utf-8")
