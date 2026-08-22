@@ -186,6 +186,184 @@ read it, so twelve of them refute with «already fixed at HEAD» and name the co
 Every finding was verified by me first — driven, not reasoned — before anything was changed. If this
 shape is run again, the finders and the verifiers should read a frozen tree.
 
+## D1 — the paid session: one pod, 526 seconds, and a STOP that is an answer
+
+One pod, `9rquj8p0lelct3`, RTX 4090 in EU-RO-1 at **$0.74/h**. Create `2026-08-22T08:01:39Z`,
+delete `08:10:25Z` — **526.0 s = $0.108122** of the $1.50 cap. The last D0 commit was
+`07:52:05Z`, printed in UTC beside the create as the runbook now makes you do.
+
+| rung | reading |
+|---|---|
+| 1 price | $0.74/h ≤ $0.80, backstop `09:51:39Z` = create + 6 600 s exactly, overshoot 0 s |
+| 2 ssh | **38 s** of create-elapsed against 500 — the fastest of six readings (14.5 · 38 · 231.9 · 262.5 · ≤50 · 29) |
+| 3 boot | **139.5 s**, a NEW FLOOR for this stack (142.7 · 146.8 · 164.9 · 192.1 · 237.2 · 267 · 293 · 353) |
+| — pre-generation | **135 s** measured (ssh 38 + stage/clone 97) against **1 100 charged** |
+| 4 projection | ran on every poll; peaked at $0.4590 of $1.50 while the leg was unstarted |
+| 5 liveness | never fired; the WAIT lines kept the log rising exactly as designed |
+| S smoke | 5 of 5, then the runner blocked on the token and printed `WAIT … 585s left of 600` |
+| S′ go/no-go | **STOP** |
+| 7 completeness | **GO** on the STOP arm |
+
+### The measurement this contract was bought for
+
+**A pass-2 decode, measured for the first time on this stack:**
+
+| thread | pass 2 | v5b, same thread | ratio | chars |
+|---|---:|---:|---:|---:|
+| `@VARUS_channel:10613` (F1) | **58.07** | 108.4 | 0.54 | 3 252 |
+| `@matusi_ukr:22303` (F2) | **15.80** | 43.0 | 0.37 | 815 |
+| `@mandziak:3676` (F3) | **40.85** | 58.2 | 0.70 | 2 319 |
+| `@mandziak:3703` (F4) | **56.46** | 63.5 | 0.89 | 3 261 |
+| `@matusi_ukr:22272` (F5) | **56.70** | 103.8 | 0.55 | 3 141 |
+| | **mean 45.582 · max 58.07** | mean 75.4 | **0.53** | 4 595 completion tokens |
+
+0 replies hit the 4 000-token ceiling and 0 failed to close their object.
+
+### Rung S′, and why the STOP is about the SAMPLE and not only the rate
+
+```
+charged_full = max(1.5 × 45.582, 58.07) = 68.373        arm: 1.5 × mean
+projected    = 517.3 + 74 × 68.373 + 1 300 = 6 876.9    against the 6 600 s stop
+               ^ cumulative billed at the decision       over by 276.9 s
+```
+
+**It missed by 3.74 seconds a call.** The pod was FAST — 517.3 s of create-elapsed at the decision
+against the ~1 700 the registration's own worked arm assumes — so the LIVE knife edge was
+`(6 600 − 1 300 − 517.3) / 74 = 64.63 s/call`, not the registered 48.6486, and the charge came in at
+68.373. A smoke mean of **43.09** instead of 45.582 — a 5.5 % difference on five calls — would have
+been a GO. The `max` arm alone (58.07) would have passed with 6.5 s a call to spare; it is the
+`1.5 ×` multiplier applied to a mean drawn from the five richest threads that closed it.
+
+**Beside it, computed live and gating nothing — the row-weighted arm:**
+
+```
+fit over the five: seconds = a + b × filtered_rows
+predicted mean for the remaining 74: 27.485 s/call
+projected: 3 851.2 s          would have said: GO
+```
+
+**The registered flat charge prices the remaining 74 at 2.49× what their own row counts predict**,
+and that is the effect the registration named before the money: the five F threads carry **6.0
+filtered rows a thread against the population's 3.56**, and they are the reference's own richest
+threads. The STOP is correct under the law as registered. It is also, on this evidence, a STOP
+about the sampling.
+
+The verdict was **recorded before the token was not written**, and the pod was deleted 5 s later.
+Deletion proven by three listings — `pod list -a` `[]`, `serverless list` `[]`, the EU-RO-1 volume
+unchanged as the positive control.
+
+## D2 — what the five threads say
+
+### Rung 7 — the completeness bar, STOP arm
+
+```
+arm STOP · owed 5 · answered 5 · sha_mismatches 0 · relabellings_refused 0
+unreadable_replies 1 of a budget of 1 · verdict GO
+```
+
+**The budget is the finding.** `ceil(0.174 × 5)` is 1; `int(0.01 × 5)` — pass 1's fraction, which
+this registration refused to carry — is **0**, and a transport with five answers, zero sha
+mismatches and zero relabellings would have read RED.
+
+**And the one refusal is a finding of its own.** `@matusi_ukr:22303` — **F2** — died on
+`per_comment.note is not a non-empty string`. The prompt asks for a note *where a doubt is
+recorded*; the model wrote `"note": ""` for a row it did not doubt, and `prompts._reader`'s `_text`
+refuses an empty string. **That is the third report-only field found to carry whole-thread refusal
+power** — after `subject_doubt` and an omitted `subject_type`, both caught at $0 by the review — and
+the first one to actually fire. It cost the one thread whose expected-RED was already registered.
+
+### The bars — all three UNSCORED, and each says why
+
+| bar | state | why |
+|---|---|---|
+| 1 flagships | **UNSCORED** | `@matusi_ukr:22303` was ANSWERED and REFUSED — not «never read». This is the review's finding #6 working: before it, the record would have said the go/no-go stopped the run before the population was bought |
+| 2 entity cases | **UNSCORED** | E2/E3/E4's threads are not in the smoke. Registered before the pod at **3 of 4** |
+| 3 noise | **UNSCORED** | N2 (`@VARUS_channel:10366`) is not one of the five F threads — registered in advance as exactly this |
+
+**None of them is reported as a number**, and bar 3 in particular is not reported as GREEN over
+zero threads, which is what it would have said before the fix.
+
+### The per-signal scorecard — 6 of the 7 gold signals, on the 4 threads that parsed
+
+| signal | gold | pass 2 said | found |
+|---|---|---|---|
+| F1a | `жалоба` · `сеть_ритейлер` · quality · 21626 | `жалоба` · `сеть_ритейлер` · quality · [21626] | **✓** |
+| F1b | `спрос` · `категория_личное` · **availability** · 21599+21601 | `спрос` · `категория_личное` · **availability** · [21599] | **✓** |
+| F1c | `похвала` · — · **taste** · 21629 | `похвала` · `категория_личное` · **taste** · [21629] | **✓** |
+| F2a | `жалоба` · `молочный_бренд` · availability · 580124 | — | ✗ the reply was refused; and registered UNREACHABLE by construction |
+| F3a | `привычка` · `категория_личное` · — · 47899+47902 | `привычка` · `категория_личное` · [47899] and [47902] | **✓** |
+| F4a | `тренд` · `категория_личное` · — · 48276+48283 | `похвала` / `привычка` · `категория_личное` · [48276] | **✓** (signal_type is not compared — the reference's own rule) |
+| F5a | `привычка` · `категория_личное` · — · 579379+579457 | `привычка` · `категория_личное` · [579379] | **✓** |
+
+**F1 took all three of its signals** — the case v5b scored 0 of 3 on — and the two that turn on an
+aspect are exactly the two clauses spliced in from `prompts` after the review: F1b answered
+**availability** and not taste (`READER_ASPECT_V5`), and F1c answered a two-word «дуже смачне» as
+`похвала`/**taste** (`READER_NOT_A_SIGNAL_V3`). That splice was the difference on this case.
+
+**This is not bar 1.** Bar 1 is 5 of 5 over CASES, all or nothing, and it is UNSCORED. What the row
+above is, is a per-signal reading over five threads — the reference's own richest five — and it may
+not be quoted as a bar or as a population number.
+
+### The comparison row the contract asks for
+
+| | v5b, the one-shot reader | pass 2, the smoke |
+|---|---|---|
+| bar 1 (collapsed) | **2 of 5** cases | UNSCORED — 6 of 7 signals found on 4 threads read |
+| bar 2 | 4 of 4 | registered 3 of 4, UNSCORED here (E1's thread is not called) |
+| threads read | 23 | 5 |
+| seconds per thread | 45.016 (leg A) | **45.582** |
+| cost | $0.312592 | **$0.108122** |
+
+Same gold, same scorer, different populations — v5b read 23 threads including four its gate injects,
+and pass 2's population is 79 of which it bought 5.
+
+### The DROP table and `subject_doubt` — the FP reading ruling (б) bought
+
+**DROP: 0 of 28 filtered rows.** Pass 2 dropped nothing on these five. Every row it was given, it
+kept, and the two lists partition the 28 exactly: 28 kept, 0 dropped, 0 in both, 0 in neither.
+
+**`subject_doubt`: 4 of 28 — 14.3 %, and all four on `категория_личное` (4 of 23 = 17.4 %).** The
+notes are the answer:
+
+| row | pass 1 said | pass 2's doubt |
+|---|---|---|
+| `@VARUS_channel:10613#21601` | `категория_личное` | «Коментар є відповіддю адміністрації/бота, а не особистим досвідом споживача» |
+| `@mandziak:3676#47902` | `категория_личное` | «Коментар стосується конкретного бренду та мережі, а не особистої категорії» |
+| `@mandziak:3703#48177` | `категория_личное` | «Суб'єктом є автор відео, а не категорія продуктів» |
+| `@matusi_ukr:22272#580340` | `категория_личное` | «Коментар стосується бренду суміші, але має subject_type "категория_личное"» |
+
+Row 47902 is the АТБ/творог comment — **the mention-vs-about cell that pass 1's v2 prompt did not
+move (22 → 24)**, named by hand by the pass that is forbidden to relabel it. And **0 relabellings**
+across all four parsed replies: strict authority held everywhere it was tested.
+
+### The money
+
+| | |
+|---|---:|
+| this pod, on the gate's clock | **$0.108122** (526.0 s) |
+| the guard's balance delta | $0.1057 — a LOWER BOUND; the billing walk was `UNAVAILABLE` |
+| the step | $0.108122 of **$1.50** |
+| pass 1 over window 1 | $0.742055 |
+| the signal layer so far | **$0.850177** |
+| the one-shot reader, for comparison | $0.312592 |
+| cycle 2 | $7.3999 of $20.00 |
+
+## What returns to the operator
+
+1. **A pass-2 decode, measured: 45.582 s/call mean, 58.07 max, over five threads on one pod** —
+   0.53 of the one-shot reader on the same threads. No record on this stack had this number.
+2. **The remaining 74 units, unbought, and a cap-and-rate decision with two numbers in front of
+   it.** The registered flat charge says 68.373 s/call and 6 876.9 s; the row-weighted fit says
+   27.485 s/call and 3 851.2 s. At the measured rate the whole 74 is roughly **2 000–5 000 s ≈
+   $0.41–$1.03**, and the choice of which arm to register is the operator's.
+3. **A third report-only field with whole-thread refusal power, and this one fired.** `note`
+   joins `subject_doubt` and an omitted `subject_type`. The next registration should treat every
+   report-only field as unable to refuse, by construction.
+4. **`subject_doubt` works.** 4 of 23 `категория_личное` rows doubted, each with a reason that
+   names the confusion — including the mention-vs-about cell v2 did not move.
+5. **The fourteen are not in this report.** No reading over them is taken here, at any
+   multiplicity.
+
 ## Deviations from Dv680
 
 Each with its cause tag. Everything below was decided at $0, before the create.
@@ -213,6 +391,13 @@ Each with its cause tag. Everything below was decided at $0, before the create.
 | **Dv699** | `an-omission-is-not-a-rewrite` | **A null `subject_type` in `per_comment` is counted, not refused** as the ADR's cardinal violation. |
 | **Dv700** | `two-authorities-one-word` | **«категория» is a synonym, not a relabelling** — compared through `SUBJECT_SYNONYMS`, asserted equal to `score_reader_probe_b.COLLAPSE`. |
 | **Dv701** | `paid-for-clauses` | **`READER_ASPECT_V5` and `READER_NOT_A_SIGNAL_V3` are spliced into the pass-2 text** from `prompts`, not retyped. They are F1(б) and F1(в) in as many words, and F1 is all-or-nothing. |
+
+## Two more Deviations, from the run itself
+
+| # | cause | what |
+|---|---|---|
+| **Dv702** | `report-only-field-with-refusal-power` | **`per_comment.note` refused a whole thread on an empty string.** The prompt asks for a note where a doubt is recorded; the model wrote `"note": ""` for a row it did not doubt, and `prompts._reader`'s `_text` refuses it. Third field of its kind after `subject_doubt` and an omitted `subject_type`, and the first to fire. Not fixed — the record is sealed and the money is spent; it goes to the next registration as a rule: **a report-only field may not be able to refuse.** |
+| **Dv703** | `the-worked-arm-assumed-a-slow-pod` | **The registered knife edge is not the one that decided.** 48.6486 s/call assumes ~1 700 s of elapsed at the decision; the pod reached it at 517.3, so the live edge was 64.63. The gate is right — it projects from the clock — but a reader of the record would have taken 48.6486 for the number that binds. The record now publishes a band; it should publish it as a FUNCTION of the elapsed. |
 
 ## Process signals
 
