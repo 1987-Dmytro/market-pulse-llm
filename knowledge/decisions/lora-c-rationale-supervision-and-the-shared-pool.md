@@ -172,6 +172,36 @@ occurs in the comment. Nine rows, and they are the four error classes exactly �
 вересня» and «Uakino» read as a dairy brand, «Гамета» as a retailer, «варус кафе» as a dairy brand,
 «Новус» and «Варусу» as retailers in a giveaway. [[run_the_instrument_on_the_named_example]]
 
+## The review found a leak onto the gating bar, and it is the operator's call
+
+**22 of the 198 eval items are shown a byte-identical copy of their own comment, carrying a label,
+inside their own `<examples>` block — and FIVE of them are holdout rows**, five of the 98 the
+registered bar `holdout-100 agreement ≥ 64 of 100` is scored on, each shown its own gold answer.
+
+The mechanism is exact: the own-thread rule blocks `pick["thread"] == one["thread"]` and nothing
+else, while `build_pass1_fewshot_packs.neighbours` maximises Jaccard over character 3-grams — an
+identical string scores **1.0**, so wherever this window reposts a comment verbatim across threads
+the duplicate is chosen **first and deterministically**. 18 of the 22 are reference-thread rows
+feeding bars 1 and 3, seven of them carrying a *contradicting* label; 13 of the 506 training rows
+have the same shape.
+
+**It is neutral to arm-vs-base and to the A/B ablation** — `render_pair` builds both legs from one
+`chosen` and the adapter is a runner flag, so every leg sees the same block — **and decisive for the
+absolute reading the bar stands on.** Reported and NOT repaired: the contract mandates that
+selection rule, so the remedy (refuse a neighbour whose normalised text equals the query's) is the
+operator's.
+
+**And dev-200 is not disjoint from E.** 80 of its 200 rows are in E, 115 in the training set, 5 in
+the refused thread. An earlier version of this record said «dev-200 is NOT in E» while the same
+document listed those 80. Of dev's 49 «our» rows only 40 are in train, so for 8 of them the
+agreement is a legitimate eval reading that the registration had forbidden quoting.
+
+**Two registered numbers were refuted by the files the record cites.** `expected_draws_per_epoch`
+said 101.2 and the sampler draws **126.5** — `random.choices` normalises, and the weight vector sums
+to 404.8 of 506 because `w_c = N/(5·n_c)` is written for five classes and the rendered set has four.
+And `121.0 s/step` was called «the worst case while every rung says GO» when lora-b's own worked
+example at 121.0 carries verdict **KILL**. Both corrected; the bars do not move.
+
 ## What this record does NOT claim
 
 - **Nothing is trained and nothing is measured about v3's quality.** Every number here is about the
