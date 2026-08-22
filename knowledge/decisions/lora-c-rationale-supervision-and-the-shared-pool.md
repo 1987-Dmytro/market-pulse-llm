@@ -113,7 +113,20 @@ PASSES is named beside them — the `learn_chars` guard and the prompt-sha equal
 by lora-b's prereg AND its verdict, so the remedy is a sibling and it is `lora-c-run`'s first $0
 deliverable, not an edit here.
 
-**Four neighbours does NOT dissolve the second STOP, and that is measured.** Re-rendering the same rows with FOUR examples leaves **484 of 506 over at the most favourable measured ratio and 506 of 506 at the registered one**; with ONE example 62 are still over. The cause is the TEXT, not the block: v3's prompt is **4 112 characters = 1 200 tokens at the worst measured ratio and 1 109 at the minimum**, against a ceiling of 1 408 — the prompt alone occupies 79–85 % of it before a single neighbour, the topic, the entity block or the comment. Only raising `max_seq_len` or shortening the text closes STOP 2. Four neighbours DOES dissolve STOP 1, and that is a **scoped** change to nine rows of one thread against a **global** one — so they are two decisions, not one.
+**Four neighbours does NOT dissolve the second STOP, and that is measured — every drop-choice, by
+the producer.** The choice moves the count by tens: four examples leaves **484–506** over at the
+most favourable measured ratio depending on which neighbour goes, and ONE example leaves **62–125**
+(and 412–500 at the registered ratio). **Zero is not an option** — `pass1_messages_gm4_v3` refuses
+an empty block by name — so the floor of any neighbour-count remedy is one, and the best case
+anywhere is 62 rows still over. Four neighbours DOES dissolve STOP 1, and that is a **scoped**
+change to nine rows of one thread against a **global** one: two decisions, not one.
+
+**And the reason is narrower than this record first stated.** «The cause is the TEXT, not the
+block» was a false dichotomy, refuted by the record's own table: the median row exceeds by **159**
+tokens and the five-example block is worth **~223** median tokens, so at one example the median row
+FITS. What is true: the prompt text (**1 109–1 200 tokens of 1 408**, leaving 208–299 for the topic,
+the entities, the comment, the examples and the target) makes the margin thin, and the **tail**
+makes no legal neighbour count enough.
 
 ## The registration is a draft and carries no price
 

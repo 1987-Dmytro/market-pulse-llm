@@ -329,8 +329,10 @@ def unreachable(pool: list[dict]) -> dict:
             " is a different instrument, so the arm would be two instruments",
             "allow the query's own thread as a candidate for that class alone — a per-class rule,"
             " and for the молочный_бренд row itself it would hand the model its own answer",
-            "draw the example from the EXCLUDED set — it leaks a holdout or reference-thread"
-            " comment into a training and an inference request",
+            "draw the example from the EXCLUDED set — and for THIS class it is not a disjunction:"
+            " the only other молочный_бренд row is @mandziak:3721:48445, a HOLDOUT row whose thread"
+            " is not among the 16, so the remedy is necessarily «show a holdout comment WITH ITS"
+            " GOLD LABEL inside every request of the run that scores the holdout-100 bar»",
             "drop the eleven rows — arm A then has ZERO real молочный_бренд positives and the"
             " holdout denominator moves off the registered 100, taking the ≥64 bar with it",
         ],
@@ -500,6 +502,74 @@ def build() -> dict:
     }
 
 
+def fewer_examples(trained: list[dict]) -> dict:
+    """The same rows RE-RENDERED with fewer neighbours — computed here, never typed.
+
+    The first version of this block carried `484` and `62` as literals under a `rule` that said
+    «measured rather than argued». They were true and they had no producer, which is the same defect
+    the remedy they support was written to correct ([[a_claim_no_number_can_check]]). Worse, «one
+    example» has no meaning until the block says WHICH example survives: keeping the
+    `молочный_бренд` neighbour leaves 62 rows over and keeping a different one leaves 87–125. So
+    every drop-choice is enumerated and the rule is the label, not a position.
+    """
+    ratio = sft.ratio()["tokens_per_char_max"]
+    labels = [fewshot.key(one["label"]) for one in trained[0]["examples"]]
+
+    def over(rows: list[dict], per_char: float) -> int:
+        return len(
+            [one for one in rows if math.ceil(one * per_char) + sft.TEMPLATE_SLACK > MAX_SEQ_LEN]
+        )
+
+    def sizes_without(dropped: tuple[str, ...]) -> list[int]:
+        out = []
+        for one in trained:
+            kept = [
+                example
+                for example in one["examples"]
+                if fewshot.key(example["label"]) not in dropped
+            ]
+            out.append(len(render_v3(one["fields"], kept)) + len(one["target"]))
+        return out
+
+    table = {}
+    for name, dropped in [("four_examples__drop_" + label, (label,)) for label in labels] + [
+        ("one_example__keep_" + label, tuple(one for one in labels if one != label))
+        for label in labels
+    ]:
+        rows = sizes_without(dropped)
+        table[name] = {
+            "over_at_the_min_ratio": over(rows, PROBE_RATIO_MIN),
+            "over_at_the_registered_ratio": over(rows, ratio),
+            "median_tokens_at_the_min_ratio": sorted(
+                math.ceil(one * PROBE_RATIO_MIN) + sft.TEMPLATE_SLACK for one in rows
+            )[len(rows) // 2],
+            "of": len(rows),
+        }
+    return {
+        "rule": (
+            "every drop-choice re-rendered through pass1_v3.pass1_messages_gm4_v3 and bounded the"
+            " same way. COMPUTED here — the remedy this supports is the sentence the operator would"
+            " act on, and it may not rest on a literal"
+        ),
+        "the_choice_matters": (
+            "«four examples» and «one example» are not single numbers. Dropping the smallest class's"
+            " neighbour is the choice remedy 1 implies and it leaves the most rows over; keeping a"
+            " different one moves the count by tens. Named per label rather than per position"
+        ),
+        "zero_examples_is_not_an_option": (
+            "pass1_v3.pass1_messages_gm4_v3 refuses an empty block by name — v3 has no"
+            " no-examples arm, so the floor of this table is ONE"
+        ),
+        "by_choice": table,
+        "best_case_over": min(cell["over_at_the_min_ratio"] for cell in table.values()),
+        "best_case_over_rule": (
+            "the most favourable drop-choice at the most favourable measured ratio. Even there the"
+            " count is not zero, which is what makes STOP 2 a property of the population and not of"
+            " the block"
+        ),
+    }
+
+
 def token_table(trained: list[dict]) -> dict:
     """Tokens per SFT row against `max_seq_len` — and this line's second STOP.
 
@@ -561,7 +631,7 @@ def token_table(trained: list[dict]) -> dict:
             " whole dataset, and train_qlora.encode_pass1 would refuse every row on the pod. This"
             " is the contract's STOP and it returns to the operator"
         ),
-        "the_cause_is_the_TEXT_not_the_block": {
+        "the_text_and_the_block_BOTH_matter": {
             "v3_prompt_chars": len(pass1_v3.PASS1_COMMENT_PROMPT_V3),
             "v2_prompt_chars": len(prompts.PASS1_COMMENT_PROMPT_V2),
             "v3_prompt_tokens_at_the_worst_ratio": math.ceil(
@@ -571,24 +641,22 @@ def token_table(trained: list[dict]) -> dict:
                 len(pass1_v3.PASS1_COMMENT_PROMPT_V3) * PROBE_RATIO_MIN
             ),
             "share_of_max_seq_len": (
-                "the prompt TEXT alone occupies 79–85 % of the ceiling, before a single neighbour,"
-                " the topic, the entity block or the comment itself. That is why no neighbour count"
-                " closes this STOP and only raising max_seq_len or shortening the text does"
+                "the prompt TEXT alone occupies 79–85 % of the ceiling — 1 109 to 1 200 tokens of"
+                " 1 408 — before a single neighbour, the topic, the entity block, the comment or"
+                " the target. That leaves 208–299 tokens for all of them together"
+            ),
+            "the_dichotomy_is_FALSE_and_this_is_the_correction": (
+                "an earlier version of this record said «the cause is the TEXT, not the block». The"
+                " record's own table refutes it: the MEDIAN row exceeds the ceiling by 159 tokens"
+                " and the five-example block is worth ~223 median tokens, so the block weighs more"
+                " than the median row's excess and at ONE example the median row FITS. What is"
+                " true is narrower and still closes the STOP: no LEGAL neighbour count makes ALL"
+                " rows fit — the widest rows are over at every choice — and zero neighbours is"
+                " refused by the renderer. The text is why the margin is thin; the tail is why no"
+                " count is enough ([[co_occurrence_is_not_explanation]])"
             ),
         },
-        "measured_at_other_neighbour_counts": {
-            "rule": (
-                "the same rows re-rendered through pass1_v3.pass1_messages_gm4_v3 with fewer"
-                " examples, bounded the same way. Measured rather than argued, because the remedy"
-                " below is the sentence the operator would act on"
-            ),
-            "four_examples": {
-                "over_at_the_min_ratio": 484,
-                "over_at_the_registered_ratio": 506,
-                "of": len(sizes),
-            },
-            "one_example": {"over_at_the_min_ratio": 62, "of": len(sizes)},
-        },
+        "measured_at_other_neighbour_counts": fewer_examples(trained),
         "remedies_named_none_taken": [
             "raise config/qlora.yaml training.max_seq_len — FROZEN law, pinned by"
             " results/prereg_lora_b.json::instruments.config_sha256 and by lora-b's verdict; there"

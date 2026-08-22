@@ -223,11 +223,27 @@ def bars(data_record: dict) -> dict:
             ),
         },
         "report_only": {
-            "the_mention_cell": (
-                "`не_наш_рынок → категория_личное` on holdout-100. 18 of the 52 `не_наш_рынок`"
-                " rows before; this is the cell the line targets and it is REPORTED, not gated"
+            "the_mention_cell": {
+                "what": (
+                    "`не_наш_рынок → категория_личное` on holdout-100 — the cell this whole line"
+                    " targets. REPORTED, never gated"
+                ),
+                "before": "18 of 52",
+                "after_is_out_of_50_and_not_52": (
+                    "BOTH holdout rows that cannot be rendered — @VARUS_channel:10367:20985 and"
+                    " :21005 — are labelled `не_наш_рынок`, so the AFTER column is answered on 50"
+                    " of the 52 and the two columns have different denominators. The gated bar got"
+                    " its reachability note (98 of 100) and this cell had none; quoting «18 → X»"
+                    " without it would compare a rate to a count"
+                    " ([[the_fix_widened_the_denominator]], [[correcting_gold_moves_the_denominator]])"
+                ),
+                "denominator_before": 52,
+                "denominator_after": 50,
+            },
+            "our_on_holdout": (
+                "6 of 8 before, and the denominator does NOT move — neither unrenderable row is"
+                " «our», both are `не_наш_рынок`"
             ),
-            "our_on_holdout": "6 of 8 before",
             "dev_200": (
                 "TRAINING FIT only. dev-200's «our» rows are the training set's «our» rows now, so"
                 " its agreement is not an eval reading and may never be quoted as one"
@@ -388,6 +404,17 @@ def reachability(data_record: dict) -> dict:
                     "remedies_named_none_taken",
                 )
             },
+            "the_margin_on_the_tightest_row": (
+                "1 419 against 1 408 is ELEVEN tokens, 0.78 %, and it is a model rather than a"
+                " tokenizer run: the ratio was measured on probe rows of 2 778–3 923 characters and"
+                " applied to rows of 5 262–9 402, so the chat template's fixed part scales with the"
+                " content it should not scale with — and `TEMPLATE_SLACK` = 16 is itself larger"
+                " than the margin. The direction of the correction is ambiguous (the target is"
+                " Ukrainian prose plus JSON punctuation, whose tokens-per-character is probably"
+                " above the average this ratio came from). **The STOP does not rest on this row:**"
+                " the MEDIAN needs ~1 520–1 570 and the widest ~2 460–2 560 under any plausible"
+                " correction ([[a_reproducible_probe_can_be_unrepresentative]])"
+            ),
             "the_pods_own_count": (
                 "train_qlora.encode_pass1 tokenizes apply_chat_template(...) and refuses on"
                 " len(context) + len(target); build_pass1_sft.ratio() measured tokens-per-character"
@@ -396,7 +423,10 @@ def reachability(data_record: dict) -> dict:
                 f" SHORTEST row still needs"
                 f" {tokens['by_ratio']['min_observed']['pods_own_count_of_the_shortest']} against"
                 f" {tokens['max_seq_len']}. Both the Mac-side drop rule and the pod-side refusal"
-                " fire, on every row"
+                " WOULD fire on every row, and neither has run: `encode_pass1` is never reached"
+                " because `load_sft` refuses on the task name first (that is STOP 3's own"
+                " evidence), and `build_pass1_sft`'s drop rule does not read this file at all."
+                " Both are PROJECTIONS through the measured ratio, and the mood matters"
             ),
         },
         "arm_a_has_no_молочный_бренд_target": {

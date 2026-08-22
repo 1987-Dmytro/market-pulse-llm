@@ -44,10 +44,16 @@
       "arm_a_vs_arm_b": "the ablation, on the same instruments",
       "dev_200": "TRAINING FIT only. dev-200's «our» rows are the training set's «our» rows now, so its agreement is not an eval reading and may never be quoted as one",
       "gold_14": "the SIXTH look. A census row with multiplicity, NEVER a bar — docs/STATUS.md п. 1 (д). All 14 are inside E because they are inside the reference threads",
-      "our_on_holdout": "6 of 8 before",
+      "our_on_holdout": "6 of 8 before, and the denominator does NOT move — neither unrenderable row is «our», both are `не_наш_рынок`",
       "pass_2_tables": "the DROP table and the subject_doubt table, per leg",
       "per_class_tables": "агreement by subject_type, both arms and both bases",
-      "the_mention_cell": "`не_наш_рынок → категория_личное` on holdout-100. 18 of the 52 `не_наш_рынок` rows before; this is the cell the line targets and it is REPORTED, not gated"
+      "the_mention_cell": {
+        "after_is_out_of_50_and_not_52": "BOTH holdout rows that cannot be rendered — @VARUS_channel:10367:20985 and :21005 — are labelled `не_наш_рынок`, so the AFTER column is answered on 50 of the 52 and the two columns have different denominators. The gated bar got its reachability note (98 of 100) and this cell had none; quoting «18 → X» without it would compare a rate to a count ([[the_fix_widened_the_denominator]], [[correcting_gold_moves_the_denominator]])",
+        "before": "18 of 52",
+        "denominator_after": 50,
+        "denominator_before": 52,
+        "what": "`не_наш_рынок → категория_личное` on holdout-100 — the cell this whole line targets. REPORTED, never gated"
+      }
     },
     "rule": "holdout-100 agreement ≥ 64 AND end-to-end bar 1 = 5 of 5 AND bar 3 = 0 signals. ALL THREE or RED. Registered per ARM; base v3 takes no bar and is a control column"
   },
@@ -373,7 +379,7 @@
   },
   "producer": {
     "script": "scripts/write_lora_c_prereg.py",
-    "sha256": "9fd2fc0beefa9a725e8a1cd0117d2d9ac98d3a22fd0abae6286f9972269ae174"
+    "sha256": "f12ed46fead78b111b7fb23add41d757ba0f7d47ace41ecc09bb3352b3e18e6a"
   },
   "question": "does rationale-supervised QLoRA on pass 1 fix the subject-attribution errors pass 2 measured — brand ↔ retailer, a retailer in a non-dairy context, non-dairy «brands», and mention-vs-about — WITHOUT learning the prior the way line B did",
   "reachability": {
@@ -436,7 +442,8 @@
         "drop the rationale from the neighbour examples — the model then never sees the shape it is asked to produce, which is the clause's own reason for existing",
         "drop rows over the limit — that is all 506"
       ],
-      "the_pods_own_count": "train_qlora.encode_pass1 tokenizes apply_chat_template(...) and refuses on len(context) + len(target); build_pass1_sft.ratio() measured tokens-per-character against served prompt_tokens, which counts the same template. So the pod's number is this bound minus TEMPLATE_SLACK = 16, and at the MINIMUM observed ratio the SHORTEST row still needs 1419 against 1408. Both the Mac-side drop rule and the pod-side refusal fire, on every row",
+      "the_margin_on_the_tightest_row": "1 419 against 1 408 is ELEVEN tokens, 0.78 %, and it is a model rather than a tokenizer run: the ratio was measured on probe rows of 2 778–3 923 characters and applied to rows of 5 262–9 402, so the chat template's fixed part scales with the content it should not scale with — and `TEMPLATE_SLACK` = 16 is itself larger than the margin. The direction of the correction is ambiguous (the target is Ukrainian prose plus JSON punctuation, whose tokens-per-character is probably above the average this ratio came from). **The STOP does not rest on this row:** the MEDIAN needs ~1 520–1 570 and the widest ~2 460–2 560 under any plausible correction ([[a_reproducible_probe_can_be_unrepresentative]])",
+      "the_pods_own_count": "train_qlora.encode_pass1 tokenizes apply_chat_template(...) and refuses on len(context) + len(target); build_pass1_sft.ratio() measured tokens-per-character against served prompt_tokens, which counts the same template. So the pod's number is this bound minus TEMPLATE_SLACK = 16, and at the MINIMUM observed ratio the SHORTEST row still needs 1419 against 1408. Both the Mac-side drop rule and the pod-side refusal WOULD fire on every row, and neither has run: `encode_pass1` is never reached because `load_sft` refuses on the task name first (that is STOP 3's own evidence), and `build_pass1_sft`'s drop rule does not read this file at all. Both are PROJECTIONS through the measured ratio, and the mood matters",
       "verdict": "EVERY one of the 506 rows is over max_seq_len 1408 at all three measured ratios. build_pass1_sft's own drop rule (bound > max_seq_len) would drop the whole dataset, and train_qlora.encode_pass1 would refuse every row on the pod. This is the contract's STOP and it returns to the operator"
     },
     "the_pinned_trainer_refuses_a_v3_dataset": {
@@ -512,7 +519,7 @@
       "remedies_named_none_taken": [
         "render those rows with FOUR examples — neighbours() itself says a four-example block is a different instrument, so the arm would be two instruments",
         "allow the query's own thread as a candidate for that class alone — a per-class rule, and for the молочный_бренд row itself it would hand the model its own answer",
-        "draw the example from the EXCLUDED set — it leaks a holdout or reference-thread comment into a training and an inference request",
+        "draw the example from the EXCLUDED set — and for THIS class it is not a disjunction: the only other молочный_бренд row is @mandziak:3721:48445, a HOLDOUT row whose thread is not among the 16, so the remedy is necessarily «show a holdout comment WITH ITS GOLD LABEL inside every request of the run that scores the holdout-100 bar»",
         "drop the eleven rows — arm A then has ZERO real молочный_бренд positives and the holdout denominator moves off the registered 100, taking the ≥64 bar with it"
       ],
       "rows_in_the_650": 2,

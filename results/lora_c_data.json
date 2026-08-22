@@ -70,7 +70,7 @@
   },
   "produced_by": {
     "script": "scripts/build_lora_c_data.py",
-    "sha256": "0bb24cf2672d3e20636d3ff52023d9ad8c842b85a2eb2be91dd10a21bbe2f49d"
+    "sha256": "2e8976c28c4fdb0abcdec362adc832b5ffd6104175d4ae5ca868d15ef6518256"
   },
   "rationales": {
     "author": "claude-code",
@@ -255,16 +255,73 @@
     "max_seq_len": 1408,
     "max_seq_len_source": "config/qlora.yaml training.max_seq_len — FROZEN law",
     "measured_at_other_neighbour_counts": {
-      "four_examples": {
-        "of": 506,
-        "over_at_the_min_ratio": 484,
-        "over_at_the_registered_ratio": 506
+      "best_case_over": 62,
+      "best_case_over_rule": "the most favourable drop-choice at the most favourable measured ratio. Even there the count is not zero, which is what makes STOP 2 a property of the population and not of the block",
+      "by_choice": {
+        "four_examples__drop_null": {
+          "median_tokens_at_the_min_ratio": 1511,
+          "of": 506,
+          "over_at_the_min_ratio": 506,
+          "over_at_the_registered_ratio": 506
+        },
+        "four_examples__drop_категория_личное": {
+          "median_tokens_at_the_min_ratio": 1502,
+          "of": 506,
+          "over_at_the_min_ratio": 498,
+          "over_at_the_registered_ratio": 506
+        },
+        "four_examples__drop_молочный_бренд": {
+          "median_tokens_at_the_min_ratio": 1510,
+          "of": 506,
+          "over_at_the_min_ratio": 484,
+          "over_at_the_registered_ratio": 506
+        },
+        "four_examples__drop_не_наш_рынок": {
+          "median_tokens_at_the_min_ratio": 1509,
+          "of": 506,
+          "over_at_the_min_ratio": 505,
+          "over_at_the_registered_ratio": 506
+        },
+        "four_examples__drop_сеть_ритейлер": {
+          "median_tokens_at_the_min_ratio": 1514,
+          "of": 506,
+          "over_at_the_min_ratio": 502,
+          "over_at_the_registered_ratio": 506
+        },
+        "one_example__keep_null": {
+          "median_tokens_at_the_min_ratio": 1340,
+          "of": 506,
+          "over_at_the_min_ratio": 125,
+          "over_at_the_registered_ratio": 412
+        },
+        "one_example__keep_категория_личное": {
+          "median_tokens_at_the_min_ratio": 1351,
+          "of": 506,
+          "over_at_the_min_ratio": 115,
+          "over_at_the_registered_ratio": 475
+        },
+        "one_example__keep_молочный_бренд": {
+          "median_tokens_at_the_min_ratio": 1344,
+          "of": 506,
+          "over_at_the_min_ratio": 62,
+          "over_at_the_registered_ratio": 500
+        },
+        "one_example__keep_не_наш_рынок": {
+          "median_tokens_at_the_min_ratio": 1341,
+          "of": 506,
+          "over_at_the_min_ratio": 124,
+          "over_at_the_registered_ratio": 463
+        },
+        "one_example__keep_сеть_ритейлер": {
+          "median_tokens_at_the_min_ratio": 1339,
+          "of": 506,
+          "over_at_the_min_ratio": 87,
+          "over_at_the_registered_ratio": 450
+        }
       },
-      "one_example": {
-        "of": 506,
-        "over_at_the_min_ratio": 62
-      },
-      "rule": "the same rows re-rendered through pass1_v3.pass1_messages_gm4_v3 with fewer examples, bounded the same way. Measured rather than argued, because the remedy below is the sentence the operator would act on"
+      "rule": "every drop-choice re-rendered through pass1_v3.pass1_messages_gm4_v3 and bounded the same way. COMPUTED here — the remedy this supports is the sentence the operator would act on, and it may not rest on a literal",
+      "the_choice_matters": "«four examples» and «one example» are not single numbers. Dropping the smallest class's neighbour is the choice remedy 1 implies and it leaves the most rows over; keeping a different one moves the count by tens. Named per label rather than per position",
+      "zero_examples_is_not_an_option": "pass1_v3.pass1_messages_gm4_v3 refuses an empty block by name — v3 has no no-examples arm, so the floor of this table is ONE"
     },
     "measured_on": "@VARUS_channel:10613#21601",
     "observed_ratio_range": [
@@ -279,8 +336,9 @@
       "drop rows over the limit — that is all 506"
     ],
     "rule": "the maximum over probe-b's 64 paid rows of prompt_tokens / rendered_chars. The numerator counts the chat template the pod wraps the request in, so the bound is conservative by construction",
-    "the_cause_is_the_TEXT_not_the_block": {
-      "share_of_max_seq_len": "the prompt TEXT alone occupies 79–85 % of the ceiling, before a single neighbour, the topic, the entity block or the comment itself. That is why no neighbour count closes this STOP and only raising max_seq_len or shortening the text does",
+    "the_text_and_the_block_BOTH_matter": {
+      "share_of_max_seq_len": "the prompt TEXT alone occupies 79–85 % of the ceiling — 1 109 to 1 200 tokens of 1 408 — before a single neighbour, the topic, the entity block, the comment or the target. That leaves 208–299 tokens for all of them together",
+      "the_dichotomy_is_FALSE_and_this_is_the_correction": "an earlier version of this record said «the cause is the TEXT, not the block». The record's own table refutes it: the MEDIAN row exceeds the ceiling by 159 tokens and the five-example block is worth ~223 median tokens, so the block weighs more than the median row's excess and at ONE example the median row FITS. What is true is narrower and still closes the STOP: no LEGAL neighbour count makes ALL rows fit — the widest rows are over at every choice — and zero neighbours is refused by the renderer. The text is why the margin is thin; the tail is why no count is enough ([[co_occurrence_is_not_explanation]])",
       "v2_prompt_chars": 3455,
       "v3_prompt_chars": 4112,
       "v3_prompt_tokens_at_the_min_ratio": 1109,
@@ -343,7 +401,7 @@
     "remedies_named_none_taken": [
       "render those rows with FOUR examples — neighbours() itself says a four-example block is a different instrument, so the arm would be two instruments",
       "allow the query's own thread as a candidate for that class alone — a per-class rule, and for the молочный_бренд row itself it would hand the model its own answer",
-      "draw the example from the EXCLUDED set — it leaks a holdout or reference-thread comment into a training and an inference request",
+      "draw the example from the EXCLUDED set — and for THIS class it is not a disjunction: the only other молочный_бренд row is @mandziak:3721:48445, a HOLDOUT row whose thread is not among the 16, so the remedy is necessarily «show a holdout comment WITH ITS GOLD LABEL inside every request of the run that scores the holdout-100 bar»",
       "drop the eleven rows — arm A then has ZERO real молочный_бренд positives and the holdout denominator moves off the registered 100, taking the ≥64 bar with it"
     ],
     "rows_in_the_650": 2,

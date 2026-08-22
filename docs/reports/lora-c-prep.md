@@ -391,17 +391,43 @@ number.
 | 0.269618 | the MINIMUM of the same 64 — the ratio most favourable to the run | 1 435 | 1 567 | 2 551 | **506 of 506** | **1 419** |
 
 **Not a bound artefact.** At the most favourable ratio this repository has ever measured, the
-shortest row still needs 1 419 tokens of the pod's own count against 1 408. Four remedies are named
+shortest row still needs 1 419 tokens of the pod's own count against 1 408 — though **that margin is
+eleven tokens and it is a model, not a tokenizer run** (the ratio came from rows of 2 778–3 923
+characters and is applied to rows of 5 262–9 402, and `TEMPLATE_SLACK` = 16 is larger than the
+margin). The STOP does not rest on that row: the median needs ~1 520–1 570 and the widest
+~2 460–2 560 under any plausible correction. Four remedies are named
 and none is taken; `config/qlora.yaml` is frozen law and raising it is the operator's word — there
 is precedent (1 024 → 1 408 by operator decision of 2026-08-04) and it is not the executor's.
 
 **Four neighbours does NOT dissolve the second STOP, and that is measured.** Re-rendering the same rows with FOUR examples leaves **484 of 506 over at the most favourable measured ratio and 506 of 506 at the registered one**; with ONE example 62 are still over. The cause is the TEXT, not the block: v3's prompt is **4 112 characters = 1 200 tokens at the worst measured ratio and 1 109 at the minimum**, against a ceiling of 1 408 — the prompt alone occupies 79–85 % of it before a single neighbour, the topic, the entity block or the comment. Only raising `max_seq_len` or shortening the text closes STOP 2. Four neighbours DOES dissolve STOP 1, and that is a **scoped** change to nine rows of one thread against a **global** one — so they are two decisions, not one.
 
-| neighbours per request | chars, median / max | tokens at the MIN ratio, median / max | over 1 408 |
+**And «four» and «one» are not single numbers — the drop-CHOICE moves the count by tens**, which the
+first version of this table hid by carrying two literals. Every choice, computed by the producer:
+
+| kept | over 1 408 at the MIN ratio | at the REGISTERED ratio | median tokens (min ratio) |
 |---|---|---|---|
-| five (as built) | 5 750 / 9 402 | 1 567 / 2 551 | **506 of 506** |
-| four | 5 541 / 9 193 | 1 510 / 2 495 | **484 of 506** |
-| one | 4 925 / 6 125 | 1 344 / 1 668 | **62 of 506** |
+| five (as built) | **506 of 506** | 506 | 1 567 |
+| four, drop `null` | 506 | 506 | 1 511 |
+| four, drop `категория_личное` | 498 | 506 | 1 502 |
+| four, drop `молочный_бренд` — remedy 1's own choice | **484** | 506 | 1 510 |
+| four, drop `не_наш_рынок` | 505 | 506 | 1 509 |
+| four, drop `сеть_ритейлер` | 502 | 506 | 1 514 |
+| one, keep `молочный_бренд` | **62** | 500 | 1 344 |
+| one, keep `сеть_ритейлер` | 87 | 450 | 1 339 |
+| one, keep `категория_личное` | 115 | 475 | 1 351 |
+| one, keep `не_наш_рынок` | 124 | 463 | 1 341 |
+| one, keep `null` | 125 | 412 | 1 340 |
+
+**ZERO examples is not on this table**: `pass1_v3.pass1_messages_gm4_v3` refuses an empty block by
+name, so the floor of any neighbour-count remedy is ONE. The best case anywhere in it is **62 rows
+still over**, which is what makes STOP 2 a property of the population rather than of the block.
+
+**And the dichotomy in the first draft was false.** «The cause is the TEXT, not the block» is
+refuted by this repository's own table: the median row exceeds by **159** tokens and the
+five-example block is worth **~223** median tokens, so at one example the median row FITS. The
+narrower true statement: the prompt text is why the margin is thin (1 109–1 200 tokens of 1 408,
+leaving 208–299 for the topic, the entities, the comment, the examples and the target), and the
+**tail** is why no legal neighbour count is enough.
 
 ## The third STOP: the pinned trainer refuses a v3 dataset
 
@@ -444,16 +470,44 @@ Every number from a file this contract built, at $0.
 | widest E request, v2 / v3 | 7 781 / 8 894 characters |
 | cap | **$4.00** |
 
-## The review — launched on a frozen tree, and it did not return
+## The review — one lens of five returned, and it was worth the wait
 
 The contract asks for a five-lens review on a COMMITTED tree with a second skeptic pass on the
 fixes. **Five lenses were launched against sha `8982dd3b48b84bba46f5589ca9785bed5e7c229d`** — the
 two STOPs' arithmetic · the hand-written content of the 675 rows · the exclusion algebra · the
 registration's honesty · the negative controls — each given the sha and told to quote it back.
 
-**None of the five returned a report, and none answered a wrap-up request after 95 minutes.** So
-the second skeptic pass did not happen either: there is no first pass to read fixes against. This
-section says so instead of implying a review that was not delivered.
+**Nothing came back for 95 minutes and the report was written saying so.** Then **lens 1 (the two
+STOPs' arithmetic) delivered**, quoting the sha, with eight findings — three of them requiring
+action and one of them a defect nothing else had caught. The other four have not delivered as this
+report closes. **The second skeptic pass therefore did not happen** on any of it: there is no
+committed fix-sha that a second pass read. That is a gap in the construction, not a clean bill.
+
+### What lens 1 found — all eight verified before acting
+
+| # | finding | verified | acted |
+|---|---|---|---|
+| 1 | **`484` and `62` are LITERALS in the producer**, inside a block whose own `rule` says «measured rather than argued». The numbers were true and had no producer — Dv744 closed halfway. And «one example» has no meaning until the block says WHICH example survives: keeping the `молочный_бренд` neighbour leaves 62 over, keeping another leaves 87–125 | ✅ | **computed now**, every drop-choice enumerated by LABEL, and the floor of the table is ONE because the renderer refuses an empty block |
+| 2 | **The report-only mention cell's denominator MOVES and nothing said so.** Both unrenderable holdout rows are `не_наш_рынок`, so «18 of 52 before» would be compared with «X of **50** after». The gated bar got its reachability note; this cell had none | ✅ both rows are `не_наш_рынок`; 52 → 50 | registered, with the note that «our on holdout» 6/8 does **not** move |
+| 3 | **«The cause is the TEXT, not the block» is a FALSE dichotomy**, refuted by the record's own table: the median row exceeds by 159 tokens and the five-example block is worth ~223 median tokens, so at ONE example the median row FITS | ✅ | corrected — the text is why the margin is thin, the **tail** is why no legal count is enough. The STOP stands and its reason is narrower |
+| 4 | **Remedy 3 undersells its leak.** The other `молочный_бренд` row is a HOLDOUT row whose thread is not among the 16, so the remedy is not a disjunction: it is necessarily «show a holdout comment with its gold label inside every request of the run that scores the holdout bar» | ✅ | stated |
+| 5 | **`sampler.second_rule` claims something absent from its own table** — «the smallest class lands exactly on the floor», but that class has zero rendered rows and is not in the sampler at all | ✅ all four classes draw 101.2 | corrected |
+| 6 | **«Both … fire, on every row» is the indicative and neither has run.** `encode_pass1` is never reached (`load_sft` refuses first — STOP 3's own evidence) and `build_pass1_sft`'s drop rule does not read this file | ✅ | mood corrected to WOULD, and both named as projections |
+| 7 | **Remedy 4's price is half paid already** — arm A has zero real positives today; only the 100 → 98 denominator change is unpaid | ✅ | stated, so four remedies are not read as four unpaid prices |
+| 8 | **The 11-token margin is a model, not a tokenizer run** — the ratio was measured on 2 778–3 923-char rows and applied to 5 262–9 402-char rows, and `TEMPLATE_SLACK` = 16 is larger than the margin | ✅ | registered, with the STOP shown not to rest on that row |
+
+And what it confirmed, each independently re-derived: the pool arithmetic and distribution · exactly
+2 `молочный_бренд` in the 650 and the second removed by the **holdout**, not the reference rule · the
+9 refused rows are exactly the thread's · `100 + 106 − 6 = 200` recomputed through
+`gate_census_w1_reader.population()` · all nine cells of the three-ratio table · that `encode_pass1`
+measures the same quantity `bound_tokens` bounds and the `TEMPLATE_SLACK` subtraction is right ·
+steps 62/82 · every registered sha · and that nothing in the record contradicts the reachable
+maximum of 98. **Its verdict: both STOPs are arithmetically sound and the operator's decision on
+both stands.**
+
+One control worth naming: the lens re-rendered five items and got the shipped
+`pass1_sft_v3_train.jsonl` back byte for byte, 0 of 506 diverging — an independent confirmation of
+the rebuild-identity property the suite asserts.
 
 What DID verify this work, and it is not nothing:
 
@@ -461,6 +515,7 @@ What DID verify this work, and it is not nothing:
 |---|---|
 | the advisor, before the approach crystallised | predicted both STOPs before they were measured — the `молочный_бренд` neighbour collision and the trainer's two refusals — and each fired exactly as described |
 | the advisor, on the draft | caught the ONE claim in this contract with no producer behind it: «four neighbours dissolves both STOPs». Re-rendering says 484 of 506 are still over. **That is the correction this report exists to carry** |
+| lens 1, 95 minutes late | eight findings, three requiring action — including that my correction to that claim was ITSELF two hand-typed literals |
 | 46 tests, every guard driven in both directions | two defects the positive cases could not have found: an UNREACHABLE guard and `relative_to` raising on a tmpdir in four `main()`s |
 | the rebuild-identity test | every one of the five producers is run into a tmpdir and its bytes diffed against what is committed |
 | `--reproduce` on the pass-2 builder | bar 1 = 4 of 5, bar 3 = 2 signals, against r2's own verdict |
@@ -597,6 +652,10 @@ $0; there is no money on this contract.**
 | **Dv751** | `[cause: process]` [[a_claim_no_number_can_check]] | **A commit message claimed a change that had not been applied.** `1be8676` says two checks in the eval builder «now say in the code that they have never fired» — the patch that would have written them aborted on an assert BEFORE its write, and I read the surviving prereg half as the whole. Caught by grepping the file for the comment I had just claimed to add. Landed for real in the commit after it. Second instance on this contract of a commit message being wrong where the record was right (Dv738), and the same remedy applies: **the report is the authority and the commit message is prose**. |
 | **Dv752** | `[cause: verify-gap]` [[an_absolute_bar_needs_a_reachability_state]] | **The ablation claim was exactly backwards, and it lands on a registered bar.** The registration and this report both said «with zero real молочный_бренд rows rendered, arm B's 40 non-dairy-«brand» rows teach only the NEGATIVE of that class; synthetic does not repair the positive side». Counted: the synthetic file carries **32** `молочный_бренд` targets — 8 in each of the four error classes, which is what the ±2 balance rule produces — so synthetic is the ONLY positive supervision that class gets anywhere in this line, and **arm A has none**: `train_qlora.class_weights` on arm A returns four classes, not five, so `sampling_order` can never draw one. Since **bar 1 = 5 of 5 turns on relabelling msg 580124 to `молочный_бренд`**, the bar is near-unreachable for arm A and reachable for arm B by the same arithmetic. Registered as a FOURTH reachability block; the bar is not lowered. Written from the shape of the batch instead of from `collections.Counter`. |
 | **Dv753** | `[cause: model]` [[a_borrowed_rule_carries_an_unstated_population]] | **Fifteen synthetic rows are labelled against the codebook, and the pattern is one clause.** They name a chain and make a stock / price / assortment claim about it — «У варусі корм для котів закінчився», «В АТБ шампунь дешевший ніж в аптеці» — and are labelled `не_наш_рынок` because the THING is non-dairy. The codebook says «A comment about the retailer's service, stock, prices or stores is `сеть_ритейлер`», and the team lead's own labels agree on three real rows of exactly that shape, one of which is a NON-DAIRY item out of stock. Found by sampling the content by hand when the review lens for it did not return. **Not rewritten** — gate 2 is a STOP — but `docs/reviews/lora-c-synthetic.md` now opens with the concern, the clause, the precedents and the fifteen ids, computed by the producer. |
+| **Dv754** | `[cause: verify-gap]` [[a_claim_no_number_can_check]] | **My correction to Dv744 was itself two hand-typed literals.** `484` and `62` sat in `build_lora_c_data.py` inside a block whose own `rule` says «the same rows re-rendered … Measured rather than argued». They were true and had no producer, so the repository could not check them — the same defect the remedy they support exists to correct, one layer down. Found by lens 1. Now COMPUTED, and the computation exposed the second half: **«one example» has no meaning until the rule says which example survives** — keeping `молочный_бренд` leaves 62 over, keeping `null` leaves 125 — and «four» ranges 484–506 by the same choice. Enumerated per LABEL, never per position. |
+| **Dv755** | `[cause: verify-gap]` [[the_fix_widened_the_denominator]] | **The report-only cell this line exists for would have been quoted across two denominators.** Both holdout rows that cannot be rendered are labelled `не_наш_рынок`, so «18 of 52 before» meets «X of **50** after». The GATED bar got its reachability note (98 of 100) and the report-only cell got none — and it is the cell the whole line targets. Registered with both denominators; «our on holdout» 6/8 is unaffected and now says so. Found by lens 1. |
+| **Dv756** | `[cause: verify-gap]` [[co_occurrence_is_not_explanation]] | **«The cause is the TEXT, not the block» is a false dichotomy, refuted by the record's own table.** The median row exceeds the ceiling by 159 tokens and the five-example block is worth ~223 median tokens, so at ONE example the median row fits. The STOP survives on a narrower reason — the text makes the margin thin, the TAIL makes no legal count enough — and the wrong reason had already reached the ADR, the INDEX and this report. Found by lens 1. Three smaller corrections from the same report: remedy 3's leak is not a disjunction (the only other row of that class is a HOLDOUT row), remedy 4's price is half paid already, and `sampler.second_rule` claimed a floor-binding class that has zero rendered rows and is absent from its own table. |
+| **Dv757** | `[cause: process]` [[a_reproducible_probe_can_be_unrepresentative]] | **The tightest number in this contract has an eleven-token margin and it is a model.** 1 419 against 1 408 is 0.78 %, and the tokens-per-character it rests on was measured on probe rows of 2 778–3 923 characters then applied to rows of 5 262–9 402 — so the chat template's fixed part scales with content it should not scale with, and `TEMPLATE_SLACK` = 16 is itself larger than the margin. The direction is ambiguous. Registered because the STOP does NOT rest on that row: the median needs ~1 520–1 570 and the widest ~2 460–2 560 under any plausible correction. Found by lens 1. |
 
 **The tally, by the grep the template names:**
 
@@ -607,10 +666,10 @@ tag = {}
 for chunk in re.split(r"(?=\*\*Dv\d+)", flat):
     if (m := re.match(r"\*\*Dv(\d+)", chunk)) and (t := re.findall(r"\[cause:\s*([a-z-]+)\]", chunk)):
         tag.setdefault(int(m.group(1)), t[0])
-inr = {d: t for d, t in tag.items() if 728 <= d <= 753}
+inr = {d: t for d, t in tag.items() if 728 <= d <= 757}
 health = sum(1 for t in inr.values() if t in ("contract-gap", "spec-gap", "verify-gap"))
 print(len(inr), dict(collections.Counter(inr.values()).most_common()))
-print("contract health", health, "· paid", len(inr) - health, "· enum canonicity", len(inr), "of 26")
+print("contract health", health, "· paid", len(inr) - health, "· enum canonicity", len(inr), "of 30")
 ```
 
 ## Process signals
