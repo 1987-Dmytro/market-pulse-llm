@@ -564,7 +564,7 @@
     },
     "module": {
       "path": "src/market_pulse/pass2.py",
-      "sha256": "1b4857bf6fd51f3f9b0e884893a79325a3696b3e0ed5d37f87f300c2755fffa0"
+      "sha256": "f26eb555c54ef80aa0eb275b98ea0292e8eb477bb87d87666dca7b9dfb507e9d"
     },
     "pack_builder": {
       "path": "scripts/build_pass2_pack.py",
@@ -582,11 +582,11 @@
     },
     "population": {
       "record": "results/pass2_pack.json",
-      "sha256": "d7b9f4237308acb10387f00f823342fc4782d8fd297cdccdb8fa0ef4b059387c"
+      "sha256": "361e9cc642ba0191798f8d000dd43d95d49b7173f5a8de6c868c3090c0182dfc"
     },
     "producer": {
       "path": "scripts/write_pass2_prereg.py",
-      "sha256": "23a1516cc70bfc2d688e90578d7ff88214d03310e87b5217d47a131d1a74e56d"
+      "sha256": "6fa3036bbd31614f79900cec8a64c45cd1607aefc0e25fcfd8948ed6748c8891"
     },
     "prompt_sha256": {
       "pass2_thread_gm4_v1": "a674f284085d43c54df590ce943fb8c02d6ac28b7832c05f2e4b7a54879f61f8"
@@ -870,7 +870,7 @@
     "payable_comments_is_the_UNIT_count": "the same aliasing the pack carries, and for the same reason: `gate_pass1_window.main` hard-subscripts `population.payable_comments` in BOTH files before every rung that reads a pack, and that file is pinned by a sealed record of a closed paid session. A pass-2 unit is a THREAD. Without this key `--projection`, `--watch`, `--completeness` and `--close` all die on a KeyError — on a pod that is already billing, with nothing watching it",
     "record": "results/pass2_pack.json",
     "remaining_after_the_smoke": 74,
-    "sha256": "d7b9f4237308acb10387f00f823342fc4782d8fd297cdccdb8fa0ef4b059387c",
+    "sha256": "361e9cc642ba0191798f8d000dd43d95d49b7173f5a8de6c868c3090c0182dfc",
     "smoke_units": 5,
     "threads_pass_2_would_not_call": 48,
     "units": 79,
@@ -886,7 +886,7 @@
   "producer": {
     "rule": "the constants are typed once at the top of this file with their derivations; every other number here is computed. H6 re-derives the ones that have a file behind them",
     "script": "scripts/write_pass2_prereg.py",
-    "sha256": "23a1516cc70bfc2d688e90578d7ff88214d03310e87b5217d47a131d1a74e56d"
+    "sha256": "6fa3036bbd31614f79900cec8a64c45cd1607aefc0e25fcfd8948ed6748c8891"
   },
   "reachability": {
     "entity_cases": [
@@ -922,11 +922,13 @@
         "evidence_rows_inside_the_filter": [
           21626
         ],
+        "evidence_rows_outside_the_filter": [],
         "gold_subject_type": "сеть_ритейлер",
         "id": "F1a",
         "pass_1_labels_of_the_cited_rows": {
           "21626": "сеть_ритейлер"
         },
+        "pass_1_labels_rule": "every cited row's label as PASS 1 answered it, whether or not the filter kept the row. A row the filter dropped is named below and pass 2 never sees it — but the record may not carry `null` for a label it states in prose two blocks away",
         "reachable": true,
         "thread": "@VARUS_channel:10613",
         "thread_is_called": true
@@ -937,12 +939,14 @@
           21599,
           21601
         ],
+        "evidence_rows_outside_the_filter": [],
         "gold_subject_type": "категория_личное",
         "id": "F1b",
         "pass_1_labels_of_the_cited_rows": {
           "21599": "категория_личное",
           "21601": "категория_личное"
         },
+        "pass_1_labels_rule": "every cited row's label as PASS 1 answered it, whether or not the filter kept the row. A row the filter dropped is named below and pass 2 never sees it — but the record may not carry `null` for a label it states in prose two blocks away",
         "reachable": true,
         "thread": "@VARUS_channel:10613",
         "thread_is_called": true
@@ -952,11 +956,13 @@
         "evidence_rows_inside_the_filter": [
           21629
         ],
+        "evidence_rows_outside_the_filter": [],
         "gold_subject_type": null,
         "id": "F1c",
         "pass_1_labels_of_the_cited_rows": {
           "21629": "категория_личное"
         },
+        "pass_1_labels_rule": "every cited row's label as PASS 1 answered it, whether or not the filter kept the row. A row the filter dropped is named below and pass 2 never sees it — but the record may not carry `null` for a label it states in prose two blocks away",
         "reachable": true,
         "thread": "@VARUS_channel:10613",
         "thread_is_called": true
@@ -966,11 +972,13 @@
         "evidence_rows_inside_the_filter": [
           580124
         ],
+        "evidence_rows_outside_the_filter": [],
         "gold_subject_type": "молочный_бренд",
         "id": "F2a",
         "pass_1_labels_of_the_cited_rows": {
           "580124": "сеть_ритейлер"
         },
+        "pass_1_labels_rule": "every cited row's label as PASS 1 answered it, whether or not the filter kept the row. A row the filter dropped is named below and pass 2 never sees it — but the record may not carry `null` for a label it states in prose two blocks away",
         "reachable": false,
         "thread": "@matusi_ukr:22303",
         "thread_is_called": true
@@ -981,12 +989,14 @@
           47899,
           47902
         ],
+        "evidence_rows_outside_the_filter": [],
         "gold_subject_type": "категория_личное",
         "id": "F3a",
         "pass_1_labels_of_the_cited_rows": {
           "47899": "категория_личное",
           "47902": "категория_личное"
         },
+        "pass_1_labels_rule": "every cited row's label as PASS 1 answered it, whether or not the filter kept the row. A row the filter dropped is named below and pass 2 never sees it — but the record may not carry `null` for a label it states in prose two blocks away",
         "reachable": true,
         "thread": "@mandziak:3676",
         "thread_is_called": true
@@ -997,12 +1007,14 @@
           48276,
           48283
         ],
+        "evidence_rows_outside_the_filter": [],
         "gold_subject_type": "категория_личное",
         "id": "F4a",
         "pass_1_labels_of_the_cited_rows": {
           "48276": "категория_личное",
           "48283": "категория_личное"
         },
+        "pass_1_labels_rule": "every cited row's label as PASS 1 answered it, whether or not the filter kept the row. A row the filter dropped is named below and pass 2 never sees it — but the record may not carry `null` for a label it states in prose two blocks away",
         "reachable": true,
         "thread": "@mandziak:3703",
         "thread_is_called": true
@@ -1012,12 +1024,16 @@
         "evidence_rows_inside_the_filter": [
           579379
         ],
+        "evidence_rows_outside_the_filter": [
+          579457
+        ],
         "gold_subject_type": "категория_личное",
         "id": "F5a",
         "pass_1_labels_of_the_cited_rows": {
           "579379": "категория_личное",
-          "579457": null
+          "579457": "не_наш_рынок"
         },
+        "pass_1_labels_rule": "every cited row's label as PASS 1 answered it, whether or not the filter kept the row. A row the filter dropped is named below and pass 2 never sees it — but the record may not carry `null` for a label it states in prose two blocks away",
         "reachable": true,
         "thread": "@matusi_ukr:22272",
         "thread_is_called": true

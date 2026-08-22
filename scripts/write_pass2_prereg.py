@@ -33,6 +33,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "src"))
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
+import build_pass2_pack as builder  # noqa: E402
 import score_reader_probe_b as readerscore  # noqa: E402
 import window_summary_5c2 as summary  # noqa: E402
 
@@ -248,16 +249,30 @@ def reachability(held: dict) -> dict:
     """
     record = gold()
     called = {one["id"] for one in held["legs"][0]["items"]}
-    labels = {
-        one["id"]: {int(row["msg_id"]): row["subject_type"] for row in one["comments"]}
+    inside = {
+        one["id"]: {int(row["msg_id"]) for row in one["comments"]}
         for one in held["legs"][0]["items"]
     }
+    # the labels of the WHOLE window and not of the filtered rows only. Built from the pack alone, a
+    # gold evidence row outside the filter reports `null` — and this same record's F5 expectation
+    # says in prose that pass 1 labelled 579457 `не_наш_рынок`. Two values for one input, inside one
+    # pre-registered record, is the class this line keeps making
+    # ([[two_values_for_one_input_get_quoted_kindly]])
+    answers, _table, _refusals = builder.filtered(builder.r2builder.r1_pack())
+    labels: dict[str, dict[int, str | None]] = {}
+    for item_id, answer in answers.items():
+        thread, _, msg_id = item_id.rpartition("#")
+        labels.setdefault(thread, {})[int(msg_id)] = answer.get("subject_type")
     flagships = []
     for case in record["flagships"]:
         name = f"{case['channel']}:{case['post_id']}"
         for signal in case["signals"]:
             cited = {msg_id: labels.get(name, {}).get(msg_id) for msg_id in signal["evidence"]}
-            inside = {m: label for m, label in cited.items() if label}
+            in_filter = {
+                msg_id: label
+                for msg_id, label in cited.items()
+                if msg_id in inside.get(name, set())
+            }
             wanted = signal["subject_type"]
             flagships.append(
                 {
@@ -267,9 +282,16 @@ def reachability(held: dict) -> dict:
                     "thread_is_called": name in called,
                     "gold_subject_type": wanted,
                     "pass_1_labels_of_the_cited_rows": cited,
-                    "evidence_rows_inside_the_filter": sorted(inside),
-                    "reachable": bool(inside)
-                    and (wanted is None or wanted in set(inside.values())),
+                    "pass_1_labels_rule": (
+                        "every cited row's label as PASS 1 answered it, whether or not the filter"
+                        " kept the row. A row the filter dropped is named below and pass 2 never"
+                        " sees it — but the record may not carry `null` for a label it states in"
+                        " prose two blocks away"
+                    ),
+                    "evidence_rows_inside_the_filter": sorted(in_filter),
+                    "evidence_rows_outside_the_filter": sorted(set(cited) - set(in_filter)),
+                    "reachable": bool(in_filter)
+                    and (wanted is None or wanted in set(in_filter.values())),
                 }
             )
     entity = []
@@ -284,7 +306,7 @@ def reachability(held: dict) -> dict:
                 "id": case["id"],
                 "thread": name,
                 "thread_is_called": name in called,
-                "filtered_rows": len(labels.get(name, {})),
+                "filtered_rows": len(inside.get(name, set())),
             }
         )
     return {

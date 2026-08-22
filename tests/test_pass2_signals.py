@@ -939,6 +939,45 @@ def test_the_prompt_carries_the_two_clauses_the_reader_line_PAID_for():
     assert stated == ["F1a", "F1b", "F1c", "F2a"], "aspect is compared where the gold states one"
 
 
+def test_an_OMITTED_subject_type_is_not_a_relabelling():
+    """`prompts._reader` permits a null there, and a null rewrote nothing. Refusing it would report
+    the ADR's cardinal violation — exempt from the transport budget, so unbounded — for a row that
+    failed to echo ([[an_abstention_is_an_answer]])."""
+    said = json.loads(reply())
+    said["per_comment"][0]["subject_type"] = None
+    verdict = pass2.parse_pass2(json.dumps(said, ensure_ascii=False), unit=unit())
+    assert verdict["per_comment_subject_omitted"] == [7]
+    assert verdict["per_comment"][0]["subject_type"] is None, "the label is not invented either"
+    assert verdict["accounting"]["kept"] == [7]
+    # a WRONG word is still a relabelling
+    said["per_comment"][0]["subject_type"] = "молочный_бренд"
+    with pytest.raises(pass2.RelabelError):
+        pass2.parse_pass2(json.dumps(said, ensure_ascii=False), unit=unit())
+
+
+def test_the_record_carries_ONE_label_per_gold_evidence_row():
+    """Built from the pack alone, a row outside the filter reported `null` while the same record's
+    F5 expectation said `не_наш_рынок` in prose ([[two_values_for_one_input_get_quoted_kindly]])."""
+    import build_pass1_window_r2_pack as r2builder
+
+    answers, _table, _refusals = builder.filtered(r2builder.r1_pack())
+    gold = json.loads((RESULTS / "reader_gold_w1_r2.json").read_text(encoding="utf-8"))
+    rows = {one["id"]: one for one in RECORD["reachability"]["flagship_signals"]}
+    for case in gold["flagships"]:
+        thread = f"{case['channel']}:{case['post_id']}"
+        for signal in case["signals"]:
+            said = rows[signal["id"]]["pass_1_labels_of_the_cited_rows"]
+            for msg_id in signal["evidence"]:
+                truth = answers[f"{thread}#{msg_id}"]["subject_type"]
+                assert said[str(msg_id)] == truth, f"{signal['id']}#{msg_id}"
+    f5 = rows["F5a"]
+    assert f5["pass_1_labels_of_the_cited_rows"]["579457"] == "не_наш_рынок"
+    assert f5["evidence_rows_outside_the_filter"] == [579457]
+    assert f5["reachable"] is True
+    assert "не_наш_рынок" in RECORD["bars"]["1_flagships"]["expectation"]["F5"]["why"]
+    assert None not in f5["pass_1_labels_of_the_cited_rows"].values()
+
+
 def test_a_vocabulary_SYNONYM_is_not_a_relabelling():
     """«категория» and «категория_личное» are the two words two authorities disagree about, and the
     project's own scorer folds them. Refusing one as the ADR's cardinal violation would report an

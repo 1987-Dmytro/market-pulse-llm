@@ -22,7 +22,7 @@
   "instruments": {
     "module": {
       "path": "src/market_pulse/pass2.py",
-      "sha256": "1b4857bf6fd51f3f9b0e884893a79325a3696b3e0ed5d37f87f300c2755fffa0"
+      "sha256": "f26eb555c54ef80aa0eb275b98ea0292e8eb477bb87d87666dca7b9dfb507e9d"
     },
     "parser": {
       "entry_point": "market_pulse.pass2.parse_pass2",

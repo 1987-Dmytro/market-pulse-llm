@@ -360,7 +360,11 @@ def parse_pass2(reply: str, *, unit: dict) -> dict:
        pass 2's text and is refused here, because strict authority keys on the pass-1 label of a
        CITED row: a signal citing none carries a `subject_type` nothing authorises, and it is the
        hole the relabelling refusal would otherwise be walked around through;
-    4. **a relabelling**, in `per_comment` or in `signals` — :class:`RelabelError`. Compared through
+    4. **a relabelling**, in `per_comment` or in `signals` — :class:`RelabelError`. A per-comment
+       `subject_type` of ``null`` is an OMISSION and not one: it rewrote nothing, the authoritative
+       label is in the pack either way, and refusing it would report the ADR's cardinal violation —
+       exempt from the transport budget, so unbounded — for a row that failed to echo. Counted.
+       Compared through
        :data:`SUBJECT_SYNONYMS`, so «категория» against a pass-1 «категория_личное» is the reader's
        own two-authorities finding and not an architecture violation.
 
@@ -388,7 +392,19 @@ def parse_pass2(reply: str, *, unit: dict) -> dict:
                 "a signal names no comment — pass 2 assembles signals out of the rows it was given"
             )
         _authority(one["subject_type"], one["evidence"], given, "a signal")
+    omitted = []
     for one in verdict["per_comment"]:
+        if one["msg_id"] not in given:
+            raise prompts.ParseError(
+                f"per_comment names msg_id {one['msg_id']}, which was not in this request"
+            )
+        # `prompts._reader` permits a null `subject_type` in per_comment, and a null did not REWRITE
+        # a label — it failed to repeat one. Calling that the ADR's cardinal violation would report
+        # an architecture breach for an omission, and relabellings are outside the transport budget,
+        # so it would be an unbounded refusal counted against nothing ([[an_abstention_is_an_answer]])
+        if one["subject_type"] is None:
+            omitted.append(one["msg_id"])
+            continue
         _authority(one["subject_type"], [one["msg_id"]], given, f"per_comment {one['msg_id']}")
     unknown = [one["msg_id"] for one in verdict["noise"] if one["msg_id"] not in given]
     if unknown:
@@ -430,6 +446,7 @@ def parse_pass2(reply: str, *, unit: dict) -> dict:
             " two halves. pass 2 was not asked for it and never re-resolved it"
         ),
         "subject_doubt_unreadable": sorted(unreadable),
+        "per_comment_subject_omitted": sorted(omitted),
         "vocabulary_synonyms_used": synonyms,
         "accounting": {
             "given": sorted(given),
