@@ -294,6 +294,13 @@ def contamination(written: list[dict]) -> dict:
             if any(shingle in index for shingle in synthetic.shingles(text, SHINGLE))
         )
         out[f"{name}_n"] = len(body)
+    echoed = {name: out[name] for name in corpus() if out[name]}
+    if echoed:
+        raise SystemExit(
+            f"synthetic rows echo real text: {echoed}. The contract asks for these lists EMPTY, and"
+            " a producer that writes a non-empty one and exits 0 puts the STOP in a test instead of"
+            " in the instrument — `balance()` refuses, and so must this."
+        )
     return out
 
 

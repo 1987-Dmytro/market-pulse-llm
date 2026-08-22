@@ -470,18 +470,146 @@ Every number from a file this contract built, at $0.
 | widest E request, v2 / v3 | 7 781 / 8 894 characters |
 | cap | **$4.00** |
 
-## The review — one lens of five returned, and it was worth the wait
+## The review — all five returned, four of them after the report first said none had
 
 The contract asks for a five-lens review on a COMMITTED tree with a second skeptic pass on the
 fixes. **Five lenses were launched against sha `8982dd3b48b84bba46f5589ca9785bed5e7c229d`** — the
 two STOPs' arithmetic · the hand-written content of the 675 rows · the exclusion algebra · the
 registration's honesty · the negative controls — each given the sha and told to quote it back.
 
-**Nothing came back for 95 minutes and the report was written saying so.** Then **lens 1 (the two
-STOPs' arithmetic) delivered**, quoting the sha, with eight findings — three of them requiring
-action and one of them a defect nothing else had caught. The other four have not delivered as this
-report closes. **The second skeptic pass therefore did not happen** on any of it: there is no
-committed fix-sha that a second pass read. That is a gap in the construction, not a clean bill.
+**Nothing came back for 95 minutes and the report was written saying so.** Then all five delivered,
+in two waves. **The second skeptic pass did not happen** — there is no committed fix-sha that a
+second pass read — and that is a gap in the construction, not a clean bill. What the five did find
+is below, and three of them found defects nothing else in this contract could have.
+
+### The most serious finding of the whole contract — lens 3
+
+**22 of the 198 E items are shown a byte-identical copy of their own comment, carrying a label,
+inside their own `<examples>` block. Five of them are holdout rows — five of the 98 rows the GATING
+bar `holdout-100 agreement ≥ 64 of 100` is scored on.**
+
+The mechanism is exact and deterministic: the own-thread rule blocks `pick["thread"] ==
+one["thread"]` and nothing else, while `fewshot.neighbours` maximises Jaccard over character
+3-grams — an identical string scores **1.0**, so wherever this window reposts a comment verbatim
+across threads the duplicate is not merely eligible, it is chosen **first**. The window is full of
+spam and boilerplate reposted word for word, which is why it has volume.
+
+| | |
+|---|---|
+| E items shown their own text | **22 of 198** |
+| of which holdout rows | **5 of 98** — and in all five the twin's label equals the row's own gold |
+| reference-thread rows (bars 1 and 3) | 18, of which **7 carry a CONTRADICTING label** |
+| training rows of the same shape | 13 of 506, all label-consistent |
+| gold-14 affected | none |
+
+**Direction of the damage.** `render_pair` builds both legs from ONE `chosen` and the adapter is a
+runner flag, so every leg — base v2, base v3, arm A, arm B — sees the same contaminated block. It is
+therefore **neutral to arm-vs-base and to the A/B ablation, and decisive for the absolute reading
+the bar stands on**: five free rows out of 98 against a bar registered at 64.
+
+**Reported, not repaired.** The contract mandates `build_pass1_fewshot_packs.neighbours` as the
+selection rule, so changing it is the operator's call. The remedy is one comparison — refuse a
+neighbour whose whitespace-collapsed casefolded text equals the query's — and it is named in
+`results/lora_c_eval_pack.json::own_text_in_examples` and not taken. Lens 3 also bounded it: scanning
+every pick at similarity exactly 1.0 returns those 22 and 13 and nothing else, and the highest
+similarity strictly below 1.0 is 0.9875 — so the duplicate tail is a continuum and any threshold
+above equality would be a judgement call.
+
+### dev-200 IS in E, and the record denied it in the same document — lens 3
+
+`made.rule` said «dev-200 is NOT in E» while `membership.dev_200_in_e` in the **same file** listed 80
+rows. The true decomposition: **115 in the training set · 80 in E · 5 in the refused thread**. And
+the consequence half was wrong the same way — of dev's 49 «our» rows only 40 are in train; **8 are
+in E and not in train**, so for those 8 the agreement is a legitimate EVAL reading and the blanket
+«may never be quoted as an eval reading» forbade a valid one. Corrected, and the split is now a
+field.
+
+### The registration published two numbers its own files refute — lens 4
+
+**`expected_draws_per_epoch` registered 101.2; the sampler draws 126.5.** `train_qlora.sampling_order`
+calls `random.choices`, which **normalises** the weight vector, so the naive product `n_c · w_c` is
+not the expected draw. The weights sum to **404.8 against 506 rows** — because `w_c = N/(5·n_c)` is
+written for FIVE classes and the rendered set has four, `молочный_бренд` having zero rows. Every
+class is scaled up by 506/404.8 = 1.25. **Registered 25 % below fact**, and «the majority class is
+capped at N/5» is false: it lands on **N/4**. Driven now over 60 epochs of the real rows rather than
+multiplied — 126.48 / 127.37 / 126.22 / 125.93. The bars do not move (126.5 > the floor of 8), but
+the next contract would have quoted 101.2 as a fact. *One section of the record names the missing
+class and the section beside it published a number that assumed it.*
+
+**121.0 s/step was described as «the worst case a run can be in while every rung says GO».** In
+lora-b's own worked examples the entry at 121.0 carries verdict **KILL**; the GO belongs to
+`compliant_slow_by_the_contracts_letter`, which lora-b calls «the path the rung exists to close».
+121.0 is the rate that slips the **watchdog** and is caught by the **projection** — and the real
+reason it cannot be carried unexamined is that lora-c has no 122 s watchdog of its own.
+
+Three more from the same lens, all corrected: **68.442 is not in `prereg_lora_b.json`** (grep 0 — it
+lives in `results/lora_b_run.json`), and «ALL THREE are readings» was wrong because 121.0 is not a
+reading at all; **6.14's `measured_on: "v2 requests"` was false** — the level is probe-b's base **v1**
+5.161578 and only the uplift ratio is v2 — and its direction was inverted, «safe as a FLOOR» where
+the lesson it cites says a conservative **ceiling**, which is the safe direction under a cap; and
+**`results/lora_c_data.json` and `results/lora_c_synthetic.json` were not pinned at all** while
+supplying a third of the record's numbers. Both are pinned and frozen now.
+
+### Three more dead guards, and a STOP that lived only in a test — lens 5
+
+**`build_lora_c_eval_pack.py` still carried a word-for-word DUPLICATE of the pool-isolation guard I
+had "moved".** Nothing between the two mutates `pool`, so the first copy always fired and the second
+was dead. Moving a guard and leaving the copy behind is how a file grows a check nobody can see run.
+Deleted. Two more are unreachable by construction and now say so: the legs-same-instances check (both
+legs are appended in one iteration from one `fields`) and the own-thread neighbour check (already
+excluded by `neighbours`' own rule).
+
+**`syn.contamination()` had no `raise`.** A synthetic row echoing a labelled comment produced a
+non-empty list and the producer exited 0 — the STOP lived only in a test. It refuses now, like
+`balance()` beside it.
+
+**And a SEVENTH state of the rationale field does exist — it is lexical, not a value.** A rationale
+containing an ASCII double quote, or a raw newline, makes the reply malformed JSON: `prompts._object`
+raises, the row loses its label, and **no `rationale_state` is written at all**, so the outcome is
+invisible to the census that field exists for. My own nine-shape probe could not reach it because
+every shape built with `json.dumps` is escaped by construction. Scoped honestly: **the field cannot
+refuse a reply the parser can READ**, and `subject_id` had this exposure already. What prices it:
+0 of the 515 shipped rationales carry an ASCII quote and 515 of 515 use guillemets, so arm A only
+ever trains on the safe form — **the exposed leg is base v3**, an untrained model asked for 160
+characters of free text.
+
+Also from lens 5, and it fires on the contract's NEXT step: `VERDICT.exists()` is embedded in three
+records. When a verdict file lands, the producers emit `true`, the byte-for-byte rebuild test goes
+red on three of five parameters and blames producer drift. No sha cascade — the registration hashes
+the raw inputs, not those records.
+
+### The content lens confirmed my 15 rows and gave them a much bigger denominator — lens 2
+
+Lens 2 judged **113 of 515 rationales and 104 of 160 synthetic rows** line by line. It did **not**
+find my 15-row defect independently — it had both halves on screen and wrote the opposite conclusion.
+What it added is the denominator, and it is decisive: **the team lead puts a non-dairy thing at a
+chain into `сеть_ритейлер` in 21 of the 37 `сеть_ритейлер` rows — 57 % of the class**, not an edge
+case. And the defect is **synthetic-ONLY**: zero rows of that shape in the 515. So the two files
+would teach opposite rules for one shape into one training run, and the real file is the one that is
+right.
+
+Its own findings, all of which go to review gate 1 and 2:
+
+- **17 rationales name a subject that is not in the comment, read off the POST.** The proof needs no
+  interpretation: `@retsepty:7342#49696` and `@retsepty:7349#49742` are byte-identical text with an
+  identical cue and resolve to different subjects. 13 of the 17 are in `@retsepty`.
+- **The worst single row: `@matusi_ukr:22158#578032`.** The rationale says «лише ЗГАДУЄ морозиво…
+  насправді про лікування горла» and the label is `категория_личное` — an inversion of the codebook's
+  opening line. And the same reading appears in synthetic `mention_vs_about` #5 labelled
+  `не_наш_рынок`. One reading, two classes, two files, one run — on the exact axis arm B exists to fix.
+- `@retsepty:7342#49685` vs `#49686`: byte-identical spam text, one post, labelled `null` and
+  `не_наш_рынок`.
+- **24 null rows shaped «коментар ні про кого — <names a definite subject>»** — self-contradicting
+  inside the supervised span.
+- **16 of the 32 synthetic `молочный_бренд` rows carry one of two generic skeletons**, and that
+  matters more than it looks because synthetic carries essentially the whole positive signal for that
+  class — 32 rows against 1 real.
+- Seven rationales are UA/RU hybrids («лише УПОМИНАЕТ»), going into the supervised span verbatim.
+- **Not one of the 160 synthetic texts contains a newline, against 19.4 % of real comments** — a
+  discriminator separates the two sets on that alone. `@olega13`, a real handle, is reused in two
+  «written from scratch» rows.
+
+**None of these is rewritten.** They are the gates' business and both gates are STOPPED.
 
 ### What lens 1 found — all eight verified before acting
 
@@ -597,15 +725,15 @@ line exists to fix, and it would have gone into arm B unnoticed.
 
 ```
 $ make check
-3656 passed, 2 skipped in 551.35s (0:09:11)          exit 0
+3658 passed, 2 skipped in 558.72s (0:09:18)          exit 0
 
 $ make preflight ARGS='pass1_v3.py prereg_lora_c.json'
-pin registry: 1559 paths pinned by results/*.json
+pin registry: 1561 paths pinned by results/*.json
 
 QUERY  pass1_v3.py
-[3] pins — 5 of the 12 touched paths are pinned by a record
-[4] digests — sha256 of all 5 pinned paths, against what is pinned
-    5 of 5 pinned paths match every digest on them
+[3] pins — 6 of the 12 touched paths are pinned by a record
+[4] digests — sha256 of all 6 pinned paths, against what is pinned
+    6 of 6 pinned paths match every digest on them
 
 QUERY  prereg_lora_c.json
 [3] pins — 4 of the 9 touched paths are pinned by a record
@@ -613,7 +741,7 @@ QUERY  prereg_lora_c.json
     4 of 4 pinned paths match every digest on them
 ```
 
-The suite opened this contract at **3 608 passed / 2 skipped** and closes at **3 656 / 2** — the 48
+The suite opened this contract at **3 608 passed / 2 skipped** and closes at **3 658 / 2** — the 50
 tests of `tests/test_lora_c_prep.py`, at a cost **within noise** of the opening run's 549.57 s —
 the two figures are wall clocks of two different trees and their difference is not a measurement. The
 pin registry grew 1 547 → 1 559 paths.
@@ -656,6 +784,13 @@ $0; there is no money on this contract.**
 | **Dv755** | `[cause: verify-gap]` [[the_fix_widened_the_denominator]] | **The report-only cell this line exists for would have been quoted across two denominators.** Both holdout rows that cannot be rendered are labelled `не_наш_рынок`, so «18 of 52 before» meets «X of **50** after». The GATED bar got its reachability note (98 of 100) and the report-only cell got none — and it is the cell the whole line targets. Registered with both denominators; «our on holdout» 6/8 is unaffected and now says so. Found by lens 1. |
 | **Dv756** | `[cause: verify-gap]` [[co_occurrence_is_not_explanation]] | **«The cause is the TEXT, not the block» is a false dichotomy, refuted by the record's own table.** The median row exceeds the ceiling by 159 tokens and the five-example block is worth ~223 median tokens, so at ONE example the median row fits. The STOP survives on a narrower reason — the text makes the margin thin, the TAIL makes no legal count enough — and the wrong reason had already reached the ADR, the INDEX and this report. Found by lens 1. Three smaller corrections from the same report: remedy 3's leak is not a disjunction (the only other row of that class is a HOLDOUT row), remedy 4's price is half paid already, and `sampler.second_rule` claimed a floor-binding class that has zero rendered rows and is absent from its own table. |
 | **Dv757** | `[cause: process]` [[a_reproducible_probe_can_be_unrepresentative]] | **The tightest number in this contract has an eleven-token margin and it is a model.** 1 419 against 1 408 is 0.78 %, and the tokens-per-character it rests on was measured on probe rows of 2 778–3 923 characters then applied to rows of 5 262–9 402 — so the chat template's fixed part scales with content it should not scale with, and `TEMPLATE_SLACK` = 16 is itself larger than the margin. The direction is ambiguous. Registered because the STOP does NOT rest on that row: the median needs ~1 520–1 570 and the widest ~2 460–2 560 under any plausible correction. Found by lens 1. |
+| **Dv758** | `[cause: verify-gap]` [[a_prefilter_cannot_certify_the_population]] | **22 of 198 eval items are shown a byte-identical copy of their own comment, labelled — and FIVE of them are on the gating bar.** The own-thread rule blocks the query's THREAD; `neighbours` maximises Jaccard over character 3-grams and an identical string scores **1.0**, so where the window reposts a comment verbatim the duplicate is chosen FIRST and deterministically. Five of the 98 rows `holdout-100 ≥ 64 of 100` is scored on see their own answer, and in all five the twin's label equals their gold. Neutral to arm-vs-base and to the A/B ablation — every leg is rendered from one `chosen` — and **decisive for the absolute reading the bar stands on**. Reported and NOT repaired: the contract mandates that selection rule. Found by lens 3; I had verified every example ID was inside the pool and never checked the TEXT. |
+| **Dv759** | `[cause: verify-gap]` [[a_count_in_prose_is_not_the_enumeration]] | **dev-200 IS in E — 80 rows — and the record denied it in the same document that listed them.** `made.rule` said «dev-200 is NOT in E» while `membership.dev_200_in_e` carried exactly those 80. The split is 115 train · 80 E · 5 in the refused thread, and the consequence was wrong the same way: of dev's 49 «our» rows only 40 are in train, so for the 8 that are in E and not in train the agreement is a legitimate EVAL reading that the registration forbade quoting. Found by lens 3. |
+| **Dv760** | `[cause: verify-gap]` [[a_borrowed_rule_carries_an_unstated_population]] | **The registration published 101.2 draws per class per epoch; the sampler draws 126.5.** `random.choices` NORMALISES the weight vector, so `n_c · w_c` is not the expected draw — and the vector sums to **404.8 against 506** because `w_c = N/(5·n_c)` is written for five classes and the rendered set has four. Registered 25 % low, and «the majority is capped at N/5» is really N/4. Driven now over 60 epochs instead of multiplied. Bars unmoved; the next contract would have quoted it. **One section of the record names the missing class and the section beside it published a number that assumed it.** Found by lens 4. |
+| **Dv761** | `[cause: verify-gap]` [[a_named_revision_is_not_a_passing_one]] | **121.0 s/step was called «the worst case while every rung says GO» and lora-b's own worked example at 121.0 says KILL.** The GO belongs to `compliant_slow_by_the_contracts_letter`, which lora-b describes as the hole its two tightenings close. 121.0 slips the WATCHDOG and is caught by the PROJECTION, and the real reason it cannot be carried is that lora-c has no 122 s watchdog. Three more from the same lens: **68.442 is not in `prereg_lora_b.json`** (grep 0; it is in `lora_b_run.json`) and 121.0 is not a «reading» at all; **6.14's `measured_on: "v2 requests"` is false** — the level is probe-b's base **v1** and only the uplift is v2 — and its direction was inverted, «safe as a FLOOR» where a conservative CEILING is the safe side under a cap; and **`lora_c_data.json` / `lora_c_synthetic.json` were unpinned** while supplying a third of the record's numbers. Found by lens 4. |
+| **Dv762** | `[cause: verify-gap]` [[an-empty-class-is-the-definitions-answer]] | **The guard I "moved" was still there twice — the old copy was dead.** Nothing between the two mutates `pool`, so the first always fires. Deleted. Two more unreachable checks labelled (legs-same-instances, own-thread neighbour). And **`syn.contamination()` had no raise**: a synthetic row echoing a labelled comment produced a non-empty list and the producer exited 0, so the STOP lived only in a test. It refuses now, like `balance()` beside it. Found by lens 5. |
+| **Dv763** | `[cause: model]` [[a_report_only_field_can_refuse_the_whole_row]] | **There IS a seventh state of the rationale field, and it is LEXICAL.** A rationale carrying an ASCII double quote or a raw newline makes the reply malformed JSON — `prompts._object` raises, the row loses its label, and **no `rationale_state` is written at all**, so the outcome is invisible to the census the field exists for. My nine-shape probe could not reach it: every shape built with `json.dumps` is escaped by construction. Scoped honestly — the field cannot refuse a reply the parser can READ, and `subject_id` had the same exposure. Priced by what ships: 0 of 515 rationales carry an ASCII quote and 515 use guillemets, so **arm A only ever trains on the safe form and the exposed leg is base v3**. Found by lens 5. |
+| **Dv764** | `[cause: model]` [[a_borrowed_rule_carries_an_unstated_population]] | **My 15-row synthetic finding has a denominator of 21 of 37, and the lens that should have found it wrote the opposite.** The team lead puts a non-dairy thing at a chain into `сеть_ритейлер` in **21 of the 37** `сеть_ритейлер` rows — 57 % of the class — and the defect is **synthetic-ONLY**: zero rows of that shape among the 515. So the two files would teach opposite rules for one shape into one run. Lens 2 also found what I did not: **17 rationales name a subject read off the POST and not present in the comment** (proved by two byte-identical comments with identical cues resolving differently), the inverted `@matusi_ukr:22158#578032` whose rationale says «лише ЗГАДУЄ» and whose label is `категория_личное`, 24 null rows naming a definite subject, 16 of 32 synthetic `молочный_бренд` rows on two generic skeletons, seven UA/RU hybrid rationales, and **not one synthetic text carrying a newline against 19.4 % of real comments**. All of it goes to the gates; none is rewritten. |
 
 **The tally, by the grep the template names:**
 
@@ -666,10 +801,10 @@ tag = {}
 for chunk in re.split(r"(?=\*\*Dv\d+)", flat):
     if (m := re.match(r"\*\*Dv(\d+)", chunk)) and (t := re.findall(r"\[cause:\s*([a-z-]+)\]", chunk)):
         tag.setdefault(int(m.group(1)), t[0])
-inr = {d: t for d, t in tag.items() if 728 <= d <= 757}
+inr = {d: t for d, t in tag.items() if 728 <= d <= 764}
 health = sum(1 for t in inr.values() if t in ("contract-gap", "spec-gap", "verify-gap"))
 print(len(inr), dict(collections.Counter(inr.values()).most_common()))
-print("contract health", health, "· paid", len(inr) - health, "· enum canonicity", len(inr), "of 30")
+print("contract health", health, "· paid", len(inr) - health, "· enum canonicity", len(inr), "of 37")
 ```
 
 ## Process signals

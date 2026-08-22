@@ -69,6 +69,9 @@ not only at the conservative one — a ceiling that only binds under the pessimi
 weaker finding than this one is."""
 
 MIN_PER_EPOCH = 8
+SAMPLER_EPOCHS = 60
+"""How many epochs the sampler is driven for to MEASURE its draw. Sixty is enough that the four
+class means sit within 1 % of the analytic N/4 and cheap enough to run on every build."""
 """The contract's floor: no class may draw fewer than this per epoch-equivalent."""
 
 MAX_SEQ_LEN = int(
@@ -272,7 +275,18 @@ def sampler(rows: list[dict]) -> dict:
     """
     weights = trainer.class_weights(rows)
     counts = Counter(fewshot.key(one["subject_type"]) for one in rows)
-    draws = {name: round(counts[name] * weight, 4) for name, weight in sorted(weights.items())}
+    # DRIVEN, not multiplied. `sampling_order` calls `random.choices`, which NORMALISES the weight
+    # vector — so `n_c · w_c` is only the expected draw when the weights sum to the row count, and
+    # here they sum to 404.8 against 506 because the rule `w_c = N/(5·n_c)` expects FIVE classes and
+    # the rendered set has four (молочный_бренд has zero rows). The product under-reports by 25 %
+    # ([[a_borrowed_rule_carries_an_unstated_population]])
+    per_row = [weights[fewshot.key(one["subject_type"])] for one in rows]
+    seen: Counter = Counter()
+    for epoch in range(SAMPLER_EPOCHS):
+        for index in trainer.sampling_order(len(rows), per_row, 42 + epoch):
+            seen[fewshot.key(rows[index]["subject_type"])] += 1
+    draws = {name: round(seen[name] / SAMPLER_EPOCHS, 2) for name in sorted(weights)}
+    product = {name: round(counts[name] * weight, 2) for name, weight in sorted(weights.items())}
     return {
         "rule": (
             f"w_c = N/({trainer.PASS1_K}·n_c) capped at {trainer.PASS1_WEIGHT_CAP} —"
@@ -287,10 +301,36 @@ def sampler(rows: list[dict]) -> dict:
         ),
         "weights": weights,
         "rows_per_class": dict(sorted(counts.items())),
-        "expected_draws_per_epoch": draws,
+        "draws_per_epoch_MEASURED": draws,
+        "draws_rule": (
+            f"the sampler itself, driven over {SAMPLER_EPOCHS} epochs of the real rows."
+            " train_qlora.sampling_order calls random.choices, which NORMALISES the weights, so the"
+            " naive product n_c·w_c is NOT the expected draw here"
+        ),
+        "the_naive_product_and_why_it_is_wrong": {
+            "value": product,
+            "weights_sum_to": round(sum(product.values()), 2),
+            "against_row_count": len(rows),
+            "why": (
+                "w_c = N/(5·n_c) is written for FIVE classes; the rendered set has FOUR because"
+                " молочный_бренд has zero rows, so the vector sums to 404.8 of 506 and"
+                " normalisation scales every class up by 506/404.8 = 1.25. The product under-reports"
+                " the real draw by 25 %, and one section of this record naming that missing class"
+                " beside another publishing a number that assumes it is exactly the shape this"
+                " contract keeps finding"
+            ),
+        },
+        "the_majority_cap_is_N_over_4_not_N_over_5": (
+            "with four classes in the sampler the cap lands at N/4 = 126.5, not N/5 = 101.2"
+        ),
         "floor": MIN_PER_EPOCH,
         "classes_under_the_floor": sorted(
             name for name, value in draws.items() if value < MIN_PER_EPOCH
+        ),
+        "classes_under_the_floor_rule": (
+            "measured draws, not the product — and the class that WOULD have landed on the floor"
+            " (молочный_бренд, one pool row) is absent from this table entirely because it has zero"
+            " rendered rows. The floor binds on nothing here, and not because every class clears it"
         ),
     }
 

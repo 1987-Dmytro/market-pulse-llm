@@ -46,7 +46,7 @@
       "gold_14": "the SIXTH look. A census row with multiplicity, NEVER a bar — docs/STATUS.md п. 1 (д). All 14 are inside E because they are inside the reference threads",
       "our_on_holdout": "6 of 8 before, and the denominator does NOT move — neither unrenderable row is «our», both are `не_наш_рынок`",
       "pass_2_tables": "the DROP table and the subject_doubt table, per leg",
-      "per_class_tables": "агreement by subject_type, both arms and both bases",
+      "per_class_tables": "agreement by subject_type, both arms and both bases",
       "the_mention_cell": {
         "after_is_out_of_50_and_not_52": "BOTH holdout rows that cannot be rendered — @VARUS_channel:10367:20985 and :21005 — are labelled `не_наш_рынок`, so the AFTER column is answered on 50 of the 52 and the two columns have different denominators. The gated bar got its reachability note (98 of 100) and this cell had none; quoting «18 → X» without it would compare a rate to a count ([[the_fix_widened_the_denominator]], [[correcting_gold_moves_the_denominator]])",
         "before": "18 of 52",
@@ -60,6 +60,8 @@
   "contract": "docs/PROMPT-lora-c-prep.md",
   "frozen_when_the_pod_exists": [
     "results/prereg_lora_c.json",
+    "results/lora_c_data.json",
+    "results/lora_c_synthetic.json",
     "results/pass1_sft_v3_train.jsonl",
     "results/rationales_pass1_v1.jsonl",
     "results/synthetic_pass1_v1.jsonl",
@@ -82,8 +84,10 @@
       "sha256": "9baab0e92078c137d17d5275158ef6360b9f349213a671b9249f3d4433b680c7"
     },
     "packs": {
-      "results/lora_c_eval_pack.json": "72c52637f1bc630e228b3c8cbc8bf3e7d3cf2a53878c426f54e3f0b39dd4b888",
+      "results/lora_c_data.json": "3a868e4f930d1d3f4562072639f628ce499f453f32bf07cb7f54e79bb69ebbef",
+      "results/lora_c_eval_pack.json": "b728acca23a261d7f8ed91235016120c15c36228fc077ddedaadbabf3d829ea5",
       "results/lora_c_pass2_pack.json": "4438ab0b4c9f6e9a7ec59639a3ae1fef982735d583409f04ce7aa529d704fcaa",
+      "results/lora_c_synthetic.json": "2e2fa4c5a914c6edbb09bacae707f60728cc8f11a1099c91563990dab634f159",
       "results/pass1_sft_v3_train.jsonl": "0821f4aedef78ee476a993664f75feb113afdcc77551f43c82f50d887c4f40a0"
     },
     "parser": {
@@ -200,26 +204,30 @@
     "rates_and_what_would_invalidate_them": {
       "pass_1_seconds_per_call": {
         "derivation": "mean(probe-b) × mean(dev v2) / mean(dev base) = 6.135572, rounded up",
-        "invalidating_condition": "this rate was measured on v2 requests. Three of the four legs send V3, whose widest E request is 8894 characters against v2's 7781. Carrying it unchanged for v3 is the same class of error as the training rate below ([[the_smokes_rate_carries_the_smokes_transport]]). It is safe as a FLOOR and wrong as a ratio",
-        "measured_on": "v2 requests",
+        "invalidating_condition": "this rate was measured on v2 requests. Three of the four legs send V3, whose widest E request is 8894 characters against v2's 7781. Carrying it unchanged for v3 is the same class of error as the training rate below ([[the_smokes_rate_carries_the_smokes_transport]]). It is safe as a conservative CEILING and wrong as a ratio — an earlier version of this field said «floor», which is the dangerous direction under a cap. Empirically it behaves as a ceiling: 6.14 is 2.279× the window pod's direct v2 reading of 2.694083, and about 2× a width-scaled estimate for v3 (2.694083 × 8894/7781 = 3.079). The pod-class headroom already inside the charge is an order of magnitude larger than the 14 % width growth this condition is about",
+        "measured_on": "NOT v2. The level comes from pass1-probe-b's 64 paid rows at base V1 (5.161578 s/call); only the UPLIFT ratio 2.72578/2.293075 is a v2 measurement, and 5.161578 × that = 6.135572 re-derives exactly. No v2 request was ever measured near 6.14 ([[a_smoke_drawn_from_the_exam_is_not_a_rate_sample]])",
         "source": "results/prereg_pass1_window_r2.json::money.arithmetic.seconds_per_call.charged",
         "the_window_pod_measured": 2.694083,
         "value": 6.14
       },
       "pass_2_seconds_per_thread": {
         "derivation": "ceil(58.07 × 1.67) = 97 — the smoke MAX × pass 1's pod-class spread",
-        "invalidating_condition": "r2 realised 23.760 s/thread against 97 charged — 0.245 of the charge — and it measured the pod-class spread on this decode DIRECTLY at 1.008, not the 1.67 borrowed from pass 1. lora-c-run has a direct reading available and should use it; 97 is carried here because it is what is REGISTERED, and a lower charge is a decision that belongs in that contract",
+        "invalidating_condition": "r2 realised 23.760 s/thread against 97 charged — 0.245 of the charge — and it measured the pod-class spread on this decode DIRECTLY at 1.008, not the 1.67 borrowed from pass 1. lora-c-run has a direct reading available and should use it — **with r2's own caveat attached: n = 1, and it is the shortest of the five replies** (docs/reports/pass2-signals-r2.md, Dv722). 97 is carried here because it is what is REGISTERED, and a lower charge is a decision that belongs in that contract",
         "source": "results/prereg_pass2_signals_r2.json::money.arithmetic.seconds_per_call",
         "the_run_measured": 23.76,
         "value": 97
       },
       "training_seconds_per_step": {
         "compliant_slow_ceiling": 121.0,
-        "compliant_slow_rule": "121.0 s/step is the slowest rate that never trips lora-b's registered 122 s watchdog — its own worked example, and the worst case a run can be in while every rung says GO",
-        "invalidating_condition": "ALL THREE are readings on sequences of at most 1 222 tokens (results/prereg_lora_b.json::dropped_for_length.longest_kept). v3's rows are 1435–2759 tokens at the measured ratio range. config/qlora.yaml's own comment says raising max_seq_len «changes no step time and no memory except on the batches that need it» — here EVERY batch needs it, so none of the three is this line's rate. Named as inherited readings, never used as the formula's input",
+        "compliant_slow_rule": "121.0 s/step never trips lora-b's registered 122 s watchdog (kill_clock rung 4, «s/step > 122 s over 5 consecutive log lines»). **It is NOT a rate at which every rung says GO:** in lora-b's own worked examples the entry at 121.0 carries verdict KILL, and the GO belongs to `compliant_slow_by_the_contracts_letter`, which lora-b describes as «the path the rung exists to close». So 121.0 is the rate that slips the WATCHDOG and is caught by the PROJECTION — and lora-c has no 122 s watchdog of its own, which is the real reason it cannot be carried unexamined",
+        "invalidating_condition": "TWO of the three are readings, and both on sequences of at most 1 222 tokens; 121.0 is not a reading at all but a worked example constructed from the 122 s watchdog. The length condition binds on 61.047 and 68.442 (results/prereg_lora_b.json::dropped_for_length.longest_kept). v3's rows are 1435–2759 tokens at the measured ratio range. config/qlora.yaml's own comment says raising max_seq_len «changes no step time and no memory except on the batches that need it» — here EVERY batch needs it, so none of the three is this line's rate. Named as inherited readings, never used as the formula's input",
         "measured_on_arm_a": 68.442,
         "registered_by_lora_b": 61.047,
-        "source": "results/prereg_lora_b.json — both numbers, by name"
+        "sources": {
+          "121.0": "results/prereg_lora_b.json::money.arithmetic.cumulative.projection_gate.worked_examples.compliant_slow",
+          "61.047": "results/prereg_lora_b.json::money.arithmetic.seconds_per_step",
+          "68.442": "results/lora_b_run.json::measured_seconds_per_step — NOT the prereg; grep for it there returns zero"
+        }
       }
     },
     "state": "OPEN — no price is registered here. lora-c-run derives it and seals it",
@@ -232,7 +240,7 @@
       "file": "results/lora_c_eval_pack.json",
       "n": 200,
       "rendered": 198,
-      "sha256": "72c52637f1bc630e228b3c8cbc8bf3e7d3cf2a53878c426f54e3f0b39dd4b888"
+      "sha256": "b728acca23a261d7f8ed91235016120c15c36228fc077ddedaadbabf3d829ea5"
     },
     "pool": {
       "arithmetic": "650 − 100 − 41 + 6 = 515 — the two exclusions overlap and the overlap is added back once",
@@ -379,7 +387,7 @@
   },
   "producer": {
     "script": "scripts/write_lora_c_prereg.py",
-    "sha256": "f12ed46fead78b111b7fb23add41d757ba0f7d47ace41ecc09bb3352b3e18e6a"
+    "sha256": "fd77ad36d38ae68e973ed90668f5adc141fa6b056839aa06a96550d307b6762d"
   },
   "question": "does rationale-supervised QLoRA on pass 1 fix the subject-attribution errors pass 2 measured — brand ↔ retailer, a retailer in a non-dairy context, non-dairy «brands», and mention-vs-about — WITHOUT learning the prior the way line B did",
   "reachability": {
@@ -454,11 +462,11 @@
       ],
       "refusals_driven_at_zero_dollars": [
         {
-          "message": "@VARUS_channel:10367#20766: task 'pass1_comment_gm4_v3' is not 'pass1_comment_gm4_v1'",
+          "message": "@VARUS_channel:10349#20649: task 'pass1_comment_gm4_v3' is not 'pass1_comment_gm4_v1' — the FIRST row of the shipped file, driven today",
           "where": "train_qlora.load_sft"
         },
         {
-          "message": "…hashes 58718596d2dc909c… and pass1_sft.json registers ['79988046f96c981f', 'dc7c8390c3fff439'] — this is not a registered dataset. Stop rather than train on bytes nobody pre-registered.",
+          "message": "«…is not a registered dataset. Stop rather than train on bytes nobody pre-registered.» — reached only by giving the row v1's task name first, because build_pass1 calls load_sft BEFORE its own sha check, so the task-name guard always fires first on the shipped file. Stated because lora-c-run's sibling trainer is scoped by these two messages and a message quoted without the state that produces it is not evidence",
           "where": "train_qlora.build_pass1"
         }
       ],
@@ -564,12 +572,14 @@
     "read_not_typed": "every one of these is READ from config/qlora.yaml at build time. lora-b's record quotes the same file, and two spellings of a frozen constant are two answers the day one of them moves ([[a_moved_constant_fails_green]])",
     "sampler": {
       "classes_under_the_floor": [],
-      "expected_draws_per_epoch": {
-        "null": 101.1999,
-        "категория_личное": 101.2,
-        "не_наш_рынок": 101.1999,
-        "сеть_ритейлер": 101.2
+      "classes_under_the_floor_rule": "measured draws, not the product — and the class that WOULD have landed on the floor (молочный_бренд, one pool row) is absent from this table entirely because it has zero rendered rows. The floor binds on nothing here, and not because every class clears it",
+      "draws_per_epoch_MEASURED": {
+        "null": 126.48,
+        "категория_личное": 127.37,
+        "не_наш_рынок": 126.22,
+        "сеть_ритейлер": 125.93
       },
+      "draws_rule": "the sampler itself, driven over 60 epochs of the real rows. train_qlora.sampling_order calls random.choices, which NORMALISES the weights, so the naive product n_c·w_c is NOT the expected draw here",
       "floor": 8,
       "rows_per_class": {
         "null": 165,
@@ -579,6 +589,18 @@
       },
       "rule": "w_c = N/(5·n_c) capped at 8.0 — results/prereg_lora_b.json's arms.*.sampler_weights, by calling train_qlora.class_weights, the function the trainer samples with",
       "second_rule": "«no class under 8 rows per epoch-equivalent». Expected draws are n_c·w_c = min(N/5, 8·n_c), so the majority class is capped at N/5 by the first rule and the floor can only bind on a class with fewer than 8 rows. APPLIED: none — the first rule already satisfies it, and the smallest class lands exactly on the floor",
+      "the_majority_cap_is_N_over_4_not_N_over_5": "with four classes in the sampler the cap lands at N/4 = 126.5, not N/5 = 101.2",
+      "the_naive_product_and_why_it_is_wrong": {
+        "against_row_count": 506,
+        "value": {
+          "null": 101.2,
+          "категория_личное": 101.2,
+          "не_наш_рынок": 101.2,
+          "сеть_ритейлер": 101.2
+        },
+        "weights_sum_to": 404.8,
+        "why": "w_c = N/(5·n_c) is written for FIVE classes; the rendered set has FOUR because молочный_бренд has zero rows, so the vector sums to 404.8 of 506 and normalisation scales every class up by 506/404.8 = 1.25. The product under-reports the real draw by 25 %, and one section of this record naming that missing class beside another publishing a number that assumes it is exactly the shape this contract keeps finding"
+      },
       "weights": {
         "null": 0.613333,
         "категория_личное": 2.53,

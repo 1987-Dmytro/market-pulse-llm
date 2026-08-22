@@ -149,7 +149,7 @@
   "produced_by": {
     "note": "this file VALIDATES the rows; it does not write them",
     "script": "scripts/build_lora_c_synthetic.py",
-    "sha256": "2822e73fb99eaee5bdc81ac672f776f3e898cc579f11722de78538fb73243314"
+    "sha256": "9466a0734e6f896d96bef0c26209cd7e90e239a34d2f50f29902001c18d608d2"
   },
   "register": {
     "alphabet": {

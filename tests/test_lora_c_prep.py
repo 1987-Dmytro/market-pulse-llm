@@ -139,9 +139,9 @@ def test_the_rationale_can_never_refuse_a_reply(reply, state):
 def test_the_scored_fields_are_still_strict():
     """The wrapper relaxes the fifth field and NOTHING else — the negative control for the above."""
     tail = '"msg_id": 7, "subject_id": null, "stance": null'
-    with pytest.raises(prompts.ParseError):
+    with pytest.raises(prompts.ParseError, match="outside its domain"):
         pass1_v3.parse_pass1_v3('{"rationale": "x", "subject_type": "кефир", %s}' % tail, msg_id=7)
-    with pytest.raises(prompts.ParseError):
+    with pytest.raises(prompts.ParseError, match="msg_id echoes"):
         pass1_v3.parse_pass1_v3(
             '{"rationale": "x", "msg_id": 9, "subject_type": null, "subject_id": null,'
             ' "stance": null}',
@@ -180,6 +180,28 @@ def test_a_planted_holdout_row_is_refused(monkeypatch):
     widened, _ = data.shared_pool()
     assert len(widened) == len(pool) + 1
     assert victim in {(one["thread"], one["msg_id"]) for one in widened}
+
+
+def test_the_holdout_exclusion_is_keyed_on_the_PAIR_and_not_the_msg_id(monkeypatch):
+    """The discriminating victim: a holdout row whose msg_id ALSO lives on a pool row elsewhere.
+
+    The test above proves the pool is a function of the holdout and would pass on a mutant that
+    excluded by `msg_id` alone. `@klopotenkofood:6040#21239` is a holdout row and `21239` is also
+    the id of a pool row in `@VARUS_channel:10470`, so releasing it must add ONE row and leave the
+    sibling standing. Under a msg_id-keyed exclusion the sibling would never have been in the pool
+    at all ([[select_one_row_refuse_ambiguity]], [[id_spaces_that_look_comparable]]).
+    """
+    pool, _ = data.shared_pool()
+    victim = ("@klopotenkofood:6040", 21239)
+    sibling = ("@VARUS_channel:10470", 21239)
+    holdout = sft.holdout_units()
+    assert victim in holdout
+    assert sibling in {(one["thread"], one["msg_id"]) for one in pool}
+    monkeypatch.setattr(sft, "holdout_units", lambda: holdout - {victim})
+    widened, _ = data.shared_pool()
+    keys = {(one["thread"], one["msg_id"]) for one in widened}
+    assert len(widened) == len(pool) + 1
+    assert victim in keys and sibling in keys
 
 
 def test_every_training_row_has_a_rationale_whose_cue_is_in_its_own_comment(train_rows):
@@ -322,12 +344,14 @@ def test_neighbours_refuses_a_query_in_that_thread():
 
 
 def test_the_synthetic_rows_are_balanced_inside_every_error_class():
+    """`classes_over_tolerance` is a TAUTOLOGY on any record that can exist — `balance()` raises on
+    that same list before returning it — so the assertion that matters is the spread itself."""
     written = syn.rows()
     assert len(written) == 160
     table = syn.balance(written)
-    assert not table["classes_over_tolerance"]
-    for cell in table["by_class"].values():
-        assert cell["spread"] <= syn.BALANCE_TOLERANCE
+    for name, cell in table["by_class"].items():
+        assert cell["spread"] <= syn.BALANCE_TOLERANCE, name
+        assert cell["rows"] == 40, name
 
 
 def test_a_synthetic_prior_is_refused(monkeypatch):
@@ -351,16 +375,32 @@ def test_the_four_contamination_lists_are_empty():
         assert report[f"{name}_n"] > 0, name
 
 
-def test_a_planted_echo_of_a_labelled_row_is_caught():
-    """The negative control for the contamination check: a synthetic row that copies a real comment
-    long enough to share a word 6-gram must appear in the list."""
+def test_a_planted_PARTIAL_echo_is_caught_and_the_producer_now_refuses_it():
+    """A partial echo, not a copy — one shared 6-gram with everything around it rewritten.
+
+    The instrument is stronger than a copy test and the control should say so. And
+    `contamination()` now RAISES rather than reporting: the STOP used to live only in this test,
+    so a producer could write a non-empty list and exit 0 ([[a_checker_whose_failure_is_silence]]).
+    """
     long_enough = next(
-        one for one in sft.labelled_units() if len(one["text"].split()) >= syn.SHINGLE + 2
+        one for one in sft.labelled_units() if len(one["text"].split()) >= syn.SHINGLE + 4
     )
+    words = long_enough["text"].split()
+    start = len(words) // 2 - syn.SHINGLE // 2
+    borrowed = " ".join(words[start : start + syn.SHINGLE])
     written = syn.rows()
-    planted = [{**written[0], "text": long_enough["text"]}] + written[1:]
-    report = syn.contamination(planted)
-    assert report["labelled_rows"] == [f"{written[0]['thread']}:{written[0]['msg_id']}"]
+    planted = [{**written[0], "text": f"зовсім інший початок {borrowed} і зовсім інший кінець"}]
+    planted += written[1:]
+    with pytest.raises(SystemExit, match="synthetic rows echo real text"):
+        syn.contamination(planted)
+
+
+def test_a_paraphrase_with_no_shared_six_gram_is_NOT_caught():
+    """The other direction: the check bounds echoes, not similarity, and says so by passing here."""
+    written = syn.rows()
+    planted = [{**written[0], "text": "цілком новий текст без жодного спільного шестиграма"}]
+    planted += written[1:]
+    assert syn.contamination(planted)["labelled_rows"] == []
 
 
 def test_a_synthetic_thread_can_never_collide_with_a_real_one():
@@ -419,10 +459,16 @@ def test_the_fourteen_are_inside_e_and_take_no_bar(pack):
         assert leg["bar"] in (None, "the registered three, all-or-RED"), name
 
 
-def test_dev_200_is_not_an_eval_reading(pack):
-    registration = json.loads(PREREG.read_text(encoding="utf-8"))
-    assert "TRAINING FIT only" in registration["bars"]["report_only"]["dev_200"]
-    assert "training data now" in pack["membership"]["dev_200_rule"].casefold()
+def test_dev_200_is_SPLIT_and_the_record_says_which_half_gives_which_reading(pack):
+    """dev-200 is not disjoint from E — 80 of its 200 rows are in it — and the record used to deny
+    that in the same document that listed them ([[a_count_in_prose_is_not_the_enumeration]])."""
+    split = pack["membership"]["dev_200_split"]
+    assert split["in_train"] + split["in_E"] + split["in_neither"] == split["of"] == 200
+    assert split["in_E"] == len(pack["membership"]["dev_200_in_e"]) == 80
+    rule = pack["membership"]["dev_200_rule"]
+    assert "SPLIT" in rule and "legitimate EVAL reading" in rule
+    # assert the CORRECTED claim, not the absence of a string the correction legitimately quotes
+    assert "not disjoint from it either" in pack["made"]["rule"]
 
 
 # --- the pass-2 builder ---------------------------------------------------------------------------

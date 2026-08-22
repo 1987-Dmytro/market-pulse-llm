@@ -252,7 +252,7 @@ def bars(data_record: dict) -> dict:
                 "the SIXTH look. A census row with multiplicity, NEVER a bar — docs/STATUS.md"
                 " п. 1 (д). All 14 are inside E because they are inside the reference threads"
             ),
-            "per_class_tables": "агreement by subject_type, both arms and both bases",
+            "per_class_tables": "agreement by subject_type, both arms and both bases",
             "pass_2_tables": "the DROP table and the subject_doubt table, per leg",
             "arm_a_vs_arm_b": "the ablation, on the same instruments",
         },
@@ -332,7 +332,12 @@ def money(eval_pack: dict, data_record: dict, train_rows: int, synthetic_rows: i
                 "value": PASS_1_SECONDS_PER_CALL,
                 "source": "results/prereg_pass1_window_r2.json::money.arithmetic.seconds_per_call.charged",
                 "derivation": "mean(probe-b) × mean(dev v2) / mean(dev base) = 6.135572, rounded up",
-                "measured_on": "v2 requests",
+                "measured_on": (
+                    "NOT v2. The level comes from pass1-probe-b's 64 paid rows at base V1"
+                    " (5.161578 s/call); only the UPLIFT ratio 2.72578/2.293075 is a v2"
+                    " measurement, and 5.161578 × that = 6.135572 re-derives exactly. No v2 request"
+                    " was ever measured near 6.14 ([[a_smoke_drawn_from_the_exam_is_not_a_rate_sample]])"
+                ),
                 "the_window_pod_measured": 2.694083,
                 "invalidating_condition": (
                     "this rate was measured on v2 requests. Three of the four legs send V3, whose"
@@ -340,8 +345,13 @@ def money(eval_pack: dict, data_record: dict, train_rows: int, synthetic_rows: i
                     f" {eval_pack['length']['v3']['widest']} characters against v2's"
                     f" {eval_pack['length']['v2']['widest']}. Carrying it unchanged for v3 is the"
                     " same class of error as the training rate below"
-                    " ([[the_smokes_rate_carries_the_smokes_transport]]). It is safe as a FLOOR"
-                    " and wrong as a ratio"
+                    " ([[the_smokes_rate_carries_the_smokes_transport]]). It is safe as a"
+                    " conservative CEILING and wrong as a ratio — an earlier version of this field"
+                    " said «floor», which is the dangerous direction under a cap. Empirically it"
+                    " behaves as a ceiling: 6.14 is 2.279× the window pod's direct v2 reading of"
+                    " 2.694083, and about 2× a width-scaled estimate for v3 (2.694083 × 8894/7781"
+                    " = 3.079). The pod-class headroom already inside the charge is an order of"
+                    " magnitude larger than the 14 % width growth this condition is about"
                 ),
             },
             "pass_2_seconds_per_thread": {
@@ -353,8 +363,10 @@ def money(eval_pack: dict, data_record: dict, train_rows: int, synthetic_rows: i
                     "r2 realised 23.760 s/thread against 97 charged — 0.245 of the charge — and it"
                     " measured the pod-class spread on this decode DIRECTLY at 1.008, not the 1.67"
                     " borrowed from pass 1. lora-c-run has a direct reading available and should"
-                    " use it; 97 is carried here because it is what is REGISTERED, and a lower"
-                    " charge is a decision that belongs in that contract"
+                    " use it — **with r2's own caveat attached: n = 1, and it is the shortest of"
+                    " the five replies** (docs/reports/pass2-signals-r2.md, Dv722). 97 is carried"
+                    " here because it is what is REGISTERED, and a lower charge is a decision that"
+                    " belongs in that contract"
                 ),
             },
             "training_seconds_per_step": {
@@ -362,13 +374,26 @@ def money(eval_pack: dict, data_record: dict, train_rows: int, synthetic_rows: i
                 "measured_on_arm_a": SECONDS_PER_STEP_MEASURED,
                 "compliant_slow_ceiling": SECONDS_PER_STEP_COMPLIANT_SLOW,
                 "compliant_slow_rule": (
-                    "121.0 s/step is the slowest rate that never trips lora-b's registered 122 s"
-                    " watchdog — its own worked example, and the worst case a run can be in while"
-                    " every rung says GO"
+                    "121.0 s/step never trips lora-b's registered 122 s watchdog (kill_clock rung"
+                    " 4, «s/step > 122 s over 5 consecutive log lines»). **It is NOT a rate at"
+                    " which every rung says GO:** in lora-b's own worked examples the entry at"
+                    " 121.0 carries verdict KILL, and the GO belongs to"
+                    " `compliant_slow_by_the_contracts_letter`, which lora-b describes as «the path"
+                    " the rung exists to close». So 121.0 is the rate that slips the WATCHDOG and"
+                    " is caught by the PROJECTION — and lora-c has no 122 s watchdog of its own,"
+                    " which is the real reason it cannot be carried unexamined"
                 ),
-                "source": "results/prereg_lora_b.json — both numbers, by name",
+                "sources": {
+                    "61.047": "results/prereg_lora_b.json::money.arithmetic.seconds_per_step",
+                    "68.442": "results/lora_b_run.json::measured_seconds_per_step — NOT the prereg;"
+                    " grep for it there returns zero",
+                    "121.0": "results/prereg_lora_b.json::money.arithmetic.cumulative"
+                    ".projection_gate.worked_examples.compliant_slow",
+                },
                 "invalidating_condition": (
-                    "ALL THREE are readings on sequences of at most 1 222 tokens"
+                    "TWO of the three are readings, and both on sequences of at most 1 222 tokens;"
+                    " 121.0 is not a reading at all but a worked example constructed from the 122 s"
+                    " watchdog. The length condition binds on 61.047 and 68.442"
                     " (results/prereg_lora_b.json::dropped_for_length.longest_kept). v3's rows are"
                     f" {data_record['tokens']['by_ratio']['min_observed']['min']}–"
                     f"{data_record['tokens']['by_ratio']['registered_bound_max']['max']} tokens at"
@@ -468,16 +493,19 @@ def reachability(data_record: dict) -> dict:
                 {
                     "where": "train_qlora.load_sft",
                     "message": (
-                        "@VARUS_channel:10367#20766: task 'pass1_comment_gm4_v3' is not"
-                        " 'pass1_comment_gm4_v1'"
+                        "@VARUS_channel:10349#20649: task 'pass1_comment_gm4_v3' is not"
+                        " 'pass1_comment_gm4_v1' — the FIRST row of the shipped file, driven today"
                     ),
                 },
                 {
                     "where": "train_qlora.build_pass1",
                     "message": (
-                        "…hashes 58718596d2dc909c… and pass1_sft.json registers"
-                        " ['79988046f96c981f', 'dc7c8390c3fff439'] — this is not a registered"
-                        " dataset. Stop rather than train on bytes nobody pre-registered."
+                        "«…is not a registered dataset. Stop rather than train on bytes nobody"
+                        " pre-registered.» — reached only by giving the row v1's task name first,"
+                        " because build_pass1 calls load_sft BEFORE its own sha check, so the"
+                        " task-name guard always fires first on the shipped file. Stated because"
+                        " lora-c-run's sibling trainer is scoped by these two messages and a"
+                        " message quoted without the state that produces it is not evidence"
                     ),
                 },
             ],
@@ -642,6 +670,8 @@ def build() -> dict:
                 "state": "PINNED and it REFUSES a v3 dataset — see reachability",
             },
             "packs": {
+                "results/lora_c_data.json": sha(DATA_RECORD),
+                "results/lora_c_synthetic.json": sha(SYNTHETIC_RECORD),
                 "results/lora_c_eval_pack.json": sha(EVAL_PACK),
                 "results/lora_c_pass2_pack.json": sha(PASS2_PACK),
                 "results/pass1_sft_v3_train.jsonl": sha(TRAIN_FILE),
@@ -710,6 +740,8 @@ def build() -> dict:
         },
         "frozen_when_the_pod_exists": [
             "results/prereg_lora_c.json",
+            "results/lora_c_data.json",
+            "results/lora_c_synthetic.json",
             "results/pass1_sft_v3_train.jsonl",
             "results/rationales_pass1_v1.jsonl",
             "results/synthetic_pass1_v1.jsonl",

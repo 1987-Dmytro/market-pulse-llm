@@ -36076,7 +36076,7 @@
       "@retsepty:7325:49626"
     ],
     "reference_payable": 106,
-    "rule": "holdout-100 ∪ every payable comment of the 16 reference threads. dev-200 is NOT in E: it is training data now, and its agreement is reported as training FIT only"
+    "rule": "holdout-100 ∪ every payable comment of the 16 reference threads. **dev-200 is NOT a CRITERION of E and it is not disjoint from it either**: 80 of its 200 rows land in E because they are holdout or reference-thread rows, 115 land in the training set and 5 in the refused thread. An earlier version of this field said «dev-200 is NOT in E» while the same document's membership.dev_200_in_e listed those 80 ([[a_count_in_prose_is_not_the_enumeration]])"
   },
   "membership": {
     "dev_200_in_e": [
@@ -36161,7 +36161,13 @@
       "@ya_Nenka:836#2579",
       "@ya_Nenka:836#2580"
     ],
-    "dev_200_rule": "dev-200 is TRAINING data now — its «our» rows are the training set's «our» rows. Its agreement is reported as training FIT and is not an eval reading",
+    "dev_200_rule": "dev-200 is SPLIT, and the split is what decides which reading a row gives. 115 of its 200 are in the training set and their agreement is training FIT; 80 are in E and their agreement is a legitimate EVAL reading; 5 are in the refused thread and give neither. Of dev's 49 «our» rows only 40 are in train — 8 are in E and not in train, so «its «our» rows ARE the training set's «our» rows» was false and the blanket «may never be quoted as an eval reading» forbade a reading that is valid",
+    "dev_200_split": {
+      "in_E": 80,
+      "in_neither": 5,
+      "in_train": 115,
+      "of": 200
+    },
     "gold_14": [
       "@VARUS_channel:10348#20664",
       "@VARUS_channel:10613#21599",
@@ -36182,6 +36188,172 @@
     "holdout_100": 98,
     "reference_thread": 106
   },
+  "own_text_in_examples": {
+    "gating_bar_denominator": 98,
+    "mechanism": "the own-thread rule blocks the query's THREAD, not its TEXT; neighbours() maximises Jaccard over character 3-grams and an identical string scores 1.0, so the duplicate is chosen first and deterministically wherever the window reposts a comment verbatim",
+    "n": 22,
+    "of": 198,
+    "on_the_gating_bar": 5,
+    "remedy_named_not_taken": "refuse a neighbour whose whitespace-collapsed casefolded text equals the query's — one comparison, and it would change the registered selection rule the contract mandates. The operator's, not the executor's",
+    "rows": [
+      {
+        "id": "@VARUS_channel:10348#20665",
+        "in_holdout_100": false,
+        "msg_id": 20665,
+        "the_twins_label": "сеть_ритейлер",
+        "thread": "@VARUS_channel:10348"
+      },
+      {
+        "id": "@VARUS_channel:10348#20673",
+        "in_holdout_100": false,
+        "msg_id": 20673,
+        "the_twins_label": "сеть_ритейлер",
+        "thread": "@VARUS_channel:10348"
+      },
+      {
+        "id": "@VARUS_channel:10613#21609",
+        "in_holdout_100": false,
+        "msg_id": 21609,
+        "the_twins_label": "null",
+        "thread": "@VARUS_channel:10613"
+      },
+      {
+        "id": "@mandziak:3676#47897",
+        "in_holdout_100": false,
+        "msg_id": 47897,
+        "the_twins_label": "null",
+        "thread": "@mandziak:3676"
+      },
+      {
+        "id": "@mandziak:3684#48009",
+        "in_holdout_100": false,
+        "msg_id": 48009,
+        "the_twins_label": "не_наш_рынок",
+        "thread": "@mandziak:3684"
+      },
+      {
+        "id": "@mandziak:3684#48016",
+        "in_holdout_100": false,
+        "msg_id": 48016,
+        "the_twins_label": "null",
+        "thread": "@mandziak:3684"
+      },
+      {
+        "id": "@mandziak:3684#48018",
+        "in_holdout_100": false,
+        "msg_id": 48018,
+        "the_twins_label": "null",
+        "thread": "@mandziak:3684"
+      },
+      {
+        "id": "@mandziak:3684#48020",
+        "in_holdout_100": false,
+        "msg_id": 48020,
+        "the_twins_label": "не_наш_рынок",
+        "thread": "@mandziak:3684"
+      },
+      {
+        "id": "@mandziak:3684#48036",
+        "in_holdout_100": false,
+        "msg_id": 48036,
+        "the_twins_label": "не_наш_рынок",
+        "thread": "@mandziak:3684"
+      },
+      {
+        "id": "@mandziak:3684#48040",
+        "in_holdout_100": false,
+        "msg_id": 48040,
+        "the_twins_label": "null",
+        "thread": "@mandziak:3684"
+      },
+      {
+        "id": "@mandziak:3684#48041",
+        "in_holdout_100": false,
+        "msg_id": 48041,
+        "the_twins_label": "null",
+        "thread": "@mandziak:3684"
+      },
+      {
+        "id": "@mandziak:3684#48064",
+        "in_holdout_100": false,
+        "msg_id": 48064,
+        "the_twins_label": "null",
+        "thread": "@mandziak:3684"
+      },
+      {
+        "id": "@mandziak:3689#48067",
+        "in_holdout_100": false,
+        "msg_id": 48067,
+        "the_twins_label": "null",
+        "thread": "@mandziak:3689"
+      },
+      {
+        "id": "@mandziak:3689#48268",
+        "in_holdout_100": false,
+        "msg_id": 48268,
+        "the_twins_label": "null",
+        "thread": "@mandziak:3689"
+      },
+      {
+        "id": "@mandziak:3746#49218",
+        "in_holdout_100": true,
+        "msg_id": 49218,
+        "the_twins_label": "null",
+        "thread": "@mandziak:3746"
+      },
+      {
+        "id": "@mandziak:3768#49225",
+        "in_holdout_100": true,
+        "msg_id": 49225,
+        "the_twins_label": "null",
+        "thread": "@mandziak:3768"
+      },
+      {
+        "id": "@retsepty:7312#49531",
+        "in_holdout_100": false,
+        "msg_id": 49531,
+        "the_twins_label": "не_наш_рынок",
+        "thread": "@retsepty:7312"
+      },
+      {
+        "id": "@retsepty:7312#49560",
+        "in_holdout_100": false,
+        "msg_id": 49560,
+        "the_twins_label": "не_наш_рынок",
+        "thread": "@retsepty:7312"
+      },
+      {
+        "id": "@retsepty:7313#49532",
+        "in_holdout_100": true,
+        "msg_id": 49532,
+        "the_twins_label": "не_наш_рынок",
+        "thread": "@retsepty:7313"
+      },
+      {
+        "id": "@retsepty:7320#49586",
+        "in_holdout_100": true,
+        "msg_id": 49586,
+        "the_twins_label": "не_наш_рынок",
+        "thread": "@retsepty:7320"
+      },
+      {
+        "id": "@retsepty:7325#49626",
+        "in_holdout_100": true,
+        "msg_id": 49626,
+        "the_twins_label": "не_наш_рынок",
+        "thread": "@retsepty:7325"
+      },
+      {
+        "id": "@retsepty:7327#49632",
+        "in_holdout_100": false,
+        "msg_id": 49632,
+        "the_twins_label": "не_наш_рынок",
+        "thread": "@retsepty:7327"
+      }
+    ],
+    "severity": "5 of the 98 rows the registered bar «holdout-100 agreement ≥ 64 of 100» is scored on are shown their own answer. That INFLATES the absolute reading the bar stands on. It is neutral to arm-vs-base and to the A/B ablation, because every leg is rendered from one `chosen`",
+    "what": "the item is shown a byte-identical copy of its own comment, carrying a label, inside its own <examples> block"
+  },
   "phase": "lora-c-prep",
   "pool": {
     "arithmetic": "650 − 100 − 41 + 6 = 515 — the two exclusions overlap and the overlap is added back once",
@@ -36191,7 +36363,7 @@
   },
   "produced_by": {
     "script": "scripts/build_lora_c_eval_pack.py",
-    "sha256": "712bcbc27caaa7a8a3ff3c773f767777b9c13dcda9ab8481570c6f4172c21b24"
+    "sha256": "144ff0f19839c8520e8a2b158f21137eee9f88b54c61ec124fccb3c02a91f01b"
   },
   "reading": "the pod renders each item itself, from the fields in it, and refuses unless its sha equals the one above. Shipping the rendered string would only prove the two machines agree about a string; what has to be true is that the model is shown what the registration registered",
   "refused": [

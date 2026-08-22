@@ -70,7 +70,7 @@
   },
   "produced_by": {
     "script": "scripts/build_lora_c_data.py",
-    "sha256": "2e8976c28c4fdb0abcdec362adc832b5ffd6104175d4ae5ca868d15ef6518256"
+    "sha256": "30db99098f9b9ce32f4fbaf063ccc4a55a8b43ca01b3f2b181bd7941c7eb5dd1"
   },
   "rationales": {
     "author": "claude-code",
@@ -189,12 +189,14 @@
   },
   "sampler": {
     "classes_under_the_floor": [],
-    "expected_draws_per_epoch": {
-      "null": 101.1999,
-      "категория_личное": 101.2,
-      "не_наш_рынок": 101.1999,
-      "сеть_ритейлер": 101.2
+    "classes_under_the_floor_rule": "measured draws, not the product — and the class that WOULD have landed on the floor (молочный_бренд, one pool row) is absent from this table entirely because it has zero rendered rows. The floor binds on nothing here, and not because every class clears it",
+    "draws_per_epoch_MEASURED": {
+      "null": 126.48,
+      "категория_личное": 127.37,
+      "не_наш_рынок": 126.22,
+      "сеть_ритейлер": 125.93
     },
+    "draws_rule": "the sampler itself, driven over 60 epochs of the real rows. train_qlora.sampling_order calls random.choices, which NORMALISES the weights, so the naive product n_c·w_c is NOT the expected draw here",
     "floor": 8,
     "rows_per_class": {
       "null": 165,
@@ -204,6 +206,18 @@
     },
     "rule": "w_c = N/(5·n_c) capped at 8.0 — results/prereg_lora_b.json's arms.*.sampler_weights, by calling train_qlora.class_weights, the function the trainer samples with",
     "second_rule": "«no class under 8 rows per epoch-equivalent». Expected draws are n_c·w_c = min(N/5, 8·n_c), so the majority class is capped at N/5 by the first rule and the floor can only bind on a class with fewer than 8 rows. APPLIED: none — the first rule already satisfies it, and the smallest class lands exactly on the floor",
+    "the_majority_cap_is_N_over_4_not_N_over_5": "with four classes in the sampler the cap lands at N/4 = 126.5, not N/5 = 101.2",
+    "the_naive_product_and_why_it_is_wrong": {
+      "against_row_count": 506,
+      "value": {
+        "null": 101.2,
+        "категория_личное": 101.2,
+        "не_наш_рынок": 101.2,
+        "сеть_ритейлер": 101.2
+      },
+      "weights_sum_to": 404.8,
+      "why": "w_c = N/(5·n_c) is written for FIVE classes; the rendered set has FOUR because молочный_бренд has zero rows, so the vector sums to 404.8 of 506 and normalisation scales every class up by 506/404.8 = 1.25. The product under-reports the real draw by 25 %, and one section of this record naming that missing class beside another publishing a number that assumes it is exactly the shape this contract keeps finding"
+    },
     "weights": {
       "null": 0.613333,
       "категория_личное": 2.53,

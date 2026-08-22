@@ -11,9 +11,10 @@ a UNION and its size is `100 + 106 − 6 = 200`, not 206 ([[a_count_in_prose_is_
 
 **The neighbours come from the SHARED pool of 515 and not from the 650.** That is the whole point of
 the pool rule: base v2, base v3, arm A and arm B are answered against one neighbour set, so the
-paired table compares prompts and adapters and never neighbours. It also means E's own rows can
-never be their own examples — every E row is either a holdout row or a reference-thread row, and the
-pool excludes both by construction.
+paired table compares prompts and adapters and never neighbours. It keeps every E row's own ID out
+of its own examples — the pool excludes holdout and reference-thread rows by construction — but
+**not its own TEXT**: see :func:`own_text_in_examples`, which counts 22 of 198 and 5 of the 98 rows
+the gating bar is scored on.
 
 **The fourteen are inside E and take no bar.** They are answered as part of the reference threads and
 scored as a REPORT-ONLY census row — the SIXTH look at the sealed gold. `docs/STATUS.md` п. 1 (д):
@@ -103,8 +104,12 @@ def eval_pairs() -> tuple[list[tuple[str, int]], dict]:
     overlap = sorted(set(holdout) & set(reference))
     return union, {
         "rule": (
-            "holdout-100 ∪ every payable comment of the 16 reference threads. dev-200 is NOT in E:"
-            " it is training data now, and its agreement is reported as training FIT only"
+            "holdout-100 ∪ every payable comment of the 16 reference threads. **dev-200 is NOT a"
+            " CRITERION of E and it is not disjoint from it either**: 80 of its 200 rows land in E"
+            " because they are holdout or reference-thread rows, 115 land in the training set and 5"
+            " in the refused thread. An earlier version of this field said «dev-200 is NOT in E»"
+            " while the same document's membership.dev_200_in_e listed those 80"
+            " ([[a_count_in_prose_is_not_the_enumeration]])"
         ),
         "holdout": len(holdout),
         "reference_payable": len(reference),
@@ -145,6 +150,68 @@ def render_pair(fields: dict, chosen: list[dict], by_key: dict) -> dict:
             "examples": examples,
             "examples_chosen": v2["examples_chosen"],
         },
+    }
+
+
+def own_text_in_examples(items: list[dict], holdout: set) -> dict:
+    """E rows shown a BYTE-IDENTICAL copy of their own comment, labelled, inside their own block.
+
+    **This is a real leak and it lands on the gating bar.** The own-thread rule blocks
+    `pick["thread"] == one["thread"]` and nothing else, while `fewshot.neighbours` picks on maximum
+    Jaccard over character 3-grams — an identical string scores exactly 1.0, so where the window
+    reposts a comment verbatim across threads the duplicate is not merely eligible, it is chosen
+    FIRST, deterministically. The window is full of spam and boilerplate reposted word for word,
+    which is why this has volume.
+
+    It is neutral to arm-vs-base and to the A/B ablation — `render_pair` builds both legs from ONE
+    `chosen` and the adapter is a runner flag, so every leg sees the same contaminated block — and
+    it is NOT neutral to the absolute reading `P1_holdout_agreement ≥ 64 of 100` stands on.
+
+    Reported and not repaired: the contract mandates `build_pass1_fewshot_packs.neighbours`, so the
+    selection rule is the registered instrument and changing it is the operator's
+    ([[a_prefilter_cannot_certify_the_population]]).
+    """
+    hits = []
+    for one in items:
+        for example in one["examples"]:
+            if data.norm(example["text"]) == data.norm(one["text"]):
+                hits.append(
+                    {
+                        "id": one["id"],
+                        "thread": one["thread"],
+                        "msg_id": one["msg_id"],
+                        "the_twins_label": fewshot.key(example["label"]),
+                        "in_holdout_100": (one["thread"], one["msg_id"]) in holdout,
+                    }
+                )
+                break
+    gating = [one for one in hits if one["in_holdout_100"]]
+    return {
+        "what": (
+            "the item is shown a byte-identical copy of its own comment, carrying a label, inside"
+            " its own <examples> block"
+        ),
+        "mechanism": (
+            "the own-thread rule blocks the query's THREAD, not its TEXT; neighbours() maximises"
+            " Jaccard over character 3-grams and an identical string scores 1.0, so the duplicate is"
+            " chosen first and deterministically wherever the window reposts a comment verbatim"
+        ),
+        "n": len(hits),
+        "of": len(items),
+        "on_the_gating_bar": len(gating),
+        "gating_bar_denominator": 98,
+        "severity": (
+            f"{len(gating)} of the 98 rows the registered bar «holdout-100 agreement ≥ 64 of 100»"
+            " is scored on are shown their own answer. That INFLATES the absolute reading the bar"
+            " stands on. It is neutral to arm-vs-base and to the A/B ablation, because every leg is"
+            " rendered from one `chosen`"
+        ),
+        "rows": hits,
+        "remedy_named_not_taken": (
+            "refuse a neighbour whose whitespace-collapsed casefolded text equals the query's — one"
+            " comparison, and it would change the registered selection rule the contract mandates."
+            " The operator's, not the executor's"
+        ),
     }
 
 
@@ -237,13 +304,10 @@ def build() -> dict:
     ]
     if own:
         raise SystemExit(f"{len(own)} items are shown a neighbour from their own thread — stop.")
-    synthetic_in_pool = sorted(
-        one["thread"] for one in pool if one["thread"].startswith("synthetic:")
-    )
-    if synthetic_in_pool:
-        raise SystemExit(
-            f"synthetic threads reached the neighbour pool: {synthetic_in_pool}. Stop."
-        )
+    # the pool-isolation guard used to be repeated here as well. It was a word-for-word DUPLICATE of
+    # the one at the top of this function and it was DEAD: nothing between the two mutates `pool`,
+    # so the first copy always fires first. Moving a guard and leaving the old copy behind is how a
+    # file grows a check nobody can ever see run ([[an_empty_class_is_the_definitions_answer]])
     # INVARIANT ASSERTION and NOT a guard, unlike its twin above the rationale join: E is built from
     # `sft.holdout_units()` ∪ `payable_of_reference()` and neither enumeration can yield a
     # `synthetic:` thread, so this cannot fire as the pack stands. It becomes a real guard the day E
@@ -281,6 +345,7 @@ def build() -> dict:
             for name in ("v2", "v3")
         ],
         "refused": refused,
+        "own_text_in_examples": own_text_in_examples(items["v3"], holdout),
         "membership": {
             "gold_14": sorted(one["id"] for one in items["v2"] if one["membership"]["gold_14"]),
             "gold_14_rule": (
@@ -296,9 +361,14 @@ def build() -> dict:
                 one["id"] for one in items["v2"] if one["membership"]["dev_200"]
             ),
             "dev_200_rule": (
-                "dev-200 is TRAINING data now — its «our» rows are the training set's «our» rows."
-                " Its agreement is reported as training FIT and is not an eval reading"
+                "dev-200 is SPLIT, and the split is what decides which reading a row gives. 115 of"
+                " its 200 are in the training set and their agreement is training FIT; 80 are in E"
+                " and their agreement is a legitimate EVAL reading; 5 are in the refused thread and"
+                " give neither. Of dev's 49 «our» rows only 40 are in train — 8 are in E and not in"
+                " train, so «its «our» rows ARE the training set's «our» rows» was false and the"
+                " blanket «may never be quoted as an eval reading» forbade a reading that is valid"
             ),
+            "dev_200_split": {"in_train": 115, "in_E": 80, "in_neither": 5, "of": 200},
         },
         "instruments": {
             **fewshot.instruments(),
