@@ -161,13 +161,21 @@ def prompt_sha256(task: str) -> str:
 
 
 def entity_block(entities: list[dict]) -> str:
-    """The thread's bought names, rendered as pass 1 rendered them: `name → subject_type → reading`.
+    """The thread's bought names, rendered as `name → one phrase` — and NOT with their subject_type.
 
-    The same shape pass 1 showed the model, and deliberately without the `quote` field: the quotes
-    are in the block for the SCORER (bar 2 resolves a brand out of the name and the quote through
-    the watchlist matcher) and they are not what a reader of the block needs to resolve a pronoun.
-    An empty block renders as one explicit line rather than as nothing, because «this thread
-    resolved no entity» and «the block was forgotten» must not look the same to the model.
+    Pass 1 rendered `name → subject_type → reading` because pass 1's whole question was which of the
+    four words a comment deserved. Pass 2's is not, and carrying the word here puts TWO subject
+    vocabularies in one request: `@matusi_ukr:22303` — F2, a smoke thread — would show
+    `Ласунка → молочный_бренд` above a comment pass 1 labelled `категория_личное`, and the most
+    natural signal in that thread is then a RelabelError the request itself invited. The type is
+    still in the BLOCK, which is what bar 2 is scored on; it is only out of the rendering
+    ([[a_prompt_revision_is_an_instrument_swap]] — this one is registered before any pod).
+
+    The `quote` field is out for the older reason: the quotes are in the block for the SCORER, which
+    resolves a brand out of the name and the quote through the watchlist matcher, and they are not
+    what a reader of the block needs to resolve a pronoun. An empty block renders as one explicit
+    line rather than as nothing, because «this thread resolved no entity» and «the block was
+    forgotten» must not look the same to the model.
     """
     rows = []
     for one in entities:
@@ -178,8 +186,7 @@ def entity_block(entities: list[dict]) -> str:
                 " row resolves nothing"
             )
         reading = str(one.get("reading") or "").strip()
-        subject_type = str(one.get("subject_type") or "").strip() or "?"
-        rows.append(f"{name} → {subject_type}" + (f" → {reading}" if reading else ""))
+        rows.append(f"{name} → {reading}" if reading else name)
     return "\n".join(rows) if rows else "(this thread resolved no entity)"
 
 
@@ -353,13 +360,23 @@ def parse_pass2(reply: str, *, unit: dict) -> dict:
     if unknown:
         raise prompts.ParseError(f"noise names msg_id {unknown[0]}, which was not in this request")
 
-    doubts = {}
+    # REPORT-ONLY means it cannot refuse a thread. `prompts._flag` raises on `0`, on `null` and on
+    # a Ukrainian yes — and a field the contract says changes nothing downstream would then have the
+    # power to throw away a whole thread's signals. Unreadable is recorded as its own state and
+    # counted; the row keeps every gating field it had ([[an_abstention_is_an_answer]])
+    doubts, unreadable = {}, []
     for one in prompts._objects(payload, "per_comment"):
         if "msg_id" not in one:
             continue
-        doubts[prompts._msg_id(one["msg_id"], "per_comment.msg_id")] = prompts._flag(
-            one.get("subject_doubt", False), "per_comment.subject_doubt"
-        )
+        try:
+            msg_id = prompts._msg_id(one["msg_id"], "per_comment.msg_id")
+        except prompts.ParseError:
+            continue
+        try:
+            doubts[msg_id] = prompts._flag(one.get("subject_doubt", False), "subject_doubt")
+        except prompts.ParseError:
+            doubts[msg_id] = None
+            unreadable.append(msg_id)
     for one in verdict["per_comment"]:
         one["subject_doubt"] = doubts.get(one["msg_id"], False)
 
@@ -371,6 +388,7 @@ def parse_pass2(reply: str, *, unit: dict) -> dict:
             "the thread's bought entity block, placed into the payload between the reader parser's"
             " two halves. pass 2 was not asked for it and never re-resolved it"
         ),
+        "subject_doubt_unreadable": sorted(unreadable),
         "accounting": {
             "given": sorted(given),
             "in_both_lists": sorted(set(kept) & set(dropped)),

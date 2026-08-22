@@ -1290,6 +1290,111 @@ def test_over_the_whole_population_every_bar_is_SCORED():
     assert bars["3_noise"]["passed"] is True
 
 
+def echo_reply(item: dict, relabel: str | None = None, doubt=False) -> str:
+    """A reply that repeats every pass-1 label — the shape the parser is supposed to accept."""
+    return json.dumps(
+        {
+            "thread": {"channel": item["channel"], "post_id": item["post_id"]},
+            "post_summary": "пост",
+            "discussion_summary": "обговорення",
+            "signals": [],
+            "per_comment": [
+                {
+                    "msg_id": row["msg_id"],
+                    "subject_type": (
+                        relabel
+                        if relabel and index == 0 and row["subject_type"] != relabel
+                        else row["subject_type"]
+                    ),
+                    "subject_id": row["subject_id"],
+                    "stance": row["stance"],
+                    "aspects": [],
+                    "subject_doubt": doubt,
+                    "note": None,
+                }
+                for index, row in enumerate(item["comments"])
+            ],
+            "noise": [],
+        },
+        ensure_ascii=False,
+    )
+
+
+def test_a_REFUSED_reply_is_not_an_unread_thread_and_bar_3_says_which():
+    """A relabelling on N2 used to delete bar 3 with «the go/no-go stopped the run» — which is
+    false about a unit the pod answered ([[the_empty_class_eats_the_parse_failures]])."""
+    gold = json.loads((RESULTS / "reader_gold_w1_r2.json").read_text(encoding="utf-8"))
+    rows = [
+        {
+            "id": one["id"],
+            "rendering_sha256": one["rendering_sha256"],
+            "reply": echo_reply(
+                one, relabel="категория_личное" if one["id"] == "@VARUS_channel:10366" else None
+            ),
+            "balanced": True,
+            "seconds": 30.0,
+        }
+        for one in ITEMS
+    ]
+    parsed, refused = scoring.answers(PACK, rows)
+    assert len(refused) == 1 and "RelabelError" in refused[0]["cause"]
+    bars = scoring.bar_states(
+        RECORD,
+        gold,
+        parsed,
+        set(parsed),
+        attempted={one["id"] for one in rows},
+        refused_threads={one["id"]: one["cause"] for one in refused},
+    )
+    three = bars["3_noise"]
+    assert three["verdict"] == "UNSCORED"
+    assert three["threads_answered_and_refused"] == ["@VARUS_channel:10366"]
+    assert "ANSWERED these threads and the parser refused" in three["unscored_reason"]
+    assert "go/no-go stopped the run" not in three["unscored_reason"]
+    assert three["threads_not_read"] == [], "the thread WAS read"
+    # the bars whose cases parsed are untouched
+    assert bars["1_flagships"]["verdict"] == "SCORED"
+    assert bars["2_entity_cases"]["verdict"] == "SCORED"
+
+
+def test_subject_doubt_is_REPORT_ONLY_and_cannot_refuse_a_thread():
+    """`prompts._flag` raises on 0, on null and on a Ukrainian yes. A field the contract says
+    changes nothing downstream may not throw away a thread's signals."""
+    item = BY_ID["@VARUS_channel:10613"]
+    for value in (0, None, "ні", "так", 1.5, []):
+        verdict = pass2.parse_pass2(echo_reply(item, doubt=value), unit=item)
+        assert len(verdict["per_comment"]) == len(item["comments"])
+        assert verdict["per_comment"][0]["subject_doubt"] is None
+        assert verdict["subject_doubt_unreadable"] == sorted(
+            row["msg_id"] for row in item["comments"]
+        )
+    # and a boolean still reads as one, both ways
+    assert (
+        pass2.parse_pass2(echo_reply(item, doubt=True), unit=item)["per_comment"][0][
+            "subject_doubt"
+        ]
+        is True
+    )
+    assert (
+        pass2.parse_pass2(echo_reply(item, doubt=False), unit=item)["subject_doubt_unreadable"]
+        == []
+    )
+
+
+def test_no_request_carries_a_subject_word_the_prompt_does_not_define():
+    """The entity block used to render pass 1's four-word taxonomy above comments carrying one of
+    three — so F2's own request offered `Ласунка → молочный_бренд` over a comment pass 1 labelled
+    `категория_личное`, and the natural signal was a RelabelError the request invited."""
+    for item in ITEMS:
+        block = pass2.entity_block(item["entities"])
+        for word in prompts.READER_ENTITY_TYPES:
+            assert word not in block, f"{item['id']} renders {word}"
+    # the type is still in the BLOCK, which is what bar 2 is scored on
+    f2 = BY_ID["@matusi_ukr:22303"]
+    assert any(one["subject_type"] == "молочный_бренд" for one in f2["entities"])
+    assert "Ласунка" in pass2.entity_block(f2["entities"])
+
+
 def test_the_row_weighted_reading_is_computed_beside_the_charge_and_gates_nothing(
     tmp_path, monkeypatch
 ):

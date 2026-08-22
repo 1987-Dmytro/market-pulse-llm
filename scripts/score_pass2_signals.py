@@ -270,7 +270,14 @@ def threads_of(gold: dict, key: str, cases: list[str]) -> list[str]:
     )
 
 
-def bar_states(record: dict, gold: dict, verdicts: dict, seen: set[str]) -> dict:
+def bar_states(
+    record: dict,
+    gold: dict,
+    verdicts: dict,
+    seen: set[str],
+    attempted: set[str] | None = None,
+    refused_threads: dict[str, str] | None = None,
+) -> dict:
     """The three bars, each with its reachability named beside its number.
 
     **Every bar goes through `readerscore.bar_state` first**, and that is not decoration. Under a
@@ -298,7 +305,32 @@ def bar_states(record: dict, gold: dict, verdicts: dict, seen: set[str]) -> dict
         for one in wanted["2_entity_cases"]
         if one not in {row["thread"] for row in reach["entity_cases"] if row["id"] in unreachable}
     ]
-    state = {name: readerscore.bar_state(rows, seen) for name, rows in wanted.items()}
+    # a thread whose reply was ANSWERED and REFUSED is not a thread that was never read, and the
+    # two must not share a state: the shipped reason says «the go/no-go stopped the run before the
+    # population was bought», which is false about a unit the pod answered. A bar cannot be reported
+    # off a reply nobody could read either — so it is UNSCORED with the REFUSAL as its cause
+    # ([[the_empty_class_eats_the_parse_failures]], [[an_empty_field_hides_several_states]])
+    attempted = seen if attempted is None else attempted
+    refused_threads = refused_threads or {}
+    state = {}
+    for name, threads in wanted.items():
+        one = readerscore.bar_state(threads, attempted)
+        unreadable = [thread for thread in threads if thread in refused_threads]
+        if unreadable and one["scored"]:
+            one = {
+                **one,
+                "scored": False,
+                "verdict": "UNSCORED",
+                "threads_answered_and_refused": unreadable,
+                "reason": (
+                    "the pod ANSWERED these threads and the parser refused the replies —"
+                    f" {', '.join(f'{thread} ({refused_threads[thread]})' for thread in unreadable)}."
+                    " That is not a thread nobody read and it is not a number: this bar cannot be"
+                    " reported off a reply nobody could read, and a REFUSAL is its own finding"
+                ),
+            }
+        one.setdefault("threads_answered_and_refused", [])
+        state[name] = one
     one = readerscore.flagships(gold, verdicts, seen, collapsed=False)
     one_collapsed = readerscore.flagships(gold, verdicts, seen, collapsed=True)
     two = readerscore.entity_cases(gold, verdicts, seen, table)
@@ -356,6 +388,7 @@ def bar_states(record: dict, gold: dict, verdicts: dict, seen: set[str]) -> dict
             "threads_registered": state[name]["threads_registered"],
             "threads_not_read": state[name]["threads_not_read"],
             "unscored_reason": state[name]["reason"],
+            "threads_answered_and_refused": state[name]["threads_answered_and_refused"],
             # a bar whose cases were not read has NO result — not a zero and not a pass
             **(
                 {} if state[name]["scored"] else {"passed": None, "result": None, "collapsed": None}
@@ -373,6 +406,7 @@ def build() -> dict:
     state = json.loads(RUN.read_text(encoding="utf-8")) if RUN.exists() else {}
     v5b = json.loads(summary.read_text_or_refuse(V5B))
 
+    by_id = {one["id"]: one for one in pack["legs"][0]["items"]}
     parsed, refused = answers(pack, rows)
     seen = set(parsed)
     causes = Counter(one["cause"] for one in refused)
@@ -402,7 +436,14 @@ def build() -> dict:
             "arm_rule": record["bars"]["completeness"]["arm_rule"],
         },
         "go_no_go": go[-1] if go else None,
-        "bars": bar_states(record, gold, parsed, seen),
+        "bars": bar_states(
+            record,
+            gold,
+            parsed,
+            seen,
+            attempted={one["id"] for one in rows if one.get("id") in by_id} | seen,
+            refused_threads={one["id"]: one["cause"] for one in refused if one["id"] in by_id},
+        ),
         "scorecard": scorecard(record, gold, parsed, seen, record["reachability"]),
         "drop_table": drop_table(pack, parsed),
         "subject_doubt": doubt_table(pack, parsed),

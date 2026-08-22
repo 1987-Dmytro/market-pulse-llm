@@ -548,7 +548,7 @@
     },
     "module": {
       "path": "src/market_pulse/pass2.py",
-      "sha256": "f921339fb3c85891e040d92b9ea76564c36ebdd557b3d31f2d5ab38a32abb1df"
+      "sha256": "a89629414a40d73babccb5271fe8ddd07e447357918d2eb62d4910276fee18fd"
     },
     "pack_builder": {
       "path": "scripts/build_pass2_pack.py",
@@ -566,7 +566,7 @@
     },
     "population": {
       "record": "results/pass2_pack.json",
-      "sha256": "7608f8fa8c27314480f2a44b6c6d7cc877f2b107c8cc1a28a8fc91fe309f9f08"
+      "sha256": "8a9caf5cf2c2eed174551071b9df72086eff8a85e27a55a4ad0577bdf3cd2e22"
     },
     "producer": {
       "path": "scripts/write_pass2_prereg.py",
@@ -630,7 +630,7 @@
     "task": "pass2_thread_gm4_v1",
     "verdict_producer": {
       "path": "scripts/score_pass2_signals.py",
-      "sha256": "1edee847be837978106a113a0fa04a73e0a07a5437baf302b03ab89b8014b17c"
+      "sha256": "01743c3a748f807189099ec258f5e4c041a80f5cac79ea13bb914f367d49c2c8"
     }
   },
   "kill_clock": [
@@ -854,7 +854,7 @@
     "payable_comments_is_the_UNIT_count": "the same aliasing the pack carries, and for the same reason: `gate_pass1_window.main` hard-subscripts `population.payable_comments` in BOTH files before every rung that reads a pack, and that file is pinned by a sealed record of a closed paid session. A pass-2 unit is a THREAD. Without this key `--projection`, `--watch`, `--completeness` and `--close` all die on a KeyError — on a pod that is already billing, with nothing watching it",
     "record": "results/pass2_pack.json",
     "remaining_after_the_smoke": 74,
-    "sha256": "7608f8fa8c27314480f2a44b6c6d7cc877f2b107c8cc1a28a8fc91fe309f9f08",
+    "sha256": "8a9caf5cf2c2eed174551071b9df72086eff8a85e27a55a4ad0577bdf3cd2e22",
     "smoke_units": 5,
     "threads_pass_2_would_not_call": 48,
     "units": 79,
