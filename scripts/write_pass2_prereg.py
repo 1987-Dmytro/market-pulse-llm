@@ -651,8 +651,10 @@ def kill_clock(people: dict) -> list[dict]:
             "multiplier": PROJECTION_MULTIPLIER,
             "worked_arm": (
                 f"the full run fits iff charged_full ≤ (hard_stop − overhead − pre_generation −"
-                f" smoke_seconds) / {remaining}; at a {smoke_worst:.0f} s smoke that is"
-                f" {knife:.4f} s/call"
+                f" smoke_seconds − go_wait_seconds) / {remaining}; at a {smoke_worst:.0f} s smoke"
+                f" and a ZERO wait that is {knife:.4f} s/call, and at the full registered wait it"
+                " is 40.5405. The gate projects from the clock at the moment it decides, so the"
+                " wait it actually took is inside the number — these two are the band"
             ),
             "knife_edge_seconds_per_call": round(knife, 4),
             "cumulative_not_create_elapsed": (
@@ -800,7 +802,29 @@ def arithmetic(people: dict) -> dict:
             "knife_edge_seconds_per_call": round(knife, 4),
             "knife_edge_formula": (
                 f"({HARD_STOP_SECONDS:.0f} − {OVERHEAD_SECONDS:.0f} − {pre_generation:.0f} −"
-                f" smoke_seconds) / {remaining}, at a {smoke_generation:.0f} s smoke"
+                f" smoke_seconds − go_wait_seconds) / {remaining}, at a"
+                f" {smoke_generation:.0f} s smoke"
+            ),
+            "knife_edge_at_a_zero_go_wait": round(knife, 4),
+            "knife_edge_at_the_full_go_wait": round(
+                (
+                    HARD_STOP_SECONDS
+                    - OVERHEAD_SECONDS
+                    - pre_generation
+                    - smoke_generation
+                    - GO_WAIT_SECONDS
+                )
+                / remaining,
+                4,
+            ),
+            "the_wait_is_billed_and_the_band_is_why": (
+                f"the pod sits in `wait_for_go` while the Mac decides, and those seconds are"
+                f" BILLED. The contract's own printed figure — {knife:.4f} — is the arm at a ZERO"
+                " wait, and the other end of the band is the arm at the full registered wait. The"
+                " gate does not use either: `--go-no-go` projects from `cumulative_billed_seconds`"
+                " AT THE MOMENT the decision is taken, so whatever the wait actually cost is"
+                " already inside the number that decides. These two are the band a reader should"
+                " have in front of them, and neither is a threshold"
             ),
             "what_a_GO_needs": (
                 f"smoke_mean ≤ {knife / PROJECTION_MULTIPLIER:.4f} AND smoke_max ≤ {knife:.4f}."
@@ -1137,9 +1161,27 @@ def h6(held: dict, people: dict, sums: dict, clock: list[dict]) -> dict:
         ),
         row(
             "rung_S_prime_knife_edge_exact",
-            "the same division, unrounded",
+            "the same division, unrounded — the arm at a ZERO go wait",
             48.6486,
             round(knife, 4),
+        ),
+        row(
+            "rung_S_prime_knife_edge_at_the_full_go_wait",
+            f"the other end of the band: the go wait is BILLED, so ({HARD_STOP_SECONDS:.0f} −"
+            f" {OVERHEAD_SECONDS:.0f} − {pre_generation:.0f} − {smoke_generation:.0f} −"
+            f" {GO_WAIT_SECONDS:.0f}) / {remaining}",
+            40.5405,
+            round(
+                (
+                    HARD_STOP_SECONDS
+                    - OVERHEAD_SECONDS
+                    - pre_generation
+                    - smoke_generation
+                    - GO_WAIT_SECONDS
+                )
+                / remaining,
+                4,
+            ),
         ),
         row(
             "what_a_GO_needs_of_the_mean",

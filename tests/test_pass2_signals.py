@@ -565,6 +565,20 @@ def test_the_money_authorises_the_smoke_and_not_the_run():
     assert sums["the_full_run_is_priced_by_rung_S_prime"]["knife_edge_seconds_per_call"] == 48.6486
 
 
+def test_the_knife_edge_prose_carries_the_BILLED_wait():
+    """The pod sits in `wait_for_go` while the Mac decides and those seconds are billed. The
+    contract's 48.6486 is the arm at a ZERO wait; the record publishes the band and says the gate
+    uses neither ([[two_values_for_one_input_get_quoted_kindly]])."""
+    arm = RECORD["money"]["arithmetic"]["the_full_run_is_priced_by_rung_S_prime"]
+    assert "go_wait_seconds" in arm["knife_edge_formula"]
+    assert arm["knife_edge_at_a_zero_go_wait"] == 48.6486
+    assert arm["knife_edge_at_the_full_go_wait"] == 40.5405
+    assert arm["knife_edge_at_the_full_go_wait"] < arm["knife_edge_at_a_zero_go_wait"]
+    wait = next(one["deadline_seconds"] for one in RECORD["kill_clock"] if int(one["rung"]) == 8)
+    assert round((6600 - 1300 - 1100 - 600 - wait) / 74, 4) == arm["knife_edge_at_the_full_go_wait"]
+    assert "cumulative_billed_seconds" in arm["the_wait_is_billed_and_the_band_is_why"]
+
+
 def test_the_overhead_is_one_number_in_two_places():
     sums = RECORD["money"]["arithmetic"]
     assert sums["overhead_seconds"] == sums["cumulative"]["projection_gate"]["overhead_seconds"]

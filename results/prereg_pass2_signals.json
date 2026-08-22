@@ -351,11 +351,19 @@
       },
       {
         "agrees": true,
-        "formula": "the same division, unrounded",
+        "formula": "the same division, unrounded — the arm at a ZERO go wait",
         "mode": "equals",
         "name": "rung_S_prime_knife_edge_exact",
         "re_derived": 48.6486,
         "registered": 48.6486
+      },
+      {
+        "agrees": true,
+        "formula": "the other end of the band: the go wait is BILLED, so (6600 − 1300 − 1100 − 600 − 600) / 74",
+        "mode": "equals",
+        "name": "rung_S_prime_knife_edge_at_the_full_go_wait",
+        "re_derived": 40.5405,
+        "registered": 40.5405
       },
       {
         "agrees": true,
@@ -586,7 +594,7 @@
     },
     "producer": {
       "path": "scripts/write_pass2_prereg.py",
-      "sha256": "6fa3036bbd31614f79900cec8a64c45cd1607aefc0e25fcfd8948ed6748c8891"
+      "sha256": "3df9d0b4c2a47cc3627775071cd7b8416689199b6abc582da65c2ce2dacb8ca0"
     },
     "prompt_sha256": {
       "pass2_thread_gm4_v1": "a674f284085d43c54df590ce943fb8c02d6ac28b7832c05f2e4b7a54879f61f8"
@@ -698,7 +706,7 @@
       "read": "`--go-no-go`, which RECORDS its verdict and writes the token only on GO",
       "rule": "charged_full = max(1.5 × smoke_mean, smoke_max) s/call — same pod, so the spread charged is the CALL-LENGTH spread and not the pod-class spread. projected = cumulative_billed_now + remaining × charged_full + overhead. GO if projected ≤ the cumulative hard stop; else STOP",
       "rung": 9,
-      "worked_arm": "the full run fits iff charged_full ≤ (hard_stop − overhead − pre_generation − smoke_seconds) / 74; at a 600 s smoke that is 48.6486 s/call"
+      "worked_arm": "the full run fits iff charged_full ≤ (hard_stop − overhead − pre_generation − smoke_seconds − go_wait_seconds) / 74; at a 600 s smoke and a ZERO wait that is 48.6486 s/call, and at the full registered wait it is 40.5405. The gate projects from the clock at the moment it decides, so the wait it actually took is inside the number — these two are the band"
     },
     {
       "before": "every call after the first reply",
@@ -807,8 +815,11 @@
         "a_STOP_is_a_registered_outcome": "not a failure and not a kill: the five replies are scored, the rate is measured, and the remainder becomes the operator's decision with a number in front of it",
         "against_the_nearest_measured_shape": "v5b's leg A ran 45.016 s a thread with a maximum of 108.362 on @VARUS_channel:10613 — which IS F1 and IS the first unit of the smoke. On those numbers the max arm alone would STOP. A pass-2 reply is smaller than a reader's, and how much smaller is exactly what the smoke is bought to find out",
         "formula": "charged_full = max(1.5 × smoke_mean, smoke_max); projected = cumulative_billed_now + 74 × charged_full + 1300",
-        "knife_edge_formula": "(6600 − 1300 − 1100 − smoke_seconds) / 74, at a 600 s smoke",
+        "knife_edge_at_a_zero_go_wait": 48.6486,
+        "knife_edge_at_the_full_go_wait": 40.5405,
+        "knife_edge_formula": "(6600 − 1300 − 1100 − smoke_seconds − go_wait_seconds) / 74, at a 600 s smoke",
         "knife_edge_seconds_per_call": 48.6486,
+        "the_wait_is_billed_and_the_band_is_why": "the pod sits in `wait_for_go` while the Mac decides, and those seconds are BILLED. The contract's own printed figure — 48.6486 — is the arm at a ZERO wait, and the other end of the band is the arm at the full registered wait. The gate does not use either: `--go-no-go` projects from `cumulative_billed_seconds` AT THE MOMENT the decision is taken, so whatever the wait actually cost is already inside the number that decides. These two are the band a reader should have in front of them, and neither is a threshold",
         "what_a_GO_needs": "smoke_mean ≤ 32.4324 AND smoke_max ≤ 48.6486. Both, because the charge is the maximum of the two arms"
       },
       "total_seconds": 3000.0,
@@ -886,7 +897,7 @@
   "producer": {
     "rule": "the constants are typed once at the top of this file with their derivations; every other number here is computed. H6 re-derives the ones that have a file behind them",
     "script": "scripts/write_pass2_prereg.py",
-    "sha256": "6fa3036bbd31614f79900cec8a64c45cd1607aefc0e25fcfd8948ed6748c8891"
+    "sha256": "3df9d0b4c2a47cc3627775071cd7b8416689199b6abc582da65c2ce2dacb8ca0"
   },
   "reachability": {
     "entity_cases": [
