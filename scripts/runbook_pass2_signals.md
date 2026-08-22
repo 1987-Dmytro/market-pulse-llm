@@ -25,9 +25,16 @@ as an ASSUMPTION**, which is the only assumption in the record.
 | overhead | **1 300 s** |
 | the smoke's worst case, all in | **3 000 s = $0.6667** |
 | cumulative hard stop, platform-held | **6 600 s = $1.4667** of a **$1.50** cap |
-| rung S′'s knife edge at a 600 s smoke | **48.6486 s/call** |
-| what a GO needs | `smoke_mean ≤ 32.4324` **AND** `smoke_max ≤ 48.6486` |
+| rung S′'s knife edge at a 600 s smoke, **zero wait** | **48.6486 s/call** |
+| the same, at the **full 600 s go wait** (it is billed) | **40.5405 s/call** |
+| what a GO needs, at a zero wait | `smoke_mean ≤ 32.4324` **AND** `smoke_max ≤ 48.6486` |
 | widest dead pod that still fits the smoke | **3 600 s** |
+
+**The go wait is BILLED, and that is why the knife edge is a band.** The pod sits in `wait_for_go`
+while the Mac reads `--boot` and `--go-no-go`, and those seconds are on the meter. The gate does not
+use either end: `--go-no-go` projects from `cumulative_billed_seconds` at the moment it decides, so
+whatever the wait actually cost is already inside the number. **Do steps 4 and 4a back to back** —
+every second between the smoke's last reply and the go is a second rung S′ will not lend to the rate.
 
 **The first rule:** the meter starts at `pod create` and stops at `pod delete`. Not at ssh, not at
 the model load, not at the first reply — a pod bills for existing, and `pod stop` does NOT stop it.
