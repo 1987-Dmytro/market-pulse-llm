@@ -368,3 +368,323 @@ value*. It is distinguishable everywhere it matters — `unreadable_fields` name
 parser repaired and is the authority, no bar reads `signal_type` or `noise.class`, and both rule
 strings now point at that census. The alternative is a sentinel no model can produce, which is more
 machinery for a case no reply has ever shown.
+
+## D1 — the paid session: one pod, 2 061 seconds, and 75 of 75
+
+One pod, `dusd807citw8d7`, RTX 4090 in EU-RO-1 at **$0.74/h**. Create `2026-08-22T12:07:23Z`,
+delete `12:41:44Z` — **2 061.0 s = $0.42365** of the $2.50 cap. The last D0′ commit was `01c716f`
+at **12:02:00Z**, five minutes and twenty-two seconds before the create.
+
+| rung | reading |
+|---|---|
+| 0 pre-create | **GO**, recorded. 9 675 s / $2.15 against 11 000 s / $2.50, 0 pods opened, the recovery clause fitted with 4 carried rows in the out-file and 0 bought |
+| 1 price | **$0.74/h** ≤ $0.80, card `RTX 4090`. Backstop `15:10:42Z` — a 10 999 s window against the 11 000 s stop, 1 s SHORT, and short is always safe |
+| 2 ssh | **23 s** of create-elapsed against 500 — the second-fastest of seven readings (14.5 · **23** · 29 · 38 · ≤50 · 231.9 · 262.5) |
+| 3 boot | **140.6 s**, one second off r1's floor (139.5 · **140.6** · 142.7 · 146.8 · 164.9 · 192.1 · 237.2 · [267, 293] · 353). First reply **156.6 s** after the runner's own launch, against a 450 s ceiling |
+| — pre-generation | **84 s measured** (ssh 23 + stage/clone 61) against **1 100 charged** |
+| 4 projection | peaked at **$1.8266** of $2.50 while the leg was unstarted — 75 units at the registered 97 s/call — and fell to $0.73–0.85 as soon as the real rate landed |
+| 5 liveness | never fired. Peak idle **115 s** of 600, on the 135 s call |
+| 7 completeness | **GO** — 79 of 79, 79 parsed, 0 refusals, 0 relabellings, 0 sha mismatches, 0 unbalanced, carried 4 / bought 75 with no disagreement |
+
+**The seed landed and the digest said so.** `results/pass2_signals_r2_v1.jsonl` scp'd to
+`/workspace/run/` before the launch, `888f65bb…` on both sides, 4 lines. The runner's first line was
+`4 carried rows verified against the pack's renderings`, then `4 of 79 units are already answered
+and are NOT re-asked`. Deletion proven by three listings — `pod list -a` `[]`, `serverless list`
+`[]`, the EU-RO-1 volume unchanged as the positive control.
+
+### The rate — and how far the registered charge was from it
+
+| | this pod, the 75 it bought | r1's smoke, 5 calls | charged |
+|---|---:|---:|---:|
+| s/thread, mean | **23.760** | 45.582 | **97** |
+| median | 18.003 | — | — |
+| min · max | 8.379 · **135.232** | 15.801 · 58.07 | — |
+| generation, total | **1 782 s** | 227.9 s | 7 275 s |
+| filtered rows a thread | **3.37** | 6.0 | — |
+
+**The measured run is 0.245 of the charge.** The registration priced 75 threads at 7 275 s and they
+took 1 782. That is not a failure of the arm — it is the arm doing what a MAX × a spread is for —
+but the size of it is the reading: **4.08× conservative**, on a cap the operator set at $2.50 for a
+run that cost $0.42.
+
+**Two readings this run bought that no record on this stack had.**
+
+**1 — the paired thread, and it is the carry's own proof.** `@matusi_ukr:22303` is the one thread
+BOTH pods answered: r1's parser refused its reply, so r2 re-bought it. The reply came back
+**byte-identical** —
+
+```
+r1  815 chars · sha a336b6cea3aa1379… · 304 completion tokens · 15.801 s
+r2  815 chars · sha a336b6cea3aa1379… · 304 completion tokens · 15.934 s      1.008×
+```
+
+Same request, same bytes, greedy decoding, two different pods. **That is the empirical answer to
+«may the four carried replies be carried»** — the one carried-class thread that WAS re-bought
+returned the same string. And it is the only size-free pod-class reading in the run: on this decode
+the spread between two pods is **1.008**, against the **1.67** the registration charged.
+
+**2 — the heavy tail is real, and the smoke never contained it.** The population's widest unit,
+`@klopotenkofood:6040` (26 filtered rows), took **135.232 s** — **2.33× the smoke's maximum** and
+1.39× the charge itself. The three next slowest are the next three widest units. The registration's
+argument for the MAX was that a fit over five threads whose widest carries eight rows extrapolates
+onto units carrying twenty-six; the run says that argument was right in KIND, and that the smoke
+would have under-priced this tail whatever arm was drawn over it.
+
+## D2 — what 79 threads say
+
+### The bars, SCORED for the first time
+
+| bar | result | reading |
+|---|---|---|
+| **1 flagships** | **4 of 5 — RED** | **6 of the 7 gold signals found.** The only miss is F2a, and the scorecard gives the reason it was registered with before the pod: `580124` is `сеть_ритейлер` under pass 1 and the gold reads a `молочный_бренд` signal from it. **F2 was ANSWERED and READ this time** — the tolerant reader saw the reply r1's parser refused — and it still does not take the case. That is the expectation proving itself: the RED is about AUTHORITY and never was about the transport |
+| **2 entity cases** | **3 of 4 — RED** | E2/E3/E4 held, E1 not called. **Exactly the value registered at $0 before the pod**, and `agrees_with_the_registration` is `true`. Inherited from v5b, reported as held, never claimed |
+| **3 noise** | **RED — 2 signals over 1 thread** | and it is the finding of the run — below |
+
+**Bar 1's scorecard, all seven gold signals:**
+
+| signal | found | why |
+|---|---|---|
+| F1a `жалоба · сеть_ритейлер · quality` | ✓ | |
+| F1b `спрос · категория_личное · availability` | ✓ | the aspect clause spliced from `prompts` |
+| F1c `похвала · — · taste` | ✓ | the two-word «дуже смачне» |
+| **F2a `жалоба · молочный_бренд · availability`** | **✗** | **UNREACHABLE by construction**: pass 1 labelled the only cited row `сеть_ритейлер` |
+| F3a `привычка · категория_личное` | ✓ | |
+| F4a `тренд · категория_личное` | ✓ | signal_type not compared — the reference's own rule |
+| F5a `привычка · категория_личное` | ✓ | answered from `579379` alone |
+
+### Bar 3 is RED, and the two signals are the whole question this line has been carrying
+
+`@VARUS_channel:10366` is a giveaway thread the reference calls noise. Pass 2 was handed its four
+`сеть_ритейлер` rows and **dropped none of them** — `noise: []` — and read two signals out of them:
+
+```
+похвала · сеть_ритейлер · service · [20760] · «Класні призи, все хочу)»
+жалоба  · сеть_ритейлер · service · [20912] · «Де умови?!»
+```
+
+Both are *about the chain's giveaway*. Neither is about dairy. **This is the mention-vs-about cell
+arriving at pass 2 exactly as the registration said it would** — and pass 2 answered it the way pass
+1 did, which is the honest outcome of STRICT authority: pass 2 may drop a row, and on this thread it
+judged there was something to say. The bar is 0 signals and it is RED at 2. Registered in advance as
+«the case this bar is really about».
+
+### The DROP table — the FP reading ruling (б) bought
+
+**21 of 281 filtered rows dropped — 7.47 %.** By the pass-1 label of the row:
+
+| pass 1 said | offered | dropped | rate |
+|---|---:|---:|---:|
+| `сеть_ритейлер` | 59 | **7** | **11.86 %** |
+| `молочный_бренд` | 15 | 1 | 6.67 % |
+| `категория_личное` | 207 | 13 | 6.28 % |
+
+By class: `оффтоп` 19, `плюс_спам` 2. The heaviest single thread is `@matusi_ukr:22092` — five
+`категория_личное` rows, all `оффтоп`. **`сеть_ритейлер` is dropped at nearly twice the rate of the
+other two**, which is the same direction the `subject_doubt` notes point in and the same direction
+the whole mention-vs-about question has always pointed.
+
+**The accounting partitions the 281 exactly**: 260 kept, 21 dropped, **0 in both lists, 0 in
+neither**. Every row pass 1 handed over is accounted for.
+
+### `subject_doubt` — 15 of 260, and the highest rate is not where r1 saw it
+
+| pass 1 said | kept | doubted | rate |
+|---|---:|---:|---:|
+| `молочный_бренд` | 14 | **3** | **21.4 %** |
+| `категория_личное` | 194 | 10 | 5.15 % |
+| `сеть_ритейлер` | 52 | 2 | 3.85 % |
+
+r1's five threads doubted only `категория_личное`. Over the whole population the **highest rate is
+`молочный_бренд`**, and the three notes say what it is: «Кафе не є молочним брендом» ·
+«Бренд канцелярії помилково атрибутовано як молочний бренд» · «Тантум Верде — це лікарський засіб,
+а не молочний бренд». **A café, a stationery brand and a throat spray, all labelled a dairy brand by
+pass 1.** That is a precision reading of the smallest and most valuable class in the filter, and it
+is exactly what a report-only field was put there to produce.
+
+### The measurement Dv702 bought — and it is enormous
+
+```
+unreadable report-only fields: 169 rows across 52 of 79 threads
+by field: {"per_comment.note": 169}     on carried rows: 0
+overwritten fields: 0
+```
+
+Every one is `per_comment.note`, and every one is `""` on a row the model did not doubt. Driven, not
+inferred:
+
+```
+r1's parser over THIS out-file: 52 of 79 threads REFUSED — 65.8%
+   52  per_comment.note is not a non-empty string
+r2's parser: 0 refused
+```
+
+**r1's F2 refusal was not a fluke. It was the MODAL outcome.** Two thirds of the population would
+have come back unreadable, bar 1 would have been UNSCORED, and the run would have cost $0.42 for a
+verdict nobody could compute. Dv702 was raised as a rule for the next registration — «a report-only
+field may not be able to refuse» — and this is what that rule was worth: **52 threads.**
+
+### The comparison row the contract asks for
+
+| | v5b, the one-shot reader | pass 2 over window 1 |
+|---|---|---|
+| bar 1 (collapsed) | **2 of 5** cases | **4 of 5** cases · 6 of 7 signals |
+| bar 2 | 4 of 4 (its own population) | 3 of 4 — E1's thread carries no filtered row |
+| bar 3 | — | RED, 2 signals from N2 |
+| threads read | 23 | **79** |
+| s/thread | 45.016 | **23.760** |
+| cost | $0.312592 | pass 1 $0.742055 + r1 $0.108122 + r2 **$0.42365** = **$1.273827** |
+
+Same gold, same scorer, different populations — v5b read 23 threads including four its gate injects,
+and pass 2 called all 79 of the window. **The signal layer over window 1 now stands at $1.273827**
+against the one-shot reader's $0.312592, for **double the flagship cases and 3.4× the threads**.
+
+### The money
+
+| | |
+|---|---:|
+| this pod, on the gate's clock | **$0.42365** (2 061.0 s) |
+| the guard's balance delta | **$0.4162** — BELOW the clock this time |
+| the billing walk | `pods $0.0000` · `network-volume $0.0097` — lagging, as it has for four contracts |
+| the step | $0.42365 of **$2.50** |
+| the pass-2 layer | r1 $0.108122 + r2 $0.42365 = **$0.531772** |
+| the signal layer over window 1 | **$1.273827** |
+| cycle 2 | $7.8479 of $20.00 |
+
+**The delta is $0.0075 UNDER the clock**, the opposite direction from r1, where it came in above.
+Neither is a discrepancy to reconcile at $0.0075 on a 2 061 s pod; both are the same fact, that the
+delta carries the always-on volume and the settlement lag in whichever direction the sampling moment
+falls. **The number to quote is the clock: $0.42365.** The step joins the three already waiting on
+`money-anchors`.
+
+## What returns to the operator
+
+1. **The window's signal layer is complete: 79 of 79 threads, all three bars SCORED for the first
+   time.** Bar 1 **4 of 5** cases and **6 of 7 signals** — double v5b's flagship count over 3.4×
+   the threads. The one miss was registered UNREACHABLE before the pod and is about authority, not
+   about the model.
+2. **Bar 3 is RED at 2 signals, and the two are the mention-vs-about cell.** `@VARUS_channel:10366`,
+   a giveaway thread: pass 2 dropped none of its four `сеть_ритейлер` rows and read `похвала` and
+   `жалоба` about the giveaway itself. That is a question for the reference or for pass 1's filter,
+   and it is now a measurement rather than an argument.
+3. **The FP reading ruling (б) bought.** DROP 21 of 281 = 7.47 %, and `сеть_ритейлер` drops at
+   **11.86 %** against `категория_личное`'s 6.28 %. `subject_doubt` 15 of 260, and its highest rate
+   is `молочный_бренд` at **21.4 %** — a café, a stationery brand and a throat spray, all labelled a
+   dairy brand by pass 1. That is a precision reading of the smallest class in the filter.
+4. **The registered charge was 4.08× the measured run.** 97 s/thread charged, 23.760 measured; $2.50
+   capped, $0.42365 spent. The MAX × the pod-class spread is a safe arm and this is how safe.
+5. **The pod-class spread on THIS decode is 1.008, not 1.67** — measured on the one thread both pods
+   answered, whose reply came back byte-identical. The next registration that needs a spread for a
+   pass-2 call has a direct reading instead of a borrowed one.
+6. **Dv702 was worth 52 threads.** r1's parser over this out-file refuses 65.8 % of the population,
+   every one on `per_comment.note`. A report-only field that can refuse is not a rare hazard on this
+   prompt; it is the modal outcome.
+7. **The fourteen are not in this report.** No reading over them is taken here, at any multiplicity.
+
+## Deviations from Dv704
+
+Each with its cause tag from the closed enum and the lesson beside it. Everything above Dv722 was
+decided at $0, before the create.
+
+| # | cause | what |
+|---|---|---|
+| **Dv704** | `[cause: contract-gap]` [[a-pinned-file-is-not-edited-to-grow-a-parameter]] | **The module is a SIBLING, not an edit.** D0′ says «`src/market_pulse/pass2.py`: the tolerant reader…»; that file is pinned by `results/pass2_pack.json`, which is pinned by r1's sealed record, and r1's own `test_the_pack_rebuilds_byte_for_byte_from_its_own_inputs` re-runs the builder. One character turns `make check` red on a closed paid session. The contract states the rule for the GATE — «if r1's pinned bytes stay untouched, otherwise a sibling (say which)» — and the same rule decides the module. |
+| **Dv705** | `[cause: tooling]` [[a-proof-can-cover-the-sibling-branch]] | **The gate is a sibling that re-binds TWO module objects, and `_SHIPPED` had to take the RAW functions.** r1's gate has already re-bound `legs_of` / `leg_state` / `pre_create` onto its window module before this file imports it, so `getattr(window, …)` returns r1's wrappers. Delegating «to the shipped one» applied r1's recovery clause on top of r2's and KILLed the first create. |
+| **Dv706** | `[cause: tooling]` [[rewriting-a-record-resets-state-you-do-not-own]] | **A sibling runner and a sibling scorer, and the scorer binds r2's parser HERE.** Re-binding `score_pass2_signals.pass2` would break r1's scorer for the rest of the process — its own tests re-parse r1's out-file and expect the refusal that IS r1's record. |
+| **Dv707** | `[cause: spec-gap]` [[a-registered-threshold-that-is-really-a-function]] | **The model's context is not on this stack.** The contract asks for a ceiling derived from it; grepped for `context_window` / `context_length` / `max_position` / `n_ctx` across `src/`, `scripts/`, `results/`, `docs/` and `knowledge/` — nothing. The ceiling is anchored on what IS provable: the widest prompt the READER serving config has been observed to serve, 4 510 tokens at `finish_reason: stop`, converted at pass 2's own worst measured density. **15 569 ≥ 11 856**, so the contract's STOP does not fire. |
+| **Dv708** | `[cause: tooling]` [[the-entry-points-preamble-is-untested-code]] | **`record.population.sha256`.** `gate_pass1_window.main` subscripts it before every rung that reads a pack; without it `--watch`, `--projection`, `--completeness` and `--close` all raise `KeyError` on a billing pod. Same shape as r1's `payable_comments`, a different key, found the same way — by driving the COMMAND. |
+| **Dv709** | `[cause: contract-gap]` [[a-count-in-prose-is-not-the-enumeration]] | **The smoke's widest unit is EIGHT filtered rows, not the contract's 10.** `@mandziak:3703` and `@matusi_ukr:22272` tie at 8 and no reading of the five gives 10. H6 refused the contract's own figure and the argument got stronger: the extrapolation the MAX avoids is 26/8 = **3.25×**, not 2.6×. The run then measured that tail at 135.232 s. |
+| **Dv710** | `[cause: contract-gap]` [[two-values-for-one-input-get-quoted-kindly]] | **The recovery dollar is $2.261111 and the contract prints $2.2607.** 10 175 s × $0.80/h. Nothing binds — both are under the cap — and it is the FIFTH instance of one input with two values on this line, the fourth of which step 0.5 exists to correct. |
+| **Dv711** | `[cause: tooling]` [[the-argmax-and-the-max-are-two-rows]] | **Two counts, and every rung has to say which.** Rungs 3, 4 and 5 count the rows THIS POD bought; rung 7 counts the whole file. Six re-bindings, and `fingerprint` is the fatal one: `watch`'s boot branch is `if not cleared and not answered`, so four carried rows meant **rung 3 could never fire**. |
+| **Dv712** | `[cause: contract-gap]` [[a-consumer-list-is-not-a-meaning-list]] | **What «a SCORED field» means is READ OFF the scorer, not asserted.** `scorer.reader_signal_found` compares evidence, `subject_type` and `aspect` and says in as many words that `signal_type` and `subject_id` are deliberately NOT compared — so `signals.signal_type` is report-only and a sixth signal word keeps its thread. |
+| **Dv713** | `[cause: verify-gap]` [[a-tolerant-reader-that-moves-the-refusal]] | **The sentinel SURVIVES into the verdict.** The first tolerant reader nulled every repaired field, and `prompts._reader` guarantees six of them are non-empty STRINGS — two of which consumers `Counter`-sort on, one in a SEALED file. `TypeError` after the whole run was paid for and rung 7 had said GO. A tolerant reader that hands the next stage a type its contract forbids has moved the refusal, not removed it. |
+| **Dv714** | `[cause: verify-gap]` [[count-the-kind-not-the-rows]] | **A field the parser OVERWROTE is not a field the reader could not READ.** `signals.proposed` is forced True to carry an unreadable word past the pinned domain check; filing it under `unreadable_fields` inflated the Dv702 census with a field the reader read fine. Its own list, its own name, the model's RAW value captured before the repair, and only when something changed. |
+| **Dv715** | `[cause: contract-gap]` [[a-claim-no-number-can-check]] | **The seed's scp is a step with money on it, and the RUNNER refuses without it.** Staging does `rm -rf /workspace/run`, so an absent out-file is the DEFAULT state; the first `carried()` returned `[]` for it and skipped the whole check. A rule that lives only in a runbook line is r1's Process signal 2 wearing new clothes. |
+| **Dv716** | `[cause: verify-gap]` [[a-registered-bar-may-have-no-producer]] | **Rung 7's fifth RED cause is REGISTERED.** The carried/bought census is keyed on `carried_from` and a disagreement with the pack is RED — and the record said «All three, or RED» while the code gated on five. A bar may not go RED for a reason the pre-registration does not carry. |
+| **Dv717** | `[cause: tooling]` [[a-report-proves-it-does-not-instruct]] | **The runbook's `pod create` was a hybrid of two CLIs.** `--gpuType` / `--networkVolumeId` / `--imageName` do not exist; `runpodctl pod create --help` is the authority. It could not parse — and the natural repair of a create that will not parse is a retyped line without `--terminate-after`, which is the whole of rung 6. Replaced with r1's own line, values compared and not only names, and step 0 now greps the CLI's help. |
+| **Dv718** | `[cause: process]` [[the-runbook-is-run-not-read]] | **`$SSHK` was used six times and defined nowhere** — inherited from r1's pass-2 runbook, which dropped the line five other runbooks of this repo carry. My own fix then defaulted it to `~/.ssh/id_ed25519`, which does not exist on this machine. Found by RUNNING step 0 instead of reading it; the key is `~/.runpod/ssh/runpodctl-ssh-key`. |
+| **Dv719** | `[cause: tooling]` [[a-guard-that-runs-after-the-write]] | **A gate command APPENDS to the run record, including commands that look read-only.** `launched_at_of` stamps the pod and `save()`s it. An untracked `results/pass2_signals_r2_run.json` holding a TEST fixture pod with no `deleted_at` was left in the tree by a review agent's driver, and rung 0 would have returned KILL before the first legitimate create, telling the operator to delete a pod that never existed. Step 0 of the runbook now looks for it. |
+| **Dv720** | `[cause: verify-gap]` [[an-assertion-whose-truth-depends-on-when-it-runs]] | **r1's go-token test was a CLOCK.** `run_go_no_go` projects from `datetime.now()`, so with a fixed `created_at` its GO half stopped passing at `created_at + 1 970 s` — **10:32:50Z today** — and went red with no commit behind it. Isolated by stashing every r2 change and re-running at the committed tree. The pod's create stamp moves with the clock it is measured against now. |
+| **Dv721** | `[cause: process]` [[a-review-that-verifies-a-moving-tree]] | **The review reads a COMMITTED tree, and the tally moved from 3/12 to 10/11.** D0′ was committed first, every lens was given the sha and quoted it back, the fixes landed as their own commit, and a second pass read THAT sha. Same apparatus, one structural change, and the difference is the whole of r1's Process signal 4. |
+
+### From the run itself
+
+| # | cause | what |
+|---|---|---|
+| **Dv722** | `[cause: env]` [[a-rate-is-a-property-of-the-pod]] | **The pod-class spread on a pass-2 call is 1.008, measured directly.** `@matusi_ukr:22303` is the one thread both pods answered — r1's parser refused its reply, so r2 re-bought it — and it came back BYTE-IDENTICAL: 815 chars, the same sha256, 304 completion tokens, 15.801 → 15.934 s. Greedy decoding on the same request gives the same string on two pods. That is the carry's own proof AND the only size-free spread reading this stack has; the registration charged 1.67, borrowed from pass 1. |
+| **Dv723** | `[cause: model]` [[a-report-only-field-can-refuse-the-whole-row]] | **r1's parser refuses 65.8 % of this out-file** — 52 of 79 threads, every one on `per_comment.note is not a non-empty string`. The model writes `"note": ""` habitually. r1's F2 was the modal outcome, not a fluke, and the tolerant reader bought 52 threads with one construction. |
+| **Dv724** | `[cause: contract-gap]` [[a-smoke-drawn-from-the-exam-is-not-a-rate-sample]] | **The heavy tail is real and no smoke could have contained it.** `@klopotenkofood:6040`, 26 filtered rows, **135.232 s — 2.33× the smoke's maximum** and 1.39× the charge. The three next slowest are the next three widest units. The registration's reason for the MAX was right in kind; its size (4.08× the realised run) is the price of a sample whose widest thread carries eight rows against a population's twenty-six. |
+| **Dv725** | `[cause: process]` [[a-gate-command-is-a-write]] | **Two `--completeness` runs appended two identical rung-7 snapshots** to `results/pass2_signals_r2_run.json` — I ran it twice to read two halves of its output. No verdict moves and both snapshots agree, but a gate command is a WRITE and reading it twice writes it twice. |
+| **Dv726** | `[cause: tooling]` [[a-step-meter-on-a-balance-delta-never-stops]] | **The money's three readings again, and this time the delta is UNDER the clock.** Clock $0.42365 (2 061 s) · balance delta $0.4162 · walk `pods $0.0000`. r1's delta came in ABOVE its clock; both are the same fact — the delta carries the always-on volume and the settlement lag in whichever direction the sampling moment falls. The clock is what is quoted, and the step joins three already waiting on `money-anchors`. |
+
+**The tally, by the grep the template names:**
+
+```python
+import re, pathlib, collections
+flat = " ".join(pathlib.Path("docs/reports/pass2-signals-r2.md").read_text(encoding="utf-8").split())
+tag = {}
+for chunk in re.split(r"(?=\*\*Dv\d+)", flat):
+    if (m := re.match(r"\*\*Dv(\d+)", chunk)) and (t := re.findall(r"\[cause:\s*([a-z-]+)\]", chunk)):
+        tag.setdefault(int(m.group(1)), t[0])
+inr = {d: t for d, t in tag.items() if 704 <= d <= 726}
+health = sum(1 for t in inr.values() if t in ("contract-gap", "spec-gap", "verify-gap"))
+print(len(inr), dict(collections.Counter(inr.values()).most_common()))
+print("contract health", health, "· paid", len(inr) - health, "· enum canonicity", len(inr), "of 23")
+```
+
+```
+23 {'tooling': 7, 'contract-gap': 6, 'verify-gap': 4, 'process': 3, 'spec-gap': 1, 'env': 1, 'model': 1}
+contract health 11 · paid 12 · enum canonicity 23 of 23
+```
+
+**Split tally: contract health 11, paid lessons 12, enum canonicity 23 of 23.** r1's split was 16/7
+the other way. The difference is where the work went: r1 was the first pass-2 registration on this
+stack and spent itself amending its own contract, while r2 inherited a working contract and spent
+itself on the INSTRUMENTS — seven `tooling`, four `verify-gap`, and every one of the eleven found by
+driving a command rather than reading a file.
+
+## Process signals
+
+1. **A tolerant reader can move a refusal instead of removing it, and the move is invisible until
+   the money is spent.** `parse_pass2` repaired every report-only field the pinned validator refused
+   and then wrote `None` in its place — and `prompts._reader` guarantees six of those fields are
+   non-empty STRINGS. Two consumers `Counter`-sort on them, one of which is a SEALED file this
+   registration may not edit. The result: 75 threads bought, $2.15 authorised, rung 7 GO, and D2
+   raising `TypeError` with no verdict, no bars and no scorecard. **The rule is that a repair has to
+   satisfy the CONSUMER's contract and not only the producer's** — the field's type is part of what
+   the next stage was promised, and «it is report-only» says nothing about what may be written into
+   it ([[a_consumer_list_is_not_a_meaning_list]], [[the_hardening_did_not_reach_the_sibling_reader]]).
+2. **A run that carries rows it did not buy has TWO counts, and every instrument has to declare
+   which.** Four seeded rows in the out-file before the pod existed made `fingerprint` see
+   `answered = 4` from the first poll, and `watch`'s boot branch is `if not cleared and not
+   answered` — **rung 3 could never fire**. `first_reply_after_launch` returned 197.6 s measured on
+   another pod last session. `leg_state` would have blended two pods into one rate. `pre_create`
+   would have refused this session's first create. Four different rungs, one cause: a count that was
+   right about the FILE used where a count about the POD belonged. What closed it is a field on the
+   row — `carried_from` — and a rule in the gate's own docstring naming which rungs use which
+   ([[the_argmax_and_the_max_are_two_rows]], [[a_rate_is_a_property_of_the_pod]]).
+3. **A review of a FROZEN tree is a different instrument from a review of a working one.** r1's five
+   lenses reported 3 confirmed and 12 refuted, and every refutation named the commit that had just
+   fixed it — the tally measured my commit timing. This time D0′ was committed first, each lens was
+   given the sha and quoted it back, the fixes landed as one commit, and a second pass read THAT sha
+   with two questions instead of one: does the fix close its defect, and did the fix OPEN something.
+   **10 of 11 confirmed on the first pass; 8 of 8 closed and 19 further distinct defects on the
+   second** — including a fatal one *in a fix*. The second question is where the value was, and it
+   only exists because the first pass's fixes had a sha of their own to be read at
+   ([[a_review_that_verifies_a_moving_tree]]).
+4. **The registration's own argument survived the run; its number was 4.08× out.** The MAX × the
+   pod-class spread charged 97 s a thread and the run took 23.760 — $0.42 of a $2.50 cap. But the
+   REASON the MAX was chosen is exactly what the run confirmed: the population's widest unit took
+   **135.232 s, 2.33× anything in the smoke**, and no arm fitted over five threads whose widest
+   carries eight rows could have seen it. And the factor the arm borrowed — 1.67, from pass 1 across
+   three pods — was measurable directly for the first time here, on the one thread both pods
+   answered: **1.008**, on a reply that came back byte-identical. A conservative charge and a
+   measurable one are two different things, and this run turned the second into a number
+   ([[a_smoke_drawn_from_the_exam_is_not_a_rate_sample]], [[price-the-incumbent-in-the-same-units]]).
+5. **The commands are where the money is, and three of this session's worst defects lived in one.**
+   `KeyError: 'sha256'` in `gate_pass1_window.main` would have hit `--watch` on a billing pod;
+   `runpodctl pod create` with camelCase flags could not parse at all; `$SSHK` was undefined in six
+   scp lines. None is visible from a function, a docstring or a reading — all three came out of
+   DRIVING: the gate's argparse entry points on a fake transport, `pod create --help`, and running
+   step 0 rather than reading it. The one gate command no test drove, `--watch`, turned out to need
+   nothing but a fake `scp` to be drivable at $0, and it is driven now
+   ([[the_entry_points_preamble_is_untested_code]], [[drive_the_consumer_not_only_the_producer]]).
