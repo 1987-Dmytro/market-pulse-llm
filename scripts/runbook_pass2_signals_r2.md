@@ -66,7 +66,7 @@ git status --short                       # clean; the record is COMMITTED or the
 ls results/pass2_signals_r2_run.json 2>/dev/null && \
   echo "STOP: a run record exists before the first pod. A test or a driver wrote it -- rung 0 will
         read its fixture pod, find no deleted_at and KILL. Delete it and re-run step 0."
-: "${SSHK:=$HOME/.ssh/id_ed25519}"; ls -l "$SSHK"   # every scp/ssh below spells -i "$SSHK"
+: "${SSHK:=$HOME/.runpod/ssh/runpodctl-ssh-key}"; ls -l "$SSHK"  # every scp/ssh below spells -i "$SSHK"
 runpodctl pod create --help | grep -E -- "--gpu-id|--network-volume-id|--container-disk-in-gb|--terminate-after"
 PYTHONPATH=src python3.11 scripts/build_pass2_r2_pack.py          # 79 units, 4 carried, 75 owed
 PYTHONPATH=src python3.11 scripts/build_pass2_r2_pack.py --seed   # the four rows into the out-file

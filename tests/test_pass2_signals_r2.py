@@ -1809,8 +1809,14 @@ def test_step_0_makes_the_operator_ask_the_CLI_and_look_for_a_stray_run_record()
     step_zero = RUNBOOK.split("## 0 —", 1)[1].split("## 1 —", 1)[0]
     assert "runpodctl pod create --help" in step_zero
     assert "results/pass2_signals_r2_run.json" in step_zero
-    assert "SSHK" in step_zero, 'six scp/ssh lines spell -i "$SSHK" and nothing defined it'
+    assert "runpodctl-ssh-key" in step_zero, (
+        'six scp/ssh lines spell -i "$SSHK" and nothing defined it. It is the key every paid'
+        " session of this repo has used, named in five other runbooks and dropped from r1's"
+    )
     assert "-i $SSHK" not in RUNBOOK, "unquoted, an unset $SSHK makes -i swallow the next -o"
+    # the same key five other runbooks of this repo name, and it is on disk
+    other = (REPO_ROOT / "scripts" / "runbook_pass1_window_r2.md").read_text(encoding="utf-8")
+    assert "~/.runpod/ssh/runpodctl-ssh-key" in other
 
 
 def test_the_record_carries_no_clause_about_a_rung_r2_REPEALED():
