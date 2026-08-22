@@ -1,0 +1,1092 @@
+{
+  "attempt": "ONE attempt, ONE paid session. A KILL after the smoke's first reply closes it; a STOP at rung S′ closes it with the smoke scored. What follows either is a new registration, never a second pass at this one",
+  "authority": {
+    "adr": "knowledge/decisions/v2-is-the-base-and-pass-2-is-not-a-one-shot-reader.md",
+    "reference": "docs/REFERENCE-signals-w1.md — the bar's text, the team lead's",
+    "rulings": "docs/STATUS.md «Открытые решения» п. 1 (г), (д), (ж)",
+    "what_pass_2_may_not_be": "the closed one-shot reader. It does no per-comment attribution from a raw thread and its input is a FILTERED set that already carries a label. A design that started attributing from the raw thread IS the closed instrument and the ADR refuses it as surely as it permits this one"
+  },
+  "bars": {
+    "1_flagships": {
+      "collapsed": "scored BOTH ways and the collapsed reading is the one quoted, as v5b's verdict quotes it: `score_reader_probe_b.COLLAPSE` folds «категория_личное» into «категория». Pass 2 answers pass 1's own word, so the two readings agree here — and both are published because a difference would be a finding",
+      "expectation": {
+        "F2": {
+          "by_construction": true,
+          "expected": "RED",
+          "why": "the gold's F2a is a `молочный_бренд` signal read from msg 580124, and pass 1 labelled 580124 `сеть_ритейлер`. Strict authority forbids pass 2 from saying the brand, so the only reply that could take F2 is one this contract REFUSES as a relabelling"
+        },
+        "F5": {
+          "expected": "reachable",
+          "why": "F5a cites 579379 and 579457; pass 1 labelled 579457 `не_наш_рынок`, so it is outside the filter and pass 2 never sees it. 579379 IS inside and `scorer.reader_signal_found` matches on ANY intersection of the evidence lists, so citing it alone answers the case"
+        },
+        "reachable_signals": [
+          "F1a",
+          "F1b",
+          "F1c",
+          "F3a",
+          "F4a",
+          "F5a"
+        ],
+        "the_bar_is_not_moved": "F2's RED is registered as an EXPECTATION and the threshold stays 5 of 5. The bar measures the signal layer as built, and a bar lowered to what the layer can reach would measure nothing ([[the_expectation_no_reading_reaches]])",
+        "unreachable_signals": [
+          "F2a"
+        ]
+      },
+      "rule": "F1–F5, 5 of 5, every named signal found: signal_type + subject (collapsed) + at least one named evidence msg_id. All or nothing, as the reference says",
+      "scored_over": [
+        "F1",
+        "F2",
+        "F3",
+        "F4",
+        "F5"
+      ],
+      "scorer": "score_reader_probe_b.flagships, through scorer.reader_signal_found",
+      "threshold": "5 of 5 cases"
+    },
+    "2_entity_cases": {
+      "computed": {
+        "cases": 4,
+        "cases_answered": 3,
+        "computed_before_the_pod": true,
+        "passed": false,
+        "per_case": {
+          "E1": false,
+          "E2": true,
+          "E3": true,
+          "E4": true
+        },
+        "per_row": [
+          {
+            "answered": false,
+            "brand_id": "garmonija",
+            "expected": "не_наш_рынок",
+            "id": "E1",
+            "thread": "@matusi_ukr:22242"
+          },
+          {
+            "answered": true,
+            "brand_id": "selianske",
+            "expected": "молочный_бренд",
+            "id": "E2",
+            "reported": [
+              "молочный_бренд"
+            ],
+            "thread": "@VARUS_channel:10360"
+          },
+          {
+            "answered": true,
+            "brand_id": "varus-pl",
+            "expected": "сеть_ритейлер",
+            "id": "E3",
+            "reported": [
+              "сеть_ритейлер"
+            ],
+            "thread": "@VARUS_channel:10348"
+          },
+          {
+            "answered": true,
+            "brand_id": "varto",
+            "expected": "absent",
+            "id": "E4a",
+            "reported": [],
+            "thread": "@mandziak:3684"
+          },
+          {
+            "answered": true,
+            "brand_id": "varto",
+            "expected": "absent",
+            "id": "E4b",
+            "reported": [],
+            "thread": "@mandziak:3689"
+          }
+        ],
+        "why_it_is_knowable": "the entity block is the BOUGHT v5b/v4/topup verdict, passed through and never re-resolved. The model is not asked for it and cannot move it, so this number is a property of the pack and of `brands.find_watchlist_brands`",
+        "why_the_bar_is_still_registered": "the contract registers it and it is the INHERITANCE that is being reported: the signal layer's entity resolution is v5b's, it holds for E2/E3/E4 inside pass 2's population, and E1's thread carries no filtered row so pass 2 never calls it. The bar is not moved for that — the reachability is named"
+      },
+      "held_not_earned": "reported as «held» and never claimed as pass 2's own. The value is computed before the pod because the model is not asked for the block",
+      "rule": "E1–E4, 4 of 4 — INHERITED through the pass-through `entities` list",
+      "scored_over": [
+        "E1",
+        "E2",
+        "E3",
+        "E4a",
+        "E4b"
+      ],
+      "scorer": "score_reader_probe_b.entity_cases, through scorer.reader_entity_found",
+      "threshold": "4 of 4 cases",
+      "under_a_STOP": "UNSCORED. None of E2/E3/E4's threads is one of the five F threads, so a STOP leaves `entity_cases` counting 0 of 4 against a registration that says 3 of 4 — a false RED where bar 3's is a false GREEN. Both are the same defect and both are answered by asking whether the cases were READ before reporting a number"
+    },
+    "3_noise": {
+      "excluded_with_cause": {
+        "N1": "carried unchanged from r1 and from v5b's own verdict: the reference's S list reads a signal inside this thread (S1, msg 21420), so a bar that failed the machine for agreeing with the reference would measure nothing. It IS called — pass 1 labelled two of its rows `сеть_ритейлер` — and its signal count is reported beside the bar"
+      },
+      "not_called": {
+        "N3": "the thread carries no payable comment at all, so it is not in the window",
+        "N4": "0 filtered rows — no signal by construction",
+        "N5": "0 filtered rows — no signal by construction",
+        "N6": "0 filtered rows — no signal by construction"
+      },
+      "rule": "zero signals out of the reference's N threads that pass 2 calls",
+      "scored_over": [
+        "N2"
+      ],
+      "scored_over_is_one_thread": true,
+      "scorer": "score_reader_probe_b.noise, through scorer.reader_noise_count",
+      "the_case_this_bar_is_really_about": "N2 (@VARUS_channel:10366) carries FOUR rows pass 1 labelled `сеть_ритейлер` in a plus-spam thread. Pass 2 must DROP them into `noise`. This is the mention-vs-about confusion the whole line has been carrying, arriving as pass 2's own question",
+      "threshold": "0 signals",
+      "under_a_STOP": "UNSCORED, and it is registered here rather than discovered afterwards. N2 (@VARUS_channel:10366) is NOT one of the five F threads, so a STOP at rung S′ leaves this bar with no case in the evidence at all. The contract's «bars 1/3 on the five» reaches bar 1 — the five F threads ARE the smoke — and does not reach bar 3. `scorer.reader_noise_count({})` returns `signals: 0`, so a scorer that did not ask whether the cases were READ would report this bar GREEN over zero threads ([[a_pre_filter_cannot_certify_the_population]], [[a_checker_whose_failure_is_silence]])"
+    },
+    "completeness": {
+      "answered_means": "a reply came back and was written into the out-file, counted by DISTINCT id. A parse refusal is an ANSWERED row whose reply the parser refused — the two counts are NOT disjoint ([[measure_on_the_rows_the_gate_scores]])",
+      "arm_rule": "the arm is READ off the go/no-go's own recorded verdict and never chosen by hand. A STOP is a registered outcome of this contract, not a failure, so it gets a completeness bar of its own over the units it authorised",
+      "arms": {
+        "GO": {
+          "answered_minimum": 79,
+          "owed": 79,
+          "parse_refusals_maximum": 14,
+          "sha_mismatches_maximum": 0
+        },
+        "STOP": {
+          "answered_minimum": 5,
+          "owed": 5,
+          "parse_refusals_maximum": 1,
+          "sha_mismatches_maximum": 0
+        }
+      },
+      "parse_refusals_fraction": 0.174,
+      "parse_refusals_fraction_rule": "MEASURED on this schema and not carried from pass 1: results/reader_v5b_w1.jsonl refused 4 of 23 leg-A threads through the same parser after the same repairs. Pass 1's 1 % was derived for an answer of four scalars, and `int(0.01 × 79)` is ZERO — a transport bar an instrument measured at 17 % cannot pass. Rounded UP with ceil, so the STOP arm's five units carry a budget of one rather than none",
+      "refusals_are_counted_by_cause": "never dropped and never summed into one «other». A RELABELLING is its own cause and its own finding: it is the ADR's line, and a run whose refusals are all relabellings is a different result from one whose refusals are torn objects",
+      "relabellings_are_outside_the_budget": "a reply that rewrote a pass-1 subject is READABLE. It says something this pass has no authority to say, which is the ADR's line arriving as a measurement, and it is counted by its own cause and reported beside the bar rather than spending a budget that exists to price a transport",
+      "rule": "answered N / N · every row's `rendering_sha256` equals its pack item's · parse refusals ≤ 1 % of N. All three, or RED — with N chosen by the ARM the go/no-go landed on",
+      "sha_rule": "the pod re-renders every item from its own fields and REFUSES the whole leg if one sha does not match, so a mismatch on the Mac means the out-file and the pack parted AFTER the run",
+      "what_this_bar_is": "TRANSPORT. Every unit answered, every sha matching, no duplicate and no unknown id, and the replies readable at the rate this schema is readable at. Whether the answers are RIGHT is bars 1/2/3, and they are a different question"
+    },
+    "report_only": {
+      "4_per_comment_agreement_is_NOT_registered": "`per_comment` is pass 1's pass-through under strict authority, so a bar on the fourteen would be the SIXTH look at them through a threshold — the base 9/14, arm A 9/14, v2 registered for a shot it never fired, v2 inside r1's killed pass, v2 over the complete window at 11/14, and this. The ADR's «What binds» point 2 forbids it, and it binds the team lead as well as the executor",
+      "subject_doubt_rate": "by pass-1 label — the FP/FN reading ruling (б) asked for",
+      "the_DROP_table": "the filtered rows pass 2 sent to `noise`, by thread and by pass-1 label — the FP reading of the filter, and the answer this contract was bought for",
+      "the_cost_of_the_signal_layer": "pass 1 $0.742055 + this step, beside v5b's $0.312592",
+      "the_scorecard": "per flagship: found / missing / why, citing the pass-1 label of the row it names",
+      "the_v5b_comparison_row": {
+        "bar_1": "2 of 5 (collapsed)",
+        "bar_2": "4 of 4",
+        "record": "results/reader_v5b_verdict.json",
+        "rule": "the one-shot reader on the SAME gold and the SAME scorer, quoted from its own sealed verdict and never re-scored. What is NOT the same is the population: v5b read 23 threads including four the gate injects, and pass 2 calls 79",
+        "sha256": "d39cd2332a043a9b20899cd77cd4645aeb2d85bc4ab121995a5d4254122a1740"
+      }
+    }
+  },
+  "contract": "docs/PROMPT-pass2-signals.md",
+  "do_not": [
+    "edit prompts.py, scorer.py, the reader gold, any pinned file, the pass-1 out-files or packs",
+    "render a raw unfiltered comment in any request",
+    "accept a relabelling, however named",
+    "register a bar on the fourteen",
+    "run the remaining 74 without rung S′'s recorded GO",
+    "leave --watch",
+    "open two billing endpoints at once, or a third pod"
+  ],
+  "frozen_when_the_pod_exists": [
+    "results/prereg_pass2_signals.json",
+    "results/pass2_pack.json",
+    "src/market_pulse/pass2.py",
+    "scripts/gate_pass2_signals.py",
+    "scripts/pass2_pod_runner.py"
+  ],
+  "h6": {
+    "mismatches": [],
+    "reading": "every registered number re-derives",
+    "rows": [
+      {
+        "agrees": true,
+        "formula": "threads with ≥1 filtered row, census_pass1_window.pass_2_filter over the union",
+        "mode": "equals",
+        "name": "population_units",
+        "re_derived": 79,
+        "registered": 79
+      },
+      {
+        "agrees": true,
+        "formula": "the same table's filtered_rows_total",
+        "mode": "equals",
+        "name": "filtered_rows",
+        "re_derived": 281,
+        "registered": 281
+      },
+      {
+        "agrees": true,
+        "formula": "the same table's filtered_chars_total",
+        "mode": "equals",
+        "name": "filtered_chars",
+        "re_derived": 32756,
+        "registered": 32756
+      },
+      {
+        "agrees": true,
+        "formula": "callable threads carrying no filtered row",
+        "mode": "equals",
+        "name": "threads_pass_2_would_not_call",
+        "re_derived": 48,
+        "registered": 48
+      },
+      {
+        "agrees": true,
+        "formula": "max rows in a unit — the contract names @klopotenkofood:6040 at 26",
+        "mode": "equals",
+        "name": "widest_unit_rows",
+        "re_derived": 26,
+        "registered": 26
+      },
+      {
+        "agrees": true,
+        "formula": "max filtered chars in a unit — the contract names @mandziak:3679 at 4 315",
+        "mode": "equals",
+        "name": "widest_unit_chars",
+        "re_derived": 4315,
+        "registered": 4315
+      },
+      {
+        "agrees": true,
+        "formula": "len(pack.smoke.ids), the reference's five F threads",
+        "mode": "equals",
+        "name": "smoke_units",
+        "re_derived": 5,
+        "registered": 5
+      },
+      {
+        "agrees": true,
+        "formula": "79 − 5",
+        "mode": "equals",
+        "name": "remaining_after_the_smoke",
+        "re_derived": 74,
+        "registered": 74
+      },
+      {
+        "agrees": true,
+        "formula": "5 × 120 s/call",
+        "mode": "equals",
+        "name": "smoke_generation_seconds",
+        "re_derived": 600.0,
+        "registered": 600.0
+      },
+      {
+        "agrees": true,
+        "formula": "ssh 500 + stage/launch 150 + load 450",
+        "mode": "equals",
+        "name": "pre_generation_seconds",
+        "re_derived": 1100.0,
+        "registered": 1100.0
+      },
+      {
+        "agrees": true,
+        "formula": "the r2 bucket, carried",
+        "mode": "equals",
+        "name": "overhead_seconds",
+        "re_derived": 1300.0,
+        "registered": 1300.0
+      },
+      {
+        "agrees": true,
+        "formula": "money.arithmetic.overhead_seconds == projection_gate.overhead_seconds",
+        "mode": "equals",
+        "name": "overhead_is_one_number",
+        "re_derived": 1300.0,
+        "registered": 1300.0
+      },
+      {
+        "agrees": true,
+        "formula": "600 + 1 100 + 1 300",
+        "mode": "equals",
+        "name": "smoke_worst_seconds",
+        "re_derived": 3000.0,
+        "registered": 3000.0
+      },
+      {
+        "agrees": true,
+        "formula": "3000 s at $0.8/h",
+        "mode": "equals",
+        "name": "smoke_worst_usd",
+        "re_derived": 0.6667,
+        "registered": 0.6667
+      },
+      {
+        "agrees": true,
+        "formula": "6600 s at $0.8/h",
+        "mode": "equals",
+        "name": "hard_stop_usd",
+        "re_derived": 1.4667,
+        "registered": 1.4667
+      },
+      {
+        "agrees": true,
+        "formula": "the platform-held stop must sit under the cap it defends",
+        "mode": "at_most",
+        "name": "hard_stop_is_under_the_cap",
+        "re_derived": 1.4667,
+        "registered": 1.5
+      },
+      {
+        "agrees": true,
+        "formula": "$1.50 / $0.8/h in seconds",
+        "mode": "equals",
+        "name": "session_ceiling_seconds",
+        "re_derived": 6750.0,
+        "registered": 6750.0
+      },
+      {
+        "agrees": true,
+        "formula": "the cap must buy at least the seconds the stop allows",
+        "mode": "at_least",
+        "name": "session_ceiling_covers_the_hard_stop",
+        "re_derived": 6750.0,
+        "registered": 6600.0
+      },
+      {
+        "agrees": true,
+        "formula": "(6600 − 1300 − 1100 − 600) / 74 — the contract prints 48.6",
+        "mode": "equals",
+        "name": "rung_S_prime_knife_edge",
+        "re_derived": 48.6,
+        "registered": 48.6
+      },
+      {
+        "agrees": true,
+        "formula": "the same division, unrounded",
+        "mode": "equals",
+        "name": "rung_S_prime_knife_edge_exact",
+        "re_derived": 48.6486,
+        "registered": 48.6486
+      },
+      {
+        "agrees": true,
+        "formula": "the knife edge / 1.5",
+        "mode": "equals",
+        "name": "what_a_GO_needs_of_the_mean",
+        "re_derived": 32.4324,
+        "registered": 32.4324
+      },
+      {
+        "agrees": true,
+        "formula": "6600 − the SMOKE's worst case",
+        "mode": "equals",
+        "name": "widest_dead_pod_seconds",
+        "re_derived": 3600.0,
+        "registered": 3600.0
+      },
+      {
+        "agrees": true,
+        "formula": "79 × 120 + 1100 + 1300 against the 6600 s stop",
+        "mode": "at_least",
+        "name": "the_full_run_at_the_registered_rate_does_NOT_fit",
+        "re_derived": 11880.0,
+        "registered": 6600.0
+      },
+      {
+        "agrees": true,
+        "formula": "rung S's deadline is DERIVED from rung 5's, not chosen",
+        "mode": "equals",
+        "name": "go_wait_equals_the_liveness_period",
+        "re_derived": 600.0,
+        "registered": 600.0
+      },
+      {
+        "agrees": true,
+        "formula": "mean of `seconds.worker` over the 23 leg-A rows of results/reader_v5b_w1.jsonl",
+        "mode": "equals",
+        "name": "v5b_leg_a_seconds_per_thread",
+        "re_derived": 45.016,
+        "registered": 45.016
+      },
+      {
+        "agrees": true,
+        "formula": "max of the same — and the thread is F1, the smoke's first unit",
+        "mode": "equals",
+        "name": "v5b_slowest_leg_a_thread_seconds",
+        "re_derived": 108.362,
+        "registered": 108.362
+      },
+      {
+        "agrees": true,
+        "formula": "120 / the v5b leg-A mean",
+        "mode": "equals",
+        "name": "the_assumption_over_the_nearest_measured_mean",
+        "re_derived": 2.666,
+        "registered": 2.666
+      },
+      {
+        "agrees": true,
+        "formula": "results/reader_v5b_pack.json::serving.output_tokens — the contract says «4 000-char»",
+        "mode": "equals",
+        "name": "reader_output_ceiling_is_TOKENS",
+        "re_derived": 4000,
+        "registered": 4000
+      },
+      {
+        "agrees": true,
+        "formula": "the pack's own serving.output_tokens",
+        "mode": "equals",
+        "name": "pass_2_serving_carries_the_same_ceiling",
+        "re_derived": 4000,
+        "registered": 4000
+      },
+      {
+        "agrees": true,
+        "formula": "prompts.PASS1_MAX_INPUT_CHARS, aliased by pass2.PASS2_MAX_INPUT_CHARS",
+        "mode": "equals",
+        "name": "input_ceiling_chars",
+        "re_derived": 12000,
+        "registered": 12000
+      },
+      {
+        "agrees": true,
+        "formula": "the pack's own length block — headroom is what is left of 12 000",
+        "mode": "at_least",
+        "name": "widest_request_fits_the_ceiling",
+        "re_derived": 603,
+        "registered": 0
+      },
+      {
+        "agrees": true,
+        "formula": "rows per thread in the smoke against rows per thread in the population",
+        "mode": "at_least",
+        "name": "the_smoke_is_row_heavier_than_the_population",
+        "re_derived": 6.0,
+        "registered": 3.5569620253164556
+      },
+      {
+        "agrees": true,
+        "formula": "30 filtered rows over the five F threads",
+        "mode": "equals",
+        "name": "smoke_rows_per_thread",
+        "re_derived": 6.0,
+        "registered": 6.0
+      },
+      {
+        "agrees": true,
+        "formula": "281 filtered rows over 79 threads",
+        "mode": "equals",
+        "name": "population_rows_per_thread",
+        "re_derived": 3.557,
+        "registered": 3.557
+      },
+      {
+        "agrees": true,
+        "formula": "pass1-window $0.173694 + pass1-window-r2 $0.568361, both on the gate's clock",
+        "mode": "equals",
+        "name": "signal_layer_cost_so_far_usd",
+        "re_derived": 0.742055,
+        "registered": 0.742055
+      },
+      {
+        "agrees": true,
+        "formula": "rungs 2, 3, 5, 6 and 8 carry a numeric `deadline_seconds`; 1, 4, 7 and 9 are not clocks and carry None (Dv669)",
+        "mode": "equals",
+        "name": "kill_clock_rungs_carrying_a_deadline_by_key",
+        "re_derived": 5,
+        "registered": 5
+      },
+      {
+        "agrees": true,
+        "formula": "gate_pass2_signals.DEADLINE_RUNGS ⊆ the rungs carrying deadline_seconds — the four the inherited gate_zero / gate_boot / watch read out of a rule",
+        "mode": "equals",
+        "name": "the_rungs_a_pure_function_parses_all_carry_the_key",
+        "re_derived": 4,
+        "registered": 4
+      },
+      {
+        "agrees": true,
+        "formula": "results/reader_v5b_w1.jsonl leg A: rows carrying a parse_error, over rows",
+        "mode": "equals",
+        "name": "reader_schema_refusal_rate_MEASURED",
+        "re_derived": 0.1739,
+        "registered": 0.1739
+      },
+      {
+        "agrees": true,
+        "formula": "ceil(0.174 × 79)",
+        "mode": "equals",
+        "name": "refusal_budget_on_the_GO_arm",
+        "re_derived": 14,
+        "registered": 14
+      },
+      {
+        "agrees": true,
+        "formula": "ceil(0.174 × 5) — ceil, so the five units carry a budget of one and not of none",
+        "mode": "equals",
+        "name": "refusal_budget_on_the_STOP_arm",
+        "re_derived": 1,
+        "registered": 1
+      },
+      {
+        "agrees": true,
+        "formula": "int(0.01 × 79) — the number this record does NOT carry",
+        "mode": "equals",
+        "name": "pass_1s_fraction_would_have_allowed_no_refusal_at_all",
+        "re_derived": 0,
+        "registered": 0
+      }
+    ],
+    "rule": "every number the contract prints, re-derived from the file it comes out of. A mismatch REFUSES: this producer writes nothing and exits non-zero"
+  },
+  "instruments": {
+    "bar_scorer": {
+      "path": "scripts/score_reader_probe_b.py",
+      "sha256": "952a14dc8fc9d036f1dabb969ba7abb267282c40e0a62296d21f2015b3fae64c"
+    },
+    "census": {
+      "path": "results/pass1_window_r2_census.json",
+      "sha256": "17741904637a2339ff98022850007e8c1e40461f213577642b4e508765534c8c"
+    },
+    "gate": {
+      "path": "scripts/gate_pass2_signals.py",
+      "sha256": "cf31a0b103d8b95097a04018fae041fb528e2ff911cc0e33c09d9210ab6c9bfa"
+    },
+    "gold": {
+      "path": "results/reader_gold_w1_r2.json",
+      "rule": "the reader's r2 gold, unedited",
+      "sha256": "716ff4174bdafa5957caa4d038a11241b6eb299df4035a5f0e983217ec2a46d9"
+    },
+    "module": {
+      "path": "src/market_pulse/pass2.py",
+      "sha256": "f921339fb3c85891e040d92b9ea76564c36ebdd557b3d31f2d5ab38a32abb1df"
+    },
+    "pack_builder": {
+      "path": "scripts/build_pass2_pack.py",
+      "sha256": "05274bc36877620a17b3c08f56ed4e3beee0a279a64b6e12be59740560abbf2c"
+    },
+    "parser": {
+      "entry_point": "market_pulse.pass2.parse_pass2",
+      "path": "src/market_pulse/prompts.py",
+      "rule": "`prompts._reader_object` then `prompts._reader` — the exact pair `prompts.parse_reply` binds for a reader task — with the bought entity block placed into the payload between them, and four refusals of pass 2's own on top",
+      "sha256": "b70e2114b03a76dc2c8cfc9b559bf7ef22e9193d841b4fccc5ed8bd0a40294ab"
+    },
+    "pass_1_out_files": {
+      "results/pass1_window_r2_v2.jsonl": "ca35c9ae674a326cee92c3f15168494abc5c7ea6055e20a214f328e5d84bf445",
+      "results/pass1_window_v2.jsonl": "e888d466d36e32a08fa13e5598700bc0cdfffd768eba761df3f51881375eb740"
+    },
+    "population": {
+      "record": "results/pass2_pack.json",
+      "sha256": "a7458480d3ffcca6d50968e32d711093cde6c69b675b9df572625a0adb48d349"
+    },
+    "producer": {
+      "path": "scripts/write_pass2_prereg.py",
+      "sha256": "d06c598af82d60ed2b022936477782ea3d6f651a29e592f52db55a31fa907c9a"
+    },
+    "prompt_sha256": {
+      "pass2_thread_gm4_v1": "34a5d2857b4d256fe69f66b6cf82dbf57ad1e9e1afd78dc5c0fcfed2825e8b3c"
+    },
+    "reference": {
+      "path": "docs/REFERENCE-signals-w1.md",
+      "rule": "the bar's text, the team lead's, never re-read against the machine's answer",
+      "sha256": "6408d4bbbb6e374394e48802f1a13a2c78d92825a54968666a9ac3c54d4835b3"
+    },
+    "runner": {
+      "path": "scripts/pass2_pod_runner.py",
+      "sha256": "303f0923354a6d51be2d402c95b7ea8eb007a20701fffd78d181368f5192999c"
+    },
+    "scorer": {
+      "functions": [
+        "reader_signal_found",
+        "reader_entity_found",
+        "reader_noise_count",
+        "reader_comment_agreement"
+      ],
+      "path": "src/market_pulse/scorer.py",
+      "rule": "the reader's own scorer, IMPORTED over pass 2's out-file and never forked",
+      "sha256": "dbb5406a502f813ba1b4940e0914310efd632386a8da60e0c002cc8964a97d4f"
+    },
+    "serving": {
+      "adapter": null,
+      "chat_template": {
+        "add_generation_prompt": true,
+        "enable_thinking": false
+      },
+      "decoding": "greedy",
+      "do_sample": false,
+      "forward_batch_size": 1,
+      "gpu_class_preference": [
+        "ADA_24",
+        "ADA_24_PRO",
+        "AMPERE_24"
+      ],
+      "gpu_rule": "requested fastest-first and never asserted. probe-a asked for the display name «NVIDIA L4», the endpoint came back `gpuIds: AMPERE_24` and the worker reported an L4 runtime — so the CLASS is what is requested and the RUNTIME string is what lands in provenance. Seconds per thread are reported per card",
+      "merge_state": "base-no-adapter",
+      "model": "google/gemma-4-31b-it",
+      "model_revision": "842da3794eaa0b77d5f08bae87a17459d91ff475",
+      "output_tokens": 4000,
+      "quantization": {
+        "bnb_4bit_compute_dtype": "bfloat16",
+        "bnb_4bit_quant_type": "nf4",
+        "bnb_4bit_use_double_quant": true,
+        "load_in_4bit": true
+      },
+      "serving_config": "READER",
+      "template_note": "the window pack's serving block, with the reader's own output ceiling in place of pass 1's 256: a pass-2 reply is a list of signals and per-comment rows, and 256 tokens is a third of what v5b's replies took. TOKENS, not characters"
+    },
+    "shipped_runner": {
+      "path": "scripts/reader_v5_pod_runner.py",
+      "sha256": "75ae15af6c60a5aa7d6b77bc67ea9dda2588955500221fab50706859444a6090"
+    },
+    "task": "pass2_thread_gm4_v1",
+    "verdict_producer": {
+      "path": "scripts/score_pass2_signals.py",
+      "sha256": "1edee847be837978106a113a0fa04a73e0a07a5437baf302b03ab89b8014b17c"
+    }
+  },
+  "kill_clock": [
+    {
+      "before": "the first billed second",
+      "deadline_seconds": null,
+      "name": "price",
+      "read": "`--price` refuses to record a pod above the ceiling",
+      "rule": "live price > $0.8/h at create → STOP, no endpoint. The backstop stamp is checked against the cumulative hard stop in the same command",
+      "rung": 1
+    },
+    {
+      "before": "staging",
+      "deadline_seconds": 500.0,
+      "name": "ssh dead-man",
+      "read": "`--gate0 [--ssh-ok]`",
+      "rule": "the ssh endpoint has to answer inside this pod's create-elapsed deadline or KILL. r2's ceiling, unmoved: two pods of 2026-08-20 were still unreachable past 230 s and the spread of five readings runs 14.5 → 262.5",
+      "rung": 2
+    },
+    {
+      "anchor": "the runner's own `pass2_signals_launched_at`, copied back by --watch",
+      "backstop_rule": "create-anchored, and it equals the charged pre-generation. Without an anchor there is no GO: a rung whose deadline cannot be demonstrated has not been passed",
+      "backstop_seconds": 1100.0,
+      "before": "the smoke's first reply",
+      "deadline_seconds": 450.0,
+      "name": "launch → first reply",
+      "read": "`--boot`, and every poll of `--watch` while no row has landed",
+      "rule": "the first reply has to land inside this many seconds of the runner's OWN launch stamp, or KILL. The create-anchored backstop bounds a pod that never wrote one",
+      "rung": 3
+    },
+    {
+      "before": "any unit beyond the five",
+      "deadline_seconds": 600.0,
+      "name": "S — the smoke",
+      "read": "`--watch` returns GO when the authorised leg is answered",
+      "rule": "the smoke leg is the reference's five flagship threads, charged 120 s/call = 600 s. When they are answered the runner WAITS for the Mac's go token, and this deadline is how long it waits before it stops answering. It equals rung 5's liveness period by derivation: the Mac has one liveness period to answer",
+      "rung": 8,
+      "the_assumption": "120 s/call is an ASSUMPTION and the only one in this record — a 600-token reply at a 5 tok/s worst decode plus prefill. It is charged on 5 calls and on nothing else",
+      "the_smoke_is_not_a_sample": "the five F threads carry 30 of the 281 filtered rows — 6.0 rows a thread against the population's 3.56, and v5b's two slowest leg-A threads are two of them. The rate they measure is charged on the remaining 74 AS REGISTERED, and the row-weighted reading is published beside it and never gates ([[a_reproducible_probe_can_be_unrepresentative]])"
+    },
+    {
+      "before": "the remaining 74",
+      "cumulative_not_create_elapsed": "the contract writes `create_elapsed_now`; this gate computes it on `cumulative_billed_seconds`, which is create-elapsed PLUS every closed pod. The two are equal when no pod died, and where they differ the cumulative arm is the stricter one — a recovery must not hide a dead pod's seconds from the guard that authorises the spend. BOTH are printed (Dv630/655)",
+      "deadline_seconds": null,
+      "knife_edge_seconds_per_call": 48.6486,
+      "multiplier": 1.5,
+      "name": "S′ — the go/no-go",
+      "on_stop": "the five F-thread replies are scored — bars 1 and 3 on the five, the scorecard — and the question returns to the operator WITH the measured rate. No full run at a price the record did not register",
+      "read": "`--go-no-go`, which RECORDS its verdict and writes the token only on GO",
+      "rule": "charged_full = max(1.5 × smoke_mean, smoke_max) s/call — same pod, so the spread charged is the CALL-LENGTH spread and not the pod-class spread. projected = cumulative_billed_now + remaining × charged_full + overhead. GO if projected ≤ the cumulative hard stop; else STOP",
+      "rung": 9,
+      "worked_arm": "the full run fits iff charged_full ≤ (hard_stop − overhead − pre_generation − smoke_seconds) / 74; at a 600 s smoke that is 48.6486 s/call"
+    },
+    {
+      "before": "every call after the first reply",
+      "deadline_seconds": null,
+      "name": "projection",
+      "read": "every poll of `--watch`, and `--projection` on demand",
+      "rule": "projection gate every 20 calls — a FLOOR; the gate runs it on every poll because it is a local computation and costs nothing. The projected attempt total at MEASURED rates, with the authorised leg's remaining calls priced at max(mean, last call), against BOTH the cap and the cumulative hard stop",
+      "rung": 4,
+      "this_is_the_rate_rung": "no separate rate rung is added. Rung 4 re-prices the remainder on every poll and kills a pod that cannot finish inside the stop at the first poll that shows it",
+      "what_it_prices_before_the_go": "the SMOKE and nothing else. The remaining 74 are not authorised until rung S′ says GO, and a projection that priced 79 units against a registration that has bought five would refuse the create it is guarding"
+    },
+    {
+      "before": "a pod that has stopped working outliving its usefulness",
+      "deadline_seconds": 600.0,
+      "name": "liveness",
+      "read": "`--watch`",
+      "rule": "no new answered row AND no new pod-log line for this many seconds → KILL. The deadline is measured from the LAST EVENT and never from create, and an event is a RISE: a failed scp can shorten a local file and a drop is never work",
+      "rung": 5,
+      "the_event_is_a_log_line_too": "a pass-2 call may take minutes and the go wait writes no row at all, so the liveness event is the pod LOG line the runner prints per call and per wait poll, beside a new out-file row. `reader_v5_pod_runner.run` prints one per reply and `pass2_pod_runner.wait_for_go` prints one per poll — both asserted by test"
+    },
+    {
+      "before": "a hung call no gate can see",
+      "deadline_seconds": 6600.0,
+      "name": "cumulative hard stop",
+      "read": "`--price` checks the stamp; the platform enforces it",
+      "rule": "cumulative billed seconds, PLATFORM-held. Each pod's `--terminate-after` is its own create plus what the stop has left, and the overshoot it forgives is 60 s",
+      "rung": 6
+    },
+    {
+      "before": "the census and the report",
+      "deadline_seconds": null,
+      "name": "completeness",
+      "on_red": "the out-file goes back to the team lead WITH its refusals by cause. Nothing already bought is deleted and nothing is re-asked without the recovery clause",
+      "read": "`--completeness` on the Mac, after the pod is deleted",
+      "rule": "answered N / N · every row's `rendering_sha256` equals its pack item's · parse refusals ≤ 1 % of N, with N read off the arm the go/no-go landed on. All three, or RED",
+      "rung": 7
+    }
+  ],
+  "kill_clock_order": [
+    "1 — price",
+    "2 — ssh dead-man",
+    "3 — launch → first reply",
+    "8 — S — the smoke",
+    "9 — S′ — the go/no-go",
+    "4 — projection",
+    "5 — liveness",
+    "6 — cumulative hard stop",
+    "7 — completeness"
+  ],
+  "money": {
+    "arithmetic": {
+      "authorised_before_the_go": 5,
+      "calls": {
+        "v1": 79
+      },
+      "cumulative": {
+        "backstop_tolerance_rule": "how far the `--terminate-after` stamp actually handed to `pod create` may sit BEYOND the one the hard stop computes. Only overshoot is bounded — a window rounded DOWN shortens itself and is always safe. The gate READS it from here and a record without this field is a refusal, not a default",
+        "backstop_tolerance_seconds": 60.0,
+        "hard_stop_hours": 1.8333,
+        "hard_stop_rule": "cumulative billed ≤ 6600 s = $1.4667 at the $0.8/h ceiling. It sits UNDER the $1.50 cap it defends and it is the PLATFORM that enforces it, so it protects even a hung call no gate can see",
+        "hard_stop_seconds": 6600.0,
+        "hard_stop_usd_at_the_price_ceiling": 1.4667,
+        "projection_gate": {
+          "authorised_rule": "«the authorised leg» is the smoke until the go is recorded and the whole leg after it. `gate_pass2_signals.legs_of` is where that is one line of code",
+          "every": "20 calls",
+          "every_calls": 20,
+          "formula": "billed_by_closed_pods + elapsed_on_this_pod + the AUTHORISED leg's remaining calls × its s/call + overhead_seconds. The leg is priced at its MEASURED rate — the larger of its mean and its last call — as soon as it has a reply, and at the registered rate before that",
+          "overhead_rule": "the SAME bucket the money block charges, and it has to be: rung 4 prices the attempt with it on every poll. H6 asserts the two are one number",
+          "overhead_seconds": 1300.0
+        },
+        "session_ceiling_rule": "$1.50 / $0.8/h = 1.875 h = 6750 s ≥ the hard stop",
+        "session_ceiling_seconds": 6750.0
+      },
+      "hours": 0.8333,
+      "overhead_rule": "r2's bucket, unmoved — the watch tail, the copy-backs and the deletion tail. Rung 4 prices the attempt with it on every poll, so a second copy would be a second budget; H6 asserts the projection gate carries this same number",
+      "overhead_seconds": 1300.0,
+      "pre_generation_rule": "ssh 500 + stage/launch 150 + load 450. Charged ONCE for the whole session: the runner waits for the go with the model in the card, and `pass1_fewshot_pod_runner.once` is what hands the second call the client the first one built",
+      "pre_generation_seconds": 1100.0,
+      "recovery_arithmetic": {
+        "and_the_full_run_after_a_dead_pod": "charged_full ≤ (6600 − 1300 − 1100 − smoke_seconds − dead_pod_seconds) / 74. A dead pod does not close the run, it narrows the go/no-go — and rung S′ computes it live on `cumulative_billed_seconds`, which is what makes the narrowing automatic",
+        "at_the_registered_arm": "at the 120 s/call arm the full run does not fit even with no dead pod (79 × 120 + 1100 + 1300 = 11880 s > 6600). The inequality above is the honest form of «widest dead pod»: it is a function of a rate this record does not have",
+        "re_creations_allowed": 1,
+        "rule": "ONE re-creation after a proven deletion, and ONLY for a death BEFORE the smoke's first reply — rungs 1, 2 and 3. After the first reply a KILL closes the session: the smoke replies on the Mac are the evidence and the remainder is a new registration",
+        "widest_dead_pod_rule": "6600 − 3000 = 3600 s — the widest dead pod that still leaves the SMOKE's whole worst case inside the stop. Computed by `pre_create` on every create and never typed into a command",
+        "widest_dead_pod_that_still_fits_seconds": 3600.0
+      },
+      "seconds_per_call": {
+        "nearest_measured_shape": {
+          "max_completion_tokens": 2056,
+          "max_seconds_per_thread": 108.362,
+          "mean_completion_tokens": 834.8,
+          "mean_seconds_per_thread": 45.016,
+          "min_seconds_per_thread": 6.402,
+          "reading": "the READER's shape and not pass 2's: a v5b reply carries `entities` with their quotes and a per_comment row for every comment of the thread, while a pass-2 reply carries no entities and only the FILTERED rows. So this is an upper reading of pass 2's decode on ANOTHER pod, and it is here to say what the assumption is 2.67× of — never to price this run ([[a_rate_is_a_property_of_the_pod]])",
+          "record": "results/reader_v5b_w1.jsonl",
+          "sha256": "9540a84bc87109ce3589a636fa5640d56feb5c8382bb82adcf8345bd8e858e8c",
+          "slowest_thread": "@VARUS_channel:10613",
+          "threads": 23
+        },
+        "rule": "the registered FLOOR the projection uses before a leg has a reply. It is the SMOKE's charge, and it is deliberately the only rate this record carries: the full run's rate is not a number this registration knows, which is why rung S′ exists",
+        "the_assumption": "a 600-token reply at a 5 tok/s worst decode plus prefill. NAMED as an assumption: nothing on this stack has measured a pass-2 decode",
+        "v1": 120.0
+      },
+      "smoke_generation_seconds": 600.0,
+      "the_full_run_is_priced_by_rung_S_prime": {
+        "a_STOP_is_a_registered_outcome": "not a failure and not a kill: the five replies are scored, the rate is measured, and the remainder becomes the operator's decision with a number in front of it",
+        "against_the_nearest_measured_shape": "v5b's leg A ran 45.016 s a thread with a maximum of 108.362 on @VARUS_channel:10613 — which IS F1 and IS the first unit of the smoke. On those numbers the max arm alone would STOP. A pass-2 reply is smaller than a reader's, and how much smaller is exactly what the smoke is bought to find out",
+        "formula": "charged_full = max(1.5 × smoke_mean, smoke_max); projected = cumulative_billed_now + 74 × charged_full + 1300",
+        "knife_edge_formula": "(6600 − 1300 − 1100 − smoke_seconds) / 74, at a 600 s smoke",
+        "knife_edge_seconds_per_call": 48.6486,
+        "what_a_GO_needs": "smoke_mean ≤ 32.4324 AND smoke_max ≤ 48.6486. Both, because the charge is the maximum of the two arms"
+      },
+      "total_seconds": 3000.0,
+      "total_seconds_rule": "**the SMOKE's worst case, all in — NOT the run's.** This is what rung 0 authorises a create against. The full run at the registered 120 s/call would be 11880 s — far outside the 6600 s stop — and that is the point: the registration cannot price the full run, so it buys the measurement and registers the guard that decides on it",
+      "worst_case_usd_at_the_measured_price": 0.616667,
+      "worst_case_usd_at_the_price_ceiling": 0.666667
+    },
+    "cap_rule": "$1.50, the ADR's table (д) for the second of the two contracts. The step ledger is `results/spend_pass2_signals.json` with a FRESH anchor: the window's two steps are closed against their own ledgers",
+    "cap_usd_all_in": 1.5,
+    "guard": {
+      "rule": "`scripts/runpod_guard.py --step pass2-signals --step-cap 1.50`, anchored BEFORE the first create. Every rung that names a guard reading acts on the guard's number and never on the gate's projection",
+      "step": "pass2-signals",
+      "step_cap_usd": 1.5
+    },
+    "meter": {
+      "price_ceiling_usd_per_hour": 0.8,
+      "price_rule": "rung 1 refuses a create above $0.8/h. The 4090 24 GB this line has rented four times costs $0.74 and is taken on the first attempt",
+      "rule": "the gate's CLOCK is what the rungs act on: create-elapsed × the pod's own price. The billing walk and the balance delta are read afterwards and reconciled in the report, and where they disagree the clock is the number quoted",
+      "why": "`pass1-window` closed with `pods $0.0000` on a pod that had billed 845 s, and `pass1-window r2`'s walk was UNAVAILABLE at 20:27Z and $0.1691 at 21:05Z — the endpoint LAGS. A rung that waited for it would be a rung that never fires"
+    },
+    "recovery": {
+      "a_second_dead_pod_is_a_STOP": true,
+      "after_the_first_reply": "a KILL closes the session. The replies already on the Mac are the evidence and the remainder is a new registration, never a third pod",
+      "rule": "ONE re-creation after a proven deletion, and only for a death before the smoke's first reply. `pre_create` computes both bounds on every create — reading + the SMOKE's worst case ≤ cap, and billed + the SMOKE's worst case ≤ the hard stop — and the stricter binds. What it authorises is the MEASUREMENT: the remaining units are authorised by rung S′ and by nothing else"
+    },
+    "step_sum": {
+      "the_one_shot_reader_for_comparison_usd": 0.312592,
+      "the_signal_layer_rule": "pass 1 over window 1 cost $0.742055 across two registrations — r1's pod $0.173694 and r2's $0.568361, both on the gate's clock. This step's cap is not added to that number until it is spent",
+      "the_signal_layer_so_far_usd": 0.742055,
+      "this_step_cap_usd": 1.5
+    }
+  },
+  "phase": "pass2-signals",
+  "population": {
+    "census": {
+      "record": "results/pass1_window_r2_census.json",
+      "sha256": "17741904637a2339ff98022850007e8c1e40461f213577642b4e508765534c8c"
+    },
+    "derived_by": "census_pass1_window.pass_2_filter, CALLED over the union view",
+    "filter": [
+      "молочный_бренд",
+      "сеть_ритейлер",
+      "категория_личное"
+    ],
+    "filtered_chars": 32756,
+    "filtered_rows": 281,
+    "input_ceiling": {
+      "ceiling_chars": 12000,
+      "headroom_chars": 603,
+      "median_chars": 6253,
+      "widest_request": "@mandziak:3679",
+      "widest_request_chars": 11397
+    },
+    "keyed_on": "the PAIR (thread, msg_id). The ADR's acceptance correction, and this registration is where it was required to be said: seven msg_ids of window 1 live in two threads each",
+    "leg": "v1",
+    "no_signal_by_construction": "48 of the 127 callable threads carry no row pass 1 labelled one of the three. They are NOT called and they are not a failure — the filter answered about them",
+    "out_file": "pass2_signals_v1.jsonl",
+    "record": "results/pass2_pack.json",
+    "remaining_after_the_smoke": 74,
+    "sha256": "a7458480d3ffcca6d50968e32d711093cde6c69b675b9df572625a0adb48d349",
+    "smoke_units": 5,
+    "threads_pass_2_would_not_call": 48,
+    "units": 79,
+    "widest_unit_chars": {
+      "chars": 4315,
+      "thread": "@mandziak:3679"
+    },
+    "widest_unit_rows": {
+      "rows": 26,
+      "thread": "@klopotenkofood:6040"
+    }
+  },
+  "producer": {
+    "rule": "the constants are typed once at the top of this file with their derivations; every other number here is computed. H6 re-derives the ones that have a file behind them",
+    "script": "scripts/write_pass2_prereg.py",
+    "sha256": "d06c598af82d60ed2b022936477782ea3d6f651a29e592f52db55a31fa907c9a"
+  },
+  "reachability": {
+    "entity_cases": [
+      {
+        "id": "E1",
+        "thread": "@matusi_ukr:22242",
+        "thread_is_called": false
+      },
+      {
+        "id": "E2",
+        "thread": "@VARUS_channel:10360",
+        "thread_is_called": true
+      },
+      {
+        "id": "E3",
+        "thread": "@VARUS_channel:10348",
+        "thread_is_called": true
+      },
+      {
+        "id": "E4a",
+        "thread": "@mandziak:3684",
+        "thread_is_called": true
+      },
+      {
+        "id": "E4b",
+        "thread": "@mandziak:3689",
+        "thread_is_called": true
+      }
+    ],
+    "flagship_signals": [
+      {
+        "case": "F1",
+        "evidence_rows_inside_the_filter": [
+          21626
+        ],
+        "gold_subject_type": "сеть_ритейлер",
+        "id": "F1a",
+        "pass_1_labels_of_the_cited_rows": {
+          "21626": "сеть_ритейлер"
+        },
+        "reachable": true,
+        "thread": "@VARUS_channel:10613",
+        "thread_is_called": true
+      },
+      {
+        "case": "F1",
+        "evidence_rows_inside_the_filter": [
+          21599,
+          21601
+        ],
+        "gold_subject_type": "категория_личное",
+        "id": "F1b",
+        "pass_1_labels_of_the_cited_rows": {
+          "21599": "категория_личное",
+          "21601": "категория_личное"
+        },
+        "reachable": true,
+        "thread": "@VARUS_channel:10613",
+        "thread_is_called": true
+      },
+      {
+        "case": "F1",
+        "evidence_rows_inside_the_filter": [
+          21629
+        ],
+        "gold_subject_type": null,
+        "id": "F1c",
+        "pass_1_labels_of_the_cited_rows": {
+          "21629": "категория_личное"
+        },
+        "reachable": true,
+        "thread": "@VARUS_channel:10613",
+        "thread_is_called": true
+      },
+      {
+        "case": "F2",
+        "evidence_rows_inside_the_filter": [
+          580124
+        ],
+        "gold_subject_type": "молочный_бренд",
+        "id": "F2a",
+        "pass_1_labels_of_the_cited_rows": {
+          "580124": "сеть_ритейлер"
+        },
+        "reachable": false,
+        "thread": "@matusi_ukr:22303",
+        "thread_is_called": true
+      },
+      {
+        "case": "F3",
+        "evidence_rows_inside_the_filter": [
+          47899,
+          47902
+        ],
+        "gold_subject_type": "категория_личное",
+        "id": "F3a",
+        "pass_1_labels_of_the_cited_rows": {
+          "47899": "категория_личное",
+          "47902": "категория_личное"
+        },
+        "reachable": true,
+        "thread": "@mandziak:3676",
+        "thread_is_called": true
+      },
+      {
+        "case": "F4",
+        "evidence_rows_inside_the_filter": [
+          48276,
+          48283
+        ],
+        "gold_subject_type": "категория_личное",
+        "id": "F4a",
+        "pass_1_labels_of_the_cited_rows": {
+          "48276": "категория_личное",
+          "48283": "категория_личное"
+        },
+        "reachable": true,
+        "thread": "@mandziak:3703",
+        "thread_is_called": true
+      },
+      {
+        "case": "F5",
+        "evidence_rows_inside_the_filter": [
+          579379
+        ],
+        "gold_subject_type": "категория_личное",
+        "id": "F5a",
+        "pass_1_labels_of_the_cited_rows": {
+          "579379": "категория_личное",
+          "579457": null
+        },
+        "reachable": true,
+        "thread": "@matusi_ukr:22272",
+        "thread_is_called": true
+      }
+    ],
+    "noise_threads": [
+      {
+        "filtered_rows": 2,
+        "id": "N1",
+        "thread": "@VARUS_channel:10529",
+        "thread_is_called": true
+      },
+      {
+        "filtered_rows": 4,
+        "id": "N2",
+        "thread": "@VARUS_channel:10366",
+        "thread_is_called": true
+      },
+      {
+        "filtered_rows": 0,
+        "id": "N3",
+        "thread": "@sashafitnesslife:3939",
+        "thread_is_called": false
+      },
+      {
+        "filtered_rows": 0,
+        "id": "N4",
+        "thread": "@retsepty:7312",
+        "thread_is_called": false
+      },
+      {
+        "filtered_rows": 0,
+        "id": "N5",
+        "thread": "@retsepty:7325",
+        "thread_is_called": false
+      },
+      {
+        "filtered_rows": 0,
+        "id": "N6",
+        "thread": "@retsepty:7327",
+        "thread_is_called": false
+      }
+    ],
+    "noise_threads_pass_2_calls": [
+      "N1",
+      "N2"
+    ],
+    "rule": "strict authority makes a flagship signal reachable only where the pass-1 label of a row it cites IS the gold's subject_type — `scorer.reader_signal_found` matches on EVIDENCE and then compares `subject_type` where the gold states one. A signal whose every cited row pass 1 labelled something else cannot be answered without a relabelling, and a relabelling is a parse refusal",
+    "unreachable_entity_cases": [
+      "E1"
+    ],
+    "unreachable_flagship_signals": [
+      "F2a"
+    ]
+  },
+  "return_to_the_operator": {
+    "on_a_STOP": "the measured rate and what it implies for the remaining 74, so the cap-and-rate decision is the operator's with a number in front of it",
+    "the_fourteen": "no reading over them is a bar, in this report or in its acceptance. The ADR's «What binds» point 2 binds the team lead as well as the executor",
+    "whatever_happens": [
+      "the per-flagship scorecard, citing the pass-1 label of every row it names",
+      "the DROP table — the filtered rows pass 2 sent to noise, by thread and by label",
+      "the subject_doubt rate by pass-1 label",
+      "the v5b comparison row on the same gold and scorer",
+      "the measured rate of a pass-2 call, which no record on this stack had before"
+    ]
+  },
+  "run_record": {
+    "go_token": "results/pass2_signals_go.json",
+    "launch_stamp": "pass2_signals_launched_at",
+    "pod_log": "results/pass2_signals_pod.log",
+    "record": "results/pass2_signals_run.json",
+    "rule": "this attempt's OWN names for every file a rung reads or writes. `results/` holds three closed sessions' stamps and logs, and a rung that read one of them would be reading a dead pod's clock (Dv621/632)"
+  },
+  "supersedes": {
+    "nothing": "this is the first registration of pass 2. It INHERITS the kill-clock shape of `docs/PROMPT-pass1-window-r2.md` and adds rungs S and S′; it repeals none of that contract's numbers, because none of them describes this population or this decode",
+    "what_it_carries_and_why": {
+      "backstop tolerance 60 s": "unmoved",
+      "liveness 600 s": "unmoved, and rung S's go wait is derived FROM it",
+      "load 450 s": "the boot is not a constant and is charged at the maximum",
+      "overhead 1 300 s": "the same tail this line has now measured twice",
+      "ssh 500 s": "the same five-reading spread; nothing has narrowed it"
+    },
+    "what_it_does_NOT_carry": {
+      "6.14 s/call": "pass 1's rate, and it prices a ~50-token reply about ONE comment. Carrying it would be the copied-block defect this line has already made once ([[an_audit_of_pins_is_not_an_audit_of_thresholds]])",
+      "8 600 s / $2.00": "r2's stop and cap, computed for 901 calls at that rate"
+    }
+  },
+  "what_this_run_is": "the assembly pass over the bought window: ONE call per THREAD over the comments pass 1 labelled категория_личное / молочный_бренд / сеть_ритейлер, answered in the reader's schema and scored by the reader's own scorer against the reader's gold r2",
+  "what_this_run_is_not": "not a re-attribution — strict authority, and a reply that relabels is a parse refusal. Not a bar on the fourteen — `per_comment` is pass 1's pass-through and a threshold over it would be their SIXTH look. Not a claim about entity resolution — bar 2 is v5b's, inherited, and its value is known before the pod. Not a full run unless rung S′ says so"
+}
