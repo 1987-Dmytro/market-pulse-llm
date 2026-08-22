@@ -450,3 +450,148 @@ Each with its cause tag. Everything below was decided at $0, before the create.
    sample — 6.0 filtered rows a thread against the population's 3.56, and v5b's two slowest threads
    are two of the five — so a STOP is a likely outcome of the SAMPLING and not only of the rate, and
    the row-weighted arm is computed at the go/no-go so the operator can tell the two apart.
+
+---
+
+# ADDENDUM — the acceptance of r1 (step 0.5 of `docs/PROMPT-pass2-signals-r2.md`, $0)
+
+Three corrections the acceptance asked for, all at $0 and all before r2's first line of code. Nothing
+above is rewritten: this section is the correction of record and it says what it moves.
+
+## 1 — the Deviations, re-tagged on the CLOSED enum
+
+The table above carries free lesson names in its «cause» column and not one `[cause: …]` tag, so the
+programme's own tally could not be run over it. The names were the right thing to write down and the
+wrong thing to count with. Here is every one of Dv681–Dv703 with its enum tag, the name kept beside
+it as a link.
+
+| # | cause | name | in one line |
+|---|---|---|---|
+| **Dv681** | `[cause: contract-gap]` | [[contract-description-vs-source]] | the contract calls `reader_v5_pod_runner.py` duck-typed on `prompts`; `run()` imports the module itself, so a sibling runner |
+| **Dv682** | `[cause: contract-gap]` | [[pinned-file]] | the contract offered `parse_reply`, which dispatches on a task name that would have to be added to a file 38 sealed records pin |
+| **Dv683** | `[cause: contract-gap]` | [[smoke-cost-and-refusal-risk]] | «passed through» admits two readings — echoed by the model or injected by the harness — and the echo can refuse the thread |
+| **Dv684** | `[cause: contract-gap]` | [[pinned-parser-domain]] | the contract's «не_сигнал» is not one of the three noise classes the pinned parser ratifies |
+| **Dv685** | `[cause: contract-gap]` | [[strict-authority-hole]] | `from_post` is the hole strict authority would be walked around through, and the contract does not mention it |
+| **Dv686** | `[cause: contract-gap]` | [[unit-error-in-the-contract]] | «the reader's 4 000-char output ceiling» reads a registered number in the wrong unit — it is TOKENS |
+| **Dv687** | `[cause: contract-gap]` | [[stricter-arm-published]] | the contract writes `create_elapsed_now`; `cumulative_billed_seconds` is equal when no pod died and stricter when one did |
+| **Dv688** | `[cause: tooling]` | [[pinned-call-sites]] | rebinding `rung` reaches only the one of three inherited functions defined in the module rebound |
+| **Dv689** | `[cause: tooling]` | [[registration-authorises-the-smoke]] | the inherited `legs_of`/`leg_state` know nothing of a smoke prefix, and rung 4 would kill the pod on the first poll |
+| **Dv690** | `[cause: contract-gap]` | [[unpriceable-run]] | the contract's money block has one `total_seconds` and this run has two authorisations |
+| **Dv691** | `[cause: verify-gap]` | [[a-bar-no-reading-reaches]] | the inherited refusal fraction makes `int(0.01 × 79)` zero — a bar no transport can pass |
+| **Dv692** | `[cause: contract-gap]` | [[finding-not-defect]] | the contract does not say whether a relabelling spends a budget that prices a TRANSPORT |
+| **Dv693** | `[cause: verify-gap]` | [[false-green-under-a-STOP]] | `reader_noise_count({})` returns `signals: 0`, so an unscored bar reported GREEN over zero threads |
+| **Dv694** | `[cause: contract-gap]` | [[smoke-leg-membership]] | the contract's «bars 1/3 on the five» reaches bar 1 and not bar 3 — N2 is not one of the five |
+| **Dv695** | `[cause: contract-gap]` | [[the-smoke-is-not-a-sample]] | the registered flat charge prices 74 threads at the weight of the reference's five richest |
+| **Dv696** | `[cause: tooling]` | [[one-out-file]] | the shipped resume-skip is what makes «the five FIRST» a prefix of one leg instead of a second pack |
+| **Dv697** | `[cause: tooling]` | [[pre-generation-charged-once]] | the registered rate only closes if the two `run()` calls share one loader |
+| **Dv698** | `[cause: tooling]` | [[pinned-guard-subscripts]] | `gate_pass1_window.main` hard-subscripts `payable_comments` and that file cannot be renamed |
+| **Dv699** | `[cause: contract-gap]` | [[an-omission-is-not-a-rewrite]] | «equals the pass-1 label» does not decide a `null`, and calling it the cardinal violation makes an unbounded refusal |
+| **Dv700** | `[cause: spec-gap]` | [[two-authorities-one-word]] | `docs/PLAN-comment-signals.md` §3 writes «категория» and the ratified taxonomy writes «категория_личное» |
+| **Dv701** | `[cause: process]` | [[paid-for-clauses]] | the prompt shipped the pre-v3 wording and un-learned two clauses this line had already paid for |
+| **Dv702** | `[cause: model]` | [[report-only-field-with-refusal-power]] | the model wrote `"note": ""` on a row it did not doubt and the pinned `_text` refused the thread |
+| **Dv703** | `[cause: contract-gap]` | [[the-worked-arm-assumed-a-slow-pod]] | the contract's worked arm reads 48.6486 s/call at ~1 700 s of elapsed; the pod decided at 517.3 |
+
+**The tally, by the grep the template names** (`docs/reports/5c2-close.md` §«What the tags cover»),
+run over this file:
+
+```python
+import re, pathlib, collections
+flat = " ".join(pathlib.Path("docs/reports/pass2-signals.md").read_text(encoding="utf-8").split())
+tag = {}
+for chunk in re.split(r"(?=\*\*Dv\d+)", flat):
+    if (m := re.match(r"\*\*Dv(\d+)", chunk)) and (t := re.findall(r"\[cause:\s*([a-z-]+)\]", chunk)):
+        tag.setdefault(int(m.group(1)), t[0])
+inr = {d: t for d, t in tag.items() if 681 <= d <= 703}
+health = sum(1 for t in inr.values() if t in ("contract-gap", "spec-gap", "verify-gap"))
+print(len(inr), dict(collections.Counter(inr.values()).most_common()))
+print("contract health", health, "· paid", len(inr) - health, "· enum canonicity", len(inr), "of 23")
+```
+
+```
+23 {'contract-gap': 13, 'tooling': 5, 'verify-gap': 2, 'spec-gap': 1, 'process': 1, 'model': 1}
+contract health 16 · paid 7 · enum canonicity 23 of 23
+```
+
+**Split tally: contract health 16, paid lessons 7, enum canonicity 23 of 23.** `env` is empty —
+this session had no platform surprise; the pod it asked for is the pod it got, at the price it
+registered, on the first attempt.
+
+**And the split is the finding.** Sixteen of twenty-three are the registration meeting its own
+contract: a word that admitted two readings, a number in the wrong unit, a bar the arithmetic could
+not pass, a clause about `entities` that did not say who produces the list. Seven were paid for —
+five of them our own instruments forcing a shape (`tooling`), one the prompt shipping stale text
+(`process`), one the model (`model`). A contract that is amended sixteen times at $0 before the
+create is a contract doing its job; the reading to take from it is that pass 2's registration was
+the first of its kind on this stack and had no sibling to copy.
+
+## 2 — the pack's headroom is 144 characters, not 603
+
+The D0 section above quotes the PRE-REVIEW pack. The pack that shipped, and that the pod rendered
+against, reads:
+
+```
+length: widest 11856 chars (@mandziak:3679) · median 6712 · headroom 144 of 12000
+```
+
+**The rebuild that moved it is `4d60d33`** — «three from the bars lens, and one of them un-learned
+what this line paid for», the fix that spliced `prompts.READER_ASPECT_V5` and
+`prompts.READER_NOT_A_SIGNAL_V3` into `PASS2_THREAD_PROMPT`. The two constants are 288 and 323
+characters, and they are spliced INTO sentences the text already carried, so the edit adds 464
+characters and removes 5: the text went **5 021 → 5 480, net +459**, and every one of the 79
+requests grew by exactly that — the widest 11 397 → 11 856, the median 6 253 → 6 712. Re-derivable
+at any commit:
+
+```
+$ for c in 0a5e2f1 893295e 236a07a 4d60d33 812d24f; do git show "${c}:results/pass2_pack.json" \
+    | python3 -c "import json,sys; print(json.load(sys.stdin)['length'])"; done
+{'ceiling_chars': 12000, 'headroom_chars': 603, ... 'widest_request_chars': 11397}   0a5e2f1
+{'ceiling_chars': 12000, 'headroom_chars': 603, ... 'widest_request_chars': 11397}   893295e
+{'ceiling_chars': 12000, 'headroom_chars': 603, ... 'widest_request_chars': 11397}   236a07a
+{'ceiling_chars': 12000, 'headroom_chars': 144, ... 'widest_request_chars': 11856}   4d60d33
+{'ceiling_chars': 12000, 'headroom_chars': 144, ... 'widest_request_chars': 11856}   812d24f
+```
+
+So the sentence «603 characters of headroom, 5.0 %» is **144 characters, 1.2 %** — and the reading
+it carried gets sharper, not softer: a fix that ADDS 459 characters of prompt to buy two clauses
+spends 76 % of the remaining headroom, and nobody costed it in that unit at the time. The r1 record
+is not edited; r2 derives its own ceiling rather than inheriting pass 1's constant.
+
+## 3 — «a smoke mean of 43.09 would have been a GO» is false by 0.29 seconds
+
+Re-derived from the recorded gate (`results/pass2_signals_run.json`, the `go-no-go` snapshot,
+`cumulative_billed_seconds: 517.3`, `overhead_seconds: 1300.0`, `hard_stop_seconds: 6600.0`,
+74 units, multiplier 1.5):
+
+```
+at mean 43.09:   517.3 + 74 × 1.5 × 43.09   + 1 300 = 6 600.29  >  6 600   → STOP
+break-even:      (6 600 − 517.3 − 1 300) / (74 × 1.5) = 4 782.7 / 111 = 43.0873873…
+                 → 43.087 is the largest mean that fits, and 1.5 × 43.087 = 64.63,
+                   which is the LIVE knife edge — the two are the same number in two units
+the max arm:     1.5 × 43.087 = 64.63 > 58.07, so the maximum call does not bind at the edge
+```
+
+**The correct sentence is: a smoke mean of 43.087 — 5.5 % below the measured 45.582 — would have
+been a GO.** The gap between the two readings is 0.29 s of projected pod time, about **$0.00006**.
+
+**This is the FOURTH instance of one input carrying two values on this line, and the third inside
+the r1 report alone** — after «parse refusals ≤ 1 % of N» printed beside an enforced 14 of 79, F5a's
+`null` two blocks from prose naming that row's label, and the knife edge printed without the wait
+term billed against it. Process signal 3 above counted three and named the class; this is the fourth,
+and it appeared in the sentence that was *explaining* the third. A number written to make a point
+readable is not exempt from being re-derived — and what catches it is exactly what caught this one:
+solving the registered inequality backwards in the unit it measures, instead of rounding a quotient
+([[two_values_for_one_input_get_quoted_kindly]], [[a_published_ratio_is_not_the_gates]]).
+
+## What this addendum does NOT move
+
+- **No sealed artifact is touched.** `results/prereg_pass2_signals.json`, `results/pass2_pack.json`,
+  `results/pass2_signals_v1.jsonl`, `results/pass2_signals_run.json` and
+  `results/pass2_signals_verdict.json` are the record of a closed paid session and stay byte for
+  byte as they were written.
+- **The ADR and `knowledge/hot.md` quote none of the three numbers** — `grep -n "603\|43\.09\|11397"`
+  over `knowledge/decisions/pass-2-in-the-readers-schema-and-strict-authority.md`,
+  `knowledge/hot.md` and `knowledge/daily_logs/2026-08-22.md` returns nothing. The acceptance asked
+  for them to be corrected «where they quote the same numbers»; they do not, and that is reported
+  rather than assumed.
+- **The verdict does not move.** Rung S′ said STOP at the numbers it recorded, and 43.087 against
+  43.09 changes which counterfactual is true, not which decision was.
