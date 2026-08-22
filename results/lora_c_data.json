@@ -1,0 +1,339 @@
+{
+  "authority": "docs/STATUS.md «Открытые решения» п. 1 (в) and (к), 2026-08-22",
+  "contract": "docs/PROMPT-lora-c-prep.md D0",
+  "instruments": {
+    "module": "src/market_pulse/pass1_v3.py",
+    "module_sha256": "9baab0e92078c137d17d5275158ef6360b9f349213a671b9249f3d4433b680c7",
+    "neighbours": "build_pass1_fewshot_packs.neighbours, CALLED",
+    "prompt_sha256": {
+      "pass1_comment_gm4_v1": "5a4a3cb6ce4db89adb304c04de41210fdabfde0c53addfdb75adba0f1d866650",
+      "pass1_comment_gm4_v2": "f5f6a5afdd8573ba52bde5cf79041cf9a01d8421ea402c0f39d2ea1c1d430aee",
+      "pass1_comment_gm4_v3": "b9b27a53f8f56140657d682f49dd4e8cd1fb1364a915adb888ca999083d5a49c"
+    },
+    "renderer": "src/market_pulse/pass1_v3.py::pass1_messages_gm4_v3 — a SIBLING renderer. build_pass1_fewshot_packs.rendered_item cannot take v3: prompts.pass1_messages_gm4 raises `not a registered pass-1 prompt` for any task outside prompts.PASS1, and prompts.py is pinned by 38 records",
+    "target": "build_pass1_sft.target_for, CALLED — the +1 END-offset boundary",
+    "v3_extends_v2": true
+  },
+  "length": {
+    "ceiling_chars": 12000,
+    "headroom_chars": 2772,
+    "median_chars": 5565,
+    "widest_request": "@tarilka_malyuka:746#83",
+    "widest_request_chars": 9228
+  },
+  "phase": "lora-c-prep",
+  "pool_is_the_training_set": "one pool for every leg: base v2, base v3, arm A and arm B are rendered against the same 515 rows, so the paired table compares prompts and adapters, never neighbours",
+  "population": {
+    "arithmetic": "650 − 100 − 41 + 6 = 515 — the two exclusions overlap and the overlap is added back once",
+    "distribution": {
+      "null": 165,
+      "категория_личное": 40,
+      "молочный_бренд": 1,
+      "не_наш_рынок": 272,
+      "сеть_ритейлер": 37
+    },
+    "holdout_rows": 100,
+    "holdout_rows_inside_reference_threads": 6,
+    "labels": 650,
+    "our_rows": 41,
+    "our_share": 7.96,
+    "pool": 515,
+    "reference_rows": 41,
+    "reference_threads": [
+      "@VARUS_channel:10348",
+      "@VARUS_channel:10360",
+      "@VARUS_channel:10366",
+      "@VARUS_channel:10529",
+      "@VARUS_channel:10613",
+      "@mandziak:3676",
+      "@mandziak:3684",
+      "@mandziak:3689",
+      "@mandziak:3703",
+      "@matusi_ukr:22242",
+      "@matusi_ukr:22272",
+      "@matusi_ukr:22303",
+      "@retsepty:7312",
+      "@retsepty:7325",
+      "@retsepty:7327",
+      "@sashafitnesslife:3939"
+    ],
+    "reference_threads_carrying_labelled_rows": [
+      "@VARUS_channel:10360",
+      "@VARUS_channel:10366",
+      "@VARUS_channel:10529",
+      "@mandziak:3684",
+      "@mandziak:3689",
+      "@retsepty:7312",
+      "@retsepty:7325",
+      "@retsepty:7327"
+    ]
+  },
+  "produced_by": {
+    "script": "scripts/build_lora_c_data.py",
+    "sha256": "cf021da94e314ca699f5e25fc7f02a0c8a951142bb5a4055493abb3b4f5eda03"
+  },
+  "rationales": {
+    "author": "claude-code",
+    "codebook": "scripts/build_pass1_label_pack.py::codebook() — the labeller's own text, law v5 + the F2a carve-out + the gold r2 adjudication",
+    "codebook_sha256": "56059561291daa013bb70e9c5fe356244220d9fa4c2cd33ea7a3e3028c27106d",
+    "cue_rule": "every rationale names a cue that occurs in ITS OWN comment, compared on whitespace-collapsed case-folded text. A rationale derivable from the label alone is the label wearing a sentence, and the target would still be a deterministic function of the class — line B's failure in a new costume",
+    "distinct": {
+      "cues": 501,
+      "per_class": {
+        "null": {
+          "distinct_cues": 159,
+          "distinct_rationales": 159,
+          "rows": 165
+        },
+        "категория_личное": {
+          "distinct_cues": 40,
+          "distinct_rationales": 40,
+          "rows": 40
+        },
+        "молочный_бренд": {
+          "distinct_cues": 1,
+          "distinct_rationales": 1,
+          "rows": 1
+        },
+        "не_наш_рынок": {
+          "distinct_cues": 267,
+          "distinct_rationales": 268,
+          "rows": 272
+        },
+        "сеть_ритейлер": {
+          "distinct_cues": 36,
+          "distinct_rationales": 36,
+          "rows": 37
+        }
+      },
+      "rationales": 504
+    },
+    "file": "results/rationales_pass1_v1.jsonl",
+    "n": 515,
+    "reviewed": [
+      false
+    ],
+    "sha256": "ed817668b02bf1bb174003a2983108beaae4045c3fdd5b09fb76032a64c08a55",
+    "shapes": {
+      "коментар ПРО": 339,
+      "коментар ні про кого": 160,
+      "лише ЗГАДУЄ": 16
+    }
+  },
+  "review_gate_1": {
+    "boundary": {
+      "seed": 20260822,
+      "target": 40,
+      "the_matcher_reading": "the shipped registry-and-watchlist matchers find ZERO retailer or brand mentions in the 466 non-«our» rows. config/registry.yaml spells the chain `Varus` in Latin and the comments write «Варус» / «варусі» / «Варусу»; running the registry names through the lexicon's own stem+endings screen (yield_screen.compile_categories) reaches «Сільпо» and «АТБ» and still not «варусі». No file in this repo carries the Cyrillic spelling of that source",
+      "tier_a_found": 9,
+      "tier_a_rule": "brands.find_watchlist_brands over the sealed watchlist (ruled revision, carrier=comment), else pass 1's own window answer read сеть_ритейлер or молочный_бренд with a subject_id that occurs in the comment",
+      "tier_a_taken": 9,
+      "tier_b_drawn": 31,
+      "tier_b_found": 104,
+      "tier_b_rule": "the same, with pass 1's reading unrestricted — a name of any other kind",
+      "total": 40,
+      "watchlist_matcher_hits": 0
+    },
+    "our_rows": 40,
+    "sample": "docs/reviews/lora-c-rationales-sample.md",
+    "verdict": "docs/reviews/lora-c-rationales-verdict.md",
+    "verdict_present": false
+  },
+  "rows": {
+    "distribution": {
+      "null": 165,
+      "категория_личное": 40,
+      "не_наш_рынок": 267,
+      "сеть_ритейлер": 34
+    },
+    "our_rows": 40,
+    "refused": [
+      {
+        "id": "@VARUS_channel:10367#20766",
+        "why": "no fifth neighbour"
+      },
+      {
+        "id": "@VARUS_channel:10367#20945",
+        "why": "no fifth neighbour"
+      },
+      {
+        "id": "@VARUS_channel:10367#20947",
+        "why": "no fifth neighbour"
+      },
+      {
+        "id": "@VARUS_channel:10367#20979",
+        "why": "no fifth neighbour"
+      },
+      {
+        "id": "@VARUS_channel:10367#20981",
+        "why": "no fifth neighbour"
+      },
+      {
+        "id": "@VARUS_channel:10367#20982",
+        "why": "no fifth neighbour"
+      },
+      {
+        "id": "@VARUS_channel:10367#20983",
+        "why": "no fifth neighbour"
+      },
+      {
+        "id": "@VARUS_channel:10367#20984",
+        "why": "no fifth neighbour"
+      },
+      {
+        "id": "@VARUS_channel:10367#21006",
+        "why": "no fifth neighbour"
+      }
+    ],
+    "rendered": 506
+  },
+  "sampler": {
+    "classes_under_the_floor": [],
+    "expected_draws_per_epoch": {
+      "null": 101.1999,
+      "категория_личное": 101.2,
+      "не_наш_рынок": 101.1999,
+      "сеть_ритейлер": 101.2
+    },
+    "floor": 8,
+    "rows_per_class": {
+      "null": 165,
+      "категория_личное": 40,
+      "не_наш_рынок": 267,
+      "сеть_ритейлер": 34
+    },
+    "rule": "w_c = N/(5·n_c) capped at 8.0 — results/prereg_lora_b.json's arms.*.sampler_weights, by calling train_qlora.class_weights, the function the trainer samples with",
+    "second_rule": "«no class under 8 rows per epoch-equivalent». Expected draws are n_c·w_c = min(N/5, 8·n_c), so the majority class is capped at N/5 by the first rule and the floor can only bind on a class with fewer than 8 rows. APPLIED: none — the first rule already satisfies it, and the smallest class lands exactly on the floor",
+    "weights": {
+      "null": 0.613333,
+      "категория_личное": 2.53,
+      "не_наш_рынок": 0.379026,
+      "сеть_ритейлер": 2.976471
+    }
+  },
+  "tokens": {
+    "by_ratio": {
+      "median_observed": {
+        "max": 2675,
+        "median": 1643,
+        "min": 1505,
+        "of": 506,
+        "over_max_seq_len": 506,
+        "pods_own_count_of_the_shortest": 1489,
+        "tokens_per_char": 0.282802
+      },
+      "min_observed": {
+        "max": 2551,
+        "median": 1567,
+        "min": 1435,
+        "of": 506,
+        "over_max_seq_len": 506,
+        "pods_own_count_of_the_shortest": 1419,
+        "tokens_per_char": 0.269618
+      },
+      "registered_bound_max": {
+        "max": 2759,
+        "median": 1694,
+        "min": 1552,
+        "of": 506,
+        "over_max_seq_len": 506,
+        "pods_own_count_of_the_shortest": 1536,
+        "tokens_per_char": 0.291741
+      }
+    },
+    "chars_prompt_plus_target": {
+      "max": 9402,
+      "median": 5750,
+      "min": 5262
+    },
+    "lora_b_v1_rows_for_comparison": {
+      "chars_max": 4132,
+      "chars_median": 2950,
+      "longest_kept_tokens": 1222,
+      "source": "results/pass1_sft_arm_b.jsonl and results/prereg_lora_b.json::dropped_for_length.longest_kept"
+    },
+    "max_seq_len": 1408,
+    "max_seq_len_source": "config/qlora.yaml training.max_seq_len — FROZEN law",
+    "measured_on": "@VARUS_channel:10613#21601",
+    "observed_ratio_range": [
+      0.269618,
+      0.282802,
+      0.291741
+    ],
+    "remedies_named_none_taken": [
+      "raise config/qlora.yaml training.max_seq_len — FROZEN law, pinned by results/prereg_lora_b.json::instruments.config_sha256 and by lora-b's verdict; there is precedent (1024 → 1408 by operator decision of 2026-08-04) and it is the operator's word, never the executor's",
+      "shrink the examples block — FOUR neighbours instead of five relieves the sequence length AND dissolves the молочный_бренд blockage above, so it is ONE decision and not two; the cost is that build_pass1_fewshot_packs.neighbours calls a four-example block a different instrument from a five-example one",
+      "drop the rationale from the neighbour examples — the model then never sees the shape it is asked to produce, which is the clause's own reason for existing",
+      "drop rows over the limit — that is all 506"
+    ],
+    "rule": "the maximum over probe-b's 64 paid rows of prompt_tokens / rendered_chars. The numerator counts the chat template the pod wraps the request in, so the bound is conservative by construction",
+    "verdict": "EVERY one of the 506 rows is over max_seq_len 1408 at all three measured ratios. build_pass1_sft's own drop rule (bound > max_seq_len) would drop the whole dataset, and train_qlora.encode_pass1 would refuse every row on the pod. This is the contract's STOP and it returns to the operator"
+  },
+  "train_file": "results/pass1_sft_v3_train.jsonl",
+  "train_sha256": "0821f4aedef78ee476a993664f75feb113afdcc77551f43c82f50d887c4f40a0",
+  "unreachable": {
+    "blocked_pool_rows": [
+      [
+        "@VARUS_channel:10367",
+        20766,
+        "молочный_бренд"
+      ],
+      [
+        "@VARUS_channel:10367",
+        20945,
+        "не_наш_рынок"
+      ],
+      [
+        "@VARUS_channel:10367",
+        20947,
+        "сеть_ритейлер"
+      ],
+      [
+        "@VARUS_channel:10367",
+        20979,
+        "сеть_ритейлер"
+      ],
+      [
+        "@VARUS_channel:10367",
+        20981,
+        "сеть_ритейлер"
+      ],
+      [
+        "@VARUS_channel:10367",
+        20982,
+        "не_наш_рынок"
+      ],
+      [
+        "@VARUS_channel:10367",
+        20983,
+        "не_наш_рынок"
+      ],
+      [
+        "@VARUS_channel:10367",
+        20984,
+        "не_наш_рынок"
+      ],
+      [
+        "@VARUS_channel:10367",
+        21006,
+        "не_наш_рынок"
+      ]
+    ],
+    "blocked_pool_rows_n": 9,
+    "cause": "build_pass1_fewshot_packs.neighbours raises when a class has no candidate outside the query's own thread. The shared pool holds ONE молочный_бренд row and the exclusion that removed the other is holdout-100, which the ruling puts out of the pool",
+    "remedies_named_none_taken": [
+      "render those rows with FOUR examples — neighbours() itself says a four-example block is a different instrument, so the arm would be two instruments",
+      "allow the query's own thread as a candidate for that class alone — a per-class rule, and for the молочный_бренд row itself it would hand the model its own answer",
+      "draw the example from the EXCLUDED set — it leaks a holdout or reference-thread comment into a training and an inference request",
+      "drop the eleven rows — arm A then has ZERO real молочный_бренд positives and the holdout denominator moves off the registered 100, taking the ≥64 bar with it"
+    ],
+    "rows_in_the_650": 2,
+    "rows_in_the_pool": 1,
+    "ruling": "the operator's — this file renders what it can and names the rest",
+    "smallest_class": "молочный_бренд",
+    "the_other_one": "@mandziak:3721:48445 — a holdout row",
+    "threads": [
+      "@VARUS_channel:10367"
+    ]
+  }
+}
