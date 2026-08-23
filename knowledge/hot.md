@@ -2,23 +2,23 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-23 12:54:36 (every SessionStart)
+**Auto-refreshed:** 2026-08-23 18:09:44 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
-e4ce3e5 docs(report): lora-c-close -- the manoeuvre, and the pin the premise did not cover
-2f8fe17 fix(lora-c): the one pin that hashes the RAW spec, and the field that denied its own file
-d76091a fix(5c2): amendment 3.26 lands in the strip registry -- four touches, one by hand
-1e9eebf docs(spec): amendment 3.26 and the day-23 STATUS, verbatim from the team lead
-c15b502 chore(vault): the ceiling is closed by ruling, and what is NOT in the law is a blocker
+6f7e65d docs(report): lora-c-run STOPS at $0 -- the cap does not cover four legs, and arm B has no dataset
+1c84944 feat(lora-c): the pre-pod derivation -- and the cap does not cover the four legs
+7c7035e feat(lora-c): the sibling trainer -- two guards re-bound, everything else called
+251afcd test(lora-c): the two close debts -- a grep nobody had watched refuse, and a threshold with two homes
+ed1c341 docs(lead): lora-c-run's contract and the day-23 acceptance of lora-c-close
 ```
 
 ## 📋 Recent decisions
 
-- `INDEX.md` — Decision records
 - `lora-c-rationale-supervision-and-the-shared-pool.md` — Rationale supervision, one shared neighbour pool — and four things the design cannot reach
+- `INDEX.md` — Decision records
 - `pass-2-in-the-readers-schema-and-strict-authority.md` — pass 2 answers in the reader's schema under STRICT authority, and the fourteen keep their sixth look off a bar
 
 ## 📅 Recent daily logs
@@ -30,10 +30,11 @@ c15b502 chore(vault): the ceiling is closed by ruling, and what is NOT in the la
 <!-- AUTO-GEN END (everything below preserved across refreshes) -->
 # Hot Cache — curated
 
-**Last update:** 2026-08-23 12:54 `lora-c-apply` ПРИНЯТ, **и закон догнал рулинг: поправка SPEC 3.26
-села в реестр срезки** (`lora-c-close`, $0). Потолок 3 072 теперь читается ИЗ ЗАКОНА. Оба ревью-гейта
-закрыты — 515 рационалей и 160 синтетических строк с `reviewed: true`. Верификатор **3 669/2**,
-подов нет.
+**Last update:** 2026-08-23 18:09 `lora-c-run` ОСТАНОВЛЕН ДО СОЗДАНИЯ ПОДА — **$0 потрачено,
+попытка не израсходована, регистрация всё ещё DRAFT**. Весь $0-объём контракта сдан и зелён: два
+долга close, sibling-тренер с прогоном в обе стороны, вывод цены в записи. Две находки держат
+контракт: **капа не хватает на четыре леги** и **у арма B нет датасета**. Отчёт —
+`docs/reports/lora-c-run.md`, решение за оператором.
 
 > Этот блок курируется руками. Археология закрытых контрактов живёт в отчётах, ADR и логах дня — не
 > восстанавливать сюда то, у чего есть дом. Ценз буста мерить ДО и ПОСЛЕ каждой правки.
@@ -63,25 +64,51 @@ c15b502 chore(vault): the ceiling is closed by ruling, and what is NOT in the la
 **⚙️ ЛИНИЯ B НЕ ТРОНУТА ДВАЖДЫ, и это измерено.** Все три запечатанных артефакта пересобираются байт
 в байт и при ревизии 2, и при ревизии 3; её пины остаются на ревизии 1.
 
-**📏 ЧТО ГОТОВО К ЦЕНЕ.** 506 строк арм A · 666 арм B · шаги 62/82 (`planned` 64/84 ведёт LR) · 198
-вызовов на легу · 4 леги · 11 тредов прохода-2 · токенов на строку **1 445 мин / 1 633 медиана /
-2 975 макс — счётом, не моделью**. Кап **$4.00**. **Цена не зарегистрирована и не должна быть.**
+**📏 ЦЕНА ВЫВЕДЕНА (`lora-c-run`, $0) — И ОНА НЕ СХОДИТСЯ.** Фиксированная часть по заряженным
+ставкам контракта = бут 500 + загрузка 300 + базы 2×198×6.14 + оценки адаптеров 2×198×6.14 +
+проход-2 4×11×97 + смок 6×181.5 = **11 019.88 с**. При $0.80/ч (рунг 1 lora-b, худшая цена, при
+которой create вообще разрешён) это **$2.4489**, и на 144 шага остаётся **48.47 с/шаг**; при $0.74/ч
+(что реально платили последние пять подов) — **58.61**. Единственные два ЧТЕНИЯ s/step в репозитории
+— **61.047** и **68.442**, оба ВЫШЕ обоих порогов и оба сняты на ≤1 222 токенах против здешних
+1 445–2 975. **Ни одна s/step не зарегистрирована** — её покупает смок, и контракт запрещает её
+проецировать. По ИЗМЕРЕННЫМ сиблинг-ставкам (2.694083 с/звонок · 23.760 с/тред) порог поднимается до
+**93.47–103.20 с/шаг** — сессия коротка, но не безнадёжна; решает смок, а не арифметика.
+
+**📐 ЧТО ИЗМЕРЕНО ЗА $0 ЭТИМ КОНТРАКТОМ.** Ценз кодировки: **506 из 506 строк проходят
+`train_qlora.encode_pass1`** настоящим токенайзером на запиненной ревизии против 3 072 — **0
+отказов, максимум 2 975, запас 97**, строка в строку с `results/lora_c_tokens.json`.
+`class_weights` на арме A возвращает **ЧЕТЫРЕ** класса (`молочный_бренд` отсутствует —
+зарегистрированная недостижимость, а не сюрприз).
 
 ## ⏭️ Next
 
-1. **Приёмка `lora-c-close` тимлидом** — отчёт `docs/reports/lora-c-close.md`.
-2. **`lora-c-run`** — первый $0-деливерабл: **sibling-тренер**. `train_qlora.py` запинен
-   `prereg_lora_b.json` И `lora_b_verdict.json`, редактировать нельзя.
-3. **`money-anchors` ($0)** — СЕМЬ открытых шагов: `pass1-window`, `pass1-window-r2`,
-   `pass2-signals`, `pass2-signals-r2`, `lora-c-prep`, `lora-c-apply`, `lora-c-close`
-   (все $0, но шаги есть).
+1. **РЕШЕНИЕ ОПЕРАТОРА по `lora-c-run`** — три опции в §«What the operator is being asked»
+   отчёта: (1) поднять кап; (2) урезать до трёх лег, которые существуют (но КРАСНЫЙ на арме A
+   почти ничего не говорит — у него ноль таргетов `молочный_бренд`); (3) сначала $0-контракт
+   на датасет арма B, потом один `lora-c-run` с выведенным капом.
+2. **Приёмка STOP-отчёта `lora-c-run`** тимлидом — `docs/reports/lora-c-run.md`.
+3. **`money-anchors` ($0)** — ВОСЕМЬ открытых шагов: `pass1-window`, `pass1-window-r2`,
+   `pass2-signals`, `pass2-signals-r2`, `lora-c-prep`, `lora-c-apply`, `lora-c-close`,
+   `lora-c-run` (все $0, но шаги есть).
 
 ## 🚧 Blockers
 
-**⛔ ТРИ ОСТАВШИЕСЯ НЕДОСТИЖИМОСТИ (3.25 (3) принял STOP 1 как есть).** (1) девять строк
+**⛔ У АРМА B НЕТ ДАТАСЕТА, И CREATE — ЭТО ЗАМОРОЗКА.** `legs.arm_b.train_rows` = 666,
+`population.train` называет ОДИН файл на 506, а 160 синтетических строк —
+сырые комментарии без `prompt`/`target`/`learn_chars`: арм B не конкатенация, а РЕНДЕРИНГ, который
+никто не запускал. И не хватает не только продюсера: **нигде не зарегистрировано, как синтетическая
+строка рендерится как v3-запрос** — изоляция запрещает синтетику как СОСЕДА и молчит о синтетике
+как ЗАПРОСЕ. Порядок при этом ВЫНУЖДЕН: состояние записи — «DRAFT — frozen only by lora-c-run's
+first `pod create`», значит create до появления файла запечатает регистрацию, которая не может
+назвать половину своего же эксперимента, а дописать её после — это ре-пиннинг запечатанной записи,
+прямо запрещённый DO NOT контракта. **Поднятие капа это НЕ разблокирует.**
+
+**⛔ ДВЕ ОСТАВШИЕСЯ НЕДОСТИЖИМОСТИ (3.25 (3) принял STOP 1 как есть).** (1) девять строк
 `@VARUS_channel:10367` не рендерятся, включая единственную реальную `молочный_бренд`; (2) **у арма A
-ноль таргетов `молочный_бренд`**, у B — 32, значит бар 1 почти недостижим для A; (3) запиненный
-`train_qlora.py` отказывает v3-датасету двумя гардами — лечится sibling-тренером.
+ноль таргетов `молочный_бренд`**, у B — 32, значит бар 1 почти недостижим для A. Третья —
+запиненный `train_qlora.py`, отказывавший v3-датасету двумя гардами, — **ЗАКРЫТА**:
+`scripts/train_qlora_v3.py` переносит ровно эти два гарда и всё остальное ВЫЗЫВАЕТ; тест
+подтверждает, что сам `train_qlora` по-прежнему отказывает.
 
 **⛔ БАР 3 КРАСНЫЙ** (`@VARUS_channel:10366`, 2 сигнала против 0) — вопрос к фильтру прохода-1
 или к эталону, решается только рулингом.
