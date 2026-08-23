@@ -85,6 +85,30 @@ MAX_SEQ_LEN = int(
 table and the trainer's own refusal cannot part ([[a_moved_constant_fails_green]])."""
 
 
+def _token_verdict(table: dict, rows: int) -> str:
+    """What the ratio table says about the CURRENT ceiling, derived from its own cells.
+
+    This string was a literal describing revision 1's 1 408, and it survived two ceiling raises
+    ([[a_reading_that_outlived_its_state]]). Both directions are spelled out so a future raise or
+    repeal cannot leave it asserting the world it was written in.
+    """
+    over = {name: cell["over_max_seq_len"] for name, cell in table.items()}
+    worst = max(over.values())
+    if worst == 0:
+        return (
+            f"at max_seq_len {MAX_SEQ_LEN} this MODEL puts 0 of {rows} rows over, at all three"
+            " measured ratios. It is a model and it under-predicts: results/lora_c_tokens.json"
+            " counts the same rows through the real tokenizer and the widest is 228 tokens above"
+            " what the worst ratio here projects. The count, not this table, is what the"
+            " registration stands on"
+        )
+    return (
+        f"at max_seq_len {MAX_SEQ_LEN} this model puts {min(over.values())}–{worst} of {rows} rows"
+        " over, by ratio. build_pass1_sft's own drop rule (bound > max_seq_len) would drop them and"
+        " train_qlora.encode_pass1 would refuse them on the pod"
+    )
+
+
 def norm(text: str) -> str:
     """Whitespace-collapsed, case-folded — the form every cue is checked against.
 
@@ -705,13 +729,14 @@ def token_table(trained: list[dict]) -> dict:
     is this bound minus `build_pass1_sft.TEMPLATE_SLACK`, and the producer's drop rule and the pod's
     refusal are two readings of one number ([[drive_the_consumer_not_only_the_producer]]).
 
-    **The reading: every v3 row is over the frozen ceiling, at every ratio the repo has measured.**
-    Not a bound artefact — at the MINIMUM observed ratio the SHORTEST row still needs 1 419 tokens
-    of the pod's own count against 1 408. The cause is size: v3's request is 5 262–9 402 characters
-    where lora-b's v1 rows were 2 950 median and 4 132 max, because the five-neighbour block now
-    carries a rationale per example on top of v2's two extra paragraphs. `config/qlora.yaml` is
-    FROZEN law and pinned by `results/prereg_lora_b.json::instruments.config_sha256`, so this is a
-    ruling and not an edit ([[compute_the_ceiling_first]]).
+    **This table is a MODEL and `results/lora_c_tokens.json` is the count that replaced it.** At
+    revision 1's ceiling of 1 408 every v3 row was over it at every ratio here; the operator raised
+    the ceiling twice — 2 816 (amendment 3.25 (1)) and 3 072 (ruling of 2026-08-23) — and at 3 072
+    this table reports zero. That is NOT the same statement as «the rows fit»: the model
+    under-predicts the widest row by 228 tokens against the real tokenizer, which is why the
+    amendment ordered a count and why the count is what the registration now stands on. Every
+    reading below is derived from the cells, so a ceiling that moves again cannot leave a sentence
+    behind ([[a_reading_that_outlived_its_state]], [[compute_the_ceiling_first]]).
     """
     ratio = sft.ratio()
     sizes = sorted(len(one["prompt"]) + len(one["target"]) for one in trained)
@@ -750,11 +775,11 @@ def token_table(trained: list[dict]) -> dict:
             "::dropped_for_length.longest_kept",
         },
         "by_ratio": table,
-        "verdict": (
-            f"EVERY one of the {len(sizes)} rows is over max_seq_len {MAX_SEQ_LEN} at all three"
-            " measured ratios. build_pass1_sft's own drop rule (bound > max_seq_len) would drop the"
-            " whole dataset, and train_qlora.encode_pass1 would refuse every row on the pod. This"
-            " is the contract's STOP and it returns to the operator"
+        "verdict": _token_verdict(table, len(sizes)),
+        "superseded_by": (
+            "results/lora_c_tokens.json — the model's own tokenizer, run for real at the pinned"
+            " revision on all 506 rows. This table is kept because the 2 816 ceiling was DERIVED"
+            " from it and a reader has to be able to see what was derived from what"
         ),
         "the_text_and_the_block_BOTH_matter": {
             "v3_prompt_chars": len(pass1_v3.PASS1_COMMENT_PROMPT_V3),
@@ -766,9 +791,11 @@ def token_table(trained: list[dict]) -> dict:
                 len(pass1_v3.PASS1_COMMENT_PROMPT_V3) * PROBE_RATIO_MIN
             ),
             "share_of_max_seq_len": (
-                "the prompt TEXT alone occupies 79–85 % of the ceiling — 1 109 to 1 200 tokens of"
-                " 1 408 — before a single neighbour, the topic, the entity block, the comment or"
-                " the target. That leaves 208–299 tokens for all of them together"
+                "the prompt TEXT alone is 1 109 to 1 200 tokens at the measured ratio range —"
+                f" {round(100 * 1109 / MAX_SEQ_LEN)}–{round(100 * 1200 / MAX_SEQ_LEN)} % of the"
+                f" current ceiling of {MAX_SEQ_LEN}, and 79–85 % of revision 1's 1 408 where this"
+                " reading was first taken — before a single neighbour, the topic, the entity block,"
+                " the comment or the target"
             ),
             "the_dichotomy_is_FALSE_and_this_is_the_correction": (
                 "an earlier version of this record said «the cause is the TEXT, not the block». The"
@@ -782,11 +809,15 @@ def token_table(trained: list[dict]) -> dict:
             ),
         },
         "measured_at_other_neighbour_counts": fewer_examples(trained),
+        "remedies_the_operator_TOOK": [
+            "raise config/qlora.yaml training.max_seq_len — 1 408 -> 2 816 by amendment 3.25 (1)"
+            " and 2 816 -> 3 072 by the operator's ruling of 2026-08-23, on the strength of the"
+            " tokenizer count in results/lora_c_tokens.json. Both are the operator's word, as the"
+            " precedent (1 024 -> 1 408, 2026-08-04) was; the executor never raised it. Line B's"
+            " pins on revision 1 stay sealed and its three sealed artefacts rebuild byte-identical"
+            " at every revision since",
+        ],
         "remedies_named_none_taken": [
-            "raise config/qlora.yaml training.max_seq_len — FROZEN law, pinned by"
-            " results/prereg_lora_b.json::instruments.config_sha256 and by lora-b's verdict; there"
-            " is precedent (1024 → 1408 by operator decision of 2026-08-04) and it is the"
-            " operator's word, never the executor's",
             "shrink the examples block — MEASURED, and it does NOT close this STOP. With FOUR"
             " examples (the smallest class's dropped) 484 of 506 rows are still over at the most"
             " favourable measured ratio and 506 of 506 at the registered one; with ONE example 62"

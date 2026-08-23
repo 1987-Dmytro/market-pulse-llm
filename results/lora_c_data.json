@@ -85,7 +85,7 @@
   },
   "produced_by": {
     "script": "scripts/build_lora_c_data.py",
-    "sha256": "f24a49ead48b181ac7735521e273b7f74d180b3aa18d095c981ea836938d9922"
+    "sha256": "e94afe31e984f0b57dbdd5f44b13fc14b0e9174374479a8b5cb607473b5d0ee0"
   },
   "rationales": {
     "author": "claude-code",
@@ -281,7 +281,7 @@
       "longest_kept_tokens": 1222,
       "source": "results/pass1_sft_arm_b.jsonl and results/prereg_lora_b.json::dropped_for_length.longest_kept"
     },
-    "max_seq_len": 2816,
+    "max_seq_len": 3072,
     "max_seq_len_source": "config/qlora.yaml training.max_seq_len — FROZEN law",
     "measured_at_other_neighbour_counts": {
       "best_case_over": 0,
@@ -359,21 +359,24 @@
       0.291741
     ],
     "remedies_named_none_taken": [
-      "raise config/qlora.yaml training.max_seq_len — FROZEN law, pinned by results/prereg_lora_b.json::instruments.config_sha256 and by lora-b's verdict; there is precedent (1024 → 1408 by operator decision of 2026-08-04) and it is the operator's word, never the executor's",
       "shrink the examples block — MEASURED, and it does NOT close this STOP. With FOUR examples (the smallest class's dropped) 484 of 506 rows are still over at the most favourable measured ratio and 506 of 506 at the registered one; with ONE example 62 rows are still over. It DOES dissolve the молочный_бренд blockage above, but that is a SCOPED change to nine rows of one thread and this would be a global one — two decisions, not one ([[a_claim_no_number_can_check]])",
       "drop the rationale from the neighbour examples — the model then never sees the shape it is asked to produce, which is the clause's own reason for existing",
       "drop rows over the limit — that is all 506"
     ],
+    "remedies_the_operator_TOOK": [
+      "raise config/qlora.yaml training.max_seq_len — 1 408 -> 2 816 by amendment 3.25 (1) and 2 816 -> 3 072 by the operator's ruling of 2026-08-23, on the strength of the tokenizer count in results/lora_c_tokens.json. Both are the operator's word, as the precedent (1 024 -> 1 408, 2026-08-04) was; the executor never raised it. Line B's pins on revision 1 stay sealed and its three sealed artefacts rebuild byte-identical at every revision since"
+    ],
     "rule": "the maximum over probe-b's 64 paid rows of prompt_tokens / rendered_chars. The numerator counts the chat template the pod wraps the request in, so the bound is conservative by construction",
+    "superseded_by": "results/lora_c_tokens.json — the model's own tokenizer, run for real at the pinned revision on all 506 rows. This table is kept because the 2 816 ceiling was DERIVED from it and a reader has to be able to see what was derived from what",
     "the_text_and_the_block_BOTH_matter": {
-      "share_of_max_seq_len": "the prompt TEXT alone occupies 79–85 % of the ceiling — 1 109 to 1 200 tokens of 1 408 — before a single neighbour, the topic, the entity block, the comment or the target. That leaves 208–299 tokens for all of them together",
+      "share_of_max_seq_len": "the prompt TEXT alone is 1 109 to 1 200 tokens at the measured ratio range — 36–39 % of the current ceiling of 3072, and 79–85 % of revision 1's 1 408 where this reading was first taken — before a single neighbour, the topic, the entity block, the comment or the target",
       "the_dichotomy_is_FALSE_and_this_is_the_correction": "an earlier version of this record said «the cause is the TEXT, not the block». The record's own table refutes it: the MEDIAN row exceeds the ceiling by 159 tokens and the five-example block is worth ~223 median tokens, so the block weighs more than the median row's excess and at ONE example the median row FITS. What is true is narrower and still closes the STOP: no LEGAL neighbour count makes ALL rows fit — the widest rows are over at every choice — and zero neighbours is refused by the renderer. The text is why the margin is thin; the tail is why no count is enough ([[co_occurrence_is_not_explanation]])",
       "v2_prompt_chars": 3455,
       "v3_prompt_chars": 4112,
       "v3_prompt_tokens_at_the_min_ratio": 1109,
       "v3_prompt_tokens_at_the_worst_ratio": 1200
     },
-    "verdict": "EVERY one of the 506 rows is over max_seq_len 2816 at all three measured ratios. build_pass1_sft's own drop rule (bound > max_seq_len) would drop the whole dataset, and train_qlora.encode_pass1 would refuse every row on the pod. This is the contract's STOP and it returns to the operator"
+    "verdict": "at max_seq_len 3072 this MODEL puts 0 of 506 rows over, at all three measured ratios. It is a model and it under-predicts: results/lora_c_tokens.json counts the same rows through the real tokenizer and the widest is 228 tokens above what the worst ratio here projects. The count, not this table, is what the registration stands on"
   },
   "train_file": "results/pass1_sft_v3_train.jsonl",
   "train_sha256": "cf55d3f20216139845d320b4283d543c5283e3475f3c6afa42ea98cf20997c18",

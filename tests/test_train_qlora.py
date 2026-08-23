@@ -249,4 +249,4 @@ def test_the_provenance_names_the_rendering_the_gate_will_check(tmp_path):
     assert record["prompt_revision_sha256"] == prompts.revision_sha256("v4")
     # the carry-through, not a second copy of the constant: `config/qlora.yaml` is at revision 2
     # (amendment 3.25 (1)) and a literal here would pin the value in a file that does not own it
-    assert record["config"]["training"]["max_seq_len"] == config["training"]["max_seq_len"] == 2816
+    assert record["config"]["training"]["max_seq_len"] == config["training"]["max_seq_len"] == 3072

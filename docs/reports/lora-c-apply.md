@@ -1,8 +1,15 @@
 # lora-c-apply — the two verdicts, amendment 3.25, and the count that refuses the ceiling
 
 **Everything below cost $0. No pod, no endpoint, no paid call of any kind.** Both review gates are
-applied and closed; the registration is re-issued as a DRAFT. **One thing STOPS back to the
-operator, and it is the reality check amendment 3.25 (1) ordered against exactly this hazard.**
+applied and closed; the registration is re-issued as a DRAFT. **One thing STOPPED back to the
+operator — the reality check amendment 3.25 (1) ordered against exactly this hazard — and it has
+since been ANSWERED.**
+
+> **Ruling, operator, 2026-08-23: «поднимай max_seq_len до 3072».** `config/qlora.yaml` is at
+> **revision 3** and no row of the 506 is over it, by the tokenizer's count or by that count plus
+> `TEMPLATE_SLACK`. The section «The ruling, and what it moved» at the end of D3 carries the
+> arithmetic; everything before it is the state that produced the escalation and is left standing,
+> because the reason a ceiling is 3 072 is the count that refused 2 816.
 
 ## Read back — one line each
 
@@ -348,7 +355,38 @@ The amendment's own next rung fits: 2 991 sits under 3 072 with 81 tokens to spa
 conservative reading and 97 on the true count, and 3.25 (1) already calls it «one word, not a
 redesign». **This contract does not take it.** Raising frozen law is the operator's word.
 
-### What the STOP stops, and why D4 and D5 ran anyway
+### The ruling, and what it moved
+
+The operator answered on 2026-08-23 with the rung 3.25 (1) had named in advance — «the next rung is
+3 072 and it is one word, not a redesign». `config/qlora.yaml` is at **revision 3**.
+
+| | by the tokenizer's count | + `TEMPLATE_SLACK` |
+|---|---|---|
+| widest row | 2 975 | 2 991 |
+| rows over the ceiling 3 072 | **0 of 506** | **0 of 506** |
+| headroom under 3 072 | **97 tokens** | **81 tokens** |
+
+**Both readings of the headroom are published, and the margin is thin — under 4 % of the ceiling.**
+What separates it from how 2 816 was set is that this is a COUNT and not a projection: the ratio
+model that produced 2 816 still under-predicts the widest row by 228 tokens, and that finding is
+unchanged by the ruling. `results/lora_c_tokens.json` now reads as a history — the count that fired,
+the escalation, the answer — and `STOP_AT = 2800` is kept for exactly that reason: deleting the
+threshold would delete the reason 3 072 exists.
+
+**Line B is untouched again, and it was measured rather than reasoned forward.** Driving
+`build_pass1_sft.py` at revision 3 rebuilds `pass1_sft_arm_a.jsonl`, `pass1_sft_arm_b.jsonl` and
+`lora_b_smoke_pack.json` **byte-identical**, as at revision 2. Its pins stay on revision 1 and are
+never re-taken.
+
+**Where this ruling's authority does and does not live.** It is recorded in `config/qlora.yaml`'s
+revision-3 comment, in `results/lora_c_tokens.json::ruling`, in
+`results/prereg_lora_c.json::training.config_revision_history` and here. **It is NOT in
+`docs/SPEC.md`** — that is a team-lead file and the executor never edits it — so a later contract
+grepping SPEC for the ceiling in force will find amendment 3.25 (1)'s **2 816** and nothing after
+it. The registration carries a field beside the verbatim quote saying so. **Writing the marked block
+is the team lead's.**
+
+### What the STOP stopped, and why D4 and D5 ran anyway
 
 D3's instruction is «STOP back to the team lead if any row exceeds 2 800», and this report then
 presents a completed D4 and D5. The reading applied, stated so it can be overruled: **the STOP is on
@@ -515,6 +553,7 @@ this contract.**
 | **Dv775** | `[cause: process]` [[the_fix_widened_the_denominator]] | **A metric improved without being targeted, and the record nearly took credit for tuning.** Four of six register axes missed at the gate-2 sample; one of seven misses now. Nothing aimed at those axes: R1/R2 replaced fifteen price-and-stock fragments with thing-quality claims and R5 rewrote ten skeletons into longer forms. Recorded with its cause, because «the register now matches» read as an achievement of the rewrite would be a claim about an instrument nobody moved. |
 | **Dv777** | `[cause: verify-gap]` [[two_values_for_one_input_get_quoted_kindly]] | **The stop threshold has two readings and the record published one — the larger.** `rows_over_the_stop_threshold` tested `pod_count + TEMPLATE_SLACK > 2 800` and reported **3**; the amendment's words are «a **true count** above 2 800» and the true count is **2**. `TEMPLATE_SLACK` = 16 exists to correct a CHARACTER-RATIO estimate of the chat template, which `apply_chat_template` already counts here, so the +16 double-counts — at exactly the row that separates 2 from 3. `@matusi_ukr:22327#580336` reads 2 785 raw and 2 801 with slack: over by ONE token under a correction that should not have been applied. Both readings are now published with the row that separates them, and the STOP is shown invariant to the question — two rows are over `max_seq_len` 2 816 itself under either. **This is the seventh instance of one input with two values on this line**, and the first where the wrong one was the number an operator's ruling rests on. |
 | **Dv778** | `[cause: contract-gap]` [[the_contracts_scope_is_narrower_than_the_rulings]] | **D3 says STOP and D4, D5 and the report ran after it.** The reading applied — the STOP is on the PAID line, not on the $0 contract — rests on three sentences: amendment 3.25 (1) scopes it «before `lora-c-run` buys anything», D5 of this contract requires «the tokenizer result from D3» inside the registration, and the contract closes with «STOP after the report for team-lead acceptance». Recorded as a deviation rather than left as prose, because a team lead reading a STOP instruction followed by two more phases is owed the reasoning and the option to overrule it. Nothing was taken on the strength of it: the 3 072 rung is untouched, no threshold moved, no row dropped. |
+| **Dv780** | `[cause: spec-gap]` [[a_registered_bar_may_have_no_producer]] | **The ceiling in force is not in the law, and the law still names the one it replaced.** The operator's ruling of 2026-08-23 raised `max_seq_len` to 3 072; `docs/SPEC.md` amendment 3.25 (1) reads «1 408 → 2 816», it is quoted verbatim into the registration and grepped back at every build, and that grep still passes because the SPEC text has not moved. So the record pins a config whose value contradicts the law it quotes. The executor may not write a SPEC block. Recorded in four places the executor DOES own, and flagged in the registration beside the quote, so «grep SPEC for the ceiling» returns 2 816 with a pointer rather than silently. **The marked block is the team lead's to write.** |
 | **Dv779** | `[cause: process]` [[a_review_that_verifies_a_moving_tree]] | **The second skeptic was launched on a frozen sha and returned nothing — the second time on this line.** It was given both shas, the checklist and the DO NOT list; it ran 28 minutes and a full `make check` of its own, then answered three requests for its text — one of which offered a one-line `NOTHING TO REPORT` — with four empty idle notifications. `lora-c-prep` closed with the same shape (Dv748: five lenses, none answering for 95 minutes). **The construction is right and the apparatus does not answer**, and this row exists so «reviewed» is not read off a section that says nothing. What replaced it is the same checklist run by ME over the same range, recorded as the executor checking his own work; every DO NOT clause holds, and the one question an executor cannot answer about himself — whether the P-NULL rule I wrote is the rule the verdict meant — is left open in the report rather than closed by my own re-reading. |
 | **Dv776** | `[cause: process]` [[a_review_that_verifies_a_moving_tree]] | **The opening tree was RED and the suite stamp said 35.** Eight of 3 658 failed, all of them caused by the team-lead files already on disk before the first commit: four the landing manoeuvre for `amendment-3.25`, four lora-c's records still saying `verdict_present: false`. Recorded at step 0 rather than discovered at D5 — the baseline instrument's stamp (35 passed) was a partial run and the live `make check` is what said so. |
 
@@ -527,10 +566,10 @@ tag = {}
 for chunk in re.split(r"(?=\*\*Dv\d+)", flat):
     if (m := re.match(r"\*\*Dv(\d+)", chunk)) and (t := re.findall(r"\[cause:\s*([a-z-]+)\]", chunk)):
         tag.setdefault(int(m.group(1)), t[0])
-inr = {d: t for d, t in tag.items() if 765 <= d <= 779}
+inr = {d: t for d, t in tag.items() if 765 <= d <= 780}
 health = sum(1 for t in inr.values() if t in ("contract-gap", "spec-gap", "verify-gap"))
 print(len(inr), dict(collections.Counter(inr.values()).most_common()))
-print("contract health", health, "· paid", len(inr) - health, "· enum canonicity", len(inr), "of 15")
+print("contract health", health, "· paid", len(inr) - health, "· enum canonicity", len(inr), "of 16")
 ```
 
 ## Process signals

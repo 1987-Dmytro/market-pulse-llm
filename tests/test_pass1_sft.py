@@ -120,7 +120,7 @@ def test_no_row_can_exceed_the_frozen_max_seq_len(state):
 
     config = yaml.safe_load((REPO_ROOT / "config" / "qlora.yaml").read_text(encoding="utf-8"))
     registered = json.loads((REPO_ROOT / "results" / "pass1_sft.json").read_text("utf-8"))
-    assert state["max_seq_len"] == config["training"]["max_seq_len"] == 2816
+    assert state["max_seq_len"] == config["training"]["max_seq_len"] == 3072
     assert registered["length"]["max_seq_len"] == 1408
     assert registered["census"]["dropped_for_length"]["longest_kept"] == 1222 <= 1408
     assert all(row["bound_tokens"] <= state["max_seq_len"] for row in state["rows"])

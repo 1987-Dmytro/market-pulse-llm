@@ -57,7 +57,22 @@ training:
   # revision 1 and join preflight's «carries an older pin» list, which is what a sealed record
   # doing its job looks like. Nothing of line B's data moves with the number — its longest kept row
   # is 1 222 tokens and it dropped 0 rows for length at 1 408, so it drops 0 at 2 816 too.
-  max_seq_len: 2816
+  #
+  # REVISION 3 (operator ruling, 2026-08-23, at the acceptance of the `lora-c-apply` STOP report):
+  # 2 816 -> 3 072. This is the rung amendment 3.25 (1) named in advance — «the next rung is 3 072
+  # and it is one word, not a redesign» — and the word was given after the reality check that
+  # clause ordered came back above its own 2 800 stop. Revision 2's 2 816 was derived from a
+  # tokens-per-character MODEL (2 759 at the registered worst ratio); the model under-predicts the
+  # widest v3 row by 228 tokens, and the tokenizer's own count is 2 975 (2 991 with TEMPLATE_SLACK).
+  # 3 072 clears that by 97 tokens on the true count and 81 with slack — a COUNT this time, not a
+  # projection, so the margin is thin but it is real. Two of the 506 rows were over 2 816 itself and
+  # `train_qlora.encode_pass1` would have refused them on the pod; none is over 3 072.
+  # Line B is untouched by this, as it was by revision 2: its longest kept row is 1 222 tokens and
+  # it dropped 0 rows for length at 1 408, so it drops 0 here, and its pins on revision 1 stay
+  # sealed and are never re-taken. Raising this is a guard threshold and not a pad width —
+  # `collate` pads to the longest row in each micro-batch — so the ceiling itself costs no step
+  # time and no memory; what costs is the rows' own length, which has not changed.
+  max_seq_len: 3072
   micro_batch_size: 2
   grad_accum: 8 # effective batch 16; on OOM the trainer halves one and doubles the other
   seed: 42

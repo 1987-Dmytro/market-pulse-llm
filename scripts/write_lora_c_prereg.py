@@ -298,7 +298,9 @@ def bars(data_record: dict) -> dict:
     }
 
 
-def money(eval_pack: dict, data_record: dict, train_rows: int, synthetic_rows: int) -> dict:
+def money(
+    eval_pack: dict, data_record: dict, train_rows: int, synthetic_rows: int, counted: dict
+) -> dict:
     """LEFT OPEN by the contract: formulas, named rates, and no sum.
 
     Every rate here was measured on something, and for two of the three the thing it was measured on
@@ -429,9 +431,12 @@ def money(eval_pack: dict, data_record: dict, train_rows: int, synthetic_rows: i
                     " 121.0 is not a reading at all but a worked example constructed from the 122 s"
                     " watchdog. The length condition binds on 61.047 and 68.442"
                     " (results/prereg_lora_b.json::dropped_for_length.longest_kept). v3's rows are"
+                    f" {counted['pod_count']['min']}–{counted['pod_count']['max']} tokens by the"
+                    " TOKENIZER'S OWN COUNT (results/lora_c_tokens.json) — not the ratio model's"
                     f" {data_record['tokens']['by_ratio']['min_observed']['min']}–"
-                    f"{data_record['tokens']['by_ratio']['registered_bound_max']['max']} tokens at"
-                    " the measured ratio range. config/qlora.yaml's own comment says raising"
+                    f"{data_record['tokens']['by_ratio']['registered_bound_max']['max']}, which"
+                    " under-predicts the widest row by 228 tokens. config/qlora.yaml's own comment"
+                    " says raising"
                     " max_seq_len «changes no step time and no memory except on the batches that"
                     " need it» — here EVERY batch needs it, so none of the three is this line's"
                     " rate. Named as inherited readings, never used as the formula's input"
@@ -450,12 +455,21 @@ def reachability(data_record: dict, counted: dict) -> dict:
     tokens = data_record["tokens"]
     return {
         "the_smallest_class_has_no_fifth_neighbour": data_record["unreachable"],
-        "three_rows_do_not_fit_max_seq_len": {
+        "max_seq_len_RESOLVED_by_the_operators_ruling": {
             "state": (
                 "amendment 3.25 (1) raised the ceiling 1 408 -> 2 816 and ordered a reality check"
                 " before `lora-c-run` buys anything. The check RAN, at $0, through the model's own"
-                " tokenizer at the pinned revision — and it STOPS the line back to the operator"
+                " tokenizer at the pinned revision, and it came back ABOVE the amendment's own"
+                f" 2 800 stop — so the line went back to the operator, who ruled"
+                f" {counted['ruling']['ceiling_after']} on {counted['ruling']['date']}"
+                " («поднимай max_seq_len до 3072»), the rung 3.25 (1) had named in advance."
+                " config/qlora.yaml is at revision 3 and NO row is over it. **This block is kept"
+                " as the history of a threshold that fired and was answered**, not as an open"
+                " unreachability — the three beside it are still open"
             ),
+            "resolved": True,
+            "headroom": counted["headroom_under_the_ceiling"],
+            "where_the_authority_lives": counted["ruling"]["recorded_in_the_spec_by"],
             "counted": counted,
             "what_the_model_said_and_the_count_says": (
                 f"the three-ratio model puts the widest row at"
@@ -486,13 +500,17 @@ def reachability(data_record: dict, counted: dict) -> dict:
                 " 2 785 and crossed the slack boundary by ONE token. The finding predates the"
                 " contract that reports it"
             ),
-            "the_operators_own_next_rung": (
-                "3.25 (1)'s own words: «the next rung is 3 072 and it is one word, not a redesign»."
-                f" {counted['pod_count_plus_template_slack']['max']} fits under 3 072 with"
-                f" {3072 - counted['pod_count_plus_template_slack']['max']} tokens to spare — and"
-                " that is the CONSERVATIVE reading; the true count leaves"
-                f" {3072 - counted['pod_count']['max']}. This"
-                " registration does NOT take that rung: raising frozen law is the operator's word"
+            "the_rung_the_operator_took": (
+                "3.25 (1)'s own words: «the next rung is 3 072 and it is one word, not a redesign»,"
+                " and that is the word given on 2026-08-23."
+                f" {counted['pod_count_plus_template_slack']['max']} fits under"
+                f" {counted['headroom_under_the_ceiling']['ceiling']} with"
+                f" {counted['headroom_under_the_ceiling']['with_template_slack']} tokens to spare on"
+                " the CONSERVATIVE reading and"
+                f" {counted['headroom_under_the_ceiling']['by_the_true_count']} on the true count."
+                " Both are published because one number in prose is the trap the 2 800 split was."
+                " The margin is thin — under 4 % of the ceiling — and it is a COUNT rather than a"
+                " projection, which is the whole difference from how 2 816 was set"
             ),
             "rows_over": counted["over"],
             "rows_over_max_seq_len": counted["rows_over_max_seq_len"],
@@ -634,6 +652,14 @@ def build() -> dict:
                     "all three clauses are grepped back into docs/SPEC.md on every build of this"
                     " file, whitespace-normalised, by `quoted_spec`"
                 ),
+                "1_max_seq_len_SUPERSEDED": (
+                    "the clause above names 2 816 and the config is at 3 072. The quotation is"
+                    " verbatim law and is not edited; what superseded it is the operator's ruling"
+                    f" of {counted['ruling']['date']}, which 3.25 (1) pre-authorised by naming"
+                    " 3 072 as the next rung. **No marked block in docs/SPEC.md records that"
+                    " ruling yet** — SPEC is a team-lead file — so a later contract grepping SPEC"
+                    " for the ceiling in force will find 2 816 and must read this field beside it"
+                ),
             },
             "quotation_rule": (
                 "both strings are grepped back into docs/STATUS.md on every build of this file,"
@@ -695,7 +721,15 @@ def build() -> dict:
             "inherited_from": "results/prereg_lora_b.json — by NAME, and every number says so",
             "config": "config/qlora.yaml — FROZEN law",
             "config_sha256": sha(QLORA),
-            "config_revision": 2,
+            "config_revision": 3,
+            "config_revision_history": {
+                "1": "1 408 — operator, 2026-08-04. Line B registered under it and its pins stay on it",
+                "2": "2 816 — amendment 3.25 (1), derived from the tokens-per-character MODEL",
+                "3": (
+                    f"{counted['ruling']['ceiling_after']} — {counted['ruling']['by']},"
+                    f" {counted['ruling']['date']}, on the strength of the tokenizer COUNT"
+                ),
+            },
             "config_agrees_with_lora_b": sha(QLORA) == lora_b["instruments"]["config_sha256"],
             "config_agrees_with_lora_b_reading": (
                 "FALSE ON PURPOSE, and the field publishes the false value rather than being"
@@ -850,7 +884,7 @@ def build() -> dict:
             "gold": {"record": "results/reader_gold_w1_r2.json", "sha256": sha(GOLD)},
             "holdout": {"record": "results/pass1_holdout_100.json", "sha256": sha(HOLDOUT)},
         },
-        "money": money(eval_pack, data_record, train_rows, synthetic_rows),
+        "money": money(eval_pack, data_record, train_rows, synthetic_rows, counted),
         "ready_to_price": {
             "rule": "every number here comes from a file this contract built, at $0",
             "train_rows": train_rows,

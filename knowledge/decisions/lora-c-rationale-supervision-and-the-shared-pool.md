@@ -260,3 +260,29 @@ and the verdict's «expected small» was calibrated on a third of the corpus. An
 outlives the state it describes — a remedy «not taken» after it was taken, a concern «the gate
 decides» after the gate decided, three named-deliberate register gaps after they closed. All three
 now derive their reading from the measurement beside them.
+
+## Update — the operator's ruling of 2026-08-23: `max_seq_len` 3 072, and the line is clear
+
+**«поднимай max_seq_len до 3072».** The rung amendment 3.25 (1) had named in advance, given after
+the reality check that clause ordered came back above its own 2 800 stop. `config/qlora.yaml` is at
+**revision 3**.
+
+| | tokenizer's count | + `TEMPLATE_SLACK` |
+|---|---|---|
+| widest of the 506 rows | 2 975 | 2 991 |
+| over the ceiling 3 072 | **0** | **0** |
+| headroom | **97** | **81** |
+
+**The margin is thin — under 4 % — and it is a COUNT, which is the whole difference from how 2 816
+was set.** The ratio model that produced 2 816 still under-predicts the widest row by 228 tokens;
+the ruling does not touch that finding, and `STOP_AT = 2800` stays in the producer because deleting
+the threshold would delete the reason 3 072 exists. `results/lora_c_tokens.json` now reads as a
+history: the count that fired, the escalation, the answer.
+
+**Line B is untouched a second time, and measured rather than reasoned forward** — all three sealed
+artefacts rebuild byte-identical at revision 3, and its pins stay on revision 1.
+
+**Where the authority is NOT.** `docs/SPEC.md` still reads «1 408 → 2 816» and no marked block
+records this ruling — SPEC is a team-lead file. The registration carries a field beside the verbatim
+quote saying the ruling superseded the number, so a later contract grepping SPEC for the ceiling in
+force finds 2 816 **with a pointer** rather than silently. Writing that block is the team lead's.

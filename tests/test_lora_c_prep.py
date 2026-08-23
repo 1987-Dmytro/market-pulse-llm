@@ -312,41 +312,48 @@ def test_the_pinned_trainer_refuses_a_v3_row_by_name(tmp_path):
     assert trainer.load_sft(path)[0]["id"] == row["id"]
 
 
-def test_the_ratio_model_clears_2816_and_the_real_tokenizer_does_not(record):
-    """The second STOP after amendment 3.25 (1), as the two numbers that disagree.
+def test_the_ceiling_holds_by_the_COUNT_and_the_model_still_under_predicts(record):
+    """After the operator's ruling of 2026-08-23, both the model and the tokenizer clear 3 072.
 
-    The model that DERIVED 2 816 says every row now fits it. The tokenizer, run for real at the
-    pinned revision, says three rows cross the amendment's own 2 800 stop and the widest needs more
-    than `max_seq_len` itself. Both directions are asserted, because either alone passes for the
-    wrong reason: a model that still refused every row would mean the raise never landed, and a
-    count under 2 800 would mean there is nothing to take back to the operator
-    ([[projected_rate_versus_measured_rate]]).
+    The name no longer asserts a disagreement about PASS/FAIL, because there is none — what survives
+    is the property that made the count worth buying: the ratio model under-predicts the widest row
+    by 228 tokens, so the ceiling holds by the COUNT and not by the model. That is the finding; the
+    pass is not ([[projected_rate_versus_measured_rate]]).
+
+    The 2 800 stop is asserted as HISTORY: it fired, and it is kept in the record because deleting
+    it would delete the reason 3 072 exists.
     """
     tokens = record["tokens"]
     counted = json.loads((REPO_ROOT / "results" / "lora_c_tokens.json").read_text("utf-8"))
-    assert tokens["max_seq_len"] == data.MAX_SEQ_LEN == 2816
+    assert tokens["max_seq_len"] == data.MAX_SEQ_LEN == 3072
     for name, cell in tokens["by_ratio"].items():
         assert cell["over_max_seq_len"] == 0, name
 
     assert counted["rows"] == len(jsonl(TRAIN)) == 506
     assert counted["max_seq_len"] == tokens["max_seq_len"]
-    assert counted["stop_threshold"] == 2800
-    over = counted["rows_over_the_stop_threshold"]
-    # BOTH readings, and the row that separates them, because the operator's ruling rests on the
-    # integer and `TEMPLATE_SLACK` corrected a character-ratio estimate the tokenizer already counts
-    # ([[two_values_for_one_input_get_quoted_kindly]])
-    assert over["by_the_true_count"] == len(counted["over"]["by_the_true_count"]) == 2
-    assert over["with_template_slack"] == len(counted["over"]["with_template_slack"]) == 3
-    assert over["the_difference"] == ["@matusi_ukr:22327#580336"]
-    assert over["which_the_amendment_names"].startswith("by_the_true_count")
-    # and the invariance that makes the STOP a finding rather than a wobble
+    # the ceiling holds by the count, under BOTH readings of it
     ceiling = counted["rows_over_max_seq_len"]
-    assert ceiling["by_the_true_count"] == ceiling["with_template_slack"]
-    assert len(ceiling["by_the_true_count"]) == 2
-    assert counted["pod_count_plus_template_slack"]["max"] > counted["max_seq_len"]
-    assert counted["verdict"].startswith("STOP")
-    # and the model is LOW, which is the reason the amendment ordered the count at all
-    assert counted["the_model_this_replaces"]["the_model_underpredicts_by"] > 0
+    assert ceiling["by_the_true_count"] == ceiling["with_template_slack"] == []
+    assert counted["pod_count_plus_template_slack"]["max"] < counted["max_seq_len"]
+
+    # the 2 800 stop is history and is still recorded as having fired
+    over = counted["rows_over_the_stop_threshold"]
+    assert counted["stop_threshold"] == 2800
+    assert over["by_the_true_count"] == 2 and over["with_template_slack"] == 3
+    assert over["the_difference"] == ["@matusi_ukr:22327#580336"]
+    assert counted["ruling"]["ceiling_before"] == 2816
+    assert counted["ruling"]["ceiling_after"] == 3072
+    assert "SPEC" in counted["ruling"]["recorded_in_the_spec_by"]
+
+    # and the reason the count was bought at all: the model is LOW
+    assert counted["the_model_this_replaces"]["the_model_underpredicts_by"] == 228
+
+    # both readings of the headroom, never one ([[two_values_for_one_input_get_quoted_kindly]])
+    room = counted["headroom_under_the_ceiling"]
+    assert room["by_the_true_count"] == 3072 - counted["pod_count"]["max"] == 97
+    assert (
+        room["with_template_slack"] == 3072 - counted["pod_count_plus_template_slack"]["max"] == 81
+    )
 
 
 def test_the_smallest_class_has_no_fifth_neighbour(record):
@@ -566,7 +573,7 @@ def test_the_four_reachability_blocks_are_registered():
     reach = registration["reachability"]
     assert set(reach) == {
         "the_smallest_class_has_no_fifth_neighbour",
-        "three_rows_do_not_fit_max_seq_len",
+        "max_seq_len_RESOLVED_by_the_operators_ruling",
         "arm_a_has_no_молочный_бренд_target",
         "the_pinned_trainer_refuses_a_v3_dataset",
     }
@@ -919,12 +926,14 @@ def test_the_tokenizer_check_refuses_a_substitute_template(monkeypatch):
 def test_the_registration_carries_the_count_and_quotes_the_amendment():
     registration = json.loads(PREREG.read_text(encoding="utf-8"))
     check = registration["training"]["tokenizer_reality_check"]
-    assert check["ran"] is True and check["verdict"].startswith("STOP")
+    assert check["ran"] is True
+    assert check["verdict"].startswith("the 2 800 stop FIRED")
     assert check["rows_over"]["by_the_true_count"] == 2
     assert check["rows_over"]["with_template_slack"] == 3
-    assert len(check["rows_over_max_seq_len"]["by_the_true_count"]) == 2
+    assert check["rows_over_max_seq_len"]["by_the_true_count"] == []
+    assert registration["training"]["config_revision"] == 3
+    assert set(registration["training"]["config_revision_history"]) == {"1", "2", "3"}
     assert registration["training"]["config_agrees_with_lora_b"] is False
-    assert registration["training"]["config_revision"] == 2
     assert "FALSE ON PURPOSE" in registration["training"]["config_agrees_with_lora_b_reading"]
 
     spec = " ".join((REPO_ROOT / "docs" / "SPEC.md").read_text(encoding="utf-8").split())

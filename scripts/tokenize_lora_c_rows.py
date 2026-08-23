@@ -44,6 +44,25 @@ from market_pulse import local_llm  # noqa: E402
 TRAIN = REPO_ROOT / "results" / "pass1_sft_v3_train.jsonl"
 OUT = REPO_ROOT / "results" / "lora_c_tokens.json"
 QLORA = REPO_ROOT / "config" / "qlora.yaml"
+RULING = {
+    "date": "2026-08-23",
+    "by": "the OPERATOR, at the acceptance of the lora-c-apply STOP report",
+    "words": "поднимай max_seq_len до 3072",
+    "pre_authorised_by": (
+        "docs/SPEC.md amendment 3.25 (1), which named this rung in advance — «the next rung is"
+        " 3 072 and it is one word, not a redesign»"
+    ),
+    "recorded_in_the_spec_by": (
+        "the TEAM LEAD — docs/SPEC.md is a team-lead file and the executor never edits it, so the"
+        " marked block recording this ruling does not exist yet and a later contract grepping SPEC"
+        " for it will find nothing. The authority is this field, config/qlora.yaml's revision-3"
+        " comment and docs/reports/lora-c-apply.md until that block is written"
+    ),
+    "ceiling_before": 2816,
+    "ceiling_after": 3072,
+}
+"""The word the 2 800 stop escalated for, and where its authority does and does not live yet."""
+
 STOP_AT = 2800
 """Amendment 3.25 (1): «a **true count** above 2 800 STOPS the line back to the operator». It is not
 `max_seq_len` — it is the margin the operator kept under 2 816 for the run to live in.
@@ -148,6 +167,17 @@ def measure(rows: list[dict]) -> dict:
         ),
         "config_sha256": summary.sha256_of(QLORA),
         "stop_threshold": STOP_AT,
+        "ruling": RULING,
+        "headroom_under_the_ceiling": {
+            "ceiling": ceiling,
+            "by_the_true_count": ceiling - pod[-1],
+            "with_template_slack": ceiling - with_slack[-1],
+            "reading": (
+                "both, named by their quantity. One number in prose here is the same trap the 2 800"
+                " split was ([[two_values_for_one_input_get_quoted_kindly]]), and this margin is"
+                " thin: it is a COUNT rather than a projection, but it is under 4 % of the ceiling"
+            ),
+        },
         "rows_over_the_stop_threshold": {
             "by_the_true_count": len(over_true),
             "with_template_slack": len(over_slack),
@@ -174,12 +204,15 @@ def measure(rows: list[dict]) -> dict:
             ),
         },
         "verdict": (
-            "STOP — a true count above 2 800 on"
-            f" {len(over_true)} of {len(counts)} rows, and {len(over_ceiling)} of them are over"
-            f" max_seq_len {ceiling} itself. The STOP fires under BOTH readings of the threshold."
-            " Back to the operator; the next rung is 3 072"
-            if over_true or over_ceiling
-            else "the amendment's reality check PASSES: every row is at or under 2 800"
+            f"the 2 800 stop FIRED on {len(over_true)} of {len(counts)} rows by the true count"
+            f" ({len(over_slack)} with slack) and was ANSWERED: the operator ruled"
+            f" {RULING['ceiling_after']} on {RULING['date']}, the rung amendment 3.25 (1) named in"
+            f" advance. At that ceiling {len(over_ceiling)} of {len(counts)} rows are over by the"
+            f" true count and {len(over_ceiling_slack)} with slack — the line is clear"
+            if not over_ceiling and not over_ceiling_slack
+            else f"STOP — {len(over_ceiling)} of {len(counts)} rows are over max_seq_len {ceiling}"
+            f" itself by the true count and {len(over_ceiling_slack)} with slack. Back to the"
+            " operator: the ceiling in config/qlora.yaml does not hold this dataset"
         ),
         "the_model_this_replaces": {
             "why": (

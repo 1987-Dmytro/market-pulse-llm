@@ -1,5 +1,11 @@
 {
-  "config_sha256": "331b8c1ea61302e01fd07394ab7ec90f443d13d4288150f5812a32201a6da9c1",
+  "config_sha256": "96b4b31865576c24a7dd3a995fa93b267f021451cd8444b8855e8f856972d435",
+  "headroom_under_the_ceiling": {
+    "by_the_true_count": 97,
+    "ceiling": 3072,
+    "reading": "both, named by their quantity. One number in prose here is the same trap the 2 800 split was ([[two_values_for_one_input_get_quoted_kindly]]), and this margin is thin: it is a COUNT rather than a projection, but it is under 4 % of the ceiling",
+    "with_template_slack": 81
+  },
   "instrument": {
     "chat_template": {
       "add_generation_prompt": true,
@@ -15,7 +21,7 @@
     "tokenizer": "GemmaTokenizer",
     "why_not_the_processor": "AutoProcessor needs torchvision for Gemma4ImageProcessor and this is a text-only count; the snapshot carries one template file and no processor-specific one, so the two loaders read the same bytes"
   },
-  "max_seq_len": 2816,
+  "max_seq_len": 3072,
   "over": {
     "by_the_true_count": [
       "@klopotenkofood:6060#21366",
@@ -40,16 +46,10 @@
   },
   "rows": 506,
   "rows_over_max_seq_len": {
-    "by_the_true_count": [
-      "@klopotenkofood:6060#21366",
-      "@tarilka_malyuka:746#83"
-    ],
-    "ceiling": 2816,
+    "by_the_true_count": [],
+    "ceiling": 3072,
     "reading": "these are the rows train_qlora.encode_pass1 would REFUSE on the pod, and the two readings agree on them — which is what makes the STOP invariant to the question above",
-    "with_template_slack": [
-      "@klopotenkofood:6060#21366",
-      "@tarilka_malyuka:746#83"
-    ]
+    "with_template_slack": []
   },
   "rows_over_the_stop_threshold": {
     "by_the_true_count": 2,
@@ -59,6 +59,15 @@
     "which_the_amendment_names": "by_the_true_count — «a true count above 2 800»",
     "why_they_differ": "TEMPLATE_SLACK = 16 corrected a CHARACTER-RATIO estimate for the chat template; apply_chat_template already counts it here, so adding it back double-counts. One row sits inside that margin",
     "with_template_slack": 3
+  },
+  "ruling": {
+    "by": "the OPERATOR, at the acceptance of the lora-c-apply STOP report",
+    "ceiling_after": 3072,
+    "ceiling_before": 2816,
+    "date": "2026-08-23",
+    "pre_authorised_by": "docs/SPEC.md amendment 3.25 (1), which named this rung in advance — «the next rung is 3 072 and it is one word, not a redesign»",
+    "recorded_in_the_spec_by": "the TEAM LEAD — docs/SPEC.md is a team-lead file and the executor never edits it, so the marked block recording this ruling does not exist yet and a later contract grepping SPEC for it will find nothing. The authority is this field, config/qlora.yaml's revision-3 comment and docs/reports/lora-c-apply.md until that block is written",
+    "words": "поднимай max_seq_len до 3072"
   },
   "source": {
     "file": "results/pass1_sft_v3_train.jsonl",
@@ -75,7 +84,7 @@
     "true_max_with_slack": 2991,
     "why": "amendment 3.25 (1) derived 2 816 from 2 759 — the widest row at the registered worst tokens-per-character. That is a MODEL measured on probe-b's 2 778-3 923 character rows and applied to rows of 5 262-9 415 (Dv757). Here is what it predicts against what the tokenizer counts, on the SAME rows"
   },
-  "verdict": "STOP — a true count above 2 800 on 2 of 506 rows, and 2 of them are over max_seq_len 2816 itself. The STOP fires under BOTH readings of the threshold. Back to the operator; the next rung is 3 072",
+  "verdict": "the 2 800 stop FIRED on 2 of 506 rows by the true count (3 with slack) and was ANSWERED: the operator ruled 3072 on 2026-08-23, the rung amendment 3.25 (1) named in advance. At that ceiling 0 of 506 rows are over by the true count and 0 with slack — the line is clear",
   "widest_rows": [
     {
       "chars": 9415,
