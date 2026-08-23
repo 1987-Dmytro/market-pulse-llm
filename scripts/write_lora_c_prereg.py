@@ -108,6 +108,13 @@ AMENDMENT_325_3 = (
     " unchanged, and the nine rows of `@VARUS_channel:10367` stay unrendered"
 )
 
+AMENDMENT_325_1_PRICE = (
+    "Price consequences are derived in `lora-c-run` at the stack's worst measured rates; the cap"
+    " stays $4.00 until that derivation reports — raising a cap is a separate operator word."
+)
+"""The sentence of 3.25 (1) that makes the cap conditional on this contract's own derivation. Kept
+apart from `AMENDMENT_325_1` because the derivation quotes it and the ceiling clause does not."""
+
 AMENDMENT_326_1 = (
     "**`training.max_seq_len` is 3 072** — «поднимай max_seq_len до 3072», the rung 3.25 (1)"
     " named in advance. `config/qlora.yaml` is at revision 3; line B's pins stay on revision 1"
@@ -309,8 +316,161 @@ def bars(data_record: dict) -> dict:
     }
 
 
+BOOT_SECONDS = 500
+"""`docs/PROMPT-lora-c-run.md` D2's boot gate — «ssh ≤500 s from create, else kill+recreate»."""
+
+LOAD_SECONDS = 300
+"""«load (worst measured 300 s)», the contract's own term."""
+
+SMOKE_STEPS = 6
+SMOKE_KILL_CLOCK_MULTIPLIER = 1.5
+"""«Smoke bound for its kill-clock only: 121 s/step × 1.5». A CEILING for the smoke's own six
+steps, and explicitly not a rate: the contract forbids projecting one at 3 072."""
+
+USD_PER_HOUR_WORST = 0.80
+"""lora-b's rung 1, registered: «live A6000-class price > $0.80/h at create → STOP, no endpoint»
+(results/prereg_lora_b.json::kill_clock). The worst price this line may meet and still create."""
+
+USD_PER_HOUR_LAST_FIVE_PODS = 0.74
+"""What the last five pods of this stack actually billed, on a 4090 24 GB in EU-RO-1. A second
+reading of the same quantity, never a substitute for the worst one under a cap."""
+
+
+def pre_pod_arithmetic(calls: int, steps: dict, pass2_threads: int) -> dict:
+    """lora-c-run's price derivation, at the CHARGED rates, before any pod exists.
+
+    SPEC amendment 3.25 (1) and `docs/STATUS.md` п. 1 (л) both end the same way — «the cap stays
+    $4.00 until that derivation reports». This is that derivation.
+
+    It registers no s/step, because none exists at 3 072 and the contract buys it with the smoke.
+    What it registers instead is the inequality solved BACKWARDS: the largest s/step the cap can
+    pay for once every other term is charged, in the unit the smoke will measure
+    ([[a_published_ratio_is_not_the_gates]]). Beside it stand the only two readings this repo has,
+    with the sequence length they were taken at — a reachability statement about the acceptance
+    criterion, never a projected rate ([[the_expectation_no_reading_reaches]]).
+    """
+    total_steps = steps["arm_a"] + steps["arm_b"]
+    smoke = SMOKE_STEPS * SECONDS_PER_STEP_COMPLIANT_SLOW * SMOKE_KILL_CLOCK_MULTIPLIER
+    fixed = {
+        "boot": BOOT_SECONDS,
+        "load": LOAD_SECONDS,
+        "base_legs": round(2 * calls * PASS_1_SECONDS_PER_CALL, 2),
+        "pass_1_evals_of_the_two_adapters": round(2 * calls * PASS_1_SECONDS_PER_CALL, 2),
+        "pass_2": round(4 * pass2_threads * PASS_2_SECONDS_PER_THREAD, 2),
+        "training_smoke": round(smoke, 2),
+    }
+    fixed["total"] = round(sum(fixed.values()), 2)
+    at = {}
+    for price in (USD_PER_HOUR_WORST, USD_PER_HOUR_LAST_FIVE_PODS):
+        budget = CAP_USD / price * 3600
+        left = budget - fixed["total"]
+        at[f"{price:.2f}"] = {
+            "budget_seconds": round(budget, 1),
+            "fixed_usd": round(fixed["total"] / 3600 * price, 4),
+            "left_for_training_seconds": round(left, 1),
+            "break_even_seconds_per_step": round(left / total_steps, 2),
+        }
+    return {
+        "state": (
+            "DERIVED and REPORTED, not sealed — no pod exists, so the record is still the DRAFT"
+            " `frozen_when_the_pod_exists` describes"
+        ),
+        "authority": {
+            "record": "docs/SPEC.md, the `amendment-3.25` marked block, clause (1)",
+            "clause": quoted_spec(AMENDMENT_325_1_PRICE),
+        },
+        "rates_used": {
+            "pass_1_seconds_per_call": PASS_1_SECONDS_PER_CALL,
+            "pass_2_seconds_per_thread": PASS_2_SECONDS_PER_THREAD,
+            "training_seconds_per_step": (
+                "NONE. No reading exists at 3 072 and the contract forbids projecting one from"
+                " lora-b's ≤1 222-token readings — the smoke buys it"
+            ),
+        },
+        "price_usd_per_hour": {
+            "worst": USD_PER_HOUR_WORST,
+            "worst_source": "results/prereg_lora_b.json::kill_clock rung 1 — the create refuses above it",
+            "last_five_pods": USD_PER_HOUR_LAST_FIVE_PODS,
+        },
+        "hard_stop_seconds": round(CAP_USD / USD_PER_HOUR_WORST * 3600, 1),
+        "hard_stop_rule": "cap / worst rate, stamped on `--terminate-after` at create",
+        "fixed_seconds": fixed,
+        "steps": {**steps, "total": total_steps},
+        "at_each_price": at,
+        "verdict": (
+            "the four-leg plan DOES NOT FIT the $4.00 cap at the charged rates. The fixed part alone"
+            f" is {fixed['total']:.0f} s — ${at[f'{USD_PER_HOUR_WORST:.2f}']['fixed_usd']:.4f} at"
+            f" the worst price — and what is left pays for at most"
+            f" {at[f'{USD_PER_HOUR_WORST:.2f}']['break_even_seconds_per_step']:.2f} s/step over the"
+            f" {total_steps} optimizer steps"
+            f" ({at[f'{USD_PER_HOUR_LAST_FIVE_PODS:.2f}']['break_even_seconds_per_step']:.2f} at"
+            " the price the last five pods billed). The only two s/step READINGS this repo holds"
+            f" are {SECONDS_PER_STEP_REGISTERED} and {SECONDS_PER_STEP_MEASURED}, both ABOVE both"
+            " break-evens and both taken on sequences of at most 1 222 tokens against this line's"
+            " 1 445–2 975. So the cap is short even at lora-b's own speed on rows less than half as"
+            " long. This is the report amendment 3.25 (1) made the cap conditional on; the raise,"
+            " if any, is the operator's word and it is due BEFORE a create, never after a reading"
+        ),
+        "what_the_projection_rung_would_see": {
+            "why_this_column_exists": (
+                "the rung fires at MEASURED rates, and both charged rates have a direct sibling"
+                " measurement: 2.694083 s/call (pass1-window r2's own pod) and 23.760 s/thread"
+                " (pass2-signals r2's). They are 0.439 and 0.245 of the charge. This column is what"
+                " the session's own instruments would compute after the base legs and the smoke —"
+                " it is a SCENARIO and no part of it is registered as a rate"
+            ),
+            "fixed_seconds_at_sibling_rates": round(
+                BOOT_SECONDS + LOAD_SECONDS + 4 * calls * 2.694083 + 4 * pass2_threads * 23.760, 1
+            ),
+            "break_even_seconds_per_step": {
+                f"{price:.2f}": round(
+                    (
+                        CAP_USD / price * 3600
+                        - (
+                            BOOT_SECONDS
+                            + LOAD_SECONDS
+                            + 4 * calls * 2.694083
+                            + 4 * pass2_threads * 23.760
+                        )
+                    )
+                    / (total_steps + SMOKE_STEPS),
+                    2,
+                )
+                for price in (USD_PER_HOUR_WORST, USD_PER_HOUR_LAST_FIVE_PODS)
+            },
+            "reading": (
+                "under the sibling-measured rates the break-even rises above both lora-b readings,"
+                " so the session is not arithmetically hopeless — it is UNDECIDED until the smoke"
+                " measures s/step at 3 072. That is the decision the operator is owed, and it is"
+                " not the executor's to take under a cap the derivation just reported short"
+            ),
+        },
+        "the_pass_2_leg_count_is_stated_twice": (
+            "the contract's fixed part charges 4 × 11 × 97 — four legs — and its order of"
+            " operations names pass 2 only under «eval A» and «eval B likewise», which is two."
+            " The registration's `bars.report_only.pass_2_tables` says «per leg», and four is the"
+            " conservative charge, so four is what is summed above. At 97 s/thread the difference"
+            f" is {2 * pass2_threads * PASS_2_SECONDS_PER_THREAD} s ="
+            f" ${2 * pass2_threads * PASS_2_SECONDS_PER_THREAD / 3600 * USD_PER_HOUR_WORST:.4f}."
+            " Named rather than chosen quietly ([[two_values_for_one_input_get_quoted_kindly]])"
+        ),
+        "the_card_the_ruling_names_was_last_read_as_out_of_stock": (
+            "ruling (к) says «один A6000». knowledge/hot.md records A6000 48 GB in EU-RO-1 as"
+            " `none` and a 4090 24 GB at $0.74/h taken on the first attempt, five pods running."
+            " A create is the only free stock test ([[a_stock_window_needs_the_create_not_a_poll]]),"
+            " and a create is also this record's freeze — so the two cannot be separated and the"
+            " card is part of what the operator is being asked"
+        ),
+    }
+
+
 def money(
-    eval_pack: dict, data_record: dict, train_rows: int, synthetic_rows: int, counted: dict
+    eval_pack: dict,
+    data_record: dict,
+    train_rows: int,
+    synthetic_rows: int,
+    counted: dict,
+    pass2_threads: int,
 ) -> dict:
     """LEFT OPEN by the contract: formulas, named rates, and no sum.
 
@@ -331,7 +491,12 @@ def money(
         "arm_b": math.floor(math.ceil((train_rows + synthetic_rows) / micro) / accum) * epochs,
     }
     return {
-        "state": "OPEN — no price is registered here. lora-c-run derives it and seals it",
+        "state": (
+            "DERIVED by lora-c-run at the charged rates and REPORTED to the operator — see"
+            " `pre_pod_arithmetic`. Still not SEALED: sealing is the first `pod create` and no pod"
+            " exists"
+        ),
+        "pre_pod_arithmetic": pre_pod_arithmetic(calls, steps, pass2_threads),
         "cap_usd_all_in": CAP_USD,
         "cap_rule": (
             "the operator's ruling (к): «один A6000, кап $4.00». Raising it is the operator's word"
@@ -909,7 +1074,14 @@ def build() -> dict:
             "gold": {"record": "results/reader_gold_w1_r2.json", "sha256": sha(GOLD)},
             "holdout": {"record": "results/pass1_holdout_100.json", "sha256": sha(HOLDOUT)},
         },
-        "money": money(eval_pack, data_record, train_rows, synthetic_rows, counted),
+        "money": money(
+            eval_pack,
+            data_record,
+            train_rows,
+            synthetic_rows,
+            counted,
+            pass2_pack["population"]["threads_with_at_least_one_filtered_row"],
+        ),
         "ready_to_price": {
             "rule": "every number here comes from a file this contract built, at $0",
             "train_rows": train_rows,

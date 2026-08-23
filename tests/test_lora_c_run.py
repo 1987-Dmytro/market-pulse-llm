@@ -223,3 +223,30 @@ def test_the_arm_is_read_from_the_record_and_a_tie_is_refused():
     assert sibling.arm_of(666) == "arm_b"
     with pytest.raises(SystemExit, match="a training run whose arm"):
         sibling.arm_of(1)
+
+
+def test_the_derivation_solves_the_cap_inequality_backwards():
+    """The pre-pod arithmetic, re-derived here from the record's own terms.
+
+    A verdict in prose is not the verdict ([[gate_verdicts_need_an_artifact]]): the break-even is
+    recomputed from the fixed part, the cap and the step count, and the reading that matters — that
+    both s/step readings this repo holds sit ABOVE it — is asserted rather than described.
+    """
+    money = json.loads(PREREG.read_text(encoding="utf-8"))["money"]
+    derived = money["pre_pod_arithmetic"]
+    cap, steps = money["cap_usd_all_in"], derived["steps"]["total"]
+    assert steps == derived["steps"]["arm_a"] + derived["steps"]["arm_b"] == 144
+    for price, column in derived["at_each_price"].items():
+        budget = cap / float(price) * 3600
+        assert round(budget, 1) == column["budget_seconds"]
+        left = budget - derived["fixed_seconds"]["total"]
+        assert round(left, 1) == column["left_for_training_seconds"]
+        assert round(left / steps, 2) == column["break_even_seconds_per_step"]
+        # the finding: neither reading this repo holds fits under the bar the cap sets
+        assert column["break_even_seconds_per_step"] < prereg.SECONDS_PER_STEP_REGISTERED
+        assert column["break_even_seconds_per_step"] < prereg.SECONDS_PER_STEP_MEASURED
+    assert derived["hard_stop_seconds"] == round(
+        cap / derived["price_usd_per_hour"]["worst"] * 3600, 1
+    )
+    # and the quotation the whole derivation stands on is law, grepped, not paraphrased
+    assert prereg.quoted_spec(derived["authority"]["clause"]) == prereg.AMENDMENT_325_1_PRICE

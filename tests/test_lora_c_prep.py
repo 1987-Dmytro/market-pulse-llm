@@ -530,10 +530,25 @@ def test_the_rulings_are_quoted_verbatim_and_a_paraphrase_is_refused():
 
 
 def test_the_registration_carries_no_price():
+    """No PRICE of this run — a derivation of what the cap can pay for is not one.
+
+    The state moved OPEN → DERIVED when `lora-c-run` did what amendment 3.25 (1) ordered («the cap
+    stays $4.00 until that derivation reports»). What the block may now carry is the charged fixed
+    part and the break-even inequality; what it still may not carry is a total, a projected dollar
+    figure for the whole run, or an s/step at 3 072 — the smoke buys that one and nothing projects
+    it ([[projected_rate_versus_measured_rate]]).
+    """
     registration = json.loads(PREREG.read_text(encoding="utf-8"))
     money = registration["money"]
     assert money["cap_usd_all_in"] == 4.00
-    assert money["state"].startswith("OPEN")
+    assert money["state"].startswith("DERIVED")
+    derived = money["pre_pod_arithmetic"]
+    assert derived["state"].startswith("DERIVED and REPORTED, not sealed")
+    # the one rate the contract forbids projecting is registered as a SENTENCE, not a number
+    assert isinstance(derived["rates_used"]["training_seconds_per_step"], str)
+    assert derived["fixed_seconds"]["total"] == round(
+        sum(value for key, value in derived["fixed_seconds"].items() if key != "total"), 2
+    )
     keys = set()
 
     def walk(node) -> None:

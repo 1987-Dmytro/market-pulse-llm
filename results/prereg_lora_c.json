@@ -238,6 +238,65 @@
       "training_seconds_per_arm": "<steps> × <s/step>"
     },
     "hard_stop_seconds": "TO BE DERIVED in lora-c-run's contract, from the cap and the live price at create. Registering one here would be a number with no run behind it",
+    "pre_pod_arithmetic": {
+      "at_each_price": {
+        "0.74": {
+          "break_even_seconds_per_step": 58.61,
+          "budget_seconds": 19459.5,
+          "fixed_usd": 2.2652,
+          "left_for_training_seconds": 8439.6
+        },
+        "0.80": {
+          "break_even_seconds_per_step": 48.47,
+          "budget_seconds": 18000.0,
+          "fixed_usd": 2.4489,
+          "left_for_training_seconds": 6980.1
+        }
+      },
+      "authority": {
+        "clause": "Price consequences are derived in `lora-c-run` at the stack's worst measured rates; the cap stays $4.00 until that derivation reports — raising a cap is a separate operator word.",
+        "record": "docs/SPEC.md, the `amendment-3.25` marked block, clause (1)"
+      },
+      "fixed_seconds": {
+        "base_legs": 2431.44,
+        "boot": 500,
+        "load": 300,
+        "pass_1_evals_of_the_two_adapters": 2431.44,
+        "pass_2": 4268,
+        "total": 11019.88,
+        "training_smoke": 1089.0
+      },
+      "hard_stop_rule": "cap / worst rate, stamped on `--terminate-after` at create",
+      "hard_stop_seconds": 18000.0,
+      "price_usd_per_hour": {
+        "last_five_pods": 0.74,
+        "worst": 0.8,
+        "worst_source": "results/prereg_lora_b.json::kill_clock rung 1 — the create refuses above it"
+      },
+      "rates_used": {
+        "pass_1_seconds_per_call": 6.14,
+        "pass_2_seconds_per_thread": 97,
+        "training_seconds_per_step": "NONE. No reading exists at 3 072 and the contract forbids projecting one from lora-b's ≤1 222-token readings — the smoke buys it"
+      },
+      "state": "DERIVED and REPORTED, not sealed — no pod exists, so the record is still the DRAFT `frozen_when_the_pod_exists` describes",
+      "steps": {
+        "arm_a": 62,
+        "arm_b": 82,
+        "total": 144
+      },
+      "the_card_the_ruling_names_was_last_read_as_out_of_stock": "ruling (к) says «один A6000». knowledge/hot.md records A6000 48 GB in EU-RO-1 as `none` and a 4090 24 GB at $0.74/h taken on the first attempt, five pods running. A create is the only free stock test ([[a_stock_window_needs_the_create_not_a_poll]]), and a create is also this record's freeze — so the two cannot be separated and the card is part of what the operator is being asked",
+      "the_pass_2_leg_count_is_stated_twice": "the contract's fixed part charges 4 × 11 × 97 — four legs — and its order of operations names pass 2 only under «eval A» and «eval B likewise», which is two. The registration's `bars.report_only.pass_2_tables` says «per leg», and four is the conservative charge, so four is what is summed above. At 97 s/thread the difference is 2134 s = $0.4742. Named rather than chosen quietly ([[two_values_for_one_input_get_quoted_kindly]])",
+      "verdict": "the four-leg plan DOES NOT FIT the $4.00 cap at the charged rates. The fixed part alone is 11020 s — $2.4489 at the worst price — and what is left pays for at most 48.47 s/step over the 144 optimizer steps (58.61 at the price the last five pods billed). The only two s/step READINGS this repo holds are 61.047 and 68.442, both ABOVE both break-evens and both taken on sequences of at most 1 222 tokens against this line's 1 445–2 975. So the cap is short even at lora-b's own speed on rows less than half as long. This is the report amendment 3.25 (1) made the cap conditional on; the raise, if any, is the operator's word and it is due BEFORE a create, never after a reading",
+      "what_the_projection_rung_would_see": {
+        "break_even_seconds_per_step": {
+          "0.74": 103.2,
+          "0.80": 93.47
+        },
+        "fixed_seconds_at_sibling_rates": 3979.2,
+        "reading": "under the sibling-measured rates the break-even rises above both lora-b readings, so the session is not arithmetically hopeless — it is UNDECIDED until the smoke measures s/step at 3 072. That is the decision the operator is owed, and it is not the executor's to take under a cap the derivation just reported short",
+        "why_this_column_exists": "the rung fires at MEASURED rates, and both charged rates have a direct sibling measurement: 2.694083 s/call (pass1-window r2's own pod) and 23.760 s/thread (pass2-signals r2's). They are 0.439 and 0.245 of the charge. This column is what the session's own instruments would compute after the base legs and the smoke — it is a SCENARIO and no part of it is registered as a rate"
+      }
+    },
     "rates_and_what_would_invalidate_them": {
       "pass_1_seconds_per_call": {
         "derivation": "mean(probe-b) × mean(dev v2) / mean(dev base) = 6.135572, rounded up",
@@ -267,7 +326,7 @@
         }
       }
     },
-    "state": "OPEN — no price is registered here. lora-c-run derives it and seals it",
+    "state": "DERIVED by lora-c-run at the charged rates and REPORTED to the operator — see `pre_pod_arithmetic`. Still not SEALED: sealing is the first `pod create` and no pod exists",
     "what_this_record_deliberately_does_NOT_carry": "a worst_case_usd, a total_seconds and a projected price. r1 of pass1-window registered a rate it had not measured and the number outlived the correction"
   },
   "phase": "lora-c",
@@ -424,7 +483,7 @@
   },
   "producer": {
     "script": "scripts/write_lora_c_prereg.py",
-    "sha256": "77ef863e0958da11f756467c2ac65085fd924cafcbd3f2901cc223deb4dcf464"
+    "sha256": "e512486b44b6efb566c8a79c197ed673e2c921039bd59785f0e7bbaac050adea"
   },
   "question": "does rationale-supervised QLoRA on pass 1 fix the subject-attribution errors pass 2 measured — brand ↔ retailer, a retailer in a non-dairy context, non-dairy «brands», and mention-vs-about — WITHOUT learning the prior the way line B did",
   "reachability": {
