@@ -108,6 +108,17 @@ AMENDMENT_325_3 = (
     " unchanged, and the nine rows of `@VARUS_channel:10367` stay unrendered"
 )
 
+AMENDMENT_326_1 = (
+    "**`training.max_seq_len` is 3 072** — «поднимай max_seq_len до 3072», the rung 3.25 (1)"
+    " named in advance. `config/qlora.yaml` is at revision 3; line B's pins stay on revision 1"
+    " and are never re-taken."
+)
+AMENDMENT_326_2 = (
+    "**The 2 800 STOP threshold reads the TRUE count** — the tokenizer's own number, with no"
+    " `TEMPLATE_SLACK` added"
+)
+AMENDMENT_326_3 = "**The ratio model stays retired for ceilings.**"
+
 
 def quoted_spec(text: str) -> str:
     """The same rule as `quoted`, against `docs/SPEC.md` — amendment 3.25 is law, not a briefing.
@@ -656,9 +667,23 @@ def build() -> dict:
                     "the clause above names 2 816 and the config is at 3 072. The quotation is"
                     " verbatim law and is not edited; what superseded it is the operator's ruling"
                     f" of {counted['ruling']['date']}, which 3.25 (1) pre-authorised by naming"
-                    " 3 072 as the next rung. **No marked block in docs/SPEC.md records that"
-                    " ruling yet** — SPEC is a team-lead file — so a later contract grepping SPEC"
-                    " for the ceiling in force will find 2 816 and must read this field beside it"
+                    " 3 072 as the next rung. That ruling is now REGISTERED — `amendment_3_26`"
+                    " below quotes the block that carries it, so a contract grepping docs/SPEC.md"
+                    " for the ceiling in force reads 3 072 from the law itself and not from a"
+                    " field beside it"
+                ),
+            },
+            "amendment_3_26": {
+                "record": "docs/SPEC.md, the `amendment-3.26` marked block",
+                "1_max_seq_len": quoted_spec(AMENDMENT_326_1),
+                "2_the_stop_threshold_reads_the_true_count": quoted_spec(AMENDMENT_326_2),
+                "3_the_ratio_model_retires_for_ceilings": quoted_spec(AMENDMENT_326_3),
+                "supersedes": "3.25 (1) — 2 816. The superseded clause stays quoted above verbatim",
+                "why_this_block_is_quoted_and_not_asserted": (
+                    "until this block existed the field above SAID the ruling was unregistered,"
+                    " which was true the hour it was written and false the hour the team lead"
+                    " wrote 3.26. A quotation cannot outlive its state: `quoted_spec` refuses the"
+                    " build if the text leaves docs/SPEC.md"
                 ),
             },
             "quotation_rule": (

@@ -941,6 +941,39 @@ def test_the_registration_carries_the_count_and_quotes_the_amendment():
     for key in ("1_max_seq_len", "2_the_neighbour_refusal", "3_stop_1_as_built"):
         assert " ".join(quoted[key].split()) in spec, key
 
+    # 3.26 gets the same grep, and it is the reason `1_max_seq_len_SUPERSEDED` stopped ASSERTING
+    # that the ruling was unregistered: that sentence was true for the hours between the ruling and
+    # the team lead's block, and false afterwards ([[a_reading_that_outlived_its_state]]). A quote
+    # cannot go stale — it is either in the file or the build refuses.
+    quoted = registration["authority"]["amendment_3_26"]
+    for key in (
+        "1_max_seq_len",
+        "2_the_stop_threshold_reads_the_true_count",
+        "3_the_ratio_model_retires_for_ceilings",
+    ):
+        assert " ".join(quoted[key].split()) in spec, key
+    assert "3 072" in quoted["1_max_seq_len"]
+    superseded = registration["authority"]["amendment_3_25"]["1_max_seq_len_SUPERSEDED"]
+    assert "REGISTERED" in superseded and "amendment_3_26" in superseded
+
+
+def test_the_spec_quotation_refuses_a_paraphrase(tmp_path, monkeypatch):
+    """The direction the record CLAIMS and nobody had watched fire ([[guard_selftest_negative_control]]).
+
+    `quoted_spec` is what the registration offers instead of asserting that a ruling is law, so a
+    green suite has to have seen it refuse — a grep that always returns its argument is not a grep.
+    """
+    copy = tmp_path / "SPEC.md"
+    copy.write_text(
+        (REPO_ROOT / "docs" / "SPEC.md").read_text(encoding="utf-8").replace("3 072", "3072"),
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(prereg, "SPEC", copy)
+    with pytest.raises(SystemExit, match="this quotation is not in SPEC.md"):
+        prereg.quoted_spec(prereg.AMENDMENT_326_1)
+    monkeypatch.setattr(prereg, "SPEC", REPO_ROOT / "docs" / "SPEC.md")
+    assert prereg.quoted_spec(prereg.AMENDMENT_326_1) == prereg.AMENDMENT_326_1
+
 
 def _tokenizer_is_obtainable() -> bool:
     try:

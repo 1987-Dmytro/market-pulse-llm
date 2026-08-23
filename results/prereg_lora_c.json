@@ -2,12 +2,20 @@
   "authority": {
     "amendment_3_25": {
       "1_max_seq_len": "**`training.max_seq_len` rises 1 408 → 2 816 by a NEW REVISION of `config/qlora.yaml`** (frozen law; precedent: 1 024 → 1 408, operator, 2026-08-04).",
-      "1_max_seq_len_SUPERSEDED": "the clause above names 2 816 and the config is at 3 072. The quotation is verbatim law and is not edited; what superseded it is the operator's ruling of 2026-08-23, which 3.25 (1) pre-authorised by naming 3 072 as the next rung. **No marked block in docs/SPEC.md records that ruling yet** — SPEC is a team-lead file — so a later contract grepping SPEC for the ceiling in force will find 2 816 and must read this field beside it",
+      "1_max_seq_len_SUPERSEDED": "the clause above names 2 816 and the config is at 3 072. The quotation is verbatim law and is not edited; what superseded it is the operator's ruling of 2026-08-23, which 3.25 (1) pre-authorised by naming 3 072 as the next rung. That ruling is now REGISTERED — `amendment_3_26` below quotes the block that carries it, so a contract grepping docs/SPEC.md for the ceiling in force reads 3 072 from the law itself and not from a field beside it",
       "2_the_neighbour_refusal": "**The neighbour-selection rule gains ONE refusal:** a candidate whose whitespace-collapsed, casefolded text EQUALS the query's own text is refused",
       "3_stop_1_as_built": "**STOP 1 is accepted AS BUILT:** 506 rendered training rows, zero real `молочный_бренд` positives in arm A, the holdout's reachable maximum 98 of 100 with the bar's integer unchanged, and the nine rows of `@VARUS_channel:10367` stay unrendered",
       "quotation_rule": "all three clauses are grepped back into docs/SPEC.md on every build of this file, whitespace-normalised, by `quoted_spec`",
       "record": "docs/SPEC.md, the `amendment-3.25` marked block",
-      "sha256_of_the_spec": "ff300bc7013eef64e35ea12ab35ebb7448ec04ebc27d463164c74673bb2c48e9"
+      "sha256_of_the_spec": "b5aa39af8fc002ec89d5b0cf8eb184bd772f2ccfdfa48e35d7cfd3dd9943077a"
+    },
+    "amendment_3_26": {
+      "1_max_seq_len": "**`training.max_seq_len` is 3 072** — «поднимай max_seq_len до 3072», the rung 3.25 (1) named in advance. `config/qlora.yaml` is at revision 3; line B's pins stay on revision 1 and are never re-taken.",
+      "2_the_stop_threshold_reads_the_true_count": "**The 2 800 STOP threshold reads the TRUE count** — the tokenizer's own number, with no `TEMPLATE_SLACK` added",
+      "3_the_ratio_model_retires_for_ceilings": "**The ratio model stays retired for ceilings.**",
+      "record": "docs/SPEC.md, the `amendment-3.26` marked block",
+      "supersedes": "3.25 (1) — 2 816. The superseded clause stays quoted above verbatim",
+      "why_this_block_is_quoted_and_not_asserted": "until this block existed the field above SAID the ruling was unregistered, which was true the hour it was written and false the hour the team lead wrote 3.26. A quotation cannot outlive its state: `quoted_spec` refuses the build if the text leaves docs/SPEC.md"
     },
     "quotation_rule": "both strings are grepped back into docs/STATUS.md on every build of this file, whitespace-normalised. A ruling quoted from memory is a paraphrase in quotation marks",
     "record": "docs/STATUS.md «Открытые решения» п. 1",
@@ -416,7 +424,7 @@
   },
   "producer": {
     "script": "scripts/write_lora_c_prereg.py",
-    "sha256": "6be5ecb4652744b697a4d862ff52c840cacf84da38b4da4180948b9c869fd09d"
+    "sha256": "77ef863e0958da11f756467c2ac65085fd924cafcbd3f2901cc223deb4dcf464"
   },
   "question": "does rationale-supervised QLoRA on pass 1 fix the subject-attribution errors pass 2 measured — brand ↔ retailer, a retailer in a non-dairy context, non-dairy «brands», and mention-vs-about — WITHOUT learning the prior the way line B did",
   "reachability": {
