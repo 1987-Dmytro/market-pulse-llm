@@ -1,5 +1,13 @@
 {
   "authority": {
+    "amendment_3_25": {
+      "1_max_seq_len": "**`training.max_seq_len` rises 1 408 → 2 816 by a NEW REVISION of `config/qlora.yaml`** (frozen law; precedent: 1 024 → 1 408, operator, 2026-08-04).",
+      "2_the_neighbour_refusal": "**The neighbour-selection rule gains ONE refusal:** a candidate whose whitespace-collapsed, casefolded text EQUALS the query's own text is refused",
+      "3_stop_1_as_built": "**STOP 1 is accepted AS BUILT:** 506 rendered training rows, zero real `молочный_бренд` positives in arm A, the holdout's reachable maximum 98 of 100 with the bar's integer unchanged, and the nine rows of `@VARUS_channel:10367` stay unrendered",
+      "quotation_rule": "all three clauses are grepped back into docs/SPEC.md on every build of this file, whitespace-normalised, by `quoted_spec`",
+      "record": "docs/SPEC.md, the `amendment-3.25` marked block",
+      "sha256_of_the_spec": "ff300bc7013eef64e35ea12ab35ebb7448ec04ebc27d463164c74673bb2c48e9"
+    },
     "quotation_rule": "both strings are grepped back into docs/STATUS.md on every build of this file, whitespace-normalised. A ruling quoted from memory is a paraphrase in quotation marks",
     "record": "docs/STATUS.md «Открытые решения» п. 1",
     "ruling_k": "(к) **РУЛИНГ 22.08 (вечер) — дизайн `lora-c`:** промпт v3 = v2 + поле `rationale` ПЕРЕД меткой, одним рендерингом для обучения и инференса; таблица парно в четыре колонки (база v2 · база v3 · адаптер A · адаптер B) на одном пуле соседей; рационали для обучающих строк пишет Claude Code по кодбуку и метке тимлида, тимлид ревьюит все «наши» + ~40 пограничных; синтетика ~160 (по 40 на класс ошибки) — арм B, тег в provenance, абляция армом A, никогда в холдаут/голд; из обучения и из пула соседей исключены холдаут-100 и ВСЕ строки 16 референсных тредов; **бар на арм (один выстрел): холдаут-100 ≥ 64 И сквозной бар 1 = 5/5 И бар 3 = 0 — все три или КРАСНЫЙ**; отчётно: ячейка «упоминание → категория» на холдауте (18 → ?), dev-200 (fit), 14 золотых (шестой взгляд). Два контракта: `lora-c-prep` ($0, с ревью-гейтом тимлида) → `lora-c-run` (один A6000, кап **$4.00**).",
@@ -84,11 +92,11 @@
       "sha256": "9baab0e92078c137d17d5275158ef6360b9f349213a671b9249f3d4433b680c7"
     },
     "packs": {
-      "results/lora_c_data.json": "3a868e4f930d1d3f4562072639f628ce499f453f32bf07cb7f54e79bb69ebbef",
-      "results/lora_c_eval_pack.json": "b728acca23a261d7f8ed91235016120c15c36228fc077ddedaadbabf3d829ea5",
+      "results/lora_c_data.json": "4574ef98d47d141df6d383bbc96c65e04f4704d47095b8a5266c1b45913b5186",
+      "results/lora_c_eval_pack.json": "049e0a5883192007b18cb4d46ef76b8f5b339b7aec2472cca03e063d4566b99a",
       "results/lora_c_pass2_pack.json": "4438ab0b4c9f6e9a7ec59639a3ae1fef982735d583409f04ce7aa529d704fcaa",
-      "results/lora_c_synthetic.json": "2e2fa4c5a914c6edbb09bacae707f60728cc8f11a1099c91563990dab634f159",
-      "results/pass1_sft_v3_train.jsonl": "0821f4aedef78ee476a993664f75feb113afdcc77551f43c82f50d887c4f40a0"
+      "results/lora_c_synthetic.json": "dc1ea0e759843d57e17dda693461407ef626cddb7d044d64ee9d6fc05d689a46",
+      "results/pass1_sft_v3_train.jsonl": "cf55d3f20216139845d320b4283d543c5283e3475f3c6afa42ea98cf20997c18"
     },
     "parser": {
       "note": "PINNED and untouched — parse_pass1_v3 wraps it, never edits it",
@@ -121,23 +129,43 @@
     },
     "v3_extends_v2": true,
     "written_inputs": {
+      "results/labels_pass1_r3.jsonl": {
+        "author": "the TEAM LEAD — the fifth named ruling of the gate-1 verdict",
+        "kind": "a DELTA over r1+r2 on the (thread, msg_id) key, last wins. It draws no unit, so it has no pack and build_pass1_sft.labelled_units's pack-equals-labels refusal never sees it",
+        "moved": [
+          {
+            "now": "не_наш_рынок",
+            "row": "@retsepty:7342#49685",
+            "was": null
+          }
+        ],
+        "provenance": "results/labels_pass1_r3_provenance.json",
+        "review_gate": "docs/reviews/lora-c-rationales-verdict.md",
+        "reviewed": [
+          true
+        ],
+        "rows": 1,
+        "scope": "the lora-c shared pool ONLY. results/pass1_sft_arm_a.jsonl and results/pass1_sft_arm_b.jsonl are sealed at bytes taken before this correction existed and are never re-derived to follow a later ruling",
+        "sha256": "c0de78d8de85d6e8366488af75dbcc7e117c432e9f8beab967cfc531f26fa8e7",
+        "verdict_present": true
+      },
       "results/rationales_pass1_v1.jsonl": {
         "author": "claude-code",
         "review_gate": "docs/reviews/lora-c-rationales-verdict.md",
         "reviewed": [
-          false
+          true
         ],
-        "sha256": "ed817668b02bf1bb174003a2983108beaae4045c3fdd5b09fb76032a64c08a55",
-        "verdict_present": false
+        "sha256": "ba3681d8ae58432b4742bac02bcdf53583d8418dcd02cd79540a22a0e98305b1",
+        "verdict_present": true
       },
       "results/synthetic_pass1_v1.jsonl": {
         "author": "claude-code",
         "review_gate": "docs/reviews/lora-c-synthetic-verdict.md",
         "reviewed": [
-          false
+          true
         ],
-        "sha256": "9b049bc2046360a811169f45a669f802a8676c643aa9eb647563b636c20c195d",
-        "verdict_present": false
+        "sha256": "247b0db1bc10bc41d9ada7406e9cc08edd2214d57fdbf7f991c7195b9a7daf5c",
+        "verdict_present": true
       }
     }
   },
@@ -204,7 +232,7 @@
     "rates_and_what_would_invalidate_them": {
       "pass_1_seconds_per_call": {
         "derivation": "mean(probe-b) × mean(dev v2) / mean(dev base) = 6.135572, rounded up",
-        "invalidating_condition": "this rate was measured on v2 requests. Three of the four legs send V3, whose widest E request is 8894 characters against v2's 7781. Carrying it unchanged for v3 is the same class of error as the training rate below ([[the_smokes_rate_carries_the_smokes_transport]]). It is safe as a conservative CEILING and wrong as a ratio — an earlier version of this field said «floor», which is the dangerous direction under a cap. Empirically it behaves as a ceiling: 6.14 is 2.279× the window pod's direct v2 reading of 2.694083, and about 2× a width-scaled estimate for v3 (2.694083 × 8894/7781 = 3.079). The pod-class headroom already inside the charge is an order of magnitude larger than the 14 % width growth this condition is about",
+        "invalidating_condition": "this rate was measured on v2 requests. Three of the four legs send V3, whose widest E request is 8907 characters against v2's 7781. Carrying it unchanged for v3 is the same class of error as the training rate below ([[the_smokes_rate_carries_the_smokes_transport]]). It is safe as a conservative CEILING and wrong as a ratio — an earlier version of this field said «floor», which is the dangerous direction under a cap. Empirically it behaves as a ceiling: 6.14 is 2.279× the window pod's direct v2 reading of 2.694083, and about 2× a width-scaled estimate for v3 (2.694083 × 8894/7781 = 3.079). The pod-class headroom already inside the charge is an order of magnitude larger than the 14 % width growth this condition is about",
         "measured_on": "NOT v2. The level comes from pass1-probe-b's 64 paid rows at base V1 (5.161578 s/call); only the UPLIFT ratio 2.72578/2.293075 is a v2 measurement, and 5.161578 × that = 6.135572 re-derives exactly. No v2 request was ever measured near 6.14 ([[a_smoke_drawn_from_the_exam_is_not_a_rate_sample]])",
         "source": "results/prereg_pass1_window_r2.json::money.arithmetic.seconds_per_call.charged",
         "the_window_pod_measured": 2.694083,
@@ -220,7 +248,7 @@
       "training_seconds_per_step": {
         "compliant_slow_ceiling": 121.0,
         "compliant_slow_rule": "121.0 s/step never trips lora-b's registered 122 s watchdog (kill_clock rung 4, «s/step > 122 s over 5 consecutive log lines»). **It is NOT a rate at which every rung says GO:** in lora-b's own worked examples the entry at 121.0 carries verdict KILL, and the GO belongs to `compliant_slow_by_the_contracts_letter`, which lora-b describes as «the path the rung exists to close». So 121.0 is the rate that slips the WATCHDOG and is caught by the PROJECTION — and lora-c has no 122 s watchdog of its own, which is the real reason it cannot be carried unexamined",
-        "invalidating_condition": "TWO of the three are readings, and both on sequences of at most 1 222 tokens; 121.0 is not a reading at all but a worked example constructed from the 122 s watchdog. The length condition binds on 61.047 and 68.442 (results/prereg_lora_b.json::dropped_for_length.longest_kept). v3's rows are 1435–2759 tokens at the measured ratio range. config/qlora.yaml's own comment says raising max_seq_len «changes no step time and no memory except on the batches that need it» — here EVERY batch needs it, so none of the three is this line's rate. Named as inherited readings, never used as the formula's input",
+        "invalidating_condition": "TWO of the three are readings, and both on sequences of at most 1 222 tokens; 121.0 is not a reading at all but a worked example constructed from the 122 s watchdog. The length condition binds on 61.047 and 68.442 (results/prereg_lora_b.json::dropped_for_length.longest_kept). v3's rows are 1435–2763 tokens at the measured ratio range. config/qlora.yaml's own comment says raising max_seq_len «changes no step time and no memory except on the batches that need it» — here EVERY batch needs it, so none of the three is this line's rate. Named as inherited readings, never used as the formula's input",
         "measured_on_arm_a": 68.442,
         "registered_by_lora_b": 61.047,
         "sources": {
@@ -240,15 +268,15 @@
       "file": "results/lora_c_eval_pack.json",
       "n": 200,
       "rendered": 198,
-      "sha256": "b728acca23a261d7f8ed91235016120c15c36228fc077ddedaadbabf3d829ea5"
+      "sha256": "049e0a5883192007b18cb4d46ef76b8f5b339b7aec2472cca03e063d4566b99a"
     },
     "pool": {
       "arithmetic": "650 − 100 − 41 + 6 = 515 — the two exclusions overlap and the overlap is added back once",
       "distribution": {
-        "null": 165,
+        "null": 164,
         "категория_личное": 40,
         "молочный_бренд": 1,
-        "не_наш_рынок": 272,
+        "не_наш_рынок": 273,
         "сеть_ритейлер": 37
       },
       "record": "results/lora_c_data.json",
@@ -333,13 +361,13 @@
       "contamination_is_empty": true,
       "file": "results/synthetic_pass1_v1.jsonl",
       "rows": 160,
-      "sha256": "9b049bc2046360a811169f45a669f802a8676c643aa9eb647563b636c20c195d"
+      "sha256": "247b0db1bc10bc41d9ada7406e9cc08edd2214d57fdbf7f991c7195b9a7daf5c"
     },
     "train": {
       "distribution": {
-        "null": 165,
+        "null": 164,
         "категория_личное": 40,
-        "не_наш_рынок": 267,
+        "не_наш_рынок": 268,
         "сеть_ритейлер": 34
       },
       "file": "results/pass1_sft_v3_train.jsonl",
@@ -382,12 +410,12 @@
         }
       ],
       "rows": 506,
-      "sha256": "0821f4aedef78ee476a993664f75feb113afdcc77551f43c82f50d887c4f40a0"
+      "sha256": "cf55d3f20216139845d320b4283d543c5283e3475f3c6afa42ea98cf20997c18"
     }
   },
   "producer": {
     "script": "scripts/write_lora_c_prereg.py",
-    "sha256": "fd77ad36d38ae68e973ed90668f5adc141fa6b056839aa06a96550d307b6762d"
+    "sha256": "b99da5c7c9c98be6921cd7ebd0c6b61620a17135e52060daea5f68e049ed1684"
   },
   "question": "does rationale-supervised QLoRA on pass 1 fix the subject-attribution errors pass 2 measured — brand ↔ retailer, a retailer in a non-dairy context, non-dairy «brands», and mention-vs-about — WITHOUT learning the prior the way line B did",
   "reachability": {
@@ -400,59 +428,6 @@
       "cause": "the pool's single молочный_бренд row is one of the nine that cannot be rendered (see the_smallest_class_has_no_fifth_neighbour), so arm A's 506 rows carry ZERO targets of that class and `train_qlora.class_weights` does not even contain the key — `sampling_order` can never draw one",
       "reported_not_remedied": "the remedies are the ones listed under the_smallest_class_has_no_fifth_neighbour — this is that fact read forward into the bars, not a second decision",
       "what_it_does_to_bar_1": "bar 1 = 5 of 5 turns on F2a, and F2a turns on relabelling msg 580124 from `сеть_ритейлер` to `молочный_бренд` — the reading the gold gives it. An adapter with no training target carrying that label cannot learn to emit it, so **bar 1 is near-unreachable for arm A and reachable for arm B**, by the same arithmetic. The bar is NOT lowered for arm A: it is registered per arm at 5 of 5 and this block is why a RED there would say something different from a RED on arm B ([[an_absolute_bar_needs_a_reachability_state]])"
-    },
-    "no_row_fits_max_seq_len": {
-      "by_ratio": {
-        "median_observed": {
-          "max": 2675,
-          "median": 1643,
-          "min": 1505,
-          "of": 506,
-          "over_max_seq_len": 506,
-          "pods_own_count_of_the_shortest": 1489,
-          "tokens_per_char": 0.282802
-        },
-        "min_observed": {
-          "max": 2551,
-          "median": 1567,
-          "min": 1435,
-          "of": 506,
-          "over_max_seq_len": 506,
-          "pods_own_count_of_the_shortest": 1419,
-          "tokens_per_char": 0.269618
-        },
-        "registered_bound_max": {
-          "max": 2759,
-          "median": 1694,
-          "min": 1552,
-          "of": 506,
-          "over_max_seq_len": 506,
-          "pods_own_count_of_the_shortest": 1536,
-          "tokens_per_char": 0.291741
-        }
-      },
-      "chars_prompt_plus_target": {
-        "max": 9402,
-        "median": 5750,
-        "min": 5262
-      },
-      "lora_b_v1_rows_for_comparison": {
-        "chars_max": 4132,
-        "chars_median": 2950,
-        "longest_kept_tokens": 1222,
-        "source": "results/pass1_sft_arm_b.jsonl and results/prereg_lora_b.json::dropped_for_length.longest_kept"
-      },
-      "max_seq_len": 1408,
-      "max_seq_len_source": "config/qlora.yaml training.max_seq_len — FROZEN law",
-      "remedies_named_none_taken": [
-        "raise config/qlora.yaml training.max_seq_len — FROZEN law, pinned by results/prereg_lora_b.json::instruments.config_sha256 and by lora-b's verdict; there is precedent (1024 → 1408 by operator decision of 2026-08-04) and it is the operator's word, never the executor's",
-        "shrink the examples block — MEASURED, and it does NOT close this STOP. With FOUR examples (the smallest class's dropped) 484 of 506 rows are still over at the most favourable measured ratio and 506 of 506 at the registered one; with ONE example 62 rows are still over. It DOES dissolve the молочный_бренд blockage above, but that is a SCOPED change to nine rows of one thread and this would be a global one — two decisions, not one ([[a_claim_no_number_can_check]])",
-        "drop the rationale from the neighbour examples — the model then never sees the shape it is asked to produce, which is the clause's own reason for existing",
-        "drop rows over the limit — that is all 506"
-      ],
-      "the_margin_on_the_tightest_row": "1 419 against 1 408 is ELEVEN tokens, 0.78 %, and it is a model rather than a tokenizer run: the ratio was measured on probe rows of 2 778–3 923 characters and applied to rows of 5 262–9 402, so the chat template's fixed part scales with the content it should not scale with — and `TEMPLATE_SLACK` = 16 is itself larger than the margin. The direction of the correction is ambiguous (the target is Ukrainian prose plus JSON punctuation, whose tokens-per-character is probably above the average this ratio came from). **The STOP does not rest on this row:** the MEDIAN needs ~1 520–1 570 and the widest ~2 460–2 560 under any plausible correction ([[a_reproducible_probe_can_be_unrepresentative]])",
-      "the_pods_own_count": "train_qlora.encode_pass1 tokenizes apply_chat_template(...) and refuses on len(context) + len(target); build_pass1_sft.ratio() measured tokens-per-character against served prompt_tokens, which counts the same template. So the pod's number is this bound minus TEMPLATE_SLACK = 16, and at the MINIMUM observed ratio the SHORTEST row still needs 1419 against 1408. Both the Mac-side drop rule and the pod-side refusal WOULD fire on every row, and neither has run: `encode_pass1` is never reached because `load_sft` refuses on the task name first (that is STOP 3's own evidence), and `build_pass1_sft`'s drop rule does not read this file at all. Both are PROJECTIONS through the measured ratio, and the mood matters",
-      "verdict": "EVERY one of the 506 rows is over max_seq_len 1408 at all three measured ratios. build_pass1_sft's own drop rule (bound > max_seq_len) would drop the whole dataset, and train_qlora.encode_pass1 would refuse every row on the pod. This is the contract's STOP and it returns to the operator"
     },
     "the_pinned_trainer_refuses_a_v3_dataset": {
       "instrument": "scripts/train_qlora.py",
@@ -538,12 +513,166 @@
       "threads": [
         "@VARUS_channel:10367"
       ]
+    },
+    "three_rows_do_not_fit_max_seq_len": {
+      "counted": {
+        "config_sha256": "331b8c1ea61302e01fd07394ab7ec90f443d13d4288150f5812a32201a6da9c1",
+        "instrument": {
+          "chat_template": {
+            "add_generation_prompt": true,
+            "enable_thinking": false
+          },
+          "model_id": "google/gemma-4-31b-it",
+          "quantity": "len(apply_chat_template(prompt)) + len(target) — `train_qlora.encode_pass1`'s own refusal expression, the same calls in the same order",
+          "revision": "842da3794eaa0b77d5f08bae87a17459d91ff475",
+          "templates_in_the_snapshot": {
+            "chat_template.jinja": "/Users/hdv_1987/.cache/huggingface/hub/models--google--gemma-4-31b-it/snapshots/842da3794eaa0b77d5f08bae87a17459d91ff475/chat_template.jinja",
+            "chat_template.json": "PROVEN-ABSENT"
+          },
+          "tokenizer": "GemmaTokenizer",
+          "why_not_the_processor": "AutoProcessor needs torchvision for Gemma4ImageProcessor and this is a text-only count; the snapshot carries one template file and no processor-specific one, so the two loaders read the same bytes"
+        },
+        "max_seq_len": 2816,
+        "over": [
+          "@klopotenkofood:6060#21366",
+          "@matusi_ukr:22327#580336",
+          "@tarilka_malyuka:746#83"
+        ],
+        "pod_count": {
+          "max": 2975,
+          "median": 1633.0,
+          "min": 1445
+        },
+        "pod_count_plus_template_slack": {
+          "max": 2991,
+          "median": 1649.0,
+          "min": 1461,
+          "slack": 16
+        },
+        "rows": 506,
+        "rows_over_the_stop_threshold": 3,
+        "source": {
+          "file": "results/pass1_sft_v3_train.jsonl",
+          "sha256": "cf55d3f20216139845d320b4283d543c5283e3475f3c6afa42ea98cf20997c18"
+        },
+        "stop_threshold": 2800,
+        "the_model_this_replaces": {
+          "predicted_max_with_slack": {
+            "median_0.282802": 2679,
+            "minimum_0.269618": 2555,
+            "registered_worst_0.291741": 2763
+          },
+          "the_model_underpredicts_by": 228,
+          "true_max_with_slack": 2991,
+          "why": "amendment 3.25 (1) derived 2 816 from 2 759 — the widest row at the registered worst tokens-per-character. That is a MODEL measured on probe-b's 2 778-3 923 character rows and applied to rows of 5 262-9 415 (Dv757). Here is what it predicts against what the tokenizer counts, on the SAME rows"
+        },
+        "verdict": "STOP — a true count above 2 800; back to the operator, the next rung is 3 072",
+        "widest_rows": [
+          {
+            "chars": 9415,
+            "context": 2907,
+            "id": "@tarilka_malyuka:746#83",
+            "pod_count": 2975,
+            "target": 68
+          },
+          {
+            "chars": 9391,
+            "context": 2880,
+            "id": "@klopotenkofood:6060#21366",
+            "pod_count": 2963,
+            "target": 83
+          },
+          {
+            "chars": 9281,
+            "context": 2708,
+            "id": "@matusi_ukr:22327#580336",
+            "pod_count": 2785,
+            "target": 77
+          },
+          {
+            "chars": 9250,
+            "context": 2713,
+            "id": "@matusi_ukr:22111#577092",
+            "pod_count": 2778,
+            "target": 65
+          },
+          {
+            "chars": 8943,
+            "context": 2656,
+            "id": "@mandziak:3679#47933",
+            "pod_count": 2728,
+            "target": 72
+          }
+        ]
+      },
+      "not_caused_by_this_contract": "measured on the rows as they stood at 97548df — before the gate-1 rewrites and before amendment 3.25 (2)'s neighbour refusal — the same tokenizer counts 2 974 with TWO rows over 2 800. The rebuild moved the widest row by one token",
+      "rows_over": [
+        "@klopotenkofood:6060#21366",
+        "@matusi_ukr:22327#580336",
+        "@tarilka_malyuka:746#83"
+      ],
+      "state": "amendment 3.25 (1) raised the ceiling 1 408 -> 2 816 and ordered a reality check before `lora-c-run` buys anything. The check RAN, at $0, through the model's own tokenizer at the pinned revision — and it STOPS the line back to the operator",
+      "the_model_this_ceiling_was_derived_from": {
+        "by_ratio": {
+          "median_observed": {
+            "max": 2679,
+            "median": 1643,
+            "min": 1505,
+            "of": 506,
+            "over_max_seq_len": 0,
+            "pods_own_count_of_the_shortest": 1489,
+            "tokens_per_char": 0.282802
+          },
+          "min_observed": {
+            "max": 2555,
+            "median": 1567,
+            "min": 1435,
+            "of": 506,
+            "over_max_seq_len": 0,
+            "pods_own_count_of_the_shortest": 1419,
+            "tokens_per_char": 0.269618
+          },
+          "registered_bound_max": {
+            "max": 2763,
+            "median": 1694,
+            "min": 1552,
+            "of": 506,
+            "over_max_seq_len": 0,
+            "pods_own_count_of_the_shortest": 1536,
+            "tokens_per_char": 0.291741
+          }
+        },
+        "chars_prompt_plus_target": {
+          "max": 9415,
+          "median": 5751,
+          "min": 5262
+        },
+        "lora_b_v1_rows_for_comparison": {
+          "chars_max": 4132,
+          "chars_median": 2950,
+          "longest_kept_tokens": 1222,
+          "source": "results/pass1_sft_arm_b.jsonl and results/prereg_lora_b.json::dropped_for_length.longest_kept"
+        },
+        "max_seq_len": 2816,
+        "max_seq_len_source": "config/qlora.yaml training.max_seq_len — FROZEN law",
+        "remedies_named_none_taken": [
+          "raise config/qlora.yaml training.max_seq_len — FROZEN law, pinned by results/prereg_lora_b.json::instruments.config_sha256 and by lora-b's verdict; there is precedent (1024 → 1408 by operator decision of 2026-08-04) and it is the operator's word, never the executor's",
+          "shrink the examples block — MEASURED, and it does NOT close this STOP. With FOUR examples (the smallest class's dropped) 484 of 506 rows are still over at the most favourable measured ratio and 506 of 506 at the registered one; with ONE example 62 rows are still over. It DOES dissolve the молочный_бренд blockage above, but that is a SCOPED change to nine rows of one thread and this would be a global one — two decisions, not one ([[a_claim_no_number_can_check]])",
+          "drop the rationale from the neighbour examples — the model then never sees the shape it is asked to produce, which is the clause's own reason for existing",
+          "drop rows over the limit — that is all 506"
+        ],
+        "superseded_by": "results/lora_c_tokens.json — a count, not a model. Kept because 2 816 was DERIVED from this table and a reader has to be able to see what was derived from what",
+        "the_pods_own_count": "train_qlora.encode_pass1 tokenizes apply_chat_template(...) and refuses on len(context) + len(target). That expression is what results/lora_c_tokens.json now evaluates directly, by the same calls in the same order, so the projection and the count measure one quantity. The pod-side refusal still has not RUN — `load_sft` refuses on the task name first, which is STOP 3's own evidence — and the mood stays WOULD",
+        "what_it_gets_wrong": "measured on probe rows of 2 778–3 923 characters and applied to rows of 5262–9415, so the chat template's fixed part scales with content it should not scale with. On the widest row it is 228 tokens LOW, and the direction was called ambiguous when it was only a model ([[a_reproducible_probe_can_be_unrepresentative]])"
+      },
+      "the_operators_own_next_rung": "3.25 (1)'s own words: «the next rung is 3 072 and it is one word, not a redesign». 2991 fits under 3 072 with 81 tokens to spare. This registration does NOT take that rung: raising frozen law is the operator's word",
+      "what_the_model_said_and_the_count_says": "the three-ratio model puts the widest row at 2763 tokens and reports 0 of 506 over 2816. The TOKENIZER counts 2975 (2991 with TEMPLATE_SLACK) and 3 rows over the amendment's 2 800 stop. The model under-predicts by 228 tokens on the widest row, which is exactly the hazard 3.25 (1) ordered the check against (Dv757: a ratio is a MODEL carried across a change of row length)"
     }
   },
   "ready_to_price": {
     "chars_per_sft_row": {
-      "max": 9402,
-      "median": 5750
+      "max": 9415,
+      "median": 5751
     },
     "eval_calls_per_leg": 198,
     "legs": 4,
@@ -552,7 +681,7 @@
     "rule": "every number here comes from a file this contract built, at $0",
     "tokens_per_sft_row": {
       "bound": "build_pass1_sft.bound_tokens at the worst measured tokens-per-character",
-      "max": 2759,
+      "max": 2763,
       "median": 1694,
       "min": 1552
     },
@@ -563,8 +692,11 @@
   "training": {
     "alpha": 32,
     "config": "config/qlora.yaml — FROZEN law",
-    "config_agrees_with_lora_b": true,
-    "config_sha256": "6771ed373f9e7c52b3180a45506fe0dfef4446bc89b2c3ff6c1b39992f2d00ff",
+    "config_agrees_with_lora_b": false,
+    "config_agrees_with_lora_b_reading": "FALSE ON PURPOSE, and the field publishes the false value rather than being deleted. Amendment 3.25 (1) revised config/qlora.yaml in place — max_seq_len 1 408 -> 2 816 — and line B's pin on revision 1 is NEVER re-taken, so results/prereg_lora_b.json, results/lora_b_verdict.json and results/pass1_sft.json now describe a revision that is no longer on disk. That is what a sealed record doing its job looks like. Line B's DATA does not move with the number: driving build_pass1_sft.py at revision 2 rebuilds both sealed arms and the smoke pack BYTE-IDENTICAL, because its longest kept row is 1 222 tokens and it dropped 0 rows for length at 1 408",
+    "config_lora_b_revision_1_sha256": "6771ed373f9e7c52b3180a45506fe0dfef4446bc89b2c3ff6c1b39992f2d00ff",
+    "config_revision": 2,
+    "config_sha256": "331b8c1ea61302e01fd07394ab7ec90f443d13d4288150f5812a32201a6da9c1",
     "epochs": 2,
     "inherited_from": "results/prereg_lora_b.json — by NAME, and every number says so",
     "learning_rate": 0.0001,
@@ -574,17 +706,17 @@
       "classes_under_the_floor": [],
       "classes_under_the_floor_rule": "measured draws, not the product — and the class that WOULD have landed on the floor (молочный_бренд, one pool row) is absent from this table entirely because it has zero rendered rows. The floor binds on nothing here, and not because every class clears it",
       "draws_per_epoch_MEASURED": {
-        "null": 126.48,
-        "категория_личное": 127.37,
-        "не_наш_рынок": 126.22,
-        "сеть_ритейлер": 125.93
+        "null": 126.65,
+        "категория_личное": 127.55,
+        "не_наш_рынок": 125.9,
+        "сеть_ритейлер": 125.9
       },
       "draws_rule": "the sampler itself, driven over 60 epochs of the real rows. train_qlora.sampling_order calls random.choices, which NORMALISES the weights, so the naive product n_c·w_c is NOT the expected draw here",
       "floor": 8,
       "rows_per_class": {
-        "null": 165,
+        "null": 164,
         "категория_личное": 40,
-        "не_наш_рынок": 267,
+        "не_наш_рынок": 268,
         "сеть_ритейлер": 34
       },
       "rule": "w_c = N/(5·n_c) capped at 8.0 — results/prereg_lora_b.json's arms.*.sampler_weights, by calling train_qlora.class_weights, the function the trainer samples with",
@@ -602,9 +734,9 @@
         "why": "w_c = N/(5·n_c) is written for FIVE classes; the rendered set has FOUR because молочный_бренд has zero rows, so the vector sums to 404.8 of 506 and normalisation scales every class up by 506/404.8 = 1.25. The product under-reports the real draw by 25 %, and one section of this record naming that missing class beside another publishing a number that assumes it is exactly the shape this contract keeps finding"
       },
       "weights": {
-        "null": 0.613333,
+        "null": 0.617073,
         "категория_личное": 2.53,
-        "не_наш_рынок": 0.379026,
+        "не_наш_рынок": 0.377612,
         "сеть_ритейлер": 2.976471
       }
     },
@@ -613,6 +745,41 @@
       "field": "the rationale AND `subject_type`",
       "not_supervised": "subject_id and stance — the team lead labelled neither",
       "vs_lora_b": "line B supervised `subject_type` ALONE on a set that is 52 % `не_наш_рынок` and the adapter learned the marginal. That is the failure this design is a response to, and the cue-in-text rule is what keeps the rationale from being the label wearing a sentence"
+    },
+    "tokenizer_reality_check": {
+      "authority": "docs/SPEC.md amendment 3.25 (1)",
+      "file": "results/lora_c_tokens.json",
+      "instrument": {
+        "chat_template": {
+          "add_generation_prompt": true,
+          "enable_thinking": false
+        },
+        "model_id": "google/gemma-4-31b-it",
+        "quantity": "len(apply_chat_template(prompt)) + len(target) — `train_qlora.encode_pass1`'s own refusal expression, the same calls in the same order",
+        "revision": "842da3794eaa0b77d5f08bae87a17459d91ff475",
+        "templates_in_the_snapshot": {
+          "chat_template.jinja": "/Users/hdv_1987/.cache/huggingface/hub/models--google--gemma-4-31b-it/snapshots/842da3794eaa0b77d5f08bae87a17459d91ff475/chat_template.jinja",
+          "chat_template.json": "PROVEN-ABSENT"
+        },
+        "tokenizer": "GemmaTokenizer",
+        "why_not_the_processor": "AutoProcessor needs torchvision for Gemma4ImageProcessor and this is a text-only count; the snapshot carries one template file and no processor-specific one, so the two loaders read the same bytes"
+      },
+      "pod_count": {
+        "max": 2975,
+        "median": 1633.0,
+        "min": 1445
+      },
+      "ran": true,
+      "rows_over": 3,
+      "sha256": "d7642388fed9f797b5beb605596c5f00e27d9fcce31d5d7814e0d1fc6e349d1b",
+      "stop_threshold": 2800,
+      "verdict": "STOP — a true count above 2 800; back to the operator, the next rung is 3 072",
+      "with_template_slack": {
+        "max": 2991,
+        "median": 1649.0,
+        "min": 1461,
+        "slack": 16
+      }
     }
   }
 }

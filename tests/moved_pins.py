@@ -66,15 +66,30 @@ def servable(pack: dict) -> dict:
     return copy
 
 
-def assert_only_the_prompts_pin_moved(shipped: dict, rebuilt: dict, *also: Path) -> set[str]:
+def assert_only_the_prompts_pin_moved(
+    shipped: dict, rebuilt: dict, *also: Path, carried: dict[Path, tuple[str, ...]] | None = None
+) -> set[str]:
     """The whole claim, in one call. Returns the paths that moved, so a caller can name them.
 
     `also` names further files this contract edited whose pins may therefore move — a producer that
     hashes ITSELF into the record it writes is the usual one. Each is resolved to its LIVE sha and
     the paths carrying it are found in the rebuild, so the allowance is derived from the file rather
     than from a name somebody typed ([[provenance_cannot_name_itself]]).
+
+    `carried` is for the other half of a moved file: a record that pins a CONFIG also quotes values
+    out of it, and those move with the pin and only with it. Amendment 3.25 (1) revised
+    `config/qlora.yaml` (`max_seq_len` 1 408 -> 2 816) and line B's registration is never re-pinned,
+    so its `config_sha256` now describes revision 1 — and `training.max_seq_len` moves in the
+    rebuild for exactly that reason and no other. The allowance is CONDITIONAL on the pin having
+    actually moved, so when the config is restored these names stop being excused
+    ([[one_constant_answering_two_questions]]).
     """
     expected: set[str] = set()
+    for path, names in (carried or {}).items():
+        here = paths_holding(rebuilt, live_sha(path))
+        assert here, f"no path in the rebuild carries {path.name}'s live sha — check is vacuous"
+        if any(path_name not in paths_holding(shipped, live_sha(path)) for path_name in here):
+            expected |= set(names)
     for path in (PROMPTS, *also):
         found = paths_holding(rebuilt, live_sha(path))
         assert found, (

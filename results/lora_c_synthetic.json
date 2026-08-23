@@ -157,7 +157,7 @@
   "produced_by": {
     "note": "this file VALIDATES the rows; it does not write them",
     "script": "scripts/build_lora_c_synthetic.py",
-    "sha256": "88d2d873269b8c75982112069884c3c439ff1e8400fb4bc6b43fadc0b68a22d4"
+    "sha256": "9fc01c79ba908a1cf188783f69c29eea75e6e9341a7f6ebe55a5bc322c9329b3"
   },
   "register": {
     "alphabet": {
@@ -285,17 +285,19 @@
   ],
   "rows": 160,
   "self_flagged": {
-    "action_taken": "NONE — review gate 2 is a STOP and the verdict decides",
+    "action_taken": "RULING R1 of docs/reviews/lora-c-synthetic-verdict.md: «the executor was right, and the fix is the TEXT, not the label». Fifteen texts were rewritten into thing-quality claims with the chain named only as WHERE, labels untouched, and this instrument — the one that found them — now matches none of the 160",
     "codebook_clause": "«A comment about the retailer's service, stock, prices or stores is `сеть_ритейлер`» — prompts.PASS1_CODEBOOK_CLAUSE_V2, carried into the labeller's codebook",
     "concern": "labelled `не_наш_рынок` because the THING is non-dairy, while the comment makes a stock / price / assortment claim about a NAMED chain — which the codebook rules `сеть_ритейлер`",
     "n": 0,
     "of": 160,
     "rows": [],
+    "rows_at_the_gate_2_sample": 15,
     "the_team_leads_own_labels_on_this_shape": {
       "@VARUS_channel:10367:20979": "сеть_ритейлер — «Коли буде знижка?»",
       "@VARUS_channel:10470:21236": "сеть_ритейлер — «кубок ковбасний … там сказали, що нема»",
       "@VARUS_channel:10470:21240": "сеть_ритейлер — «І в нас теж такого нема»"
-    }
+    },
+    "verdict": "docs/reviews/lora-c-synthetic-verdict.md R1"
   },
   "sha256": "247b0db1bc10bc41d9ada7406e9cc08edd2214d57fdbf7f991c7195b9a7daf5c",
   "skeletons": {

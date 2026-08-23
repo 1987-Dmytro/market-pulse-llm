@@ -282,9 +282,12 @@ def self_flagged(written: list[dict]) -> dict:
     `@VARUS_channel:10470:21240` and `@VARUS_channel:10367:20979` are all `сеть_ритейлер`, and the
     first of those is a NON-DAIRY item out of stock at a chain.
 
-    **Nothing is rewritten here.** Review gate 2 is a STOP and the verdict names what changes; a
-    draft that quietly corrected itself after its own sample path was reported would hand the team
-    lead a file different from the one they were sent. So the rows stand and the concern is carried
+    **Nothing is rewritten HERE, and that is still true** — this function counts, it does not fix.
+    Review gate 2 was a STOP and the verdict named what changes; a draft that quietly corrected
+    itself after its own sample path was reported would have handed the team lead a file different
+    from the one they were sent. R1 ruled for the concern and `lora-c-apply` rewrote the fifteen
+    TEXTS, so this now matches nothing — which is the check on R1 landing, measured by the
+    instrument that raised it rather than asserted beside it. So the rows stand and the concern is carried
     beside them ([[an_exclusion_rule_built_from_failures]] read the other way: the executor may not
     grade its own sample — SPEC §10).
     """
@@ -313,7 +316,16 @@ def self_flagged(written: list[dict]) -> dict:
         "rows": [f"{one['thread']}:{one['msg_id']}" for one in hits],
         "n": len(hits),
         "of": len(written),
-        "action_taken": "NONE — review gate 2 is a STOP and the verdict decides",
+        "action_taken": (
+            "NONE — review gate 2 is a STOP and the verdict decides"
+            if hits
+            else "RULING R1 of docs/reviews/lora-c-synthetic-verdict.md: «the executor was right,"
+            " and the fix is the TEXT, not the label». Fifteen texts were rewritten into"
+            " thing-quality claims with the chain named only as WHERE, labels untouched, and this"
+            " instrument — the one that found them — now matches none of the 160"
+        ),
+        "verdict": "docs/reviews/lora-c-synthetic-verdict.md R1",
+        "rows_at_the_gate_2_sample": 15,
     }
 
 

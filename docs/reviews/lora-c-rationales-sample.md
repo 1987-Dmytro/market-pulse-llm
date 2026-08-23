@@ -110,3 +110,25 @@ Written by Claude Code from the codebook (`scripts/build_pass1_label_pack.py::co
 | 30 | `@tarilka_malyuka:695`<br>`16` | null<br>*names:* pass 1 read `категория_личное` — «педіатр» | Судячи з усього педіатр у вас так собі… | коментар ні про кого — випад у бік співрозмовниці (cue: «педіатр у вас так собі») |  |
 | 31 | `@tarilka_malyuka:747`<br>`84` | не_наш_рынок<br>*names:* pass 1 read `категория_личное` — «посуд малюку» | Як обрати посуд малюку, щоб було і зручно і був якісний, на що звернути увагу, і які найкраще складові брати, тобто яких тарілочок можливо треба декілька, що можете порадити? | коментар ПРО дитячий посуд, поза нашою категорією (cue: «Як обрати посуд малюку») |  |
 
+
+## Addendum — the 41st «our» row, added by `lora-c-apply` on the verdict's own instruction
+
+This file promised **every** «our» row and shipped 40 of the 41 in the pool. The missing one is
+below. It is appended rather than re-rendered: `docs/reviews/lora-c-rationales-verdict.md` ruled on
+the bytes above, so the producer now refuses to rewrite this file at all
+(`build_lora_c_data.sample_is_closed`) and only this block was added by hand.
+
+| # | pair | label | comment | rationale | verdict |
+|---|---|---|---|---|---|
+| 41 | `@VARUS_channel:10367`<br>`20766` | молочный_бренд | Уцей сир треба пару днів як купив потримати в пакеті щоб він став мокрим, тоді його лупашить можна на ура. | коментар ПРО сам сир із допису — як його доводити після покупки (cue: «цей сир») | **PASSES** |
+
+> **The verdict, quoted.** «`@VARUS_channel:10367#20766` (the singleton `молочный_бренд`) — **Not a
+> rewrite — a record correction: this row was ABSENT from the sample**, which promised every «our»
+> row (41 in the pool, 40 in the table). Reviewed here from the store: cue «цей сир» occurs, «з
+> допису» marker present, agrees with the label. PASSES. The application report adds it to the
+> sample file with this verdict quoted, so the sample's own promise holds.»
+
+**One thing the row's own record says and this table cannot.** It is the pool's ONLY real
+`молочный_бренд` row, it sits in `@VARUS_channel:10367`, and that thread is the nine rows STOP 1
+leaves unrendered — so this row trains nothing and is evaluated nowhere. Amendment 3.25 (3) accepts
+that as built.

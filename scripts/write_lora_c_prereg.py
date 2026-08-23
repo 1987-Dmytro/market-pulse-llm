@@ -41,6 +41,7 @@ from market_pulse import pass1_v3, pass2_r2, prompts  # noqa: E402
 
 OUT = REPO_ROOT / "results" / "prereg_lora_c.json"
 STATUS = REPO_ROOT / "docs" / "STATUS.md"
+SPEC = REPO_ROOT / "docs" / "SPEC.md"
 
 DATA_RECORD = REPO_ROOT / "results" / "lora_c_data.json"
 SYNTHETIC_RECORD = REPO_ROOT / "results" / "lora_c_synthetic.json"
@@ -49,6 +50,8 @@ PASS2_PACK = REPO_ROOT / "results" / "lora_c_pass2_pack.json"
 TRAIN_FILE = REPO_ROOT / "results" / "pass1_sft_v3_train.jsonl"
 RATIONALES = REPO_ROOT / "results" / "rationales_pass1_v1.jsonl"
 SYNTHETIC_FILE = REPO_ROOT / "results" / "synthetic_pass1_v1.jsonl"
+TOKENS = REPO_ROOT / "results" / "lora_c_tokens.json"
+LABELS_R3 = REPO_ROOT / "results" / "labels_pass1_r3.jsonl"
 LORA_B = REPO_ROOT / "results" / "prereg_lora_b.json"
 PASS2_R2 = REPO_ROOT / "results" / "prereg_pass2_signals_r2.json"
 WINDOW_R2 = REPO_ROOT / "results" / "prereg_pass1_window_r2.json"
@@ -89,6 +92,37 @@ SECONDS_PER_STEP_COMPLIANT_SLOW = 121.0
 
 def sha(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+AMENDMENT_325_1 = (
+    "**`training.max_seq_len` rises 1 408 → 2 816 by a NEW REVISION of `config/qlora.yaml`**"
+    " (frozen law; precedent: 1 024 → 1 408, operator, 2026-08-04)."
+)
+AMENDMENT_325_2 = (
+    "**The neighbour-selection rule gains ONE refusal:** a candidate whose whitespace-collapsed,"
+    " casefolded text EQUALS the query's own text is refused"
+)
+AMENDMENT_325_3 = (
+    "**STOP 1 is accepted AS BUILT:** 506 rendered training rows, zero real `молочный_бренд`"
+    " positives in arm A, the holdout's reachable maximum 98 of 100 with the bar's integer"
+    " unchanged, and the nine rows of `@VARUS_channel:10367` stay unrendered"
+)
+
+
+def quoted_spec(text: str) -> str:
+    """The same rule as `quoted`, against `docs/SPEC.md` — amendment 3.25 is law, not a briefing.
+
+    The amendment arrived in its own marked block AFTER every sealed pre-registration pin, and
+    `write_sku_prereg.registered_law()` strips those blocks before hashing. So the text below is
+    read from a part of the file no pin covers, and the only thing standing between this record and
+    a paraphrase is this grep ([[verbatim_quotes_must_be_grepped]]).
+    """
+    if " ".join(text.split()) not in " ".join(SPEC.read_text(encoding="utf-8").split()):
+        raise SystemExit(
+            f"this quotation is not in {SPEC.name}: {text[:80]!r}… Either the amendment moved or"
+            " this record is paraphrasing law. Stop."
+        )
+    return text
 
 
 def quoted(text: str) -> str:
@@ -411,48 +445,78 @@ def money(eval_pack: dict, data_record: dict, train_rows: int, synthetic_rows: i
     }
 
 
-def reachability(data_record: dict) -> dict:
+def reachability(data_record: dict, counted: dict) -> dict:
     """Three things this line cannot reach as registered, each with its arithmetic and its remedies."""
     tokens = data_record["tokens"]
     return {
         "the_smallest_class_has_no_fifth_neighbour": data_record["unreachable"],
-        "no_row_fits_max_seq_len": {
-            **{
-                key: tokens[key]
-                for key in (
-                    "max_seq_len",
-                    "max_seq_len_source",
-                    "chars_prompt_plus_target",
-                    "lora_b_v1_rows_for_comparison",
-                    "by_ratio",
-                    "verdict",
-                    "remedies_named_none_taken",
-                )
+        "three_rows_do_not_fit_max_seq_len": {
+            "state": (
+                "amendment 3.25 (1) raised the ceiling 1 408 -> 2 816 and ordered a reality check"
+                " before `lora-c-run` buys anything. The check RAN, at $0, through the model's own"
+                " tokenizer at the pinned revision — and it STOPS the line back to the operator"
+            ),
+            "counted": counted,
+            "what_the_model_said_and_the_count_says": (
+                f"the three-ratio model puts the widest row at"
+                f" {tokens['by_ratio']['registered_bound_max']['max']} tokens and reports"
+                f" {tokens['by_ratio']['registered_bound_max']['over_max_seq_len']} of"
+                f" {tokens['by_ratio']['registered_bound_max']['of']} over {tokens['max_seq_len']}."
+                f" The TOKENIZER counts {counted['pod_count']['max']}"
+                f" ({counted['pod_count_plus_template_slack']['max']} with TEMPLATE_SLACK) and"
+                f" {counted['rows_over_the_stop_threshold']} rows over the amendment's 2 800 stop."
+                " The model under-predicts by"
+                f" {counted['the_model_this_replaces']['the_model_underpredicts_by']} tokens on the"
+                " widest row, which is exactly the hazard 3.25 (1) ordered the check against"
+                " (Dv757: a ratio is a MODEL carried across a change of row length)"
+            ),
+            "not_caused_by_this_contract": (
+                "measured on the rows as they stood at 97548df — before the gate-1 rewrites and"
+                " before amendment 3.25 (2)'s neighbour refusal — the same tokenizer counts 2 974"
+                " with TWO rows over 2 800. The rebuild moved the widest row by one token"
+            ),
+            "the_operators_own_next_rung": (
+                "3.25 (1)'s own words: «the next rung is 3 072 and it is one word, not a redesign»."
+                f" {counted['pod_count_plus_template_slack']['max']} fits under 3 072 with"
+                f" {3072 - counted['pod_count_plus_template_slack']['max']} tokens to spare. This"
+                " registration does NOT take that rung: raising frozen law is the operator's word"
+            ),
+            "rows_over": counted["over"],
+            "the_model_this_ceiling_was_derived_from": {
+                **{
+                    key: tokens[key]
+                    for key in (
+                        "max_seq_len",
+                        "max_seq_len_source",
+                        "chars_prompt_plus_target",
+                        "lora_b_v1_rows_for_comparison",
+                        "by_ratio",
+                        "remedies_named_none_taken",
+                    )
+                },
+                "superseded_by": (
+                    "results/lora_c_tokens.json — a count, not a model. Kept because 2 816 was"
+                    " DERIVED from this table and a reader has to be able to see what was derived"
+                    " from what"
+                ),
+                "what_it_gets_wrong": (
+                    "measured on probe rows of 2 778–3 923 characters and applied to rows of"
+                    f" {tokens['chars_prompt_plus_target']['min']}–"
+                    f"{tokens['chars_prompt_plus_target']['max']}, so the chat template's fixed"
+                    " part scales with content it should not scale with. On the widest row it is"
+                    f" {counted['the_model_this_replaces']['the_model_underpredicts_by']} tokens"
+                    " LOW, and the direction was called ambiguous when it was only a model"
+                    " ([[a_reproducible_probe_can_be_unrepresentative]])"
+                ),
+                "the_pods_own_count": (
+                    "train_qlora.encode_pass1 tokenizes apply_chat_template(...) and refuses on"
+                    " len(context) + len(target). That expression is what"
+                    " results/lora_c_tokens.json now evaluates directly, by the same calls in the"
+                    " same order, so the projection and the count measure one quantity. The"
+                    " pod-side refusal still has not RUN — `load_sft` refuses on the task name"
+                    " first, which is STOP 3's own evidence — and the mood stays WOULD"
+                ),
             },
-            "the_margin_on_the_tightest_row": (
-                "1 419 against 1 408 is ELEVEN tokens, 0.78 %, and it is a model rather than a"
-                " tokenizer run: the ratio was measured on probe rows of 2 778–3 923 characters and"
-                " applied to rows of 5 262–9 402, so the chat template's fixed part scales with the"
-                " content it should not scale with — and `TEMPLATE_SLACK` = 16 is itself larger"
-                " than the margin. The direction of the correction is ambiguous (the target is"
-                " Ukrainian prose plus JSON punctuation, whose tokens-per-character is probably"
-                " above the average this ratio came from). **The STOP does not rest on this row:**"
-                " the MEDIAN needs ~1 520–1 570 and the widest ~2 460–2 560 under any plausible"
-                " correction ([[a_reproducible_probe_can_be_unrepresentative]])"
-            ),
-            "the_pods_own_count": (
-                "train_qlora.encode_pass1 tokenizes apply_chat_template(...) and refuses on"
-                " len(context) + len(target); build_pass1_sft.ratio() measured tokens-per-character"
-                " against served prompt_tokens, which counts the same template. So the pod's number"
-                " is this bound minus TEMPLATE_SLACK = 16, and at the MINIMUM observed ratio the"
-                f" SHORTEST row still needs"
-                f" {tokens['by_ratio']['min_observed']['pods_own_count_of_the_shortest']} against"
-                f" {tokens['max_seq_len']}. Both the Mac-side drop rule and the pod-side refusal"
-                " WOULD fire on every row, and neither has run: `encode_pass1` is never reached"
-                " because `load_sft` refuses on the task name first (that is STOP 3's own"
-                " evidence), and `build_pass1_sft`'s drop rule does not read this file at all."
-                " Both are PROJECTIONS through the measured ratio, and the mood matters"
-            ),
         },
         "arm_a_has_no_молочный_бренд_target": {
             "cause": (
@@ -528,6 +592,7 @@ def reachability(data_record: dict) -> dict:
 
 def build() -> dict:
     data_record = json.loads(DATA_RECORD.read_text(encoding="utf-8"))
+    counted = json.loads(TOKENS.read_text(encoding="utf-8"))
     synthetic_record = json.loads(SYNTHETIC_RECORD.read_text(encoding="utf-8"))
     eval_pack = json.loads(EVAL_PACK.read_text(encoding="utf-8"))
     pass2_pack = json.loads(PASS2_PACK.read_text(encoding="utf-8"))
@@ -544,6 +609,17 @@ def build() -> dict:
             "record": "docs/STATUS.md «Открытые решения» п. 1",
             "ruling_v": quoted(RULING_V),
             "ruling_k": quoted(RULING_K),
+            "amendment_3_25": {
+                "record": "docs/SPEC.md, the `amendment-3.25` marked block",
+                "sha256_of_the_spec": sha(SPEC),
+                "1_max_seq_len": quoted_spec(AMENDMENT_325_1),
+                "2_the_neighbour_refusal": quoted_spec(AMENDMENT_325_2),
+                "3_stop_1_as_built": quoted_spec(AMENDMENT_325_3),
+                "quotation_rule": (
+                    "all three clauses are grepped back into docs/SPEC.md on every build of this"
+                    " file, whitespace-normalised, by `quoted_spec`"
+                ),
+            },
             "quotation_rule": (
                 "both strings are grepped back into docs/STATUS.md on every build of this file,"
                 " whitespace-normalised. A ruling quoted from memory is a paraphrase in quotation"
@@ -599,12 +675,37 @@ def build() -> dict:
         },
         "legs": legs(eval_pack, train_rows, synthetic_rows),
         "bars": bars(data_record),
-        "reachability": reachability(data_record),
+        "reachability": reachability(data_record, counted),
         "training": {
             "inherited_from": "results/prereg_lora_b.json — by NAME, and every number says so",
             "config": "config/qlora.yaml — FROZEN law",
             "config_sha256": sha(QLORA),
+            "config_revision": 2,
             "config_agrees_with_lora_b": sha(QLORA) == lora_b["instruments"]["config_sha256"],
+            "config_agrees_with_lora_b_reading": (
+                "FALSE ON PURPOSE, and the field publishes the false value rather than being"
+                " deleted. Amendment 3.25 (1) revised config/qlora.yaml in place — max_seq_len"
+                " 1 408 -> 2 816 — and line B's pin on revision 1 is NEVER re-taken, so"
+                " results/prereg_lora_b.json, results/lora_b_verdict.json and"
+                " results/pass1_sft.json now describe a revision that is no longer on disk. That is"
+                " what a sealed record doing its job looks like. Line B's DATA does not move with"
+                " the number: driving build_pass1_sft.py at revision 2 rebuilds both sealed arms"
+                " and the smoke pack BYTE-IDENTICAL, because its longest kept row is 1 222 tokens"
+                " and it dropped 0 rows for length at 1 408"
+            ),
+            "config_lora_b_revision_1_sha256": lora_b["instruments"]["config_sha256"],
+            "tokenizer_reality_check": {
+                "authority": "docs/SPEC.md amendment 3.25 (1)",
+                "file": "results/lora_c_tokens.json",
+                "sha256": sha(TOKENS),
+                "ran": True,
+                "instrument": counted["instrument"],
+                "pod_count": counted["pod_count"],
+                "with_template_slack": counted["pod_count_plus_template_slack"],
+                "stop_threshold": counted["stop_threshold"],
+                "rows_over": counted["rows_over_the_stop_threshold"],
+                "verdict": counted["verdict"],
+            },
             "rank": yaml.safe_load(QLORA.read_text(encoding="utf-8"))["lora"]["r"],
             "alpha": yaml.safe_load(QLORA.read_text(encoding="utf-8"))["lora"]["alpha"],
             "learning_rate": yaml.safe_load(QLORA.read_text(encoding="utf-8"))["optimizer"][
@@ -694,6 +795,28 @@ def build() -> dict:
                     "verdict_present": (
                         REPO_ROOT / "docs" / "reviews" / "lora-c-synthetic-verdict.md"
                     ).exists(),
+                },
+                "results/labels_pass1_r3.jsonl": {
+                    "sha256": sha(LABELS_R3),
+                    "author": "the TEAM LEAD — the fifth named ruling of the gate-1 verdict",
+                    "reviewed": [True],
+                    "review_gate": "docs/reviews/lora-c-rationales-verdict.md",
+                    "verdict_present": (
+                        REPO_ROOT / "docs" / "reviews" / "lora-c-rationales-verdict.md"
+                    ).exists(),
+                    "rows": 1,
+                    "kind": (
+                        "a DELTA over r1+r2 on the (thread, msg_id) key, last wins. It draws no"
+                        " unit, so it has no pack and build_pass1_sft.labelled_units's"
+                        " pack-equals-labels refusal never sees it"
+                    ),
+                    "scope": (
+                        "the lora-c shared pool ONLY. results/pass1_sft_arm_a.jsonl and"
+                        " results/pass1_sft_arm_b.jsonl are sealed at bytes taken before this"
+                        " correction existed and are never re-derived to follow a later ruling"
+                    ),
+                    "provenance": "results/labels_pass1_r3_provenance.json",
+                    "moved": data_record["population"]["labels_r3"]["moved"],
                 },
             },
             "pass_2": {

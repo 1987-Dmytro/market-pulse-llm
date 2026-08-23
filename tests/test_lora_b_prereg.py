@@ -74,8 +74,19 @@ def test_the_shipped_record_is_what_the_producer_builds_today(tmp_path):
     # WHOLE, which refused every older pack the day a second text was registered, and it was
     # narrowed to the subset check the reader's own handshake had already been given
     moved_pins.assert_only_the_prompts_pin_moved(
-        shipped, rebuilt, REPO_ROOT / "scripts" / "pass1_pod_runner.py"
+        shipped,
+        rebuilt,
+        REPO_ROOT / "scripts" / "pass1_pod_runner.py",
+        REPO_ROOT / "config" / "qlora.yaml",
+        carried={REPO_ROOT / "config" / "qlora.yaml": ("training.max_seq_len",)},
     )
+    # and the direction that makes it a SEAL rather than an excuse: the shipped record still says
+    # 1 408 and its config pin still names revision 1, which is amendment 3.25 (1)'s own words —
+    # «`results/prereg_lora_b.json`'s pin on the OLD config revision stays sealed and is never
+    # re-pinned». Line B's DATA does not move with the number; `tests/test_pass1_sft.py` proves
+    # both sealed arms and the smoke pack rebuild byte-identical at revision 2.
+    assert shipped["training"]["max_seq_len"] == 1408 != rebuilt["training"]["max_seq_len"]
+    assert shipped["dropped_for_length"]["longest_kept"] == 1222
     assert shipped["instruments"]["prompt_sha256"] == rebuilt["instruments"]["prompt_sha256"]
 
 

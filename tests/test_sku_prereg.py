@@ -287,6 +287,12 @@ def test_every_pinned_input_still_hashes_to_what_it_says(record):
         # _MIN_USD` retires with it. One name short on arrival like every block before it. Stripped
         # here for the same reason: these pins are v1–v4's and no dollar of theirs is on that line.
         "amendment-3.24",
+        # 3.25 — the acceptance of the `lora-c-prep` STOP report (2026-08-23): `max_seq_len` rises
+        # to 2 816 by a new revision of config/qlora.yaml, the neighbour rule gains its one equality
+        # refusal, and lora-c's STOP 1 is accepted as built. One name short on arrival like every
+        # block before it. Stripped here for the same reason: these pins are v1–v4's and every row
+        # they price predates the lora-c line entirely.
+        "amendment-3.25",
     ]
     assert prereg.RATIFICATION_NAME.findall(spec_text) == blocks
     law = prereg.registered_law(prereg.SPEC).decode("utf-8")

@@ -12,6 +12,7 @@ file which grows during the run ([[a_test_that_reads_a_shipped_artifact]]).
 """
 
 import json
+import re
 import subprocess
 import sys
 from pathlib import Path
@@ -311,13 +312,30 @@ def test_the_pinned_trainer_refuses_a_v3_row_by_name(tmp_path):
     assert trainer.load_sft(path)[0]["id"] == row["id"]
 
 
-def test_no_v3_row_fits_max_seq_len_at_any_measured_ratio(record):
-    """The second STOP, as a number rather than as a sentence."""
+def test_the_ratio_model_clears_2816_and_the_real_tokenizer_does_not(record):
+    """The second STOP after amendment 3.25 (1), as the two numbers that disagree.
+
+    The model that DERIVED 2 816 says every row now fits it. The tokenizer, run for real at the
+    pinned revision, says three rows cross the amendment's own 2 800 stop and the widest needs more
+    than `max_seq_len` itself. Both directions are asserted, because either alone passes for the
+    wrong reason: a model that still refused every row would mean the raise never landed, and a
+    count under 2 800 would mean there is nothing to take back to the operator
+    ([[projected_rate_versus_measured_rate]]).
+    """
     tokens = record["tokens"]
-    assert tokens["max_seq_len"] == data.MAX_SEQ_LEN
+    counted = json.loads((REPO_ROOT / "results" / "lora_c_tokens.json").read_text("utf-8"))
+    assert tokens["max_seq_len"] == data.MAX_SEQ_LEN == 2816
     for name, cell in tokens["by_ratio"].items():
-        assert cell["over_max_seq_len"] == cell["of"], name
-        assert cell["pods_own_count_of_the_shortest"] > tokens["max_seq_len"], name
+        assert cell["over_max_seq_len"] == 0, name
+
+    assert counted["rows"] == len(jsonl(TRAIN)) == 506
+    assert counted["max_seq_len"] == tokens["max_seq_len"]
+    assert counted["stop_threshold"] == 2800
+    assert counted["rows_over_the_stop_threshold"] == len(counted["over"]) == 3
+    assert counted["pod_count_plus_template_slack"]["max"] > counted["max_seq_len"]
+    assert counted["verdict"].startswith("STOP")
+    # and the model is LOW, which is the reason the amendment ordered the count at all
+    assert counted["the_model_this_replaces"]["the_model_underpredicts_by"] > 0
 
 
 def test_the_smallest_class_has_no_fifth_neighbour(record):
@@ -537,12 +555,14 @@ def test_the_four_reachability_blocks_are_registered():
     reach = registration["reachability"]
     assert set(reach) == {
         "the_smallest_class_has_no_fifth_neighbour",
-        "no_row_fits_max_seq_len",
+        "three_rows_do_not_fit_max_seq_len",
         "arm_a_has_no_молочный_бренд_target",
         "the_pinned_trainer_refuses_a_v3_dataset",
     }
     for name, cell in reach.items():
-        assert any("remed" in key for key in cell), name
+        assert any("remed" in key for key in cell) or any(
+            "remed" in key for value in cell.values() if isinstance(value, dict) for key in value
+        ), name
 
 
 def test_arm_a_has_no_dairy_brand_target_and_arm_b_has_thirty_two():
@@ -566,18 +586,26 @@ def test_arm_a_has_no_dairy_brand_target_and_arm_b_has_thirty_two():
     assert block["arm_b_targets"] == 32
 
 
-def test_the_synthetic_sample_carries_the_executors_own_concern():
-    """The 15 rows flagged against the codebook reach the gate-2 file, and none was rewritten."""
+def test_the_executors_own_concern_reached_the_gate_and_the_ruling_closed_it():
+    """The 15 rows reached the gate-2 file, R1 ruled for them, and the instrument now finds none.
+
+    Both ends are asserted. The FROZEN sample still names all fifteen — that file is the evidence
+    the verdict rests on and it is never re-rendered — and the live instrument that raised them
+    matches nothing after R1's rewrites. A test that only checked the zero could not tell «fixed»
+    from «the matcher stopped working», so the sample's fifteen are the negative control.
+    """
     record = json.loads(
         (REPO_ROOT / "results" / "lora_c_synthetic.json").read_text(encoding="utf-8")
     )
     flag = record["self_flagged"]
-    assert flag["n"] == len(flag["rows"]) > 0
-    assert flag["action_taken"].startswith("NONE")
+    assert flag["n"] == len(flag["rows"]) == 0
+    assert flag["rows_at_the_gate_2_sample"] == 15
+    assert flag["action_taken"].startswith("RULING R1")
     text = SAMPLE_2.read_text(encoding="utf-8")
     assert "What this file believes may be wrong" in text
-    for one in flag["rows"]:
-        assert one in text
+    section = text.split("## What this file believes may be wrong")[1]
+    assert "**15 of 160 rows.**" in section
+    assert len(re.findall(r"`synthetic:\w+:\d+`", section)) == 15
 
 
 # --- the two review gates -------------------------------------------------------------------------
@@ -603,22 +631,21 @@ def test_review_gate_2_shows_all_160_rows_with_a_blank_verdict_column():
 
 
 PRODUCERS = [
+    # `--sample` is still PASSED, so the sample renderer and the freeze guard are both driven; the
+    # sample FILES are no longer compared, because a verdict closes its own sample and the producer
+    # now refuses to rewrite one. `test_a_sample_is_closed_by_its_verdict` is that guard's control.
     (
         "scripts/build_lora_c_data.py",
         ["--sample"],
         {
             "--train-out": "results/pass1_sft_v3_train.jsonl",
             "--record-out": "results/lora_c_data.json",
-            "--sample-out": "docs/reviews/lora-c-rationales-sample.md",
         },
     ),
     (
         "scripts/build_lora_c_synthetic.py",
         ["--sample"],
-        {
-            "--record-out": "results/lora_c_synthetic.json",
-            "--sample-out": "docs/reviews/lora-c-synthetic.md",
-        },
+        {"--record-out": "results/lora_c_synthetic.json"},
     ),
     ("scripts/build_lora_c_eval_pack.py", [], {"--out": "results/lora_c_eval_pack.json"}),
     (
@@ -628,6 +655,41 @@ PRODUCERS = [
     ),
     ("scripts/write_lora_c_prereg.py", [], {"--out": "results/prereg_lora_c.json"}),
 ]
+
+
+def test_a_sample_is_closed_by_its_verdict(tmp_path):
+    """Both directions of the freeze, on both samples.
+
+    The file a team lead read is the evidence their ruling rests on. Re-rendering it from data the
+    ruling has since moved would hand a later reader a document nobody reviewed under the name of
+    one that was — so with the verdict present the producer writes nothing, and with it absent it
+    writes as before. A guard tested only in the state that satisfies it is a guard nobody has seen
+    fire ([[guard_selftest_negative_control]]).
+    """
+    for verdict, out in (
+        (data.VERDICT, tmp_path / "one.md"),
+        (syn.VERDICT, tmp_path / "two.md"),
+    ):
+        assert verdict.exists(), verdict
+        assert data.sample_is_closed(verdict, out) is True
+        assert data.sample_is_closed(tmp_path / "no-such-verdict.md", out) is False
+
+    # and end to end: the shipped samples are untouched by a full `--sample` run
+    before = {one: one.read_bytes() for one in (SAMPLE_1, SAMPLE_2)}
+    for script, flags in (
+        ("scripts/build_lora_c_data.py", ["--sample", "--train-out", str(tmp_path / "t.jsonl")]),
+        ("scripts/build_lora_c_synthetic.py", ["--sample"]),
+    ):
+        done = subprocess.run(
+            [sys.executable, script, *flags, "--record-out", str(tmp_path / "r.json")],
+            cwd=REPO_ROOT,
+            capture_output=True,
+            text=True,
+            env={"PYTHONPATH": "src", "PATH": "/usr/bin:/bin:/usr/local/bin"},
+        )
+        assert done.returncode == 0, done.stderr[-2000:]
+        assert "is CLOSED by" in done.stdout, done.stdout[-500:]
+    assert {one: one.read_bytes() for one in (SAMPLE_1, SAMPLE_2)} == before
 
 
 @pytest.mark.parametrize("script, flags, outputs", PRODUCERS, ids=[one[0] for one in PRODUCERS])
@@ -678,3 +740,221 @@ def test_the_pass_2_reproduction_command_is_driven_end_to_end():
     )
     assert done.returncode == 0, done.stdout[-2000:] + done.stderr[-2000:]
     assert "AGREES: True" in done.stdout
+
+
+# --- lora-c-apply: the two verdicts and amendment 3.25 --------------------------------------------
+
+
+def test_the_r3_delta_is_a_layer_and_refuses_to_be_a_draw():
+    """The delta corrects a drawn unit and may not introduce one — both directions.
+
+    r2 composes with r1 by being a second disjoint DRAW of 150 units; r3 is neither a draw nor
+    disjoint — it is one correction laid over the same keys, last wins. The distinction is not
+    cosmetic: a row that arrived through a «delta» would be a unit nobody drew, sitting in the
+    training pool with no pack behind it ([[select_one_row_refuse_ambiguity]]).
+    """
+    delta = data.labels_r3()
+    assert delta == {("@retsepty:7342", 49685): "не_наш_рынок"}
+
+    units = [
+        {"thread": "@retsepty:7342", "msg_id": 49685, "subject_type": None},
+        {"thread": "@retsepty:7342", "msg_id": 49686, "subject_type": "не_наш_рынок"},
+    ]
+    applied, census = data.apply_r3([dict(one) for one in units])
+    assert applied[0]["subject_type"] == "не_наш_рынок"
+    assert applied[1]["subject_type"] == "не_наш_рынок"
+    assert census["rows_moved"] == 1
+    assert census["moved"] == [{"row": "@retsepty:7342#49685", "was": None, "now": "не_наш_рынок"}]
+    # the negative control: the same delta over rows that never drew it
+    with pytest.raises(SystemExit, match="a delta may only CORRECT a drawn unit"):
+        data.apply_r3([{"thread": "@nobody:1", "msg_id": 2, "subject_type": None}])
+
+
+def test_the_r3_delta_reaches_the_pool_and_not_line_bs_sealed_arms():
+    """The correction is lora-c's. Line B's datasets were sealed before it existed."""
+    record = json.loads(DATA_RECORD.read_text(encoding="utf-8"))
+    assert record["population"]["labels_r3"]["rows_moved"] == 1
+    rows = {(one["thread"], one["msg_id"]): one for one in jsonl(TRAIN)}
+    assert rows[("@retsepty:7342", 49685)]["subject_type"] == "не_наш_рынок"
+    sealed = jsonl(REPO_ROOT / "results" / "pass1_sft_arm_b.jsonl")
+    theirs = [one for one in sealed if one["id"].endswith("49685")]
+    assert theirs and theirs[0]["subject_type"] is None, (
+        "line B's sealed arm still carries the pre-correction label, which is what «sealed» means"
+    )
+
+
+def test_the_equality_refusal_removes_only_an_identical_text():
+    """Amendment 3.25 (2), both directions and at the boundary.
+
+    The threshold is EQUALITY and nothing below it, so the row that proves the rule is the one at
+    similarity 0.9875 — the highest strictly below 1.0 anywhere in this window — which must still
+    be eligible. Whitespace and case are collapsed first, because that is the form the amendment
+    names.
+    """
+    pool = [
+        {
+            "thread": "@a:1",
+            "msg_id": 1,
+            "text": "порожній рядок",
+            "subject_type": None,
+            "grams": fewshot.grams("порожній рядок"),
+        },
+        {
+            "thread": "@a:1",
+            "msg_id": 2,
+            "text": "те   САМЕ",
+            "subject_type": "не_наш_рынок",
+            "grams": fewshot.grams("те   САМЕ"),
+        },
+        {
+            "thread": "@a:1",
+            "msg_id": 6,
+            "text": "те саме, але не зовсім",
+            "subject_type": "не_наш_рынок",
+            "grams": fewshot.grams("те саме, але не зовсім"),
+        },
+        {
+            "thread": "@a:1",
+            "msg_id": 3,
+            "text": "Те саме, майже",
+            "subject_type": "категория_личное",
+            "grams": fewshot.grams("Те саме, майже"),
+        },
+        {
+            "thread": "@a:1",
+            "msg_id": 4,
+            "text": "зовсім інше",
+            "subject_type": "сеть_ритейлер",
+            "grams": fewshot.grams("зовсім інше"),
+        },
+        {
+            "thread": "@a:1",
+            "msg_id": 5,
+            "text": "ще одне",
+            "subject_type": "молочный_бренд",
+            "grams": fewshot.grams("ще одне"),
+        },
+    ]
+    query = "ТЕ   саме"
+    plain = fewshot.neighbours("@q:9", fewshot.grams(query), pool)
+    assert any(data.norm(one["text"]) == data.norm(query) for one in plain), (
+        "the unamended rule must show the twin, or this test proves nothing"
+    )
+    amended = data.neighbours_v3("@q:9", query, fewshot.grams(query), pool)
+    assert not any(data.norm(one["text"]) == data.norm(query) for one in amended)
+    # the near-twin is untouched: equality, and nothing below it
+    assert ("@a:1", 3) in [(one["thread"], one["msg_id"]) for one in amended]
+    # and a class emptied by the refusal is a NEW instance of STOP 1, raised rather than patched
+    with pytest.raises(SystemExit, match="cannot be given one example of each class"):
+        data.neighbours_v3("@q:9", "зовсім інше", fewshot.grams("зовсім інше"), pool)
+
+
+def test_no_pack_shows_a_query_its_own_text():
+    """The leak, measured over the SHIPPED packs rather than trusted to the filter."""
+    pack = json.loads(EVAL_PACK.read_text(encoding="utf-8"))
+    leak = pack["own_text_in_examples"]
+    assert leak["n"] == 0 and leak["on_the_gating_bar"] == 0
+    assert leak["remedy"]["state"] == "CLOSED"
+    assert leak["remedy"]["measured_at_97548df"]["e_items"] == 22
+    own = 0
+    for row in jsonl(TRAIN):
+        for one in row["examples_chosen"]:
+            if one.get("similarity") == 1.0:
+                own += 1
+    assert own == 0, "a training row is still shown a neighbour identical to its own text"
+
+
+def test_the_newline_pass_is_seeded_idempotent_and_never_trailing():
+    rows = jsonl(SYNTHETIC)
+    texts = [one["text"] for one in rows]
+    assert syn.newline_pass(texts) == texts, (
+        "re-running the pass on its own output must reproduce it"
+    )
+    assert len([one for one in texts if "\n" in one]) == syn.NEWLINE_TARGET == 30
+    assert not [one for one in texts if one.endswith("\n") or one.startswith("\n")]
+    # a different seed picks different rows, or the seed is decorative
+    assert syn.newline_pass(texts, seed=syn.NEWLINE_SEED + 1) != texts
+
+
+def test_no_skeleton_covers_more_than_a_third_of_the_dairy_brand_rows():
+    rows = jsonl(SYNTHETIC)
+    census = syn.skeletons(rows)
+    assert census["rows"] == 32 and census["ceiling"] == 10
+    assert census["largest"]["rows"] <= census["ceiling"]
+    assert census["passes"]
+    # the instrument is not vacuous: it separates the 32 into more than two frames
+    assert len(census["by_skeleton"]) >= 4
+
+
+def test_the_tokenizer_check_refuses_a_substitute_template(monkeypatch):
+    """The three states of «is this file in the cache», and only one of them licenses the count.
+
+    A path means present, a sentinel means the Hub answered «no such file», and None means nobody
+    ever asked. Absent and unasked are different answers ([[unreadable_now_versus_never]]), and a
+    substitute chat template would look exactly like a measurement.
+    """
+    import tokenize_lora_c_rows as tok
+
+    for state in (
+        {"chat_template.jinja": "/x", "chat_template.json": "UNASKED"},
+        {"chat_template.jinja": "/x", "chat_template.json": "/y"},
+        {"chat_template.jinja": "PROVEN-ABSENT", "chat_template.json": "PROVEN-ABSENT"},
+    ):
+        monkeypatch.setattr(tok, "templates_of", lambda *a, **k: dict(state))
+        with pytest.raises(SystemExit):
+            tok.measure([])
+
+
+def test_the_registration_carries_the_count_and_quotes_the_amendment():
+    registration = json.loads(PREREG.read_text(encoding="utf-8"))
+    check = registration["training"]["tokenizer_reality_check"]
+    assert check["ran"] is True and check["verdict"].startswith("STOP")
+    assert check["rows_over"] == 3
+    assert registration["training"]["config_agrees_with_lora_b"] is False
+    assert registration["training"]["config_revision"] == 2
+    assert "FALSE ON PURPOSE" in registration["training"]["config_agrees_with_lora_b_reading"]
+
+    spec = " ".join((REPO_ROOT / "docs" / "SPEC.md").read_text(encoding="utf-8").split())
+    quoted = registration["authority"]["amendment_3_25"]
+    for key in ("1_max_seq_len", "2_the_neighbour_refusal", "3_stop_1_as_built"):
+        assert " ".join(quoted[key].split()) in spec, key
+
+
+def _tokenizer_is_obtainable() -> bool:
+    try:
+        import transformers  # noqa: F401
+        from huggingface_hub import try_to_load_from_cache
+    except ImportError:
+        return False
+    import tokenize_lora_c_rows as tok
+
+    return isinstance(
+        try_to_load_from_cache(
+            "google/gemma-4-31b-it", "chat_template.jinja", revision=tok.revision()
+        ),
+        str,
+    )
+
+
+@pytest.mark.skipif(
+    not _tokenizer_is_obtainable(),
+    reason="the model tokenizer is not on this machine — amendment 3.25 (1)'s other branch, and"
+    " results/lora_c_tokens.json then describes a measurement this suite cannot re-run",
+)
+def test_the_tokenizer_producer_rebuilds_its_shipped_bytes(tmp_path):
+    """The fifth producer, driven end to end like the other four — it writes a REGISTERED number."""
+    done = subprocess.run(
+        [
+            sys.executable,
+            "scripts/tokenize_lora_c_rows.py",
+            "--out",
+            str(tmp_path / "lora_c_tokens.json"),
+        ],
+        cwd=REPO_ROOT,
+        capture_output=True,
+        text=True,
+        env={"PYTHONPATH": "src", "PATH": "/usr/bin:/bin:/usr/local/bin"},
+    )
+    assert done.returncode == 0, done.stderr[-2000:]
+    shipped = REPO_ROOT / "results" / "lora_c_tokens.json"
+    assert (tmp_path / "lora_c_tokens.json").read_bytes() == shipped.read_bytes()

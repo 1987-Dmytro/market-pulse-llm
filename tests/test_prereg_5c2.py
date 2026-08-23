@@ -246,6 +246,7 @@ def test_the_sealed_pin_still_derives_through_the_ten_block_keep():
         "amendment-3.22",
         "amendment-3.23",
         "amendment-3.24",
+        "amendment-3.25",
     ), "after the seal"
     assert hashlib.sha256(spec.read_bytes()).hexdigest() != pin, "3.19 is not in the file"
     assert hashlib.sha256(prereg.registered_law(spec, keep=writer.KEEP_BLOCKS)).hexdigest() == pin
@@ -311,13 +312,13 @@ def test_a_twelfth_marked_block_is_refused_rather_than_stripped(monkeypatch, tmp
     looked at cannot arrive quietly. Moving it is the one part of the landing manoeuvre the suite
     does NOT force — a duplicate still refuses, so the test still passes — and it was duly left
     behind when 3.21 landed. The assertion below is what makes the next omission red instead of
-    silent, and it has now done its job on two consecutive landings: 3.23 and 3.24 each walked into
-    the planted name and this line reddened.
+    silent, and it has now done its job on three consecutive landings: 3.23, 3.24 and 3.25 each
+    walked into the planted name and this line reddened.
 
     The last line is the direction that keeps this a control rather than a refusal that refuses
     everything: the file as it stands must still pass.
     """
-    intruder = "amendment-3.25"
+    intruder = "amendment-3.26"
     assert intruder not in writer.BLOCKS_TODAY, "the intruder must be a name nobody has looked at"
 
     grown = tmp_path / "SPEC.md"
