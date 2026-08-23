@@ -301,6 +301,7 @@ Each with its cause tag from the closed enum v2. **Every one was found at $0.**
 | **Dv789** | `[cause: spec-gap]` [[a_stock_window_needs_the_create_not_a_poll]] | **The card ruling (к) names was last read as out of stock, and the only free test of that is the create that freezes the record.** «один A6000»; `knowledge/hot.md` records A6000 48 GB in EU-RO-1 as `none` and a 4090 24 GB at $0.74/h taken first try, five pods running. A refused create costs $0 and IS the stock test — but a create that SUCCEEDS is this registration's freeze, so stock and freeze cannot be separated and the card is part of what the operator is being asked. The derivation therefore prices BOTH the $0.80/h rung-1 ceiling and the $0.74/h reading rather than assuming a card. |
 | **Dv790** | `[cause: process]` [[a_citation_is_not_a_record]] | **A test changed its content under a name a shipped report cites.** `test_the_registration_carries_no_price` asserted `money["state"].startswith("OPEN")`, which stopped being true the moment this contract did what 3.25 (1) ordered. `docs/reports/lora-c-apply.md:481` — «The money block is still **OPEN**, the cap is still $4.00, and `test_the_registration_carries_no_price` still passes» — cites the test by name, and two of that sentence's three clauses are superseded by this contract (the block is DERIVED; the test's content moved). The cap is still $4.00. All three were true when written and a shipped report is not edited to follow a later state. Renaming would strand that citation, so the NAME is kept and the assertions moved: `DERIVED`, the forbidden field names still absent, the fixed part re-summed from its own terms, and the one rate the contract forbids projecting asserted to be a `str` and not a number. Disclosed here rather than left for a reader to notice the docstring no longer matches the title. |
 | **Dv791** | `[cause: process]` [[gate_verdicts_need_an_artifact]] | **The census is written to a file the contract only asked to have printed.** D1 says «print the census»; `results/lora_c_encode_census.json` is 12 lines of JSON and is committed beside the print. A verdict a report quotes from stdout is a verdict nobody can re-hash. Named because it is a results file this contract added and no registration pins — and it is deliberately NOT added to `frozen_when_the_pod_exists`, which is a sealed list. |
+| **Dv792** | `[cause: process]` [[a_review_that_verifies_a_moving_tree]] | **The closing verifier was started and then edited underneath — void, killed, re-run.** The operator ruled on this report while the closing `make check` was in flight, and recording the ruling means writing `knowledge/hot.md` and the day log. `hot.md` is a price input `scripts/volume_calc_5c1.py` greps, and pytest reads files at run time, so from that edit onward the run described neither tree — the same shape as Dv785 one contract ago, made again. Killed at ~70 % rather than quoted; the reading in §«The verifier, re-read on the closing tree» is a separate run over a tree that did not move under it. The rule this keeps breaking against is simple and was already written down: **do not touch the repo while a verifier is running, including the vault.** |
 
 **The tally, by the grep the template names:**
 
@@ -311,20 +312,20 @@ tag = {}
 for chunk in re.split(r"(?=\*\*Dv\d+)", flat):
     if (m := re.match(r"\*\*Dv(\d+)", chunk)) and (t := re.findall(r"\[cause:\s*([a-z-]+)\]", chunk)):
         tag.setdefault(int(m.group(1)), t[0])
-inr = {d: t for d, t in tag.items() if 786 <= d <= 791}
+inr = {d: t for d, t in tag.items() if 786 <= d <= 792}
 health = sum(1 for t in inr.values() if t in ("contract-gap", "spec-gap", "verify-gap"))
 print(len(inr), dict(collections.Counter(inr.values()).most_common()))
-print("contract health", health, "· paid", len(inr) - health, "· enum canonicity", len(inr), "of 6")
+print("contract health", health, "· paid", len(inr) - health, "· enum canonicity", len(inr), "of 7")
 ```
 
 ```
-6 {'contract-gap': 3, 'process': 2, 'spec-gap': 1}
-contract health 4 · paid 2 · enum canonicity 6 of 6
+7 {'contract-gap': 3, 'process': 3, 'spec-gap': 1}
+contract health 4 · paid 3 · enum canonicity 7 of 7
 ```
 
 «paid» is the enum's residual class (`process`, `tooling`, `model`) and not money: this contract
-spent nothing. Four of six are contract- or spec-gaps, and the two that are not are disclosures of
-my own edits.
+spent nothing. Four of seven are contract- or spec-gaps; the three that are not are disclosures of my own
+edits, and one of them (Dv792) is a repeat of Dv785 from the contract before.
 
 ## What the operator is being asked
 
@@ -375,3 +376,39 @@ sealed registration that still cannot name arm B.
    content and could not change name; the report that cites it stays greppable and the change is in
    the ledger instead.
 
+
+## Addendum — the operator ruled on this report, in this session
+
+Both questions were put to the operator with the arithmetic above in front of them, and both were
+answered. **The ruling is recorded here because `docs/STATUS.md` is a team-lead file and the
+executor never writes it — п. 1 needs the team lead to register this the way it registered (к),
+(л) and (м).**
+
+1. **Arm B first, at $0.** «Сначала $0-контракт на датасет арма B» — a separate prep contract in
+   which the team lead rules how a synthetic row is rendered as a v3 query, a producer renders the
+   666 rows, and the registration pins the file. Then ONE `lora-c-run` with a derived cap and both
+   arms. This is option 3 of §«What the operator is being asked», and it is the only one under
+   which the A-vs-B ablation — the reason the line exists — happens at all.
+2. **The cap stays $4.00.** «Оставить $4.00 — решать после выбора объёма.» Nothing is raised
+   blind: the cap is re-derived in the contract that knows its scope. The derivation in
+   `money.pre_pod_arithmetic` describes the FOUR-leg plan at $4.00 and is superseded the moment
+   the scope moves — §«Open» 3 already said so, and this is that clause firing.
+
+**What this contract does NOT do with the ruling.** It does not build arm B's dataset. That is a
+new contract's scope, it turns on a design decision only the team lead can take (the pool rule bars
+synthetic as a NEIGHBOUR and is silent about synthetic as a QUERY), and a paid contract's executor
+quietly widening into a $0 prep deliverable is how a scope stops being the operator's to set.
+`scripts/train_qlora_v3.py` is ready for it: `arm_of(666)` already reads `arm_b` out of the
+registration, and guard 2 will accept that file the moment `population` names it.
+
+## The verifier, re-read on the closing tree
+
+§5's 3 682 was taken at `1c84944` — before this report, the vault tail and the addendum above. Two
+of those touch files the suite reads (`knowledge/hot.md` is a price input `scripts/volume_calc_5c1.py`
+greps through `quoted(HOT, "~$0.24/day", 0.24)`), so a gate measured before the last commits is a
+gate measured on a tree that no longer exists ([[the_gates_evidence_outlived_its_artifact]]).
+
+**A first attempt at that re-read was VOID and was killed rather than quoted** — see Dv792. The
+reading below is a run over a tree that did not move under it.
+
+CLOSING_TAIL

@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-23 18:09:44 (every SessionStart)
+**Auto-refreshed:** 2026-08-23 18:16:05 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
+e25c79d chore(vault): the price is derived and it does not fit, and arm B has no file
 6f7e65d docs(report): lora-c-run STOPS at $0 -- the cap does not cover four legs, and arm B has no dataset
 1c84944 feat(lora-c): the pre-pod derivation -- and the cap does not cover the four legs
 7c7035e feat(lora-c): the sibling trainer -- two guards re-bound, everything else called
 251afcd test(lora-c): the two close debts -- a grep nobody had watched refuse, and a threshold with two homes
-ed1c341 docs(lead): lora-c-run's contract and the day-23 acceptance of lora-c-close
 ```
 
 ## 📋 Recent decisions
@@ -82,10 +82,11 @@ ed1c341 docs(lead): lora-c-run's contract and the day-23 acceptance of lora-c-cl
 
 ## ⏭️ Next
 
-1. **РЕШЕНИЕ ОПЕРАТОРА по `lora-c-run`** — три опции в §«What the operator is being asked»
-   отчёта: (1) поднять кап; (2) урезать до трёх лег, которые существуют (но КРАСНЫЙ на арме A
-   почти ничего не говорит — у него ноль таргетов `молочный_бренд`); (3) сначала $0-контракт
-   на датасет арма B, потом один `lora-c-run` с выведенным капом.
+1. **РУЛИНГ ОПЕРАТОРА 23.08 (вечер), в сессии исполнителя — ЖДЁТ РЕГИСТРАЦИИ ТИМЛИДОМ в
+   `STATUS.md` п. 1:** (1) **сначала $0-контракт на датасет арма B** — тимлид правит, как
+   синтетическая строка рендерится как v3-запрос, продюсер рендерит 666 строк, регистрация пинит
+   файл; потом ОДИН `lora-c-run` с выведенным капом и обоими армами. (2) **Кап остаётся $4.00** —
+   решать после выбора объёма, вслепую не поднимаем. Аддендум — в отчёте.
 2. **Приёмка STOP-отчёта `lora-c-run`** тимлидом — `docs/reports/lora-c-run.md`.
 3. **`money-anchors` ($0)** — ВОСЕМЬ открытых шагов: `pass1-window`, `pass1-window-r2`,
    `pass2-signals`, `pass2-signals-r2`, `lora-c-prep`, `lora-c-apply`, `lora-c-close`,
