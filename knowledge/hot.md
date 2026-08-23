@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-23 09:00:44 (every SessionStart)
+**Auto-refreshed:** 2026-08-23 12:54:36 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
-97548df chore(vault): /close за 22.08 -- три контракта, два ревью-гейта стоят
-20a9b88 docs(adr): the leak onto the gating bar, and two numbers the record refuted
-6a2f407 fix(lora-c): all five lenses returned; the worst finding is a leak onto the bar
-bad6b66 fix(lora-c): lens 1 returned 95 minutes late with eight findings; all eight hold
-96ae7b1 fix(lora-c): a fourth reachability block, and the executor flags 15 of its own rows
+e4ce3e5 docs(report): lora-c-close -- the manoeuvre, and the pin the premise did not cover
+2f8fe17 fix(lora-c): the one pin that hashes the RAW spec, and the field that denied its own file
+d76091a fix(5c2): amendment 3.26 lands in the strip registry -- four touches, one by hand
+1e9eebf docs(spec): amendment 3.26 and the day-23 STATUS, verbatim from the team lead
+c15b502 chore(vault): the ceiling is closed by ruling, and what is NOT in the law is a blocker
 ```
 
 ## 📋 Recent decisions
@@ -30,10 +30,10 @@ bad6b66 fix(lora-c): lens 1 returned 95 minutes late with eight findings; all ei
 <!-- AUTO-GEN END (everything below preserved across refreshes) -->
 # Hot Cache — curated
 
-**Last update:** 2026-08-23 `lora-c-apply` ИСПОЛНЕН за $0, **и операторский рулинг снял потолок:
-`max_seq_len` 3 072, ревизия 3.** Оба ревью-гейта закрыты — 515 рационалей и 160 синтетических строк
-с `reviewed: true`, ни одна метка в гейте 2 не сдвинулась. Ни одна из 506 строк не за потолком.
-Верификатор зелёный, подов нет.
+**Last update:** 2026-08-23 12:54 `lora-c-apply` ПРИНЯТ, **и закон догнал рулинг: поправка SPEC 3.26
+села в реестр срезки** (`lora-c-close`, $0). Потолок 3 072 теперь читается ИЗ ЗАКОНА. Оба ревью-гейта
+закрыты — 515 рационалей и 160 синтетических строк с `reviewed: true`. Верификатор **3 669/2**,
+подов нет.
 
 > Этот блок курируется руками. Археология закрытых контрактов живёт в отчётах, ADR и логах дня — не
 > восстанавливать сюда то, у чего есть дом. Ценз буста мерить ДО и ПОСЛЕ каждой правки.
@@ -49,9 +49,11 @@ bad6b66 fix(lora-c): lens 1 returned 95 minutes late with eight findings; all ei
 находки не трогает. Любая будущая правка длины строк должна перемеряться токенизатором, а не
 отношением.
 
-**🩸 ЧЕГО НЕТ В ЗАКОНЕ.** `docs/SPEC.md` читается «1 408 → 2 816»; блока под рулинг 23.08 не
-существует — SPEC файл тимлида. Регистрация несёт поле рядом с цитатой, чтобы грep за действующим
-потолком возвращал 2 816 **с указателем**. Написать блок — за тимлидом (Dv780).
+**✅ ЗАКОН ДОГНАЛ РУЛИНГ — ПОПРАВКА 3.26.** Блок написан тимлидом, посажен в реестр срезки
+(`lora-c-close`): 3.26 (1) потолок 3 072 · (2) порог STOP 2 800 читается ИСТИННЫМ счётом, без
+`TEMPLATE_SLACK` · (3) ratio-модель для потолков в отставке. Регистрация больше не УТВЕРЖДАЕТ, что
+блока нет, — она его **цитирует** через `quoted_spec`, который падает, если текст ушёл из SPEC.
+Грep за действующим потолком возвращает 3 072 из закона.
 
 **✅ ПРОТЕЧКА ЗАКРЫТА, и доказывает это 0.9875.** Элементы E, видящие свой же коммент: 22 → 0, на
 платном баре 5 → 0, обучающие 13 → 0. Максимальная похожесть теперь ровно то значение, которое линза
@@ -67,12 +69,12 @@ bad6b66 fix(lora-c): lens 1 returned 95 minutes late with eight findings; all ei
 
 ## ⏭️ Next
 
-1. **Приёмка `lora-c-apply` тимлидом** — отчёт `docs/reports/lora-c-apply.md`.
-2. **Блок в SPEC под рулинг 23.08** — за тимлидом; до него действующий потолок в законе не найти.
-3. **`lora-c-run`** — первый $0-деливерабл: **sibling-тренер**. `train_qlora.py` запинен
+1. **Приёмка `lora-c-close` тимлидом** — отчёт `docs/reports/lora-c-close.md`.
+2. **`lora-c-run`** — первый $0-деливерабл: **sibling-тренер**. `train_qlora.py` запинен
    `prereg_lora_b.json` И `lora_b_verdict.json`, редактировать нельзя.
-4. **`money-anchors` ($0)** — ШЕСТЬ открытых шагов: `pass1-window`, `pass1-window-r2`,
-   `pass2-signals`, `pass2-signals-r2`, `lora-c-prep`, `lora-c-apply` (все $0, но шаги есть).
+3. **`money-anchors` ($0)** — СЕМЬ открытых шагов: `pass1-window`, `pass1-window-r2`,
+   `pass2-signals`, `pass2-signals-r2`, `lora-c-prep`, `lora-c-apply`, `lora-c-close`
+   (все $0, но шаги есть).
 
 ## 🚧 Blockers
 
