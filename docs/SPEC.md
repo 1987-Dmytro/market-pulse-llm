@@ -1046,6 +1046,32 @@ re-pinning is refused. The index therefore still reads «the current revision is
 SEVEN amendments behind: 3.19 through 3.25 are each their own index entry, here and in the six
 blocks before this one, until that pin retires.)
 <!-- amendment-3.25 end -->
+<!-- amendment-3.26 begin — stripped by write_sku_prereg.registered_law() before hashing
+docs/SPEC.md against every sealed pre-registration pin, all of which predate this text; the
+law those records registered is the stripped text. New law arrives ONLY inside its own marked
+block — a sealed registration is never re-pinned to make it green -->
+**Amendment 3.26 (operator, 2026-08-23, in the `lora-c-apply` executor session, relayed and
+confirmed at acceptance — the ceiling in force is 3 072):**
+1. **`training.max_seq_len` is 3 072** — «поднимай max_seq_len до 3072», the rung 3.25 (1)
+   named in advance. `config/qlora.yaml` is at revision 3; line B's pins stay on revision 1 and
+   are never re-taken. Ground: the REAL tokenizer's count over all 506 rows (the check 3.25 (1)
+   ordered) reads max 2 975 — two rows over 2 816 itself under both readings — so 3.25 (1)'s
+   2 816 is superseded. Headroom under 3 072: 97 tokens by the true count, 81 with slack; both
+   readings stay published in `results/lora_c_tokens.json`.
+2. **The 2 800 STOP threshold reads the TRUE count** — the tokenizer's own number, with no
+   `TEMPLATE_SLACK` added: `apply_chat_template` already counts the template, and adding the
+   slack back double-counts it (Dv777). The slack remains what it always was — a correction for
+   CHARACTER-RATIO estimates only.
+3. **The ratio model stays retired for ceilings.** It under-predicted the widest row by 228
+   tokens (Dv765); any future ceiling on this line is set from a real count, never from
+   tokens-per-character.
+(Index note, in this block for the reason 3.19's through 3.25's own notes give: the
+`amendment-index` block above is one of the TEN blocks `write_prereg_5c2.KEEP_BLOCKS` holds
+INSIDE the sealed pin of `results/prereg_5c2_run.json`, so editing it would break that pin and
+re-pinning is refused. The index therefore still reads «the current revision is 3.18» and is now
+EIGHT amendments behind: 3.19 through 3.26 are each their own index entry, here and in the seven
+blocks before this one, until that pin retires.)
+<!-- amendment-3.26 end -->
 **Date:** 2026-07-26 · **Team lead:** Fable session · **Executor:** Claude Code
 **Repo folder:** `/Users/hdv_1987/Desktop/Projects/market-pulse-llm`
 **rev. 3 change (operator decision):** producers in Ukraine barely use Telegram for
