@@ -215,3 +215,47 @@ example at 121.0 carries verdict **KILL**. Both corrected; the bars do not move.
   is why a RED there would mean something different from a RED on arm B.
 - **The bar of ≥ 64 on holdout is reachable, and its maximum is 98 and not 100** — the two
   unrenderable holdout rows.
+
+## Update — `lora-c-apply`, 2026-08-23: both gates closed, and one number refuses the ceiling
+
+Amendment 3.25 (operator, at the acceptance of the STOP report) ruled on three of the four
+unreachabilities above, and `lora-c-apply` executed it at $0. Both review gates are **CLOSED**: all
+515 rationales carry `rationale_reviewed: true` and all 160 synthetic rows carry `reviewed: true`.
+Report: `docs/reports/lora-c-apply.md`.
+
+**The own-text leak is closed and the number that proves it is 0.9875.** The refusal is equality and
+nothing below it, applied as a pre-filter on the candidate pool — because ten sealed records pin
+`build_pass1_fewshot_packs.py` and the amendment says nothing of this touches a sealed record. E
+items shown their own comment: **22 → 0**, of which on the gating bar **5 → 0**; training rows
+**13 → 0**. The highest similarity anywhere in either pack is now exactly the value lens 3 named as
+the highest strictly below 1.0, so the refusal removed the equality tier and left the continuum
+under it alone. **No query lost its fifth neighbour**, so there is no new instance of STOP 1.
+
+**`config/qlora.yaml` is at revision 2 and line B did not move with it.** 1 408 → 2 816, in place,
+which is this project's own vocabulary for «a new revision» — the file has two commits and the
+precedent the amendment cites is the first of them. Line B's three sealed artefacts rebuild
+**byte-identical** under the new ceiling, because its longest kept row is 1 222 tokens and it dropped
+0 rows for length at 1 408. Its pin now describes revision 1 and is never re-taken.
+
+**And the reality check the amendment ordered STOPS the line.** The model's own tokenizer, at the
+pinned revision, counts **2 975 tokens on the widest of the 506 rows — 2 991 with `TEMPLATE_SLACK`**
+— against the amendment's stop at 2 800 and against `max_seq_len` 2 816 itself. Three rows are over.
+The three-ratio model that DERIVED 2 816 predicts 2 763 and clears every row, so it under-predicts by
+**228 tokens** on rows three times longer than the ones it was measured on. **It is not the rebuild's
+doing:** the same measurement at `97548df` returns 2 974 with two rows over. 3.25 (1)'s own next rung,
+3 072, clears 2 991 by 81 — and taking it is the operator's word, not the executor's.
+
+**What the two verdicts moved in the data.** Gate 1: four named rewrites in the team lead's words, a
+one-row labels **r3 delta** (`@retsepty:7342#49685` `null` → `не_наш_рынок`) that composes as a LAYER
+over r1+r2 and draws no unit, 13 P-NULL rewrites and 31 P-MARKER markers. Gate 2: fifteen texts
+rewritten so the claim is the THING and the chain is only WHERE — after which `self_flagged`, the
+instrument that found them, matches **0 of 160** — plus one instrumental rewrite, seven rationales
+into Ukrainian, two invented handles, ten skeletons broken and a seeded newline pass into 30 rows.
+**No label moved anywhere in gate 2**, so the 8/8/8/8/8 balance survives by construction.
+
+**Two measurement lessons worth carrying off this contract.** A reviewer's integer is a reading of
+its own population: lens 2 judged **113 of 515** rationales, so its «17» and «24» are sample counts
+and the verdict's «expected small» was calibrated on a third of the corpus. And a record's prose
+outlives the state it describes — a remedy «not taken» after it was taken, a concern «the gate
+decides» after the gate decided, three named-deliberate register gaps after they closed. All three
+now derive their reading from the measurement beside them.
