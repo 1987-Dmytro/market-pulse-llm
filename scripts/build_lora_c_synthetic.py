@@ -33,6 +33,7 @@ a comment — a producer that generated the rows it also checks would be measuri
 import argparse
 import hashlib
 import json
+import random
 import re
 import statistics
 import sys
@@ -58,6 +59,51 @@ PREFIX = "synthetic:"
 SHINGLE = 6
 BALANCE_TOLERANCE = 2
 REGISTER_TOLERANCE = 3
+AXES = (
+    "emoji_pct",
+    "lowercase_opening_pct",
+    "no_terminal_punctuation_pct",
+    "question_pct",
+    "words_median",
+    "chars_median",
+    "newline_pct",
+)
+"""The register axes, named ONCE. Three lists used to spell them out separately and gate 2's R6
+added a seventh ([[a_consumer_list_is_not_a_meaning_list]])."""
+
+WAS_MISSING = {"no_terminal_punctuation_pct", "question_pct", "words_median", "chars_median"}
+"""The four axes that missed at the gate-2 sample, carried so «this gap closed» is a comparison
+against a recorded state and not a memory."""
+
+REGISTER_REASONS = {
+    "question_pct": lambda theirs, mine: (
+        f"{mine['question_pct']} % against {theirs['question_pct']} %. Under-represented because"
+        " three of the four error classes are statements about a subject and only one is naturally"
+        " a question"
+    ),
+    "no_terminal_punctuation_pct": lambda theirs, mine: (
+        f"{mine['no_terminal_punctuation_pct']} % against"
+        f" {theirs['no_terminal_punctuation_pct']} %. Set by a seeded pass, not by hand"
+    ),
+    "words_median": lambda theirs, mine: (
+        f"median {mine['words_median']} words against the window's {theirs['words_median']}, max"
+        f" {mine['words_max']} against {theirs['words_max']}. DELIBERATE: the contract asks for"
+        " «short, colloquial» rows and the window's tail is 40-190-word recipe and advice posts —"
+        " writing those synthetically would be a different instrument, not a longer version of this"
+        " one"
+    ),
+    "chars_median": lambda theirs, mine: (
+        f"{mine['chars_median']} against {theirs['chars_median']} — the length gap above in the"
+        " other unit, and deliberate for the same reason"
+    ),
+    "emoji_pct": lambda theirs, mine: f"{mine['emoji_pct']} % against {theirs['emoji_pct']} %",
+    "lowercase_opening_pct": lambda theirs, mine: (
+        f"{mine['lowercase_opening_pct']} % against {theirs['lowercase_opening_pct']} %"
+    ),
+    "newline_pct": lambda theirs, mine: (
+        f"{mine['newline_pct']} % against {theirs['newline_pct']} % — R6's own axis"
+    ),
+}
 """Percentage points, or units where the axis is a median. Stated because «matched» without a
 tolerance is an opinion, and because two of the six axes below do NOT clear it."""
 CLASSES = (
@@ -89,6 +135,21 @@ RETAILER_CLAIM = re.compile(
 """The shape the codebook rules `сеть_ритейлер`: «A comment about the retailer's service, stock,
 prices or stores is `сеть_ритейлер`». Named here so a synthetic row that CONTRADICTS the codebook
 can be counted rather than argued about."""
+NEWLINE_SEED = 20260823
+NEWLINE_TARGET = 30
+"""Gate 2's R6. 19.4 % of the window's comments carry a newline and not one of the 160 did, so a
+discriminator separates the corpora on that axis alone (Dv764). ~30 of 160 is 19 %."""
+
+SENTENCE = re.compile(r"(?<=[.!?…]) ")
+LISTISH = re.compile(r"(?<=[,;]) ")
+BRAND_START = re.compile(r"^[«\"]?(\w[\w'ʼ-]*(?: \w[\w'ʼ-]*)?)")
+CATEGORY_NOUN = re.compile(
+    r"^(молок\w*|сир\w*|сметан\w*|йогурт\w*|кефір\w*|кефир\w*|масл\w*|морозив\w*|вершк\w*"
+    r"|ряжанк\w*|сирк\w*|ріжок|ріжк\w*|ескімо|эскимо|пломбір|пляшк\w*|стаканчик\w*|упаковк\w*"
+    r"|глазур\w*)$",
+    re.I,
+)
+PREPOSITION = re.compile(r"^(для|у|в|на|до|з|із|под|під|к|при|за)$", re.I)
 UA = set("іїєґІЇЄҐ")
 RU = set("ыэъёЫЭЪЁ")
 
@@ -120,7 +181,94 @@ def register(texts: list[str]) -> dict:
             100 * len([one for one in texts if one[:1].islower()]) / len(texts)
         ),
         "question_pct": round(100 * len([one for one in texts if "?" in one]) / len(texts)),
+        # gate 2's R6 axis. Measured on both sides by this same function, so «the synthetic rows
+        # now carry newlines» is a comparison and not an assertion
+        "newline_pct": round(100 * len([one for one in texts if "\n" in one]) / len(texts)),
     }
+
+
+def skeleton(text: str, brand: str | None) -> str:
+    """Which syntactic frame one row sits on — gate 2's R5, defined ONCE and run on both states.
+
+    The verdict's finding is «16 of 32 `молочный_бренд` rows sit on two skeletons
+    («<Бренд> <продукт> <властивість>» and its minor variant)», and that number came from a human
+    reading, not from an instrument. This is the instrument; where it disagrees with 16 the report
+    says so rather than the definition being tuned until it agrees
+    ([[an_exclusion_rule_built_from_failures]] — a measure fitted to its own target measures
+    nothing).
+
+    The frames are the opening's shape: a question, a row that does not open with its brand at all,
+    and — for the brand-initial ones — whether the brand is followed by a category noun (the
+    «<Бренд> <продукт> <властивість>» frame), by a preposition (the instrumental «<Бренд> для X»
+    frame) or by anything else.
+    """
+    flat = " ".join(text.split())
+    if "?" in flat:
+        return "question"
+    if not brand or not flat.casefold().startswith(brand.split()[0].casefold()):
+        return "not-brand-initial"
+    rest = (
+        flat[len(brand) :].strip().split()
+        if flat.casefold().startswith(brand.casefold())
+        else (flat.split()[1:])
+    )
+    if not rest:
+        return "brand alone"
+    head = rest[0].strip(',.!?;:«»"')
+    if CATEGORY_NOUN.match(head):
+        return "brand + product + property"
+    if PREPOSITION.match(head):
+        return "brand + preposition"
+    return "brand + predicate"
+
+
+def skeletons(written: list[dict], subject_type: str = "молочный_бренд") -> dict:
+    """The skeleton census of one class, with the third-of-the-class ceiling R5 sets."""
+    rows = [one for one in written if one["subject_type"] == subject_type]
+    counts = Counter(skeleton(one["text"], one.get("subject_id")) for one in rows)
+    ceiling = len(rows) // 3
+    worst = counts.most_common(1)[0] if counts else ("", 0)
+    return {
+        "class": subject_type,
+        "rows": len(rows),
+        "by_skeleton": dict(sorted(counts.items(), key=lambda one: (-one[1], one[0]))),
+        "ceiling": ceiling,
+        "rule": (
+            f"no single skeleton over a third of the {len(rows)} rows — at most {ceiling},"
+            " because this class's whole positive supervision is synthetic (32 against 1 real)"
+        ),
+        "largest": {"skeleton": worst[0], "rows": worst[1]},
+        "passes": worst[1] <= ceiling,
+    }
+
+
+def newline_pass(
+    texts: list[str], seed: int = NEWLINE_SEED, target: int = NEWLINE_TARGET
+) -> list[str]:
+    """R6: natural line breaks into ~`target` rows, seeded, and IDEMPOTENT.
+
+    Every text is collapsed back to one line before the draw, so running this on rows that already
+    carry a break reproduces the same rows and the same break points — the pass is a function of
+    (seed, collapsed texts) and of nothing that it itself wrote. A break is never placed at the end
+    of a text: `register`'s `no_terminal_punctuation_pct` reads `text[-1]`, and a trailing newline
+    would move an axis the verdict deliberately left at −5.
+    """
+    flat = [" ".join(one.split()) for one in texts]
+    eligible = [
+        index for index, one in enumerate(flat) if SENTENCE.search(one) or LISTISH.search(one)
+    ]
+    picked = set(random.Random(seed).sample(eligible, min(target, len(eligible))))
+    out = []
+    for index, one in enumerate(flat):
+        if index not in picked:
+            out.append(one)
+            continue
+        breaks = [match.start() for match in SENTENCE.finditer(one)] or [
+            match.start() for match in LISTISH.finditer(one)
+        ]
+        at = min(breaks, key=lambda pos: abs(pos - len(one) // 2))
+        out.append(one[:at] + "\n" + one[at + 1 :])
+    return out
 
 
 def self_flagged(written: list[dict]) -> dict:
@@ -324,6 +472,7 @@ def build() -> dict:
         if line.strip()
     ]
     theirs, mine = register(pool_texts), register([one["text"] for one in written])
+    MISSING = [axis for axis in AXES if abs(theirs[axis] - mine[axis]) > REGISTER_TOLERANCE]
     return {
         "phase": "lora-c-prep",
         "contract": "docs/PROMPT-lora-c-prep.md — D0, synthetic rows for arm B",
@@ -365,6 +514,7 @@ def build() -> dict:
                     "question_pct",
                     "words_median",
                     "chars_median",
+                    "newline_pct",
                 )
             },
             "alphabet": {"window": theirs["alphabet_pct"], "synthetic": mine["alphabet_pct"]},
@@ -377,30 +527,45 @@ def build() -> dict:
                     "question_pct",
                     "words_median",
                     "chars_median",
+                    "newline_pct",
                 )
                 if abs(theirs[axis] - mine[axis]) <= REGISTER_TOLERANCE
             ],
             "not_matched": {
-                "how_many": "FOUR of the six axes miss the ±3 tolerance. Named, not smoothed",
-                "question_pct": (
-                    "8 % against 13 %. Under-represented because three of the four error classes"
-                    " are statements about a subject and only one is naturally a question"
+                # ONLY the axes that actually miss, and the reasons keyed by axis. Gate 2's R1/R2/R5
+                # rewrites lengthened the texts and R6 added the newline axis; three axes that used
+                # to be «named deliberate exceptions» now match, and an exception block that still
+                # listed them would be a standing excuse for a gap that closed
+                # ([[a_consumer_list_is_not_a_meaning_list]], [[corrections_break_derivations]])
+                "how_many": (
+                    f"{len(MISSING)} of the {len(AXES)} axes miss the ±{REGISTER_TOLERANCE}"
+                    " tolerance. Named, not smoothed"
                 ),
-                "no_terminal_punctuation_pct": (
-                    "54 % against 59 %. Within five points and set by a seeded pass, not by hand"
-                ),
-                "length": (
-                    f"median {mine['words_median']} words against the window's"
-                    f" {theirs['words_median']}, and max {mine['words_max']} against"
-                    f" {theirs['words_max']}. DELIBERATE: the contract asks for «short, colloquial»"
-                    " rows, and the window's tail is recipes and advice posts of 40-190 words —"
-                    " writing those synthetically would be a different instrument, not a longer"
-                    " version of this one. Named rather than smoothed. `chars_median` 40 against"
-                    " 68 is the same fact in the other unit"
+                "axes": {axis: REGISTER_REASONS[axis](theirs, mine) for axis in MISSING},
+                "closed_since_the_gate_2_sample": sorted(WAS_MISSING - set(MISSING)),
+                "closed_by": (
+                    "not by tuning the axis: R1 and R2 rewrote fifteen stock/price claims into"
+                    " thing-quality claims and R5 broke ten skeletons into question, reply and"
+                    " anecdote forms, all of which are longer and more punctuated than what they"
+                    " replaced; R6 added the newline axis and hit it by construction"
                 ),
             },
         },
         "self_flagged": self_flagged(written),
+        "skeletons": skeletons(written),
+        "newline_pass": {
+            "ruling": "docs/reviews/lora-c-synthetic-verdict.md R6",
+            "seed": NEWLINE_SEED,
+            "target": NEWLINE_TARGET,
+            "rows_carrying_a_newline": len([one for one in written if "\n" in one["text"]]),
+            "reproduces": [one["text"] for one in written]
+            == newline_pass([one["text"] for one in written]),
+            "rule": (
+                "collapse every text to one line, then draw under the seed — so the pass is a"
+                " function of (seed, collapsed texts) and re-running it on its own output"
+                " reproduces it. `reproduces` above is that property, computed at every build"
+            ),
+        },
         "isolation": {
             "rule": (
                 "a synthetic row is NEVER in the neighbour pool, never in an eval set and never in"
@@ -476,13 +641,11 @@ def sample(record: dict) -> str:
             f"| {label} | {record['register']['the_window'][axis]} |"
             f" {record['register']['synthetic'][axis]} |"
         )
+    missed = record["register"]["not_matched"]
     lines += [
         "",
-        "> **Four of the six axes do NOT match at ±"
-        f"{record['register']['tolerance_points']}, and none of them is smoothed.**"
-        f" *Length:* {record['register']['not_matched']['length']}"
-        f" *Questions:* {record['register']['not_matched']['question_pct']}."
-        f" *Terminal punctuation:* {record['register']['not_matched']['no_terminal_punctuation_pct']}.",
+        f"> **{missed['how_many']}**"
+        + "".join(f" *{axis}:* {why}." for axis, why in sorted(missed["axes"].items())),
         "",
     ]
     flag = record["self_flagged"]

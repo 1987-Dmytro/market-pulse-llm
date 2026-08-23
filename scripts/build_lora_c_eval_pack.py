@@ -167,9 +167,13 @@ def own_text_in_examples(items: list[dict], holdout: set) -> dict:
     `chosen` and the adapter is a runner flag, so every leg sees the same contaminated block — and
     it is NOT neutral to the absolute reading `P1_holdout_agreement ≥ 64 of 100` stands on.
 
-    Reported and not repaired: the contract mandates `build_pass1_fewshot_packs.neighbours`, so the
-    selection rule is the registered instrument and changing it is the operator's
-    ([[a_prefilter_cannot_certify_the_population]]).
+    **CLOSED by amendment 3.25 (2)** (operator, 2026-08-23), which gave the neighbour rule its one
+    refusal: a candidate whose whitespace-collapsed casefolded text equals the query's. This block
+    stays, and it stays a MEASUREMENT rather than a claim that the leak is gone — the count is
+    recomputed over the rebuilt pack at every build, so a selection rule that ever stopped refusing
+    would show up here as a number and not as a missing guard
+    ([[a_prefilter_cannot_certify_the_population]] answered: the filter does not certify the
+    population, this scan of the population does).
     """
     hits = []
     for one in items:
@@ -202,16 +206,32 @@ def own_text_in_examples(items: list[dict], holdout: set) -> dict:
         "gating_bar_denominator": 98,
         "severity": (
             f"{len(gating)} of the 98 rows the registered bar «holdout-100 agreement ≥ 64 of 100»"
-            " is scored on are shown their own answer. That INFLATES the absolute reading the bar"
-            " stands on. It is neutral to arm-vs-base and to the A/B ablation, because every leg is"
-            " rendered from one `chosen`"
+            " is scored on are shown their own answer"
+            + (
+                ". That INFLATES the absolute reading the bar stands on. It is neutral to"
+                " arm-vs-base and to the A/B ablation, because every leg is rendered from one"
+                " `chosen`"
+                if gating
+                else " — the reading the bar stands on carries none of this leak"
+            )
         ),
         "rows": hits,
-        "remedy_named_not_taken": (
-            "refuse a neighbour whose whitespace-collapsed casefolded text equals the query's — one"
-            " comparison, and it would change the registered selection rule the contract mandates."
-            " The operator's, not the executor's"
-        ),
+        "remedy": {
+            "rule": (
+                "refuse a neighbour whose whitespace-collapsed casefolded text equals the query's."
+                " Equality and nothing below it"
+            ),
+            "authority": "docs/SPEC.md amendment 3.25 (2), operator, 2026-08-23",
+            "applied_by": "build_lora_c_data.neighbours_v3, as a pre-filter on the candidate pool",
+            "measured_at_97548df": {
+                "e_items": 22,
+                "of": 198,
+                "on_the_gating_bar": 5,
+                "training_rows": 13,
+                "of_training": 506,
+            },
+            "state": "CLOSED" if not hits else "OPEN — the refusal is not reaching this pack",
+        },
     }
 
 

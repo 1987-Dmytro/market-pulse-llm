@@ -90,6 +90,14 @@
     "rule": "synthetic.frame_counts over two-word openings and closings",
     "top_closings": [
       [
+        "у варусі",
+        3
+      ],
+      [
+        "у форі",
+        2
+      ],
+      [
         "так зрозуміли",
         2
       ],
@@ -100,40 +108,32 @@
       [
         "в магазині",
         1
-      ],
-      [
-        "не брала",
-        1
-      ],
-      [
-        "те саме",
-        1
       ]
     ],
     "top_openings": [
       [
         "у варусі",
-        8
-      ],
-      [
-        "в атб",
         5
       ],
       [
         "еко маркет",
-        5
+        4
       ],
       [
-        "селянське масло",
-        2
+        "в атб",
+        3
       ],
       [
         "а хто",
         2
+      ],
+      [
+        "дякую за",
+        2
       ]
     ],
-    "worst_closing_share_pct": 1,
-    "worst_opening_share_pct": 5
+    "worst_closing_share_pct": 2,
+    "worst_opening_share_pct": 3
   },
   "isolation": {
     "prefix": "synthetic:",
@@ -145,18 +145,26 @@
       "synthetic:retailer_non_dairy"
     ]
   },
+  "newline_pass": {
+    "reproduces": true,
+    "rows_carrying_a_newline": 30,
+    "rule": "collapse every text to one line, then draw under the seed — so the pass is a function of (seed, collapsed texts) and re-running it on its own output reproduces it. `reproduces` above is that property, computed at every build",
+    "ruling": "docs/reviews/lora-c-synthetic-verdict.md R6",
+    "seed": 20260823,
+    "target": 30
+  },
   "phase": "lora-c-prep",
   "produced_by": {
     "note": "this file VALIDATES the rows; it does not write them",
     "script": "scripts/build_lora_c_synthetic.py",
-    "sha256": "9466a0734e6f896d96bef0c26209cd7e90e239a34d2f50f29902001c18d608d2"
+    "sha256": "88d2d873269b8c75982112069884c3c439ff1e8400fb4bc6b43fadc0b68a22d4"
   },
   "register": {
     "alphabet": {
       "synthetic": {
         "neutral": 18,
-        "ru": 11,
-        "ua": 71
+        "ru": 10,
+        "ua": 72
       },
       "window": {
         "both": 0,
@@ -167,49 +175,65 @@
     },
     "matched": [
       "emoji_pct",
-      "lowercase_opening_pct"
+      "lowercase_opening_pct",
+      "no_terminal_punctuation_pct",
+      "question_pct",
+      "words_median",
+      "newline_pct"
     ],
     "not_matched": {
-      "how_many": "FOUR of the six axes miss the ±3 tolerance. Named, not smoothed",
-      "length": "median 7.0 words against the window's 11, and max 20 against 192. DELIBERATE: the contract asks for «short, colloquial» rows, and the window's tail is recipes and advice posts of 40-190 words — writing those synthetically would be a different instrument, not a longer version of this one. Named rather than smoothed. `chars_median` 40 against 68 is the same fact in the other unit",
-      "no_terminal_punctuation_pct": "54 % against 59 %. Within five points and set by a seeded pass, not by hand",
-      "question_pct": "8 % against 13 %. Under-represented because three of the four error classes are statements about a subject and only one is naturally a question"
+      "axes": {
+        "chars_median": "46 against 68 — the length gap above in the other unit, and deliberate for the same reason"
+      },
+      "closed_by": "not by tuning the axis: R1 and R2 rewrote fifteen stock/price claims into thing-quality claims and R5 broke ten skeletons into question, reply and anecdote forms, all of which are longer and more punctuated than what they replaced; R6 added the newline axis and hit it by construction",
+      "closed_since_the_gate_2_sample": [
+        "no_terminal_punctuation_pct",
+        "question_pct",
+        "words_median"
+      ],
+      "how_many": "1 of the 7 axes miss the ±3 tolerance. Named, not smoothed"
     },
     "per_axis": {
       "chars_median": {
-        "delta": -28,
+        "delta": -22,
         "matched": false,
-        "synthetic": 40,
+        "synthetic": 46,
         "window": 68
       },
       "emoji_pct": {
+        "delta": 1,
+        "matched": true,
+        "synthetic": 20,
+        "window": 19
+      },
+      "lowercase_opening_pct": {
+        "delta": -1,
+        "matched": true,
+        "synthetic": 5,
+        "window": 6
+      },
+      "newline_pct": {
         "delta": 0,
         "matched": true,
         "synthetic": 19,
         "window": 19
       },
-      "lowercase_opening_pct": {
-        "delta": 0,
-        "matched": true,
-        "synthetic": 6,
-        "window": 6
-      },
       "no_terminal_punctuation_pct": {
-        "delta": -5,
-        "matched": false,
-        "synthetic": 54,
+        "delta": -1,
+        "matched": true,
+        "synthetic": 58,
         "window": 59
       },
       "question_pct": {
-        "delta": -5,
-        "matched": false,
-        "synthetic": 8,
+        "delta": -3,
+        "matched": true,
+        "synthetic": 10,
         "window": 13
       },
       "words_median": {
-        "delta": -4.0,
-        "matched": false,
-        "synthetic": 7.0,
+        "delta": -3.0,
+        "matched": true,
+        "synthetic": 8.0,
         "window": 11
       }
     },
@@ -217,17 +241,18 @@
     "synthetic": {
       "alphabet_pct": {
         "neutral": 18,
-        "ru": 11,
-        "ua": 71
+        "ru": 10,
+        "ua": 72
       },
-      "chars_median": 40,
-      "emoji_pct": 19,
-      "lowercase_opening_pct": 6,
+      "chars_median": 46,
+      "emoji_pct": 20,
+      "lowercase_opening_pct": 5,
       "n": 160,
-      "no_terminal_punctuation_pct": 54,
-      "question_pct": 8,
+      "newline_pct": 19,
+      "no_terminal_punctuation_pct": 58,
+      "question_pct": 10,
       "words_max": 20,
-      "words_median": 7.0,
+      "words_median": 8.0,
       "words_p90": 14
     },
     "the_window": {
@@ -241,6 +266,7 @@
       "emoji_pct": 19,
       "lowercase_opening_pct": 6,
       "n": 515,
+      "newline_pct": 19,
       "no_terminal_punctuation_pct": 59,
       "question_pct": 13,
       "words_max": 192,
@@ -252,40 +278,42 @@
   "review_gate_2": {
     "sample": "docs/reviews/lora-c-synthetic.md",
     "verdict": "docs/reviews/lora-c-synthetic-verdict.md",
-    "verdict_present": false
+    "verdict_present": true
   },
   "reviewed": [
-    false
+    true
   ],
   "rows": 160,
   "self_flagged": {
     "action_taken": "NONE — review gate 2 is a STOP and the verdict decides",
     "codebook_clause": "«A comment about the retailer's service, stock, prices or stores is `сеть_ритейлер`» — prompts.PASS1_CODEBOOK_CLAUSE_V2, carried into the labeller's codebook",
     "concern": "labelled `не_наш_рынок` because the THING is non-dairy, while the comment makes a stock / price / assortment claim about a NAMED chain — which the codebook rules `сеть_ритейлер`",
-    "n": 15,
+    "n": 0,
     "of": 160,
-    "rows": [
-      "synthetic:brand_vs_retailer:25",
-      "synthetic:brand_vs_retailer:27",
-      "synthetic:brand_vs_retailer:28",
-      "synthetic:brand_vs_retailer:29",
-      "synthetic:brand_vs_retailer:30",
-      "synthetic:brand_vs_retailer:31",
-      "synthetic:brand_vs_retailer:32",
-      "synthetic:retailer_non_dairy:9",
-      "synthetic:retailer_non_dairy:10",
-      "synthetic:retailer_non_dairy:11",
-      "synthetic:retailer_non_dairy:12",
-      "synthetic:retailer_non_dairy:13",
-      "synthetic:retailer_non_dairy:14",
-      "synthetic:retailer_non_dairy:15",
-      "synthetic:retailer_non_dairy:16"
-    ],
+    "rows": [],
     "the_team_leads_own_labels_on_this_shape": {
       "@VARUS_channel:10367:20979": "сеть_ритейлер — «Коли буде знижка?»",
       "@VARUS_channel:10470:21236": "сеть_ритейлер — «кубок ковбасний … там сказали, що нема»",
       "@VARUS_channel:10470:21240": "сеть_ритейлер — «І в нас теж такого нема»"
     }
   },
-  "sha256": "9b049bc2046360a811169f45a669f802a8676c643aa9eb647563b636c20c195d"
+  "sha256": "247b0db1bc10bc41d9ada7406e9cc08edd2214d57fdbf7f991c7195b9a7daf5c",
+  "skeletons": {
+    "by_skeleton": {
+      "brand + predicate": 9,
+      "brand + preposition": 4,
+      "brand + product + property": 9,
+      "not-brand-initial": 7,
+      "question": 3
+    },
+    "ceiling": 10,
+    "class": "молочный_бренд",
+    "largest": {
+      "rows": 9,
+      "skeleton": "brand + predicate"
+    },
+    "passes": true,
+    "rows": 32,
+    "rule": "no single skeleton over a third of the 32 rows — at most 10, because this class's whole positive supervision is synthetic (32 against 1 real)"
+  }
 }

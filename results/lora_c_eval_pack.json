@@ -25,7 +25,7 @@
       "pass1_comment_gm4_v2": "f5f6a5afdd8573ba52bde5cf79041cf9a01d8421ea402c0f39d2ea1c1d430aee",
       "pass1_comment_gm4_v3": "b9b27a53f8f56140657d682f49dd4e8cd1fb1364a915adb888ca999083d5a49c"
     },
-    "rationales_sha256": "ed817668b02bf1bb174003a2983108beaae4045c3fdd5b09fb76032a64c08a55",
+    "rationales_sha256": "ba3681d8ae58432b4742bac02bcdf53583d8418dcd02cd79540a22a0e98305b1",
     "renderer": "market_pulse.prompts.pass1_messages_gm4"
   },
   "legs": [
@@ -416,7 +416,7 @@
             },
             {
               "label": "сеть_ритейлер",
-              "text": "Вітаємо!Вже з вами у діректі."
+              "text": "Вітаємо! Вже написали вам у приватні повідомлення"
             },
             {
               "label": "категория_личное",
@@ -440,9 +440,9 @@
             },
             {
               "label": "сеть_ритейлер",
-              "msg_id": 21239,
-              "similarity": 1.0,
-              "thread": "@VARUS_channel:10470"
+              "msg_id": 20947,
+              "similarity": 0.174603,
+              "thread": "@VARUS_channel:10367"
             },
             {
               "label": "категория_личное",
@@ -473,8 +473,8 @@
           },
           "msg_id": 20665,
           "post_id": 10348,
-          "rendered_chars": 4148,
-          "rendering_sha256": "857edfbe8edb4694bd24e3844ebb2a54d2b6fb4bf850cf00e3d7bdb1af6b9c46",
+          "rendered_chars": 4168,
+          "rendering_sha256": "0698a3196ba0d93f03f18048ba1716dc6fce0b6005bd9cb2c967da35f1ea98ea",
           "task": "pass1_comment_gm4_v2",
           "text": "Вітаємо!Вже з вами у діректі.",
           "thread": "@VARUS_channel:10348",
@@ -596,7 +596,7 @@
             },
             {
               "label": "сеть_ритейлер",
-              "text": "Вітаємо!Вже з вами у діректі."
+              "text": "Вітаємо! Вже написали вам у приватні повідомлення"
             },
             {
               "label": "категория_личное",
@@ -620,9 +620,9 @@
             },
             {
               "label": "сеть_ритейлер",
-              "msg_id": 21239,
-              "similarity": 1.0,
-              "thread": "@VARUS_channel:10470"
+              "msg_id": 20947,
+              "similarity": 0.174603,
+              "thread": "@VARUS_channel:10367"
             },
             {
               "label": "категория_личное",
@@ -653,8 +653,8 @@
           },
           "msg_id": 20673,
           "post_id": 10348,
-          "rendered_chars": 4148,
-          "rendering_sha256": "1d96136dc340a527538252938cc054b4acec4fb056397bc40cc6113e697dd022",
+          "rendered_chars": 4168,
+          "rendering_sha256": "60f6eb1725483e3d9b38c6e9fdb4b5fff6fa853329f16a9eb9dfb9fd545b288c",
           "task": "pass1_comment_gm4_v2",
           "text": "Вітаємо!Вже з вами у діректі.",
           "thread": "@VARUS_channel:10348",
@@ -3091,7 +3091,7 @@
             },
             {
               "label": null,
-              "text": "Дякую"
+              "text": "Дякую 🙌"
             }
           ],
           "examples_chosen": [
@@ -3121,9 +3121,9 @@
             },
             {
               "label": "null",
-              "msg_id": 21127,
-              "similarity": 1.0,
-              "thread": "@VARUS_channel:10451"
+              "msg_id": 48596,
+              "similarity": 0.6,
+              "thread": "@mandziak:3736"
             }
           ],
           "id": "@VARUS_channel:10613#21609",
@@ -3136,8 +3136,8 @@
           },
           "msg_id": 21609,
           "post_id": 10613,
-          "rendered_chars": 4683,
-          "rendering_sha256": "4a28cc41383b8d2a6f745cd3606f0026d1a66884b98a29294d93a32881f3e242",
+          "rendered_chars": 4685,
+          "rendering_sha256": "2d0c50951acb10bc7b3a61e29a95f1cf0570c18db2155a6e717489e722016a42",
           "task": "pass1_comment_gm4_v2",
           "text": "Дякую",
           "thread": "@VARUS_channel:10613",
@@ -5525,7 +5525,7 @@
             },
             {
               "label": null,
-              "text": "Дякую"
+              "text": "Дякую 🙌"
             }
           ],
           "examples_chosen": [
@@ -5555,9 +5555,9 @@
             },
             {
               "label": "null",
-              "msg_id": 21127,
-              "similarity": 1.0,
-              "thread": "@VARUS_channel:10451"
+              "msg_id": 48596,
+              "similarity": 0.6,
+              "thread": "@mandziak:3736"
             }
           ],
           "id": "@mandziak:3676#47897",
@@ -5570,8 +5570,8 @@
           },
           "msg_id": 47897,
           "post_id": 3676,
-          "rendered_chars": 4299,
-          "rendering_sha256": "73542d9609118819bf42d69acab907663bd07ac0500c784ed60882f1438c6cee",
+          "rendered_chars": 4301,
+          "rendering_sha256": "43265dfc418a81f6bbd58a12e9be64a3294c53bddcbc6abaa600eff198e60c76",
           "task": "pass1_comment_gm4_v2",
           "text": "Дякую",
           "thread": "@mandziak:3676",
@@ -6376,7 +6376,7 @@
             },
             {
               "label": "не_наш_рынок",
-              "text": "Цікавить"
+              "text": "Бо неначе як казали що від солодких газованих напоїв треба відмовлятись, а саме їх вплив і цікавить"
             },
             {
               "label": null,
@@ -6404,9 +6404,9 @@
             },
             {
               "label": "не_наш_рынок",
-              "msg_id": 48528,
-              "similarity": 1.0,
-              "thread": "@mandziak:3736"
+              "msg_id": 48407,
+              "similarity": 0.06383,
+              "thread": "@mandziak:3718"
             },
             {
               "label": "null",
@@ -6425,8 +6425,8 @@
           },
           "msg_id": 48009,
           "post_id": 3684,
-          "rendered_chars": 4099,
-          "rendering_sha256": "5b81642f036aa574c45c10365d917a08cc98db690a8bf47275d012bbd0a552fd",
+          "rendered_chars": 4190,
+          "rendering_sha256": "cdfb1ee7237380ed24dd3df01a817ec2e6400cafde17099b75576b6dbee00f86",
           "task": "pass1_comment_gm4_v2",
           "text": "Цікавить",
           "thread": "@mandziak:3684",
@@ -6530,7 +6530,7 @@
             },
             {
               "label": null,
-              "text": "Пишіть сюди 👉🏻 https://t.me/sport_food_life"
+              "text": "https://t.me/istorium_ua/6342"
             }
           ],
           "examples_chosen": [
@@ -6560,9 +6560,9 @@
             },
             {
               "label": "null",
-              "msg_id": 48529,
-              "similarity": 1.0,
-              "thread": "@mandziak:3736"
+              "msg_id": 47830,
+              "similarity": 0.192982,
+              "thread": "@mandziak:3667"
             }
           ],
           "id": "@mandziak:3684#48016",
@@ -6575,8 +6575,8 @@
           },
           "msg_id": 48016,
           "post_id": 3684,
-          "rendered_chars": 4337,
-          "rendering_sha256": "5817cafc849dd673261d51ccc1d0a651f6625ca6c62f58335328ae45940b155b",
+          "rendered_chars": 4323,
+          "rendering_sha256": "1c8492126e3e7b72558293f8f77a7ff02ef2902fffccb88fbdb8803fbfb697e3",
           "task": "pass1_comment_gm4_v2",
           "text": "Пишіть сюди 👉🏻 https://t.me/sport_food_life",
           "thread": "@mandziak:3684",
@@ -6605,7 +6605,7 @@
             },
             {
               "label": null,
-              "text": "Пишіть сюди 👉🏻 https://t.me/sport_food_life"
+              "text": "https://t.me/istorium_ua/6342"
             }
           ],
           "examples_chosen": [
@@ -6635,9 +6635,9 @@
             },
             {
               "label": "null",
-              "msg_id": 48529,
-              "similarity": 1.0,
-              "thread": "@mandziak:3736"
+              "msg_id": 47830,
+              "similarity": 0.192982,
+              "thread": "@mandziak:3667"
             }
           ],
           "id": "@mandziak:3684#48018",
@@ -6650,8 +6650,8 @@
           },
           "msg_id": 48018,
           "post_id": 3684,
-          "rendered_chars": 4337,
-          "rendering_sha256": "4d38356966d67cb66c1a693660f3997dfa83a9cdfd8d45b16a48cf0107cb19fd",
+          "rendered_chars": 4323,
+          "rendering_sha256": "8cecaa38aea0ae1def6a64efc21607f00ec18d06701be8316f313d06b79fc011",
           "task": "pass1_comment_gm4_v2",
           "text": "Пишіть сюди 👉🏻 https://t.me/sport_food_life",
           "thread": "@mandziak:3684",
@@ -6676,7 +6676,7 @@
             },
             {
               "label": "не_наш_рынок",
-              "text": "Цікавить"
+              "text": "Бо неначе як казали що від солодких газованих напоїв треба відмовлятись, а саме їх вплив і цікавить"
             },
             {
               "label": null,
@@ -6704,9 +6704,9 @@
             },
             {
               "label": "не_наш_рынок",
-              "msg_id": 48528,
-              "similarity": 1.0,
-              "thread": "@mandziak:3736"
+              "msg_id": 48407,
+              "similarity": 0.06383,
+              "thread": "@mandziak:3718"
             },
             {
               "label": "null",
@@ -6725,8 +6725,8 @@
           },
           "msg_id": 48020,
           "post_id": 3684,
-          "rendered_chars": 4099,
-          "rendering_sha256": "4e6afae21eab94053dede5a8fd51fcb226f52d4e6f8d3c76be671d3550b83b3a",
+          "rendered_chars": 4190,
+          "rendering_sha256": "e41f88c5a54c0c2c7a66a983f057bfb71e318f7a05550ae1ed7cf0fee636b095",
           "task": "pass1_comment_gm4_v2",
           "text": "Цікавить",
           "thread": "@mandziak:3684",
@@ -6751,7 +6751,7 @@
             },
             {
               "label": "не_наш_рынок",
-              "text": "Цікавить"
+              "text": "Бо неначе як казали що від солодких газованих напоїв треба відмовлятись, а саме їх вплив і цікавить"
             },
             {
               "label": null,
@@ -6779,9 +6779,9 @@
             },
             {
               "label": "не_наш_рынок",
-              "msg_id": 48528,
-              "similarity": 1.0,
-              "thread": "@mandziak:3736"
+              "msg_id": 48407,
+              "similarity": 0.06383,
+              "thread": "@mandziak:3718"
             },
             {
               "label": "null",
@@ -6800,8 +6800,8 @@
           },
           "msg_id": 48036,
           "post_id": 3684,
-          "rendered_chars": 4099,
-          "rendering_sha256": "bd5594919fe8180eb0f69faf31629493edba2677edfc0f46a7b440de5e1f9ba6",
+          "rendered_chars": 4190,
+          "rendering_sha256": "3fb4946906cab96cb2fd35e6d0af4dc06843d80db3a70b29d817cf1996c9d4f7",
           "task": "pass1_comment_gm4_v2",
           "text": "Цікавить",
           "thread": "@mandziak:3684",
@@ -6830,7 +6830,7 @@
             },
             {
               "label": null,
-              "text": "Пишіть сюди 👉🏻 https://t.me/sport_food_life"
+              "text": "https://t.me/istorium_ua/6342"
             }
           ],
           "examples_chosen": [
@@ -6860,9 +6860,9 @@
             },
             {
               "label": "null",
-              "msg_id": 48529,
-              "similarity": 1.0,
-              "thread": "@mandziak:3736"
+              "msg_id": 47830,
+              "similarity": 0.192982,
+              "thread": "@mandziak:3667"
             }
           ],
           "id": "@mandziak:3684#48040",
@@ -6875,8 +6875,8 @@
           },
           "msg_id": 48040,
           "post_id": 3684,
-          "rendered_chars": 4337,
-          "rendering_sha256": "1adc63e8167c95d10a1cc02f63b93f163d1f4468f49755fbb95d379ef5cec92c",
+          "rendered_chars": 4323,
+          "rendering_sha256": "bec3cbebf63c6301b6f318a6a0dd29466e12fb47fc711398a7e5edf43d8d2143",
           "task": "pass1_comment_gm4_v2",
           "text": "Пишіть сюди 👉🏻 https://t.me/sport_food_life",
           "thread": "@mandziak:3684",
@@ -6905,7 +6905,7 @@
             },
             {
               "label": null,
-              "text": "Пишіть сюди 👉🏻 https://t.me/sport_food_life"
+              "text": "https://t.me/istorium_ua/6342"
             }
           ],
           "examples_chosen": [
@@ -6935,9 +6935,9 @@
             },
             {
               "label": "null",
-              "msg_id": 48529,
-              "similarity": 1.0,
-              "thread": "@mandziak:3736"
+              "msg_id": 47830,
+              "similarity": 0.192982,
+              "thread": "@mandziak:3667"
             }
           ],
           "id": "@mandziak:3684#48041",
@@ -6950,8 +6950,8 @@
           },
           "msg_id": 48041,
           "post_id": 3684,
-          "rendered_chars": 4337,
-          "rendering_sha256": "d25d5ddee1a3b1754738ca3ff197a026bfe95e8104abfe57d940c23150122738",
+          "rendered_chars": 4323,
+          "rendering_sha256": "3a068dda218b698b597c94d740838d2ac3565d00f02f9248aebeb566f8590748",
           "task": "pass1_comment_gm4_v2",
           "text": "Пишіть сюди 👉🏻 https://t.me/sport_food_life",
           "thread": "@mandziak:3684",
@@ -7055,7 +7055,7 @@
             },
             {
               "label": null,
-              "text": "Пишіть сюди 👉🏻 https://t.me/sport_food_life"
+              "text": "https://t.me/istorium_ua/6342"
             }
           ],
           "examples_chosen": [
@@ -7085,9 +7085,9 @@
             },
             {
               "label": "null",
-              "msg_id": 48529,
-              "similarity": 1.0,
-              "thread": "@mandziak:3736"
+              "msg_id": 47830,
+              "similarity": 0.192982,
+              "thread": "@mandziak:3667"
             }
           ],
           "id": "@mandziak:3684#48064",
@@ -7100,8 +7100,8 @@
           },
           "msg_id": 48064,
           "post_id": 3684,
-          "rendered_chars": 4337,
-          "rendering_sha256": "e469af8ba5b6de097c756e552783c0e61813c9519fe68056af7fa65547985093",
+          "rendered_chars": 4323,
+          "rendering_sha256": "abc060f74137db373853947e0cb920681ca6a75b726ea13ffe4ee857cbd7e991",
           "task": "pass1_comment_gm4_v2",
           "text": "Пишіть сюди 👉🏻 https://t.me/sport_food_life",
           "thread": "@mandziak:3684",
@@ -7580,7 +7580,7 @@
             },
             {
               "label": null,
-              "text": "Дякую"
+              "text": "Дякую 🙌"
             }
           ],
           "examples_chosen": [
@@ -7610,9 +7610,9 @@
             },
             {
               "label": "null",
-              "msg_id": 21127,
-              "similarity": 1.0,
-              "thread": "@VARUS_channel:10451"
+              "msg_id": 48596,
+              "similarity": 0.6,
+              "thread": "@mandziak:3736"
             }
           ],
           "id": "@mandziak:3689#48067",
@@ -7625,8 +7625,8 @@
           },
           "msg_id": 48067,
           "post_id": 3689,
-          "rendered_chars": 4345,
-          "rendering_sha256": "a52c66819337d288a006eb26e68230153d049f36c2822080e8a9a6bce13f753f",
+          "rendered_chars": 4347,
+          "rendering_sha256": "7e6454e1bd51a5fca764df3416fff1c6cfcc912fb8a5538b11d9b8ff27cb3ac7",
           "task": "pass1_comment_gm4_v2",
           "text": "Дякую",
           "thread": "@mandziak:3689",
@@ -7805,7 +7805,7 @@
             },
             {
               "label": null,
-              "text": "Дякую Богу за Вітю. Дякую"
+              "text": "Дякую Богу за Вітю.."
             }
           ],
           "examples_chosen": [
@@ -7835,9 +7835,9 @@
             },
             {
               "label": "null",
-              "msg_id": 49075,
-              "similarity": 1.0,
-              "thread": "@mandziak:3721"
+              "msg_id": 49014,
+              "similarity": 0.809524,
+              "thread": "@mandziak:3768"
             }
           ],
           "id": "@mandziak:3689#48268",
@@ -7850,8 +7850,8 @@
           },
           "msg_id": 48268,
           "post_id": 3689,
-          "rendered_chars": 4339,
-          "rendering_sha256": "3a4ccff6cd020bfd97fd88c45cc6ffb4813bb82162b5fc5d545f6023b106c143",
+          "rendered_chars": 4334,
+          "rendering_sha256": "100af8c16154e7ea7401b071ff455a8a8d499392d3826c3c7097d1d9fefaef9f",
           "task": "pass1_comment_gm4_v2",
           "text": "Дякую Богу за Вітю. Дякую",
           "thread": "@mandziak:3689",
@@ -9163,7 +9163,7 @@
             },
             {
               "label": null,
-              "text": "Дякую Богу за Вітю. Дякую"
+              "text": "Дякую Богу за Вітю.."
             }
           ],
           "examples_chosen": [
@@ -9193,9 +9193,9 @@
             },
             {
               "label": "null",
-              "msg_id": 49075,
-              "similarity": 1.0,
-              "thread": "@mandziak:3721"
+              "msg_id": 49014,
+              "similarity": 0.809524,
+              "thread": "@mandziak:3768"
             }
           ],
           "id": "@mandziak:3746#49218",
@@ -9208,8 +9208,8 @@
           },
           "msg_id": 49218,
           "post_id": 3746,
-          "rendered_chars": 4320,
-          "rendering_sha256": "3183ed8928558be4635ff68a915bb785df815b33678f15937d6d99bbdf8cfbc5",
+          "rendered_chars": 4315,
+          "rendering_sha256": "07a12aecc19a6d700fb433a9ee3851a482a50091bc2df6b961dbfbd4fbf2a4ba",
           "task": "pass1_comment_gm4_v2",
           "text": "Дякую Богу за Вітю. Дякую",
           "thread": "@mandziak:3746",
@@ -9388,7 +9388,7 @@
             },
             {
               "label": null,
-              "text": "Дякую Богу за Вітю. Дякую"
+              "text": "Дякую Бог за Вітю. Дякую"
             }
           ],
           "examples_chosen": [
@@ -9418,9 +9418,9 @@
             },
             {
               "label": "null",
-              "msg_id": 49075,
-              "similarity": 1.0,
-              "thread": "@mandziak:3721"
+              "msg_id": 49053,
+              "similarity": 0.772727,
+              "thread": "@mandziak:3702"
             }
           ],
           "id": "@mandziak:3768#49225",
@@ -9433,8 +9433,8 @@
           },
           "msg_id": 49225,
           "post_id": 3768,
-          "rendered_chars": 4250,
-          "rendering_sha256": "6d302b7acdc5be738ba89502d32fd8b2d62953bcd4e788468a69318600c91c94",
+          "rendered_chars": 4249,
+          "rendering_sha256": "bd54d05b0a40fbe281148ba805df86dd883a0b54554c0925ae88175723b6e4ab",
           "task": "pass1_comment_gm4_v2",
           "text": "Дякую Богу за Вітю. Дякую",
           "thread": "@mandziak:3768",
@@ -15883,7 +15883,7 @@
             },
             {
               "label": "не_наш_рынок",
-              "text": "задолбало. мне нужны деньги, быстро только не легальными путями, вот так  => @xaxaxa380"
+              "text": "украинцы, кто в отчаянии и нужны деньги, смотрите => @poq380"
             },
             {
               "label": null,
@@ -15911,9 +15911,9 @@
             },
             {
               "label": "не_наш_рынок",
-              "msg_id": 49529,
-              "similarity": 1.0,
-              "thread": "@retsepty:7310"
+              "msg_id": 49561,
+              "similarity": 0.139344,
+              "thread": "@retsepty:7313"
             },
             {
               "label": "null",
@@ -15932,8 +15932,8 @@
           },
           "msg_id": 49531,
           "post_id": 7312,
-          "rendered_chars": 4392,
-          "rendering_sha256": "256db23db48db38fac081cc4aeaea70fb8b1b54f44cfc825b1dd406aef84c4a9",
+          "rendered_chars": 4365,
+          "rendering_sha256": "0599f0b1e4c89005fd1f4ff23ecbfb848ba1b78abcb6487673a08e807990ed0e",
           "task": "pass1_comment_gm4_v2",
           "text": "задолбало. мне нужны деньги, быстро только не легальными путями, вот так  => @xaxaxa380",
           "thread": "@retsepty:7312",
@@ -16033,7 +16033,7 @@
             },
             {
               "label": "не_наш_рынок",
-              "text": "украинцы, кто в отчаянии и нужны деньги, смотрите => @poq380"
+              "text": "задолбало. мне нужны деньги, быстро только не легальными путями, вот так  => @xaxaxa380"
             },
             {
               "label": null,
@@ -16061,9 +16061,9 @@
             },
             {
               "label": "не_наш_рынок",
-              "msg_id": 49561,
-              "similarity": 1.0,
-              "thread": "@retsepty:7313"
+              "msg_id": 49529,
+              "similarity": 0.139344,
+              "thread": "@retsepty:7310"
             },
             {
               "label": "null",
@@ -16082,8 +16082,8 @@
           },
           "msg_id": 49560,
           "post_id": 7312,
-          "rendered_chars": 4294,
-          "rendering_sha256": "747a68603d6139fd67a901cd80223a24277cefbce442de0b548b3f1c1016e775",
+          "rendered_chars": 4321,
+          "rendering_sha256": "0398add79d64c8db80e99a0328cd610f15ee930c41842217fb57fc04ea9917e1",
           "task": "pass1_comment_gm4_v2",
           "text": "украинцы, кто в отчаянии и нужны деньги, смотрите => @poq380",
           "thread": "@retsepty:7312",
@@ -16108,7 +16108,7 @@
             },
             {
               "label": "не_наш_рынок",
-              "text": "задолбало. мне нужны деньги, быстро только не легальными путями, вот так  => @xaxaxa380"
+              "text": "украинцы, кто в отчаянии и нужны деньги, смотрите => @poq380"
             },
             {
               "label": null,
@@ -16136,9 +16136,9 @@
             },
             {
               "label": "не_наш_рынок",
-              "msg_id": 49529,
-              "similarity": 1.0,
-              "thread": "@retsepty:7310"
+              "msg_id": 49567,
+              "similarity": 0.139344,
+              "thread": "@retsepty:7317"
             },
             {
               "label": "null",
@@ -16157,8 +16157,8 @@
           },
           "msg_id": 49532,
           "post_id": 7313,
-          "rendered_chars": 4400,
-          "rendering_sha256": "ef3a6983582aa92bd92bc5be0ec52d8b03373dbb2350793dfbe59bb0f3b81ab6",
+          "rendered_chars": 4373,
+          "rendering_sha256": "76db3dcf6cc70eae17ddb821115cf060fb622bc81f3c7eeed329a0627cfc9a47",
           "task": "pass1_comment_gm4_v2",
           "text": "задолбало. мне нужны деньги, быстро только не легальными путями, вот так  => @xaxaxa380",
           "thread": "@retsepty:7313",
@@ -16258,7 +16258,7 @@
             },
             {
               "label": "не_наш_рынок",
-              "text": "украинцы, кто в отчаянии и нужны деньги, смотрите => @poq380"
+              "text": "задолбало. мне нужны деньги, быстро только не легальными путями, вот так  => @xaxaxa380"
             },
             {
               "label": null,
@@ -16286,9 +16286,9 @@
             },
             {
               "label": "не_наш_рынок",
-              "msg_id": 49561,
-              "similarity": 1.0,
-              "thread": "@retsepty:7313"
+              "msg_id": 49529,
+              "similarity": 0.139344,
+              "thread": "@retsepty:7310"
             },
             {
               "label": "null",
@@ -16307,8 +16307,8 @@
           },
           "msg_id": 49586,
           "post_id": 7320,
-          "rendered_chars": 4327,
-          "rendering_sha256": "3a321821e61936a91db2a40e7680c14897bb89390ebe1ce8b16ab2b3411be103",
+          "rendered_chars": 4354,
+          "rendering_sha256": "8192a56a1dc3fec1c1687b1fa3fc7a2177e33c7a08570a3b4e6e90fee5e0d1a1",
           "task": "pass1_comment_gm4_v2",
           "text": "украинцы, кто в отчаянии и нужны деньги, смотрите => @poq380",
           "thread": "@retsepty:7320",
@@ -16558,7 +16558,7 @@
             },
             {
               "label": "не_наш_рынок",
-              "text": "потужная работа, чернуха kriминал, 20000 гривен в сутки => @xaxaxa380"
+              "text": "необычная работа, 45000 гривен за заказ, только для суровых людей @gerdo_s"
             },
             {
               "label": null,
@@ -16586,9 +16586,9 @@
             },
             {
               "label": "не_наш_рынок",
-              "msg_id": 49625,
-              "similarity": 1.0,
-              "thread": "@retsepty:7324"
+              "msg_id": 49677,
+              "similarity": 0.173913,
+              "thread": "@retsepty:7335"
             },
             {
               "label": "null",
@@ -16607,8 +16607,8 @@
           },
           "msg_id": 49626,
           "post_id": 7325,
-          "rendered_chars": 4582,
-          "rendering_sha256": "2e315ff8e5fce408b1948e17f3398c696461b8b55ea8c139473e6b9f91483448",
+          "rendered_chars": 4587,
+          "rendering_sha256": "d643da36deefa0f503d5519df28e0f261bc4bc9dfff10ed396ddff0a833e1dfc",
           "task": "pass1_comment_gm4_v2",
           "text": "потужная работа, чернуха kriминал, 20000 гривен в сутки => @xaxaxa380",
           "thread": "@retsepty:7325",
@@ -16708,7 +16708,7 @@
             },
             {
               "label": "не_наш_рынок",
-              "text": "работа для смелых, 2000O грн @cats_up_work"
+              "text": "200 грн 15 см"
             },
             {
               "label": null,
@@ -16736,9 +16736,9 @@
             },
             {
               "label": "не_наш_рынок",
-              "msg_id": 49636,
-              "similarity": 1.0,
-              "thread": "@retsepty:7328"
+              "msg_id": 579646,
+              "similarity": 0.108696,
+              "thread": "@matusi_ukr:22295"
             },
             {
               "label": "null",
@@ -16757,8 +16757,8 @@
           },
           "msg_id": 49632,
           "post_id": 7327,
-          "rendered_chars": 4185,
-          "rendering_sha256": "6091a7979a90dcdb4c34a89770a20f4d5abc8b9417e1d38aa4e6b6197f7c4bc8",
+          "rendered_chars": 4156,
+          "rendering_sha256": "489ecc4284f1bec2c9be2fe5c79d5a36dfd455c62dad561c414abca527a48913",
           "task": "pass1_comment_gm4_v2",
           "text": "работа для смелых, 2000O грн @cats_up_work",
           "thread": "@retsepty:7327",
@@ -17586,7 +17586,7 @@
             },
             {
               "label": null,
-              "rationale": "коментар ні про кого — сумнів у першому продукті прикорму (cue: «Кабачок? Серйозно»)",
+              "rationale": "коментар ні про кого — емоційний вигук у відповідь на пораду (cue: «Кабачок? Серйозно»)",
               "text": "Кабачок? Серйозно???"
             }
           ],
@@ -17632,8 +17632,8 @@
           },
           "msg_id": 20594,
           "post_id": 10348,
-          "rendered_chars": 6477,
-          "rendering_sha256": "1580c563ce618da3318ca4f19f5247412592dae9b67de49e57b370c6024af6ff",
+          "rendered_chars": 6480,
+          "rendering_sha256": "edfda115dc53fe45977dd4ed57b45e5caf27e870827fdb2bcd886837ebd98c70",
           "task": "pass1_comment_gm4_v3",
           "text": "Dfcvvvccv",
           "thread": "@VARUS_channel:10348",
@@ -17681,7 +17681,7 @@
             },
             {
               "label": null,
-              "rationale": "коментар ні про кого — сумнів у першому продукті прикорму (cue: «Кабачок? Серйозно»)",
+              "rationale": "коментар ні про кого — емоційний вигук у відповідь на пораду (cue: «Кабачок? Серйозно»)",
               "text": "Кабачок? Серйозно???"
             }
           ],
@@ -17727,8 +17727,8 @@
           },
           "msg_id": 20595,
           "post_id": 10348,
-          "rendered_chars": 6512,
-          "rendering_sha256": "17e47a194c4cca7b2034056a5c76f9b354f26d7e3af4f558a3f73ca9cf96a5d8",
+          "rendered_chars": 6515,
+          "rendering_sha256": "1af33a24849a62798f878f15f09ea93be0bffcd984c4032d83ff1453d2f769c9",
           "task": "pass1_comment_gm4_v3",
           "text": "Sgdcvvbbvcvcvbhhhjjkknvv gg iuudufufufuufufu",
           "thread": "@VARUS_channel:10348",
@@ -17771,12 +17771,12 @@
             },
             {
               "label": "не_наш_рынок",
-              "rationale": "коментар ПРО невдалі кабачкові млинці, поза нашою категорією (cue: «не зʼєднало»)",
+              "rationale": "коментар ПРО невдалі кабачкові млинці з допису, поза нашою категорією (cue: «не зʼєднало»)",
               "text": "В мене не зʼєднало."
             },
             {
               "label": null,
-              "rationale": "коментар ні про кого — про власну лактацію при завершенні ГВ (cue: «не довелося зцежувати»)",
+              "rationale": "коментар ні про кого — відповідь співрозмовниці власним прикладом (cue: «не довелося зцежувати»)",
               "text": "Майже ні, пару крапель, навіть не довелося зцежувати. Але воно, мені здається, просто стало пропадати ще до того, як я кинула годувати. В мене взагалі його було дуууже мало"
             }
           ],
@@ -17822,8 +17822,8 @@
           },
           "msg_id": 20656,
           "post_id": 10348,
-          "rendered_chars": 5492,
-          "rendering_sha256": "791bf1e2c0aa8a4143d7b724c75f1bae430d0aa6f2193f5765aba1080d47a855",
+          "rendered_chars": 5506,
+          "rendering_sha256": "82683e9409f856c2a645a0e290ad4557af148484d885e02f4e4250952e84d7a8",
           "task": "pass1_comment_gm4_v3",
           "text": "В мене зелений, я задоволена. Все чисте, пахне, економний",
           "thread": "@VARUS_channel:10348",
@@ -17861,7 +17861,7 @@
             },
             {
               "label": "категория_личное",
-              "rationale": "коментар ПРО власну звичку із сирною запіканкою (cue: «плачу і їм»)",
+              "rationale": "коментар ПРО власну звичку із сирною запіканкою з допису (cue: «плачу і їм»)",
               "text": "Часто, нічого не роблю, плачу і їм ))"
             },
             {
@@ -17917,8 +17917,8 @@
           },
           "msg_id": 20664,
           "post_id": 10348,
-          "rendered_chars": 5907,
-          "rendering_sha256": "352326e572e24817e1ffd533aa7755f6ffcf771f940208c7772efa788fbe4c2d",
+          "rendered_chars": 5916,
+          "rendering_sha256": "b526c01b0a5e5a4c7d099c6fba879ccbcab6f72a776c0cc4b24a8e0cf04dee45",
           "task": "pass1_comment_gm4_v3",
           "text": "Зайшла в Varus на Деміївській стоїть цінник 302 грн.по акції,показала фото,питаю\"де?\"хочу купити\"-\"в нас такого нема\"\nДе є?",
           "thread": "@VARUS_channel:10348",
@@ -17951,12 +17951,12 @@
             },
             {
               "label": "сеть_ритейлер",
-              "rationale": "коментар ПРО сервіс мережі — відповідь SMM про звернення (cue: «Вже з вами у діректі»)",
-              "text": "Вітаємо!Вже з вами у діректі."
+              "rationale": "коментар ПРО сервіс мережі — відповідь SMM, що вже пише у приват (cue: «написали вам у приватні повідомлення»)",
+              "text": "Вітаємо! Вже написали вам у приватні повідомлення"
             },
             {
               "label": "категория_личное",
-              "rationale": "коментар ПРО власну звичку із сирною запіканкою (cue: «їмо що виходить»)",
+              "rationale": "коментар ПРО власну звичку із сирною запіканкою з допису (cue: «їмо що виходить»)",
               "text": "Вже звикла…що опадає…то ж їмо що виходить 😳"
             },
             {
@@ -17979,9 +17979,9 @@
             },
             {
               "label": "сеть_ритейлер",
-              "msg_id": 21239,
-              "similarity": 1.0,
-              "thread": "@VARUS_channel:10470"
+              "msg_id": 20947,
+              "similarity": 0.174603,
+              "thread": "@VARUS_channel:10367"
             },
             {
               "label": "категория_личное",
@@ -18012,8 +18012,8 @@
           },
           "msg_id": 20665,
           "post_id": 10348,
-          "rendered_chars": 5223,
-          "rendering_sha256": "d075edcedff6648316daed9f76eb3bae7c1ddd57a3634a592712417c6d436088",
+          "rendered_chars": 5276,
+          "rendering_sha256": "01a613e80dcd866f6b4ec5d7baa3eadf5d16b1bd8ec48ca62457e4bdbe84df3c",
           "task": "pass1_comment_gm4_v3",
           "text": "Вітаємо!Вже з вами у діректі.",
           "thread": "@VARUS_channel:10348",
@@ -18141,12 +18141,12 @@
             },
             {
               "label": "сеть_ритейлер",
-              "rationale": "коментар ПРО сервіс мережі — відповідь SMM про звернення (cue: «Вже з вами у діректі»)",
-              "text": "Вітаємо!Вже з вами у діректі."
+              "rationale": "коментар ПРО сервіс мережі — відповідь SMM, що вже пише у приват (cue: «написали вам у приватні повідомлення»)",
+              "text": "Вітаємо! Вже написали вам у приватні повідомлення"
             },
             {
               "label": "категория_личное",
-              "rationale": "коментар ПРО власну звичку із сирною запіканкою (cue: «їмо що виходить»)",
+              "rationale": "коментар ПРО власну звичку із сирною запіканкою з допису (cue: «їмо що виходить»)",
               "text": "Вже звикла…що опадає…то ж їмо що виходить 😳"
             },
             {
@@ -18169,9 +18169,9 @@
             },
             {
               "label": "сеть_ритейлер",
-              "msg_id": 21239,
-              "similarity": 1.0,
-              "thread": "@VARUS_channel:10470"
+              "msg_id": 20947,
+              "similarity": 0.174603,
+              "thread": "@VARUS_channel:10367"
             },
             {
               "label": "категория_личное",
@@ -18202,8 +18202,8 @@
           },
           "msg_id": 20673,
           "post_id": 10348,
-          "rendered_chars": 5223,
-          "rendering_sha256": "24239d4a345101a8ac65c3b57c273f4698286229df9990ec94da753e79a86a86",
+          "rendered_chars": 5276,
+          "rendering_sha256": "3307abbb39dcd1726f93d6589eed3e6412033fbaa0d8019b034420156391672b",
           "task": "pass1_comment_gm4_v3",
           "text": "Вітаємо!Вже з вами у діректі.",
           "thread": "@VARUS_channel:10348",
@@ -18226,7 +18226,7 @@
             },
             {
               "label": "категория_личное",
-              "rationale": "коментар ПРО власний смак у сирній запіканці (cue: «Люблю з маком»)",
+              "rationale": "коментар ПРО власний смак у сирній запіканці з допису (cue: «Люблю з маком»)",
               "text": "Люблю з маком +родзинки ( або яблука)+манки трошки . Не осідала наче ."
             },
             {
@@ -18236,7 +18236,7 @@
             },
             {
               "label": null,
-              "rationale": "коментар ні про кого — про міфи материнства (cue: «після пологів розумієш»)",
+              "rationale": "коментар ні про кого — згода з попередньою реплікою (cue: «після пологів розумієш»)",
               "text": "Ага, а після пологів розумієш що ніхрена ти не знаєш 😅"
             }
           ],
@@ -18282,8 +18282,8 @@
           },
           "msg_id": 20660,
           "post_id": 10349,
-          "rendered_chars": 5255,
-          "rendering_sha256": "9d28442f06d04287e55f46d768063c7f01a29c872763bb18de525e18091a5339",
+          "rendered_chars": 5272,
+          "rendering_sha256": "bf8dd9e1a278612efc29ec647868b5fc0ab5b4ce68ab24b15070c740f160d467",
           "task": "pass1_comment_gm4_v3",
           "text": "2 яблука, 2 нектарини))",
           "thread": "@VARUS_channel:10349",
@@ -18422,7 +18422,7 @@
             },
             {
               "label": "категория_личное",
-              "rationale": "коментар ПРО власний спосіб пекти сирну запіканку (cue: «скляна форма»)",
+              "rationale": "коментар ПРО власний спосіб пекти сирну запіканку з допису (cue: «скляна форма»)",
               "text": "скляна форма і більшість часу під фольгою, а потім на останні 10 хвилин фольгу зняти і не підгорить."
             },
             {
@@ -18478,8 +18478,8 @@
           },
           "msg_id": 20737,
           "post_id": 10360,
-          "rendered_chars": 6360,
-          "rendering_sha256": "8542e4a63782e6aee6963ce460cb35add3efa73584a9b437971536b19ca27342",
+          "rendered_chars": 6369,
+          "rendering_sha256": "dc750a949e7962489804b31bd496d2b098f8e9ba2f94b0e4f5a356d60e09a3a1",
           "task": "pass1_comment_gm4_v3",
           "text": "А можно как то повлиять, чтобы акционый товар оказался на полке магазина? На остатках он есть. Одесса. Французский бульвар.",
           "thread": "@VARUS_channel:10360",
@@ -18538,7 +18538,7 @@
             },
             {
               "label": "категория_личное",
-              "rationale": "коментар ПРО власну звичку із сирною запіканкою (cue: «їмо що виходить»)",
+              "rationale": "коментар ПРО власну звичку із сирною запіканкою з допису (cue: «їмо що виходить»)",
               "text": "Вже звикла…що опадає…то ж їмо що виходить 😳"
             },
             {
@@ -18594,8 +18594,8 @@
           },
           "msg_id": 20741,
           "post_id": 10360,
-          "rendered_chars": 5556,
-          "rendering_sha256": "11ddf5b22cdc7f26672721aa1040688ef9bc1c9bd133801a0d3a5e34e168823b",
+          "rendered_chars": 5565,
+          "rendering_sha256": "aa6a3bf5fe184961262bf5af14f08087dfc732579e203f4714205ceca0ffd2bc",
           "task": "pass1_comment_gm4_v3",
           "text": "Вітаємо! Вже пишемо вам в особисті",
           "thread": "@VARUS_channel:10360",
@@ -18626,7 +18626,7 @@
             },
             {
               "label": "категория_личное",
-              "rationale": "коментар ПРО власну відмову пекти сирну запіканку (cue: «вже не печу її»)",
+              "rationale": "коментар ПРО власну відмову пекти сирну запіканку з допису (cue: «вже не печу її»)",
               "text": "І осідає і підгорає. Нічого вже не роблю, бо вже не печу її - не хочу продукти переводити"
             },
             {
@@ -18682,8 +18682,8 @@
           },
           "msg_id": 20760,
           "post_id": 10366,
-          "rendered_chars": 5340,
-          "rendering_sha256": "d407f8b248ea7e8ad6cf1cba381e8f32800e2a0d9712070ca2a78579c61ae375",
+          "rendered_chars": 5349,
+          "rendering_sha256": "3cd80d132858db3c9283375f547dec4eba5e5b32eaf63362933c5612655f252f",
           "task": "pass1_comment_gm4_v3",
           "text": "Класні призи, все хочу) долучатимусь)",
           "thread": "@VARUS_channel:10366",
@@ -18724,7 +18724,7 @@
             },
             {
               "label": null,
-              "rationale": "коментар ні про кого — сумнів у першому продукті прикорму (cue: «Кабачок? Серйозно»)",
+              "rationale": "коментар ні про кого — емоційний вигук у відповідь на пораду (cue: «Кабачок? Серйозно»)",
               "text": "Кабачок? Серйозно???"
             }
           ],
@@ -18770,8 +18770,8 @@
           },
           "msg_id": 20782,
           "post_id": 10366,
-          "rendered_chars": 6475,
-          "rendering_sha256": "b77bb9aae6644b5552af1807b89d956c087b4e751d0a2cccc2e4559010b6f025",
+          "rendered_chars": 6478,
+          "rendering_sha256": "c851aa051a0b31df65d38afbcf86aa0b8746288abf5e0ffc4118bd31103ef2e5",
           "task": "pass1_comment_gm4_v3",
           "text": "✅",
           "thread": "@VARUS_channel:10366",
@@ -18885,17 +18885,17 @@
             },
             {
               "label": "сеть_ритейлер",
-              "rationale": "коментар ПРО промокод мережі, який не спрацював (cue: «не застосовується»)",
+              "rationale": "коментар ПРО промокод мережі з допису, який не спрацював (cue: «не застосовується»)",
               "text": "А можна перевірити, а то не застосовується."
             },
             {
               "label": "категория_личное",
-              "rationale": "коментар ПРО власний варіант сирної запіканки (cue: «Роблю за Вашим рецептом з курагою»)",
+              "rationale": "коментар ПРО власний варіант сирної запіканки з допису (cue: «Роблю за Вашим рецептом з курагою»)",
               "text": "Роблю за Вашим рецептом з курагою 😋🤌. Виходить супер ))"
             },
             {
               "label": "не_наш_рынок",
-              "rationale": "коментар ПРО якість рюкзака, поза нашою категорією (cue: «отличное качество»)",
+              "rationale": "коментар ПРО якість рюкзака з допису, поза нашою категорією (cue: «отличное качество»)",
               "text": "Покупали, отличное качество, супер"
             },
             {
@@ -18946,8 +18946,8 @@
           },
           "msg_id": 20884,
           "post_id": 10366,
-          "rendered_chars": 5237,
-          "rendering_sha256": "3c62cce0c2cb277d18070d608705d86a0c281bc37d0e307c2af5b3d972dc1054",
+          "rendered_chars": 5264,
+          "rendering_sha256": "babdaa146bff74855018e2fda52e9817cf80ae8ebd4611ec62e6a93acc7148c2",
           "task": "pass1_comment_gm4_v3",
           "text": "+ супер !",
           "thread": "@VARUS_channel:10366",
@@ -18978,7 +18978,7 @@
             },
             {
               "label": "категория_личное",
-              "rationale": "коментар ПРО власну звичку із сирною запіканкою (cue: «плачу і їм»)",
+              "rationale": "коментар ПРО власну звичку із сирною запіканкою з допису (cue: «плачу і їм»)",
               "text": "Часто, нічого не роблю, плачу і їм ))"
             },
             {
@@ -19034,8 +19034,8 @@
           },
           "msg_id": 20912,
           "post_id": 10366,
-          "rendered_chars": 5258,
-          "rendering_sha256": "d0bc1c64b0a267ad279a9c46dfcc322a082d5374b0b6da623f767bc1062429e0",
+          "rendered_chars": 5267,
+          "rendering_sha256": "9074d46b06652943684cf23a9d6b68e8483d1d77e8be5ac388db821ca7839f20",
           "task": "pass1_comment_gm4_v3",
           "text": "Доброго дня. Де умови?!",
           "thread": "@VARUS_channel:10366",
@@ -19154,7 +19154,7 @@
             },
             {
               "label": "категория_личное",
-              "rationale": "коментар ПРО власну відмову пекти сирну запіканку (cue: «вже не печу її»)",
+              "rationale": "коментар ПРО власну відмову пекти сирну запіканку з допису (cue: «вже не печу її»)",
               "text": "І осідає і підгорає. Нічого вже не роблю, бо вже не печу її - не хочу продукти переводити"
             },
             {
@@ -19210,8 +19210,8 @@
           },
           "msg_id": 20919,
           "post_id": 10366,
-          "rendered_chars": 5398,
-          "rendering_sha256": "c30b25592e40990e93c24eda59a4be03a3aef66b120e3eb3a17963d4de2f32ae",
+          "rendered_chars": 5407,
+          "rendering_sha256": "2ac2479dfd8c2e4b20805aa4993e593db55f1abdc4e473104310b2274d57f2bf",
           "task": "pass1_comment_gm4_v3",
           "text": "Умови вже на фінішній прямій і ось-ось з'являться тут 😉",
           "thread": "@VARUS_channel:10366",
@@ -19428,7 +19428,7 @@
             },
             {
               "label": null,
-              "rationale": "коментар ні про кого — сумнів у першому продукті прикорму (cue: «Кабачок? Серйозно»)",
+              "rationale": "коментар ні про кого — емоційний вигук у відповідь на пораду (cue: «Кабачок? Серйозно»)",
               "text": "Кабачок? Серйозно???"
             }
           ],
@@ -19474,8 +19474,8 @@
           },
           "msg_id": 20939,
           "post_id": 10366,
-          "rendered_chars": 6475,
-          "rendering_sha256": "2c7b0be3a462e4180f50d1e43ae2bb91bb729f0507290088bf0c24df4262b6f6",
+          "rendered_chars": 6478,
+          "rendering_sha256": "c0a18532e15a46bff2c14aedb7f80506477039c73b222ce7c60645fb44a94980",
           "task": "pass1_comment_gm4_v3",
           "text": "➕",
           "thread": "@VARUS_channel:10366",
@@ -19516,7 +19516,7 @@
             },
             {
               "label": null,
-              "rationale": "коментар ні про кого — сумнів у першому продукті прикорму (cue: «Кабачок? Серйозно»)",
+              "rationale": "коментар ні про кого — емоційний вигук у відповідь на пораду (cue: «Кабачок? Серйозно»)",
               "text": "Кабачок? Серйозно???"
             }
           ],
@@ -19562,8 +19562,8 @@
           },
           "msg_id": 21013,
           "post_id": 10366,
-          "rendered_chars": 6477,
-          "rendering_sha256": "7d5caeeedf1060e24747aef4e75df6a36faf6b65b4ac5c2581d2550458f59ad0",
+          "rendered_chars": 6480,
+          "rendering_sha256": "5b0a3cdda8a77f18fa4cdaa9b33195fc74b912bfc813cf377344d434f35a553c",
           "task": "pass1_comment_gm4_v3",
           "text": "😂😂😂",
           "thread": "@VARUS_channel:10366",
@@ -19604,7 +19604,7 @@
             },
             {
               "label": null,
-              "rationale": "коментар ні про кого — сумнів у першому продукті прикорму (cue: «Кабачок? Серйозно»)",
+              "rationale": "коментар ні про кого — емоційний вигук у відповідь на пораду (cue: «Кабачок? Серйозно»)",
               "text": "Кабачок? Серйозно???"
             }
           ],
@@ -19650,8 +19650,8 @@
           },
           "msg_id": 21370,
           "post_id": 10366,
-          "rendered_chars": 6484,
-          "rendering_sha256": "e316df010d113eed88b2fb56a0b4c104cfdd21ecfcfd6de673ecf824cc1d97cb",
+          "rendered_chars": 6487,
+          "rendering_sha256": "a87d3de81a6d4be91468b829855d69e2e9ad179202106031c531e306df2b3428",
           "task": "pass1_comment_gm4_v3",
           "text": "——————\n🤦🤣🤣",
           "thread": "@VARUS_channel:10366",
@@ -19696,7 +19696,7 @@
             },
             {
               "label": "категория_личное",
-              "rationale": "коментар ПРО власний досвід із сирною запіканкою (cue: «Не осідає, не підгорає»)",
+              "rationale": "коментар ПРО власний досвід із сирною запіканкою з допису (cue: «Не осідає, не підгорає»)",
               "text": "Не осідає, не підгорає))"
             },
             {
@@ -19752,8 +19752,8 @@
           },
           "msg_id": 21238,
           "post_id": 10470,
-          "rendered_chars": 5357,
-          "rendering_sha256": "82a6e3044a0786ec2b2f94ae89844ea9e95e7d859ac598f20ee309364e7f644f",
+          "rendered_chars": 5366,
+          "rendering_sha256": "1b8fff7459a4644683007bd8fc9bd79b5dfc3a9ba269aeaa18345dc5dc655c31",
           "task": "pass1_comment_gm4_v3",
           "text": "100%... лучше бы не позорились с такими акциями🙈",
           "thread": "@VARUS_channel:10470",
@@ -19829,7 +19829,7 @@
             },
             {
               "label": null,
-              "rationale": "коментар ні про кого — про власну дитину і цифри (cue: «цифри почав впізнавати пізніше»)",
+              "rationale": "коментар ні про кого — відповідь у треді власним прикладом (cue: «цифри почав впізнавати пізніше»)",
               "text": "Ми спочатку рахували все, цифри почав впізнавати пізніше. Синові 5. Може рахувати предмети, додавати і віднімати їх, може сказати де більше де менше, але коли це все написано цифрами поки не справляється. Я думаю це нормально. У нього більше проблем з писанням. Перемалювати цифри може, але знову ж якщо попросити написати одну з цифр, то це поки не виходить. Моя думка, на все свій час."
             }
           ],
@@ -19875,8 +19875,8 @@
           },
           "msg_id": 21266,
           "post_id": 10471,
-          "rendered_chars": 5917,
-          "rendering_sha256": "0cd6d701b008969fde58b470ddf56ff8bf1d73869906b8300081a038a83cc181",
+          "rendered_chars": 5927,
+          "rendering_sha256": "7c997da2fdd78f8899b1d682395786e35af63164d171ebd246fa33eeaccdc0be",
           "task": "pass1_comment_gm4_v3",
           "text": "Якщо буде таке харчування може мене всиновите, будь ласка!!!",
           "thread": "@VARUS_channel:10471",
@@ -19914,7 +19914,7 @@
             },
             {
               "label": "категория_личное",
-              "rationale": "коментар ПРО власний спосіб пекти сирну запіканку (cue: «Випікаю у формі маленьких кексів»)",
+              "rationale": "коментар ПРО власний спосіб пекти сирну запіканку з допису (cue: «Випікаю у формі маленьких кексів»)",
               "text": "Випікаю у формі  маленьких кексів - і все гаразд 👍😉 ну і звичайно на кукурудзяному крохмалю"
             },
             {
@@ -19970,8 +19970,8 @@
           },
           "msg_id": 21400,
           "post_id": 10528,
-          "rendered_chars": 5398,
-          "rendering_sha256": "156202871a34827b29b2410d168ab19b51a61415fa1a7f2d024953c11cc1baa3",
+          "rendered_chars": 5407,
+          "rendering_sha256": "8dbb947ba087953350fb0b17e74aff6eb53d68c684ff17df79273cf368ec208b",
           "task": "pass1_comment_gm4_v3",
           "text": "Т9 виправив(((\nЦе і малось на увазі",
           "thread": "@VARUS_channel:10528",
@@ -20004,12 +20004,12 @@
             },
             {
               "label": "сеть_ритейлер",
-              "rationale": "коментар ПРО власний формат мережі — VARUS CAFE (cue: «варус кафе»)",
+              "rationale": "коментар ПРО формат мережі — VARUS CAFE (cue: «варус кафе»)",
               "text": "А варус кафе?"
             },
             {
               "label": "категория_личное",
-              "rationale": "коментар ПРО власний спосіб робити сирну запіканку (cue: «Додаю крохмаль кукурудзяний»)",
+              "rationale": "коментар ПРО власний спосіб робити сирну запіканку з допису (cue: «Додаю крохмаль кукурудзяний»)",
               "text": "Додаю крохмаль кукурудзяний і все тримається. А з вівсяними висівками, то взагалі повноцінна Гарвардська тарілка"
             },
             {
@@ -20019,7 +20019,7 @@
             },
             {
               "label": null,
-              "rationale": "коментар ні про кого — сумнів у першому продукті прикорму (cue: «Кабачок? Серйозно»)",
+              "rationale": "коментар ні про кого — емоційний вигук у відповідь на пораду (cue: «Кабачок? Серйозно»)",
               "text": "Кабачок? Серйозно???"
             }
           ],
@@ -20065,8 +20065,8 @@
           },
           "msg_id": 21409,
           "post_id": 10528,
-          "rendered_chars": 5407,
-          "rendering_sha256": "adaf3c6a5bf4c1452018b1cc1077041d221652c11d315ae23eb24c45503af2aa",
+          "rendered_chars": 5411,
+          "rendering_sha256": "45c17b7673e25c0bc8b946b4cba75f9571cf6ac8bc41c85d4b669a7d1a20baf6",
           "task": "pass1_comment_gm4_v3",
           "text": "Саме так. Бо Варус серйозна компанія на відміну від вас.",
           "thread": "@VARUS_channel:10528",
@@ -20084,7 +20084,7 @@
             },
             {
               "label": "сеть_ритейлер",
-              "rationale": "коментар ПРО промокод мережі, який не спрацював (cue: «не застосовується»)",
+              "rationale": "коментар ПРО промокод мережі з допису, який не спрацював (cue: «не застосовується»)",
               "text": "А можна перевірити, а то не застосовується."
             },
             {
@@ -20145,8 +20145,8 @@
           },
           "msg_id": 21420,
           "post_id": 10529,
-          "rendered_chars": 5388,
-          "rendering_sha256": "e9be0cc847feb0d65a4333d9e370baa679ca3fc3f750b877038765157d6e4b82",
+          "rendered_chars": 5397,
+          "rendering_sha256": "4c8fc6820c9cf0182c27a102a40dbeb9f587855cc0a8c8b806ab9f7770eca74c",
           "task": "pass1_comment_gm4_v3",
           "text": "Половина товаров закончилась, гениально",
           "thread": "@VARUS_channel:10529",
@@ -20169,7 +20169,7 @@
             },
             {
               "label": "категория_личное",
-              "rationale": "лише ЗГАДУЄ морозиво як засіб від болю; насправді про лікування горла (cue: «Морозиво»)",
+              "rationale": "коментар ПРО власний досвід із морозивом як помічним при болю в горлі (cue: «Мені чудово допомагає»)",
               "text": "Морозиво. Мені чудово допомагає прохолодне пиття обільне, цукерки Mintex рошенівськи. Але 2 тижні, то вже краще до лікаря звернутися, знайти, чому воно болить. За 2 тижні розвинутися могли і бактеріальні інфекції, коли просто чаю попити вже не працює"
             },
             {
@@ -20225,8 +20225,8 @@
           },
           "msg_id": 21421,
           "post_id": 10529,
-          "rendered_chars": 5819,
-          "rendering_sha256": "f814c0e3b4f310ccdebe3aaf2880d344dc545c78b4af4637a5e224a39bffbcbe",
+          "rendered_chars": 5832,
+          "rendering_sha256": "289486eb86443ff774d4df89d7e1fdf742fbb306602c8de4719d3131831c5cb5",
           "task": "pass1_comment_gm4_v3",
           "text": "Вітаємо! Вже написали вам у приватні повідомлення, щоб розібратися в усьому разом.",
           "thread": "@VARUS_channel:10529",
@@ -20462,7 +20462,7 @@
             },
             {
               "label": "не_наш_рынок",
-              "rationale": "коментар ПРО заморожування кабачка, поза нашою категорією (cue: «Чи можна заморозити його»)",
+              "rationale": "коментар ПРО заморожування кабачка з допису, поза нашою категорією (cue: «Чи можна заморозити його»)",
               "text": "Чи можна заморозити його?"
             },
             {
@@ -20513,8 +20513,8 @@
           },
           "msg_id": 21599,
           "post_id": 10613,
-          "rendered_chars": 5873,
-          "rendering_sha256": "dca4246a9858ffa2e627bebe0fc20bab569c93e802f5e6db7ba9d0ee50dea419",
+          "rendered_chars": 5882,
+          "rendering_sha256": "12e9c3e74803c5c6958f0f60cf178cb28c6461ef9c0112a28c42d3256cef9c54",
           "task": "pass1_comment_gm4_v3",
           "text": "А є морозиво без цукру?",
           "thread": "@VARUS_channel:10613",
@@ -20770,7 +20770,7 @@
             {
               "label": null,
               "rationale": "коментар ні про кого — подяка без предмета (cue: «Дякую»)",
-              "text": "Дякую"
+              "text": "Дякую 🙌"
             }
           ],
           "examples_chosen": [
@@ -20800,9 +20800,9 @@
             },
             {
               "label": "null",
-              "msg_id": 21127,
-              "similarity": 1.0,
-              "thread": "@VARUS_channel:10451"
+              "msg_id": 48596,
+              "similarity": 0.6,
+              "thread": "@mandziak:3736"
             }
           ],
           "id": "@VARUS_channel:10613#21609",
@@ -20815,8 +20815,8 @@
           },
           "msg_id": 21609,
           "post_id": 10613,
-          "rendered_chars": 5733,
-          "rendering_sha256": "324b6c2239725e7b7720e962bc097fe204f12c3672dbbfca082cfc65ab9560c5",
+          "rendered_chars": 5735,
+          "rendering_sha256": "5ef0d3cb7c72e881b349371572cf7bbc325487774160e3ba78dd2db6b3cadc61",
           "task": "pass1_comment_gm4_v3",
           "text": "Дякую",
           "thread": "@VARUS_channel:10613",
@@ -20920,7 +20920,7 @@
             },
             {
               "label": null,
-              "rationale": "коментар ні про кого — про власну дитину і цифри (cue: «цифри почав впізнавати пізніше»)",
+              "rationale": "коментар ні про кого — відповідь у треді власним прикладом (cue: «цифри почав впізнавати пізніше»)",
               "text": "Ми спочатку рахували все, цифри почав впізнавати пізніше. Синові 5. Може рахувати предмети, додавати і віднімати їх, може сказати де більше де менше, але коли це все написано цифрами поки не справляється. Я думаю це нормально. У нього більше проблем з писанням. Перемалювати цифри може, але знову ж якщо попросити написати одну з цифр, то це поки не виходить. Моя думка, на все свій час."
             }
           ],
@@ -20966,8 +20966,8 @@
           },
           "msg_id": 21626,
           "post_id": 10613,
-          "rendered_chars": 6490,
-          "rendering_sha256": "ccb2a071b316b233e89267c582d17aca6a20dc04a1bc0416c140913d06e50a4a",
+          "rendered_chars": 6500,
+          "rendering_sha256": "081d74bfb16ecaf90bd4083ffb6f544a87404fa3aaebdd5bf9698779cb9d335c",
           "task": "pass1_comment_gm4_v3",
           "text": "Брав морозиво у Варусі, воно у них завжди особливе, з нього просто тече вода, воно просто перемерзше. Цим словам є підтвердження - чек. Повернення робив не один я.",
           "thread": "@VARUS_channel:10613",
@@ -21061,7 +21061,7 @@
             },
             {
               "label": "категория_личное",
-              "rationale": "лише ЗГАДУЄ морозиво як засіб від болю; насправді про лікування горла (cue: «Морозиво»)",
+              "rationale": "коментар ПРО власний досвід із морозивом як помічним при болю в горлі (cue: «Мені чудово допомагає»)",
               "text": "Морозиво. Мені чудово допомагає прохолодне пиття обільне, цукерки Mintex рошенівськи. Але 2 тижні, то вже краще до лікаря звернутися, знайти, чому воно болить. За 2 тижні розвинутися могли і бактеріальні інфекції, коли просто чаю попити вже не працює"
             },
             {
@@ -21117,8 +21117,8 @@
           },
           "msg_id": 21627,
           "post_id": 10613,
-          "rendered_chars": 6129,
-          "rendering_sha256": "cc8b6a91610ad57606c268591b7fa92812e5d7160bb8bce0d1c3792857ac398c",
+          "rendered_chars": 6142,
+          "rendering_sha256": "a5b6a8add6ca7e6b59def45ab41cb0d178b8f0436d01c3612f29b252df29d788",
           "task": "pass1_comment_gm4_v3",
           "text": "Вже написали вам у приватні повідомлення, щоб розібратися в усьому разом✍🏻",
           "thread": "@VARUS_channel:10613",
@@ -21363,7 +21363,7 @@
             },
             {
               "label": "категория_личное",
-              "rationale": "коментар ПРО власний досвід із сирною запіканкою (cue: «Не осідає, не підгорає»)",
+              "rationale": "коментар ПРО власний досвід із сирною запіканкою з допису (cue: «Не осідає, не підгорає»)",
               "text": "Не осідає, не підгорає))"
             },
             {
@@ -21373,7 +21373,7 @@
             },
             {
               "label": null,
-              "rationale": "коментар ні про кого — про міфи материнства (cue: «після пологів розумієш»)",
+              "rationale": "коментар ні про кого — згода з попередньою реплікою (cue: «після пологів розумієш»)",
               "text": "Ага, а після пологів розумієш що ніхрена ти не знаєш 😅"
             }
           ],
@@ -21419,8 +21419,8 @@
           },
           "msg_id": 21631,
           "post_id": 10613,
-          "rendered_chars": 5637,
-          "rendering_sha256": "f48c312a431e168a882cd182d4b19f31626afa691a1634719d9622e6799eb547",
+          "rendered_chars": 5654,
+          "rendering_sha256": "fbd2b5b933bc3527e9398b464c8e1fa99fb4166539c5fc66d7a765cf961ee70e",
           "task": "pass1_comment_gm4_v3",
           "text": "Зря стараєшся,або ти співробітник не пойму",
           "thread": "@VARUS_channel:10613",
@@ -21665,7 +21665,7 @@
             },
             {
               "label": "категория_личное",
-              "rationale": "лише ЗГАДУЄ морозиво як засіб від болю; насправді про лікування горла (cue: «Морозиво»)",
+              "rationale": "коментар ПРО власний досвід із морозивом як помічним при болю в горлі (cue: «Мені чудово допомагає»)",
               "text": "Морозиво. Мені чудово допомагає прохолодне пиття обільне, цукерки Mintex рошенівськи. Але 2 тижні, то вже краще до лікаря звернутися, знайти, чому воно болить. За 2 тижні розвинутися могли і бактеріальні інфекції, коли просто чаю попити вже не працює"
             },
             {
@@ -21721,8 +21721,8 @@
           },
           "msg_id": 21678,
           "post_id": 10613,
-          "rendered_chars": 7556,
-          "rendering_sha256": "8ba5ff14b841df12852e110b92d714816ced6ddfa29fc691f70ee58457770d74",
+          "rendered_chars": 7569,
+          "rendering_sha256": "7e9c1a31bb042b76ad5891555c4ae79dbaea5ba7242d66fc649f95c40b7ba4d2",
           "task": "pass1_comment_gm4_v3",
           "text": "Дякую вам за неупередженість. Дуже прикро,коли стараєшся щиро ділитися чимось гарним,а тебе ще й в чомусь обвинувачуюсь.Люблю Варус,і хвалю,не тому що співробітник,а тому що подобається наш Варус. І хочу щоб і інші отримували  тільки найкращі послуги та товари,та не розчаровувалися❤️❤️❤️",
           "thread": "@VARUS_channel:10613",
@@ -22131,7 +22131,7 @@
             },
             {
               "label": "сеть_ритейлер",
-              "rationale": "коментар ПРО промокод мережі, який не спрацював (cue: «не застосовується»)",
+              "rationale": "коментар ПРО промокод мережі з допису, який не спрацював (cue: «не застосовується»)",
               "text": "А можна перевірити, а то не застосовується."
             },
             {
@@ -22192,8 +22192,8 @@
           },
           "msg_id": 21239,
           "post_id": 6040,
-          "rendered_chars": 5290,
-          "rendering_sha256": "c2cc841b40b8b09ef844383c66d04fe0c3b5da747c51ad7b6846d1255db93397",
+          "rendered_chars": 5299,
+          "rendering_sha256": "8cda3857ee1b79549c1ee30cb9c7699fcf6f1a4c45ac739cb154e71ee881df4d",
           "task": "pass1_comment_gm4_v3",
           "text": "Фаршировані перші\nЗелений борщ з морською капустою",
           "thread": "@klopotenkofood:6040",
@@ -22216,7 +22216,7 @@
             },
             {
               "label": "категория_личное",
-              "rationale": "коментар ПРО власну звичку із сирною запіканкою (cue: «їмо що виходить»)",
+              "rationale": "коментар ПРО власну звичку із сирною запіканкою з допису (cue: «їмо що виходить»)",
               "text": "Вже звикла…що опадає…то ж їмо що виходить 😳"
             },
             {
@@ -22272,8 +22272,8 @@
           },
           "msg_id": 21242,
           "post_id": 6040,
-          "rendered_chars": 5253,
-          "rendering_sha256": "0b5f7ea68f06919f1991e4cf0ba4b484717c5a4a5c409a09d5e5be185bc6a7bf",
+          "rendered_chars": 5262,
+          "rendering_sha256": "fb2fe6037defef55e2de8a39c82e3a2200d5a03b7154a667920fae40246765f8",
           "task": "pass1_comment_gm4_v3",
           "text": "Вихідні вже почалися",
           "thread": "@klopotenkofood:6040",
@@ -22376,7 +22376,7 @@
             },
             {
               "label": "категория_личное",
-              "rationale": "коментар ПРО власну звичку із сирною запіканкою (cue: «їмо що виходить»)",
+              "rationale": "коментар ПРО власну звичку із сирною запіканкою з допису (cue: «їмо що виходить»)",
               "text": "Вже звикла…що опадає…то ж їмо що виходить 😳"
             },
             {
@@ -22386,7 +22386,7 @@
             },
             {
               "label": null,
-              "rationale": "коментар ні про кого — про власну дитину і цифри (cue: «цифри почав впізнавати пізніше»)",
+              "rationale": "коментар ні про кого — відповідь у треді власним прикладом (cue: «цифри почав впізнавати пізніше»)",
               "text": "Ми спочатку рахували все, цифри почав впізнавати пізніше. Синові 5. Може рахувати предмети, додавати і віднімати їх, може сказати де більше де менше, але коли це все написано цифрами поки не справляється. Я думаю це нормально. У нього більше проблем з писанням. Перемалювати цифри може, але знову ж якщо попросити написати одну з цифр, то це поки не виходить. Моя думка, на все свій час."
             }
           ],
@@ -22432,8 +22432,8 @@
           },
           "msg_id": 21246,
           "post_id": 6040,
-          "rendered_chars": 5657,
-          "rendering_sha256": "135dde2face0a3aa914d918374a9cfce89dbdf19f03304a798ea274aa67da633",
+          "rendered_chars": 5676,
+          "rendering_sha256": "a3cbd51fad0bcb0ef89873b91f7edef7dec1eef52c35c54916867cf2553ae073",
           "task": "pass1_comment_gm4_v3",
           "text": "На вихідні вже приготували яєчну локшину з мідіями ☺️",
           "thread": "@klopotenkofood:6040",
@@ -22536,7 +22536,7 @@
             },
             {
               "label": "категория_личное",
-              "rationale": "коментар ПРО власний варіант сирної запіканки (cue: «Роблю за Вашим рецептом з курагою»)",
+              "rationale": "коментар ПРО власний варіант сирної запіканки з допису (cue: «Роблю за Вашим рецептом з курагою»)",
               "text": "Роблю за Вашим рецептом з курагою 😋🤌. Виходить супер ))"
             },
             {
@@ -22592,8 +22592,8 @@
           },
           "msg_id": 21286,
           "post_id": 6040,
-          "rendered_chars": 5530,
-          "rendering_sha256": "1a754b94fe586af484bbee68a9fcefea66fa963050dc78021f285db870d3045f",
+          "rendered_chars": 5539,
+          "rendering_sha256": "27b08dbdd5e0ab1f430e119225abed52e9a38ea377b9d5578cb405c17021cd4b",
           "task": "pass1_comment_gm4_v3",
           "text": "Готувала пиріг за вашім рецептом https://klopotenko.com/ru/yablochnyi-pirog-na-kefire/ вийшло дуже смачно (а випічка в мене далеко не завжди виходить) ❤️ Дякую за рецепт 🥰",
           "thread": "@klopotenkofood:6040",
@@ -22872,7 +22872,7 @@
             },
             {
               "label": "категория_личное",
-              "rationale": "лише ЗГАДУЄ морозиво як засіб від болю; насправді про лікування горла (cue: «Морозиво»)",
+              "rationale": "коментар ПРО власний досвід із морозивом як помічним при болю в горлі (cue: «Мені чудово допомагає»)",
               "text": "Морозиво. Мені чудово допомагає прохолодне пиття обільне, цукерки Mintex рошенівськи. Але 2 тижні, то вже краще до лікаря звернутися, знайти, чому воно болить. За 2 тижні розвинутися могли і бактеріальні інфекції, коли просто чаю попити вже не працює"
             },
             {
@@ -22882,7 +22882,7 @@
             },
             {
               "label": null,
-              "rationale": "коментар ні про кого — про власну лактацію при завершенні ГВ (cue: «не довелося зцежувати»)",
+              "rationale": "коментар ні про кого — відповідь співрозмовниці власним прикладом (cue: «не довелося зцежувати»)",
               "text": "Майже ні, пару крапель, навіть не довелося зцежувати. Але воно, мені здається, просто стало пропадати ще до того, як я кинула годувати. В мене взагалі його було дуууже мало"
             }
           ],
@@ -22928,8 +22928,8 @@
           },
           "msg_id": 391544,
           "post_id": 21720,
-          "rendered_chars": 6154,
-          "rendering_sha256": "67352474e1a0dc72f261024ca1b6a0af19490f0951b1a79764692d919c397610",
+          "rendered_chars": 6172,
+          "rendering_sha256": "470918630fa87efaf5f7946895489dca2df1b5e43be843d9f4f2993926483843",
           "task": "pass1_comment_gm4_v3",
           "text": "Вітаю! ☀\nЄ в наявності за адресою: Біла Церква №3,вул.Ак.Кримського, в р-ні ж/б№5\nЗавітайте до нас💘",
           "thread": "@kopiyochka1:21720",
@@ -22955,7 +22955,7 @@
             },
             {
               "label": "сеть_ритейлер",
-              "rationale": "коментар ПРО промокод мережі, який не спрацював (cue: «не застосовується»)",
+              "rationale": "коментар ПРО промокод мережі з допису, який не спрацював (cue: «не застосовується»)",
               "text": "А можна перевірити, а то не застосовується."
             },
             {
@@ -23016,8 +23016,8 @@
           },
           "msg_id": 391772,
           "post_id": 21720,
-          "rendered_chars": 5199,
-          "rendering_sha256": "15d10a53b9fb989e28cb85e0b807952c325f59ea235463d61f219e5f73c120d9",
+          "rendered_chars": 5208,
+          "rendering_sha256": "0b8883277c13ae0e216377737f24ea107b0e7418ae3a52a23cd01ab99238d8fa",
           "task": "pass1_comment_gm4_v3",
           "text": "У вас є баттер і мішка нідел і сир будь ласка можна відповісти",
           "thread": "@kopiyochka1:21720",
@@ -23048,7 +23048,7 @@
             },
             {
               "label": "категория_личное",
-              "rationale": "коментар ПРО власну звичку із сирною запіканкою (cue: «плачу і їм»)",
+              "rationale": "коментар ПРО власну звичку із сирною запіканкою з допису (cue: «плачу і їм»)",
               "text": "Часто, нічого не роблю, плачу і їм ))"
             },
             {
@@ -23104,8 +23104,8 @@
           },
           "msg_id": 391773,
           "post_id": 21720,
-          "rendered_chars": 5252,
-          "rendering_sha256": "2ecf58cd91493c2af41563bec23044b554eca2d5a5d9b6d495d85dc06959de2a",
+          "rendered_chars": 5261,
+          "rendering_sha256": "181e81280ec32f1e7ce933fb7d850ddf7fd8af6e11996a0d3471c332b790275f",
           "task": "pass1_comment_gm4_v3",
           "text": "Дніпропетровська область",
           "thread": "@kopiyochka1:21720",
@@ -23233,7 +23233,7 @@
             },
             {
               "label": null,
-              "rationale": "коментар ні про кого — сумнів у першому продукті прикорму (cue: «Кабачок? Серйозно»)",
+              "rationale": "коментар ні про кого — емоційний вигук у відповідь на пораду (cue: «Кабачок? Серйозно»)",
               "text": "Кабачок? Серйозно???"
             }
           ],
@@ -23279,8 +23279,8 @@
           },
           "msg_id": 47896,
           "post_id": 3676,
-          "rendered_chars": 6461,
-          "rendering_sha256": "fc9541a61ed0da77264ce5929ee75100f411000a46479655fcf8467162f2f306",
+          "rendered_chars": 6464,
+          "rendering_sha256": "7a766c326a5f663878262f14191c2e030704804db0e40e20b07a5e65a55970bc",
           "task": "pass1_comment_gm4_v3",
           "text": "👍",
           "thread": "@mandziak:3676",
@@ -23329,7 +23329,7 @@
             {
               "label": null,
               "rationale": "коментар ні про кого — подяка без предмета (cue: «Дякую»)",
-              "text": "Дякую"
+              "text": "Дякую 🙌"
             }
           ],
           "examples_chosen": [
@@ -23359,9 +23359,9 @@
             },
             {
               "label": "null",
-              "msg_id": 21127,
-              "similarity": 1.0,
-              "thread": "@VARUS_channel:10451"
+              "msg_id": 48596,
+              "similarity": 0.6,
+              "thread": "@mandziak:3736"
             }
           ],
           "id": "@mandziak:3676#47897",
@@ -23374,8 +23374,8 @@
           },
           "msg_id": 47897,
           "post_id": 3676,
-          "rendered_chars": 5349,
-          "rendering_sha256": "4423715e98b2fdec09bb0d175ac518e1d362ac952925695df126dad7ff3250bd",
+          "rendered_chars": 5351,
+          "rendering_sha256": "d19c912e48e75c6f29e48cee48533a3c27014a6be89a916528d14e9439822579",
           "task": "pass1_comment_gm4_v3",
           "text": "Дякую",
           "thread": "@mandziak:3676",
@@ -23508,7 +23508,7 @@
             },
             {
               "label": "категория_личное",
-              "rationale": "коментар ПРО власну звичку пекти сирну запіканку (cue: «роблю без борошна»)",
+              "rationale": "коментар ПРО власну звичку пекти сирну запіканку з допису (cue: «роблю без борошна»)",
               "text": "не осідає в духовці, навпаки піднімається. осідає трохи вже коли охолоджується. роблю без борошна, а з кукурудзяним крохмалем."
             },
             {
@@ -23518,7 +23518,7 @@
             },
             {
               "label": null,
-              "rationale": "коментар ні про кого — про власну дитину і цифри (cue: «цифри почав впізнавати пізніше»)",
+              "rationale": "коментар ні про кого — відповідь у треді власним прикладом (cue: «цифри почав впізнавати пізніше»)",
               "text": "Ми спочатку рахували все, цифри почав впізнавати пізніше. Синові 5. Може рахувати предмети, додавати і віднімати їх, може сказати де більше де менше, але коли це все написано цифрами поки не справляється. Я думаю це нормально. У нього більше проблем з писанням. Перемалювати цифри може, але знову ж якщо попросити написати одну з цифр, то це поки не виходить. Моя думка, на все свій час."
             }
           ],
@@ -23564,8 +23564,8 @@
           },
           "msg_id": 47899,
           "post_id": 3676,
-          "rendered_chars": 6844,
-          "rendering_sha256": "8fb889bac948d3cb16ff745b0163564d2a6d142053cafdcacc282b2c8bc4cea5",
+          "rendered_chars": 6863,
+          "rendering_sha256": "933150242038ab99aceabd41db575ac241c3d8a911666977f706df62ef1ca9a4",
           "task": "pass1_comment_gm4_v3",
           "text": "Погоджуюсь) я робила піцу з творога 0.2 % і цільнозернового борошна, випікала а зверху накладала все що люблю: курку, кукурудзу, томат, трохи сиру і виходило дійсно як справжня піца, ще й дуже ситно)) крохмаль не давала, лиш пів ложечки розпушувача)) \nВідколи зловила гіперфікс на творогові, навчилась робити купу всього з нього😅",
           "thread": "@mandziak:3676",
@@ -24063,7 +24063,7 @@
             },
             {
               "label": "категория_личное",
-              "rationale": "коментар ПРО власну відмову пекти сирну запіканку (cue: «вже не печу її»)",
+              "rationale": "коментар ПРО власну відмову пекти сирну запіканку з допису (cue: «вже не печу її»)",
               "text": "І осідає і підгорає. Нічого вже не роблю, бо вже не печу її - не хочу продукти переводити"
             },
             {
@@ -24119,8 +24119,8 @@
           },
           "msg_id": 47987,
           "post_id": 3679,
-          "rendered_chars": 6170,
-          "rendering_sha256": "49fa9266e7eaa90f19d85b3aa7a73c35656fd62a811e20be354f64fea440bd69",
+          "rendered_chars": 6179,
+          "rendering_sha256": "04754528ddd47a51c1f7c09538e24efba2c7f99a52cd4577255bf95656f94a2c",
           "task": "pass1_comment_gm4_v3",
           "text": "Тому що принцип такий що ви маєте спочатку випити потрібну кількість води чистої води а вже після цього п'єте що забажаєте. \nАле з особистого досвіду після того як звикаєш до того що пити 3 л води в принципі більше нічого пити і не хочеться",
           "thread": "@mandziak:3679",
@@ -24143,7 +24143,7 @@
             },
             {
               "label": "категория_личное",
-              "rationale": "коментар ПРО власний досвід із сирною запіканкою (cue: «Не осідає, не підгорає»)",
+              "rationale": "коментар ПРО власний досвід із сирною запіканкою з допису (cue: «Не осідає, не підгорає»)",
               "text": "Не осідає, не підгорає))"
             },
             {
@@ -24199,8 +24199,8 @@
           },
           "msg_id": 48004,
           "post_id": 3684,
-          "rendered_chars": 5285,
-          "rendering_sha256": "67e2843e30a3eadbc9f0f92378e2b5d37d111d19b11f24dff5e1a9d8eb369433",
+          "rendered_chars": 5294,
+          "rendering_sha256": "5833c1c7d7809f4ea87ae9d00ea9aee8c2e1108cd4ea2b01f828c88e3b4be6cf",
           "task": "pass1_comment_gm4_v3",
           "text": "Відгук Лізи💖",
           "thread": "@mandziak:3684",
@@ -24228,8 +24228,8 @@
             },
             {
               "label": "не_наш_рынок",
-              "rationale": "коментар ПРО курс автора, поза нашою категорією — односкладна заявка (cue: «Цікавить»)",
-              "text": "Цікавить"
+              "rationale": "коментар ПРО солодкі газовані напої, поза нашою категорією (cue: «солодких газованих напоїв»)",
+              "text": "Бо неначе як казали що від солодких газованих напоїв треба відмовлятись, а саме їх вплив і цікавить"
             },
             {
               "label": null,
@@ -24258,9 +24258,9 @@
             },
             {
               "label": "не_наш_рынок",
-              "msg_id": 48528,
-              "similarity": 1.0,
-              "thread": "@mandziak:3736"
+              "msg_id": 48407,
+              "similarity": 0.06383,
+              "thread": "@mandziak:3718"
             },
             {
               "label": "null",
@@ -24279,8 +24279,8 @@
           },
           "msg_id": 48009,
           "post_id": 3684,
-          "rendered_chars": 5166,
-          "rendering_sha256": "c1392413d5f7fee32e11efebce719ee17cf7a4d46e15c503e0b408f5e364b958",
+          "rendered_chars": 5264,
+          "rendering_sha256": "fc2fb23d3006c34ab426c815ee6e02c0fa5a6314ba9d4adef89ba1dc3f14fc7a",
           "task": "pass1_comment_gm4_v3",
           "text": "Цікавить",
           "thread": "@mandziak:3684",
@@ -24303,7 +24303,7 @@
             },
             {
               "label": "категория_личное",
-              "rationale": "лише ЗГАДУЄ морозиво як засіб від болю; насправді про лікування горла (cue: «Морозиво»)",
+              "rationale": "коментар ПРО власний досвід із морозивом як помічним при болю в горлі (cue: «Мені чудово допомагає»)",
               "text": "Морозиво. Мені чудово допомагає прохолодне пиття обільне, цукерки Mintex рошенівськи. Але 2 тижні, то вже краще до лікаря звернутися, знайти, чому воно болить. За 2 тижні розвинутися могли і бактеріальні інфекції, коли просто чаю попити вже не працює"
             },
             {
@@ -24359,8 +24359,8 @@
           },
           "msg_id": 48011,
           "post_id": 3684,
-          "rendered_chars": 5455,
-          "rendering_sha256": "292b94b768ef6975afe8a5595930ab643c810647d2afb4c5827f049de988f38a",
+          "rendered_chars": 5468,
+          "rendering_sha256": "b9604103ea9e0d4c876abf3e4a58d8aa74225255cadc81c7eaf980c6945503d3",
           "task": "pass1_comment_gm4_v3",
           "text": "Цiкавитт",
           "thread": "@mandziak:3684",
@@ -24393,8 +24393,8 @@
             },
             {
               "label": null,
-              "rationale": "коментар ні про кого — службове перенаправлення в інший канал (cue: «sport_food_life»)",
-              "text": "Пишіть сюди 👉🏻 https://t.me/sport_food_life"
+              "rationale": "коментар ні про кого — самé посилання на сторонній канал (cue: «t.me/istorium_ua»)",
+              "text": "https://t.me/istorium_ua/6342"
             }
           ],
           "examples_chosen": [
@@ -24424,9 +24424,9 @@
             },
             {
               "label": "null",
-              "msg_id": 48529,
-              "similarity": 1.0,
-              "thread": "@mandziak:3736"
+              "msg_id": 47830,
+              "similarity": 0.192982,
+              "thread": "@mandziak:3667"
             }
           ],
           "id": "@mandziak:3684#48016",
@@ -24439,8 +24439,8 @@
           },
           "msg_id": 48016,
           "post_id": 3684,
-          "rendered_chars": 5448,
-          "rendering_sha256": "89f7be332e711ea3d7af9d3f957b89c4bb0d1dbfe7ad3999fc052f9fb74dd80e",
+          "rendered_chars": 5430,
+          "rendering_sha256": "585b8bdd144558192642f3514eb25fc7f5d2be713d2898f9e1a5c61f9f5579fb",
           "task": "pass1_comment_gm4_v3",
           "text": "Пишіть сюди 👉🏻 https://t.me/sport_food_life",
           "thread": "@mandziak:3684",
@@ -24473,8 +24473,8 @@
             },
             {
               "label": null,
-              "rationale": "коментар ні про кого — службове перенаправлення в інший канал (cue: «sport_food_life»)",
-              "text": "Пишіть сюди 👉🏻 https://t.me/sport_food_life"
+              "rationale": "коментар ні про кого — самé посилання на сторонній канал (cue: «t.me/istorium_ua»)",
+              "text": "https://t.me/istorium_ua/6342"
             }
           ],
           "examples_chosen": [
@@ -24504,9 +24504,9 @@
             },
             {
               "label": "null",
-              "msg_id": 48529,
-              "similarity": 1.0,
-              "thread": "@mandziak:3736"
+              "msg_id": 47830,
+              "similarity": 0.192982,
+              "thread": "@mandziak:3667"
             }
           ],
           "id": "@mandziak:3684#48018",
@@ -24519,8 +24519,8 @@
           },
           "msg_id": 48018,
           "post_id": 3684,
-          "rendered_chars": 5448,
-          "rendering_sha256": "34be1168487f094c8c90b0c2df7f0ce7ee16228e41dad2dabaa1fe644560e6a4",
+          "rendered_chars": 5430,
+          "rendering_sha256": "6bbb2e57bb60570a0ce73b136da215d7a20e3dfc0d25b5605ebc61c1a5666f9c",
           "task": "pass1_comment_gm4_v3",
           "text": "Пишіть сюди 👉🏻 https://t.me/sport_food_life",
           "thread": "@mandziak:3684",
@@ -24548,8 +24548,8 @@
             },
             {
               "label": "не_наш_рынок",
-              "rationale": "коментар ПРО курс автора, поза нашою категорією — односкладна заявка (cue: «Цікавить»)",
-              "text": "Цікавить"
+              "rationale": "коментар ПРО солодкі газовані напої, поза нашою категорією (cue: «солодких газованих напоїв»)",
+              "text": "Бо неначе як казали що від солодких газованих напоїв треба відмовлятись, а саме їх вплив і цікавить"
             },
             {
               "label": null,
@@ -24578,9 +24578,9 @@
             },
             {
               "label": "не_наш_рынок",
-              "msg_id": 48528,
-              "similarity": 1.0,
-              "thread": "@mandziak:3736"
+              "msg_id": 48407,
+              "similarity": 0.06383,
+              "thread": "@mandziak:3718"
             },
             {
               "label": "null",
@@ -24599,8 +24599,8 @@
           },
           "msg_id": 48020,
           "post_id": 3684,
-          "rendered_chars": 5166,
-          "rendering_sha256": "98ea9f4cec3ac447139d62e66876631399e24cfc3bb6b1259f76c172b64a2afb",
+          "rendered_chars": 5264,
+          "rendering_sha256": "4681e29a881c9c8be4f1fa898964d784b786b256bc38b9f3c7ce63ddef60568e",
           "task": "pass1_comment_gm4_v3",
           "text": "Цікавить",
           "thread": "@mandziak:3684",
@@ -24628,8 +24628,8 @@
             },
             {
               "label": "не_наш_рынок",
-              "rationale": "коментар ПРО курс автора, поза нашою категорією — односкладна заявка (cue: «Цікавить»)",
-              "text": "Цікавить"
+              "rationale": "коментар ПРО солодкі газовані напої, поза нашою категорією (cue: «солодких газованих напоїв»)",
+              "text": "Бо неначе як казали що від солодких газованих напоїв треба відмовлятись, а саме їх вплив і цікавить"
             },
             {
               "label": null,
@@ -24658,9 +24658,9 @@
             },
             {
               "label": "не_наш_рынок",
-              "msg_id": 48528,
-              "similarity": 1.0,
-              "thread": "@mandziak:3736"
+              "msg_id": 48407,
+              "similarity": 0.06383,
+              "thread": "@mandziak:3718"
             },
             {
               "label": "null",
@@ -24679,8 +24679,8 @@
           },
           "msg_id": 48036,
           "post_id": 3684,
-          "rendered_chars": 5166,
-          "rendering_sha256": "1e956a74a4fbb7e87d4573d920a962418dc249f64dd3268154f98dfafb7869c1",
+          "rendered_chars": 5264,
+          "rendering_sha256": "7ff6391e74f5a7773f965b6588e5d8b49f2ac856eab0a9b782a06b7dc9743b52",
           "task": "pass1_comment_gm4_v3",
           "text": "Цікавить",
           "thread": "@mandziak:3684",
@@ -24713,8 +24713,8 @@
             },
             {
               "label": null,
-              "rationale": "коментар ні про кого — службове перенаправлення в інший канал (cue: «sport_food_life»)",
-              "text": "Пишіть сюди 👉🏻 https://t.me/sport_food_life"
+              "rationale": "коментар ні про кого — самé посилання на сторонній канал (cue: «t.me/istorium_ua»)",
+              "text": "https://t.me/istorium_ua/6342"
             }
           ],
           "examples_chosen": [
@@ -24744,9 +24744,9 @@
             },
             {
               "label": "null",
-              "msg_id": 48529,
-              "similarity": 1.0,
-              "thread": "@mandziak:3736"
+              "msg_id": 47830,
+              "similarity": 0.192982,
+              "thread": "@mandziak:3667"
             }
           ],
           "id": "@mandziak:3684#48040",
@@ -24759,8 +24759,8 @@
           },
           "msg_id": 48040,
           "post_id": 3684,
-          "rendered_chars": 5448,
-          "rendering_sha256": "78af0ea784138f5ddb1557632bbed5e97a1939d543d48dc39e9b781d74c71a15",
+          "rendered_chars": 5430,
+          "rendering_sha256": "f81aa28739a470bdf2a5b01fbded024fac169dd3bd55aff994e0b772d6e1b1f0",
           "task": "pass1_comment_gm4_v3",
           "text": "Пишіть сюди 👉🏻 https://t.me/sport_food_life",
           "thread": "@mandziak:3684",
@@ -24793,8 +24793,8 @@
             },
             {
               "label": null,
-              "rationale": "коментар ні про кого — службове перенаправлення в інший канал (cue: «sport_food_life»)",
-              "text": "Пишіть сюди 👉🏻 https://t.me/sport_food_life"
+              "rationale": "коментар ні про кого — самé посилання на сторонній канал (cue: «t.me/istorium_ua»)",
+              "text": "https://t.me/istorium_ua/6342"
             }
           ],
           "examples_chosen": [
@@ -24824,9 +24824,9 @@
             },
             {
               "label": "null",
-              "msg_id": 48529,
-              "similarity": 1.0,
-              "thread": "@mandziak:3736"
+              "msg_id": 47830,
+              "similarity": 0.192982,
+              "thread": "@mandziak:3667"
             }
           ],
           "id": "@mandziak:3684#48041",
@@ -24839,8 +24839,8 @@
           },
           "msg_id": 48041,
           "post_id": 3684,
-          "rendered_chars": 5448,
-          "rendering_sha256": "b0dfd73e0a7a3f96934756aa787fc2b27a51ca1ceb213829d3bb5861e32a3d54",
+          "rendered_chars": 5430,
+          "rendering_sha256": "ab2d62a9ddeb881764286dc342ce0fc6261265e94856295d508d3acade1cf163",
           "task": "pass1_comment_gm4_v3",
           "text": "Пишіть сюди 👉🏻 https://t.me/sport_food_life",
           "thread": "@mandziak:3684",
@@ -24863,7 +24863,7 @@
             },
             {
               "label": "категория_личное",
-              "rationale": "коментар ПРО власну звичку із сирною запіканкою (cue: «їмо що виходить»)",
+              "rationale": "коментар ПРО власну звичку із сирною запіканкою з допису (cue: «їмо що виходить»)",
               "text": "Вже звикла…що опадає…то ж їмо що виходить 😳"
             },
             {
@@ -24919,8 +24919,8 @@
           },
           "msg_id": 48047,
           "post_id": 3684,
-          "rendered_chars": 5180,
-          "rendering_sha256": "43af7c54be7b2c1cd484962b24f0f5536910856689199e3d04fa8dea38141c0f",
+          "rendered_chars": 5189,
+          "rendering_sha256": "3d7acb4485e30700b5cf1d091a24b09856bc43771fd3e18550a6a3fa3a6d1f07",
           "task": "pass1_comment_gm4_v3",
           "text": "Цiкавить",
           "thread": "@mandziak:3684",
@@ -24953,8 +24953,8 @@
             },
             {
               "label": null,
-              "rationale": "коментар ні про кого — службове перенаправлення в інший канал (cue: «sport_food_life»)",
-              "text": "Пишіть сюди 👉🏻 https://t.me/sport_food_life"
+              "rationale": "коментар ні про кого — самé посилання на сторонній канал (cue: «t.me/istorium_ua»)",
+              "text": "https://t.me/istorium_ua/6342"
             }
           ],
           "examples_chosen": [
@@ -24984,9 +24984,9 @@
             },
             {
               "label": "null",
-              "msg_id": 48529,
-              "similarity": 1.0,
-              "thread": "@mandziak:3736"
+              "msg_id": 47830,
+              "similarity": 0.192982,
+              "thread": "@mandziak:3667"
             }
           ],
           "id": "@mandziak:3684#48064",
@@ -24999,8 +24999,8 @@
           },
           "msg_id": 48064,
           "post_id": 3684,
-          "rendered_chars": 5448,
-          "rendering_sha256": "e4b2e39de8d80c88ec031b9346a4dbca2d2c1e9632fa63b75f3c17a7ffc8968a",
+          "rendered_chars": 5430,
+          "rendering_sha256": "66cff41ba64b797d56407a6bf3270ae030f6c747f9860393a033fa609ed0e5fd",
           "task": "pass1_comment_gm4_v3",
           "text": "Пишіть сюди 👉🏻 https://t.me/sport_food_life",
           "thread": "@mandziak:3684",
@@ -25023,7 +25023,7 @@
             },
             {
               "label": "категория_личное",
-              "rationale": "коментар ПРО власний спосіб робити сирну запіканку (cue: «Додаю крохмаль кукурудзяний»)",
+              "rationale": "коментар ПРО власний спосіб робити сирну запіканку з допису (cue: «Додаю крохмаль кукурудзяний»)",
               "text": "Додаю крохмаль кукурудзяний і все тримається. А з вівсяними висівками, то взагалі повноцінна Гарвардська тарілка"
             },
             {
@@ -25079,8 +25079,8 @@
           },
           "msg_id": 48099,
           "post_id": 3684,
-          "rendered_chars": 5652,
-          "rendering_sha256": "ceafedaac9f51a4eeb39b74d83482b05e043b53c19be1716063addad9bf924e9",
+          "rendered_chars": 5661,
+          "rendering_sha256": "f97a04e9e69990565db9aca83e131f7accd9e479543e6b002923329bfdb1dd64",
           "task": "pass1_comment_gm4_v3",
           "text": "Добрий день. Скажіть чи людині 100+кг вдасться з вами привести тіло і свій стан в порядок? Чи варто до вас йти?",
           "thread": "@mandziak:3684",
@@ -25098,12 +25098,12 @@
             },
             {
               "label": "сеть_ритейлер",
-              "rationale": "коментар ПРО промокод мережі, який не спрацював (cue: «не застосовується»)",
+              "rationale": "коментар ПРО промокод мережі з допису, який не спрацював (cue: «не застосовується»)",
               "text": "А можна перевірити, а то не застосовується."
             },
             {
               "label": "категория_личное",
-              "rationale": "коментар ПРО власний спосіб робити сирну запіканку (cue: «Додаю крохмаль кукурудзяний»)",
+              "rationale": "коментар ПРО власний спосіб робити сирну запіканку з допису (cue: «Додаю крохмаль кукурудзяний»)",
               "text": "Додаю крохмаль кукурудзяний і все тримається. А з вівсяними висівками, то взагалі повноцінна Гарвардська тарілка"
             },
             {
@@ -25159,8 +25159,8 @@
           },
           "msg_id": 48045,
           "post_id": 3685,
-          "rendered_chars": 5757,
-          "rendering_sha256": "c73d3b23f25a40e4126c26685ee275abc6c184df6c5ca8b33e3ecf2065b861da",
+          "rendered_chars": 5775,
+          "rendering_sha256": "440f05c049edb2c65ffd2511bf44ace6d6fe46356531ef25e9af3b7ba2f3d99b",
           "task": "pass1_comment_gm4_v3",
           "text": "Та 100%\nНавіть додатки, які рахують калорії по введеним даним маси і продуктів не дають гарантії точності, а тут просто по фото...",
           "thread": "@mandziak:3685",
@@ -25263,7 +25263,7 @@
             },
             {
               "label": "категория_личное",
-              "rationale": "коментар ПРО власну звичку пекти сирну запіканку (cue: «роблю без борошна»)",
+              "rationale": "коментар ПРО власну звичку пекти сирну запіканку з допису (cue: «роблю без борошна»)",
               "text": "не осідає в духовці, навпаки піднімається. осідає трохи вже коли охолоджується. роблю без борошна, а з кукурудзяним крохмалем."
             },
             {
@@ -25319,8 +25319,8 @@
           },
           "msg_id": 48055,
           "post_id": 3689,
-          "rendered_chars": 5745,
-          "rendering_sha256": "093157341a8c66379043ccfa40586a50c3bc497378154bf673b2bbeab8eecf5c",
+          "rendered_chars": 5754,
+          "rendering_sha256": "7611a8429b564f22a93b320602e5c9a85f0038fe5257ab290bb290c09be896fd",
           "task": "pass1_comment_gm4_v3",
           "text": "А скільки калорій витрачається, щоб добути 280 ккал з білка, а скільки - ті ж 280 ккал з жиру",
           "thread": "@mandziak:3689",
@@ -25338,7 +25338,7 @@
             },
             {
               "label": "сеть_ритейлер",
-              "rationale": "коментар ПРО промокод мережі, який не спрацював (cue: «не застосовується»)",
+              "rationale": "коментар ПРО промокод мережі з допису, який не спрацював (cue: «не застосовується»)",
               "text": "А можна перевірити, а то не застосовується."
             },
             {
@@ -25399,8 +25399,8 @@
           },
           "msg_id": 48056,
           "post_id": 3689,
-          "rendered_chars": 5321,
-          "rendering_sha256": "b55300d745084d81cde7379f6c8f3c169b6dc75cb93fb7d8fb91c6a54a23fd99",
+          "rendered_chars": 5330,
+          "rendering_sha256": "a28be581ea7809768a35360eb546864aa09c56f719dc20d4157f707c66aac254",
           "task": "pass1_comment_gm4_v3",
           "text": "Засранец",
           "thread": "@mandziak:3689",
@@ -25418,7 +25418,7 @@
             },
             {
               "label": "сеть_ритейлер",
-              "rationale": "коментар ПРО промокод мережі, який не спрацював (cue: «не застосовується»)",
+              "rationale": "коментар ПРО промокод мережі з допису, який не спрацював (cue: «не застосовується»)",
               "text": "А можна перевірити, а то не застосовується."
             },
             {
@@ -25479,8 +25479,8 @@
           },
           "msg_id": 48057,
           "post_id": 3689,
-          "rendered_chars": 5462,
-          "rendering_sha256": "10dfe6bbc71d02cbdf049f11c77874df21dc05c3c8750d6233dde8dfb1984b94",
+          "rendered_chars": 5471,
+          "rendering_sha256": "c2af7b5f1b87c4e3c5f3f1b8d3cb6ea24980c94af5d9bf4543eb29cef376677b",
           "task": "pass1_comment_gm4_v3",
           "text": "Короче... головне -це загальна спожита каллорійність",
           "thread": "@mandziak:3689",
@@ -25514,7 +25514,7 @@
             {
               "label": null,
               "rationale": "коментар ні про кого — подяка без предмета (cue: «Дякую»)",
-              "text": "Дякую"
+              "text": "Дякую 🙌"
             }
           ],
           "examples_chosen": [
@@ -25544,9 +25544,9 @@
             },
             {
               "label": "null",
-              "msg_id": 21127,
-              "similarity": 1.0,
-              "thread": "@VARUS_channel:10451"
+              "msg_id": 48596,
+              "similarity": 0.6,
+              "thread": "@mandziak:3736"
             }
           ],
           "id": "@mandziak:3689#48067",
@@ -25559,8 +25559,8 @@
           },
           "msg_id": 48067,
           "post_id": 3689,
-          "rendered_chars": 5395,
-          "rendering_sha256": "f3cc0b25378251caf2a8e450db8744ec23af4ee013af15b2a703509759093f9e",
+          "rendered_chars": 5397,
+          "rendering_sha256": "a573640130e70fc561147fc369d7983f7bfd156c922069f506aa315611d71e36",
           "task": "pass1_comment_gm4_v3",
           "text": "Дякую",
           "thread": "@mandziak:3689",
@@ -25754,7 +25754,7 @@
             {
               "label": null,
               "rationale": "коментар ні про кого — подяка авторові каналу (cue: «Дякую Богу за Вітю»)",
-              "text": "Дякую Богу за Вітю. Дякую"
+              "text": "Дякую Богу за Вітю.."
             }
           ],
           "examples_chosen": [
@@ -25784,9 +25784,9 @@
             },
             {
               "label": "null",
-              "msg_id": 49075,
-              "similarity": 1.0,
-              "thread": "@mandziak:3721"
+              "msg_id": 49014,
+              "similarity": 0.809524,
+              "thread": "@mandziak:3768"
             }
           ],
           "id": "@mandziak:3689#48268",
@@ -25799,8 +25799,8 @@
           },
           "msg_id": 48268,
           "post_id": 3689,
-          "rendered_chars": 5405,
-          "rendering_sha256": "45d98fcd10643759906e7b22749f4444dd4e458636a9a6efdc14114e7516766b",
+          "rendered_chars": 5400,
+          "rendering_sha256": "54229e4cabf30c65f9f5671db380514f37bbaee693bd20647a8037a763e9dfbd",
           "task": "pass1_comment_gm4_v3",
           "text": "Дякую Богу за Вітю. Дякую",
           "thread": "@mandziak:3689",
@@ -26063,7 +26063,7 @@
             },
             {
               "label": "категория_личное",
-              "rationale": "лише ЗГАДУЄ морозиво як засіб від болю; насправді про лікування горла (cue: «Морозиво»)",
+              "rationale": "коментар ПРО власний досвід із морозивом як помічним при болю в горлі (cue: «Мені чудово допомагає»)",
               "text": "Морозиво. Мені чудово допомагає прохолодне пиття обільне, цукерки Mintex рошенівськи. Але 2 тижні, то вже краще до лікаря звернутися, знайти, чому воно болить. За 2 тижні розвинутися могли і бактеріальні інфекції, коли просто чаю попити вже не працює"
             },
             {
@@ -26073,7 +26073,7 @@
             },
             {
               "label": null,
-              "rationale": "коментар ні про кого — про власну дитину і цифри (cue: «цифри почав впізнавати пізніше»)",
+              "rationale": "коментар ні про кого — відповідь у треді власним прикладом (cue: «цифри почав впізнавати пізніше»)",
               "text": "Ми спочатку рахували все, цифри почав впізнавати пізніше. Синові 5. Може рахувати предмети, додавати і віднімати їх, може сказати де більше де менше, але коли це все написано цифрами поки не справляється. Я думаю це нормально. У нього більше проблем з писанням. Перемалювати цифри може, але знову ж якщо попросити написати одну з цифр, то це поки не виходить. Моя думка, на все свій час."
             }
           ],
@@ -26119,8 +26119,8 @@
           },
           "msg_id": 48176,
           "post_id": 3703,
-          "rendered_chars": 5948,
-          "rendering_sha256": "41156112d1e22c3582ff957f9cd828a411648c99b3000aac1644270850a8208c",
+          "rendered_chars": 5971,
+          "rendering_sha256": "42157cbcaa7ba2410fd118eb27238926ded9b082c450abc889198bc471402b57",
           "task": "pass1_comment_gm4_v3",
           "text": "Коли бачу відео з цим інтервʼюером, не покидає думка, що цій жінці не завадило б піти на програму до Віті…",
           "thread": "@mandziak:3703",
@@ -26303,7 +26303,7 @@
             },
             {
               "label": "категория_личное",
-              "rationale": "коментар ПРО власну відмову пекти сирну запіканку (cue: «вже не печу її»)",
+              "rationale": "коментар ПРО власну відмову пекти сирну запіканку з допису (cue: «вже не печу її»)",
               "text": "І осідає і підгорає. Нічого вже не роблю, бо вже не печу її - не хочу продукти переводити"
             },
             {
@@ -26359,8 +26359,8 @@
           },
           "msg_id": 48181,
           "post_id": 3703,
-          "rendered_chars": 5625,
-          "rendering_sha256": "f47973022ba4af1922d7b2ab3ab55f2f85fa8d90895fa37036aaf367b71c9331",
+          "rendered_chars": 5634,
+          "rendering_sha256": "cd4e36ac392f44935b5151da1a88faca28538a37147207be08b6cb3a70b8f796",
           "task": "pass1_comment_gm4_v3",
           "text": "Людина не зїдає стільки продуктів за день. Хіба шо вона молода і здорова.",
           "thread": "@mandziak:3703",
@@ -26393,7 +26393,7 @@
             },
             {
               "label": null,
-              "rationale": "коментар ні про кого — про власну дитину і цифри (cue: «цифри почав впізнавати пізніше»)",
+              "rationale": "коментар ні про кого — відповідь у треді власним прикладом (cue: «цифри почав впізнавати пізніше»)",
               "text": "Ми спочатку рахували все, цифри почав впізнавати пізніше. Синові 5. Може рахувати предмети, додавати і віднімати їх, може сказати де більше де менше, але коли це все написано цифрами поки не справляється. Я думаю це нормально. У нього більше проблем з писанням. Перемалювати цифри може, але знову ж якщо попросити написати одну з цифр, то це поки не виходить. Моя думка, на все свій час."
             }
           ],
@@ -26439,8 +26439,8 @@
           },
           "msg_id": 48231,
           "post_id": 3703,
-          "rendered_chars": 7176,
-          "rendering_sha256": "191b01b779905c2b76c2b1f6a7e5d69ca1c18bf36bef1671ba4985c18308a912",
+          "rendered_chars": 7186,
+          "rendering_sha256": "91dab9ce917b101bd426a143dfb1d6a298e74fd1cfdefd437f11bfc61a6c79d1",
           "task": "pass1_comment_gm4_v3",
           "text": "Я не можу стільки мʼяса їсти на день, тим більше дієтичне. Зранку їм 2 яйця, а не 3. Клітковину щоб добрати треба 0,5 кг фруктів, але ж не всі фрукти мають великий вміст клітковини. Як виявляється не кожен овоч має хороший вміст клітковини. Ще й попробуй все це зʼісти.  Щоб добирати усе по нормах, має бути дуже добре продумане меню, це все треба ще й готувати, а ще й треба щось придумати для дітей, бо вони не все їдять. Скажу як Вітя \nза🫢балась, готувати, продумувати ще й рахувати. В мене все.",
           "thread": "@mandziak:3703",
@@ -26543,7 +26543,7 @@
             },
             {
               "label": "категория_личное",
-              "rationale": "лише ЗГАДУЄ морозиво як засіб від болю; насправді про лікування горла (cue: «Морозиво»)",
+              "rationale": "коментар ПРО власний досвід із морозивом як помічним при болю в горлі (cue: «Мені чудово допомагає»)",
               "text": "Морозиво. Мені чудово допомагає прохолодне пиття обільне, цукерки Mintex рошенівськи. Але 2 тижні, то вже краще до лікаря звернутися, знайти, чому воно болить. За 2 тижні розвинутися могли і бактеріальні інфекції, коли просто чаю попити вже не працює"
             },
             {
@@ -26599,8 +26599,8 @@
           },
           "msg_id": 48283,
           "post_id": 3703,
-          "rendered_chars": 8100,
-          "rendering_sha256": "44f97939d1748dbee621e6dceacc11e2e77048e2968fc5a211b0adc2727e0ee1",
+          "rendered_chars": 8113,
+          "rendering_sha256": "24bb62bdde6db631f5ed8b8c061c37442d2c022f5d89a25edc9daf6e9429d2e2",
           "task": "pass1_comment_gm4_v3",
           "text": "Так само як і попередні коментатори - не можу їсти багато їжі.\nРахував КБЖВ програмкою і виявилося, що окрім недобору калорій (1700-2000) ще й білка споживав десь 70-80г на 70 кг ваги. І не розумів чому м'язи не ростуть. Тому взяв за правило пити один протеїновий коктейль на день і прогрес пішов.\nЗрозуміло, що можна білок з м’яса замінити на яєчний або сирний. Але всеодно не кожен прийом їжі - це цисокобілковий продукт. Вівсянка з сухофруктами на сніданок і  тільки овочевий салат (бо за*бався задень) на вечерю - і білка меньше половини норми - звичайна справа",
           "thread": "@mandziak:3703",
@@ -26623,7 +26623,7 @@
             },
             {
               "label": "категория_личное",
-              "rationale": "лише ЗГАДУЄ морозиво як засіб від болю; насправді про лікування горла (cue: «Морозиво»)",
+              "rationale": "коментар ПРО власний досвід із морозивом як помічним при болю в горлі (cue: «Мені чудово допомагає»)",
               "text": "Морозиво. Мені чудово допомагає прохолодне пиття обільне, цукерки Mintex рошенівськи. Але 2 тижні, то вже краще до лікаря звернутися, знайти, чому воно болить. За 2 тижні розвинутися могли і бактеріальні інфекції, коли просто чаю попити вже не працює"
             },
             {
@@ -26633,7 +26633,7 @@
             },
             {
               "label": null,
-              "rationale": "коментар ні про кого — про власну дитину і цифри (cue: «цифри почав впізнавати пізніше»)",
+              "rationale": "коментар ні про кого — відповідь у треді власним прикладом (cue: «цифри почав впізнавати пізніше»)",
               "text": "Ми спочатку рахували все, цифри почав впізнавати пізніше. Синові 5. Може рахувати предмети, додавати і віднімати їх, може сказати де більше де менше, але коли це все написано цифрами поки не справляється. Я думаю це нормально. У нього більше проблем з писанням. Перемалювати цифри може, але знову ж якщо попросити написати одну з цифр, то це поки не виходить. Моя думка, на все свій час."
             }
           ],
@@ -26679,8 +26679,8 @@
           },
           "msg_id": 49098,
           "post_id": 3703,
-          "rendered_chars": 6858,
-          "rendering_sha256": "aa2ff840b748a72f5704f3a11be9fd4af6770f1d12d61758d30c2337be0a50fa",
+          "rendered_chars": 6881,
+          "rendering_sha256": "364ade7fe2585cc4e0210abbe53c5ada3571db472e4e7af58515be0d6a775d78",
           "task": "pass1_comment_gm4_v3",
           "text": "Підтримую: їм мало, мʼяса практично не вживаю, бо не хочеться. Молочку люблю, але білка не добираю все одно. Хоча прискіпливо не рахую, бо потрібно тоді лише цим і займатись, шкода витрачати на це час. В дні тренувань вживаю протеїновий коктейль для кращого самопочуття і відновлення сил. Хоча не відмовилась би наростити пару кг мʼязів, але для цього потрібні якісні силові вправи, а мені здоровʼя не дозволяє, на жаль.",
           "thread": "@mandziak:3703",
@@ -26713,7 +26713,7 @@
             },
             {
               "label": null,
-              "rationale": "коментар ні про кого — про умови для переселенців у Норвегії (cue: «В Норвегіі гарні умови»)",
+              "rationale": "коментар ні про кого — репліка в дискусії з посиланням на власний досвід (cue: «В Норвегіі гарні умови»)",
               "text": "В Норвегіі гарні умови, дітей дуже люблять, допомагають. Базова допомога буде типу соціальна, цього цілком достатньо на їжу і необхідне. Це якщо не зможете роботу знайти після інтро програми, вона вже лише пів року."
             }
           ],
@@ -26759,8 +26759,8 @@
           },
           "msg_id": 48236,
           "post_id": 3708,
-          "rendered_chars": 5966,
-          "rendering_sha256": "d81f3103e01302702da4de816b366d0ef601138f575181e503d69e6e97a90b8a",
+          "rendered_chars": 5978,
+          "rendering_sha256": "38a46dcef2597768df2adf798e786f92207fc811c1638f3727fbd8485b75e030",
           "task": "pass1_comment_gm4_v3",
           "text": "Я алкоголь не вживала ,в моїй сімʼї  ніхто не вживав спиртне,я на роботу іду пішки, робота близько, іду на 7,30 приходжу з роботи 20.00. , діти дорослі, мені 49 років,",
           "thread": "@mandziak:3708",
@@ -26943,7 +26943,7 @@
             },
             {
               "label": "категория_личное",
-              "rationale": "коментар ПРО власну звичку пекти сирну запіканку (cue: «роблю без борошна»)",
+              "rationale": "коментар ПРО власну звичку пекти сирну запіканку з допису (cue: «роблю без борошна»)",
               "text": "не осідає в духовці, навпаки піднімається. осідає трохи вже коли охолоджується. роблю без борошна, а з кукурудзяним крохмалем."
             },
             {
@@ -26953,7 +26953,7 @@
             },
             {
               "label": null,
-              "rationale": "коментар ні про кого — про власну лактацію при завершенні ГВ (cue: «не довелося зцежувати»)",
+              "rationale": "коментар ні про кого — відповідь співрозмовниці власним прикладом (cue: «не довелося зцежувати»)",
               "text": "Майже ні, пару крапель, навіть не довелося зцежувати. Але воно, мені здається, просто стало пропадати ще до того, як я кинула годувати. В мене взагалі його було дуууже мало"
             }
           ],
@@ -26999,8 +26999,8 @@
           },
           "msg_id": 48398,
           "post_id": 3718,
-          "rendered_chars": 5580,
-          "rendering_sha256": "99609f30519f58310ffaa4e38487221f7530a1ab2dbf0f33fd685e7ca3637eff",
+          "rendered_chars": 5594,
+          "rendering_sha256": "e7bfc87fc33a959b69db32253615a0804f723acea3551b313b7ee285aed8e59f",
           "task": "pass1_comment_gm4_v3",
           "text": "В мене не перевернулось  з крохмалем, розсипалось. Додала борошно",
           "thread": "@mandziak:3718",
@@ -27202,7 +27202,7 @@
             {
               "label": null,
               "rationale": "коментар ні про кого — подяка авторові каналу (cue: «Дякую Богу за Вітю»)",
-              "text": "Дякую Богу за Вітю. Дякую"
+              "text": "Дякую Богу за Вітю.."
             }
           ],
           "examples_chosen": [
@@ -27232,9 +27232,9 @@
             },
             {
               "label": "null",
-              "msg_id": 49075,
-              "similarity": 1.0,
-              "thread": "@mandziak:3721"
+              "msg_id": 49014,
+              "similarity": 0.809524,
+              "thread": "@mandziak:3768"
             }
           ],
           "id": "@mandziak:3746#49218",
@@ -27247,8 +27247,8 @@
           },
           "msg_id": 49218,
           "post_id": 3746,
-          "rendered_chars": 5386,
-          "rendering_sha256": "6b555c9ef8bdb6871ab89b9b604868eeae5f8511099045676b3f73a18af6514d",
+          "rendered_chars": 5381,
+          "rendering_sha256": "a972570393fc4167d1fe794838c1ff30695c7dac09fd5e7718151ed6b1c7b7b1",
           "task": "pass1_comment_gm4_v3",
           "text": "Дякую Богу за Вітю. Дякую",
           "thread": "@mandziak:3746",
@@ -27441,8 +27441,8 @@
             },
             {
               "label": null,
-              "rationale": "коментар ні про кого — подяка авторові каналу (cue: «Дякую Богу за Вітю»)",
-              "text": "Дякую Богу за Вітю. Дякую"
+              "rationale": "коментар ні про кого — подяка авторові каналу (cue: «Дякую Бог за Вітю»)",
+              "text": "Дякую Бог за Вітю. Дякую"
             }
           ],
           "examples_chosen": [
@@ -27472,9 +27472,9 @@
             },
             {
               "label": "null",
-              "msg_id": 49075,
-              "similarity": 1.0,
-              "thread": "@mandziak:3721"
+              "msg_id": 49053,
+              "similarity": 0.772727,
+              "thread": "@mandziak:3702"
             }
           ],
           "id": "@mandziak:3768#49225",
@@ -27487,8 +27487,8 @@
           },
           "msg_id": 49225,
           "post_id": 3768,
-          "rendered_chars": 5316,
-          "rendering_sha256": "4d4c2568786948b9928f11dd3c9b66c8e64eb58a8c068a815a31c2ae729ddea3",
+          "rendered_chars": 5314,
+          "rendering_sha256": "ccc4bc8d94970dc10b1ad681b78a8845a116a27f408d99ca923abb466488d30e",
           "task": "pass1_comment_gm4_v3",
           "text": "Дякую Богу за Вітю. Дякую",
           "thread": "@mandziak:3768",
@@ -27511,7 +27511,7 @@
             },
             {
               "label": "категория_личное",
-              "rationale": "коментар ПРО власну звичку із сирною запіканкою (cue: «плачу і їм»)",
+              "rationale": "коментар ПРО власну звичку із сирною запіканкою з допису (cue: «плачу і їм»)",
               "text": "Часто, нічого не роблю, плачу і їм ))"
             },
             {
@@ -27521,7 +27521,7 @@
             },
             {
               "label": null,
-              "rationale": "коментар ні про кого — про власну лактацію при завершенні ГВ (cue: «троих можно кормить»)",
+              "rationale": "коментар ні про кого — відповідь співрозмовниці власним прикладом (cue: «троих можно кормить»)",
               "text": "Ааа, ну тогда понятно) У меня было столько,что троих можно кормить было, поэтому сводить на нет было лучшим решением)"
             }
           ],
@@ -27567,8 +27567,8 @@
           },
           "msg_id": 49072,
           "post_id": 3775,
-          "rendered_chars": 5917,
-          "rendering_sha256": "ef0a428d2bd0238f4539139bab2e4775f459280bd334616c9b0b1dadbca464c6",
+          "rendered_chars": 5931,
+          "rendering_sha256": "8ef787af27516a5c5f21b8c4d9d7a925818644b8213643b4e4190ff5b3e947a0",
           "task": "pass1_comment_gm4_v3",
           "text": "Это ровно то, что я талдычу своим родителям с детства, но меня никто не слушает, ведь так удобно все спихнуть на гены)",
           "thread": "@mandziak:3775",
@@ -27615,7 +27615,7 @@
             },
             {
               "label": "сеть_ритейлер",
-              "rationale": "коментар ПРО новинки меню мережі — заперечення їх новизни (cue: «Пряне печиво вже місяці три є»)",
+              "rationale": "коментар ПРО новинки меню мережі з допису — заперечення їх новизни (cue: «Пряне печиво вже місяці три є»)",
               "text": "Вони усі не нові)\nПряне печиво вже місяці три є😁"
             },
             {
@@ -27630,7 +27630,7 @@
             },
             {
               "label": null,
-              "rationale": "коментар ні про кого — про міфи материнства (cue: «маля лише їсть та спить»)",
+              "rationale": "коментар ні про кого — заперечення почутого раніше твердження (cue: «маля лише їсть та спить»)",
               "text": "Мені говорили що перший місяць маля лише їсть та спить🤣🤣🤣\nМабуть, найбільша брехня яку я колись чула"
             }
           ],
@@ -27676,8 +27676,8 @@
           },
           "msg_id": 576514,
           "post_id": 22058,
-          "rendered_chars": 5536,
-          "rendering_sha256": "ad0528b1d46309c3e6634dfe26ca33faa9b2d760165b110d7401c275e00c99d0",
+          "rendered_chars": 5563,
+          "rendering_sha256": "297fcbd2c9058c8ef28774be04d4aea2f7a4492bc2c7f0dabfb00468f5e1cc5b",
           "task": "pass1_comment_gm4_v3",
           "text": "Піжами та сліп на 12-18 місяців.\nСтан гарний\n\n120 грн/шт. Або 300 грн/набір.",
           "thread": "@matusi_ukr:22058",
@@ -27926,7 +27926,7 @@
             },
             {
               "label": "категория_личное",
-              "rationale": "лише ЗГАДУЄ морозиво як засіб від болю; насправді про лікування горла (cue: «Морозиво»)",
+              "rationale": "коментар ПРО власний досвід із морозивом як помічним при болю в горлі (cue: «Мені чудово допомагає»)",
               "text": "Морозиво. Мені чудово допомагає прохолодне пиття обільне, цукерки Mintex рошенівськи. Але 2 тижні, то вже краще до лікаря звернутися, знайти, чому воно болить. За 2 тижні розвинутися могли і бактеріальні інфекції, коли просто чаю попити вже не працює"
             },
             {
@@ -27982,8 +27982,8 @@
           },
           "msg_id": 576877,
           "post_id": 22092,
-          "rendered_chars": 6108,
-          "rendering_sha256": "497137430a800a6284238733e9e57633d113b0027ef1ec9de2b707e4f2e2cfb9",
+          "rendered_chars": 6121,
+          "rendering_sha256": "81c2bce1db3b2a9c89c9ea7f2f24667911f0949e8294208000cd963dc4e17dc5",
           "task": "pass1_comment_gm4_v3",
           "text": "Уночі замість грудей давала компот в бутилочці. Ссяв багато конєшно, але перехід пройшов швидко і безболісно для обох.",
           "thread": "@matusi_ukr:22092",
@@ -28009,7 +28009,7 @@
             },
             {
               "label": "сеть_ритейлер",
-              "rationale": "коментар ПРО промокод мережі, який не спрацював (cue: «не застосовується»)",
+              "rationale": "коментар ПРО промокод мережі з допису, який не спрацював (cue: «не застосовується»)",
               "text": "А можна перевірити, а то не застосовується."
             },
             {
@@ -28019,7 +28019,7 @@
             },
             {
               "label": "не_наш_рынок",
-              "rationale": "коментар ПРО заміну в рецепті котлет, поза нашою категорією (cue: «Вместо картошки кабачек»)",
+              "rationale": "коментар ПРО заміну в рецепті котлет з допису, поза нашою категорією (cue: «Вместо картошки кабачек»)",
               "text": "Вместо картошки кабачек и будет"
             },
             {
@@ -28070,8 +28070,8 @@
           },
           "msg_id": 576878,
           "post_id": 22092,
-          "rendered_chars": 5305,
-          "rendering_sha256": "1fd8b30ea1ce282f38007ddb29fee0e157614ae6f0a07ed07d1e6eee64ce8e81",
+          "rendered_chars": 5323,
+          "rendering_sha256": "7e1c2bcfcffdc2a28ad7ffc972c730c5eec2b89a5f9de5f3fa6c756eb8fb315f",
           "task": "pass1_comment_gm4_v3",
           "text": "Просто перешли на смесь и бутылку и все",
           "thread": "@matusi_ukr:22092",
@@ -28190,7 +28190,7 @@
             },
             {
               "label": "категория_личное",
-              "rationale": "лише ЗГАДУЄ морозиво як засіб від болю; насправді про лікування горла (cue: «Морозиво»)",
+              "rationale": "коментар ПРО власний досвід із морозивом як помічним при болю в горлі (cue: «Мені чудово допомагає»)",
               "text": "Морозиво. Мені чудово допомагає прохолодне пиття обільне, цукерки Mintex рошенівськи. Але 2 тижні, то вже краще до лікаря звернутися, знайти, чому воно болить. За 2 тижні розвинутися могли і бактеріальні інфекції, коли просто чаю попити вже не працює"
             },
             {
@@ -28246,8 +28246,8 @@
           },
           "msg_id": 576901,
           "post_id": 22092,
-          "rendered_chars": 6540,
-          "rendering_sha256": "d4183dcd92bccd5d0bc0b6fb8bb7038c3aee8926f7d5667d7ba089aa0860c963",
+          "rendered_chars": 6553,
+          "rendering_sha256": "17574f9b25bddb480cf3a7ad543b4a430ebeabfea4be7800bf58a12a27dbd6c4",
           "task": "pass1_comment_gm4_v3",
           "text": "Звернутися до притомного педіатра, здати аналізи на ферітин, але спершу взагалі розібратися з харчовою поведінкою, з режимом. Але то вам детальніше і схематично краще пояснить лікар, який вас бачить, може оцінити дії",
           "thread": "@matusi_ukr:22092",
@@ -28371,7 +28371,7 @@
             },
             {
               "label": "не_наш_рынок",
-              "rationale": "коментар ПРО той самий спосіб пити воду, поза нашою категорією (cue: «за 2 ковтки»)",
+              "rationale": "коментар ПРО той самий спосіб пити воду з допису, поза нашою категорією (cue: «за 2 ковтки»)",
               "text": "Ого, треба спробувати за 2 ковтки. Якщо не з'явлюся в цьому каналі - я захлинулася 😁"
             },
             {
@@ -28422,8 +28422,8 @@
           },
           "msg_id": 576943,
           "post_id": 22092,
-          "rendered_chars": 5721,
-          "rendering_sha256": "71235e9733575934244dba142e76d0e361fc31f5a2e46c025275cc7032375e01",
+          "rendered_chars": 5730,
+          "rendering_sha256": "e452195baaf7c12adbdde9fdbaac31f3103f43538b81332581e88a8345a02acc",
           "task": "pass1_comment_gm4_v3",
           "text": "Ніяк не вирішувала, не було ніяких проблем. Кинула і все",
           "thread": "@matusi_ukr:22092",
@@ -28449,7 +28449,7 @@
             },
             {
               "label": "сеть_ритейлер",
-              "rationale": "коментар ПРО промокод мережі, який не спрацював (cue: «не застосовується»)",
+              "rationale": "коментар ПРО промокод мережі з допису, який не спрацював (cue: «не застосовується»)",
               "text": "А можна перевірити, а то не застосовується."
             },
             {
@@ -28459,7 +28459,7 @@
             },
             {
               "label": "не_наш_рынок",
-              "rationale": "коментар ПРО невдалі кабачкові млинці, поза нашою категорією (cue: «не зʼєднало»)",
+              "rationale": "коментар ПРО невдалі кабачкові млинці з допису, поза нашою категорією (cue: «не зʼєднало»)",
               "text": "В мене не зʼєднало."
             },
             {
@@ -28510,8 +28510,8 @@
           },
           "msg_id": 576968,
           "post_id": 22092,
-          "rendered_chars": 5261,
-          "rendering_sha256": "edcaed5f98b85f502f3febb4603fe312ffb8377510a3f92d1819773a10f55d19",
+          "rendered_chars": 5279,
+          "rendering_sha256": "5b5fd9cfdac6deac1500dd88429f29503fe6416e785da46fe6749bd895e0677c",
           "task": "pass1_comment_gm4_v3",
           "text": "И молоко не прибывало?",
           "thread": "@matusi_ukr:22092",
@@ -28589,7 +28589,7 @@
             },
             {
               "label": "не_наш_рынок",
-              "rationale": "коментар ПРО якість рюкзака, поза нашою категорією (cue: «отличное качество»)",
+              "rationale": "коментар ПРО якість рюкзака з допису, поза нашою категорією (cue: «отличное качество»)",
               "text": "Покупали, отличное качество, супер"
             },
             {
@@ -28640,8 +28640,8 @@
           },
           "msg_id": 577089,
           "post_id": 22111,
-          "rendered_chars": 5506,
-          "rendering_sha256": "403e543669ec4a1cb01090df755c8b86dd059b9f3a0c3c5f7d1d80161110f76d",
+          "rendered_chars": 5515,
+          "rendering_sha256": "24de666acdf001c555348f0c4a86cb8954b6b7adc957f1d1c0e91921850c02ca",
           "task": "pass1_comment_gm4_v3",
           "text": "Да. Отличная клиника 👍",
           "thread": "@matusi_ukr:22111",
@@ -28816,7 +28816,7 @@
             },
             {
               "label": "категория_личное",
-              "rationale": "лише ЗГАДУЄ морозиво як засіб від болю; насправді про лікування горла (cue: «Морозиво»)",
+              "rationale": "коментар ПРО власний досвід із морозивом як помічним при болю в горлі (cue: «Мені чудово допомагає»)",
               "text": "Морозиво. Мені чудово допомагає прохолодне пиття обільне, цукерки Mintex рошенівськи. Але 2 тижні, то вже краще до лікаря звернутися, знайти, чому воно болить. За 2 тижні розвинутися могли і бактеріальні інфекції, коли просто чаю попити вже не працює"
             },
             {
@@ -28872,8 +28872,8 @@
           },
           "msg_id": 577262,
           "post_id": 22131,
-          "rendered_chars": 7633,
-          "rendering_sha256": "ef8fd211d09bf1754074613a0e95046062eb32e8bb5bb06f3449ff24c22ba602",
+          "rendered_chars": 7646,
+          "rendering_sha256": "f03e5dce00125ec0bcfee6b6f97895d738be35604eeb108fcde80741465a40b6",
           "task": "pass1_comment_gm4_v3",
           "text": "Я мама першокласника: купіть прості канцтовари - 2–3 олівці, гумка, точилка, кольорові олівці, пара фломастерів, клей-олівець, дитячі ножиці, пенал, папка і зошити за списком. Не треба дорогих наборів чи зайвих зошитів. Для підземної школи - шари: футболка + кофтинка, легка куртка, запасні шкарпетки і тапочки. На 1/9 сорочка+штани ок, вишиванка 1–2 (запас). Маркуйте речі.",
           "thread": "@matusi_ukr:22131",
@@ -29020,7 +29020,7 @@
             },
             {
               "label": "категория_личное",
-              "rationale": "коментар ПРО власний спосіб пекти сирну запіканку (cue: «скляна форма»)",
+              "rationale": "коментар ПРО власний спосіб пекти сирну запіканку з допису (cue: «скляна форма»)",
               "text": "скляна форма і більшість часу під фольгою, а потім на останні 10 хвилин фольгу зняти і не підгорить."
             },
             {
@@ -29076,8 +29076,8 @@
           },
           "msg_id": 577282,
           "post_id": 22131,
-          "rendered_chars": 6764,
-          "rendering_sha256": "fd4ba8281538ef12894dba0ed88615c60782655c65a09293a7287e002dab01be",
+          "rendered_chars": 6773,
+          "rendering_sha256": "4fef5b40ddc0ddf6cbc39932f9bcbc6ee67447f3a5ef0fb3898eceaf44b78a4c",
           "task": "pass1_comment_gm4_v3",
           "text": "Вишиванка у нас одна,одягаємо раз-два на рік.Купіть рюкзак та пенал,небагато канцтоварів,бо можуть від мерії видати.В підземці тепло взимку.Форма одежи класична,хоча деякі дітки і в спортивних костюмах ходять.Взагалі про це треба спитати у вчителя,бо правила різні бувають",
           "thread": "@matusi_ukr:22131",
@@ -29664,7 +29664,7 @@
             },
             {
               "label": "категория_личное",
-              "rationale": "коментар ПРО власну відмову пекти сирну запіканку (cue: «вже не печу її»)",
+              "rationale": "коментар ПРО власну відмову пекти сирну запіканку з допису (cue: «вже не печу її»)",
               "text": "І осідає і підгорає. Нічого вже не роблю, бо вже не печу її - не хочу продукти переводити"
             },
             {
@@ -29674,7 +29674,7 @@
             },
             {
               "label": null,
-              "rationale": "коментар ні про кого — про власну дитину і цифри (cue: «цифри почав впізнавати пізніше»)",
+              "rationale": "коментар ні про кого — відповідь у треді власним прикладом (cue: «цифри почав впізнавати пізніше»)",
               "text": "Ми спочатку рахували все, цифри почав впізнавати пізніше. Синові 5. Може рахувати предмети, додавати і віднімати їх, може сказати де більше де менше, але коли це все написано цифрами поки не справляється. Я думаю це нормально. У нього більше проблем з писанням. Перемалювати цифри може, але знову ж якщо попросити написати одну з цифр, то це поки не виходить. Моя думка, на все свій час."
             }
           ],
@@ -29720,8 +29720,8 @@
           },
           "msg_id": 578384,
           "post_id": 22195,
-          "rendered_chars": 5956,
-          "rendering_sha256": "7ba6cb488a0753b7194bb1d6f2b29d638479897a2875666e67b829b4e2dd9b88",
+          "rendered_chars": 5975,
+          "rendering_sha256": "48393b801e2f72439131a4079f286b699fc80a1220fe05c0c23005b0845fbca6",
           "task": "pass1_comment_gm4_v3",
           "text": "З Тему якраз з 5го классу носить дитина. Якість добра, вже більше року і все нормально. Бо вже ніякі Кайт не подобаються, підлітки )",
           "thread": "@matusi_ukr:22195",
@@ -29882,7 +29882,7 @@
             },
             {
               "label": "категория_личное",
-              "rationale": "коментар ПРО власну звичку пекти сирну запіканку (cue: «роблю без борошна»)",
+              "rationale": "коментар ПРО власну звичку пекти сирну запіканку з допису (cue: «роблю без борошна»)",
               "text": "не осідає в духовці, навпаки піднімається. осідає трохи вже коли охолоджується. роблю без борошна, а з кукурудзяним крохмалем."
             },
             {
@@ -29938,8 +29938,8 @@
           },
           "msg_id": 578838,
           "post_id": 22217,
-          "rendered_chars": 5709,
-          "rendering_sha256": "7e19084f878ec858cc1d1f1f5c08c56ea25720690b8ae6685a58efaad198fef8",
+          "rendered_chars": 5718,
+          "rendering_sha256": "054ddbc1ea3c169b07b9eb9e4a7c2a20ac05f687e3e03460c1f7dc19c216a8a0",
           "task": "pass1_comment_gm4_v3",
           "text": "Козырев Станислав Александрович в областной травмотологии.",
           "thread": "@matusi_ukr:22217",
@@ -29991,7 +29991,7 @@
             },
             {
               "label": "категория_личное",
-              "rationale": "коментар ПРО власний спосіб пекти сирну запіканку (cue: «скляна форма»)",
+              "rationale": "коментар ПРО власний спосіб пекти сирну запіканку з допису (cue: «скляна форма»)",
               "text": "скляна форма і більшість часу під фольгою, а потім на останні 10 хвилин фольгу зняти і не підгорить."
             },
             {
@@ -30047,8 +30047,8 @@
           },
           "msg_id": 578841,
           "post_id": 22217,
-          "rendered_chars": 5977,
-          "rendering_sha256": "b1041a1070436bcf2995c14a4ed228ca0be8b7c8b5e1c3133bef2fdfaf70c300",
+          "rendered_chars": 5986,
+          "rendering_sha256": "2e3c364c18307005050fe31db708c1e2e9d25b8ad5e424759206d73821cc39fa",
           "task": "pass1_comment_gm4_v3",
           "text": "Бабалян  робили двічі операцій, але там і на консультацію потрібно приїзжати і чекати коли буде вільний час",
           "thread": "@matusi_ukr:22217",
@@ -30339,7 +30339,7 @@
             },
             {
               "label": "категория_личное",
-              "rationale": "лише ЗГАДУЄ морозиво як засіб від болю; насправді про лікування горла (cue: «Морозиво»)",
+              "rationale": "коментар ПРО власний досвід із морозивом як помічним при болю в горлі (cue: «Мені чудово допомагає»)",
               "text": "Морозиво. Мені чудово допомагає прохолодне пиття обільне, цукерки Mintex рошенівськи. Але 2 тижні, то вже краще до лікаря звернутися, знайти, чому воно болить. За 2 тижні розвинутися могли і бактеріальні інфекції, коли просто чаю попити вже не працює"
             },
             {
@@ -30395,8 +30395,8 @@
           },
           "msg_id": 578939,
           "post_id": 22242,
-          "rendered_chars": 5754,
-          "rendering_sha256": "8febe3aa447bdbf557e382e78df4498746109ae6d4e7186714dcab2e4be0f118",
+          "rendered_chars": 5767,
+          "rendering_sha256": "f632fd9f9d0cc72dd38de7e733752dcfc42f8849cfd0877b9cad98e7f42b6f74",
           "task": "pass1_comment_gm4_v3",
           "text": "Можу вам допомогти) працюю онлайн",
           "thread": "@matusi_ukr:22242",
@@ -30455,7 +30455,7 @@
             },
             {
               "label": "категория_личное",
-              "rationale": "лише ЗГАДУЄ морозиво як засіб від болю; насправді про лікування горла (cue: «Морозиво»)",
+              "rationale": "коментар ПРО власний досвід із морозивом як помічним при болю в горлі (cue: «Мені чудово допомагає»)",
               "text": "Морозиво. Мені чудово допомагає прохолодне пиття обільне, цукерки Mintex рошенівськи. Але 2 тижні, то вже краще до лікаря звернутися, знайти, чому воно болить. За 2 тижні розвинутися могли і бактеріальні інфекції, коли просто чаю попити вже не працює"
             },
             {
@@ -30511,8 +30511,8 @@
           },
           "msg_id": 578940,
           "post_id": 22242,
-          "rendered_chars": 7172,
-          "rendering_sha256": "2726305d98f0269e1b31ad548a60dc21898392f07a1eaf151ef097e8d8c749e3",
+          "rendered_chars": 7185,
+          "rendering_sha256": "67de0e0964a62c9ac3a759683b0694303cf2a19ec6b2d2fff982600253308372",
           "task": "pass1_comment_gm4_v3",
           "text": "Якщо не принципово саме офлайн, можу порадити онлайн-заняття, які зараз відвідують багато дітей. Є безкоштовний пробний урок, щоб зрозуміти, чи підходить такий формат. Якщо буде цікаво - напишіть мені. 😊",
           "thread": "@matusi_ukr:22242",
@@ -30687,7 +30687,7 @@
             },
             {
               "label": "категория_личное",
-              "rationale": "коментар ПРО власний спосіб пекти сирну запіканку (cue: «Випікаю у формі маленьких кексів»)",
+              "rationale": "коментар ПРО власний спосіб пекти сирну запіканку з допису (cue: «Випікаю у формі маленьких кексів»)",
               "text": "Випікаю у формі  маленьких кексів - і все гаразд 👍😉 ну і звичайно на кукурудзяному крохмалю"
             },
             {
@@ -30743,8 +30743,8 @@
           },
           "msg_id": 578944,
           "post_id": 22242,
-          "rendered_chars": 5715,
-          "rendering_sha256": "122709a901f91bdef0ff5118184549edd510ff733361bc8afefe8120c632a2cf",
+          "rendered_chars": 5724,
+          "rendering_sha256": "e52e8bfebbf177b59784c02675b8e31a14133d1a1b9d39f91dc57eea7a5f9a16",
           "task": "pass1_comment_gm4_v3",
           "text": "Офф-лайн (Каденюка)\nКому интересно-пишите)",
           "thread": "@matusi_ukr:22242",
@@ -30803,7 +30803,7 @@
             },
             {
               "label": "категория_личное",
-              "rationale": "коментар ПРО власний варіант сирної запіканки (cue: «Роблю за Вашим рецептом з курагою»)",
+              "rationale": "коментар ПРО власний варіант сирної запіканки з допису (cue: «Роблю за Вашим рецептом з курагою»)",
               "text": "Роблю за Вашим рецептом з курагою 😋🤌. Виходить супер ))"
             },
             {
@@ -30859,8 +30859,8 @@
           },
           "msg_id": 578947,
           "post_id": 22242,
-          "rendered_chars": 5640,
-          "rendering_sha256": "0b456b25ea9c47eae9e349eaa5b72a1e468bc6f6116167a061ade878ef5f09b6",
+          "rendered_chars": 5649,
+          "rendering_sha256": "e1d471de140a98bc40a748f732f33e49a79d42dc015bde5149e185e07adbf731",
           "task": "pass1_comment_gm4_v3",
           "text": "Новые дома - РАДА \nПреподаватель София \nСупер! \nРекомендую!",
           "thread": "@matusi_ukr:22242",
@@ -30929,7 +30929,7 @@
             },
             {
               "label": null,
-              "rationale": "коментар ні про кого — про власну лактацію при завершенні ГВ (cue: «троих можно кормить»)",
+              "rationale": "коментар ні про кого — відповідь співрозмовниці власним прикладом (cue: «троих можно кормить»)",
               "text": "Ааа, ну тогда понятно) У меня было столько,что троих можно кормить было, поэтому сводить на нет было лучшим решением)"
             }
           ],
@@ -30975,8 +30975,8 @@
           },
           "msg_id": 578948,
           "post_id": 22242,
-          "rendered_chars": 5875,
-          "rendering_sha256": "48ff786d5adcf69e887438fee00bcfbd7bd793868dd3e896c954f6456fcbf604",
+          "rendered_chars": 5880,
+          "rendering_sha256": "6966c8850098b1d46ecea46f60f33932318337cdca277cbd59227e7b4206e37b",
           "task": "pass1_comment_gm4_v3",
           "text": "Екатерина, лучшая!🌷 С ней ваши дети английский будут учить легко и с удовольствием!!! Знаю по своей дочке.",
           "thread": "@matusi_ukr:22242",
@@ -31035,7 +31035,7 @@
             },
             {
               "label": "категория_личное",
-              "rationale": "лише ЗГАДУЄ морозиво як засіб від болю; насправді про лікування горла (cue: «Морозиво»)",
+              "rationale": "коментар ПРО власний досвід із морозивом як помічним при болю в горлі (cue: «Мені чудово допомагає»)",
               "text": "Морозиво. Мені чудово допомагає прохолодне пиття обільне, цукерки Mintex рошенівськи. Але 2 тижні, то вже краще до лікаря звернутися, знайти, чому воно болить. За 2 тижні розвинутися могли і бактеріальні інфекції, коли просто чаю попити вже не працює"
             },
             {
@@ -31091,8 +31091,8 @@
           },
           "msg_id": 578951,
           "post_id": 22242,
-          "rendered_chars": 7362,
-          "rendering_sha256": "97179d8a5a7a32d5a007d9485f897272b946d28337c6928284e4477e6c35ca33",
+          "rendered_chars": 7375,
+          "rendering_sha256": "13e7791ebe64da92a1b052ad380f594098d936d2e87ced2d7494b147994fe4cd",
           "task": "pass1_comment_gm4_v3",
           "text": "В дитячому центрі \"Гармонія\" на метро Турбоатом набираються нові групи вивчення англійської дітками від 3 років. Дуже цікаві заняття, чудові результати! Сертифіковані викладачі.\nВ групах 5-7 діток.\nКому цікаво, вже можна записуватись і бронювати місця на новий навчальний рік. Буде відкрите безкоштовне заняття. Можна прийти познайомитись з простором і методикою.)\nЗапрошуємо Вас і Ваших діток! 😊",
           "thread": "@matusi_ukr:22242",
@@ -31736,7 +31736,7 @@
             },
             {
               "label": null,
-              "rationale": "коментар ні про кого — про власну лактацію при завершенні ГВ (cue: «не довелося зцежувати»)",
+              "rationale": "коментар ні про кого — відповідь співрозмовниці власним прикладом (cue: «не довелося зцежувати»)",
               "text": "Майже ні, пару крапель, навіть не довелося зцежувати. Але воно, мені здається, просто стало пропадати ще до того, як я кинула годувати. В мене взагалі його було дуууже мало"
             }
           ],
@@ -31782,8 +31782,8 @@
           },
           "msg_id": 579373,
           "post_id": 22272,
-          "rendered_chars": 5717,
-          "rendering_sha256": "5aea17c5b804f1b159800a374343637d22b02294f86a2cb03ec473372cdc9293",
+          "rendered_chars": 5722,
+          "rendering_sha256": "9be8c7b68227447be5092161a3794bcb8794f2de09ad3dce9ace2c5b47f67260",
           "task": "pass1_comment_gm4_v3",
           "text": "Термін зберігання готової суміші 1год.Спробуйте зі свого поільника,зазвичай суміш майже як вода за густиною",
           "thread": "@matusi_ukr:22272",
@@ -31916,7 +31916,7 @@
             },
             {
               "label": "категория_личное",
-              "rationale": "коментар ПРО власну відмову пекти сирну запіканку (cue: «вже не печу її»)",
+              "rationale": "коментар ПРО власну відмову пекти сирну запіканку з допису (cue: «вже не печу її»)",
               "text": "І осідає і підгорає. Нічого вже не роблю, бо вже не печу її - не хочу продукти переводити"
             },
             {
@@ -31972,8 +31972,8 @@
           },
           "msg_id": 579375,
           "post_id": 22272,
-          "rendered_chars": 5784,
-          "rendering_sha256": "8af63f51c17de35cfc005e040d16a5e54a128081a1d08e56da05f00e0c00215f",
+          "rendered_chars": 5793,
+          "rendering_sha256": "8cfa12b514143601832decffa022303b95a012dd36097e5a2f4e72a77d1731f2",
           "task": "pass1_comment_gm4_v3",
           "text": "А навіщо їжа дитині вночі? Це рекомендація педіатрії? Не простіше взагалі прибирати їжу вночі?",
           "thread": "@matusi_ukr:22272",
@@ -32101,7 +32101,7 @@
             },
             {
               "label": "сеть_ритейлер",
-              "rationale": "коментар ПРО промокод мережі, який не спрацював (cue: «не застосовується»)",
+              "rationale": "коментар ПРО промокод мережі з допису, який не спрацював (cue: «не застосовується»)",
               "text": "А можна перевірити, а то не застосовується."
             },
             {
@@ -32162,8 +32162,8 @@
           },
           "msg_id": 579377,
           "post_id": 22272,
-          "rendered_chars": 5878,
-          "rendering_sha256": "520c3e0180485b849c1d7b0b0df7dee4fb94f79a7d76a0fcdb06e746fcd2bdde",
+          "rendered_chars": 5887,
+          "rendering_sha256": "e6649bfe19d8831ae152883751325e881abfdf621c9e9405865ca17a62872f0f",
           "task": "pass1_comment_gm4_v3",
           "text": "Якщо дитина вночі прокидається поїсти, то їй в 11 місяців не поясниш, що до ранку далеко. У мене син перед сном їв, а потім в 3 години прокидався - через 6 годин виходить.",
           "thread": "@matusi_ukr:22272",
@@ -32211,7 +32211,7 @@
             },
             {
               "label": null,
-              "rationale": "коментар ні про кого — про умови для переселенців у Норвегії (cue: «В Норвегіі гарні умови»)",
+              "rationale": "коментар ні про кого — репліка в дискусії з посиланням на власний досвід (cue: «В Норвегіі гарні умови»)",
               "text": "В Норвегіі гарні умови, дітей дуже люблять, допомагають. Базова допомога буде типу соціальна, цього цілком достатньо на їжу і необхідне. Це якщо не зможете роботу знайти після інтро програми, вона вже лише пів року."
             }
           ],
@@ -32257,8 +32257,8 @@
           },
           "msg_id": 579379,
           "post_id": 22272,
-          "rendered_chars": 5913,
-          "rendering_sha256": "9492178812dca9e786443875a9ec4ee5de7dbe2433ee5437d4635143cd38927d",
+          "rendered_chars": 5925,
+          "rendering_sha256": "da8dcb809f3ff6dc45a2da8d97eb75f957505b4654304b4d9be7956e7cc0fa51",
           "task": "pass1_comment_gm4_v3",
           "text": "Можна взагалі вже прибрати суміш, давати вночі воду, компот, можливо кефір, йогурт. А суміш це ц дитині стрес, Вам затратно і немає необхідності",
           "thread": "@matusi_ukr:22272",
@@ -32306,7 +32306,7 @@
             },
             {
               "label": null,
-              "rationale": "коментар ні про кого — про власну дитину і цифри (cue: «цифри почав впізнавати пізніше»)",
+              "rationale": "коментар ні про кого — відповідь у треді власним прикладом (cue: «цифри почав впізнавати пізніше»)",
               "text": "Ми спочатку рахували все, цифри почав впізнавати пізніше. Синові 5. Може рахувати предмети, додавати і віднімати їх, може сказати де більше де менше, але коли це все написано цифрами поки не справляється. Я думаю це нормально. У нього більше проблем з писанням. Перемалювати цифри може, але знову ж якщо попросити написати одну з цифр, то це поки не виходить. Моя думка, на все свій час."
             }
           ],
@@ -32352,8 +32352,8 @@
           },
           "msg_id": 579380,
           "post_id": 22272,
-          "rendered_chars": 6300,
-          "rendering_sha256": "d96dd5fc29640e8edce292929ad9db1cd44065e4fc48c59e0f3cdbcb60c093e5",
+          "rendered_chars": 6310,
+          "rendering_sha256": "2b4a1fe0c34aa15242aa5a2bd4a1292862f5c295fe32eb85e27cec005541bfba",
           "task": "pass1_comment_gm4_v3",
           "text": "Навіщо вночі годувати? 2 дитинки на ШВ, з 1 місяця їли в 00.00 а наступне годування о 06.00,набирали добре норму, можливо одразу перейти на вечерю і потім одразу сніданок?",
           "thread": "@matusi_ukr:22272",
@@ -32486,7 +32486,7 @@
             },
             {
               "label": "категория_личное",
-              "rationale": "лише ЗГАДУЄ морозиво як засіб від болю; насправді про лікування горла (cue: «Морозиво»)",
+              "rationale": "коментар ПРО власний досвід із морозивом як помічним при болю в горлі (cue: «Мені чудово допомагає»)",
               "text": "Морозиво. Мені чудово допомагає прохолодне пиття обільне, цукерки Mintex рошенівськи. Але 2 тижні, то вже краще до лікаря звернутися, знайти, чому воно болить. За 2 тижні розвинутися могли і бактеріальні інфекції, коли просто чаю попити вже не працює"
             },
             {
@@ -32496,7 +32496,7 @@
             },
             {
               "label": null,
-              "rationale": "коментар ні про кого — про власну дитину і цифри (cue: «цифри почав впізнавати пізніше»)",
+              "rationale": "коментар ні про кого — відповідь у треді власним прикладом (cue: «цифри почав впізнавати пізніше»)",
               "text": "Ми спочатку рахували все, цифри почав впізнавати пізніше. Синові 5. Може рахувати предмети, додавати і віднімати їх, може сказати де більше де менше, але коли це все написано цифрами поки не справляється. Я думаю це нормально. У нього більше проблем з писанням. Перемалювати цифри може, але знову ж якщо попросити написати одну з цифр, то це поки не виходить. Моя думка, на все свій час."
             }
           ],
@@ -32542,8 +32542,8 @@
           },
           "msg_id": 579383,
           "post_id": 22272,
-          "rendered_chars": 6585,
-          "rendering_sha256": "214f59c0549273f3ba6834bb3ae495843b30e15a701924d8a2e5839edb1a035a",
+          "rendered_chars": 6608,
+          "rendering_sha256": "36616210d43e5f5225ef562c147a0061ffa469ae416f82d1977322e488ccbc44",
           "task": "pass1_comment_gm4_v3",
           "text": "Можна і з чашки давати, якщо пʼє, пробуйте з вашого поільника, сильно не нервуйте, дитина вже доросла, головне щоб нормально спала, може дійсно вже можна не годувати вночі. Суміш, за потреби, можна розводити вдень і давати пити. Я так замість молока давала вдень пару раз. Можна вночі давати не тільки суміш, а йогурт, кефір, компот…",
           "thread": "@matusi_ukr:22272",
@@ -32676,7 +32676,7 @@
             },
             {
               "label": "категория_личное",
-              "rationale": "лише ЗГАДУЄ морозиво як засіб від болю; насправді про лікування горла (cue: «Морозиво»)",
+              "rationale": "коментар ПРО власний досвід із морозивом як помічним при болю в горлі (cue: «Мені чудово допомагає»)",
               "text": "Морозиво. Мені чудово допомагає прохолодне пиття обільне, цукерки Mintex рошенівськи. Але 2 тижні, то вже краще до лікаря звернутися, знайти, чому воно болить. За 2 тижні розвинутися могли і бактеріальні інфекції, коли просто чаю попити вже не працює"
             },
             {
@@ -32732,8 +32732,8 @@
           },
           "msg_id": 579429,
           "post_id": 22272,
-          "rendered_chars": 8403,
-          "rendering_sha256": "6200d249dce64fd0c2da442f4bb1986ef5cd19af152551c60d2374f8aae55bd3",
+          "rendered_chars": 8416,
+          "rendering_sha256": "c8e567700feeb860b5846dfb0cbb372bab7727eefbc877105e1510d6163e93cf",
           "task": "pass1_comment_gm4_v3",
           "text": "Матуся бажаю вам терпіння в цей не легкий період🤗 вірю що у вас все вийде. Знаю по своєму досвіді, що вночі найважче, що мені допомогло: перше - можна спробувати поїлочку з твердим носиком, якщо пляшечка категорично ні, друге - ввдити додаткові асоціації на сон, погладжування, улюблена іграшка, колискова - тобто сталі речі які не змінюються, ну і третє - все має бути поступово, якщо забирати годування то тільки по одному, на це давати час тиждень, два, стільки скільки треба. В мене зараз доня в 1,5 роки теж вночі п'є молочко Нутрілон і прекрасно себе почуває😌",
           "thread": "@matusi_ukr:22272",
@@ -32771,7 +32771,7 @@
             },
             {
               "label": "категория_личное",
-              "rationale": "лише ЗГАДУЄ морозиво як засіб від болю; насправді про лікування горла (cue: «Морозиво»)",
+              "rationale": "коментар ПРО власний досвід із морозивом як помічним при болю в горлі (cue: «Мені чудово допомагає»)",
               "text": "Морозиво. Мені чудово допомагає прохолодне пиття обільне, цукерки Mintex рошенівськи. Але 2 тижні, то вже краще до лікаря звернутися, знайти, чому воно болить. За 2 тижні розвинутися могли і бактеріальні інфекції, коли просто чаю попити вже не працює"
             },
             {
@@ -32781,7 +32781,7 @@
             },
             {
               "label": null,
-              "rationale": "коментар ні про кого — про власну дитину і цифри (cue: «цифри почав впізнавати пізніше»)",
+              "rationale": "коментар ні про кого — відповідь у треді власним прикладом (cue: «цифри почав впізнавати пізніше»)",
               "text": "Ми спочатку рахували все, цифри почав впізнавати пізніше. Синові 5. Може рахувати предмети, додавати і віднімати їх, може сказати де більше де менше, але коли це все написано цифрами поки не справляється. Я думаю це нормально. У нього більше проблем з писанням. Перемалювати цифри може, але знову ж якщо попросити написати одну з цифр, то це поки не виходить. Моя думка, на все свій час."
             }
           ],
@@ -32827,8 +32827,8 @@
           },
           "msg_id": 579457,
           "post_id": 22272,
-          "rendered_chars": 7566,
-          "rendering_sha256": "ce90dcf914ad383c0a3d68e0675914f61937f1fb577242a4ae2c320b44f13f3b",
+          "rendered_chars": 7589,
+          "rendering_sha256": "d96016c1b2dc74fd98c52ef3a56c47843ecb2b7cf2f53d88a5d067e8098fc031",
           "task": "pass1_comment_gm4_v3",
           "text": "Беріть ікеа чашку дитячу( синя чи зелена). Вона без зворотнього клапана, тобто якщо перевнути то рідина просто  буде  витікати,як зі  звичайної чашка з отворами. Суміш можете обрати по своему бюджету або ж давати вночі кефір/ряжанку/звичайне молоко з неї. Також не знаю вашої ситуації, але в наш час дуже мало ситуацій при яких треба завершувати ГВ. Більшість ліків сумісні з ГВ і їх можна перевірити на сайті єлактація. Мені нещодавно оперували зуб мудрости.  7 днів на антибиотиках,антигистамінних, знеболювальних+ перевязка з ліками і все сумісне з ГВ.",
           "thread": "@matusi_ukr:22272",
@@ -33056,7 +33056,7 @@
             },
             {
               "label": "категория_личное",
-              "rationale": "лише ЗГАДУЄ морозиво як засіб від болю; насправді про лікування горла (cue: «Морозиво»)",
+              "rationale": "коментар ПРО власний досвід із морозивом як помічним при болю в горлі (cue: «Мені чудово допомагає»)",
               "text": "Морозиво. Мені чудово допомагає прохолодне пиття обільне, цукерки Mintex рошенівськи. Але 2 тижні, то вже краще до лікаря звернутися, знайти, чому воно болить. За 2 тижні розвинутися могли і бактеріальні інфекції, коли просто чаю попити вже не працює"
             },
             {
@@ -33112,8 +33112,8 @@
           },
           "msg_id": 580340,
           "post_id": 22272,
-          "rendered_chars": 7074,
-          "rendering_sha256": "c75acbee58c120ac7ec405d45cba274f719410147f86a84b50d11b6f3c9ecae0",
+          "rendered_chars": 7087,
+          "rendering_sha256": "bc809f97b32d8a748c1d41c3ab4fb88d8e0407ef39e74ae66237252a11560baa",
           "task": "pass1_comment_gm4_v3",
           "text": "Мила, тримайтеся\nЄ спеціальні пляшечки з сосками, які імітують сосок\n\nЯ теж годувала дитя нутрілоном, то вдень була одна пляшечка, а вночі інша (це кілька років назад було, радили для прикусу міняти, але я в це зараз не сильно вірю)\n\nІндивідуальні речі дуже, треба пробувати і дивитися по дитині\n\nНехай все вдасться!",
           "thread": "@matusi_ukr:22272",
@@ -33436,7 +33436,7 @@
             },
             {
               "label": "категория_личное",
-              "rationale": "коментар ПРО власний прийом випікання сирної запіканки (cue: «Ставлю ємність з водою»)",
+              "rationale": "коментар ПРО власний прийом випікання сирної запіканки з допису (cue: «Ставлю ємність з водою»)",
               "text": "Ставлю ємність з водою на дно духовки))"
             },
             {
@@ -33492,8 +33492,8 @@
           },
           "msg_id": 579994,
           "post_id": 22295,
-          "rendered_chars": 5630,
-          "rendering_sha256": "1674fd90d8f1772ff466de9a48b63cd6b16090a5abf1b5d7e52b7dc19e01085d",
+          "rendered_chars": 5639,
+          "rendering_sha256": "52087cd78c2cf588bb3bd25bf818dfb769f028826c80d134c0d361baff4a0485",
           "task": "pass1_comment_gm4_v3",
           "text": "Композиції з мила. \nНа будь-яку вартість та смак",
           "thread": "@matusi_ukr:22295",
@@ -33531,7 +33531,7 @@
             },
             {
               "label": "категория_личное",
-              "rationale": "коментар ПРО власний спосіб робити сирну запіканку (cue: «Додаю крохмаль кукурудзяний»)",
+              "rationale": "коментар ПРО власний спосіб робити сирну запіканку з допису (cue: «Додаю крохмаль кукурудзяний»)",
               "text": "Додаю крохмаль кукурудзяний і все тримається. А з вівсяними висівками, то взагалі повноцінна Гарвардська тарілка"
             },
             {
@@ -33587,8 +33587,8 @@
           },
           "msg_id": 580014,
           "post_id": 22295,
-          "rendered_chars": 5438,
-          "rendering_sha256": "3c37b74fb2632ec9253ac3a3735af83d65f2393f4fa214aa1959b3bbb2d7d29e",
+          "rendered_chars": 5447,
+          "rendering_sha256": "7c57c8cd734b63c6b3e44403e6aef658b87cf0e7a7111b169e52d69b59e9cb55",
           "task": "pass1_comment_gm4_v3",
           "text": "#продам акваріум з трьома рибками , фільтром та аксесуарами. Ціна 2500 грн за все .",
           "thread": "@matusi_ukr:22295",
@@ -33763,7 +33763,7 @@
             },
             {
               "label": "категория_личное",
-              "rationale": "коментар ПРО власну відмову пекти сирну запіканку (cue: «вже не печу її»)",
+              "rationale": "коментар ПРО власну відмову пекти сирну запіканку з допису (cue: «вже не печу її»)",
               "text": "І осідає і підгорає. Нічого вже не роблю, бо вже не печу її - не хочу продукти переводити"
             },
             {
@@ -33819,8 +33819,8 @@
           },
           "msg_id": 580129,
           "post_id": 22303,
-          "rendered_chars": 5621,
-          "rendering_sha256": "17dd01e8be539bb19f0af617192441ce763f7491f83c616f8a5c4ebaaffa9756",
+          "rendered_chars": 5630,
+          "rendering_sha256": "1e3d84ded77ea876d2061b799e13561956ea3fb72f30a083b510ecbc58638f0c",
           "task": "pass1_comment_gm4_v3",
           "text": "Ніяке не люблю. Хоч ласунка, хоч інше - не мій продукт.",
           "thread": "@matusi_ukr:22303",
@@ -33939,7 +33939,7 @@
             },
             {
               "label": "категория_личное",
-              "rationale": "лише ЗГАДУЄ морозиво як засіб від болю; насправді про лікування горла (cue: «Морозиво»)",
+              "rationale": "коментар ПРО власний досвід із морозивом як помічним при болю в горлі (cue: «Мені чудово допомагає»)",
               "text": "Морозиво. Мені чудово допомагає прохолодне пиття обільне, цукерки Mintex рошенівськи. Але 2 тижні, то вже краще до лікаря звернутися, знайти, чому воно болить. За 2 тижні розвинутися могли і бактеріальні інфекції, коли просто чаю попити вже не працює"
             },
             {
@@ -33995,8 +33995,8 @@
           },
           "msg_id": 580142,
           "post_id": 22308,
-          "rendered_chars": 6509,
-          "rendering_sha256": "6e6de6a6df41b87f5f555177afc84ffb0d40f772fe539e743a327d26a1857871",
+          "rendered_chars": 6522,
+          "rendering_sha256": "9d71d4fa3934290f732670e437081f57422ecbf6dfa13bdf75d06daa908a34ac",
           "task": "pass1_comment_gm4_v3",
           "text": "Ви якось прочитали не так і почали чомусь агресивно сперечатися зі мною \n\nЦитую себе - «Десь певно в якихось віддалених землях Німеччини (чи якихось окремих країнах) може щось і лишилося, але це все вже в дуже обмеженому обсязі»",
           "thread": "@matusi_ukr:22308",
@@ -34032,7 +34032,7 @@
             },
             {
               "label": "не_наш_рынок",
-              "rationale": "коментар ПРО заморожування кабачка, поза нашою категорією (cue: «Чи можна заморозити його»)",
+              "rationale": "коментар ПРО заморожування кабачка з допису, поза нашою категорією (cue: «Чи можна заморозити його»)",
               "text": "Чи можна заморозити його?"
             },
             {
@@ -34083,8 +34083,8 @@
           },
           "msg_id": 13584,
           "post_id": 10651,
-          "rendered_chars": 5501,
-          "rendering_sha256": "808900cf3b807bceaf113565d0f13d8bb822be41766a6ac7f9bf1457beb8d8a7",
+          "rendered_chars": 5510,
+          "rendering_sha256": "fcd44303702f6c633f279d84ad11231f31061d8fbf549165bcfaf8aa6029de63",
           "task": "pass1_comment_gm4_v3",
           "text": "Ох, як спокусивши морозивом... Пряме дитинство!",
           "thread": "@msuaaaa:10651",
@@ -34125,7 +34125,7 @@
             },
             {
               "label": null,
-              "rationale": "коментар ні про кого — сумнів у першому продукті прикорму (cue: «Кабачок? Серйозно»)",
+              "rationale": "коментар ні про кого — емоційний вигук у відповідь на пораду (cue: «Кабачок? Серйозно»)",
               "text": "Кабачок? Серйозно???"
             }
           ],
@@ -34171,8 +34171,8 @@
           },
           "msg_id": 2421,
           "post_id": 1143,
-          "rendered_chars": 5396,
-          "rendering_sha256": "6865d8102a155cc1cf95dfce45738ac31df442cab137015d91d4a197dca1530b",
+          "rendered_chars": 5399,
+          "rendering_sha256": "51ee96d7fe87dc94cac53f0ae3b60b51b2f8bece9c5a1cfdb0a060cc1efa7dbc",
           "task": "pass1_comment_gm4_v3",
           "text": "це звучить як справжня магія, серйозно круто",
           "thread": "@polyakova_fitness:1143",
@@ -34275,13 +34275,13 @@
             },
             {
               "label": "категория_личное",
-              "rationale": "коментар ПРО власний спосіб робити сирну запіканку (cue: «Додаю крохмаль кукурудзяний»)",
+              "rationale": "коментар ПРО власний спосіб робити сирну запіканку з допису (cue: «Додаю крохмаль кукурудзяний»)",
               "text": "Додаю крохмаль кукурудзяний і все тримається. А з вівсяними висівками, то взагалі повноцінна Гарвардська тарілка"
             },
             {
               "label": "не_наш_рынок",
-              "rationale": "коментар ПРО стороннє оголошення про заробіток, поза нашою категорією (cue: «мне нужны деньги»)",
-              "text": "задолбало. мне нужны деньги, быстро только не легальными путями, вот так  => @xaxaxa380"
+              "rationale": "коментар ПРО стороннє оголошення про заробіток, поза нашою категорією (cue: «нужны деньги»)",
+              "text": "украинцы, кто в отчаянии и нужны деньги, смотрите => @poq380"
             },
             {
               "label": null,
@@ -34310,9 +34310,9 @@
             },
             {
               "label": "не_наш_рынок",
-              "msg_id": 49529,
-              "similarity": 1.0,
-              "thread": "@retsepty:7310"
+              "msg_id": 49561,
+              "similarity": 0.139344,
+              "thread": "@retsepty:7313"
             },
             {
               "label": "null",
@@ -34331,8 +34331,8 @@
           },
           "msg_id": 49531,
           "post_id": 7312,
-          "rendered_chars": 5513,
-          "rendering_sha256": "d863e12a9f6e3b5f993ba8b0f48fd3ee48a8d63d0fa8959f0846a4888e769ba3",
+          "rendered_chars": 5491,
+          "rendering_sha256": "5bdccff99eab5407b31c389453c750a9a4ada9b4f00ceda816a8b6a76c0e88fc",
           "task": "pass1_comment_gm4_v3",
           "text": "задолбало. мне нужны деньги, быстро только не легальными путями, вот так  => @xaxaxa380",
           "thread": "@retsepty:7312",
@@ -34435,13 +34435,13 @@
             },
             {
               "label": "категория_личное",
-              "rationale": "коментар ПРО власний спосіб робити сирну запіканку (cue: «Додаю крохмаль кукурудзяний»)",
+              "rationale": "коментар ПРО власний спосіб робити сирну запіканку з допису (cue: «Додаю крохмаль кукурудзяний»)",
               "text": "Додаю крохмаль кукурудзяний і все тримається. А з вівсяними висівками, то взагалі повноцінна Гарвардська тарілка"
             },
             {
               "label": "не_наш_рынок",
-              "rationale": "коментар ПРО стороннє оголошення про заробіток, поза нашою категорією (cue: «нужны деньги»)",
-              "text": "украинцы, кто в отчаянии и нужны деньги, смотрите => @poq380"
+              "rationale": "коментар ПРО стороннє оголошення про заробіток, поза нашою категорією (cue: «мне нужны деньги»)",
+              "text": "задолбало. мне нужны деньги, быстро только не легальными путями, вот так  => @xaxaxa380"
             },
             {
               "label": null,
@@ -34470,9 +34470,9 @@
             },
             {
               "label": "не_наш_рынок",
-              "msg_id": 49561,
-              "similarity": 1.0,
-              "thread": "@retsepty:7313"
+              "msg_id": 49529,
+              "similarity": 0.139344,
+              "thread": "@retsepty:7310"
             },
             {
               "label": "null",
@@ -34491,8 +34491,8 @@
           },
           "msg_id": 49560,
           "post_id": 7312,
-          "rendered_chars": 5384,
-          "rendering_sha256": "546fda011b85e1854193f78ba172e8af8d6dd84baf2d4a798d5b656fe256b350",
+          "rendered_chars": 5424,
+          "rendering_sha256": "acbfd802386f132e9b08854dca71036349eaccf1aec9a78266d870d50d43f566",
           "task": "pass1_comment_gm4_v3",
           "text": "украинцы, кто в отчаянии и нужны деньги, смотрите => @poq380",
           "thread": "@retsepty:7312",
@@ -34515,13 +34515,13 @@
             },
             {
               "label": "категория_личное",
-              "rationale": "коментар ПРО власний спосіб робити сирну запіканку (cue: «Додаю крохмаль кукурудзяний»)",
+              "rationale": "коментар ПРО власний спосіб робити сирну запіканку з допису (cue: «Додаю крохмаль кукурудзяний»)",
               "text": "Додаю крохмаль кукурудзяний і все тримається. А з вівсяними висівками, то взагалі повноцінна Гарвардська тарілка"
             },
             {
               "label": "не_наш_рынок",
-              "rationale": "коментар ПРО стороннє оголошення про заробіток, поза нашою категорією (cue: «мне нужны деньги»)",
-              "text": "задолбало. мне нужны деньги, быстро только не легальными путями, вот так  => @xaxaxa380"
+              "rationale": "коментар ПРО стороннє оголошення про заробіток, поза нашою категорією (cue: «нужны деньги»)",
+              "text": "украинцы, кто в отчаянии и нужны деньги, смотрите => @poq380"
             },
             {
               "label": null,
@@ -34550,9 +34550,9 @@
             },
             {
               "label": "не_наш_рынок",
-              "msg_id": 49529,
-              "similarity": 1.0,
-              "thread": "@retsepty:7310"
+              "msg_id": 49567,
+              "similarity": 0.139344,
+              "thread": "@retsepty:7317"
             },
             {
               "label": "null",
@@ -34571,8 +34571,8 @@
           },
           "msg_id": 49532,
           "post_id": 7313,
-          "rendered_chars": 5521,
-          "rendering_sha256": "2a9408b495a262c53677f17deb389bbb3d5145126a77d7308bebbaf37e977359",
+          "rendered_chars": 5499,
+          "rendering_sha256": "c8f66a8156f0e448196e34533425c832dde20001b49303146923a449149db3f2",
           "task": "pass1_comment_gm4_v3",
           "text": "задолбало. мне нужны деньги, быстро только не легальными путями, вот так  => @xaxaxa380",
           "thread": "@retsepty:7313",
@@ -34675,13 +34675,13 @@
             },
             {
               "label": "категория_личное",
-              "rationale": "коментар ПРО власний спосіб робити сирну запіканку (cue: «Додаю крохмаль кукурудзяний»)",
+              "rationale": "коментар ПРО власний спосіб робити сирну запіканку з допису (cue: «Додаю крохмаль кукурудзяний»)",
               "text": "Додаю крохмаль кукурудзяний і все тримається. А з вівсяними висівками, то взагалі повноцінна Гарвардська тарілка"
             },
             {
               "label": "не_наш_рынок",
-              "rationale": "коментар ПРО стороннє оголошення про заробіток, поза нашою категорією (cue: «нужны деньги»)",
-              "text": "украинцы, кто в отчаянии и нужны деньги, смотрите => @poq380"
+              "rationale": "коментар ПРО стороннє оголошення про заробіток, поза нашою категорією (cue: «мне нужны деньги»)",
+              "text": "задолбало. мне нужны деньги, быстро только не легальными путями, вот так  => @xaxaxa380"
             },
             {
               "label": null,
@@ -34710,9 +34710,9 @@
             },
             {
               "label": "не_наш_рынок",
-              "msg_id": 49561,
-              "similarity": 1.0,
-              "thread": "@retsepty:7313"
+              "msg_id": 49529,
+              "similarity": 0.139344,
+              "thread": "@retsepty:7310"
             },
             {
               "label": "null",
@@ -34731,8 +34731,8 @@
           },
           "msg_id": 49586,
           "post_id": 7320,
-          "rendered_chars": 5417,
-          "rendering_sha256": "6dd87668150abf79f920c36ebd307e2b129f423bdf25d6081b960143beed6a53",
+          "rendered_chars": 5457,
+          "rendering_sha256": "23521d92f5eebbab0bc7e2686fd20550929b40ce50e18583a9c9ae8030db1c09",
           "task": "pass1_comment_gm4_v3",
           "text": "украинцы, кто в отчаянии и нужны деньги, смотрите => @poq380",
           "thread": "@retsepty:7320",
@@ -34765,7 +34765,7 @@
             },
             {
               "label": null,
-              "rationale": "коментар ні про кого — сумнів у першому продукті прикорму (cue: «Кабачок? Серйозно»)",
+              "rationale": "коментар ні про кого — емоційний вигук у відповідь на пораду (cue: «Кабачок? Серйозно»)",
               "text": "Кабачок? Серйозно???"
             }
           ],
@@ -34811,8 +34811,8 @@
           },
           "msg_id": 49592,
           "post_id": 7323,
-          "rendered_chars": 6518,
-          "rendering_sha256": "4e01d35fa3fa23bd2678829587eea9ee08b6f25409faeabd6f5298f9bb692b20",
+          "rendered_chars": 6521,
+          "rendering_sha256": "e408bc13cc9a63e8a8d5690aaa4aa8bbf1876af9140f1149864eabee2cb2da89",
           "task": "pass1_comment_gm4_v3",
           "text": "💕",
           "thread": "@retsepty:7323",
@@ -34845,7 +34845,7 @@
             },
             {
               "label": null,
-              "rationale": "коментар ні про кого — сумнів у першому продукті прикорму (cue: «Кабачок? Серйозно»)",
+              "rationale": "коментар ні про кого — емоційний вигук у відповідь на пораду (cue: «Кабачок? Серйозно»)",
               "text": "Кабачок? Серйозно???"
             }
           ],
@@ -34891,8 +34891,8 @@
           },
           "msg_id": 49595,
           "post_id": 7324,
-          "rendered_chars": 6430,
-          "rendering_sha256": "fe261f765e51546418a550cc0c68189398422d7028a1407e6f288d3d270ab080",
+          "rendered_chars": 6433,
+          "rendering_sha256": "18fae91672101fae37b726c0e045c3031cdbc1296727cb2f1b6b127b4bee3fb1",
           "task": "pass1_comment_gm4_v3",
           "text": "💖",
           "thread": "@retsepty:7324",
@@ -34925,7 +34925,7 @@
             },
             {
               "label": null,
-              "rationale": "коментар ні про кого — сумнів у першому продукті прикорму (cue: «Кабачок? Серйозно»)",
+              "rationale": "коментар ні про кого — емоційний вигук у відповідь на пораду (cue: «Кабачок? Серйозно»)",
               "text": "Кабачок? Серйозно???"
             }
           ],
@@ -34971,8 +34971,8 @@
           },
           "msg_id": 49596,
           "post_id": 7324,
-          "rendered_chars": 6430,
-          "rendering_sha256": "b4986d4dc4b27bcae10d9b0dcda2f08081b5b5225156963c1dc1f1360d8483ce",
+          "rendered_chars": 6433,
+          "rendering_sha256": "2bbfdaae0221e4657727437095404a38fd91b2a8cf0fd21b79fee54a03d2f870",
           "task": "pass1_comment_gm4_v3",
           "text": "🍆",
           "thread": "@retsepty:7324",
@@ -35000,12 +35000,12 @@
             },
             {
               "label": "не_наш_рынок",
-              "rationale": "коментар ПРО стороннє оголошення про роботу, поза нашою категорією (cue: «потужная работа»)",
-              "text": "потужная работа, чернуха kriминал, 20000 гривен в сутки => @xaxaxa380"
+              "rationale": "коментар ПРО стороннє оголошення про роботу, поза нашою категорією (cue: «необычная работа»)",
+              "text": "необычная работа, 45000 гривен за заказ, только для суровых людей @gerdo_s"
             },
             {
               "label": null,
-              "rationale": "коментар ні про кого — про апетит власної дитини (cue: «4ложки бере»)",
+              "rationale": "коментар ні про кого — відповідь у треді власним прикладом (cue: «4ложки бере»)",
               "text": "Мій 4ложки бере і наївся, через годину перекус"
             }
           ],
@@ -35030,9 +35030,9 @@
             },
             {
               "label": "не_наш_рынок",
-              "msg_id": 49625,
-              "similarity": 1.0,
-              "thread": "@retsepty:7324"
+              "msg_id": 49677,
+              "similarity": 0.173913,
+              "thread": "@retsepty:7335"
             },
             {
               "label": "null",
@@ -35051,8 +35051,8 @@
           },
           "msg_id": 49626,
           "post_id": 7325,
-          "rendered_chars": 5666,
-          "rendering_sha256": "369627e54293570b5853137a6642f0f031698d5f10586819a4b9e477a08a118d",
+          "rendered_chars": 5682,
+          "rendering_sha256": "bdaf596a97b90d490f13312cddcb7ab9a0a53002b37a26f0612ab4e212dc0f13",
           "task": "pass1_comment_gm4_v3",
           "text": "потужная работа, чернуха kriминал, 20000 гривен в сутки => @xaxaxa380",
           "thread": "@retsepty:7325",
@@ -35085,7 +35085,7 @@
             },
             {
               "label": null,
-              "rationale": "коментар ні про кого — про апетит власної дитини (cue: «4ложки бере»)",
+              "rationale": "коментар ні про кого — відповідь у треді власним прикладом (cue: «4ложки бере»)",
               "text": "Мій 4ложки бере і наївся, через годину перекус"
             }
           ],
@@ -35131,8 +35131,8 @@
           },
           "msg_id": 49627,
           "post_id": 7325,
-          "rendered_chars": 5373,
-          "rendering_sha256": "16a65c4ca5bb36c45617b212ef708ef6e4ec4cfe84c2e044feed4937c476e618",
+          "rendered_chars": 5383,
+          "rendering_sha256": "1b542a2bd8e8bd63c6d6e20d2396c04197dfc8a3b2395b29577e4317554420ad",
           "task": "pass1_comment_gm4_v3",
           "text": "работа на 200OO гривен, чернуха полнейшая, тут @cats_up_work",
           "thread": "@retsepty:7325",
@@ -35160,8 +35160,8 @@
             },
             {
               "label": "не_наш_рынок",
-              "rationale": "коментар ПРО стороннє оголошення про роботу, поза нашою категорією (cue: «работа для смелых»)",
-              "text": "работа для смелых, 2000O грн @cats_up_work"
+              "rationale": "коментар ПРО ціну і розмір товару з оголошення, поза нашою категорією (cue: «200 грн 15 см»)",
+              "text": "200 грн 15 см"
             },
             {
               "label": null,
@@ -35190,9 +35190,9 @@
             },
             {
               "label": "не_наш_рынок",
-              "msg_id": 49636,
-              "similarity": 1.0,
-              "thread": "@retsepty:7328"
+              "msg_id": 579646,
+              "similarity": 0.108696,
+              "thread": "@matusi_ukr:22295"
             },
             {
               "label": "null",
@@ -35211,8 +35211,8 @@
           },
           "msg_id": 49632,
           "post_id": 7327,
-          "rendered_chars": 5322,
-          "rendering_sha256": "2347e7a78620abbb2f667651864901635c7b449399e3321308d9c8d7021ac95c",
+          "rendered_chars": 5292,
+          "rendering_sha256": "4c4ab196e71455e535673f6d32d622c5264573af756c5889bdeae27fe29db49e",
           "task": "pass1_comment_gm4_v3",
           "text": "работа для смелых, 2000O грн @cats_up_work",
           "thread": "@retsepty:7327",
@@ -35405,7 +35405,7 @@
             },
             {
               "label": null,
-              "rationale": "коментар ні про кого — про умови для переселенців у Норвегії (cue: «В Норвегіі гарні умови»)",
+              "rationale": "коментар ні про кого — репліка в дискусії з посиланням на власний досвід (cue: «В Норвегіі гарні умови»)",
               "text": "В Норвегіі гарні умови, дітей дуже люблять, допомагають. Базова допомога буде типу соціальна, цього цілком достатньо на їжу і необхідне. Це якщо не зможете роботу знайти після інтро програми, вона вже лише пів року."
             }
           ],
@@ -35451,8 +35451,8 @@
           },
           "msg_id": 9,
           "post_id": 695,
-          "rendered_chars": 6825,
-          "rendering_sha256": "33af62ea35e9385ac267ca29652fed93354c77b8df62795f8f86fc76c50f99f6",
+          "rendered_chars": 6837,
+          "rendering_sha256": "30b970b2fa33ee720083f226075bbc77a6303473ab054b7c369e4834f739b1cb",
           "task": "pass1_comment_gm4_v3",
           "text": "Це лише приблизна схема введення прикорму. У схемі кабачок наведений як приклад, а не як обов’язковий перший продукт\n\nЗгідно із сучасними рекомендаціями, першим овочем може бути будь-який: кабачок, броколі, цвітна капуста, гарбуз тощо",
           "thread": "@tarilka_malyuka:695",
@@ -35475,7 +35475,7 @@
             },
             {
               "label": "категория_личное",
-              "rationale": "лише ЗГАДУЄ морозиво як засіб від болю; насправді про лікування горла (cue: «Морозиво»)",
+              "rationale": "коментар ПРО власний досвід із морозивом як помічним при болю в горлі (cue: «Мені чудово допомагає»)",
               "text": "Морозиво. Мені чудово допомагає прохолодне пиття обільне, цукерки Mintex рошенівськи. Але 2 тижні, то вже краще до лікаря звернутися, знайти, чому воно болить. За 2 тижні розвинутися могли і бактеріальні інфекції, коли просто чаю попити вже не працює"
             },
             {
@@ -35531,8 +35531,8 @@
           },
           "msg_id": 12,
           "post_id": 695,
-          "rendered_chars": 7591,
-          "rendering_sha256": "9ac5fcbd27300699886eb478ace56fe5cc7d287277fdad283cce8805111631ff",
+          "rendered_chars": 7604,
+          "rendering_sha256": "448cecd0bdcb9f50a1949c44a0ed9562b887489b0675a19fa94db7150f14f3cb",
           "task": "pass1_comment_gm4_v3",
           "text": "У цьому пості описано класичний підхід до введення прикорму, коли дитину знайомлять з однокомпонентними продуктами, щоб легше було відстежувати можливі реакції. Саме за такою схемою ми починали прикорм за рекомендаціями нашого педіатра  \n\nБатьки можуть обирати той спосіб, який підходить їхній дитині та з яким їм комфортно.\n\nТак, для оформлення посту я використала ШІ, але зміст формується мною і ґрунтується на сучасних рекомендаціях педіатрів, а не публікується без перевірки. Я ділюся інформацією, яка буде зрозумілою та корисною для батьків",
           "thread": "@tarilka_malyuka:695",
@@ -35737,7 +35737,7 @@
             },
             {
               "label": "категория_личное",
-              "rationale": "лише ЗГАДУЄ морозиво як засіб від болю; насправді про лікування горла (cue: «Морозиво»)",
+              "rationale": "коментар ПРО власний досвід із морозивом як помічним при болю в горлі (cue: «Мені чудово допомагає»)",
               "text": "Морозиво. Мені чудово допомагає прохолодне пиття обільне, цукерки Mintex рошенівськи. Але 2 тижні, то вже краще до лікаря звернутися, знайти, чому воно болить. За 2 тижні розвинутися могли і бактеріальні інфекції, коли просто чаю попити вже не працює"
             },
             {
@@ -35793,8 +35793,8 @@
           },
           "msg_id": 179,
           "post_id": 827,
-          "rendered_chars": 8894,
-          "rendering_sha256": "433035e8b6759824b875525de90e0df12fc62428133a578eb582f5691979284f",
+          "rendered_chars": 8907,
+          "rendering_sha256": "a8c9d12ce7c41543744b0ee0fea023b7e6b2d91f24773c1fa8e70102f3c34ba3",
           "task": "pass1_comment_gm4_v3",
           "text": "Домашня локшина 🍜 \n\n- Борошно 100 г\n- Яйце 1 шт\n- Олія 1 ч.л.\n- Гаряча кипʼячена вода ~30 мл\n\nУ мисці просіяти борошно, додати яйце, воду та олію і поступово замішувати яйце від центру і ніби вмішувати борошно\n\nЗамісити тісто, воно виходить тепле та еластичне і не липне до рук. \nЗа потреби можна додати ще трохи борошна або води.\n\nРозкатати тісто максимально тонко.\nЗа допомогою ножа або ролика для тіста нарізати локшину будь-якої форми.\n\nВарити у підсоленій киплячій воді 2–4 хвилини після закипання (залежно від товщини)\n\nЦієї порції вистачає на два рази, половину локшини я заморожую ❄️\n\n\nТоматний соус 🍅🧀\n\n- помідор 1 шт (подрібнити блендером)\n- вершкове масло 1 скибочка (10–15 г)\n- крем-сир — 1 ч. л.\n\nПерелити подрібнений помідор у невелику сковорідку або сотейник.\nДодати вершкове масло й тушкувати 5 хвилин на невеликому вогні, поки соус трохи загусне.\nДодати крем-сир і добре перемішайте до однорідності.\n\nГотовий соус ідеально підходить як підлива до домашньої локшини 🍜",
           "thread": "@tarilka_malyuka:827",
@@ -35817,7 +35817,7 @@
             },
             {
               "label": "категория_личное",
-              "rationale": "коментар ПРО власний спосіб пекти сирну запіканку (cue: «Випікаю у формі маленьких кексів»)",
+              "rationale": "коментар ПРО власний спосіб пекти сирну запіканку з допису (cue: «Випікаю у формі маленьких кексів»)",
               "text": "Випікаю у формі  маленьких кексів - і все гаразд 👍😉 ну і звичайно на кукурудзяному крохмалю"
             },
             {
@@ -35873,8 +35873,8 @@
           },
           "msg_id": 2579,
           "post_id": 836,
-          "rendered_chars": 5480,
-          "rendering_sha256": "35d6b842ec0ae360c998f0dba173ee4baf9c203e4150df9caec4ba93180c6c35",
+          "rendered_chars": 5489,
+          "rendering_sha256": "e94ace507fc7ce404f0a5f9694ca95a57f31815873d79898829c9149c89c79b3",
           "task": "pass1_comment_gm4_v3",
           "text": "Мені теж 🙈😁,  а ще понапроходила купу курсів і думала що я готова до материнства🙈😁",
           "thread": "@ya_Nenka:836",
@@ -36052,14 +36052,14 @@
     "v2": {
       "ceiling": 12000,
       "headroom": 4219,
-      "median": 4582,
+      "median": 4587,
       "widest": 7781
     },
     "v3": {
       "ceiling": 12000,
-      "headroom": 3106,
+      "headroom": 3093,
       "median": 5704,
-      "widest": 8894
+      "widest": 8907
     }
   },
   "made": {
@@ -36191,167 +36191,24 @@
   "own_text_in_examples": {
     "gating_bar_denominator": 98,
     "mechanism": "the own-thread rule blocks the query's THREAD, not its TEXT; neighbours() maximises Jaccard over character 3-grams and an identical string scores 1.0, so the duplicate is chosen first and deterministically wherever the window reposts a comment verbatim",
-    "n": 22,
+    "n": 0,
     "of": 198,
-    "on_the_gating_bar": 5,
-    "remedy_named_not_taken": "refuse a neighbour whose whitespace-collapsed casefolded text equals the query's — one comparison, and it would change the registered selection rule the contract mandates. The operator's, not the executor's",
-    "rows": [
-      {
-        "id": "@VARUS_channel:10348#20665",
-        "in_holdout_100": false,
-        "msg_id": 20665,
-        "the_twins_label": "сеть_ритейлер",
-        "thread": "@VARUS_channel:10348"
+    "on_the_gating_bar": 0,
+    "remedy": {
+      "applied_by": "build_lora_c_data.neighbours_v3, as a pre-filter on the candidate pool",
+      "authority": "docs/SPEC.md amendment 3.25 (2), operator, 2026-08-23",
+      "measured_at_97548df": {
+        "e_items": 22,
+        "of": 198,
+        "of_training": 506,
+        "on_the_gating_bar": 5,
+        "training_rows": 13
       },
-      {
-        "id": "@VARUS_channel:10348#20673",
-        "in_holdout_100": false,
-        "msg_id": 20673,
-        "the_twins_label": "сеть_ритейлер",
-        "thread": "@VARUS_channel:10348"
-      },
-      {
-        "id": "@VARUS_channel:10613#21609",
-        "in_holdout_100": false,
-        "msg_id": 21609,
-        "the_twins_label": "null",
-        "thread": "@VARUS_channel:10613"
-      },
-      {
-        "id": "@mandziak:3676#47897",
-        "in_holdout_100": false,
-        "msg_id": 47897,
-        "the_twins_label": "null",
-        "thread": "@mandziak:3676"
-      },
-      {
-        "id": "@mandziak:3684#48009",
-        "in_holdout_100": false,
-        "msg_id": 48009,
-        "the_twins_label": "не_наш_рынок",
-        "thread": "@mandziak:3684"
-      },
-      {
-        "id": "@mandziak:3684#48016",
-        "in_holdout_100": false,
-        "msg_id": 48016,
-        "the_twins_label": "null",
-        "thread": "@mandziak:3684"
-      },
-      {
-        "id": "@mandziak:3684#48018",
-        "in_holdout_100": false,
-        "msg_id": 48018,
-        "the_twins_label": "null",
-        "thread": "@mandziak:3684"
-      },
-      {
-        "id": "@mandziak:3684#48020",
-        "in_holdout_100": false,
-        "msg_id": 48020,
-        "the_twins_label": "не_наш_рынок",
-        "thread": "@mandziak:3684"
-      },
-      {
-        "id": "@mandziak:3684#48036",
-        "in_holdout_100": false,
-        "msg_id": 48036,
-        "the_twins_label": "не_наш_рынок",
-        "thread": "@mandziak:3684"
-      },
-      {
-        "id": "@mandziak:3684#48040",
-        "in_holdout_100": false,
-        "msg_id": 48040,
-        "the_twins_label": "null",
-        "thread": "@mandziak:3684"
-      },
-      {
-        "id": "@mandziak:3684#48041",
-        "in_holdout_100": false,
-        "msg_id": 48041,
-        "the_twins_label": "null",
-        "thread": "@mandziak:3684"
-      },
-      {
-        "id": "@mandziak:3684#48064",
-        "in_holdout_100": false,
-        "msg_id": 48064,
-        "the_twins_label": "null",
-        "thread": "@mandziak:3684"
-      },
-      {
-        "id": "@mandziak:3689#48067",
-        "in_holdout_100": false,
-        "msg_id": 48067,
-        "the_twins_label": "null",
-        "thread": "@mandziak:3689"
-      },
-      {
-        "id": "@mandziak:3689#48268",
-        "in_holdout_100": false,
-        "msg_id": 48268,
-        "the_twins_label": "null",
-        "thread": "@mandziak:3689"
-      },
-      {
-        "id": "@mandziak:3746#49218",
-        "in_holdout_100": true,
-        "msg_id": 49218,
-        "the_twins_label": "null",
-        "thread": "@mandziak:3746"
-      },
-      {
-        "id": "@mandziak:3768#49225",
-        "in_holdout_100": true,
-        "msg_id": 49225,
-        "the_twins_label": "null",
-        "thread": "@mandziak:3768"
-      },
-      {
-        "id": "@retsepty:7312#49531",
-        "in_holdout_100": false,
-        "msg_id": 49531,
-        "the_twins_label": "не_наш_рынок",
-        "thread": "@retsepty:7312"
-      },
-      {
-        "id": "@retsepty:7312#49560",
-        "in_holdout_100": false,
-        "msg_id": 49560,
-        "the_twins_label": "не_наш_рынок",
-        "thread": "@retsepty:7312"
-      },
-      {
-        "id": "@retsepty:7313#49532",
-        "in_holdout_100": true,
-        "msg_id": 49532,
-        "the_twins_label": "не_наш_рынок",
-        "thread": "@retsepty:7313"
-      },
-      {
-        "id": "@retsepty:7320#49586",
-        "in_holdout_100": true,
-        "msg_id": 49586,
-        "the_twins_label": "не_наш_рынок",
-        "thread": "@retsepty:7320"
-      },
-      {
-        "id": "@retsepty:7325#49626",
-        "in_holdout_100": true,
-        "msg_id": 49626,
-        "the_twins_label": "не_наш_рынок",
-        "thread": "@retsepty:7325"
-      },
-      {
-        "id": "@retsepty:7327#49632",
-        "in_holdout_100": false,
-        "msg_id": 49632,
-        "the_twins_label": "не_наш_рынок",
-        "thread": "@retsepty:7327"
-      }
-    ],
-    "severity": "5 of the 98 rows the registered bar «holdout-100 agreement ≥ 64 of 100» is scored on are shown their own answer. That INFLATES the absolute reading the bar stands on. It is neutral to arm-vs-base and to the A/B ablation, because every leg is rendered from one `chosen`",
+      "rule": "refuse a neighbour whose whitespace-collapsed casefolded text equals the query's. Equality and nothing below it",
+      "state": "CLOSED"
+    },
+    "rows": [],
+    "severity": "0 of the 98 rows the registered bar «holdout-100 agreement ≥ 64 of 100» is scored on are shown their own answer — the reading the bar stands on carries none of this leak",
     "what": "the item is shown a byte-identical copy of its own comment, carrying a label, inside its own <examples> block"
   },
   "phase": "lora-c-prep",
@@ -36363,7 +36220,7 @@
   },
   "produced_by": {
     "script": "scripts/build_lora_c_eval_pack.py",
-    "sha256": "144ff0f19839c8520e8a2b158f21137eee9f88b54c61ec124fccb3c02a91f01b"
+    "sha256": "c8b1e907a86538a37b9a1f83d6a6f3408464876414daa38cd62d672f9ac7f8a1"
   },
   "reading": "the pod renders each item itself, from the fields in it, and refuses unless its sha equals the one above. Shipping the rendered string would only prove the two machines agree about a string; what has to be true is that the model is shown what the registration registered",
   "refused": [
