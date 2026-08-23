@@ -279,6 +279,39 @@ contract spent nothing. The health share is 3 of 5 against `lora-c-apply`'s 8 of
 proportion on a tenth of the surface, and both of this contract's contract-gaps are the SAME gap
 seen twice, from the sha and from the sentence beside it.
 
+## The verifier, re-read on the CLOSING tree
+
+§5's 3 669 was taken at the code tree, before the report, ADR and vault commits — and two of those
+touch files the suite reads (`knowledge/hot.md` is a price input for `scripts/volume_calc_5c1.py`).
+A gate measured before the last commits is a gate measured on a tree that no longer exists
+([[the_gates_evidence_outlived_its_artifact]]), so it was re-run at **`4a95be4`**, working tree
+clean:
+
+```
+$ ruff check . ; ruff format --check . ; pytest -q
+All checks passed!
+433 files already formatted
+3669 passed, 2 skipped in 584.78s (0:09:44)
+exit=0
+```
+
+Same reading, on the tree a team lead would check out.
+
+**One sweep the contract did not ask for, because the team lead's day-23 diff DELETED prose as well
+as adding it** — `5.162 с/коммент`, `(метки 8d2e1ba)`, `reader-topup ($1.2259)` and the named debt
+lines are gone from the file. A producer that greps a verbatim STATUS string and is not driven by a
+rebuild test would sit green today and `SystemExit` on the next contract that runs it:
+
+```
+$ grep -rn "STATUS\.read_text|STATUS = " scripts/*.py src/**/*.py
+scripts/write_lora_c_prereg.py:43   STATUS = REPO_ROOT / "docs" / "STATUS.md"
+scripts/write_lora_c_prereg.py:145  if " ".join(text.split()) not in " ".join(STATUS.read_text(…))
+```
+
+**Exactly one consumer reads that file from disk, and it is in the `PRODUCERS` rebuild list**, so
+the 3 669 above already proves both its quotations still grep back. Every other `STATUS` hit in
+`scripts/` is prose in a docstring or a record field. Nothing to open.
+
 ## Open, and named rather than closed
 
 1. **`quoted(…)` against `docs/STATUS.md` has no negative control.** Dv783 gave one to the SPEC grep
@@ -293,6 +326,10 @@ seen twice, from the sha and from the sentence beside it.
    lives in one file and whose constant lives in another is the shape that drifts.
 3. **The P-NULL question from `lora-c-apply` is still open**, untouched by this contract: whether the
    rule I wrote is the rule the gate-1 verdict meant. Only the team lead can close it.
+4. **This report is longer than the contract's word for it.** Step 4 asks for a SHORT report and
+   «one-line Process signals», and neither §2's enumeration nor the five signals below are one line.
+   The extra length is evidence step 4 also demands — the grep, the diff, the green tail — but an
+   executor who fixed a one-word ordinal and disclosed it (Dv784) owes the same disclosure here.
 
 ## Process signals
 
