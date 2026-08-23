@@ -16,11 +16,17 @@
     "why_not_the_processor": "AutoProcessor needs torchvision for Gemma4ImageProcessor and this is a text-only count; the snapshot carries one template file and no processor-specific one, so the two loaders read the same bytes"
   },
   "max_seq_len": 2816,
-  "over": [
-    "@klopotenkofood:6060#21366",
-    "@matusi_ukr:22327#580336",
-    "@tarilka_malyuka:746#83"
-  ],
+  "over": {
+    "by_the_true_count": [
+      "@klopotenkofood:6060#21366",
+      "@tarilka_malyuka:746#83"
+    ],
+    "with_template_slack": [
+      "@klopotenkofood:6060#21366",
+      "@matusi_ukr:22327#580336",
+      "@tarilka_malyuka:746#83"
+    ]
+  },
   "pod_count": {
     "max": 2975,
     "median": 1633.0,
@@ -33,7 +39,27 @@
     "slack": 16
   },
   "rows": 506,
-  "rows_over_the_stop_threshold": 3,
+  "rows_over_max_seq_len": {
+    "by_the_true_count": [
+      "@klopotenkofood:6060#21366",
+      "@tarilka_malyuka:746#83"
+    ],
+    "ceiling": 2816,
+    "reading": "these are the rows train_qlora.encode_pass1 would REFUSE on the pod, and the two readings agree on them — which is what makes the STOP invariant to the question above",
+    "with_template_slack": [
+      "@klopotenkofood:6060#21366",
+      "@tarilka_malyuka:746#83"
+    ]
+  },
+  "rows_over_the_stop_threshold": {
+    "by_the_true_count": 2,
+    "the_difference": [
+      "@matusi_ukr:22327#580336"
+    ],
+    "which_the_amendment_names": "by_the_true_count — «a true count above 2 800»",
+    "why_they_differ": "TEMPLATE_SLACK = 16 corrected a CHARACTER-RATIO estimate for the chat template; apply_chat_template already counts it here, so adding it back double-counts. One row sits inside that margin",
+    "with_template_slack": 3
+  },
   "source": {
     "file": "results/pass1_sft_v3_train.jsonl",
     "sha256": "cf55d3f20216139845d320b4283d543c5283e3475f3c6afa42ea98cf20997c18"
@@ -49,7 +75,7 @@
     "true_max_with_slack": 2991,
     "why": "amendment 3.25 (1) derived 2 816 from 2 759 — the widest row at the registered worst tokens-per-character. That is a MODEL measured on probe-b's 2 778-3 923 character rows and applied to rows of 5 262-9 415 (Dv757). Here is what it predicts against what the tokenizer counts, on the SAME rows"
   },
-  "verdict": "STOP — a true count above 2 800; back to the operator, the next rung is 3 072",
+  "verdict": "STOP — a true count above 2 800 on 2 of 506 rows, and 2 of them are over max_seq_len 2816 itself. The STOP fires under BOTH readings of the threshold. Back to the operator; the next rung is 3 072",
   "widest_rows": [
     {
       "chars": 9415,

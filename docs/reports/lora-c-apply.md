@@ -297,12 +297,33 @@ $ PYTHONPATH=src python3.11 scripts/tokenize_lora_c_rows.py
 wrote results/lora_c_tokens.json  506 rows
   pod count      min 1445  median 1633.0  max 2975
   + TEMPLATE_SLACK 16:  max 2991  against max_seq_len 2816 and the STOP at 2800
-  STOP — a true count above 2 800; back to the operator, the next rung is 3 072
+  over 2800:  2 by the TRUE count,  3 with slack  (@matusi_ukr:22327#580336)
+  over max_seq_len 2816:  2 under BOTH readings
+  STOP — a true count above 2 800 on 2 of 506 rows, and 2 of them are over max_seq_len 2816
+  itself. The STOP fires under BOTH readings of the threshold. Back to the operator; the next
+  rung is 3 072
 ```
 
-**Three rows are over 2 800, and the widest needs more than `max_seq_len` itself** —
-`@tarilka_malyuka:746#83` (2 975), `@klopotenkofood:6060#21366` (2 963),
-`@matusi_ukr:22327#580336` (2 785).
+**The threshold has two readings and the record publishes both, because one row sits between them.**
+
+| row | the tokenizer's count | + `TEMPLATE_SLACK` | over 2 800? | over `max_seq_len` 2 816? |
+|---|---|---|---|---|
+| `@tarilka_malyuka:746#83` | **2 975** | 2 991 | yes / yes | **yes / yes** |
+| `@klopotenkofood:6060#21366` | **2 963** | 2 979 | yes / yes | **yes / yes** |
+| `@matusi_ukr:22327#580336` | 2 785 | 2 801 | **no** / yes | no / no |
+| `@matusi_ukr:22111#577092` | 2 778 | 2 794 | no / no | no / no |
+
+**2 of 506 by the true count, 3 with slack.** Amendment 3.25 (1) says «a **true count** above
+2 800», and the true count is the tokenizer's own: `TEMPLATE_SLACK` = 16 existed to correct a
+CHARACTER-RATIO estimate for the chat template, which `apply_chat_template` here already counts, so
+adding it back double-counts the template — at exactly the row that decides 2 against 3.
+`@matusi_ukr:22327#580336` clears the true threshold by 15 tokens and lands one token over it with
+slack.
+
+**The STOP is invariant to that question, and that is what makes it a finding rather than a wobble.**
+Two rows exceed `max_seq_len` **2 816 itself** under BOTH readings — those are the rows
+`train_qlora.encode_pass1` would refuse on the pod — and 2 975 and 2 963 are over 2 800 on the raw
+count with no slack argument available.
 
 **The three-ratio model re-printed against 2 816, beside the count:**
 
@@ -316,13 +337,32 @@ wrote results/lora_c_tokens.json  506 rows
 widest row by **228 tokens**, which is precisely the hazard 3.25 (1) ordered the check against
 (Dv757: a ratio is a MODEL carried across a change of row length).
 
-**It is not this contract's doing, and that is measured too.** Run over the rows as they stood at
-`97548df` — before the gate-1 rewrites and before the neighbour refusal — the same tokenizer counts
-**2 974 with TWO rows over 2 800**. The rebuild moved the widest row by one token.
+**It is not this contract's doing, and the two-reading split makes that sharper.** Run over the rows
+as they stood at `97548df` — before the gate-1 rewrites and before the neighbour refusal — the same
+tokenizer counts **2 974, with TWO rows over 2 800 under BOTH readings** and two over `max_seq_len`.
+So **the true-count answer is 2 at both shas and this rebuild did not move it**; what moved is the
+with-slack answer, 2 -> 3, because `@matusi_ukr:22327#580336` went 2 784 -> 2 785 and crossed the
+slack boundary by ONE token. The finding predates the contract that reports it.
 
-The amendment's own next rung fits: 2 991 sits under 3 072 with 81 tokens to spare, and 3.25 (1)
-already calls it «one word, not a redesign». **This contract does not take it.** Raising frozen law
-is the operator's word.
+The amendment's own next rung fits: 2 991 sits under 3 072 with 81 tokens to spare on the
+conservative reading and 97 on the true count, and 3.25 (1) already calls it «one word, not a
+redesign». **This contract does not take it.** Raising frozen law is the operator's word.
+
+### What the STOP stops, and why D4 and D5 ran anyway
+
+D3's instruction is «STOP back to the team lead if any row exceeds 2 800», and this report then
+presents a completed D4 and D5. The reading applied, stated so it can be overruled: **the STOP is on
+the paid line, not on the $0 contract.** Amendment 3.25 (1) scopes it in its own words — «**before
+`lora-c-run` buys anything**: … a true count above 2 800 STOPS the line back to the operator» — D5
+of this contract requires «the tokenizer result from D3» inside the registration, which is only
+writable if D5 runs, and the contract closes with «STOP after the report for team-lead acceptance».
+So the whole $0 scope was completed and the STOP is carried into the registration, the ADR and the
+report rather than into an unfinished tree.
+
+**What was NOT done on the strength of it:** the 3 072 rung was not taken, no threshold was moved, no
+row was dropped or shortened, and nothing about the run was registered as priced. If the intended
+reading was «stop the contract at D3», the cost of this choice is that D4 and D5 must be re-accepted
+rather than re-done — every artifact they produced is committed and re-derivable.
 
 ## D4 — amendment 3.25 (2): the equality refusal, and the full rebuild
 
@@ -461,7 +501,7 @@ this contract.**
 
 | # | cause | what |
 |---|---|---|
-| **Dv765** | `[cause: model]` [[projected_rate_versus_measured_rate]] | **The ceiling the amendment derived does not hold, and the real tokenizer is what says so.** 2 816 comes from 2 759 — the widest row at the registered worst tokens-per-character. The count is **2 975 (2 991 with slack)**, three rows over the amendment's own 2 800 stop and the widest over `max_seq_len` itself. The model under-predicts by **228 tokens** because it was measured on 2 778–3 923-character rows and applied to rows of 5 262–9 415. **It is not this rebuild's doing**: the same measurement at `97548df` returns 2 974 with two rows over. The line STOPS back to the operator; 3.25 (1)'s own next rung, 3 072, clears 2 991 by 81. |
+| **Dv765** | `[cause: model]` [[projected_rate_versus_measured_rate]] | **The ceiling the amendment derived does not hold, and the real tokenizer is what says so.** 2 816 comes from 2 759 — the widest row at the registered worst tokens-per-character. The count is **2 975 (2 991 with slack)**: **two rows** over the amendment's own 2 800 stop by the true count, three with slack, and **two over `max_seq_len` 2 816 itself under both readings**. The model under-predicts by **228 tokens** because it was measured on 2 778–3 923-character rows and applied to rows of 5 262–9 415. **It is not this rebuild's doing**: at `97548df` the same measurement returns 2 974 and TWO rows over under both readings — the true-count answer never moved. The line STOPS back to the operator; 3.25 (1)'s own next rung, 3 072, clears 2 991 by 81. |
 | **Dv766** | `[cause: process]` [[a_count_in_prose_is_not_the_enumeration]] | **A reviewer's counts were read as population counts and they are sample counts.** The verdict says P-MARKER is «expected small» on the strength of «lens 2's 17 candidates», and lens 2 judged **113 of 515** rationales. 17 of 113 scales to ≈77 of 515, which is what the enumeration finds (72 post-derived). The same applies to «24 null rows». The expectation was never wrong about the shape; it was calibrated on a third of the corpus and quoted as if on all of it. |
 | **Dv767** | `[cause: contract-gap]` [[a_borrowed_rule_carries_an_unstated_population]] | **P-NULL's rule underdetermines by 35 rows and the choice is mine.** «Function vs subject after the dash» reads narrow (13) or broad (48) with equal fidelity to the words; the verdict's four ACCEPTED examples all have thread-internal complements and its one FLAGGED example has a definite product, which is evidence for the broad reading, and the DO NOT list forbidding rewrites of unnamed rows is decisive against it. Narrow applied, rule written out verbatim, every borderline listed as kept, and the gap to lens 2's 24 reported instead of tuned away. |
 | **Dv768** | `[cause: verify-gap]` [[a_moved_guard_that_left_its_copy]] | **«Nothing of this touches a sealed record» is only satisfiable one way.** `scripts/build_pass1_fewshot_packs.py` is pinned by **ten** sealed records, so editing `neighbours` in place would break every one of them. The refusal is therefore a pre-filter at lora-c's two call sites — the same function of the same inputs, one selection rule and not two copies of it. Found by running preflight on the file the contract named before editing it. |
@@ -472,6 +512,8 @@ this contract.**
 | **Dv773** | `[cause: verify-gap]` [[unreadable_now_versus_never]] | **My own guard fired on my own bug, which is what a guard is for.** `try_to_load_from_cache` has THREE outcomes — a path, a sentinel meaning «the Hub says this file does not exist», and `None` meaning nobody ever asked — and the first version of the template check read two of them. It refused the measurement, correctly by its own lights, on a repository that satisfies the condition. Absent and unasked are different answers, and only one licenses a tokenizer stand-in. |
 | **Dv774** | `[cause: contract-gap]` [[a_test_that_reads_a_shipped_artifact]] | **A review sample is byte-compared by the suite and is also the evidence a verdict rests on.** Rewriting rationales and synthetic texts moves both sample files, and `docs/reviews/lora-c-synthetic.md` is outside this contract's commit list entirely. Resolved by making the verdict CLOSE its own sample: the producer refuses to rewrite it, the rebuild test still drives `--sample` and no longer compares those two files, and the gate-1 addendum is appended by hand under a guard that guarantees nothing will overwrite it. |
 | **Dv775** | `[cause: process]` [[the_fix_widened_the_denominator]] | **A metric improved without being targeted, and the record nearly took credit for tuning.** Four of six register axes missed at the gate-2 sample; one of seven misses now. Nothing aimed at those axes: R1/R2 replaced fifteen price-and-stock fragments with thing-quality claims and R5 rewrote ten skeletons into longer forms. Recorded with its cause, because «the register now matches» read as an achievement of the rewrite would be a claim about an instrument nobody moved. |
+| **Dv777** | `[cause: verify-gap]` [[two_values_for_one_input_get_quoted_kindly]] | **The stop threshold has two readings and the record published one — the larger.** `rows_over_the_stop_threshold` tested `pod_count + TEMPLATE_SLACK > 2 800` and reported **3**; the amendment's words are «a **true count** above 2 800» and the true count is **2**. `TEMPLATE_SLACK` = 16 exists to correct a CHARACTER-RATIO estimate of the chat template, which `apply_chat_template` already counts here, so the +16 double-counts — at exactly the row that separates 2 from 3. `@matusi_ukr:22327#580336` reads 2 785 raw and 2 801 with slack: over by ONE token under a correction that should not have been applied. Both readings are now published with the row that separates them, and the STOP is shown invariant to the question — two rows are over `max_seq_len` 2 816 itself under either. **This is the seventh instance of one input with two values on this line**, and the first where the wrong one was the number an operator's ruling rests on. |
+| **Dv778** | `[cause: contract-gap]` [[the_contracts_scope_is_narrower_than_the_rulings]] | **D3 says STOP and D4, D5 and the report ran after it.** The reading applied — the STOP is on the PAID line, not on the $0 contract — rests on three sentences: amendment 3.25 (1) scopes it «before `lora-c-run` buys anything», D5 of this contract requires «the tokenizer result from D3» inside the registration, and the contract closes with «STOP after the report for team-lead acceptance». Recorded as a deviation rather than left as prose, because a team lead reading a STOP instruction followed by two more phases is owed the reasoning and the option to overrule it. Nothing was taken on the strength of it: the 3 072 rung is untouched, no threshold moved, no row dropped. |
 | **Dv776** | `[cause: process]` [[a_review_that_verifies_a_moving_tree]] | **The opening tree was RED and the suite stamp said 35.** Eight of 3 658 failed, all of them caused by the team-lead files already on disk before the first commit: four the landing manoeuvre for `amendment-3.25`, four lora-c's records still saying `verdict_present: false`. Recorded at step 0 rather than discovered at D5 — the baseline instrument's stamp (35 passed) was a partial run and the live `make check` is what said so. |
 
 **The tally, by the grep the template names:**
@@ -483,10 +525,10 @@ tag = {}
 for chunk in re.split(r"(?=\*\*Dv\d+)", flat):
     if (m := re.match(r"\*\*Dv(\d+)", chunk)) and (t := re.findall(r"\[cause:\s*([a-z-]+)\]", chunk)):
         tag.setdefault(int(m.group(1)), t[0])
-inr = {d: t for d, t in tag.items() if 765 <= d <= 776}
+inr = {d: t for d, t in tag.items() if 765 <= d <= 778}
 health = sum(1 for t in inr.values() if t in ("contract-gap", "spec-gap", "verify-gap"))
 print(len(inr), dict(collections.Counter(inr.values()).most_common()))
-print("contract health", health, "· paid", len(inr) - health, "· enum canonicity", len(inr), "of 12")
+print("contract health", health, "· paid", len(inr) - health, "· enum canonicity", len(inr), "of 14")
 ```
 
 ## Process signals

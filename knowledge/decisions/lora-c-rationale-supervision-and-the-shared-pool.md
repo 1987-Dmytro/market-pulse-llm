@@ -239,10 +239,11 @@ precedent the amendment cites is the first of them. Line B's three sealed artefa
 
 **And the reality check the amendment ordered STOPS the line.** The model's own tokenizer, at the
 pinned revision, counts **2 975 tokens on the widest of the 506 rows — 2 991 with `TEMPLATE_SLACK`**
-— against the amendment's stop at 2 800 and against `max_seq_len` 2 816 itself. Three rows are over.
+— against the amendment's stop at 2 800 and against `max_seq_len` 2 816 itself. **Two rows are over 2 800 by the TRUE count, three with `TEMPLATE_SLACK`** (the slack corrected a character-ratio estimate the tokenizer already counts, and `@matusi_ukr:22327#580336` sits between the readings at 2 785 raw / 2 801 with slack); **two are over `max_seq_len` itself under BOTH readings**, which is what makes the STOP invariant to that question.
 The three-ratio model that DERIVED 2 816 predicts 2 763 and clears every row, so it under-predicts by
 **228 tokens** on rows three times longer than the ones it was measured on. **It is not the rebuild's
-doing:** the same measurement at `97548df` returns 2 974 with two rows over. 3.25 (1)'s own next rung,
+doing:** at `97548df` the same measurement returns 2 974 and two rows over under BOTH readings, so
+the true-count answer never moved; only the with-slack answer went 2 → 3, by one token on one row. 3.25 (1)'s own next rung,
 3 072, clears 2 991 by 81 — and taking it is the operator's word, not the executor's.
 
 **What the two verdicts moved in the data.** Gate 1: four named rewrites in the team lead's words, a

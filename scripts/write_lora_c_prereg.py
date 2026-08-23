@@ -463,8 +463,15 @@ def reachability(data_record: dict, counted: dict) -> dict:
                 f" {tokens['by_ratio']['registered_bound_max']['over_max_seq_len']} of"
                 f" {tokens['by_ratio']['registered_bound_max']['of']} over {tokens['max_seq_len']}."
                 f" The TOKENIZER counts {counted['pod_count']['max']}"
-                f" ({counted['pod_count_plus_template_slack']['max']} with TEMPLATE_SLACK) and"
-                f" {counted['rows_over_the_stop_threshold']} rows over the amendment's 2 800 stop."
+                f" ({counted['pod_count_plus_template_slack']['max']} with TEMPLATE_SLACK):"
+                f" {counted['rows_over_the_stop_threshold']['by_the_true_count']} rows over the"
+                " amendment's 2 800 stop by the TRUE count, which is the reading its own words name"
+                f" ({counted['rows_over_the_stop_threshold']['with_template_slack']} with slack —"
+                f" {', '.join(counted['rows_over_the_stop_threshold']['the_difference'])} sits"
+                " between the two readings), and"
+                f" {len(counted['rows_over_max_seq_len']['by_the_true_count'])} over max_seq_len"
+                " itself under BOTH readings, which is what makes the STOP invariant to the"
+                " question."
                 " The model under-predicts by"
                 f" {counted['the_model_this_replaces']['the_model_underpredicts_by']} tokens on the"
                 " widest row, which is exactly the hazard 3.25 (1) ordered the check against"
@@ -472,16 +479,24 @@ def reachability(data_record: dict, counted: dict) -> dict:
             ),
             "not_caused_by_this_contract": (
                 "measured on the rows as they stood at 97548df — before the gate-1 rewrites and"
-                " before amendment 3.25 (2)'s neighbour refusal — the same tokenizer counts 2 974"
-                " with TWO rows over 2 800. The rebuild moved the widest row by one token"
+                " before amendment 3.25 (2)'s neighbour refusal — the same tokenizer counts 2 974,"
+                " with TWO rows over 2 800 under BOTH readings and two over max_seq_len. So the"
+                " TRUE-count answer is 2 at both shas and this rebuild did not move it; what moved"
+                " is the with-slack answer, 2 -> 3, because @matusi_ukr:22327#580336 went 2 784 ->"
+                " 2 785 and crossed the slack boundary by ONE token. The finding predates the"
+                " contract that reports it"
             ),
             "the_operators_own_next_rung": (
                 "3.25 (1)'s own words: «the next rung is 3 072 and it is one word, not a redesign»."
                 f" {counted['pod_count_plus_template_slack']['max']} fits under 3 072 with"
-                f" {3072 - counted['pod_count_plus_template_slack']['max']} tokens to spare. This"
+                f" {3072 - counted['pod_count_plus_template_slack']['max']} tokens to spare — and"
+                " that is the CONSERVATIVE reading; the true count leaves"
+                f" {3072 - counted['pod_count']['max']}. This"
                 " registration does NOT take that rung: raising frozen law is the operator's word"
             ),
             "rows_over": counted["over"],
+            "rows_over_max_seq_len": counted["rows_over_max_seq_len"],
+            "the_threshold_has_two_readings": counted["rows_over_the_stop_threshold"],
             "the_model_this_ceiling_was_derived_from": {
                 **{
                     key: tokens[key]
@@ -704,6 +719,7 @@ def build() -> dict:
                 "with_template_slack": counted["pod_count_plus_template_slack"],
                 "stop_threshold": counted["stop_threshold"],
                 "rows_over": counted["rows_over_the_stop_threshold"],
+                "rows_over_max_seq_len": counted["rows_over_max_seq_len"],
                 "verdict": counted["verdict"],
             },
             "rank": yaml.safe_load(QLORA.read_text(encoding="utf-8"))["lora"]["r"],

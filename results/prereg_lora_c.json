@@ -415,7 +415,7 @@
   },
   "producer": {
     "script": "scripts/write_lora_c_prereg.py",
-    "sha256": "b99da5c7c9c98be6921cd7ebd0c6b61620a17135e52060daea5f68e049ed1684"
+    "sha256": "a4f6e77f3bb90bd648b47dd7fc80b02d1616eedde4874c0eb569e0a203317391"
   },
   "question": "does rationale-supervised QLoRA on pass 1 fix the subject-attribution errors pass 2 measured — brand ↔ retailer, a retailer in a non-dairy context, non-dairy «brands», and mention-vs-about — WITHOUT learning the prior the way line B did",
   "reachability": {
@@ -533,11 +533,17 @@
           "why_not_the_processor": "AutoProcessor needs torchvision for Gemma4ImageProcessor and this is a text-only count; the snapshot carries one template file and no processor-specific one, so the two loaders read the same bytes"
         },
         "max_seq_len": 2816,
-        "over": [
-          "@klopotenkofood:6060#21366",
-          "@matusi_ukr:22327#580336",
-          "@tarilka_malyuka:746#83"
-        ],
+        "over": {
+          "by_the_true_count": [
+            "@klopotenkofood:6060#21366",
+            "@tarilka_malyuka:746#83"
+          ],
+          "with_template_slack": [
+            "@klopotenkofood:6060#21366",
+            "@matusi_ukr:22327#580336",
+            "@tarilka_malyuka:746#83"
+          ]
+        },
         "pod_count": {
           "max": 2975,
           "median": 1633.0,
@@ -550,7 +556,27 @@
           "slack": 16
         },
         "rows": 506,
-        "rows_over_the_stop_threshold": 3,
+        "rows_over_max_seq_len": {
+          "by_the_true_count": [
+            "@klopotenkofood:6060#21366",
+            "@tarilka_malyuka:746#83"
+          ],
+          "ceiling": 2816,
+          "reading": "these are the rows train_qlora.encode_pass1 would REFUSE on the pod, and the two readings agree on them — which is what makes the STOP invariant to the question above",
+          "with_template_slack": [
+            "@klopotenkofood:6060#21366",
+            "@tarilka_malyuka:746#83"
+          ]
+        },
+        "rows_over_the_stop_threshold": {
+          "by_the_true_count": 2,
+          "the_difference": [
+            "@matusi_ukr:22327#580336"
+          ],
+          "which_the_amendment_names": "by_the_true_count — «a true count above 2 800»",
+          "why_they_differ": "TEMPLATE_SLACK = 16 corrected a CHARACTER-RATIO estimate for the chat template; apply_chat_template already counts it here, so adding it back double-counts. One row sits inside that margin",
+          "with_template_slack": 3
+        },
         "source": {
           "file": "results/pass1_sft_v3_train.jsonl",
           "sha256": "cf55d3f20216139845d320b4283d543c5283e3475f3c6afa42ea98cf20997c18"
@@ -566,7 +592,7 @@
           "true_max_with_slack": 2991,
           "why": "amendment 3.25 (1) derived 2 816 from 2 759 — the widest row at the registered worst tokens-per-character. That is a MODEL measured on probe-b's 2 778-3 923 character rows and applied to rows of 5 262-9 415 (Dv757). Here is what it predicts against what the tokenizer counts, on the SAME rows"
         },
-        "verdict": "STOP — a true count above 2 800; back to the operator, the next rung is 3 072",
+        "verdict": "STOP — a true count above 2 800 on 2 of 506 rows, and 2 of them are over max_seq_len 2816 itself. The STOP fires under BOTH readings of the threshold. Back to the operator; the next rung is 3 072",
         "widest_rows": [
           {
             "chars": 9415,
@@ -605,12 +631,30 @@
           }
         ]
       },
-      "not_caused_by_this_contract": "measured on the rows as they stood at 97548df — before the gate-1 rewrites and before amendment 3.25 (2)'s neighbour refusal — the same tokenizer counts 2 974 with TWO rows over 2 800. The rebuild moved the widest row by one token",
-      "rows_over": [
-        "@klopotenkofood:6060#21366",
-        "@matusi_ukr:22327#580336",
-        "@tarilka_malyuka:746#83"
-      ],
+      "not_caused_by_this_contract": "measured on the rows as they stood at 97548df — before the gate-1 rewrites and before amendment 3.25 (2)'s neighbour refusal — the same tokenizer counts 2 974, with TWO rows over 2 800 under BOTH readings and two over max_seq_len. So the TRUE-count answer is 2 at both shas and this rebuild did not move it; what moved is the with-slack answer, 2 -> 3, because @matusi_ukr:22327#580336 went 2 784 -> 2 785 and crossed the slack boundary by ONE token. The finding predates the contract that reports it",
+      "rows_over": {
+        "by_the_true_count": [
+          "@klopotenkofood:6060#21366",
+          "@tarilka_malyuka:746#83"
+        ],
+        "with_template_slack": [
+          "@klopotenkofood:6060#21366",
+          "@matusi_ukr:22327#580336",
+          "@tarilka_malyuka:746#83"
+        ]
+      },
+      "rows_over_max_seq_len": {
+        "by_the_true_count": [
+          "@klopotenkofood:6060#21366",
+          "@tarilka_malyuka:746#83"
+        ],
+        "ceiling": 2816,
+        "reading": "these are the rows train_qlora.encode_pass1 would REFUSE on the pod, and the two readings agree on them — which is what makes the STOP invariant to the question above",
+        "with_template_slack": [
+          "@klopotenkofood:6060#21366",
+          "@tarilka_malyuka:746#83"
+        ]
+      },
       "state": "amendment 3.25 (1) raised the ceiling 1 408 -> 2 816 and ordered a reality check before `lora-c-run` buys anything. The check RAN, at $0, through the model's own tokenizer at the pinned revision — and it STOPS the line back to the operator",
       "the_model_this_ceiling_was_derived_from": {
         "by_ratio": {
@@ -665,8 +709,17 @@
         "the_pods_own_count": "train_qlora.encode_pass1 tokenizes apply_chat_template(...) and refuses on len(context) + len(target). That expression is what results/lora_c_tokens.json now evaluates directly, by the same calls in the same order, so the projection and the count measure one quantity. The pod-side refusal still has not RUN — `load_sft` refuses on the task name first, which is STOP 3's own evidence — and the mood stays WOULD",
         "what_it_gets_wrong": "measured on probe rows of 2 778–3 923 characters and applied to rows of 5262–9415, so the chat template's fixed part scales with content it should not scale with. On the widest row it is 228 tokens LOW, and the direction was called ambiguous when it was only a model ([[a_reproducible_probe_can_be_unrepresentative]])"
       },
-      "the_operators_own_next_rung": "3.25 (1)'s own words: «the next rung is 3 072 and it is one word, not a redesign». 2991 fits under 3 072 with 81 tokens to spare. This registration does NOT take that rung: raising frozen law is the operator's word",
-      "what_the_model_said_and_the_count_says": "the three-ratio model puts the widest row at 2763 tokens and reports 0 of 506 over 2816. The TOKENIZER counts 2975 (2991 with TEMPLATE_SLACK) and 3 rows over the amendment's 2 800 stop. The model under-predicts by 228 tokens on the widest row, which is exactly the hazard 3.25 (1) ordered the check against (Dv757: a ratio is a MODEL carried across a change of row length)"
+      "the_operators_own_next_rung": "3.25 (1)'s own words: «the next rung is 3 072 and it is one word, not a redesign». 2991 fits under 3 072 with 81 tokens to spare — and that is the CONSERVATIVE reading; the true count leaves 97. This registration does NOT take that rung: raising frozen law is the operator's word",
+      "the_threshold_has_two_readings": {
+        "by_the_true_count": 2,
+        "the_difference": [
+          "@matusi_ukr:22327#580336"
+        ],
+        "which_the_amendment_names": "by_the_true_count — «a true count above 2 800»",
+        "why_they_differ": "TEMPLATE_SLACK = 16 corrected a CHARACTER-RATIO estimate for the chat template; apply_chat_template already counts it here, so adding it back double-counts. One row sits inside that margin",
+        "with_template_slack": 3
+      },
+      "what_the_model_said_and_the_count_says": "the three-ratio model puts the widest row at 2763 tokens and reports 0 of 506 over 2816. The TOKENIZER counts 2975 (2991 with TEMPLATE_SLACK): 2 rows over the amendment's 2 800 stop by the TRUE count, which is the reading its own words name (3 with slack — @matusi_ukr:22327#580336 sits between the two readings), and 2 over max_seq_len itself under BOTH readings, which is what makes the STOP invariant to the question. The model under-predicts by 228 tokens on the widest row, which is exactly the hazard 3.25 (1) ordered the check against (Dv757: a ratio is a MODEL carried across a change of row length)"
     }
   },
   "ready_to_price": {
@@ -770,10 +823,30 @@
         "min": 1445
       },
       "ran": true,
-      "rows_over": 3,
-      "sha256": "d7642388fed9f797b5beb605596c5f00e27d9fcce31d5d7814e0d1fc6e349d1b",
+      "rows_over": {
+        "by_the_true_count": 2,
+        "the_difference": [
+          "@matusi_ukr:22327#580336"
+        ],
+        "which_the_amendment_names": "by_the_true_count — «a true count above 2 800»",
+        "why_they_differ": "TEMPLATE_SLACK = 16 corrected a CHARACTER-RATIO estimate for the chat template; apply_chat_template already counts it here, so adding it back double-counts. One row sits inside that margin",
+        "with_template_slack": 3
+      },
+      "rows_over_max_seq_len": {
+        "by_the_true_count": [
+          "@klopotenkofood:6060#21366",
+          "@tarilka_malyuka:746#83"
+        ],
+        "ceiling": 2816,
+        "reading": "these are the rows train_qlora.encode_pass1 would REFUSE on the pod, and the two readings agree on them — which is what makes the STOP invariant to the question above",
+        "with_template_slack": [
+          "@klopotenkofood:6060#21366",
+          "@tarilka_malyuka:746#83"
+        ]
+      },
+      "sha256": "e096b8dae774c108f7972addab14b9fdc3a9c2712e4e014bc2962250ca3ec494",
       "stop_threshold": 2800,
-      "verdict": "STOP — a true count above 2 800; back to the operator, the next rung is 3 072",
+      "verdict": "STOP — a true count above 2 800 on 2 of 506 rows, and 2 of them are over max_seq_len 2816 itself. The STOP fires under BOTH readings of the threshold. Back to the operator; the next rung is 3 072",
       "with_template_slack": {
         "max": 2991,
         "median": 1649.0,

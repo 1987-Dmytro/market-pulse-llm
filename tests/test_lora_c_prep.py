@@ -331,7 +331,18 @@ def test_the_ratio_model_clears_2816_and_the_real_tokenizer_does_not(record):
     assert counted["rows"] == len(jsonl(TRAIN)) == 506
     assert counted["max_seq_len"] == tokens["max_seq_len"]
     assert counted["stop_threshold"] == 2800
-    assert counted["rows_over_the_stop_threshold"] == len(counted["over"]) == 3
+    over = counted["rows_over_the_stop_threshold"]
+    # BOTH readings, and the row that separates them, because the operator's ruling rests on the
+    # integer and `TEMPLATE_SLACK` corrected a character-ratio estimate the tokenizer already counts
+    # ([[two_values_for_one_input_get_quoted_kindly]])
+    assert over["by_the_true_count"] == len(counted["over"]["by_the_true_count"]) == 2
+    assert over["with_template_slack"] == len(counted["over"]["with_template_slack"]) == 3
+    assert over["the_difference"] == ["@matusi_ukr:22327#580336"]
+    assert over["which_the_amendment_names"].startswith("by_the_true_count")
+    # and the invariance that makes the STOP a finding rather than a wobble
+    ceiling = counted["rows_over_max_seq_len"]
+    assert ceiling["by_the_true_count"] == ceiling["with_template_slack"]
+    assert len(ceiling["by_the_true_count"]) == 2
     assert counted["pod_count_plus_template_slack"]["max"] > counted["max_seq_len"]
     assert counted["verdict"].startswith("STOP")
     # and the model is LOW, which is the reason the amendment ordered the count at all
@@ -909,7 +920,9 @@ def test_the_registration_carries_the_count_and_quotes_the_amendment():
     registration = json.loads(PREREG.read_text(encoding="utf-8"))
     check = registration["training"]["tokenizer_reality_check"]
     assert check["ran"] is True and check["verdict"].startswith("STOP")
-    assert check["rows_over"] == 3
+    assert check["rows_over"]["by_the_true_count"] == 2
+    assert check["rows_over"]["with_template_slack"] == 3
+    assert len(check["rows_over_max_seq_len"]["by_the_true_count"]) == 2
     assert registration["training"]["config_agrees_with_lora_b"] is False
     assert registration["training"]["config_revision"] == 2
     assert "FALSE ON PURPOSE" in registration["training"]["config_agrees_with_lora_b_reading"]

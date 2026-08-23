@@ -45,8 +45,15 @@ TRAIN = REPO_ROOT / "results" / "pass1_sft_v3_train.jsonl"
 OUT = REPO_ROOT / "results" / "lora_c_tokens.json"
 QLORA = REPO_ROOT / "config" / "qlora.yaml"
 STOP_AT = 2800
-"""Amendment 3.25 (1): «a true count above 2 800 STOPS the line back to the operator». It is not
-`max_seq_len` — it is the margin the operator kept under 2 816 for the run to live in."""
+"""Amendment 3.25 (1): «a **true count** above 2 800 STOPS the line back to the operator». It is not
+`max_seq_len` — it is the margin the operator kept under 2 816 for the run to live in.
+
+**The threshold has two readings and this record publishes both**, because one row sits between
+them. «True count» is the tokenizer's own number, and `TEMPLATE_SLACK` existed to correct a
+CHARACTER-RATIO estimate for the chat template — which `apply_chat_template` here already counts, so
+adding it back double-counts the template. On the amendment's own words the count is the raw one;
+with slack it is one row larger. Naming one and hiding the other is how one input gets two values
+quoted kindly ([[two_values_for_one_input_get_quoted_kindly]])."""
 
 
 def revision() -> str:
@@ -106,7 +113,11 @@ def measure(rows: list[dict]) -> dict:
         )
     pod = sorted(one["pod_count"] for one in counts)
     with_slack = [one + sft.TEMPLATE_SLACK for one in pod]
-    over = [one for one in counts if one["pod_count"] + sft.TEMPLATE_SLACK > STOP_AT]
+    over_true = [one for one in counts if one["pod_count"] > STOP_AT]
+    over_slack = [one for one in counts if one["pod_count"] + sft.TEMPLATE_SLACK > STOP_AT]
+    ceiling = int(yaml.safe_load(QLORA.read_text(encoding="utf-8"))["training"]["max_seq_len"])
+    over_ceiling = [one for one in counts if one["pod_count"] > ceiling]
+    over_ceiling_slack = [one for one in counts if one["pod_count"] + sft.TEMPLATE_SLACK > ceiling]
     return {
         "instrument": {
             "model_id": local_llm.MODEL_ID,
@@ -137,12 +148,38 @@ def measure(rows: list[dict]) -> dict:
         ),
         "config_sha256": summary.sha256_of(QLORA),
         "stop_threshold": STOP_AT,
-        "rows_over_the_stop_threshold": len(over),
-        "over": [one["id"] for one in over],
+        "rows_over_the_stop_threshold": {
+            "by_the_true_count": len(over_true),
+            "with_template_slack": len(over_slack),
+            "which_the_amendment_names": "by_the_true_count — «a true count above 2 800»",
+            "the_difference": [one["id"] for one in over_slack if one not in over_true],
+            "why_they_differ": (
+                f"TEMPLATE_SLACK = {sft.TEMPLATE_SLACK} corrected a CHARACTER-RATIO estimate for the"
+                " chat template; apply_chat_template already counts it here, so adding it back"
+                " double-counts. One row sits inside that margin"
+            ),
+        },
+        "over": {
+            "by_the_true_count": [one["id"] for one in over_true],
+            "with_template_slack": [one["id"] for one in over_slack],
+        },
+        "rows_over_max_seq_len": {
+            "ceiling": ceiling,
+            "by_the_true_count": [one["id"] for one in over_ceiling],
+            "with_template_slack": [one["id"] for one in over_ceiling_slack],
+            "reading": (
+                "these are the rows train_qlora.encode_pass1 would REFUSE on the pod, and the two"
+                " readings agree on them — which is what makes the STOP invariant to the question"
+                " above"
+            ),
+        },
         "verdict": (
-            "STOP — a true count above 2 800; back to the operator, the next rung is 3 072"
-            if over
-            else "the amendment's reality check PASSES: every row is at or under 2 800 with slack"
+            "STOP — a true count above 2 800 on"
+            f" {len(over_true)} of {len(counts)} rows, and {len(over_ceiling)} of them are over"
+            f" max_seq_len {ceiling} itself. The STOP fires under BOTH readings of the threshold."
+            " Back to the operator; the next rung is 3 072"
+            if over_true or over_ceiling
+            else "the amendment's reality check PASSES: every row is at or under 2 800"
         ),
         "the_model_this_replaces": {
             "why": (
@@ -188,6 +225,16 @@ def main(argv: list[str] | None = None) -> int:
         f"  + TEMPLATE_SLACK {record['pod_count_plus_template_slack']['slack']}:"
         f"  max {record['pod_count_plus_template_slack']['max']}"
         f"  against max_seq_len {record['max_seq_len']} and the STOP at {record['stop_threshold']}"
+    )
+    over = record["rows_over_the_stop_threshold"]
+    print(
+        f"  over {record['stop_threshold']}:  {over['by_the_true_count']} by the TRUE count,"
+        f"  {over['with_template_slack']} with slack"
+        f"  ({', '.join(over['the_difference']) or 'no row between the readings'})"
+    )
+    print(
+        f"  over max_seq_len {record['max_seq_len']}:"
+        f"  {len(record['rows_over_max_seq_len']['by_the_true_count'])} under BOTH readings"
     )
     print(f"  {record['verdict']}")
     return 0
