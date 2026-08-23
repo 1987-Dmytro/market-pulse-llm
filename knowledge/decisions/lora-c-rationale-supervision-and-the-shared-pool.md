@@ -286,3 +286,27 @@ artefacts rebuild byte-identical at revision 3, and its pins stay on revision 1.
 records this ruling — SPEC is a team-lead file. The registration carries a field beside the verbatim
 quote saying the ruling superseded the number, so a later contract grepping SPEC for the ceiling in
 force finds 2 816 **with a pointer** rather than silently. Writing that block is the team lead's.
+
+## Update — the authority arrived: SPEC amendment 3.26 (`lora-c-close`, 2026-08-23, $0)
+
+**The paragraph above is superseded, and it is left standing because the gap it describes was real
+for eight hours and is the reason this section exists.** The team lead wrote the marked block; it
+carries three clauses — (1) `max_seq_len` is 3 072, (2) the 2 800 STOP threshold reads the REAL
+tokenizer's count with no `TEMPLATE_SLACK` added, (3) the tokens-per-character model retires for
+ceilings. A grep of `docs/SPEC.md` for the ceiling in force now returns **3 072 from the law**, not
+2 816 with a pointer.
+
+**What the landing cost, and the one thing it uncovered.** Four touches mirror what 3.25 received,
+and no registered law moved: the raw file goes `ff300bc7 → b5aa39af` while all three readings of
+`registered_law` are byte-identical across the block's arrival. But `results/prereg_lora_c.json` is
+pinned by a producer that hashes the **RAW** spec — `write_lora_c_prereg.py:647`, `sha(SPEC)`, the
+only such call site in the repo — so this record moved where the family's whole safety argument
+says nothing moves. It was rebuilt (a DRAFT, no pod), and the field that ASSERTED the gap above was
+replaced by three `quoted_spec` quotations of 3.26, so it can no longer outlive its state:
+[[the_one_pin_that_skips_the_normaliser]], [[a_reading_that_outlived_its_state]]. Report:
+`docs/reports/lora-c-close.md`.
+
+**Still not law anywhere but prose:** 3.26 (2)'s 2 800 lives as a module constant `STOP_AT` in
+`scripts/tokenize_lora_c_rows.py`, written before the ruling. The two agree today. A bar whose law
+is in one file and whose constant is in another is the shape that drifts
+([[preregistration_is_a_file_not_a_constant]]).

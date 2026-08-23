@@ -9,6 +9,7 @@ no endpoint, no paid call.** Opening HEAD `c15b502`.
 | `d76091a` | `fix(5c2)` — the strip registry: four touches | `scripts/write_prereg_5c2.py` `tests/test_prereg_5c2.py` `tests/test_sku_prereg.py` |
 | `2f8fe17` | `fix(lora-c)` — the raw-spec pin + the field that denied its own file (Dv781, Dv782, Dv783) | `scripts/write_lora_c_prereg.py` `results/prereg_lora_c.json` `tests/test_lora_c_prep.py` |
 | this report | `docs(report)` | `docs/reports/lora-c-close.md` |
+| `docs(adr)` | the decision record's «where the authority is NOT» superseded by an Update section | `knowledge/decisions/lora-c-rationale-supervision-and-the-shared-pool.md` |
 | the vault tail | `chore(vault)` | `knowledge/hot.md` · daily log · index |
 
 No `git add -A` anywhere; this report cannot name its own sha
