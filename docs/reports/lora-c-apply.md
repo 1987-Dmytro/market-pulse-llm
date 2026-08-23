@@ -481,7 +481,8 @@ commit list**, and the gate-2 rewrites would otherwise have moved it.
 
 `make check` on a STABLE tree: **3 668 passed, 2 skipped, exit 0.** Every one of the six producers
 was then re-run and `git status --porcelain` is empty — every shipped artifact is what its producer
-emits today.
+emits today. Re-run once more after Dv777's correction, at `1d0fe4f`: **3 668 passed, 2 skipped,
+exit 0**, stamped `2026-08-23T09:44:37+00:00`.
 
 **The older-pin delta is 38 → 38, and NOT because nothing moved.** `config/qlora.yaml`'s revision is
 invisible to `preflight`: its pin lives at `results/prereg_lora_b.json::instruments.config_sha256`,
@@ -514,6 +515,7 @@ this contract.**
 | **Dv775** | `[cause: process]` [[the_fix_widened_the_denominator]] | **A metric improved without being targeted, and the record nearly took credit for tuning.** Four of six register axes missed at the gate-2 sample; one of seven misses now. Nothing aimed at those axes: R1/R2 replaced fifteen price-and-stock fragments with thing-quality claims and R5 rewrote ten skeletons into longer forms. Recorded with its cause, because «the register now matches» read as an achievement of the rewrite would be a claim about an instrument nobody moved. |
 | **Dv777** | `[cause: verify-gap]` [[two_values_for_one_input_get_quoted_kindly]] | **The stop threshold has two readings and the record published one — the larger.** `rows_over_the_stop_threshold` tested `pod_count + TEMPLATE_SLACK > 2 800` and reported **3**; the amendment's words are «a **true count** above 2 800» and the true count is **2**. `TEMPLATE_SLACK` = 16 exists to correct a CHARACTER-RATIO estimate of the chat template, which `apply_chat_template` already counts here, so the +16 double-counts — at exactly the row that separates 2 from 3. `@matusi_ukr:22327#580336` reads 2 785 raw and 2 801 with slack: over by ONE token under a correction that should not have been applied. Both readings are now published with the row that separates them, and the STOP is shown invariant to the question — two rows are over `max_seq_len` 2 816 itself under either. **This is the seventh instance of one input with two values on this line**, and the first where the wrong one was the number an operator's ruling rests on. |
 | **Dv778** | `[cause: contract-gap]` [[the_contracts_scope_is_narrower_than_the_rulings]] | **D3 says STOP and D4, D5 and the report ran after it.** The reading applied — the STOP is on the PAID line, not on the $0 contract — rests on three sentences: amendment 3.25 (1) scopes it «before `lora-c-run` buys anything», D5 of this contract requires «the tokenizer result from D3» inside the registration, and the contract closes with «STOP after the report for team-lead acceptance». Recorded as a deviation rather than left as prose, because a team lead reading a STOP instruction followed by two more phases is owed the reasoning and the option to overrule it. Nothing was taken on the strength of it: the 3 072 rung is untouched, no threshold moved, no row dropped. |
+| **Dv779** | `[cause: process]` [[a_review_that_verifies_a_moving_tree]] | **The second skeptic was launched on a frozen sha and returned nothing — the second time on this line.** It was given both shas, the checklist and the DO NOT list; it ran 28 minutes and a full `make check` of its own, then answered three requests for its text — one of which offered a one-line `NOTHING TO REPORT` — with four empty idle notifications. `lora-c-prep` closed with the same shape (Dv748: five lenses, none answering for 95 minutes). **The construction is right and the apparatus does not answer**, and this row exists so «reviewed» is not read off a section that says nothing. What replaced it is the same checklist run by ME over the same range, recorded as the executor checking his own work; every DO NOT clause holds, and the one question an executor cannot answer about himself — whether the P-NULL rule I wrote is the rule the verdict meant — is left open in the report rather than closed by my own re-reading. |
 | **Dv776** | `[cause: process]` [[a_review_that_verifies_a_moving_tree]] | **The opening tree was RED and the suite stamp said 35.** Eight of 3 658 failed, all of them caused by the team-lead files already on disk before the first commit: four the landing manoeuvre for `amendment-3.25`, four lora-c's records still saying `verdict_present: false`. Recorded at step 0 rather than discovered at D5 — the baseline instrument's stamp (35 passed) was a partial run and the live `make check` is what said so. |
 
 **The tally, by the grep the template names:**
@@ -525,10 +527,10 @@ tag = {}
 for chunk in re.split(r"(?=\*\*Dv\d+)", flat):
     if (m := re.match(r"\*\*Dv(\d+)", chunk)) and (t := re.findall(r"\[cause:\s*([a-z-]+)\]", chunk)):
         tag.setdefault(int(m.group(1)), t[0])
-inr = {d: t for d, t in tag.items() if 765 <= d <= 778}
+inr = {d: t for d, t in tag.items() if 765 <= d <= 779}
 health = sum(1 for t in inr.values() if t in ("contract-gap", "spec-gap", "verify-gap"))
 print(len(inr), dict(collections.Counter(inr.values()).most_common()))
-print("contract health", health, "· paid", len(inr) - health, "· enum canonicity", len(inr), "of 14")
+print("contract health", health, "· paid", len(inr) - health, "· enum canonicity", len(inr), "of 15")
 ```
 
 ## Process signals
@@ -555,7 +557,46 @@ print("contract health", health, "· paid", len(inr) - health, "· enum canonici
    the enumerated-diff test caught a config value moving where only a sha was expected. None of the
    three was found by reading the code that contained it.
 
-## The second-skeptic debt
+## The second-skeptic debt — launched, and it did not return
 
-Launched against `git diff f5eda670efa4931c7945191a3a783729143e4c8c..<closing sha>` with the
-checklist the contract names. Its verdict is pasted below.
+Launched against `git diff f5eda670efa4931c7945191a3a783729143e4c8c..4c7947891197c5c0db099cf1cc21805bee49bdb3`
+with the contract's checklist («does every change trace to a verdict ruling or to 3.25; was anything
+else touched»), the two shas to quote back, and the DO NOT list. **It ran for 28 minutes, executed a
+full `make check` of its own, and delivered no verdict.** Three requests for its text — including one
+that offered `NOTHING TO REPORT` plus a single line naming what stopped it — returned four empty idle
+notifications and nothing else. **There is no verdict to paste, and this section is not a clean bill.**
+
+**Why the diff starts at `f5eda67` and not at `97548df`**, which the step-0 baseline names as head:
+`f5eda67` is the team-lead files' OWN commit, so a diff from `97548df` would show `docs/SPEC.md` and
+`docs/STATUS.md` as changes of this contract, which they are not.
+
+**And its range ends before this contract's last correction.** The review was given
+`..4c7947891197c5c0db099cf1cc21805bee49bdb3`, which is the closing commit the contract's final step
+names — so Dv777 (the stop threshold's two readings) and Dv778 (why D4 and D5 ran past D3's STOP)
+landed AFTER it and were never in its subject. Both came from the advisor rather than from this
+review, and the correction they produced moved the headline integer from 3 to 2.
+
+**What stands in its place is named as MINE, not as independent.** The same checklist, run by the
+executor over the same range, is not a second skeptic — it is the first one checking its own work,
+and it is recorded that way:
+
+```
+rationale rows changed in total : 48        =  31 markers + 4 named + 13 P-NULL
+  of which a marker was ADDED   : 31
+labels changed in rationales    : 1         <- the r3 row, and only it
+rationale_reviewed all true     : True | n 515
+synthetic labels changed        : 0         <- gate 2 moved no label
+synthetic texts changed         : 51        =  15 R1 + 1 R2 + 2 R4 + 10 R5 + 30 R6, overlapping on 7
+synthetic reviewed all true     : True | n 160
+gate-2 sample touched at all    : NO        <- outside the commit list
+team-lead files touched         : NONE      <- STATUS, SPEC, PROMPT-*, both verdicts
+sealed records touched          : NONE      <- prereg_lora_b, lora_b_verdict, pass1_sft,
+                                               prereg_5c2_run, both sealed arms, labels r1/r2,
+                                               prompts.py, registry.yaml, lexicon.yaml
+gate-1 sample diff              : +22 lines, one appended block, nothing above it moved
+```
+
+Every DO NOT clause the contract lists is checked above and holds. What NOBODY independent checked is
+the thing an executor is worst placed to check: whether the P-NULL rule I wrote is the rule the
+verdict meant, and whether all 48 rationale rewrites trace to a ruling rather than to my reading of
+one. **That question is open and it is the first thing a reviewer should take.**
