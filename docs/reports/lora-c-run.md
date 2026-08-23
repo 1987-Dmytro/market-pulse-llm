@@ -442,3 +442,18 @@ NONE
 ```
 
 `knowledge/hot.md`, which IS a suite input, is byte-identical across the run.
+
+**And the one file committed AFTER this reading — this report — is read by no test either.** Thirty-
+seven places in `tests/` open a file under `docs/`; every one of them reads `docs/SPEC.md`, a
+`docs/PROMPT-*.md`, `docs/reviews/`, `docs/annotation/` or a labels file, and **not one path is
+under `docs/reports/`**. The eleven `docs/reports` mentions in `tests/` are prose inside docstrings.
+So this reading covers the tree the contract closes on, and the report's own last commit cannot have
+moved it ([[a_test_that_reads_a_shipped_artifact]]).
+
+The thirteen, by collection rather than by subtraction — `pytest --collect-only -q` on
+`tests/test_lora_c_run.py` returns **13**, all in that one file: two parametrised STATUS-quotation
+controls, the `STOP_AT` binding, nine sibling-trainer tests (accept · the constant put back · the
+pinned trainer still refusing · three refusals · the arm-B gap · the census agreement · `arm_of`)
+and the derivation's re-computation. `test_the_registration_carries_no_price` changed content in
+`tests/test_lora_c_prep.py` and added no test there, which is why 3 682 − 3 669 and the enumeration
+agree ([[count_in_prose_is_not_the_enumeration]]).
