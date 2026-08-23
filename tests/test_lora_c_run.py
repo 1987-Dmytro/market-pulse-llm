@@ -16,9 +16,15 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
 import tokenize_lora_c_rows as tokens  # noqa: E402
+import train_qlora as trainer  # noqa: E402
+import train_qlora_v3 as sibling  # noqa: E402
 import write_lora_c_prereg as prereg  # noqa: E402
+from market_pulse import pass1_v3, prompts  # noqa: E402
+
+from test_train_qlora_pass1 import FakeTokenizer  # noqa: E402
 
 PREREG = REPO_ROOT / "results" / "prereg_lora_c.json"
+TRAIN = REPO_ROOT / "results" / "pass1_sft_v3_train.jsonl"
 TOKENS = REPO_ROOT / "results" / "lora_c_tokens.json"
 STATUS = REPO_ROOT / "docs" / "STATUS.md"
 
@@ -84,3 +90,136 @@ def test_the_stop_threshold_constant_equals_the_law_it_quotes():
     # every row over the threshold is among the widest five, so the count is re-derivable here
     assert sum(one["pod_count"] > law for one in census["widest_rows"]) == over["by_the_true_count"]
     assert str(law)[0] in census["verdict"] and census["max_seq_len"] > law
+
+
+# ------------------------------------------------------------------------- D1
+
+
+def a_row(**over):
+    row = json.loads(TRAIN.read_text(encoding="utf-8").splitlines()[0])
+    row.update(over)
+    return row
+
+
+def a_dataset(tmp_path: Path, rows: list[dict], name: str = "rows.jsonl") -> Path:
+    out = tmp_path / name
+    out.write_text(
+        "".join(json.dumps(row, ensure_ascii=False) + "\n" for row in rows), encoding="utf-8"
+    )
+    return out
+
+
+def test_the_sibling_accepts_the_registered_arm_a_dataset():
+    """Guard 1 and guard 2, both re-bound, on the bytes the registration names."""
+    config = {"training": {"max_seq_len": 3072}}
+    built, provenance = sibling.build_pass1_v3(config, TRAIN, weighted=True)
+    assert len(built["train"]) == 506
+    assert built["carve"] == [] and built["kind"] == "pass1" and built["weighted"]
+    assert provenance["task"] == pass1_v3.PASS1_TASK_V3
+    assert provenance["prompt_sha256"] == {
+        pass1_v3.PASS1_TASK_V3: pass1_v3.prompt_sha256(pass1_v3.PASS1_TASK_V3)
+    }
+    assert provenance["registration"]["file"] == "results/prereg_lora_c.json"
+    assert sorted(provenance["class_weights"]) == [
+        "null",
+        "категория_личное",
+        "не_наш_рынок",
+        "сеть_ритейлер",
+    ]
+
+
+def test_the_pinned_task_constant_is_put_back():
+    """The swap is scoped: line B's trainer reads v1 again the moment the call returns."""
+    was = prompts.PASS1_TASK
+    with sibling.the_task_is_v3():
+        assert prompts.PASS1_TASK == pass1_v3.PASS1_TASK_V3
+    assert prompts.PASS1_TASK == was == "pass1_comment_gm4_v1"
+
+
+def test_the_pinned_trainer_still_refuses_a_v3_row():
+    """The re-bind is the sibling's, not an edit: `train_qlora` is exactly as sealed."""
+    with pytest.raises(SystemExit, match="is not 'pass1_comment_gm4_v1'"):
+        trainer.load_sft(TRAIN)
+
+
+def test_the_sibling_refuses_a_v1_task_row(tmp_path):
+    path = a_dataset(tmp_path, [a_row(task=prompts.PASS1_TASK)])
+    with pytest.raises(SystemExit, match="is not 'pass1_comment_gm4_v3'"):
+        sibling.build_pass1_v3({"training": {}}, path, weighted=True)
+
+
+def test_the_sibling_refuses_an_unregistered_dataset(tmp_path):
+    """One row short of the registered file is a different file, and the sha says so."""
+    rows = [json.loads(one) for one in TRAIN.read_text(encoding="utf-8").splitlines() if one]
+    path = a_dataset(tmp_path, rows[:-1])
+    with pytest.raises(SystemExit, match="not a registered dataset of this line"):
+        sibling.build_pass1_v3({"training": {}}, path, weighted=True)
+
+
+def test_the_sibling_refuses_a_row_over_the_ceiling():
+    """`encode_pass1`'s own refusal, reached through the census — the pod's guard, run at $0."""
+    row = a_row()
+    with pytest.raises(SystemExit, match="against a max_seq_len of 3072"):
+        trainer.encode_pass1(FakeTokenizer(), row, 3072)
+
+
+def test_the_registration_names_no_arm_b_dataset():
+    """The 666-row arm B has a registered ROW COUNT and no registered FILE.
+
+    `legs.arm_b.train_rows` is 666 and `population.train` names one file of 506; the 160 synthetic
+    rows live in `results/synthetic_pass1_v1.jsonl` in the raw comment shape, with no `prompt`,
+    `target` or `learn_chars`, so nothing on disk is arm B's dataset and no producer renders one.
+    This test pins the gap rather than papering over it ([[a_registered_bar_may_have_no_producer]]).
+    """
+    record = json.loads(PREREG.read_text(encoding="utf-8"))
+    assert record["legs"]["arm_b"]["train_rows"] == 666
+    assert set(sibling.registered_training_shas()) == {"results/pass1_sft_v3_train.jsonl"}
+    synthetic = json.loads(
+        (REPO_ROOT / "results" / "synthetic_pass1_v1.jsonl")
+        .read_text(encoding="utf-8")
+        .split("\n")[0]
+    )
+    assert not {"prompt", "target", "learn_chars"} & set(synthetic)
+
+
+def _tokenizer_is_obtainable() -> bool:
+    try:
+        import transformers  # noqa: F401
+        from huggingface_hub import try_to_load_from_cache
+    except ImportError:
+        return False
+    return isinstance(
+        try_to_load_from_cache(
+            "google/gemma-4-31b-it", "chat_template.jinja", revision=tokens.revision()
+        ),
+        str,
+    )
+
+
+@pytest.mark.skipif(
+    not _tokenizer_is_obtainable(),
+    reason="the model tokenizer is not on this machine — the census then describes a measurement"
+    " this suite cannot re-run",
+)
+def test_the_census_agrees_with_the_shipped_token_record():
+    """The encode census against `results/lora_c_tokens.json`'s count, on the same rows.
+
+    Two instruments over one quantity: the token record tokenizes `apply_chat_template(prompt)` and
+    the target directly, and this runs `encode_pass1` — the function that will refuse on the pod.
+    They must agree on the widest row and on the headroom, or one of them is not measuring the
+    refusal ([[two_instruments_two_inputs]]).
+    """
+    census = sibling.census(TRAIN)
+    shipped = json.loads(TOKENS.read_text(encoding="utf-8"))
+    assert census["refused"] == []
+    assert census["rows"] == census["encoded"] == shipped["rows"]
+    assert census["tokens"]["max"] == shipped["pod_count"]["max"]
+    assert census["headroom"] == shipped["headroom_under_the_ceiling"]["by_the_true_count"]
+
+
+def test_the_arm_is_read_from_the_record_and_a_tie_is_refused():
+    """`arm_of` is a lookup in the registration, and the leg it cannot name it refuses."""
+    assert sibling.arm_of(506) == "arm_a"
+    assert sibling.arm_of(666) == "arm_b"
+    with pytest.raises(SystemExit, match="a training run whose arm"):
+        sibling.arm_of(1)

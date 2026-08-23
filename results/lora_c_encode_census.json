@@ -1,0 +1,15 @@
+{
+  "encoded": 506,
+  "file": "results/pass1_sft_v3_train.jsonl",
+  "headroom": 97,
+  "max_seq_len": 3072,
+  "quantity": "len(apply_chat_template(prompt)) + len(target) — train_qlora.encode_pass1's own expression, called, not re-implemented",
+  "refused": [],
+  "rows": 506,
+  "sha256": "cf55d3f20216139845d320b4283d543c5283e3475f3c6afa42ea98cf20997c18",
+  "tokens": {
+    "max": 2975,
+    "min": 1445,
+    "widest_row": "@tarilka_malyuka:746#83"
+  }
+}
