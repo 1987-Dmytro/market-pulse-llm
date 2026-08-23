@@ -411,4 +411,34 @@ gate measured on a tree that no longer exists ([[the_gates_evidence_outlived_its
 **A first attempt at that re-read was VOID and was killed rather than quoted** — see Dv792. The
 reading below is a run over a tree that did not move under it.
 
-CLOSING_TAIL
+Taken at **`7c0719b`** with the working tree clean at the start — the run stamps `HEAD` and
+`git status --porcelain` on both sides of itself, which is what says so:
+
+```
+$ HEAD=7c0719b  dirty=[]
+$ make check
+ruff check .
+All checks passed!
+3682 passed, 2 skipped in 601.17s (0:10:01)
+make_exit=0
+
+$ ruff format --check .
+435 files already formatted
+fmt_exit=0
+
+$ HEAD_after=7c0719b  dirty_after=[ M knowledge/daily_logs/2026-08-23.md
+                                    M knowledge/index.md]
+```
+
+**The tree DID move once during the run, and it was the Stop hook, not an edit of mine** — one
+appended line, `- 18:17: session ended (auto)`, plus the index the hook regenerates. Disclosed
+rather than waved away, because Dv792 is exactly this failure made deliberately. It does not touch
+the reading: no pytest input reads `knowledge/daily_logs/` at all, and the grep says so —
+
+```
+$ grep -rn "daily_logs" tests/ src/ scripts/ | grep "\.py:" \
+    | grep -vE "check-wikilinks|refresh-hot-cache|brain-session-end|context-census"
+NONE
+```
+
+`knowledge/hot.md`, which IS a suite input, is byte-identical across the run.
