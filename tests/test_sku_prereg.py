@@ -293,6 +293,14 @@ def test_every_pinned_input_still_hashes_to_what_it_says(record):
         # block before it. Stripped here for the same reason: these pins are v1–v4's and every row
         # they price predates the lora-c line entirely.
         "amendment-3.25",
+        # 3.26 — the operator's ruling of 2026-08-23, made inside the `lora-c-apply` session and
+        # confirmed at its acceptance: `max_seq_len` 2 816 → 3 072 (3.25 (1) superseded), the
+        # 2 800 STOP threshold reads the REAL tokenizer's count with no `TEMPLATE_SLACK`, and the
+        # tokens-per-character model retires for ceilings. The first block of this family that did
+        # NOT arrive one name short — `lora-c-close` is a contract for the landing itself.
+        # Stripped here for the same reason as the rest: these pins are v1–v4's, and every row
+        # they price predates the lora-c line entirely.
+        "amendment-3.26",
     ]
     assert prereg.RATIFICATION_NAME.findall(spec_text) == blocks
     law = prereg.registered_law(prereg.SPEC).decode("utf-8")

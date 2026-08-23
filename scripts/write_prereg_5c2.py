@@ -98,6 +98,7 @@ BLOCKS_TODAY = (
     "amendment-3.23",
     "amendment-3.24",
     "amendment-3.25",
+    "amendment-3.26",
 )
 """Every marked block the file carries NOW: the ten the seal keeps, plus each one that arrived after.
 
@@ -141,12 +142,21 @@ first block in this list that REPEALS a clause of another one: 3.23 (2)'s $40.00
 built on an assumption about a future payment that had already happened, and it retires with its
 constant. It rules on a line this registration cannot be charged against for the reason 3.23 could
 not either, so the ten-name keep is untouched a sixth time.
-3.25 (operator, 2026-08-23, at the acceptance of the `lora-c-prep` STOP report) is the nineteenth,
+3.25 (operator, 2026-08-23, at the acceptance of the `lora-c-prep` STOP report) is the seventeenth,
 and it arrived one name short like every block before it — the `lora-c-apply` contract named the
 config revision, the neighbour refusal and STOP 1, and this constant was the fourth part again. It
 moves no number of this registration either: its three rulings are `config/qlora.yaml`'s ceiling,
 the lora-c neighbour rule and lora-c's own STOP 1, and not one of them is an instrument these 5 075
 rows were read with. The ten-name keep is untouched and the sealed pin still derives through it.
+
+3.26 (operator, 2026-08-23, ruled inside the `lora-c-apply` executor session and confirmed at its
+acceptance) is the eighteenth, and it is the FIRST block of this family whose landing arrived as a
+contract of its own: `lora-c-close` names the manoeuvre instead of leaving it as the fourth moving
+part of something else, which is what the sentence above kept predicting would have to happen. It
+supersedes 3.25 (1) — `max_seq_len` 2 816 → 3 072 — reads the 2 800 STOP threshold as the REAL
+tokenizer's count with no `TEMPLATE_SLACK` added, and retires the tokens-per-character model for
+ceilings. Every one of those is a fact about the lora-c line's own rows, and none of them is an
+instrument these 5 075 rows were read with, so the ten-name keep is untouched a seventh time.
 """
 
 DRIFT = projection.DRIFT
