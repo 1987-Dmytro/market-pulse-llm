@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-23 08:57:26 (every SessionStart)
+**Auto-refreshed:** 2026-08-23 09:00:44 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
+97548df chore(vault): /close за 22.08 -- три контракта, два ревью-гейта стоят
 20a9b88 docs(adr): the leak onto the gating bar, and two numbers the record refuted
 6a2f407 fix(lora-c): all five lenses returned; the worst finding is a leak onto the bar
 bad6b66 fix(lora-c): lens 1 returned 95 minutes late with eight findings; all eight hold
 96ae7b1 fix(lora-c): a fourth reachability block, and the executor flags 15 of its own rows
-56303c6 docs(report): lora-c-prep -- two stops, two gates, and a review that did not return
 ```
 
 ## 📋 Recent decisions
@@ -23,9 +23,9 @@ bad6b66 fix(lora-c): lens 1 returned 95 minutes late with eight findings; all ei
 
 ## 📅 Recent daily logs
 
+- `2026-08-23.md`
 - `2026-08-22.md`
 - `2026-08-21.md`
-- `2026-08-20.md`
 
 <!-- AUTO-GEN END (everything below preserved across refreshes) -->
 # Hot Cache — curated

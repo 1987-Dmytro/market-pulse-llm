@@ -1013,6 +1013,39 @@ re-pinning is refused. The index therefore still reads «the current revision is
 amendments behind: 3.19, 3.20, 3.21, 3.22, 3.23 and 3.24 are each their own index entry, here and in
 the five blocks before this one, until that pin retires.)
 <!-- amendment-3.24 end -->
+<!-- amendment-3.25 begin — stripped by write_sku_prereg.registered_law() before hashing
+docs/SPEC.md against every sealed pre-registration pin, all of which predate this text; the
+law those records registered is the stripped text. New law arrives ONLY inside its own marked
+block — a sealed registration is never re-pinned to make it green -->
+**Amendment 3.25 (operator, 2026-08-23, at the acceptance of the `lora-c-prep` STOP report —
+three rulings for the lora-c line):**
+1. **`training.max_seq_len` rises 1 408 → 2 816 by a NEW REVISION of `config/qlora.yaml`**
+   (frozen law; precedent: 1 024 → 1 408, operator, 2026-08-04). Derivation: the widest v3 SFT
+   row is 2 759 tokens at the registered worst tokens-per-character, plus `TEMPLATE_SLACK` = 16,
+   rounded up to a multiple of 128. The ratio is a MODEL carried across a change of row length
+   (Dv757), so before `lora-c-run` buys anything: **if the model tokenizer is importable on this
+   machine, every one of the 506 rows is tokenized for real at zero cost; a true count above
+   2 800 STOPS the line back to the operator** (the next rung is 3 072 and it is one word, not a
+   redesign). `results/prereg_lora_b.json`'s pin on the OLD config revision stays sealed and is
+   never re-pinned; lora-c's registration pins the new revision. Price consequences are derived
+   in `lora-c-run` at the stack's worst measured rates; the cap stays $4.00 until that derivation
+   reports — raising a cap is a separate operator word.
+2. **The neighbour-selection rule gains ONE refusal:** a candidate whose whitespace-collapsed,
+   casefolded text EQUALS the query's own text is refused (the own-text leak — 22 of 198 E items,
+   5 of them on the gating bar; Dv758). The threshold is equality and nothing below it. All packs
+   are rebuilt at $0 under the amended rule; the registration DRAFT re-issues with the new shas;
+   nothing of this touches a sealed record.
+3. **STOP 1 is accepted AS BUILT:** 506 rendered training rows, zero real `молочный_бренд`
+   positives in arm A, the holdout's reachable maximum 98 of 100 with the bar's integer
+   unchanged, and the nine rows of `@VARUS_channel:10367` stay unrendered — no four-example
+   rendering, no per-class own-thread allowance, no draw from the excluded sets.
+(Index note, in this block for the reason 3.19's through 3.24's own notes give: the
+`amendment-index` block above is one of the TEN blocks `write_prereg_5c2.KEEP_BLOCKS` holds
+INSIDE the sealed pin of `results/prereg_5c2_run.json`, so editing it would break that pin and
+re-pinning is refused. The index therefore still reads «the current revision is 3.18» and is now
+SEVEN amendments behind: 3.19 through 3.25 are each their own index entry, here and in the six
+blocks before this one, until that pin retires.)
+<!-- amendment-3.25 end -->
 **Date:** 2026-07-26 · **Team lead:** Fable session · **Executor:** Claude Code
 **Repo folder:** `/Users/hdv_1987/Desktop/Projects/market-pulse-llm`
 **rev. 3 change (operator decision):** producers in Ukraine barely use Telegram for
