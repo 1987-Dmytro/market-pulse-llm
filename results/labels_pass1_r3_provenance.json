@@ -1,0 +1,33 @@
+{
+  "authority": "docs/reviews/lora-c-rationales-verdict.md — review gate 1 VERDICT, team lead, 2026-08-23, the fifth named ruling: «Label correction, not a rationale defect… label `null` → `не_наш_рынок` via a labels r3 delta (one row, provenance-tagged, regenerated distributions)»",
+  "contract": "docs/PROMPT-lora-c-apply.md D1 (3)",
+  "kind": "DELTA, not a pack. r1 and r2 are two disjoint draws of 500 and 150 units; r3 is neither — it is ONE correction to a row r2 already answered, and it composes as a later layer over r1+r2 on the (thread, msg_id) key, last wins ([[select_one_row_refuse_ambiguity]]). It draws no unit, so it has no pack and `build_pass1_sft.labelled_units`'s pack-equals-labels refusal is untouched",
+  "labels": {
+    "date": "2026-08-23",
+    "field": "subject_type",
+    "file": "results/labels_pass1_r3.jsonl",
+    "labelled_by": "the TEAM LEAD, in the verdict file named under `authority`. The executor copies the ruling and never decides a label",
+    "rows": 1,
+    "sha256": "c0de78d8de85d6e8366488af75dbcc7e117c432e9f8beab967cfc531f26fa8e7"
+  },
+  "phase": "lora-c-apply",
+  "rationale_follows": "коментар ПРО стороннє оголошення про заробіток, поза нашою категорією (cue: «Зарабатывай вместе с нами») — the verdict's own words, written into results/rationales_pass1_v1.jsonl by the same pass",
+  "row": {
+    "msg_id": 49685,
+    "now": "не_наш_рынок",
+    "precedent_rule": "job / earnings spam reads `не_наш_рынок` throughout the corpus; tier B rows 25-27 of docs/reviews/lora-c-rationales-sample.md are the same shape",
+    "precedents": [
+      "@retsepty:7342#49707",
+      "@retsepty:7343#49711"
+    ],
+    "text": "Зарабатывай вместе с нами от 14к в день https://t.me/wwworwk",
+    "thread": "@retsepty:7342",
+    "twin": "@retsepty:7342#49686 — byte-identical spam text in the SAME thread, labelled не_наш_рынок at r2. The pair is what the verdict read",
+    "was": null
+  },
+  "scope": {
+    "applies_to": "the lora-c shared pool only — scripts/build_lora_c_data.py::shared_pool()",
+    "does_not_apply_to": "results/pass1_sft_arm_a.jsonl and results/pass1_sft_arm_b.jsonl, which results/prereg_lora_b.json and results/lora_b_verdict.json seal at bytes taken before this correction existed",
+    "why": "a sealed dataset is never re-derived to follow a later ruling; line B's numbers were scored on the rows it registered. The disagreement is recorded here rather than smoothed away"
+  }
+}

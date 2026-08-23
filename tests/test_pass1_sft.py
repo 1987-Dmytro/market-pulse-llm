@@ -108,7 +108,21 @@ def test_training_the_unlabelled_stance_would_put_the_bar_out_of_reach():
 
 
 def test_no_row_can_exceed_the_frozen_max_seq_len(state):
-    assert state["max_seq_len"] == 1408
+    """The bound is READ from the config, and line B's registered value is read from line B's record.
+
+    `config/qlora.yaml` is at revision 2 (amendment 3.25 (1), 1 408 -> 2 816) and this producer
+    reads it live, so a literal here would be a second copy of a constant that has now moved once
+    ([[a_moved_constant_fails_green]]). What must stay true is the pair: the live bound is the
+    config's, line B REGISTERED 1 408, and the rows line B sealed are unaffected by the difference
+    because its longest kept row is 1 222 tokens — asserted, not asserted-about.
+    """
+    import yaml
+
+    config = yaml.safe_load((REPO_ROOT / "config" / "qlora.yaml").read_text(encoding="utf-8"))
+    registered = json.loads((REPO_ROOT / "results" / "pass1_sft.json").read_text("utf-8"))
+    assert state["max_seq_len"] == config["training"]["max_seq_len"] == 2816
+    assert registered["length"]["max_seq_len"] == 1408
+    assert registered["census"]["dropped_for_length"]["longest_kept"] == 1222 <= 1408
     assert all(row["bound_tokens"] <= state["max_seq_len"] for row in state["rows"])
     assert all(row["bound_tokens"] > state["max_seq_len"] for row in state["dropped"])
     # branch C: with the substituted topic cut to a bought one's envelope, nothing is dropped and
@@ -305,10 +319,21 @@ def test_the_record_moves_only_where_it_quotes_a_file_that_moved(tmp_path):
             rebuilt["instruments"]["parser"],
         ),
         "producer.sha256": ("scripts/build_pass1_sft.py", rebuilt["producer"]),
+        # revision 2 of the config (amendment 3.25 (1)). The VALUE moves with the sha and only with
+        # it, so `length.max_seq_len` is derived from the same comparison rather than listed: a
+        # typed pair would be right at this commit and wrong at the one that repeals the amendment.
+        "length.config_sha256": (
+            "config/qlora.yaml",
+            {"sha256": rebuilt["length"]["config_sha256"]},
+        ),
     }
     expect = {"holdout"} | {
         name for name, (path, block) in pins.items() if block["sha256"] != shipped_at(shipped, name)
     }
+    if "length.config_sha256" in expect:
+        expect.add("length.max_seq_len")
+        # and the rule sentence quotes the value, so it moves with it
+        expect.add("census.dropped_for_length.rule")
     assert set(moved_paths(shipped, rebuilt)) == expect, sorted(moved_paths(shipped, rebuilt))
     for name, (path, block) in pins.items():
         assert block["sha256"] == live(path), name

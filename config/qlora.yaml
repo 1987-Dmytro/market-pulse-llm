@@ -47,7 +47,17 @@ training:
   # width — `collate` pads to the longest row in each micro-batch — so raising it
   # changes no step time and no memory except on the batches that need it.
   # Truncating instead would teach a cut-off label on the rows richest in context.
-  max_seq_len: 1408
+  #
+  # REVISION 2 (amendment 3.25 (1), operator, 2026-08-23): 1 408 -> 2 816 for the lora-c line. v3's
+  # SFT rows carry a rationale per example on top of v2's two paragraphs and the widest is 2 759
+  # tokens at the registered worst tokens-per-character, plus TEMPLATE_SLACK = 16, rounded up to a
+  # multiple of 128. Same precedent shape as the 1 024 -> 1 408 raise of 2026-08-04 and the same
+  # in-place revision of this file. Line B's pins on revision 1 are NOT re-taken: the sha256 in
+  # results/prereg_lora_b.json, results/lora_b_verdict.json and results/pass1_sft.json now describe
+  # revision 1 and join preflight's «carries an older pin» list, which is what a sealed record
+  # doing its job looks like. Nothing of line B's data moves with the number — its longest kept row
+  # is 1 222 tokens and it dropped 0 rows for length at 1 408, so it drops 0 at 2 816 too.
+  max_seq_len: 2816
   micro_batch_size: 2
   grad_accum: 8 # effective batch 16; on OOM the trainer halves one and doubles the other
   seed: 42

@@ -570,12 +570,13 @@ def main(argv: list[str] | None = None) -> int:
     )
     if args.sample:
         args.sample_out.parent.mkdir(parents=True, exist_ok=True)
-        args.sample_out.write_text(sample(record), encoding="utf-8")
-        print(f"wrote {summary.rel(args.sample_out)}")
-        print(
-            f"  REVIEW GATE 2 — STOP until {summary.rel(VERDICT)} exists"
-            f" ({'present' if VERDICT.exists() else 'ABSENT'})"
-        )
+        text = sample(record)
+        if data.sample_is_closed(VERDICT, args.sample_out):
+            print("  REVIEW GATE 2 — the verdict landed; the sample is the artefact it ruled on")
+        else:
+            args.sample_out.write_text(text, encoding="utf-8")
+            print(f"wrote {summary.rel(args.sample_out)}")
+            print(f"  REVIEW GATE 2 — STOP until {summary.rel(VERDICT)} exists (ABSENT)")
     return 0
 
 

@@ -1,0 +1,90 @@
+{
+  "config_sha256": "331b8c1ea61302e01fd07394ab7ec90f443d13d4288150f5812a32201a6da9c1",
+  "instrument": {
+    "chat_template": {
+      "add_generation_prompt": true,
+      "enable_thinking": false
+    },
+    "model_id": "google/gemma-4-31b-it",
+    "quantity": "len(apply_chat_template(prompt)) + len(target) — `train_qlora.encode_pass1`'s own refusal expression, the same calls in the same order",
+    "revision": "842da3794eaa0b77d5f08bae87a17459d91ff475",
+    "templates_in_the_snapshot": {
+      "chat_template.jinja": "/Users/hdv_1987/.cache/huggingface/hub/models--google--gemma-4-31b-it/snapshots/842da3794eaa0b77d5f08bae87a17459d91ff475/chat_template.jinja",
+      "chat_template.json": "PROVEN-ABSENT"
+    },
+    "tokenizer": "GemmaTokenizer",
+    "why_not_the_processor": "AutoProcessor needs torchvision for Gemma4ImageProcessor and this is a text-only count; the snapshot carries one template file and no processor-specific one, so the two loaders read the same bytes"
+  },
+  "max_seq_len": 2816,
+  "over": [
+    "@klopotenkofood:6060#21366",
+    "@matusi_ukr:22327#580336",
+    "@tarilka_malyuka:746#83"
+  ],
+  "pod_count": {
+    "max": 2975,
+    "median": 1633.0,
+    "min": 1445
+  },
+  "pod_count_plus_template_slack": {
+    "max": 2991,
+    "median": 1649.0,
+    "min": 1461,
+    "slack": 16
+  },
+  "rows": 506,
+  "rows_over_the_stop_threshold": 3,
+  "source": {
+    "file": "results/pass1_sft_v3_train.jsonl",
+    "sha256": "cf55d3f20216139845d320b4283d543c5283e3475f3c6afa42ea98cf20997c18"
+  },
+  "stop_threshold": 2800,
+  "the_model_this_replaces": {
+    "predicted_max_with_slack": {
+      "median_0.282802": 2679,
+      "minimum_0.269618": 2555,
+      "registered_worst_0.291741": 2763
+    },
+    "the_model_underpredicts_by": 228,
+    "true_max_with_slack": 2991,
+    "why": "amendment 3.25 (1) derived 2 816 from 2 759 — the widest row at the registered worst tokens-per-character. That is a MODEL measured on probe-b's 2 778-3 923 character rows and applied to rows of 5 262-9 415 (Dv757). Here is what it predicts against what the tokenizer counts, on the SAME rows"
+  },
+  "verdict": "STOP — a true count above 2 800; back to the operator, the next rung is 3 072",
+  "widest_rows": [
+    {
+      "chars": 9415,
+      "context": 2907,
+      "id": "@tarilka_malyuka:746#83",
+      "pod_count": 2975,
+      "target": 68
+    },
+    {
+      "chars": 9391,
+      "context": 2880,
+      "id": "@klopotenkofood:6060#21366",
+      "pod_count": 2963,
+      "target": 83
+    },
+    {
+      "chars": 9281,
+      "context": 2708,
+      "id": "@matusi_ukr:22327#580336",
+      "pod_count": 2785,
+      "target": 77
+    },
+    {
+      "chars": 9250,
+      "context": 2713,
+      "id": "@matusi_ukr:22111#577092",
+      "pod_count": 2778,
+      "target": 65
+    },
+    {
+      "chars": 8943,
+      "context": 2656,
+      "id": "@mandziak:3679#47933",
+      "pod_count": 2728,
+      "target": 72
+    }
+  ]
+}

@@ -52,6 +52,8 @@ from market_pulse.registry import load_registry  # noqa: E402
 
 GOLD = REPO_ROOT / "results" / "reader_gold_w1_r2.json"
 RATIONALES = REPO_ROOT / "results" / "rationales_pass1_v1.jsonl"
+LABELS_R3 = REPO_ROOT / "results" / "labels_pass1_r3.jsonl"
+LABELS_R3_PROVENANCE = REPO_ROOT / "results" / "labels_pass1_r3_provenance.json"
 TRAIN_OUT = REPO_ROOT / "results" / "pass1_sft_v3_train.jsonl"
 RECORD_OUT = REPO_ROOT / "results" / "lora_c_data.json"
 SAMPLE_OUT = REPO_ROOT / "docs" / "reviews" / "lora-c-rationales-sample.md"
@@ -114,6 +116,63 @@ def reference_threads() -> list[str]:
     )
 
 
+def labels_r3() -> dict[tuple[str, int], str | None]:
+    """The r3 delta: the team lead's label CORRECTIONS, keyed on the pair.
+
+    r2 composes with r1 by being a second disjoint draw; r3 composes with both by being a later
+    LAYER over the same keys, last wins ([[select_one_row_refuse_ambiguity]]). It draws no unit, so
+    it has no pack and `build_pass1_sft.labelled_units`'s pack-equals-labels refusal never sees it.
+    Every key it carries must already be answered by r1 or r2 — a delta that introduces a row would
+    be a draw wearing a delta's name, and `apply_r3` below refuses it.
+    """
+    out: dict[tuple[str, int], str | None] = {}
+    for line in LABELS_R3.read_text(encoding="utf-8").splitlines():
+        if not line.strip():
+            continue
+        one = json.loads(line)
+        key = (one["thread"], int(one["msg_id"]))
+        if key in out:
+            raise SystemExit(f"{summary.rel(LABELS_R3)} answers {key} twice — stop.")
+        out[key] = one.get("subject_type")
+    return out
+
+
+def apply_r3(units: list[dict]) -> tuple[list[dict], dict]:
+    """r1+r2 with the r3 corrections laid over them, and the census of what moved.
+
+    The census carries the BEFORE label of every corrected row, because «one row was corrected» and
+    «one row now reads X» are two different claims and only the pair is checkable.
+    """
+    delta = labels_r3()
+    answered = {(one["thread"], one["msg_id"]) for one in units}
+    unknown = sorted(key for key in delta if key not in answered)
+    if unknown:
+        raise SystemExit(
+            f"{summary.rel(LABELS_R3)} carries {unknown}, which r1+r2 never answered — a delta may"
+            " only CORRECT a drawn unit. Stop rather than smuggle a row into the pool."
+        )
+    moved = []
+    for one in units:
+        key = (one["thread"], one["msg_id"])
+        if key in delta and one["subject_type"] != delta[key]:
+            moved.append(
+                {"row": f"{key[0]}#{key[1]}", "was": one["subject_type"], "now": delta[key]}
+            )
+            one["subject_type"] = delta[key]
+    return units, {
+        "file": summary.rel(LABELS_R3),
+        "sha256": summary.sha256_of(LABELS_R3),
+        "provenance": summary.rel(LABELS_R3_PROVENANCE),
+        "rows_in_delta": len(delta),
+        "rows_moved": len(moved),
+        "moved": moved,
+        "rule": (
+            "a later LAYER over r1+r2 on the (thread, msg_id) key, last wins; it draws no unit and"
+            " a key r1+r2 never answered is refused"
+        ),
+    }
+
+
 def shared_pool() -> tuple[list[dict], dict]:
     """The 515 rows every leg is rendered against, and the census of what was removed.
 
@@ -124,7 +183,9 @@ def shared_pool() -> tuple[list[dict], dict]:
     """
     reference = set(reference_threads())
     holdout = sft.holdout_units()
-    everything = [{**one, "grams": fewshot.grams(one["text"])} for one in sft.labelled_units()]
+    everything, r3 = apply_r3(
+        [{**one, "grams": fewshot.grams(one["text"])} for one in sft.labelled_units()]
+    )
     in_reference = [one for one in everything if one["thread"] in reference]
     kept = [
         one
@@ -134,6 +195,7 @@ def shared_pool() -> tuple[list[dict], dict]:
     kept.sort(key=lambda one: (one["thread"], one["msg_id"]))
     census = {
         "labels": len(everything),
+        "labels_r3": r3,
         "holdout_rows": len(holdout),
         "reference_threads": sorted(reference),
         "reference_threads_carrying_labelled_rows": sorted({one["thread"] for one in in_reference}),
@@ -218,14 +280,37 @@ def joined(pool: list[dict]) -> list[dict]:
     return out
 
 
+def neighbours_v3(query_thread: str, query_text: str, query_grams: frozenset, pool: list[dict]):
+    """`fewshot.neighbours` under amendment 3.25 (2): the own-text leak refused, and nothing else.
+
+    The refusal is a PRE-FILTER on the candidate pool rather than an edit to
+    `build_pass1_fewshot_packs.neighbours`, and that is not a style choice: ten sealed records pin
+    that file's sha256, and 3.25 (2) says in its own words that «nothing of this touches a sealed
+    record». Removing the equal-text candidates before the call is the same function of the same
+    inputs — the Jaccard rule, the total tie key and the own-thread block are all still the sealed
+    producer's ([[a_moved_guard_that_left_its_copy]] avoided: there is only ever one selection rule,
+    and this is a narrower domain for it, not a second copy of it).
+
+    The threshold is EQUALITY and nothing below it. `norm` is the whitespace-collapsed casefolded
+    form the amendment names. A candidate refused here can take a class to zero, and then
+    `neighbours` raises its own SystemExit — which is a NEW instance of STOP 1 and is reported, not
+    remedied.
+    """
+    own = norm(query_text)
+    return fewshot.neighbours(
+        query_thread, query_grams, [one for one in pool if norm(one["text"]) != own]
+    )
+
+
 def examples_for(unit: dict, pool: list[dict], by_key: dict) -> tuple[list[dict], list[dict]]:
     """The five neighbours of one query, each carrying ITS OWN rationale.
 
-    `fewshot.neighbours` is CALLED — same Jaccard over character 3-grams, same total tie key, same
-    «never the query's own thread» rule — and the rationale is looked up afterwards, so the choice
-    of neighbour is decided by exactly the instrument the window was measured with.
+    `fewshot.neighbours` is CALLED through `neighbours_v3` — same Jaccard over character 3-grams,
+    same total tie key, same «never the query's own thread» rule, plus amendment 3.25 (2)'s one
+    refusal — and the rationale is looked up afterwards, so the choice of neighbour is decided by
+    exactly the instrument the window was measured with.
     """
-    chosen = fewshot.neighbours(unit["thread"], unit["grams"], pool)
+    chosen = neighbours_v3(unit["thread"], unit["text"], unit["grams"], pool)
     shown = []
     for one in chosen:
         source = by_key[(one["thread"], one["msg_id"])]
@@ -923,6 +1008,24 @@ def sample(record: dict) -> tuple[str, dict]:
     return "\n".join(lines) + "\n", census
 
 
+def sample_is_closed(verdict, sample_out):
+    """A review sample is CLOSED by its verdict, and the producer says so instead of rewriting it.
+
+    The file the team lead read is the evidence their ruling rests on. Re-rendering it from data the
+    ruling has since moved would hand a later reader a document that never reviewed, under the
+    name of one that was ([[a_test_that_reads_a_shipped_artifact]] read from the other end: here the
+    artifact is the FIXTURE and the producer is what must not touch it). The record's own
+    gate block is still written — that is a fact about the gate, not about the file.
+    """
+    if not verdict.exists():
+        return False
+    print(
+        f"  {summary.rel(sample_out)} is CLOSED by {summary.rel(verdict)} and is NOT rewritten"
+        " — the sample is the artefact the verdict ruled on"
+    )
+    return True
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--sample", action="store_true", help="also write review gate 1's file")
@@ -964,7 +1067,9 @@ def main(argv: list[str] | None = None) -> int:
         args.sample_out.parent.mkdir(parents=True, exist_ok=True)
         text, boundary_census = sample(record)
         record.pop("rows_data")
-        args.sample_out.write_text(text, encoding="utf-8")
+        closed = sample_is_closed(VERDICT, args.sample_out)
+        if not closed:
+            args.sample_out.write_text(text, encoding="utf-8")
         stored = json.loads(args.record_out.read_text(encoding="utf-8"))
         stored["review_gate_1"] = {
             "sample": "docs/reviews/lora-c-rationales-sample.md",
@@ -977,7 +1082,8 @@ def main(argv: list[str] | None = None) -> int:
             json.dumps(stored, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
             encoding="utf-8",
         )
-        print(f"wrote {summary.rel(args.sample_out)}")
+        if not closed:
+            print(f"wrote {summary.rel(args.sample_out)}")
         print(
             f"  REVIEW GATE 1 — STOP until {summary.rel(VERDICT)} exists"
             f" ({'present' if VERDICT.exists() else 'ABSENT'})"

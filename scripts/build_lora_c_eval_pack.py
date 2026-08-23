@@ -257,7 +257,7 @@ def build() -> dict:
         unit = {"thread": thread, "msg_id": msg_id, "text": text, "store": held}
         built = sft.request(unit, context, limit)
         try:
-            chosen = fewshot.neighbours(thread, fewshot.grams(text), pool)
+            chosen = data.neighbours_v3(thread, text, fewshot.grams(text), pool)
         except SystemExit:
             refused.append(
                 {

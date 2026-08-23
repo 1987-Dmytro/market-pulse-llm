@@ -16,25 +16,40 @@
   },
   "length": {
     "ceiling_chars": 12000,
-    "headroom_chars": 2772,
+    "headroom_chars": 2759,
     "median_chars": 5565,
     "widest_request": "@tarilka_malyuka:746#83",
-    "widest_request_chars": 9228
+    "widest_request_chars": 9241
   },
   "phase": "lora-c-prep",
   "pool_is_the_training_set": "one pool for every leg: base v2, base v3, arm A and arm B are rendered against the same 515 rows, so the paired table compares prompts and adapters, never neighbours",
   "population": {
     "arithmetic": "650 − 100 − 41 + 6 = 515 — the two exclusions overlap and the overlap is added back once",
     "distribution": {
-      "null": 165,
+      "null": 164,
       "категория_личное": 40,
       "молочный_бренд": 1,
-      "не_наш_рынок": 272,
+      "не_наш_рынок": 273,
       "сеть_ритейлер": 37
     },
     "holdout_rows": 100,
     "holdout_rows_inside_reference_threads": 6,
     "labels": 650,
+    "labels_r3": {
+      "file": "results/labels_pass1_r3.jsonl",
+      "moved": [
+        {
+          "now": "не_наш_рынок",
+          "row": "@retsepty:7342#49685",
+          "was": null
+        }
+      ],
+      "provenance": "results/labels_pass1_r3_provenance.json",
+      "rows_in_delta": 1,
+      "rows_moved": 1,
+      "rule": "a later LAYER over r1+r2 on the (thread, msg_id) key, last wins; it draws no unit and a key r1+r2 never answered is refused",
+      "sha256": "c0de78d8de85d6e8366488af75dbcc7e117c432e9f8beab967cfc531f26fa8e7"
+    },
     "our_rows": 41,
     "our_share": 7.96,
     "pool": 515,
@@ -70,7 +85,7 @@
   },
   "produced_by": {
     "script": "scripts/build_lora_c_data.py",
-    "sha256": "30db99098f9b9ce32f4fbaf063ccc4a55a8b43ca01b3f2b181bd7941c7eb5dd1"
+    "sha256": "f24a49ead48b181ac7735521e273b7f74d180b3aa18d095c981ea836938d9922"
   },
   "rationales": {
     "author": "claude-code",
@@ -81,9 +96,9 @@
       "cues": 501,
       "per_class": {
         "null": {
-          "distinct_cues": 159,
-          "distinct_rationales": 159,
-          "rows": 165
+          "distinct_cues": 158,
+          "distinct_rationales": 158,
+          "rows": 164
         },
         "категория_личное": {
           "distinct_cues": 40,
@@ -98,7 +113,7 @@
         "не_наш_рынок": {
           "distinct_cues": 267,
           "distinct_rationales": 268,
-          "rows": 272
+          "rows": 273
         },
         "сеть_ритейлер": {
           "distinct_cues": 36,
@@ -106,18 +121,18 @@
           "rows": 37
         }
       },
-      "rationales": 504
+      "rationales": 503
     },
     "file": "results/rationales_pass1_v1.jsonl",
     "n": 515,
     "reviewed": [
-      false
+      true
     ],
-    "sha256": "ed817668b02bf1bb174003a2983108beaae4045c3fdd5b09fb76032a64c08a55",
+    "sha256": "ba3681d8ae58432b4742bac02bcdf53583d8418dcd02cd79540a22a0e98305b1",
     "shapes": {
-      "коментар ПРО": 339,
-      "коментар ні про кого": 160,
-      "лише ЗГАДУЄ": 16
+      "коментар ПРО": 341,
+      "коментар ні про кого": 159,
+      "лише ЗГАДУЄ": 15
     }
   },
   "review_gate_1": {
@@ -137,13 +152,13 @@
     "our_rows": 40,
     "sample": "docs/reviews/lora-c-rationales-sample.md",
     "verdict": "docs/reviews/lora-c-rationales-verdict.md",
-    "verdict_present": false
+    "verdict_present": true
   },
   "rows": {
     "distribution": {
-      "null": 165,
+      "null": 164,
       "категория_личное": 40,
-      "не_наш_рынок": 267,
+      "не_наш_рынок": 268,
       "сеть_ритейлер": 34
     },
     "our_rows": 40,
@@ -191,17 +206,17 @@
     "classes_under_the_floor": [],
     "classes_under_the_floor_rule": "measured draws, not the product — and the class that WOULD have landed on the floor (молочный_бренд, one pool row) is absent from this table entirely because it has zero rendered rows. The floor binds on nothing here, and not because every class clears it",
     "draws_per_epoch_MEASURED": {
-      "null": 126.48,
-      "категория_личное": 127.37,
-      "не_наш_рынок": 126.22,
-      "сеть_ритейлер": 125.93
+      "null": 126.65,
+      "категория_личное": 127.55,
+      "не_наш_рынок": 125.9,
+      "сеть_ритейлер": 125.9
     },
     "draws_rule": "the sampler itself, driven over 60 epochs of the real rows. train_qlora.sampling_order calls random.choices, which NORMALISES the weights, so the naive product n_c·w_c is NOT the expected draw here",
     "floor": 8,
     "rows_per_class": {
-      "null": 165,
+      "null": 164,
       "категория_личное": 40,
-      "не_наш_рынок": 267,
+      "не_наш_рынок": 268,
       "сеть_ритейлер": 34
     },
     "rule": "w_c = N/(5·n_c) capped at 8.0 — results/prereg_lora_b.json's arms.*.sampler_weights, by calling train_qlora.class_weights, the function the trainer samples with",
@@ -219,45 +234,45 @@
       "why": "w_c = N/(5·n_c) is written for FIVE classes; the rendered set has FOUR because молочный_бренд has zero rows, so the vector sums to 404.8 of 506 and normalisation scales every class up by 506/404.8 = 1.25. The product under-reports the real draw by 25 %, and one section of this record naming that missing class beside another publishing a number that assumes it is exactly the shape this contract keeps finding"
     },
     "weights": {
-      "null": 0.613333,
+      "null": 0.617073,
       "категория_личное": 2.53,
-      "не_наш_рынок": 0.379026,
+      "не_наш_рынок": 0.377612,
       "сеть_ритейлер": 2.976471
     }
   },
   "tokens": {
     "by_ratio": {
       "median_observed": {
-        "max": 2675,
+        "max": 2679,
         "median": 1643,
         "min": 1505,
         "of": 506,
-        "over_max_seq_len": 506,
+        "over_max_seq_len": 0,
         "pods_own_count_of_the_shortest": 1489,
         "tokens_per_char": 0.282802
       },
       "min_observed": {
-        "max": 2551,
+        "max": 2555,
         "median": 1567,
         "min": 1435,
         "of": 506,
-        "over_max_seq_len": 506,
+        "over_max_seq_len": 0,
         "pods_own_count_of_the_shortest": 1419,
         "tokens_per_char": 0.269618
       },
       "registered_bound_max": {
-        "max": 2759,
+        "max": 2763,
         "median": 1694,
         "min": 1552,
         "of": 506,
-        "over_max_seq_len": 506,
+        "over_max_seq_len": 0,
         "pods_own_count_of_the_shortest": 1536,
         "tokens_per_char": 0.291741
       }
     },
     "chars_prompt_plus_target": {
-      "max": 9402,
-      "median": 5750,
+      "max": 9415,
+      "median": 5751,
       "min": 5262
     },
     "lora_b_v1_rows_for_comparison": {
@@ -266,71 +281,71 @@
       "longest_kept_tokens": 1222,
       "source": "results/pass1_sft_arm_b.jsonl and results/prereg_lora_b.json::dropped_for_length.longest_kept"
     },
-    "max_seq_len": 1408,
+    "max_seq_len": 2816,
     "max_seq_len_source": "config/qlora.yaml training.max_seq_len — FROZEN law",
     "measured_at_other_neighbour_counts": {
-      "best_case_over": 62,
+      "best_case_over": 0,
       "best_case_over_rule": "the most favourable drop-choice at the most favourable measured ratio. Even there the count is not zero, which is what makes STOP 2 a property of the population and not of the block",
       "by_choice": {
         "four_examples__drop_null": {
-          "median_tokens_at_the_min_ratio": 1511,
+          "median_tokens_at_the_min_ratio": 1513,
           "of": 506,
-          "over_at_the_min_ratio": 506,
-          "over_at_the_registered_ratio": 506
+          "over_at_the_min_ratio": 0,
+          "over_at_the_registered_ratio": 0
         },
         "four_examples__drop_категория_личное": {
-          "median_tokens_at_the_min_ratio": 1502,
+          "median_tokens_at_the_min_ratio": 1503,
           "of": 506,
-          "over_at_the_min_ratio": 498,
-          "over_at_the_registered_ratio": 506
+          "over_at_the_min_ratio": 0,
+          "over_at_the_registered_ratio": 0
         },
         "four_examples__drop_молочный_бренд": {
-          "median_tokens_at_the_min_ratio": 1510,
+          "median_tokens_at_the_min_ratio": 1511,
           "of": 506,
-          "over_at_the_min_ratio": 484,
-          "over_at_the_registered_ratio": 506
+          "over_at_the_min_ratio": 0,
+          "over_at_the_registered_ratio": 0
         },
         "four_examples__drop_не_наш_рынок": {
-          "median_tokens_at_the_min_ratio": 1509,
+          "median_tokens_at_the_min_ratio": 1510,
           "of": 506,
-          "over_at_the_min_ratio": 505,
-          "over_at_the_registered_ratio": 506
+          "over_at_the_min_ratio": 0,
+          "over_at_the_registered_ratio": 0
         },
         "four_examples__drop_сеть_ритейлер": {
-          "median_tokens_at_the_min_ratio": 1514,
+          "median_tokens_at_the_min_ratio": 1516,
           "of": 506,
-          "over_at_the_min_ratio": 502,
-          "over_at_the_registered_ratio": 506
+          "over_at_the_min_ratio": 0,
+          "over_at_the_registered_ratio": 0
         },
         "one_example__keep_null": {
           "median_tokens_at_the_min_ratio": 1340,
           "of": 506,
-          "over_at_the_min_ratio": 125,
-          "over_at_the_registered_ratio": 412
+          "over_at_the_min_ratio": 0,
+          "over_at_the_registered_ratio": 0
         },
         "one_example__keep_категория_личное": {
           "median_tokens_at_the_min_ratio": 1351,
           "of": 506,
-          "over_at_the_min_ratio": 115,
-          "over_at_the_registered_ratio": 475
+          "over_at_the_min_ratio": 0,
+          "over_at_the_registered_ratio": 0
         },
         "one_example__keep_молочный_бренд": {
-          "median_tokens_at_the_min_ratio": 1344,
+          "median_tokens_at_the_min_ratio": 1345,
           "of": 506,
-          "over_at_the_min_ratio": 62,
-          "over_at_the_registered_ratio": 500
+          "over_at_the_min_ratio": 0,
+          "over_at_the_registered_ratio": 0
         },
         "one_example__keep_не_наш_рынок": {
           "median_tokens_at_the_min_ratio": 1341,
           "of": 506,
-          "over_at_the_min_ratio": 124,
-          "over_at_the_registered_ratio": 463
+          "over_at_the_min_ratio": 0,
+          "over_at_the_registered_ratio": 0
         },
         "one_example__keep_сеть_ритейлер": {
           "median_tokens_at_the_min_ratio": 1339,
           "of": 506,
-          "over_at_the_min_ratio": 87,
-          "over_at_the_registered_ratio": 450
+          "over_at_the_min_ratio": 0,
+          "over_at_the_registered_ratio": 0
         }
       },
       "rule": "every drop-choice re-rendered through pass1_v3.pass1_messages_gm4_v3 and bounded the same way. COMPUTED here — the remedy this supports is the sentence the operator would act on, and it may not rest on a literal",
@@ -358,10 +373,10 @@
       "v3_prompt_tokens_at_the_min_ratio": 1109,
       "v3_prompt_tokens_at_the_worst_ratio": 1200
     },
-    "verdict": "EVERY one of the 506 rows is over max_seq_len 1408 at all three measured ratios. build_pass1_sft's own drop rule (bound > max_seq_len) would drop the whole dataset, and train_qlora.encode_pass1 would refuse every row on the pod. This is the contract's STOP and it returns to the operator"
+    "verdict": "EVERY one of the 506 rows is over max_seq_len 2816 at all three measured ratios. build_pass1_sft's own drop rule (bound > max_seq_len) would drop the whole dataset, and train_qlora.encode_pass1 would refuse every row on the pod. This is the contract's STOP and it returns to the operator"
   },
   "train_file": "results/pass1_sft_v3_train.jsonl",
-  "train_sha256": "0821f4aedef78ee476a993664f75feb113afdcc77551f43c82f50d887c4f40a0",
+  "train_sha256": "cf55d3f20216139845d320b4283d543c5283e3475f3c6afa42ea98cf20997c18",
   "unreachable": {
     "blocked_pool_rows": [
       [
