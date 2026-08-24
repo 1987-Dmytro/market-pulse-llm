@@ -1,0 +1,4181 @@
+{
+  "contract": "docs/PROMPT-lora-c-run-r2.md — REPORT ONLY: no arm exists, so no bar is scored",
+  "legs": {
+    "base_v2": {
+      "agreement_on_every_labelled_row_of_E": {
+        "absent": 0,
+        "agreed": 85,
+        "disagreed": 48,
+        "n": 133,
+        "rate": 0.6390977443609023,
+        "rows": [
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": null,
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 20660,
+            "thread": "@VARUS_channel:10349"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 20678,
+            "thread": "@VARUS_channel:10349"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 20737,
+            "thread": "@VARUS_channel:10360"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 20741,
+            "thread": "@VARUS_channel:10360"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": null,
+                "reader": "сеть_ритейлер"
+              }
+            },
+            "msg_id": 20760,
+            "thread": "@VARUS_channel:10366"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 20782,
+            "thread": "@VARUS_channel:10366"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 20884,
+            "thread": "@VARUS_channel:10366"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": null,
+                "reader": "сеть_ритейлер"
+              }
+            },
+            "msg_id": 20912,
+            "thread": "@VARUS_channel:10366"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 20913,
+            "thread": "@VARUS_channel:10366"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": null,
+                "reader": "сеть_ритейлер"
+              }
+            },
+            "msg_id": 20919,
+            "thread": "@VARUS_channel:10366"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": null,
+                "reader": "сеть_ритейлер"
+              }
+            },
+            "msg_id": 20923,
+            "thread": "@VARUS_channel:10366"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 20939,
+            "thread": "@VARUS_channel:10366"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21013,
+            "thread": "@VARUS_channel:10366"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21370,
+            "thread": "@VARUS_channel:10366"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 20863,
+            "thread": "@VARUS_channel:10366"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 20922,
+            "thread": "@VARUS_channel:10366"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21238,
+            "thread": "@VARUS_channel:10470"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "сеть_ритейлер"
+              }
+            },
+            "msg_id": 21266,
+            "thread": "@VARUS_channel:10471"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21400,
+            "thread": "@VARUS_channel:10528"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21409,
+            "thread": "@VARUS_channel:10528"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21420,
+            "thread": "@VARUS_channel:10529"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21421,
+            "thread": "@VARUS_channel:10529"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21576,
+            "thread": "@VARUS_channel:10603"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21205,
+            "thread": "@klopotenkofood:6035"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21221,
+            "thread": "@klopotenkofood:6035"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21207,
+            "thread": "@klopotenkofood:6035"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21242,
+            "thread": "@klopotenkofood:6040"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 21251,
+            "thread": "@klopotenkofood:6040"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 21286,
+            "thread": "@klopotenkofood:6040"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 21289,
+            "thread": "@klopotenkofood:6040"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 21239,
+            "thread": "@klopotenkofood:6040"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 21245,
+            "thread": "@klopotenkofood:6040"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 21246,
+            "thread": "@klopotenkofood:6040"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 21351,
+            "thread": "@klopotenkofood:6060"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 391532,
+            "thread": "@kopiyochka1:21720"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 391772,
+            "thread": "@kopiyochka1:21720"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 391773,
+            "thread": "@kopiyochka1:21720"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "сеть_ритейлер",
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 391544,
+            "thread": "@kopiyochka1:21720"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "категория_личное",
+                "reader": null
+              }
+            },
+            "msg_id": 47839,
+            "thread": "@mandziak:3666"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 47987,
+            "thread": "@mandziak:3679"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": null
+              }
+            },
+            "msg_id": 48009,
+            "thread": "@mandziak:3684"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 48016,
+            "thread": "@mandziak:3684"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 48018,
+            "thread": "@mandziak:3684"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": null
+              }
+            },
+            "msg_id": 48020,
+            "thread": "@mandziak:3684"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": null
+              }
+            },
+            "msg_id": 48036,
+            "thread": "@mandziak:3684"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 48040,
+            "thread": "@mandziak:3684"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 48041,
+            "thread": "@mandziak:3684"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 48047,
+            "thread": "@mandziak:3684"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 48064,
+            "thread": "@mandziak:3684"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": null
+              }
+            },
+            "msg_id": 48099,
+            "thread": "@mandziak:3684"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 48004,
+            "thread": "@mandziak:3684"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 48045,
+            "thread": "@mandziak:3685"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 48054,
+            "thread": "@mandziak:3689"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": null,
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 48055,
+            "thread": "@mandziak:3689"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": null,
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 48056,
+            "thread": "@mandziak:3689"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 48057,
+            "thread": "@mandziak:3689"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 48067,
+            "thread": "@mandziak:3689"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 48081,
+            "thread": "@mandziak:3689"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 48268,
+            "thread": "@mandziak:3689"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 48109,
+            "thread": "@mandziak:3689"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 48336,
+            "thread": "@mandziak:3700"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": null,
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 48209,
+            "thread": "@mandziak:3702"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 48244,
+            "thread": "@mandziak:3708"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": null,
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 48236,
+            "thread": "@mandziak:3708"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 48279,
+            "thread": "@mandziak:3708"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": null
+              }
+            },
+            "msg_id": 48405,
+            "thread": "@mandziak:3718"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 48398,
+            "thread": "@mandziak:3718"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 48445,
+            "thread": "@mandziak:3721"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 49218,
+            "thread": "@mandziak:3746"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 48944,
+            "thread": "@mandziak:3753"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 49015,
+            "thread": "@mandziak:3768"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 49225,
+            "thread": "@mandziak:3768"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": null,
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 49072,
+            "thread": "@mandziak:3775"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 576949,
+            "thread": "@matusi_ukr:22058"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 576514,
+            "thread": "@matusi_ukr:22058"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": null
+              }
+            },
+            "msg_id": 576723,
+            "thread": "@matusi_ukr:22058"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 576878,
+            "thread": "@matusi_ukr:22092"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 576886,
+            "thread": "@matusi_ukr:22092"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 576901,
+            "thread": "@matusi_ukr:22092"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 576968,
+            "thread": "@matusi_ukr:22092"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 576877,
+            "thread": "@matusi_ukr:22092"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 576917,
+            "thread": "@matusi_ukr:22092"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 576943,
+            "thread": "@matusi_ukr:22092"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 577089,
+            "thread": "@matusi_ukr:22111"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 577159,
+            "thread": "@matusi_ukr:22111"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": null
+              }
+            },
+            "msg_id": 577262,
+            "thread": "@matusi_ukr:22131"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": null
+              }
+            },
+            "msg_id": 577282,
+            "thread": "@matusi_ukr:22131"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": null
+              }
+            },
+            "msg_id": 577623,
+            "thread": "@matusi_ukr:22131"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 577264,
+            "thread": "@matusi_ukr:22131"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 578034,
+            "thread": "@matusi_ukr:22158"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 578037,
+            "thread": "@matusi_ukr:22158"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 578075,
+            "thread": "@matusi_ukr:22158"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 578050,
+            "thread": "@matusi_ukr:22158"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 578064,
+            "thread": "@matusi_ukr:22158"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 578384,
+            "thread": "@matusi_ukr:22195"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 578836,
+            "thread": "@matusi_ukr:22217"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 578838,
+            "thread": "@matusi_ukr:22217"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 578841,
+            "thread": "@matusi_ukr:22217"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": null,
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 579242,
+            "thread": "@matusi_ukr:22263"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 579293,
+            "thread": "@matusi_ukr:22265"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": null
+              }
+            },
+            "msg_id": 579314,
+            "thread": "@matusi_ukr:22265"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 579699,
+            "thread": "@matusi_ukr:22295"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 579786,
+            "thread": "@matusi_ukr:22295"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 579994,
+            "thread": "@matusi_ukr:22295"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 580014,
+            "thread": "@matusi_ukr:22295"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 579885,
+            "thread": "@matusi_ukr:22295"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 580137,
+            "thread": "@matusi_ukr:22308"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 580142,
+            "thread": "@matusi_ukr:22308"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "категория_личное",
+                "reader": "не_наш_рынок"
+              }
+            },
+            "msg_id": 13584,
+            "thread": "@msuaaaa:10651"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 2421,
+            "thread": "@polyakova_fitness:1143"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 49374,
+            "thread": "@retsepty:7281"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 49531,
+            "thread": "@retsepty:7312"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 49541,
+            "thread": "@retsepty:7312"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 49560,
+            "thread": "@retsepty:7312"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 49532,
+            "thread": "@retsepty:7313"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 49542,
+            "thread": "@retsepty:7313"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 49586,
+            "thread": "@retsepty:7320"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 49592,
+            "thread": "@retsepty:7323"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": null,
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 49595,
+            "thread": "@retsepty:7324"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 49596,
+            "thread": "@retsepty:7324"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 49626,
+            "thread": "@retsepty:7325"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 49627,
+            "thread": "@retsepty:7325"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 49632,
+            "thread": "@retsepty:7327"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 49642,
+            "thread": "@retsepty:7328"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 49750,
+            "thread": "@retsepty:7350"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 12,
+            "thread": "@tarilka_malyuka:695"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": null,
+                "reader": "не_наш_рынок"
+              }
+            },
+            "msg_id": 9,
+            "thread": "@tarilka_malyuka:695"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 47,
+            "thread": "@tarilka_malyuka:715"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 171,
+            "thread": "@tarilka_malyuka:820"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 179,
+            "thread": "@tarilka_malyuka:827"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": null,
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 2579,
+            "thread": "@ya_Nenka:836"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 2580,
+            "thread": "@ya_Nenka:836"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 2586,
+            "thread": "@ya_Nenka:838"
+          }
+        ]
+      },
+      "agreement_on_the_holdout_rows_of_E": {
+        "absent": 0,
+        "agreed": 61,
+        "disagreed": 37,
+        "n": 98,
+        "rate": 0.6224489795918368,
+        "rows": [
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": null,
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 20660,
+            "thread": "@VARUS_channel:10349"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 20678,
+            "thread": "@VARUS_channel:10349"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 20913,
+            "thread": "@VARUS_channel:10366"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 20863,
+            "thread": "@VARUS_channel:10366"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 20922,
+            "thread": "@VARUS_channel:10366"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21238,
+            "thread": "@VARUS_channel:10470"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "сеть_ритейлер"
+              }
+            },
+            "msg_id": 21266,
+            "thread": "@VARUS_channel:10471"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21400,
+            "thread": "@VARUS_channel:10528"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21409,
+            "thread": "@VARUS_channel:10528"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21576,
+            "thread": "@VARUS_channel:10603"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21205,
+            "thread": "@klopotenkofood:6035"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21221,
+            "thread": "@klopotenkofood:6035"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21207,
+            "thread": "@klopotenkofood:6035"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21242,
+            "thread": "@klopotenkofood:6040"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 21251,
+            "thread": "@klopotenkofood:6040"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 21286,
+            "thread": "@klopotenkofood:6040"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 21289,
+            "thread": "@klopotenkofood:6040"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 21239,
+            "thread": "@klopotenkofood:6040"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 21245,
+            "thread": "@klopotenkofood:6040"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 21246,
+            "thread": "@klopotenkofood:6040"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 21351,
+            "thread": "@klopotenkofood:6060"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 391532,
+            "thread": "@kopiyochka1:21720"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 391772,
+            "thread": "@kopiyochka1:21720"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 391773,
+            "thread": "@kopiyochka1:21720"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "сеть_ритейлер",
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 391544,
+            "thread": "@kopiyochka1:21720"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "категория_личное",
+                "reader": null
+              }
+            },
+            "msg_id": 47839,
+            "thread": "@mandziak:3666"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 47987,
+            "thread": "@mandziak:3679"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 48045,
+            "thread": "@mandziak:3685"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": null,
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 48056,
+            "thread": "@mandziak:3689"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 48336,
+            "thread": "@mandziak:3700"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": null,
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 48209,
+            "thread": "@mandziak:3702"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 48244,
+            "thread": "@mandziak:3708"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": null,
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 48236,
+            "thread": "@mandziak:3708"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 48279,
+            "thread": "@mandziak:3708"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": null
+              }
+            },
+            "msg_id": 48405,
+            "thread": "@mandziak:3718"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 48398,
+            "thread": "@mandziak:3718"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 48445,
+            "thread": "@mandziak:3721"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 49218,
+            "thread": "@mandziak:3746"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 48944,
+            "thread": "@mandziak:3753"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 49015,
+            "thread": "@mandziak:3768"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 49225,
+            "thread": "@mandziak:3768"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": null,
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 49072,
+            "thread": "@mandziak:3775"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 576949,
+            "thread": "@matusi_ukr:22058"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 576514,
+            "thread": "@matusi_ukr:22058"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": null
+              }
+            },
+            "msg_id": 576723,
+            "thread": "@matusi_ukr:22058"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 576878,
+            "thread": "@matusi_ukr:22092"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 576886,
+            "thread": "@matusi_ukr:22092"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 576901,
+            "thread": "@matusi_ukr:22092"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 576968,
+            "thread": "@matusi_ukr:22092"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 576877,
+            "thread": "@matusi_ukr:22092"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 576917,
+            "thread": "@matusi_ukr:22092"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 576943,
+            "thread": "@matusi_ukr:22092"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 577089,
+            "thread": "@matusi_ukr:22111"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 577159,
+            "thread": "@matusi_ukr:22111"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": null
+              }
+            },
+            "msg_id": 577262,
+            "thread": "@matusi_ukr:22131"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": null
+              }
+            },
+            "msg_id": 577282,
+            "thread": "@matusi_ukr:22131"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": null
+              }
+            },
+            "msg_id": 577623,
+            "thread": "@matusi_ukr:22131"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 577264,
+            "thread": "@matusi_ukr:22131"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 578034,
+            "thread": "@matusi_ukr:22158"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 578037,
+            "thread": "@matusi_ukr:22158"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 578075,
+            "thread": "@matusi_ukr:22158"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 578050,
+            "thread": "@matusi_ukr:22158"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 578064,
+            "thread": "@matusi_ukr:22158"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 578384,
+            "thread": "@matusi_ukr:22195"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 578836,
+            "thread": "@matusi_ukr:22217"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 578838,
+            "thread": "@matusi_ukr:22217"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 578841,
+            "thread": "@matusi_ukr:22217"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": null,
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 579242,
+            "thread": "@matusi_ukr:22263"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 579293,
+            "thread": "@matusi_ukr:22265"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": null
+              }
+            },
+            "msg_id": 579314,
+            "thread": "@matusi_ukr:22265"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 579699,
+            "thread": "@matusi_ukr:22295"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 579786,
+            "thread": "@matusi_ukr:22295"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 579994,
+            "thread": "@matusi_ukr:22295"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 580014,
+            "thread": "@matusi_ukr:22295"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 579885,
+            "thread": "@matusi_ukr:22295"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 580137,
+            "thread": "@matusi_ukr:22308"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 580142,
+            "thread": "@matusi_ukr:22308"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "категория_личное",
+                "reader": "не_наш_рынок"
+              }
+            },
+            "msg_id": 13584,
+            "thread": "@msuaaaa:10651"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 2421,
+            "thread": "@polyakova_fitness:1143"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 49374,
+            "thread": "@retsepty:7281"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 49541,
+            "thread": "@retsepty:7312"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 49532,
+            "thread": "@retsepty:7313"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 49542,
+            "thread": "@retsepty:7313"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 49586,
+            "thread": "@retsepty:7320"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 49592,
+            "thread": "@retsepty:7323"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": null,
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 49595,
+            "thread": "@retsepty:7324"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 49596,
+            "thread": "@retsepty:7324"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 49626,
+            "thread": "@retsepty:7325"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 49642,
+            "thread": "@retsepty:7328"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 49750,
+            "thread": "@retsepty:7350"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 12,
+            "thread": "@tarilka_malyuka:695"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": null,
+                "reader": "не_наш_рынок"
+              }
+            },
+            "msg_id": 9,
+            "thread": "@tarilka_malyuka:695"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 47,
+            "thread": "@tarilka_malyuka:715"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 171,
+            "thread": "@tarilka_malyuka:820"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 179,
+            "thread": "@tarilka_malyuka:827"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": null,
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 2579,
+            "thread": "@ya_Nenka:836"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 2580,
+            "thread": "@ya_Nenka:836"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 2586,
+            "thread": "@ya_Nenka:838"
+          }
+        ]
+      },
+      "by_class": {
+        "None": {
+          "absent": 0,
+          "agreed": 34,
+          "n": 48,
+          "rate": 0.7083333333333334
+        },
+        "категория_личное": {
+          "absent": 0,
+          "agreed": 5,
+          "n": 7,
+          "rate": 0.7142857142857143
+        },
+        "молочный_бренд": {
+          "absent": 0,
+          "agreed": 1,
+          "n": 1,
+          "rate": 1.0
+        },
+        "не_наш_рынок": {
+          "absent": 0,
+          "agreed": 35,
+          "n": 66,
+          "rate": 0.5303030303030303
+        },
+        "сеть_ритейлер": {
+          "absent": 0,
+          "agreed": 10,
+          "n": 11,
+          "rate": 0.9090909090909091
+        }
+      },
+      "file": "results/lora_c_base_v2.jsonl",
+      "labelled_rows_in_E": 133,
+      "parsed": 198,
+      "refused": [],
+      "replies": 198,
+      "sha256": "f01506d94a45662381039456cdbcb26b911d37305a45717ee442b087a17097f0",
+      "task": "pass1_comment_gm4_v2",
+      "the_mention_cell": {
+        "before_on_holdout_100": "18 of 52 — results/prereg_lora_c.json::bars.report_only",
+        "denominator": 66,
+        "note": "this denominator is E's `не_наш_рынок` rows, NOT the holdout's 52. The two populations differ and the numbers are not comparable across them",
+        "to_our": 20,
+        "to_категория_личное": 20,
+        "what": "`не_наш_рынок` gold answered `категория_личное` — the cell this line targets"
+      }
+    },
+    "base_v3": {
+      "agreement_on_every_labelled_row_of_E": {
+        "absent": 0,
+        "agreed": 91,
+        "disagreed": 42,
+        "n": 133,
+        "rate": 0.6842105263157895,
+        "rows": [
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": null,
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 20660,
+            "thread": "@VARUS_channel:10349"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 20678,
+            "thread": "@VARUS_channel:10349"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 20737,
+            "thread": "@VARUS_channel:10360"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 20741,
+            "thread": "@VARUS_channel:10360"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": null,
+                "reader": "сеть_ритейлер"
+              }
+            },
+            "msg_id": 20760,
+            "thread": "@VARUS_channel:10366"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 20782,
+            "thread": "@VARUS_channel:10366"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 20884,
+            "thread": "@VARUS_channel:10366"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": null,
+                "reader": "сеть_ритейлер"
+              }
+            },
+            "msg_id": 20912,
+            "thread": "@VARUS_channel:10366"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 20913,
+            "thread": "@VARUS_channel:10366"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": null,
+                "reader": "сеть_ритейлер"
+              }
+            },
+            "msg_id": 20919,
+            "thread": "@VARUS_channel:10366"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": null,
+                "reader": "сеть_ритейлер"
+              }
+            },
+            "msg_id": 20923,
+            "thread": "@VARUS_channel:10366"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 20939,
+            "thread": "@VARUS_channel:10366"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21013,
+            "thread": "@VARUS_channel:10366"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21370,
+            "thread": "@VARUS_channel:10366"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 20863,
+            "thread": "@VARUS_channel:10366"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 20922,
+            "thread": "@VARUS_channel:10366"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21238,
+            "thread": "@VARUS_channel:10470"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": null
+              }
+            },
+            "msg_id": 21266,
+            "thread": "@VARUS_channel:10471"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21400,
+            "thread": "@VARUS_channel:10528"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21409,
+            "thread": "@VARUS_channel:10528"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21420,
+            "thread": "@VARUS_channel:10529"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21421,
+            "thread": "@VARUS_channel:10529"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "сеть_ритейлер",
+                "reader": "не_наш_рынок"
+              }
+            },
+            "msg_id": 21576,
+            "thread": "@VARUS_channel:10603"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21205,
+            "thread": "@klopotenkofood:6035"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21221,
+            "thread": "@klopotenkofood:6035"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21207,
+            "thread": "@klopotenkofood:6035"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21242,
+            "thread": "@klopotenkofood:6040"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21251,
+            "thread": "@klopotenkofood:6040"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 21286,
+            "thread": "@klopotenkofood:6040"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 21289,
+            "thread": "@klopotenkofood:6040"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 21239,
+            "thread": "@klopotenkofood:6040"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 21245,
+            "thread": "@klopotenkofood:6040"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 21246,
+            "thread": "@klopotenkofood:6040"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 21351,
+            "thread": "@klopotenkofood:6060"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "сеть_ритейлер",
+                "reader": "не_наш_рынок"
+              }
+            },
+            "msg_id": 391532,
+            "thread": "@kopiyochka1:21720"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 391772,
+            "thread": "@kopiyochka1:21720"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 391773,
+            "thread": "@kopiyochka1:21720"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 391544,
+            "thread": "@kopiyochka1:21720"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "категория_личное",
+                "reader": null
+              }
+            },
+            "msg_id": 47839,
+            "thread": "@mandziak:3666"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 47987,
+            "thread": "@mandziak:3679"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": null
+              }
+            },
+            "msg_id": 48009,
+            "thread": "@mandziak:3684"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 48016,
+            "thread": "@mandziak:3684"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 48018,
+            "thread": "@mandziak:3684"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": null
+              }
+            },
+            "msg_id": 48020,
+            "thread": "@mandziak:3684"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": null
+              }
+            },
+            "msg_id": 48036,
+            "thread": "@mandziak:3684"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 48040,
+            "thread": "@mandziak:3684"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 48041,
+            "thread": "@mandziak:3684"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 48047,
+            "thread": "@mandziak:3684"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 48064,
+            "thread": "@mandziak:3684"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 48099,
+            "thread": "@mandziak:3684"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 48004,
+            "thread": "@mandziak:3684"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 48045,
+            "thread": "@mandziak:3685"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 48054,
+            "thread": "@mandziak:3689"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": null,
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 48055,
+            "thread": "@mandziak:3689"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": null,
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 48056,
+            "thread": "@mandziak:3689"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 48057,
+            "thread": "@mandziak:3689"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 48067,
+            "thread": "@mandziak:3689"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 48081,
+            "thread": "@mandziak:3689"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 48268,
+            "thread": "@mandziak:3689"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 48109,
+            "thread": "@mandziak:3689"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 48336,
+            "thread": "@mandziak:3700"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": null,
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 48209,
+            "thread": "@mandziak:3702"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 48244,
+            "thread": "@mandziak:3708"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": null,
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 48236,
+            "thread": "@mandziak:3708"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 48279,
+            "thread": "@mandziak:3708"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 48405,
+            "thread": "@mandziak:3718"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 48398,
+            "thread": "@mandziak:3718"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 48445,
+            "thread": "@mandziak:3721"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 49218,
+            "thread": "@mandziak:3746"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": null,
+                "reader": "не_наш_рынок"
+              }
+            },
+            "msg_id": 48944,
+            "thread": "@mandziak:3753"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 49015,
+            "thread": "@mandziak:3768"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 49225,
+            "thread": "@mandziak:3768"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": null,
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 49072,
+            "thread": "@mandziak:3775"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 576949,
+            "thread": "@matusi_ukr:22058"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 576514,
+            "thread": "@matusi_ukr:22058"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 576723,
+            "thread": "@matusi_ukr:22058"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 576878,
+            "thread": "@matusi_ukr:22092"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 576886,
+            "thread": "@matusi_ukr:22092"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 576901,
+            "thread": "@matusi_ukr:22092"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 576968,
+            "thread": "@matusi_ukr:22092"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 576877,
+            "thread": "@matusi_ukr:22092"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 576917,
+            "thread": "@matusi_ukr:22092"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 576943,
+            "thread": "@matusi_ukr:22092"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 577089,
+            "thread": "@matusi_ukr:22111"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 577159,
+            "thread": "@matusi_ukr:22111"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": null
+              }
+            },
+            "msg_id": 577262,
+            "thread": "@matusi_ukr:22131"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": null
+              }
+            },
+            "msg_id": 577282,
+            "thread": "@matusi_ukr:22131"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 577623,
+            "thread": "@matusi_ukr:22131"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 577264,
+            "thread": "@matusi_ukr:22131"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 578034,
+            "thread": "@matusi_ukr:22158"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 578037,
+            "thread": "@matusi_ukr:22158"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 578075,
+            "thread": "@matusi_ukr:22158"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 578050,
+            "thread": "@matusi_ukr:22158"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 578064,
+            "thread": "@matusi_ukr:22158"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 578384,
+            "thread": "@matusi_ukr:22195"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 578836,
+            "thread": "@matusi_ukr:22217"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 578838,
+            "thread": "@matusi_ukr:22217"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 578841,
+            "thread": "@matusi_ukr:22217"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 579242,
+            "thread": "@matusi_ukr:22263"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 579293,
+            "thread": "@matusi_ukr:22265"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 579314,
+            "thread": "@matusi_ukr:22265"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 579699,
+            "thread": "@matusi_ukr:22295"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 579786,
+            "thread": "@matusi_ukr:22295"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 579994,
+            "thread": "@matusi_ukr:22295"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 580014,
+            "thread": "@matusi_ukr:22295"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 579885,
+            "thread": "@matusi_ukr:22295"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 580137,
+            "thread": "@matusi_ukr:22308"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 580142,
+            "thread": "@matusi_ukr:22308"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 13584,
+            "thread": "@msuaaaa:10651"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 2421,
+            "thread": "@polyakova_fitness:1143"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 49374,
+            "thread": "@retsepty:7281"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 49531,
+            "thread": "@retsepty:7312"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 49541,
+            "thread": "@retsepty:7312"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 49560,
+            "thread": "@retsepty:7312"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 49532,
+            "thread": "@retsepty:7313"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 49542,
+            "thread": "@retsepty:7313"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 49586,
+            "thread": "@retsepty:7320"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 49592,
+            "thread": "@retsepty:7323"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 49595,
+            "thread": "@retsepty:7324"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 49596,
+            "thread": "@retsepty:7324"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 49626,
+            "thread": "@retsepty:7325"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 49627,
+            "thread": "@retsepty:7325"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 49632,
+            "thread": "@retsepty:7327"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 49642,
+            "thread": "@retsepty:7328"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 49750,
+            "thread": "@retsepty:7350"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 12,
+            "thread": "@tarilka_malyuka:695"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": null,
+                "reader": "не_наш_рынок"
+              }
+            },
+            "msg_id": 9,
+            "thread": "@tarilka_malyuka:695"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 47,
+            "thread": "@tarilka_malyuka:715"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 171,
+            "thread": "@tarilka_malyuka:820"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 179,
+            "thread": "@tarilka_malyuka:827"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": null,
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 2579,
+            "thread": "@ya_Nenka:836"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": null,
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 2580,
+            "thread": "@ya_Nenka:836"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 2586,
+            "thread": "@ya_Nenka:838"
+          }
+        ]
+      },
+      "agreement_on_the_holdout_rows_of_E": {
+        "absent": 0,
+        "agreed": 66,
+        "disagreed": 32,
+        "n": 98,
+        "rate": 0.673469387755102,
+        "rows": [
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": null,
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 20660,
+            "thread": "@VARUS_channel:10349"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 20678,
+            "thread": "@VARUS_channel:10349"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 20913,
+            "thread": "@VARUS_channel:10366"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 20863,
+            "thread": "@VARUS_channel:10366"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 20922,
+            "thread": "@VARUS_channel:10366"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21238,
+            "thread": "@VARUS_channel:10470"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": null
+              }
+            },
+            "msg_id": 21266,
+            "thread": "@VARUS_channel:10471"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21400,
+            "thread": "@VARUS_channel:10528"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21409,
+            "thread": "@VARUS_channel:10528"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "сеть_ритейлер",
+                "reader": "не_наш_рынок"
+              }
+            },
+            "msg_id": 21576,
+            "thread": "@VARUS_channel:10603"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21205,
+            "thread": "@klopotenkofood:6035"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21221,
+            "thread": "@klopotenkofood:6035"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21207,
+            "thread": "@klopotenkofood:6035"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21242,
+            "thread": "@klopotenkofood:6040"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21251,
+            "thread": "@klopotenkofood:6040"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 21286,
+            "thread": "@klopotenkofood:6040"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 21289,
+            "thread": "@klopotenkofood:6040"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 21239,
+            "thread": "@klopotenkofood:6040"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 21245,
+            "thread": "@klopotenkofood:6040"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 21246,
+            "thread": "@klopotenkofood:6040"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 21351,
+            "thread": "@klopotenkofood:6060"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "сеть_ритейлер",
+                "reader": "не_наш_рынок"
+              }
+            },
+            "msg_id": 391532,
+            "thread": "@kopiyochka1:21720"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 391772,
+            "thread": "@kopiyochka1:21720"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 391773,
+            "thread": "@kopiyochka1:21720"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 391544,
+            "thread": "@kopiyochka1:21720"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "категория_личное",
+                "reader": null
+              }
+            },
+            "msg_id": 47839,
+            "thread": "@mandziak:3666"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 47987,
+            "thread": "@mandziak:3679"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 48045,
+            "thread": "@mandziak:3685"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": null,
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 48056,
+            "thread": "@mandziak:3689"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 48336,
+            "thread": "@mandziak:3700"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": null,
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 48209,
+            "thread": "@mandziak:3702"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 48244,
+            "thread": "@mandziak:3708"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": null,
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 48236,
+            "thread": "@mandziak:3708"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 48279,
+            "thread": "@mandziak:3708"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 48405,
+            "thread": "@mandziak:3718"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 48398,
+            "thread": "@mandziak:3718"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 48445,
+            "thread": "@mandziak:3721"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 49218,
+            "thread": "@mandziak:3746"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": null,
+                "reader": "не_наш_рынок"
+              }
+            },
+            "msg_id": 48944,
+            "thread": "@mandziak:3753"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 49015,
+            "thread": "@mandziak:3768"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 49225,
+            "thread": "@mandziak:3768"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": null,
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 49072,
+            "thread": "@mandziak:3775"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 576949,
+            "thread": "@matusi_ukr:22058"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 576514,
+            "thread": "@matusi_ukr:22058"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 576723,
+            "thread": "@matusi_ukr:22058"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 576878,
+            "thread": "@matusi_ukr:22092"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 576886,
+            "thread": "@matusi_ukr:22092"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 576901,
+            "thread": "@matusi_ukr:22092"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 576968,
+            "thread": "@matusi_ukr:22092"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 576877,
+            "thread": "@matusi_ukr:22092"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 576917,
+            "thread": "@matusi_ukr:22092"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 576943,
+            "thread": "@matusi_ukr:22092"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 577089,
+            "thread": "@matusi_ukr:22111"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 577159,
+            "thread": "@matusi_ukr:22111"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": null
+              }
+            },
+            "msg_id": 577262,
+            "thread": "@matusi_ukr:22131"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": null
+              }
+            },
+            "msg_id": 577282,
+            "thread": "@matusi_ukr:22131"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 577623,
+            "thread": "@matusi_ukr:22131"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 577264,
+            "thread": "@matusi_ukr:22131"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 578034,
+            "thread": "@matusi_ukr:22158"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 578037,
+            "thread": "@matusi_ukr:22158"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 578075,
+            "thread": "@matusi_ukr:22158"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 578050,
+            "thread": "@matusi_ukr:22158"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 578064,
+            "thread": "@matusi_ukr:22158"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 578384,
+            "thread": "@matusi_ukr:22195"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 578836,
+            "thread": "@matusi_ukr:22217"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 578838,
+            "thread": "@matusi_ukr:22217"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 578841,
+            "thread": "@matusi_ukr:22217"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 579242,
+            "thread": "@matusi_ukr:22263"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 579293,
+            "thread": "@matusi_ukr:22265"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 579314,
+            "thread": "@matusi_ukr:22265"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 579699,
+            "thread": "@matusi_ukr:22295"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 579786,
+            "thread": "@matusi_ukr:22295"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 579994,
+            "thread": "@matusi_ukr:22295"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 580014,
+            "thread": "@matusi_ukr:22295"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 579885,
+            "thread": "@matusi_ukr:22295"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 580137,
+            "thread": "@matusi_ukr:22308"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 580142,
+            "thread": "@matusi_ukr:22308"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 13584,
+            "thread": "@msuaaaa:10651"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 2421,
+            "thread": "@polyakova_fitness:1143"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 49374,
+            "thread": "@retsepty:7281"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 49541,
+            "thread": "@retsepty:7312"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 49532,
+            "thread": "@retsepty:7313"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 49542,
+            "thread": "@retsepty:7313"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 49586,
+            "thread": "@retsepty:7320"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 49592,
+            "thread": "@retsepty:7323"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 49595,
+            "thread": "@retsepty:7324"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 49596,
+            "thread": "@retsepty:7324"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 49626,
+            "thread": "@retsepty:7325"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 49642,
+            "thread": "@retsepty:7328"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 49750,
+            "thread": "@retsepty:7350"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 12,
+            "thread": "@tarilka_malyuka:695"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": null,
+                "reader": "не_наш_рынок"
+              }
+            },
+            "msg_id": 9,
+            "thread": "@tarilka_malyuka:695"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 47,
+            "thread": "@tarilka_malyuka:715"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 171,
+            "thread": "@tarilka_malyuka:820"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 179,
+            "thread": "@tarilka_malyuka:827"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": null,
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 2579,
+            "thread": "@ya_Nenka:836"
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": null,
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 2580,
+            "thread": "@ya_Nenka:836"
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 2586,
+            "thread": "@ya_Nenka:838"
+          }
+        ]
+      },
+      "by_class": {
+        "None": {
+          "absent": 0,
+          "agreed": 34,
+          "n": 48,
+          "rate": 0.7083333333333334
+        },
+        "категория_личное": {
+          "absent": 0,
+          "agreed": 6,
+          "n": 7,
+          "rate": 0.8571428571428571
+        },
+        "молочный_бренд": {
+          "absent": 0,
+          "agreed": 1,
+          "n": 1,
+          "rate": 1.0
+        },
+        "не_наш_рынок": {
+          "absent": 0,
+          "agreed": 41,
+          "n": 66,
+          "rate": 0.6212121212121212
+        },
+        "сеть_ритейлер": {
+          "absent": 0,
+          "agreed": 9,
+          "n": 11,
+          "rate": 0.8181818181818182
+        }
+      },
+      "file": "results/lora_c_base_v3.jsonl",
+      "labelled_rows_in_E": 133,
+      "parsed": 198,
+      "refused": [],
+      "replies": 198,
+      "sha256": "fdfa36d2ee39a0f9bf9622843cf0bf1b6ab4a6c98fd453de4fd466ebcc7971d7",
+      "task": "pass1_comment_gm4_v3",
+      "the_mention_cell": {
+        "before_on_holdout_100": "18 of 52 — results/prereg_lora_c.json::bars.report_only",
+        "denominator": 66,
+        "note": "this denominator is E's `не_наш_рынок` rows, NOT the holdout's 52. The two populations differ and the numbers are not comparable across them",
+        "to_our": 19,
+        "to_категория_личное": 19,
+        "what": "`не_наш_рынок` gold answered `категория_личное` — the cell this line targets"
+      }
+    }
+  },
+  "no_bar_is_scored": "results/prereg_lora_c.json::bars registers three bars PER ARM and neither arm exists — the smoke OOMed before a single optimizer step. A bar computed over a base leg would be a number for a question nobody asked",
+  "phase": "lora-c",
+  "population": {
+    "eval_set_E": 198,
+    "holdout_100_rows_inside_E": 98,
+    "join": "(thread, msg_id) — a Telegram id is unique inside a channel, not across them",
+    "labelled_by_the_team_lead": 133
+  },
+  "produced_by": {
+    "judge": "market_pulse.scorer.reader_comment_agreement, CALLED",
+    "script": "scripts/score_lora_c_bases.py"
+  },
+  "what_this_is": "the two BEFORE columns the paid session bought before rung 4 KILLED it. base v2 and base v3 on eval set E, parsed by the parser that owns each task and scored by scorer.reader_comment_agreement, called"
+}
