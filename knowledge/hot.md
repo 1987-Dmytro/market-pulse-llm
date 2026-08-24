@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-24 10:46:29 (every SessionStart)
+**Auto-refreshed:** 2026-08-24 11:15:17 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
-a51f39e docs(report): lora-c-armb -- arm B is a file, the cap now covers a reading, and a tell in the header
-b2ed1b3 feat(lora-c): the money re-derived at two pass-2 legs, both datasets registered, stock probed
-fe0cc87 feat(lora-c): arm B's 666 rows, rendered by the same renderer against the same pool
-ba14ca4 feat(verify): make check-stamped -- a reading that proves its own tree did not move
-34cc939 docs(team-lead): STATUS day 24.08 and the lora-c-armb contract, verbatim
+cb0af81 chore(vault): the day log records the closing reading and the two takes before it
+1cd3e95 docs(report): the closing reading, taken after the instrument refused its own first one
+8ef994e chore(vault): the Stop hook's own output, landed so the closing reading has a clean tree
+b659dea fix(verify): the stamps bracket the suite instead of arriving after it
+cafd446 chore(vault): lora-c-armb -- the price that now fits, and the marker that does not
 ```
 
 ## 📋 Recent decisions
@@ -35,7 +35,9 @@ ba14ca4 feat(verify): make check-stamped -- a reading that proves its own tree d
 160 отрендеренных синтетических), **проход-2 = 2 ноги по рулингу (н) → break-even вырос 48.47/58.61
 → 63.29/73.43 с/шаг, и замер lora-b 61.047 теперь ВЛЕЗАЕТ при обеих ценах**. Находка, которую
 контракт не заказывал: **все 160 синтетических несут маркер, которого нет ни в одной из 506 строк**
-— и на них же все 32 таргета `молочный_бренд`. Отчёт — `docs/reports/lora-c-armb.md`.
+— и на них же все 32 таргета `молочный_бренд`. Верификатор **3 701/2 на `8ef994e`**, «reading
+HOLDS», дерево не двинулось; `ruff format --check` 438 файлов. Отчёт —
+`docs/reports/lora-c-armb.md`.
 
 > Этот блок курируется руками. Археология закрытых контрактов живёт в отчётах, ADR и логах дня — не
 > восстанавливать сюда то, у чего есть дом. Ценз буста мерить ДО и ПОСЛЕ каждой правки.
@@ -144,7 +146,7 @@ High** · RTX 4090 $0.74 Low · RTX PRO 6000 $2.09 Low · B200 $6.79 Low. Пер
 **⛔ A6000 48 GB В EU-RO-1 — `none`.** 4090 24 GB $0.74 берётся с первой попытки, доказан пятью
 подами подряд.
 
-**🧹 BOOT TAX 11.5K при цели 10.7K** — измерено `scripts/context-census.py` 24.08 после правки
+**🧹 BOOT TAX 11.6K при цели 10.7K** — измерено `scripts/context-census.py` 24.08 после правки
 этого файла (до правки 11.2K). Цель превышена и до `lora-c-armb`; де-блоат — отдельное решение.
 
 ## 🔫 Footguns этого файла
