@@ -48,6 +48,9 @@ SYNTHETIC_RECORD = REPO_ROOT / "results" / "lora_c_synthetic.json"
 EVAL_PACK = REPO_ROOT / "results" / "lora_c_eval_pack.json"
 PASS2_PACK = REPO_ROOT / "results" / "lora_c_pass2_pack.json"
 TRAIN_FILE = REPO_ROOT / "results" / "pass1_sft_v3_train.jsonl"
+ARM_B_FILE = REPO_ROOT / "results" / "pass1_sft_v3_arm_b.jsonl"
+ARM_B_RECORD = REPO_ROOT / "results" / "lora_c_arm_b.json"
+STOCK_PROBE = REPO_ROOT / "results" / "lora_c_stock_probe.json"
 RATIONALES = REPO_ROOT / "results" / "rationales_pass1_v1.jsonl"
 SYNTHETIC_FILE = REPO_ROOT / "results" / "synthetic_pass1_v1.jsonl"
 TOKENS = REPO_ROOT / "results" / "lora_c_tokens.json"
@@ -76,6 +79,18 @@ RULING_K = (
     " → `lora-c-run` (один A6000, кап **$4.00**)."
 )
 
+RULING_N_RENDERING = (
+    "синтетический запрос рендерится ТЕМ ЖЕ правилом на ТОМ ЖЕ пуле 515 (закон уже запрещает"
+    " синтетику только как СОСЕДА; запрет двойника действует)"
+)
+RULING_N_PASS_2 = (
+    "проход-2 в ране — ТОЛЬКО для армов (2 ноги, не 4): база v2 сквозной уже измерена (r2: 4/5 ·"
+    " 2), база v3 бара не берёт — экономия ~$0.47 по заряду."
+)
+"""The team lead's two design rulings of 2026-08-24, `docs/STATUS.md` п. 1 (н). Both are grepped
+back into that file by :func:`quoted` on every build; the first is what makes arm B renderable at
+all, the second is what this money block is re-derived under."""
+
 CAP_USD = 4.00
 """The ruling's own number, and the only money figure this record may carry."""
 
@@ -85,6 +100,12 @@ registered integer regardless of what that column says ([[a_published_ratio_is_n
 
 PASS_1_SECONDS_PER_CALL = 6.14
 PASS_2_SECONDS_PER_THREAD = 97
+PASS_2_LEGS = 2
+"""Ruling (н) of 24.08: pass 2 runs for the two ARMS only. `lora-c-run` charged four and said so —
+the contract's fixed part summed `4 × 11 × 97` while its order of operations named pass 2 twice —
+and named the difference rather than choosing quietly. The team lead ruled the ambiguity: base v2's
+end-to-end BEFORE column is `pass2-signals-r2`'s registered 4/5 · 2 signals and is not re-bought,
+and base v3 takes no bar ([[two_values_for_one_input_get_quoted_kindly]] closed by a ruling)."""
 SECONDS_PER_STEP_REGISTERED = 61.047
 SECONDS_PER_STEP_MEASURED = 68.442
 SECONDS_PER_STEP_COMPLIANT_SLOW = 121.0
@@ -190,6 +211,7 @@ def legs(eval_pack: dict, train_rows: int, synthetic_rows: int) -> dict:
             "reads": "results/lora_c_eval_pack.json::legs.v3",
             "eval_calls": calls,
             "train_rows": train_rows,
+            "train_file": "results/pass1_sft_v3_train.jsonl",
             "bar": "the registered three, all-or-RED",
         },
         "arm_b": {
@@ -198,6 +220,9 @@ def legs(eval_pack: dict, train_rows: int, synthetic_rows: int) -> dict:
             "reads": "results/lora_c_eval_pack.json::legs.v3",
             "eval_calls": calls,
             "train_rows": train_rows + synthetic_rows,
+            "train_file": "results/pass1_sft_v3_arm_b.jsonl",
+            "produced_by": "scripts/build_lora_c_data.py --arm-b-out (lora-c-armb D1)",
+            "record": "results/lora_c_arm_b.json",
             "bar": "the registered three, all-or-RED",
             "ablation": (
                 "arm A's rows are a SUBSET of arm B's, so the one variable is the synthetic top-up"
@@ -331,12 +356,22 @@ USD_PER_HOUR_WORST = 0.80
 """lora-b's rung 1, registered: «live A6000-class price > $0.80/h at create → STOP, no endpoint»
 (results/prereg_lora_b.json::kill_clock). The worst price this line may meet and still create."""
 
+SIBLING_SECONDS_PER_CALL = 2.694083
+"""What pass1-window r2's own pod REALISED per pass-1 call, against 6.14 charged. A reading of this
+stack on this decode, and 0.439 of the charge."""
+
+SIBLING_SECONDS_PER_THREAD = 23.760
+"""What pass2-signals r2's pod REALISED per pass-2 thread, against 97 charged — 0.245 of it, with
+r2's own caveat: the pod-class spread was measured at 1.008 on n = 1, the shortest of five replies."""
+
 USD_PER_HOUR_LAST_FIVE_PODS = 0.74
 """What the last five pods of this stack actually billed, on a 4090 24 GB in EU-RO-1. A second
 reading of the same quantity, never a substitute for the worst one under a cap."""
 
 
-def pre_pod_arithmetic(calls: int, steps: dict, pass2_threads: int) -> dict:
+def pre_pod_arithmetic(
+    calls: int, steps: dict, pass2_threads: int, pass2_legs: int, stock: dict
+) -> dict:
     """lora-c-run's price derivation, at the CHARGED rates, before any pod exists.
 
     SPEC amendment 3.25 (1) and `docs/STATUS.md` п. 1 (л) both end the same way — «the cap stays
@@ -356,7 +391,7 @@ def pre_pod_arithmetic(calls: int, steps: dict, pass2_threads: int) -> dict:
         "load": LOAD_SECONDS,
         "base_legs": round(2 * calls * PASS_1_SECONDS_PER_CALL, 2),
         "pass_1_evals_of_the_two_adapters": round(2 * calls * PASS_1_SECONDS_PER_CALL, 2),
-        "pass_2": round(4 * pass2_threads * PASS_2_SECONDS_PER_THREAD, 2),
+        "pass_2": round(pass2_legs * pass2_threads * PASS_2_SECONDS_PER_THREAD, 2),
         "training_smoke": round(smoke, 2),
     }
     fixed["total"] = round(sum(fixed.values()), 2)
@@ -370,6 +405,24 @@ def pre_pod_arithmetic(calls: int, steps: dict, pass2_threads: int) -> dict:
             "left_for_training_seconds": round(left, 1),
             "break_even_seconds_per_step": round(left / total_steps, 2),
         }
+    readings = {
+        "registered_by_lora_b": SECONDS_PER_STEP_REGISTERED,
+        "measured_on_lora_b_arm_a": SECONDS_PER_STEP_MEASURED,
+    }
+    covered = {
+        price: sorted(
+            name for name, value in readings.items() if value <= cell["break_even_seconds_per_step"]
+        )
+        for price, cell in at.items()
+    }
+    sibling_fixed = round(
+        BOOT_SECONDS
+        + LOAD_SECONDS
+        + 4 * calls * SIBLING_SECONDS_PER_CALL
+        + pass2_legs * pass2_threads * SIBLING_SECONDS_PER_THREAD
+        + smoke,
+        1,
+    )
     return {
         "state": (
             "DERIVED and REPORTED, not sealed — no pod exists, so the record is still the DRAFT"
@@ -397,47 +450,65 @@ def pre_pod_arithmetic(calls: int, steps: dict, pass2_threads: int) -> dict:
         "fixed_seconds": fixed,
         "steps": {**steps, "total": total_steps},
         "at_each_price": at,
+        "readings_this_repo_holds": readings,
+        "readings_under_the_break_even": covered,
+        "readings_under_the_break_even_rule": (
+            "which of the s/step readings this repo holds sit at or below the break-even, per"
+            " price. A MACHINE-READABLE form of the verdict below, so a test can check the finding"
+            " instead of parsing the sentence ([[gate_verdicts_need_an_artifact]]). Neither list"
+            " licenses a rate: both readings were taken at ≤1 222 tokens and this line runs at"
+            " 1 445–2 975"
+        ),
         "verdict": (
-            "the four-leg plan DOES NOT FIT the $4.00 cap at the charged rates. The fixed part alone"
-            f" is {fixed['total']:.0f} s — ${at[f'{USD_PER_HOUR_WORST:.2f}']['fixed_usd']:.4f} at"
-            f" the worst price — and what is left pays for at most"
+            f"at the scope ruling (н) fixes — four eval legs and {pass2_legs} pass-2 legs — the"
+            f" fixed part is {fixed['total']:.2f} s ="
+            f" ${at[f'{USD_PER_HOUR_WORST:.2f}']['fixed_usd']:.4f} at the worst price a create is"
+            " allowed at, and what is left pays for at most"
             f" {at[f'{USD_PER_HOUR_WORST:.2f}']['break_even_seconds_per_step']:.2f} s/step over the"
             f" {total_steps} optimizer steps"
-            f" ({at[f'{USD_PER_HOUR_LAST_FIVE_PODS:.2f}']['break_even_seconds_per_step']:.2f} at"
-            " the price the last five pods billed). The only two s/step READINGS this repo holds"
-            f" are {SECONDS_PER_STEP_REGISTERED} and {SECONDS_PER_STEP_MEASURED}, both ABOVE both"
-            " break-evens and both taken on sequences of at most 1 222 tokens against this line's"
-            " 1 445–2 975. So the cap is short even at lora-b's own speed on rows less than half as"
-            " long. This is the report amendment 3.25 (1) made the cap conditional on; the raise,"
-            " if any, is the operator's word and it is due BEFORE a create, never after a reading"
+            f" ({at[f'{USD_PER_HOUR_LAST_FIVE_PODS:.2f}']['break_even_seconds_per_step']:.2f} at the"
+            " price the last five pods billed). The only two s/step READINGS this repo holds are"
+            f" {SECONDS_PER_STEP_REGISTERED} and {SECONDS_PER_STEP_MEASURED}. Under the break-even"
+            f" at ${USD_PER_HOUR_WORST:.2f}/h: {covered[f'{USD_PER_HOUR_WORST:.2f}'] or 'NEITHER'};"
+            f" at ${USD_PER_HOUR_LAST_FIVE_PODS:.2f}/h:"
+            f" {covered[f'{USD_PER_HOUR_LAST_FIVE_PODS:.2f}'] or 'NEITHER'}. Both were taken on"
+            " sequences of at most 1 222 tokens against this line's 1 445–2 975, so neither is this"
+            " line's rate and neither is registered as one — the smoke buys it. What amendment"
+            " 3.25 (1) made the cap conditional on is this table; the word on the cap is the"
+            " operator's, on these numbers, and it is due BEFORE a create and never after a reading"
+        ),
+        "what_changed_since_lora_c_run_reported_this": (
+            "nothing but the pass-2 leg count, which ruling (н) fixed at"
+            f" {pass2_legs}. lora-c-run charged four and reported the plan SHORT: 11 019.88 s fixed"
+            " and a break-even of 48.47–58.61 s/step against readings of 61.047 and 68.442. The"
+            f" {(4 - pass2_legs) * pass2_threads * PASS_2_SECONDS_PER_THREAD} s that came off is the"
+            " whole of the difference — no rate moved, no term was re-estimated, and the row count"
+            " of both arms was registered before either contract"
         ),
         "what_the_projection_rung_would_see": {
             "why_this_column_exists": (
                 "the rung fires at MEASURED rates, and both charged rates have a direct sibling"
-                " measurement: 2.694083 s/call (pass1-window r2's own pod) and 23.760 s/thread"
-                " (pass2-signals r2's). They are 0.439 and 0.245 of the charge. This column is what"
+                f" measurement: {SIBLING_SECONDS_PER_CALL} s/call (pass1-window r2's own pod) and"
+                f" {SIBLING_SECONDS_PER_THREAD} s/thread (pass2-signals r2's). They are"
+                f" {SIBLING_SECONDS_PER_CALL / PASS_1_SECONDS_PER_CALL:.3f} and"
+                f" {SIBLING_SECONDS_PER_THREAD / PASS_2_SECONDS_PER_THREAD:.3f} of the charge. This"
+                " column is what"
                 " the session's own instruments would compute after the base legs and the smoke —"
                 " it is a SCENARIO and no part of it is registered as a rate"
             ),
-            "fixed_seconds_at_sibling_rates": round(
-                BOOT_SECONDS + LOAD_SECONDS + 4 * calls * 2.694083 + 4 * pass2_threads * 23.760, 1
-            ),
+            "fixed_seconds_at_sibling_rates": sibling_fixed,
             "break_even_seconds_per_step": {
-                f"{price:.2f}": round(
-                    (
-                        CAP_USD / price * 3600
-                        - (
-                            BOOT_SECONDS
-                            + LOAD_SECONDS
-                            + 4 * calls * 2.694083
-                            + 4 * pass2_threads * 23.760
-                        )
-                    )
-                    / (total_steps + SMOKE_STEPS),
-                    2,
-                )
+                f"{price:.2f}": round((CAP_USD / price * 3600 - sibling_fixed) / total_steps, 2)
                 for price in (USD_PER_HOUR_WORST, USD_PER_HOUR_LAST_FIVE_PODS)
             },
+            "one_accounting_for_the_smoke": (
+                f"the smoke's {SMOKE_STEPS} steps are charged at"
+                f" {SECONDS_PER_STEP_COMPLIANT_SLOW} × {SMOKE_KILL_CLOCK_MULTIPLIER} in BOTH"
+                f" columns and divided out of NEITHER: the divisor is {total_steps} in both, the"
+                " two arms' optimizer steps. lora-c-run's version charged the smoke in the table"
+                f" above and divided by {total_steps} + {SMOKE_STEPS} here, which priced one"
+                " quantity two ways ([[two_values_for_one_input_get_quoted_kindly]])"
+            ),
             "reading": (
                 "under the sibling-measured rates the break-even rises above both lora-b readings,"
                 " so the session is not arithmetically hopeless — it is UNDECIDED until the smoke"
@@ -445,22 +516,59 @@ def pre_pod_arithmetic(calls: int, steps: dict, pass2_threads: int) -> dict:
                 " not the executor's to take under a cap the derivation just reported short"
             ),
         },
-        "the_pass_2_leg_count_is_stated_twice": (
-            "the contract's fixed part charges 4 × 11 × 97 — four legs — and its order of"
-            " operations names pass 2 only under «eval A» and «eval B likewise», which is two."
-            " The registration's `bars.report_only.pass_2_tables` says «per leg», and four is the"
-            " conservative charge, so four is what is summed above. At 97 s/thread the difference"
-            f" is {2 * pass2_threads * PASS_2_SECONDS_PER_THREAD} s ="
-            f" ${2 * pass2_threads * PASS_2_SECONDS_PER_THREAD / 3600 * USD_PER_HOUR_WORST:.4f}."
-            " Named rather than chosen quietly ([[two_values_for_one_input_get_quoted_kindly]])"
-        ),
-        "the_card_the_ruling_names_was_last_read_as_out_of_stock": (
-            "ruling (к) says «один A6000». knowledge/hot.md records A6000 48 GB in EU-RO-1 as"
-            " `none` and a 4090 24 GB at $0.74/h taken on the first attempt, five pods running."
-            " A create is the only free stock test ([[a_stock_window_needs_the_create_not_a_poll]]),"
-            " and a create is also this record's freeze — so the two cannot be separated and the"
-            " card is part of what the operator is being asked"
-        ),
+        "the_pass_2_leg_count_was_ruled": {
+            "was": (
+                "lora-c-run charged FOUR legs and said so: its fixed part summed 4 × 11 × 97 while"
+                " its order of operations named pass 2 only under «eval A» and «eval B likewise»,"
+                " which is two. Four was the conservative charge under a cap and it was named"
+                " rather than chosen quietly (Dv788)"
+            ),
+            "ruling": quoted(RULING_N_PASS_2),
+            "now": pass2_legs,
+            "saved_seconds": round((4 - pass2_legs) * pass2_threads * PASS_2_SECONDS_PER_THREAD, 2),
+            "saved_usd_at_the_worst_price": round(
+                (4 - pass2_legs)
+                * pass2_threads
+                * PASS_2_SECONDS_PER_THREAD
+                / 3600
+                * USD_PER_HOUR_WORST,
+                4,
+            ),
+            "what_bars_report_only_still_says": (
+                "`bars.report_only.pass_2_tables` says «per leg» and this contract may not touch"
+                " `bars`. The two are reconciled HERE and nowhere else: the tables are per leg for"
+                f" the legs that RUN, and ruling (н) says those are the {pass2_legs} arms. Base"
+                " v2's end-to-end BEFORE column is pass2-signals-r2's registered 4 of 5 on two"
+                " signals, already bought; base v3 takes no bar and therefore needs no pass 2"
+            ),
+        },
+        "stock_probe": {
+            "record": "results/lora_c_stock_probe.json",
+            "read_at": stock["read_at"],
+            "region": stock["region"],
+            "region_source": "the network volume's datacenter — results/d7_reread_srv2b.json",
+            "read_only": stock["creates_nothing"],
+            "caveat": stock["caveat"],
+            "reading": stock["reading"],
+            "the_card_the_ruling_names": stock["wanted_in_the_volumes_region"],
+            "in_the_volumes_region": stock["with_stock_in_the_volumes_region"],
+            "nothing_is_chosen": (
+                "ruling (к) says «один A6000» and the probe reads it as `none` in the volume's own"
+                " datacenter, as it was when knowledge/hot.md recorded it — this reading DATES that"
+                " sentence rather than repeating it. The alternatives above are listed with their"
+                " prices and NONE is picked: the card is part of what the operator is being asked,"
+                " beside the cap, and a create is the only free test of stock"
+                " ([[a_stock_window_needs_the_create_not_a_poll]]). A create is also this record's"
+                " freeze, so the two cannot be separated"
+            ),
+            "what_a_different_card_would_move": (
+                f"every second in `fixed_seconds` was measured on a 4090 or charged from one, and"
+                f" the break-even above is priced at ${USD_PER_HOUR_WORST:.2f}/h and"
+                f" ${USD_PER_HOUR_LAST_FIVE_PODS:.2f}/h. A card at another price re-prices the"
+                " budget but not the seconds; a card of another CLASS re-prices the seconds too,"
+                " and this record holds no reading of any of them"
+            ),
+        },
     }
 
 
@@ -471,6 +579,7 @@ def money(
     synthetic_rows: int,
     counted: dict,
     pass2_threads: int,
+    stock: dict,
 ) -> dict:
     """LEFT OPEN by the contract: formulas, named rates, and no sum.
 
@@ -492,11 +601,13 @@ def money(
     }
     return {
         "state": (
-            "DERIVED by lora-c-run at the charged rates and REPORTED to the operator — see"
-            " `pre_pod_arithmetic`. Still not SEALED: sealing is the first `pod create` and no pod"
-            " exists"
+            "RE-DERIVED by lora-c-armb at the charged rates, for the scope ruling (н) fixes, and"
+            " REPORTED to the operator — see `pre_pod_arithmetic`. lora-c-run derived it first at"
+            " four pass-2 legs and reported the plan short; the ruling took two of those legs off"
+            " and nothing else moved. Still not SEALED: sealing is the first `pod create` and no"
+            " pod exists"
         ),
-        "pre_pod_arithmetic": pre_pod_arithmetic(calls, steps, pass2_threads),
+        "pre_pod_arithmetic": pre_pod_arithmetic(calls, steps, pass2_threads, PASS_2_LEGS, stock),
         "cap_usd_all_in": CAP_USD,
         "cap_rule": (
             "the operator's ruling (к): «один A6000, кап $4.00». Raising it is the operator's word"
@@ -806,6 +917,8 @@ def build() -> dict:
     eval_pack = json.loads(EVAL_PACK.read_text(encoding="utf-8"))
     pass2_pack = json.loads(PASS2_PACK.read_text(encoding="utf-8"))
     lora_b = json.loads(LORA_B.read_text(encoding="utf-8"))
+    arm_b_record = json.loads(ARM_B_RECORD.read_text(encoding="utf-8"))
+    stock = json.loads(STOCK_PROBE.read_text(encoding="utf-8"))
     train_rows = data_record["rows"]["rendered"]
     synthetic_rows = synthetic_record["rows"]
     rows = [json.loads(one) for one in TRAIN_FILE.read_text(encoding="utf-8").splitlines() if one]
@@ -818,6 +931,14 @@ def build() -> dict:
             "record": "docs/STATUS.md «Открытые решения» п. 1",
             "ruling_v": quoted(RULING_V),
             "ruling_k": quoted(RULING_K),
+            "ruling_n_rendering": quoted(RULING_N_RENDERING),
+            "ruling_n_pass_2": quoted(RULING_N_PASS_2),
+            "ruling_n_what_it_settled": (
+                "(н) of 24.08 answers the two questions lora-c-run STOPPED on. The first makes a"
+                " synthetic row a v3 QUERY under the rules a real one obeys, which is what makes"
+                " arm B a file rather than an arithmetic; the second fixes the pass-2 leg count at"
+                " two, which is the only term of the money block that moved"
+            ),
             "amendment_3_25": {
                 "record": "docs/SPEC.md, the `amendment-3.25` marked block",
                 "sha256_of_the_spec": sha(SPEC),
@@ -871,11 +992,31 @@ def build() -> dict:
                 "record": "results/lora_c_data.json",
             },
             "train": {
-                "rows": train_rows,
+                "files": [
+                    {
+                        "arm": "arm_a",
+                        "file": "results/pass1_sft_v3_train.jsonl",
+                        "rows": train_rows,
+                        "sha256": sha(TRAIN_FILE),
+                        "distribution": data_record["rows"]["distribution"],
+                    },
+                    {
+                        "arm": "arm_b",
+                        "file": "results/pass1_sft_v3_arm_b.jsonl",
+                        "rows": arm_b_record["rows"]["total"],
+                        "sha256": sha(ARM_B_FILE),
+                        "distribution": arm_b_record["rows"]["distribution"],
+                    },
+                ],
+                "rule": (
+                    "arm A's file is arm B's BYTE-IDENTICAL prefix — the 506 real rows, then the"
+                    " 160 rendered synthetic ones — so the ablation's one variable is the top-up"
+                    " and nothing else. `scripts/build_lora_c_data.py` re-renders the 506 and"
+                    " refuses to write when they do not reproduce the shipped bytes"
+                ),
                 "refused": data_record["rows"]["refused"],
-                "distribution": data_record["rows"]["distribution"],
-                "file": "results/pass1_sft_v3_train.jsonl",
-                "sha256": sha(TRAIN_FILE),
+                "record": "results/lora_c_arm_b.json",
+                "rendering_ruling": quoted(RULING_N_RENDERING),
             },
             "synthetic": {
                 "rows": synthetic_rows,
@@ -1081,6 +1222,7 @@ def build() -> dict:
             synthetic_rows,
             counted,
             pass2_pack["population"]["threads_with_at_least_one_filtered_row"],
+            stock,
         ),
         "ready_to_price": {
             "rule": "every number here comes from a file this contract built, at $0",
@@ -1113,6 +1255,8 @@ def build() -> dict:
             "results/lora_c_data.json",
             "results/lora_c_synthetic.json",
             "results/pass1_sft_v3_train.jsonl",
+            "results/pass1_sft_v3_arm_b.jsonl",
+            "results/lora_c_arm_b.json",
             "results/rationales_pass1_v1.jsonl",
             "results/synthetic_pass1_v1.jsonl",
             "results/lora_c_eval_pack.json",

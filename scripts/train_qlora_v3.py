@@ -23,7 +23,8 @@ The one thing written here rather than reached for is the provenance dict. `buil
 publishing it would be describing another line's dataset in its own record
 ([[the_old_record_with_one_field_replaced]]).
 
-    PYTHONPATH=src python3.11 scripts/train_qlora_v3.py --census
+    PYTHONPATH=src python3.11 scripts/train_qlora_v3.py --census \\
+        --data results/pass1_sft_v3_arm_b.jsonl --out results/lora_c_encode_census_arm_b.json
     PYTHONPATH=src python3.11 scripts/train_qlora_v3.py --build-only --class-weights \\
         --data results/pass1_sft_v3_train.jsonl
     PYTHONPATH=src python3.11 scripts/train_qlora_v3.py --class-weights --max-steps 6 \\
@@ -79,17 +80,28 @@ def the_task_is_v3():
 def registered_training_shas() -> dict[str, str]:
     """The sha list guard 2 now reads — this line's registration, not line B's SFT record.
 
-    The registration declares its training dataset once, under `population.train`, and that single
-    entry is the whole list. A dataset the record does not name is refused whatever else is on disk
-    beside it.
+    The registration declares its training datasets under `population.train.files` — arm A's 506
+    rows and arm B's 666 — and that list is the whole list. A dataset the record does not name is
+    refused whatever else is on disk beside it.
     """
     record = json.loads(REGISTRATION.read_text(encoding="utf-8"))
-    train = record["population"]["train"]
-    return {train["file"]: train["sha256"]}
+    return {one["file"]: one["sha256"] for one in record["population"]["train"]["files"]}
 
 
 def registered_first() -> str:
-    return next(iter(registered_training_shas()))
+    """The one registered dataset — a REFUSAL when there is more than one.
+
+    `population.train` named a single file until `lora-c-armb` rendered arm B; with both files
+    registered, «the first one» would silently pick an arm and the census would describe 506 rows
+    under a report that says 666 ([[select_one_row_refuse_ambiguity]]).
+    """
+    files = sorted(registered_training_shas())
+    if len(files) != 1:
+        raise SystemExit(
+            f"{REGISTRATION.name} registers {files} — name the one you mean with --data rather than"
+            " let a default choose an arm."
+        )
+    return files[0]
 
 
 def arm_of(rows: int) -> str:
@@ -191,6 +203,7 @@ def census(path: Path, loaded=None) -> dict:
     same ceiling the training run will use, run here at $0 so a row too wide is a finding on a Mac
     and not a dead pod ([[a_frozen_record_is_an_input_to_shipped_code]]).
     """
+    path = Path(path).resolve()
     ceiling = int(yaml.safe_load(CONFIG.read_text(encoding="utf-8"))["training"]["max_seq_len"])
     loaded = loaded if loaded is not None else tokenizer_at_the_pinned_revision()
     with the_task_is_v3():
@@ -213,8 +226,10 @@ def census(path: Path, loaded=None) -> dict:
         "encoded": len(widths),
         "tokens": {
             "min": widths[0]["tokens"] if widths else None,
+            "median": widths[len(widths) // 2]["tokens"] if widths else None,
             "max": widths[-1]["tokens"] if widths else None,
             "widest_row": widths[-1]["id"] if widths else None,
+            "narrowest_row": widths[0]["id"] if widths else None,
         },
         "headroom": ceiling - widths[-1]["tokens"] if widths else None,
         "quantity": (
@@ -235,10 +250,10 @@ def main(argv: list[str] | None = None) -> int:
     if "--census" in argv:
         parser = argparse.ArgumentParser(description="the encode census, at $0")
         parser.add_argument("--census", action="store_true")
-        parser.add_argument("--data", type=Path, default=REPO_ROOT / registered_first())
+        parser.add_argument("--data", type=Path, default=None)
         parser.add_argument("--out", type=Path, default=CENSUS_OUT)
         args = parser.parse_args(argv)
-        record = census(args.data)
+        record = census(args.data or REPO_ROOT / registered_first())
         args.out.write_text(
             json.dumps(record, indent=2, sort_keys=True, ensure_ascii=False) + "\n",
             encoding="utf-8",

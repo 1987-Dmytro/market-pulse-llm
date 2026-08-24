@@ -267,3 +267,117 @@ def test_the_widest_arm_b_request_is_inside_the_input_ceiling():
     assert length["ceiling_chars"] == prompts.PASS1_MAX_INPUT_CHARS
     assert length["headroom_chars"] == length["ceiling_chars"] - length["widest_request_chars"]
     assert length["synthetic_headroom_chars"] > 0
+
+
+# --- D2: the registration and the re-derived money block -----------------------------------------
+
+
+def test_the_registration_names_both_training_files_with_their_shas():
+    """The gap `test_the_registration_names_no_arm_b_dataset` pinned (Dv786) is closed by a FILE.
+
+    That test's name is cited by `docs/reports/lora-c-run.md`; it is superseded by this one and by
+    `test_the_registration_now_names_arm_bs_dataset` in `tests/test_lora_c_run.py`, which keeps the
+    old finding greppable rather than deleting the trail.
+    """
+    train = registration()["population"]["train"]
+    files = {one["file"]: one for one in train["files"]}
+    assert set(files) == {
+        "results/pass1_sft_v3_train.jsonl",
+        "results/pass1_sft_v3_arm_b.jsonl",
+    }
+    for name, cell in files.items():
+        on_disk = hashlib.sha256((REPO_ROOT / name).read_bytes()).hexdigest()
+        assert cell["sha256"] == on_disk, f"{name} has moved under its registration"
+    assert files["results/pass1_sft_v3_train.jsonl"]["rows"] == 506
+    assert files["results/pass1_sft_v3_arm_b.jsonl"]["rows"] == 666
+    legs = registration()["legs"]
+    assert legs["arm_a"]["train_file"] == "results/pass1_sft_v3_train.jsonl"
+    assert legs["arm_b"]["train_file"] == "results/pass1_sft_v3_arm_b.jsonl"
+    assert legs["arm_b"]["train_rows"] == 666
+    assert "results/pass1_sft_v3_arm_b.jsonl" in registration()["frozen_when_the_pod_exists"]
+
+
+def test_the_sibling_trainer_reads_both_shas_and_refuses_to_guess_which_arm_to_census():
+    """Two registered datasets make «the first one» a silent arm pick, so it is a refusal instead."""
+    import train_qlora_v3 as sibling
+
+    shas = sibling.registered_training_shas()
+    assert len(shas) == 2
+    assert sibling.arm_of(506) == "arm_a"
+    assert sibling.arm_of(666) == "arm_b"
+    with pytest.raises(SystemExit, match="--data"):
+        sibling.registered_first()
+
+
+def test_the_pass_2_leg_count_is_two_and_the_record_quotes_the_ruling_that_made_it_so():
+    """Ruling (н), grepped back into `docs/STATUS.md` by the producer's own `quoted`."""
+    import write_lora_c_prereg as prereg
+
+    money = registration()["money"]["pre_pod_arithmetic"]
+    ruled = money["the_pass_2_leg_count_was_ruled"]
+    assert ruled["now"] == 2
+    assert ruled["ruling"] == prereg.RULING_N_PASS_2
+    assert prereg.quoted(prereg.RULING_N_PASS_2) == prereg.RULING_N_PASS_2
+    threads = registration()["ready_to_price"]["pass_2_threads_per_leg"]
+    assert money["fixed_seconds"]["pass_2"] == 2 * threads * prereg.PASS_2_SECONDS_PER_THREAD
+    assert ruled["saved_seconds"] == 2 * threads * prereg.PASS_2_SECONDS_PER_THREAD
+
+
+def test_the_break_even_is_the_cap_inequality_solved_backwards_at_both_prices():
+    """Every cell of the two-price table re-derived from the record's own fixed part."""
+    money = registration()["money"]["pre_pod_arithmetic"]
+    cap = registration()["money"]["cap_usd_all_in"]
+    fixed = money["fixed_seconds"]
+    steps = money["steps"]["total"]
+    assert fixed["total"] == round(sum(v for k, v in fixed.items() if k != "total"), 2)
+    assert steps == money["steps"]["arm_a"] + money["steps"]["arm_b"] == 144
+    for price, cell in money["at_each_price"].items():
+        budget = cap / float(price) * 3600
+        assert cell["budget_seconds"] == round(budget, 2) or cell["budget_seconds"] == round(
+            budget, 1
+        )
+        assert cell["left_for_training_seconds"] == round(budget - fixed["total"], 1)
+        assert cell["break_even_seconds_per_step"] == round((budget - fixed["total"]) / steps, 2)
+    assert money["rates_used"]["training_seconds_per_step"].startswith("NONE")
+
+
+def test_the_two_columns_price_the_smoke_the_same_way():
+    """One accounting for one quantity — lora-c-run's version divided by 144 and by 144 + 6."""
+    money = registration()["money"]["pre_pod_arithmetic"]
+    steps = money["steps"]["total"]
+    scenario = money["what_the_projection_rung_would_see"]
+    fixed = scenario["fixed_seconds_at_sibling_rates"]
+    cap = registration()["money"]["cap_usd_all_in"]
+    for price, value in scenario["break_even_seconds_per_step"].items():
+        assert value == round((cap / float(price) * 3600 - fixed) / steps, 2)
+    assert money["fixed_seconds"]["training_smoke"] > 0
+    assert scenario["one_accounting_for_the_smoke"]
+
+
+def test_the_registration_is_still_a_draft_with_its_attempt_unspent_and_no_price():
+    """What this contract may NOT move: the state, the bars, the attempt, and any price key."""
+    record_now = registration()
+    assert record_now["state"].startswith("DRAFT")
+    assert record_now["bars"]["attempt"].startswith("ONE.")
+    assert record_now["money"]["cap_usd_all_in"] == 4.00
+    assert isinstance(record_now["money"]["hard_stop_seconds"], str)
+    assert "spent" not in record_now["money"]
+    assert "price_usd" not in record_now["money"]
+
+
+def test_the_stock_probe_is_a_listing_and_creates_nothing():
+    """The probe's own record: a reading with a timestamp, and the caveat that dates it."""
+    probe = json.loads(
+        (REPO_ROOT / "results" / "lora_c_stock_probe.json").read_text(encoding="utf-8")
+    )
+    assert probe["region"] == "EU-RO-1"
+    assert probe["read_at"].endswith("+00:00")
+    assert all(command.startswith("runpodctl") for command in probe["commands"])
+    assert not any(
+        word in " ".join(probe["commands"]) for word in ("create", "start", "stop", "remove")
+    )
+    assert probe["caveat"]
+    in_region = registration()["money"]["pre_pod_arithmetic"]["stock_probe"][
+        "in_the_volumes_region"
+    ]
+    assert in_region, "the probe read no card at all in the volume's region — that is a finding"

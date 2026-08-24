@@ -163,17 +163,27 @@ def test_the_sibling_refuses_a_row_over_the_ceiling():
         trainer.encode_pass1(FakeTokenizer(), row, 3072)
 
 
-def test_the_registration_names_no_arm_b_dataset():
-    """The 666-row arm B has a registered ROW COUNT and no registered FILE.
+def test_the_registration_now_names_arm_bs_dataset():
+    """Dv786's gap, CLOSED — and the shape of the gap kept so the finding stays legible.
 
-    `legs.arm_b.train_rows` is 666 and `population.train` names one file of 506; the 160 synthetic
-    rows live in `results/synthetic_pass1_v1.jsonl` in the raw comment shape, with no `prompt`,
-    `target` or `learn_chars`, so nothing on disk is arm B's dataset and no producer renders one.
-    This test pins the gap rather than papering over it ([[a_registered_bar_may_have_no_producer]]).
+    This test replaces `test_the_registration_names_no_arm_b_dataset`, which `docs/reports/
+    lora-c-run.md` cites: that one asserted `population.train` named ONE file while
+    `legs.arm_b.train_rows` said 666, and the name stops being true the moment `lora-c-armb`
+    renders the file. Renaming rather than re-pointing keeps the report's citation honest — the old
+    name described a state this contract ended ([[a_registered_bar_may_have_no_producer]]).
+
+    What has NOT changed is the reason the gap existed: the 160 rows in
+    `results/synthetic_pass1_v1.jsonl` are still raw comments with no `prompt`, `target` or
+    `learn_chars`. Arm B was never a concatenation, and the file that closes the gap is the
+    RENDERING ruling (н) authorised.
     """
     record = json.loads(PREREG.read_text(encoding="utf-8"))
     assert record["legs"]["arm_b"]["train_rows"] == 666
-    assert set(sibling.registered_training_shas()) == {"results/pass1_sft_v3_train.jsonl"}
+    assert set(sibling.registered_training_shas()) == {
+        "results/pass1_sft_v3_train.jsonl",
+        "results/pass1_sft_v3_arm_b.jsonl",
+    }
+    assert sibling.arm_of(666) == "arm_b"
     synthetic = json.loads(
         (REPO_ROOT / "results" / "synthetic_pass1_v1.jsonl")
         .read_text(encoding="utf-8")
@@ -229,8 +239,16 @@ def test_the_derivation_solves_the_cap_inequality_backwards():
     """The pre-pod arithmetic, re-derived here from the record's own terms.
 
     A verdict in prose is not the verdict ([[gate_verdicts_need_an_artifact]]): the break-even is
-    recomputed from the fixed part, the cap and the step count, and the reading that matters — that
-    both s/step readings this repo holds sit ABOVE it — is asserted rather than described.
+    recomputed from the fixed part, the cap and the step count, and the finding — which of the two
+    s/step readings this repo holds sit under the bar the cap sets — is read off the record's own
+    machine-readable field and re-derived here.
+
+    **This test asserted a DIRECTION until 2026-08-24 and no longer does.** It said «neither reading
+    fits», which was lora-c-run's finding at four pass-2 legs; ruling (н) took two of those legs off,
+    the fixed part fell by 2 134 s and the break-even rose past 61.047 at both prices. A test that
+    pins which way a measurement came out has to be edited every time the measurement moves, and the
+    edit looks exactly like fixing the test ([[a_flag_that_asserts_turns_a_poll_into_a_verdict]]).
+    What it pins now is that the record's finding and the arithmetic agree.
     """
     money = json.loads(PREREG.read_text(encoding="utf-8"))["money"]
     derived = money["pre_pod_arithmetic"]
@@ -242,9 +260,16 @@ def test_the_derivation_solves_the_cap_inequality_backwards():
         left = budget - derived["fixed_seconds"]["total"]
         assert round(left, 1) == column["left_for_training_seconds"]
         assert round(left / steps, 2) == column["break_even_seconds_per_step"]
-        # the finding: neither reading this repo holds fits under the bar the cap sets
-        assert column["break_even_seconds_per_step"] < prereg.SECONDS_PER_STEP_REGISTERED
-        assert column["break_even_seconds_per_step"] < prereg.SECONDS_PER_STEP_MEASURED
+        # the finding, re-derived: which readings sit under the bar this price sets
+        assert derived["readings_under_the_break_even"][price] == sorted(
+            name
+            for name, value in derived["readings_this_repo_holds"].items()
+            if value <= column["break_even_seconds_per_step"]
+        )
+    assert derived["readings_this_repo_holds"] == {
+        "registered_by_lora_b": prereg.SECONDS_PER_STEP_REGISTERED,
+        "measured_on_lora_b_arm_a": prereg.SECONDS_PER_STEP_MEASURED,
+    }
     assert derived["hard_stop_seconds"] == round(
         cap / derived["price_usd_per_hour"]["worst"] * 3600, 1
     )

@@ -20,6 +20,9 @@
     "quotation_rule": "both strings are grepped back into docs/STATUS.md on every build of this file, whitespace-normalised. A ruling quoted from memory is a paraphrase in quotation marks",
     "record": "docs/STATUS.md «Открытые решения» п. 1",
     "ruling_k": "(к) **РУЛИНГ 22.08 (вечер) — дизайн `lora-c`:** промпт v3 = v2 + поле `rationale` ПЕРЕД меткой, одним рендерингом для обучения и инференса; таблица парно в четыре колонки (база v2 · база v3 · адаптер A · адаптер B) на одном пуле соседей; рационали для обучающих строк пишет Claude Code по кодбуку и метке тимлида, тимлид ревьюит все «наши» + ~40 пограничных; синтетика ~160 (по 40 на класс ошибки) — арм B, тег в provenance, абляция армом A, никогда в холдаут/голд; из обучения и из пула соседей исключены холдаут-100 и ВСЕ строки 16 референсных тредов; **бар на арм (один выстрел): холдаут-100 ≥ 64 И сквозной бар 1 = 5/5 И бар 3 = 0 — все три или КРАСНЫЙ**; отчётно: ячейка «упоминание → категория» на холдауте (18 → ?), dev-200 (fit), 14 золотых (шестой взгляд). Два контракта: `lora-c-prep` ($0, с ревью-гейтом тимлида) → `lora-c-run` (один A6000, кап **$4.00**).",
+    "ruling_n_pass_2": "проход-2 в ране — ТОЛЬКО для армов (2 ноги, не 4): база v2 сквозной уже измерена (r2: 4/5 · 2), база v3 бара не берёт — экономия ~$0.47 по заряду.",
+    "ruling_n_rendering": "синтетический запрос рендерится ТЕМ ЖЕ правилом на ТОМ ЖЕ пуле 515 (закон уже запрещает синтетику только как СОСЕДА; запрет двойника действует)",
+    "ruling_n_what_it_settled": "(н) of 24.08 answers the two questions lora-c-run STOPPED on. The first makes a synthetic row a v3 QUERY under the rules a real one obeys, which is what makes arm B a file rather than an arithmetic; the second fixes the pass-2 leg count at two, which is the only term of the money block that moved",
     "ruling_v": "(в) **Затем — (4) LoRA «рассуждение→метка» поверх v2 с (3) синтетикой как армом B** одной регистрации; цель обучения — из (б)."
   },
   "bars": {
@@ -80,6 +83,8 @@
     "results/lora_c_data.json",
     "results/lora_c_synthetic.json",
     "results/pass1_sft_v3_train.jsonl",
+    "results/pass1_sft_v3_arm_b.jsonl",
+    "results/lora_c_arm_b.json",
     "results/rationales_pass1_v1.jsonl",
     "results/synthetic_pass1_v1.jsonl",
     "results/lora_c_eval_pack.json",
@@ -185,6 +190,7 @@
       "eval_calls": 198,
       "prompt": "pass1_comment_gm4_v3",
       "reads": "results/lora_c_eval_pack.json::legs.v3",
+      "train_file": "results/pass1_sft_v3_train.jsonl",
       "train_rows": 506
     },
     "arm_b": {
@@ -192,8 +198,11 @@
       "adapter": "QLoRA on arm A's rows PLUS the synthetic rows",
       "bar": "the registered three, all-or-RED",
       "eval_calls": 198,
+      "produced_by": "scripts/build_lora_c_data.py --arm-b-out (lora-c-armb D1)",
       "prompt": "pass1_comment_gm4_v3",
       "reads": "results/lora_c_eval_pack.json::legs.v3",
+      "record": "results/lora_c_arm_b.json",
+      "train_file": "results/pass1_sft_v3_arm_b.jsonl",
       "train_rows": 666
     },
     "base_v2": {
@@ -241,16 +250,16 @@
     "pre_pod_arithmetic": {
       "at_each_price": {
         "0.74": {
-          "break_even_seconds_per_step": 58.61,
+          "break_even_seconds_per_step": 73.43,
           "budget_seconds": 19459.5,
-          "fixed_usd": 2.2652,
-          "left_for_training_seconds": 8439.6
+          "fixed_usd": 1.8265,
+          "left_for_training_seconds": 10573.6
         },
         "0.80": {
-          "break_even_seconds_per_step": 48.47,
+          "break_even_seconds_per_step": 63.29,
           "budget_seconds": 18000.0,
-          "fixed_usd": 2.4489,
-          "left_for_training_seconds": 6980.1
+          "fixed_usd": 1.9746,
+          "left_for_training_seconds": 9114.1
         }
       },
       "authority": {
@@ -262,8 +271,8 @@
         "boot": 500,
         "load": 300,
         "pass_1_evals_of_the_two_adapters": 2431.44,
-        "pass_2": 4268,
-        "total": 11019.88,
+        "pass_2": 2134,
+        "total": 8885.88,
         "training_smoke": 1089.0
       },
       "hard_stop_rule": "cap / worst rate, stamped on `--terminate-after` at create",
@@ -278,23 +287,125 @@
         "pass_2_seconds_per_thread": 97,
         "training_seconds_per_step": "NONE. No reading exists at 3 072 and the contract forbids projecting one from lora-b's ≤1 222-token readings — the smoke buys it"
       },
+      "readings_this_repo_holds": {
+        "measured_on_lora_b_arm_a": 68.442,
+        "registered_by_lora_b": 61.047
+      },
+      "readings_under_the_break_even": {
+        "0.74": [
+          "measured_on_lora_b_arm_a",
+          "registered_by_lora_b"
+        ],
+        "0.80": [
+          "registered_by_lora_b"
+        ]
+      },
+      "readings_under_the_break_even_rule": "which of the s/step readings this repo holds sit at or below the break-even, per price. A MACHINE-READABLE form of the verdict below, so a test can check the finding instead of parsing the sentence ([[gate_verdicts_need_an_artifact]]). Neither list licenses a rate: both readings were taken at ≤1 222 tokens and this line runs at 1 445–2 975",
       "state": "DERIVED and REPORTED, not sealed — no pod exists, so the record is still the DRAFT `frozen_when_the_pod_exists` describes",
       "steps": {
         "arm_a": 62,
         "arm_b": 82,
         "total": 144
       },
-      "the_card_the_ruling_names_was_last_read_as_out_of_stock": "ruling (к) says «один A6000». knowledge/hot.md records A6000 48 GB in EU-RO-1 as `none` and a 4090 24 GB at $0.74/h taken on the first attempt, five pods running. A create is the only free stock test ([[a_stock_window_needs_the_create_not_a_poll]]), and a create is also this record's freeze — so the two cannot be separated and the card is part of what the operator is being asked",
-      "the_pass_2_leg_count_is_stated_twice": "the contract's fixed part charges 4 × 11 × 97 — four legs — and its order of operations names pass 2 only under «eval A» and «eval B likewise», which is two. The registration's `bars.report_only.pass_2_tables` says «per leg», and four is the conservative charge, so four is what is summed above. At 97 s/thread the difference is 2134 s = $0.4742. Named rather than chosen quietly ([[two_values_for_one_input_get_quoted_kindly]])",
-      "verdict": "the four-leg plan DOES NOT FIT the $4.00 cap at the charged rates. The fixed part alone is 11020 s — $2.4489 at the worst price — and what is left pays for at most 48.47 s/step over the 144 optimizer steps (58.61 at the price the last five pods billed). The only two s/step READINGS this repo holds are 61.047 and 68.442, both ABOVE both break-evens and both taken on sequences of at most 1 222 tokens against this line's 1 445–2 975. So the cap is short even at lora-b's own speed on rows less than half as long. This is the report amendment 3.25 (1) made the cap conditional on; the raise, if any, is the operator's word and it is due BEFORE a create, never after a reading",
+      "stock_probe": {
+        "caveat": "a listing is not a create: stock at create-time may differ, in both directions, and the only free test of a create is the create itself. This reading dates the question, it does not answer it",
+        "in_the_volumes_region": [
+          {
+            "catalogued_in_this_region": true,
+            "communityPricePerHr": null,
+            "displayName": "RTX 2000 Ada",
+            "gpuId": "NVIDIA RTX 2000 Ada Generation",
+            "memoryInGb": 16,
+            "securePricePerHr": 0.24,
+            "stock": "Low"
+          },
+          {
+            "catalogued_in_this_region": true,
+            "communityPricePerHr": null,
+            "displayName": "L4",
+            "gpuId": "NVIDIA L4",
+            "memoryInGb": 24,
+            "securePricePerHr": 0.49,
+            "stock": "Low"
+          },
+          {
+            "catalogued_in_this_region": true,
+            "communityPricePerHr": null,
+            "displayName": "RTX PRO 4000",
+            "gpuId": "NVIDIA RTX PRO 4000 Blackwell",
+            "memoryInGb": 24,
+            "securePricePerHr": 0.57,
+            "stock": "Medium"
+          },
+          {
+            "catalogued_in_this_region": true,
+            "communityPricePerHr": null,
+            "displayName": "RTX PRO 4500",
+            "gpuId": "NVIDIA RTX PRO 4500 Blackwell",
+            "memoryInGb": 32,
+            "securePricePerHr": 0.72,
+            "stock": "High"
+          },
+          {
+            "catalogued_in_this_region": true,
+            "communityPricePerHr": 0.34,
+            "displayName": "RTX 4090",
+            "gpuId": "NVIDIA GeForce RTX 4090",
+            "memoryInGb": 24,
+            "securePricePerHr": 0.74,
+            "stock": "Low"
+          },
+          {
+            "catalogued_in_this_region": true,
+            "communityPricePerHr": 1.69,
+            "displayName": "RTX PRO 6000",
+            "gpuId": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+            "memoryInGb": 96,
+            "securePricePerHr": 2.09,
+            "stock": "Low"
+          },
+          {
+            "catalogued_in_this_region": true,
+            "communityPricePerHr": 5.98,
+            "displayName": "B200",
+            "gpuId": "NVIDIA B200",
+            "memoryInGb": 180,
+            "securePricePerHr": 6.79,
+            "stock": "Low"
+          }
+        ],
+        "nothing_is_chosen": "ruling (к) says «один A6000» and the probe reads it as `none` in the volume's own datacenter, as it was when knowledge/hot.md recorded it — this reading DATES that sentence rather than repeating it. The alternatives above are listed with their prices and NONE is picked: the card is part of what the operator is being asked, beside the cap, and a create is the only free test of stock ([[a_stock_window_needs_the_create_not_a_poll]]). A create is also this record's freeze, so the two cannot be separated",
+        "read_at": "2026-08-24T08:24:02+00:00",
+        "read_only": "both commands are listings. No pod, no endpoint, no volume, no template was created, started or stopped by this file",
+        "reading": "7 of 47 catalogued cards report stock other than `none` in EU-RO-1. The cards ruling (к) names read {'A40': None, 'RTX A6000': 'none'}. Prices are listed and nothing is chosen: the card is the operator's word at the cap decision, and this file only dates the question",
+        "record": "results/lora_c_stock_probe.json",
+        "region": "EU-RO-1",
+        "region_source": "the network volume's datacenter — results/d7_reread_srv2b.json",
+        "the_card_the_ruling_names": {
+          "A40": null,
+          "RTX A6000": "none"
+        },
+        "what_a_different_card_would_move": "every second in `fixed_seconds` was measured on a 4090 or charged from one, and the break-even above is priced at $0.80/h and $0.74/h. A card at another price re-prices the budget but not the seconds; a card of another CLASS re-prices the seconds too, and this record holds no reading of any of them"
+      },
+      "the_pass_2_leg_count_was_ruled": {
+        "now": 2,
+        "ruling": "проход-2 в ране — ТОЛЬКО для армов (2 ноги, не 4): база v2 сквозной уже измерена (r2: 4/5 · 2), база v3 бара не берёт — экономия ~$0.47 по заряду.",
+        "saved_seconds": 2134,
+        "saved_usd_at_the_worst_price": 0.4742,
+        "was": "lora-c-run charged FOUR legs and said so: its fixed part summed 4 × 11 × 97 while its order of operations named pass 2 only under «eval A» and «eval B likewise», which is two. Four was the conservative charge under a cap and it was named rather than chosen quietly (Dv788)",
+        "what_bars_report_only_still_says": "`bars.report_only.pass_2_tables` says «per leg» and this contract may not touch `bars`. The two are reconciled HERE and nowhere else: the tables are per leg for the legs that RUN, and ruling (н) says those are the 2 arms. Base v2's end-to-end BEFORE column is pass2-signals-r2's registered 4 of 5 on two signals, already bought; base v3 takes no bar and therefore needs no pass 2"
+      },
+      "verdict": "at the scope ruling (н) fixes — four eval legs and 2 pass-2 legs — the fixed part is 8885.88 s = $1.9746 at the worst price a create is allowed at, and what is left pays for at most 63.29 s/step over the 144 optimizer steps (73.43 at the price the last five pods billed). The only two s/step READINGS this repo holds are 61.047 and 68.442. Under the break-even at $0.80/h: ['registered_by_lora_b']; at $0.74/h: ['measured_on_lora_b_arm_a', 'registered_by_lora_b']. Both were taken on sequences of at most 1 222 tokens against this line's 1 445–2 975, so neither is this line's rate and neither is registered as one — the smoke buys it. What amendment 3.25 (1) made the cap conditional on is this table; the word on the cap is the operator's, on these numbers, and it is due BEFORE a create and never after a reading",
+      "what_changed_since_lora_c_run_reported_this": "nothing but the pass-2 leg count, which ruling (н) fixed at 2. lora-c-run charged four and reported the plan SHORT: 11 019.88 s fixed and a break-even of 48.47–58.61 s/step against readings of 61.047 and 68.442. The 2134 s that came off is the whole of the difference — no rate moved, no term was re-estimated, and the row count of both arms was registered before either contract",
       "what_the_projection_rung_would_see": {
         "break_even_seconds_per_step": {
-          "0.74": 103.2,
-          "0.80": 93.47
+          "0.74": 103.57,
+          "0.80": 93.43
         },
-        "fixed_seconds_at_sibling_rates": 3979.2,
+        "fixed_seconds_at_sibling_rates": 4545.4,
+        "one_accounting_for_the_smoke": "the smoke's 6 steps are charged at 121.0 × 1.5 in BOTH columns and divided out of NEITHER: the divisor is 144 in both, the two arms' optimizer steps. lora-c-run's version charged the smoke in the table above and divided by 144 + 6 here, which priced one quantity two ways ([[two_values_for_one_input_get_quoted_kindly]])",
         "reading": "under the sibling-measured rates the break-even rises above both lora-b readings, so the session is not arithmetically hopeless — it is UNDECIDED until the smoke measures s/step at 3 072. That is the decision the operator is owed, and it is not the executor's to take under a cap the derivation just reported short",
-        "why_this_column_exists": "the rung fires at MEASURED rates, and both charged rates have a direct sibling measurement: 2.694083 s/call (pass1-window r2's own pod) and 23.760 s/thread (pass2-signals r2's). They are 0.439 and 0.245 of the charge. This column is what the session's own instruments would compute after the base legs and the smoke — it is a SCENARIO and no part of it is registered as a rate"
+        "why_this_column_exists": "the rung fires at MEASURED rates, and both charged rates have a direct sibling measurement: 2.694083 s/call (pass1-window r2's own pod) and 23.76 s/thread (pass2-signals r2's). They are 0.439 and 0.245 of the charge. This column is what the session's own instruments would compute after the base legs and the smoke — it is a SCENARIO and no part of it is registered as a rate"
       }
     },
     "rates_and_what_would_invalidate_them": {
@@ -326,7 +437,7 @@
         }
       }
     },
-    "state": "DERIVED by lora-c-run at the charged rates and REPORTED to the operator — see `pre_pod_arithmetic`. Still not SEALED: sealing is the first `pod create` and no pod exists",
+    "state": "RE-DERIVED by lora-c-armb at the charged rates, for the scope ruling (н) fixes, and REPORTED to the operator — see `pre_pod_arithmetic`. lora-c-run derived it first at four pass-2 legs and reported the plan short; the ruling took two of those legs off and nothing else moved. Still not SEALED: sealing is the first `pod create` and no pod exists",
     "what_this_record_deliberately_does_NOT_carry": "a worst_case_usd, a total_seconds and a projected price. r1 of pass1-window registered a rate it had not measured and the number outlived the correction"
   },
   "phase": "lora-c",
@@ -432,13 +543,34 @@
       "sha256": "247b0db1bc10bc41d9ada7406e9cc08edd2214d57fdbf7f991c7195b9a7daf5c"
     },
     "train": {
-      "distribution": {
-        "null": 164,
-        "категория_личное": 40,
-        "не_наш_рынок": 268,
-        "сеть_ритейлер": 34
-      },
-      "file": "results/pass1_sft_v3_train.jsonl",
+      "files": [
+        {
+          "arm": "arm_a",
+          "distribution": {
+            "null": 164,
+            "категория_личное": 40,
+            "не_наш_рынок": 268,
+            "сеть_ритейлер": 34
+          },
+          "file": "results/pass1_sft_v3_train.jsonl",
+          "rows": 506,
+          "sha256": "cf55d3f20216139845d320b4283d543c5283e3475f3c6afa42ea98cf20997c18"
+        },
+        {
+          "arm": "arm_b",
+          "distribution": {
+            "null": 196,
+            "категория_личное": 72,
+            "молочный_бренд": 32,
+            "не_наш_рынок": 300,
+            "сеть_ритейлер": 66
+          },
+          "file": "results/pass1_sft_v3_arm_b.jsonl",
+          "rows": 666,
+          "sha256": "85a5b278550e8771e3cf9da675b64f8303d50f26f9fc1e79e68a19a29f87005b"
+        }
+      ],
+      "record": "results/lora_c_arm_b.json",
       "refused": [
         {
           "id": "@VARUS_channel:10367#20766",
@@ -477,13 +609,13 @@
           "why": "no fifth neighbour"
         }
       ],
-      "rows": 506,
-      "sha256": "cf55d3f20216139845d320b4283d543c5283e3475f3c6afa42ea98cf20997c18"
+      "rendering_ruling": "синтетический запрос рендерится ТЕМ ЖЕ правилом на ТОМ ЖЕ пуле 515 (закон уже запрещает синтетику только как СОСЕДА; запрет двойника действует)",
+      "rule": "arm A's file is arm B's BYTE-IDENTICAL prefix — the 506 real rows, then the 160 rendered synthetic ones — so the ablation's one variable is the top-up and nothing else. `scripts/build_lora_c_data.py` re-renders the 506 and refuses to write when they do not reproduce the shipped bytes"
     }
   },
   "producer": {
     "script": "scripts/write_lora_c_prereg.py",
-    "sha256": "e512486b44b6efb566c8a79c197ed673e2c921039bd59785f0e7bbaac050adea"
+    "sha256": "ff5136679fb2fcd59c7153fa88ce039d1835b7d017d73f423003c6d38bd92a68"
   },
   "question": "does rationale-supervised QLoRA on pass 1 fix the subject-attribution errors pass 2 measured — brand ↔ retailer, a retailer in a non-dairy context, non-dairy «brands», and mention-vs-about — WITHOUT learning the prior the way line B did",
   "reachability": {

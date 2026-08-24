@@ -541,7 +541,7 @@ def test_the_registration_carries_no_price():
     registration = json.loads(PREREG.read_text(encoding="utf-8"))
     money = registration["money"]
     assert money["cap_usd_all_in"] == 4.00
-    assert money["state"].startswith("DERIVED")
+    assert "DERIVED" in money["state"]
     derived = money["pre_pod_arithmetic"]
     assert derived["state"].startswith("DERIVED and REPORTED, not sealed")
     # the one rate the contract forbids projecting is registered as a SENTENCE, not a number
