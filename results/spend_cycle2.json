@@ -413,6 +413,16 @@
       "billing_since_usd": 7.441396,
       "billing_read": "read",
       "note": "pass2-signals-r2, money reading after rung 7 GO"
+    },
+    {
+      "at": "2026-08-24T20:28:44+00:00",
+      "balance": 14.0887545399,
+      "spent_usd": 8.421,
+      "remaining_usd": 11.579,
+      "balance_delta_usd": 8.421,
+      "billing_since_usd": 8.411285,
+      "billing_read": "read",
+      "note": "lora-c-run r2 anchor, before the pod"
     }
   ]
 }
