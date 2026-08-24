@@ -423,6 +423,26 @@
       "billing_since_usd": 8.411285,
       "billing_read": "read",
       "note": "lora-c-run r2 anchor, before the pod"
+    },
+    {
+      "at": "2026-08-24T21:25:41+00:00",
+      "balance": 13.4154824735,
+      "spent_usd": 9.0943,
+      "remaining_usd": 10.9057,
+      "balance_delta_usd": 9.0943,
+      "billing_since_usd": 8.421007,
+      "billing_read": "read",
+      "note": "lora-c r2: base v2 and base v3 answered, 198+198"
+    },
+    {
+      "at": "2026-08-24T21:32:59+00:00",
+      "balance": 13.3549350513,
+      "spent_usd": 9.1548,
+      "remaining_usd": 10.8452,
+      "balance_delta_usd": 9.1548,
+      "billing_since_usd": 8.481184,
+      "billing_read": "read",
+      "note": "lora-c r2 pod deleted; base v2 + base v3 bought, smoke OOM, no arm trained"
     }
   ]
 }
