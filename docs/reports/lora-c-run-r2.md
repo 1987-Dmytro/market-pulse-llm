@@ -48,6 +48,12 @@ The three readings disagree by construction and each is named for what it measur
 ([[a_balance_delta_is_not_a_per_leg_cost]]). `--close` is NOT run: the guard refuses it over an
 unanswered walk and must, so the settled figure is a debt the next session closes.
 
+**The gap is 8 % of the leg, not a rounding.** $0.0602 read against $0.7606 on the clock is not a
+few late rows — the settled number can land anywhere between them, and the next session's anchor
+must not inherit $0.7338 as though it were settled. What is safe to quote today is the pod clock:
+3 803 s at the `costPerHr` the create response gave, which is the only reading that prices THIS leg
+rather than the account ([[a_reading_is_not_an_identity]]).
+
 Resources: **one pod, no serverless, no second billing resource at any moment.** Deletion proven by
 three listings — `pod list -a` `[]`, `serverless list` `[]`, and `network-volume list` still holding
 `qw4nwleanc / mp-srv2 / EU-RO-1 / 100 GB` as the positive control that the listing works at all.
@@ -110,8 +116,16 @@ operator's to rule on and none was taken here:
   probe and the 20:2xZ reading taken before the create. A different datacenter means a different
   volume, which this registration did not price;
 - **`gradient_checkpointing`** is already `true` — there is no headroom to buy there;
-- **a lower ceiling** would change the instrument: two of the 506 rows are over 2 816 and would be
-  refused by `encode_pass1`, so the arm would train on 504 rows and stop being the registered one;
+- **a lower ceiling frees NOTHING, and this is the sentence that decides what kind of finding this
+  is.** `max_seq_len` is a guard threshold at encode time and not a pad width: `train_qlora.collate`
+  pads each micro-batch to `max(len(row["input_ids"]) for row in rows)` — the longest row IN THAT
+  BATCH — so 3 072 → 3 008 or 2 992 would still admit all 506 rows and change not one byte of
+  activation memory. `config/qlora.yaml` says exactly this in its own words («raising this is a
+  guard threshold and not a pad width … so the ceiling itself costs no step time and no memory»).
+  Below 2 975 it stops being free and starts being a different instrument: two rows are over 2 816
+  already, and an arm trained on 504 rows is not the registered one. **So the card is too small for
+  these ROWS, not for this ceiling** — which is why the remedy list is about cards and not about
+  numbers in the config;
 - **`PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True`**, which the error message itself suggests,
   is 1.33 GiB of reserved-but-unallocated fragmentation against a 1.72 GiB allocation. It is the
   only cheap thing on this list and it is a **guess** until a pod measures it. Naming it is not

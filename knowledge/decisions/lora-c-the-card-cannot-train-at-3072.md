@@ -35,6 +35,11 @@ and doubles the other», and the shipped trainer did exactly that on its own —
 `backward()`. Nothing was edited on the pod and nothing needed to be: the config's own smallest step
 does not fit on this card.
 
+**And a lower ceiling would not have helped.** `max_seq_len` is a guard threshold at encode time,
+not a pad width — `train_qlora.collate` pads each micro-batch to the longest row IN THAT BATCH — so
+3 072 → 3 008 admits all 506 rows and frees not one byte. Below 2 975 it drops rows and stops being
+the registered instrument. **The card is too small for these ROWS, not for this ceiling.**
+
 **What it does not say.** It does not say 3 072 is wrong. Every s/step reading this stack holds was
 taken on 48 GB, and the ceiling is a property of the rows, which have not moved. The remedies are
 the operator's and none was taken: a 48 GB card (A6000 reads `none` in the volume's datacenter, in

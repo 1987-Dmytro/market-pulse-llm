@@ -30,7 +30,7 @@ ddd39c8 docs(report): lora-c-run r2 -- the card cannot train at 3 072, and the p
 <!-- AUTO-GEN END (everything below preserved across refreshes) -->
 # Hot Cache — curated
 
-**Last update:** 2026-08-24 21:5x `lora-c-run r2` ИСПОЛНЕН и ЖДЁТ ПРИЁМКИ. **ОДИН под, 3 803 с =
+**Last update:** 2026-08-24 21:58 `lora-c-run r2` ИСПОЛНЕН и ЖДЁТ ПРИЁМКИ. **ОДИН под, 3 803 с =
 $0.7606 из капа $4.00, УБИТ зарегистрированным рунгом 4, попытка ЦЕЛА.** Смок 3 072 умер
 `OutOfMemoryError` при **нуле шагов** — и упал ВТОРОЙ раз: свой же откат трейнера уже сработал
 (`micro_batch 2 → 1, grad_accum 8 → 16`). **32 GB не тянут эту линию при замороженном конфиге; закон
