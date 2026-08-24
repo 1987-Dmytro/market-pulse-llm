@@ -13,12 +13,31 @@
     "results/pass1_window_v2.jsonl",
     "results/pass1_window_r2_v2.jsonl"
   ],
+  "carried": {
+    "from": null,
+    "ids": [],
+    "rule": "nothing is carried into a lora-c pass-2 leg. Each leg is rebuilt from its own arm's pass-1 out-file, so a row already in the target file would be a row from another leg and the runner stops before the model is loaded",
+    "units": 0
+  },
   "contract": "docs/PROMPT-lora-c-prep.md D0 — the pass-2 eval pack, per leg",
   "instruments": {
     "ceiling_chars": 15569,
     "filter": "census_pass1_window.pass_2_filter, CALLED",
-    "module": "src/market_pulse/pass2_r2.py",
-    "module_sha256": "b0356e73cc4bc98a1baa5928559878ed752eb560311bac029b51a67e65f1af46",
+    "module": {
+      "path": "src/market_pulse/pass2.py",
+      "rule": "the TEXT and the RENDERER — r1's, unmoved, and what the pod renders from",
+      "sha256": "f26eb555c54ef80aa0eb275b98ea0292e8eb477bb87d87666dca7b9dfb507e9d"
+    },
+    "module_r2": {
+      "path": "src/market_pulse/pass2_r2.py",
+      "rule": "the ceiling and the tolerant parser the Mac reads these replies with",
+      "sha256": "b0356e73cc4bc98a1baa5928559878ed752eb560311bac029b51a67e65f1af46"
+    },
+    "parser": {
+      "entry_point": "market_pulse.pass2_r2.parse_pass2",
+      "path": "src/market_pulse/prompts.py",
+      "sha256": "b70e2114b03a76dc2c8cfc9b559bf7ef22e9193d841b4fccc5ed8bd0a40294ab"
+    },
     "prompt_sha256": {
       "pass2_thread_gm4_v1": "a674f284085d43c54df590ce943fb8c02d6ac28b7832c05f2e4b7a54879f61f8"
     },
@@ -807,6 +826,34 @@
   },
   "produced_by": {
     "script": "scripts/build_lora_c_pass2_pack.py",
-    "sha256": "fbd3cbb78e23654965e90cbf997d9cc7d9f0992560b661ede30a9e01a90e9d8c"
+    "sha256": "9d4b8061ad8becdf9b3c1da5e4ebae44bf67d0ab3080f7100ee33c3ee234714c"
+  },
+  "serving": {
+    "adapter": null,
+    "chat_template": {
+      "add_generation_prompt": true,
+      "enable_thinking": false
+    },
+    "decoding": "greedy",
+    "do_sample": false,
+    "forward_batch_size": 1,
+    "gpu_class_preference": [
+      "ADA_24",
+      "ADA_24_PRO",
+      "AMPERE_24"
+    ],
+    "gpu_rule": "requested fastest-first and never asserted. probe-a asked for the display name «NVIDIA L4», the endpoint came back `gpuIds: AMPERE_24` and the worker reported an L4 runtime — so the CLASS is what is requested and the RUNTIME string is what lands in provenance. Seconds per thread are reported per card",
+    "merge_state": "base-no-adapter",
+    "model": "google/gemma-4-31b-it",
+    "model_revision": "842da3794eaa0b77d5f08bae87a17459d91ff475",
+    "output_tokens": 4000,
+    "quantization": {
+      "bnb_4bit_compute_dtype": "bfloat16",
+      "bnb_4bit_quant_type": "nf4",
+      "bnb_4bit_use_double_quant": true,
+      "load_in_4bit": true
+    },
+    "serving_config": "READER",
+    "template_note": "the window pack's serving block, with the reader's own output ceiling in place of pass 1's 256: a pass-2 reply is a list of signals and per-comment rows, and 256 tokens is a third of what v5b's replies took. TOKENS, not characters"
   }
 }

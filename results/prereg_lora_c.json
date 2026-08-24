@@ -93,6 +93,7 @@
     "results/synthetic_pass1_v1.jsonl",
     "results/lora_c_eval_pack.json",
     "results/lora_c_pass2_pack.json",
+    "results/lora_c_marker_census_pack.json",
     "src/market_pulse/pass1_v3.py",
     "config/qlora.yaml"
   ],
@@ -112,7 +113,8 @@
     "packs": {
       "results/lora_c_data.json": "fa6a970a07703aa5ac6579150441921974b55119fa55fd0a1ad30cac3a83fea0",
       "results/lora_c_eval_pack.json": "049e0a5883192007b18cb4d46ef76b8f5b339b7aec2472cca03e063d4566b99a",
-      "results/lora_c_pass2_pack.json": "4438ab0b4c9f6e9a7ec59639a3ae1fef982735d583409f04ce7aa529d704fcaa",
+      "results/lora_c_marker_census_pack.json": "c632d8506c3e90c7dd244c1c0f1519c7efa63888923544918f09768cd19bb3ea",
+      "results/lora_c_pass2_pack.json": "b4a488c9a5eac42bd19957eb8ffb6cc1dad97fab163e5c5b7c82de929f1258f9",
       "results/lora_c_synthetic.json": "dc1ea0e759843d57e17dda693461407ef626cddb7d044d64ee9d6fc05d689a46",
       "results/pass1_sft_v3_train.jsonl": "cf55d3f20216139845d320b4283d543c5283e3475f3c6afa42ea98cf20997c18"
     },
@@ -799,7 +801,7 @@
   },
   "producer": {
     "script": "scripts/write_lora_c_prereg.py",
-    "sha256": "c4e8fe95a7522b840783e57afd8db2691166bb519de4fe03b7285d641dd3bb21"
+    "sha256": "5bb1782533c48630e36da6c5b03766c14bf30a936fc36d085de8adad46ff7c9e"
   },
   "question": "does rationale-supervised QLoRA on pass 1 fix the subject-attribution errors pass 2 measured — brand ↔ retailer, a retailer in a non-dairy context, non-dairy «brands», and mention-vs-about — WITHOUT learning the prior the way line B did",
   "reachability": {
@@ -1255,6 +1257,32 @@
         "min": 1461,
         "slack": 16
       }
+    }
+  },
+  "transport": {
+    "files": {
+      "scripts/gate_lora_c.py": {
+        "sha256": "2993957c6de56ae17a59f574df8aeccbf466911b964fa3ae94995f20ff927b5b",
+        "what": "the nine rungs, graded on the Mac"
+      },
+      "scripts/pass1_v3_pod_runner.py": {
+        "sha256": "060643dab086fb11556401f35981ccc4678fd8e54b6cd28c15107f216d18ddbf",
+        "what": "the v3 family served and --adapter carried"
+      },
+      "scripts/pass2_r2_pod_runner.py": {
+        "sha256": "80641f37f09062c0c7cb5c40c41448aeac1288a40013263ab762aecc2bbbc002",
+        "what": "pass2-signals-r2's own runner, unchanged"
+      },
+      "scripts/train_qlora_v3.py": {
+        "sha256": "2f265e6d895670bbe9be6380b7682aaa29a3c67cab2539ff82f329e8319c0155",
+        "what": "the two guards re-bound; everything else CALLED"
+      }
+    },
+    "rule": "each was DRIVEN against this line's frozen packs with a fake client before any pod existed — the handshake, and every per-item rendering sha",
+    "what_the_drive_proved": {
+      "marker_census": "40 requests, 20 pairs, differing in the header alone",
+      "pass_1": "198 requests per leg re-rendered and matched against the pack's own shas",
+      "pass_2": "11 threads, the handshake and the carried-row guard"
     }
   }
 }

@@ -691,6 +691,11 @@ PRODUCERS = [
         ["--leg", "window_v2"],
         {"--out": "results/lora_c_pass2_pack.json"},
     ),
+    (
+        "scripts/build_lora_c_marker_census.py",
+        [],
+        {"--out": "results/lora_c_marker_census_pack.json"},
+    ),
     ("scripts/write_lora_c_prereg.py", [], {"--out": "results/prereg_lora_c.json"}),
 ]
 

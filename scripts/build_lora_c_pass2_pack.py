@@ -158,9 +158,49 @@ def build(out_files: tuple[Path, ...], leg_name: str) -> dict:
                 "items": units,
             }
         ],
+        # The serving block is `results/pass2_r2_pack.json`'s, READ from that file rather than
+        # restated: `reader_v5_pod_runner.run` and `load_reader` both read it, and this line's
+        # pass-2 legs are the same instrument on the same card class asking the same question. A
+        # second copy of the model id, the revision, the quantization and the 4 000-token ceiling
+        # is four more numbers that can drift ([[preregistration_is_a_file_not_a_constant]]).
+        "serving": serving_of(PASS2_R2_PACK),
+        # `scripts/pass2_r2_pod_runner.carried` reads this block and REFUSES when the out-file it
+        # would resume into carries rows the pack does not name. lora-c carries nothing: each leg's
+        # pack is rebuilt from THAT leg's pass-1 out-file, so there is no earlier run to inherit
+        # from — and an empty list is the assertion «this out-file must be empty», not the absence
+        # of a check ([[the_empty_row_is_the_answer]]).
+        "carried": {
+            "ids": [],
+            "units": 0,
+            "from": None,
+            "rule": (
+                "nothing is carried into a lora-c pass-2 leg. Each leg is rebuilt from its own"
+                " arm's pass-1 out-file, so a row already in the target file would be a row from"
+                " another leg and the runner stops before the model is loaded"
+            ),
+        },
         "instruments": {
-            "module": "src/market_pulse/pass2_r2.py",
-            "module_sha256": summary.sha256_of(REPO_ROOT / "src" / "market_pulse" / "pass2_r2.py"),
+            # The SHAPE is `scripts/pass2_r2_pod_runner.check_instrument`'s, not this file's taste:
+            # that handshake reads `parser.sha256`, `module.sha256` and `module_r2.sha256` and it is
+            # pinned by pass2-signals-r2's sealed record, so the pack bends and the runner does not.
+            # Until lora-c-run r2 drove it at $0 this block was a flat `module_sha256` string and
+            # every pass-2 leg of this line would have died on a KeyError with the model loaded
+            # ([[a_frozen_record_is_an_input_to_shipped_code]]).
+            "parser": {
+                "path": "src/market_pulse/prompts.py",
+                "entry_point": "market_pulse.pass2_r2.parse_pass2",
+                "sha256": summary.sha256_of(REPO_ROOT / "src" / "market_pulse" / "prompts.py"),
+            },
+            "module": {
+                "path": "src/market_pulse/pass2.py",
+                "rule": "the TEXT and the RENDERER — r1's, unmoved, and what the pod renders from",
+                "sha256": summary.sha256_of(REPO_ROOT / "src" / "market_pulse" / "pass2.py"),
+            },
+            "module_r2": {
+                "path": "src/market_pulse/pass2_r2.py",
+                "rule": "the ceiling and the tolerant parser the Mac reads these replies with",
+                "sha256": summary.sha256_of(REPO_ROOT / "src" / "market_pulse" / "pass2_r2.py"),
+            },
             "prompt_sha256": {
                 pass2_r2.PASS2_TASK_V1: pass2_r2.prompt_sha256(pass2_r2.PASS2_TASK_V1)
             },
@@ -220,6 +260,26 @@ def reproduce() -> dict:
         "expected_bar_3_signals": EXPECTED_BAR_3_SIGNALS,
         "agrees": got_one == EXPECTED_BAR_1 and got_three == EXPECTED_BAR_3_SIGNALS,
     }
+
+
+PASS2_R2_PACK = REPO_ROOT / "results" / "pass2_r2_pack.json"
+"""pass2-signals-r2's own pack — the serving block this line inherits, by reading it."""
+
+
+def serving_of(path: Path) -> dict:
+    """r2's serving block, with the adapter slot said out loud.
+
+    `adapter: null` is r2's value and it stays: a lora-c pass-2 leg reads a pass-1 out-file that an
+    ADAPTER produced, but pass 2 itself is the base model both times — that is what makes the two
+    arms' end-to-end bars comparable at all. The runner mounts nothing here.
+    """
+    block = json.loads(path.read_text(encoding="utf-8"))["serving"]
+    if block.get("adapter") is not None:
+        raise SystemExit(
+            f"{summary.rel(path)} serves an adapter and pass 2 of this line is the BASE model on"
+            " both arms. Stop rather than inherit a serving block that changes the instrument."
+        )
+    return block
 
 
 def main(argv: list[str] | None = None) -> int:

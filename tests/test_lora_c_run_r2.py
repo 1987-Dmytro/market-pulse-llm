@@ -233,3 +233,84 @@ def test_the_trainer_unreachability_reads_closed_by_sibling():
     assert block["sha256"] == data.sha_text(
         (REPO_ROOT / "scripts" / "train_qlora.py").read_text(encoding="utf-8")
     ), "the PINNED trainer did not move"
+
+
+# --- the report-only marker census ---------------------------------------------------------------
+
+CENSUS_PACK = json.loads(
+    (REPO_ROOT / "results" / "lora_c_marker_census_pack.json").read_text("utf-8")
+)
+
+
+def test_the_census_pairs_differ_in_the_header_and_nowhere_else():
+    """Re-derived from the pack's OWN renderings, not from the producer's promise.
+
+    The census reads a prediction flip between two requests. If they differed anywhere else the
+    flip would have two possible causes and the table would separate nothing — so the requests are
+    re-split here and everything from `<entities>` on is compared byte for byte.
+    """
+    import build_lora_c_marker_census as census
+
+    items = {one["id"]: one for one in CENSUS_PACK["legs"][0]["items"]}
+    assert len(items) == 40 == CENSUS_PACK["legs"][0]["n"]
+    for pair in CENSUS_PACK["pairs"]:
+        both = {name: items[f"{pair['unit']}@{name}"] for name in ("as_is", "marked")}
+        texts = {name: census.rendered(one) for name, one in both.items()}
+        assert texts["as_is"].split("<entities>", 1)[1] == texts["marked"].split("<entities>", 1)[1]
+        assert (
+            census.differs_only_in_the_header(texts["as_is"], texts["marked"])
+            == pair["header_lines_that_moved"]
+        )
+        assert both["marked"]["topic"] == data.SYNTHETIC_NO_POST
+        assert both["as_is"]["topic"] != data.SYNTHETIC_NO_POST
+
+
+def test_the_census_draw_is_seeded_stratified_and_reproducible():
+    """The draw is an instrument, so it is a file with a seed in it and not a remembered choice."""
+    import build_lora_c_marker_census as census
+
+    assert CENSUS_PACK["draw"]["seed"] == census.SEED
+    assert CENSUS_PACK["draw"]["rows"] == census.ROWS == 20
+    assert sum(CENSUS_PACK["draw"]["by_class"].values()) == 20
+    # every error class is exercised, so all five tells are covered and not just the topic line
+    assert sorted(CENSUS_PACK["draw"]["error_classes"].values()) == [5, 5, 5, 5]
+    again = census.build()
+    assert [one["id"] for one in again["legs"][0]["items"]] == [
+        one["id"] for one in CENSUS_PACK["legs"][0]["items"]
+    ]
+
+
+def test_the_census_refuses_a_pair_that_is_not_one_variable():
+    """Both refusals driven — a tail that moved, and a substitution that did not happen."""
+    import build_lora_c_marker_census as census
+
+    one = CENSUS_PACK["legs"][0]["items"][0]
+    text = census.rendered({**one, "examples": one["examples"]})
+    with pytest.raises(SystemExit, match="differ AFTER the entities block"):
+        census.differs_only_in_the_header(text, text.replace("<comment", "<COMMENT"))
+    with pytest.raises(SystemExit, match="IDENTICAL"):
+        census.differs_only_in_the_header(text, text)
+
+
+def test_the_census_is_priced_and_registered_as_report_only():
+    """Forty calls, the number the money block charges, and never a bar."""
+    arithmetic = PREREG["money"]["pre_pod_arithmetic"]
+    charged = arithmetic["the_marker_census_is_not_inside_the_fixed_part"]
+    assert charged["seconds"] == pytest.approx(
+        CENSUS_PACK["legs"][0]["n"] * arithmetic["rates_used"]["pass_1_seconds_per_call"], abs=0.01
+    )
+    assert "REPORT ONLY" in CENSUS_PACK["contract"]
+    assert PREREG["instruments"]["packs"]["results/lora_c_marker_census_pack.json"]
+    assert "results/lora_c_marker_census_pack.json" in PREREG["frozen_when_the_pod_exists"]
+
+
+def test_the_transport_block_pins_what_actually_runs():
+    """Four files, each hashed — and each one DRIVEN against a frozen pack before any pod."""
+    for name, one in PREREG["transport"]["files"].items():
+        assert one["sha256"] == data.sha_text((REPO_ROOT / name).read_text(encoding="utf-8")), name
+    assert sorted(PREREG["transport"]["files"]) == [
+        "scripts/gate_lora_c.py",
+        "scripts/pass1_v3_pod_runner.py",
+        "scripts/pass2_r2_pod_runner.py",
+        "scripts/train_qlora_v3.py",
+    ]

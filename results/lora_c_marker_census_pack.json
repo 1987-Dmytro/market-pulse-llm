@@ -1,0 +1,3974 @@
+{
+  "arm_b": {
+    "record": "results/lora_c_arm_b.json",
+    "sha256": "a95475af501e0305885db39efc187a6762dd6bf58473fc9ba1ab191aafd0b66f"
+  },
+  "carried": {
+    "from": null,
+    "ids": [],
+    "rule": "nothing is carried",
+    "units": 0
+  },
+  "contract": "docs/PROMPT-lora-c-run-r2.md amendment 4 — REPORT ONLY, never a bar",
+  "draw": {
+    "by_class": {
+      "None": 6,
+      "категория_личное": 4,
+      "молочный_бренд": 1,
+      "не_наш_рынок": 5,
+      "сеть_ритейлер": 4
+    },
+    "error_classes": {
+      "brand_vs_retailer": 5,
+      "mention_vs_about": 5,
+      "non_dairy_brand": 5,
+      "retailer_non_dairy": 5
+    },
+    "rows": 20,
+    "rule": "4 per label class over the five values, topped up from the largest class. Unlabelled rows are excluded — a flip needs a gold to be a flip",
+    "seed": 20260824
+  },
+  "instruments": {
+    "module_v3": "src/market_pulse/pass1_v3.py",
+    "module_v3_sha256": "9baab0e92078c137d17d5275158ef6360b9f349213a671b9249f3d4433b680c7",
+    "moved_from_the_sealed_pack": {
+      "parser.sha256": "a4a5a5d08546f53af18117c37e49f7e396919555563e16737a633c1df1a86eec",
+      "prompt_sha256": {
+        "pass1_comment_gm4_v1": "5a4a3cb6ce4db89adb304c04de41210fdabfde0c53addfdb75adba0f1d866650"
+      },
+      "why": "prompts.py grew pass1_comment_gm4_v2, so its module sha moved and the served pass-1 family became two texts. The pod's handshake compares the whole family map, so a verbatim copy of the sealed block would refuse this checkout. v1's own sha is UNCHANGED and is in the map beside v2 — that is what makes the paired legs comparable"
+    },
+    "parser": {
+      "entry_point": "market_pulse.prompts.parse_pass1",
+      "module": "src/market_pulse/prompts.py",
+      "rule": "strict single object, domain-checked: the four subject_type readings, the stance domain, and the request's own msg_id echoed back. Everything else is a refusal and no container is repaired",
+      "sha256": "b70e2114b03a76dc2c8cfc9b559bf7ef22e9193d841b4fccc5ed8bd0a40294ab"
+    },
+    "prompt_sha256": {
+      "pass1_comment_gm4_v2": "f5f6a5afdd8573ba52bde5cf79041cf9a01d8421ea402c0f39d2ea1c1d430aee",
+      "pass1_comment_gm4_v3": "b9b27a53f8f56140657d682f49dd4e8cd1fb1364a915adb888ca999083d5a49c"
+    },
+    "rationales_sha256": "ba3681d8ae58432b4742bac02bcdf53583d8418dcd02cd79540a22a0e98305b1",
+    "renderer": "market_pulse.prompts.pass1_messages_gm4"
+  },
+  "legs": [
+    {
+      "items": [
+        {
+          "channel": "@VARUS_channel",
+          "entities": [],
+          "error_class": null,
+          "examples": [
+            {
+              "label": "молочный_бренд",
+              "rationale": "коментар ПРО сам сир із допису — як його доводити після покупки (cue: «цей сир»)",
+              "text": "Уцей сир треба пару днів як купив потримати в пакеті щоб він став мокрим, тоді його лупашить можна на ура."
+            },
+            {
+              "label": "сеть_ритейлер",
+              "rationale": "коментар ПРО чесність розіграшу мережі (cue: «Директор выигрывает»)",
+              "text": "Директор выигрывает"
+            },
+            {
+              "label": "категория_личное",
+              "rationale": "коментар ПРО власний смак у сирній запіканці з допису (cue: «Люблю з маком»)",
+              "text": "Люблю з маком +родзинки ( або яблука)+манки трошки . Не осідала наче ."
+            },
+            {
+              "label": "не_наш_рынок",
+              "rationale": "коментар ПРО пиріжки з яблуками, поза нашою категорією (cue: «Пиріжки з яблуками»)",
+              "text": "Пиріжки з яблуками, але щоб без кориці, додаткових смаків. Відчути літо хочеться)"
+            },
+            {
+              "label": null,
+              "rationale": "коментар ні про кого — згода з попередньою реплікою (cue: «після пологів розумієш»)",
+              "text": "Ага, а після пологів розумієш що ніхрена ти не знаєш 😅"
+            }
+          ],
+          "examples_chosen": [
+            {
+              "label": "молочный_бренд",
+              "msg_id": 20766,
+              "similarity": 0.0,
+              "thread": "@VARUS_channel:10367"
+            },
+            {
+              "label": "сеть_ритейлер",
+              "msg_id": 21431,
+              "similarity": 0.027027,
+              "thread": "@VARUS_channel:10528"
+            },
+            {
+              "label": "категория_личное",
+              "msg_id": 21193,
+              "similarity": 0.075,
+              "thread": "@klopotenkofood:6032"
+            },
+            {
+              "label": "не_наш_рынок",
+              "msg_id": 21270,
+              "similarity": 0.052632,
+              "thread": "@klopotenkofood:6040"
+            },
+            {
+              "label": "null",
+              "msg_id": 2581,
+              "similarity": 0.028571,
+              "thread": "@ya_Nenka:836"
+            }
+          ],
+          "id": "@VARUS_channel:10349#20660@as_is",
+          "membership": {
+            "dev_200": false,
+            "gold_14": false,
+            "holdout_100": true,
+            "probe_64": false,
+            "reference_thread": false
+          },
+          "msg_id": 20660,
+          "post_id": 10349,
+          "rendered_chars": 5272,
+          "rendering_sha256": "bf8dd9e1a278612efc29ec647868b5fc0ab5b4ce68ab24b15070c740f160d467",
+          "task": "pass1_comment_gm4_v3",
+          "text": "2 яблука, 2 нектарини))",
+          "thread": "@VARUS_channel:10349",
+          "topic": "Запит до користувачів запропонувати рецепти страв із набору продуктів.",
+          "topic_source": "reader verdict",
+          "unit": "@VARUS_channel:10349#20660",
+          "variant": "as_is"
+        },
+        {
+          "channel": "synthetic",
+          "entities": [],
+          "error_class": "brand_vs_retailer",
+          "examples": [
+            {
+              "label": "молочный_бренд",
+              "rationale": "коментар ПРО сам сир із допису — як його доводити після покупки (cue: «цей сир»)",
+              "text": "Уцей сир треба пару днів як купив потримати в пакеті щоб він став мокрим, тоді його лупашить можна на ура."
+            },
+            {
+              "label": "сеть_ритейлер",
+              "rationale": "коментар ПРО чесність розіграшу мережі (cue: «Директор выигрывает»)",
+              "text": "Директор выигрывает"
+            },
+            {
+              "label": "категория_личное",
+              "rationale": "коментар ПРО власний смак у сирній запіканці з допису (cue: «Люблю з маком»)",
+              "text": "Люблю з маком +родзинки ( або яблука)+манки трошки . Не осідала наче ."
+            },
+            {
+              "label": "не_наш_рынок",
+              "rationale": "коментар ПРО пиріжки з яблуками, поза нашою категорією (cue: «Пиріжки з яблуками»)",
+              "text": "Пиріжки з яблуками, але щоб без кориці, додаткових смаків. Відчути літо хочеться)"
+            },
+            {
+              "label": null,
+              "rationale": "коментар ні про кого — згода з попередньою реплікою (cue: «після пологів розумієш»)",
+              "text": "Ага, а після пологів розумієш що ніхрена ти не знаєш 😅"
+            }
+          ],
+          "examples_chosen": [
+            {
+              "label": "молочный_бренд",
+              "msg_id": 20766,
+              "similarity": 0.0,
+              "thread": "@VARUS_channel:10367"
+            },
+            {
+              "label": "сеть_ритейлер",
+              "msg_id": 21431,
+              "similarity": 0.027027,
+              "thread": "@VARUS_channel:10528"
+            },
+            {
+              "label": "категория_личное",
+              "msg_id": 21193,
+              "similarity": 0.075,
+              "thread": "@klopotenkofood:6032"
+            },
+            {
+              "label": "не_наш_рынок",
+              "msg_id": 21270,
+              "similarity": 0.052632,
+              "thread": "@klopotenkofood:6040"
+            },
+            {
+              "label": "null",
+              "msg_id": 2581,
+              "similarity": 0.028571,
+              "thread": "@ya_Nenka:836"
+            }
+          ],
+          "id": "@VARUS_channel:10349#20660@marked",
+          "membership": {
+            "dev_200": false,
+            "gold_14": false,
+            "holdout_100": true,
+            "probe_64": false,
+            "reference_thread": false
+          },
+          "msg_id": 20660,
+          "post_id": "brand_vs_retailer",
+          "rendered_chars": 5259,
+          "rendering_sha256": "37f5abe9fd2cde1be54306e989695ad95e7dedeb456a991918cb42cf6f9a3b94",
+          "task": "pass1_comment_gm4_v3",
+          "text": "2 яблука, 2 нектарини))",
+          "thread": "@VARUS_channel:10349",
+          "topic": "(synthetic training row — this thread has no post)",
+          "topic_source": "reader verdict",
+          "unit": "@VARUS_channel:10349#20660",
+          "variant": "marked"
+        },
+        {
+          "channel": "@VARUS_channel",
+          "entities": [],
+          "error_class": null,
+          "examples": [
+            {
+              "label": "молочный_бренд",
+              "rationale": "коментар ПРО сам сир із допису — як його доводити після покупки (cue: «цей сир»)",
+              "text": "Уцей сир треба пару днів як купив потримати в пакеті щоб він став мокрим, тоді його лупашить можна на ура."
+            },
+            {
+              "label": "сеть_ритейлер",
+              "rationale": "коментар ПРО наявність товару в конкретному магазині мережі (cue: «Заходила на Панікахи»)",
+              "text": "А де такий кубок ковбасний можна придбати? Заходила на Панікахи, то там сказали, що нема"
+            },
+            {
+              "label": "категория_личное",
+              "rationale": "коментар ПРО власну запіканку із сирною заливкою (cue: «з сиром заливкою»)",
+              "text": "Надумала) Зроблю запіканку з цвітної капусти з печерицями та яєчно вершковою з сиром заливкою, зеленню притрушу."
+            },
+            {
+              "label": "не_наш_рынок",
+              "rationale": "коментар ПРО перелік страв на вихідні, поза нашою категорією (cue: «Грибна юшка»)",
+              "text": "Грибна юшка, баклажани з горіховою начинкою, хачапурі по мегрельски, ребра на мангалі, крила на мангалі, теплий салат з телятиною... Багато)))"
+            },
+            {
+              "label": null,
+              "rationale": "коментар ні про кого — іронія про очевидність тези допису (cue: «багато сироїдів»)",
+              "text": "Я думав, що це і так зрозуміло.\nЄ реально так багато сироїдів, що таку елементарщину потрібно пояснювати?"
+            }
+          ],
+          "examples_chosen": [
+            {
+              "label": "молочный_бренд",
+              "msg_id": 20766,
+              "similarity": 0.036765,
+              "thread": "@VARUS_channel:10367"
+            },
+            {
+              "label": "сеть_ритейлер",
+              "msg_id": 21236,
+              "similarity": 0.042373,
+              "thread": "@VARUS_channel:10470"
+            },
+            {
+              "label": "категория_личное",
+              "msg_id": 21256,
+              "similarity": 0.080292,
+              "thread": "@klopotenkofood:6040"
+            },
+            {
+              "label": "не_наш_рынок",
+              "msg_id": 21235,
+              "similarity": 0.092715,
+              "thread": "@klopotenkofood:6040"
+            },
+            {
+              "label": "null",
+              "msg_id": 48527,
+              "similarity": 0.039062,
+              "thread": "@mandziak:3736"
+            }
+          ],
+          "id": "@VARUS_channel:10349#20678@as_is",
+          "membership": {
+            "dev_200": true,
+            "gold_14": false,
+            "holdout_100": true,
+            "probe_64": false,
+            "reference_thread": false
+          },
+          "msg_id": 20678,
+          "post_id": 10349,
+          "rendered_chars": 5534,
+          "rendering_sha256": "e040e11ddeb2e896d3cdd10810f24ad192f3d9bfe2b8f7c86beafe0dd387d3cd",
+          "task": "pass1_comment_gm4_v3",
+          "text": "Теплий салат із пастою, сиром та нектаринами",
+          "thread": "@VARUS_channel:10349",
+          "topic": "Запит до користувачів запропонувати рецепти страв із набору продуктів.",
+          "topic_source": "reader verdict",
+          "unit": "@VARUS_channel:10349#20678",
+          "variant": "as_is"
+        },
+        {
+          "channel": "synthetic",
+          "entities": [],
+          "error_class": "retailer_non_dairy",
+          "examples": [
+            {
+              "label": "молочный_бренд",
+              "rationale": "коментар ПРО сам сир із допису — як його доводити після покупки (cue: «цей сир»)",
+              "text": "Уцей сир треба пару днів як купив потримати в пакеті щоб він став мокрим, тоді його лупашить можна на ура."
+            },
+            {
+              "label": "сеть_ритейлер",
+              "rationale": "коментар ПРО наявність товару в конкретному магазині мережі (cue: «Заходила на Панікахи»)",
+              "text": "А де такий кубок ковбасний можна придбати? Заходила на Панікахи, то там сказали, що нема"
+            },
+            {
+              "label": "категория_личное",
+              "rationale": "коментар ПРО власну запіканку із сирною заливкою (cue: «з сиром заливкою»)",
+              "text": "Надумала) Зроблю запіканку з цвітної капусти з печерицями та яєчно вершковою з сиром заливкою, зеленню притрушу."
+            },
+            {
+              "label": "не_наш_рынок",
+              "rationale": "коментар ПРО перелік страв на вихідні, поза нашою категорією (cue: «Грибна юшка»)",
+              "text": "Грибна юшка, баклажани з горіховою начинкою, хачапурі по мегрельски, ребра на мангалі, крила на мангалі, теплий салат з телятиною... Багато)))"
+            },
+            {
+              "label": null,
+              "rationale": "коментар ні про кого — іронія про очевидність тези допису (cue: «багато сироїдів»)",
+              "text": "Я думав, що це і так зрозуміло.\nЄ реально так багато сироїдів, що таку елементарщину потрібно пояснювати?"
+            }
+          ],
+          "examples_chosen": [
+            {
+              "label": "молочный_бренд",
+              "msg_id": 20766,
+              "similarity": 0.036765,
+              "thread": "@VARUS_channel:10367"
+            },
+            {
+              "label": "сеть_ритейлер",
+              "msg_id": 21236,
+              "similarity": 0.042373,
+              "thread": "@VARUS_channel:10470"
+            },
+            {
+              "label": "категория_личное",
+              "msg_id": 21256,
+              "similarity": 0.080292,
+              "thread": "@klopotenkofood:6040"
+            },
+            {
+              "label": "не_наш_рынок",
+              "msg_id": 21235,
+              "similarity": 0.092715,
+              "thread": "@klopotenkofood:6040"
+            },
+            {
+              "label": "null",
+              "msg_id": 48527,
+              "similarity": 0.039062,
+              "thread": "@mandziak:3736"
+            }
+          ],
+          "id": "@VARUS_channel:10349#20678@marked",
+          "membership": {
+            "dev_200": true,
+            "gold_14": false,
+            "holdout_100": true,
+            "probe_64": false,
+            "reference_thread": false
+          },
+          "msg_id": 20678,
+          "post_id": "retailer_non_dairy",
+          "rendered_chars": 5522,
+          "rendering_sha256": "b1a2e983b28ddbd4d481341b67963b28e815ac03f561273fd0080eef0c092f6a",
+          "task": "pass1_comment_gm4_v3",
+          "text": "Теплий салат із пастою, сиром та нектаринами",
+          "thread": "@VARUS_channel:10349",
+          "topic": "(synthetic training row — this thread has no post)",
+          "topic_source": "reader verdict",
+          "unit": "@VARUS_channel:10349#20678",
+          "variant": "marked"
+        },
+        {
+          "channel": "@VARUS_channel",
+          "entities": [
+            {
+              "msg_id": null,
+              "name": "Roshen",
+              "quote": "Печиво здобне ТМ Roshen",
+              "reading": "торгова марка печива",
+              "subject_type": "молочный_бренд"
+            },
+            {
+              "msg_id": null,
+              "name": "L’OR",
+              "quote": "Кава мелена ТМ L’OR",
+              "reading": "торгова марка кави",
+              "subject_type": "не_наш_рынок"
+            },
+            {
+              "msg_id": null,
+              "name": "Селянське",
+              "quote": "Молоко Дитяче 3,2% ТМ Селянське",
+              "reading": "торгова марка молока",
+              "subject_type": "молочный_бренд"
+            },
+            {
+              "msg_id": null,
+              "name": "Ariel",
+              "quote": "Гель для прання ТМ Ariel",
+              "reading": "торгова марка гелю для прання",
+              "subject_type": "не_наш_рынок"
+            },
+            {
+              "msg_id": null,
+              "name": "VARUS",
+              "quote": "супермаркетах VARUS",
+              "reading": "мережа супермаркетів",
+              "subject_type": "сеть_ритейлер"
+            }
+          ],
+          "error_class": null,
+          "examples": [
+            {
+              "label": "молочный_бренд",
+              "rationale": "коментар ПРО сам сир із допису — як його доводити після покупки (cue: «цей сир»)",
+              "text": "Уцей сир треба пару днів як купив потримати в пакеті щоб він став мокрим, тоді його лупашить можна на ура."
+            },
+            {
+              "label": "сеть_ритейлер",
+              "rationale": "коментар ПРО сервіс мережі — відповідь SMM, що вже пише у приват (cue: «написали вам у приватні повідомлення»)",
+              "text": "Вітаємо! Вже написали вам у приватні повідомлення"
+            },
+            {
+              "label": "категория_личное",
+              "rationale": "коментар ПРО власну звичку із сирною запіканкою з допису (cue: «їмо що виходить»)",
+              "text": "Вже звикла…що опадає…то ж їмо що виходить 😳"
+            },
+            {
+              "label": "не_наш_рынок",
+              "rationale": "коментар ПРО продаж дитячого костюма, поза нашою категорією (cue: «костюм для дівчинки»)",
+              "text": "Продам гарний костюм для дівчинки на 2-3 роки фірми George,ціна 250 грн. Всі питання  в особисті"
+            },
+            {
+              "label": null,
+              "rationale": "коментар ні про кого — службова відповідь авторки (cue: «Напишу вам зараз в особисті»)",
+              "text": "Напишу вам зараз в особисті"
+            }
+          ],
+          "examples_chosen": [
+            {
+              "label": "молочный_бренд",
+              "msg_id": 20766,
+              "similarity": 0.007692,
+              "thread": "@VARUS_channel:10367"
+            },
+            {
+              "label": "сеть_ритейлер",
+              "msg_id": 20947,
+              "similarity": 0.215385,
+              "thread": "@VARUS_channel:10367"
+            },
+            {
+              "label": "категория_личное",
+              "msg_id": 21189,
+              "similarity": 0.058824,
+              "thread": "@klopotenkofood:6032"
+            },
+            {
+              "label": "не_наш_рынок",
+              "msg_id": 577927,
+              "similarity": 0.098214,
+              "thread": "@matusi_ukr:22133"
+            },
+            {
+              "label": "null",
+              "msg_id": 2598,
+              "similarity": 0.295455,
+              "thread": "@ya_Nenka:844"
+            }
+          ],
+          "id": "@VARUS_channel:10360#20741@as_is",
+          "membership": {
+            "dev_200": false,
+            "gold_14": false,
+            "holdout_100": false,
+            "probe_64": false,
+            "reference_thread": true
+          },
+          "msg_id": 20741,
+          "post_id": 10360,
+          "rendered_chars": 5565,
+          "rendering_sha256": "aa6a3bf5fe184961262bf5af14f08087dfc732579e203f4714205ceca0ffd2bc",
+          "task": "pass1_comment_gm4_v3",
+          "text": "Вітаємо! Вже пишемо вам в особисті",
+          "thread": "@VARUS_channel:10360",
+          "topic": "Анонс акційних пропозицій на печиво Roshen, каву L’OR, молоко Селянське та гель Ariel у мережі VARUS.",
+          "topic_source": "reader verdict",
+          "unit": "@VARUS_channel:10360#20741",
+          "variant": "as_is"
+        },
+        {
+          "channel": "synthetic",
+          "entities": [
+            {
+              "msg_id": null,
+              "name": "Roshen",
+              "quote": "Печиво здобне ТМ Roshen",
+              "reading": "торгова марка печива",
+              "subject_type": "молочный_бренд"
+            },
+            {
+              "msg_id": null,
+              "name": "L’OR",
+              "quote": "Кава мелена ТМ L’OR",
+              "reading": "торгова марка кави",
+              "subject_type": "не_наш_рынок"
+            },
+            {
+              "msg_id": null,
+              "name": "Селянське",
+              "quote": "Молоко Дитяче 3,2% ТМ Селянське",
+              "reading": "торгова марка молока",
+              "subject_type": "молочный_бренд"
+            },
+            {
+              "msg_id": null,
+              "name": "Ariel",
+              "quote": "Гель для прання ТМ Ariel",
+              "reading": "торгова марка гелю для прання",
+              "subject_type": "не_наш_рынок"
+            },
+            {
+              "msg_id": null,
+              "name": "VARUS",
+              "quote": "супермаркетах VARUS",
+              "reading": "мережа супермаркетів",
+              "subject_type": "сеть_ритейлер"
+            }
+          ],
+          "error_class": "non_dairy_brand",
+          "examples": [
+            {
+              "label": "молочный_бренд",
+              "rationale": "коментар ПРО сам сир із допису — як його доводити після покупки (cue: «цей сир»)",
+              "text": "Уцей сир треба пару днів як купив потримати в пакеті щоб він став мокрим, тоді його лупашить можна на ура."
+            },
+            {
+              "label": "сеть_ритейлер",
+              "rationale": "коментар ПРО сервіс мережі — відповідь SMM, що вже пише у приват (cue: «написали вам у приватні повідомлення»)",
+              "text": "Вітаємо! Вже написали вам у приватні повідомлення"
+            },
+            {
+              "label": "категория_личное",
+              "rationale": "коментар ПРО власну звичку із сирною запіканкою з допису (cue: «їмо що виходить»)",
+              "text": "Вже звикла…що опадає…то ж їмо що виходить 😳"
+            },
+            {
+              "label": "не_наш_рынок",
+              "rationale": "коментар ПРО продаж дитячого костюма, поза нашою категорією (cue: «костюм для дівчинки»)",
+              "text": "Продам гарний костюм для дівчинки на 2-3 роки фірми George,ціна 250 грн. Всі питання  в особисті"
+            },
+            {
+              "label": null,
+              "rationale": "коментар ні про кого — службова відповідь авторки (cue: «Напишу вам зараз в особисті»)",
+              "text": "Напишу вам зараз в особисті"
+            }
+          ],
+          "examples_chosen": [
+            {
+              "label": "молочный_бренд",
+              "msg_id": 20766,
+              "similarity": 0.007692,
+              "thread": "@VARUS_channel:10367"
+            },
+            {
+              "label": "сеть_ритейлер",
+              "msg_id": 20947,
+              "similarity": 0.215385,
+              "thread": "@VARUS_channel:10367"
+            },
+            {
+              "label": "категория_личное",
+              "msg_id": 21189,
+              "similarity": 0.058824,
+              "thread": "@klopotenkofood:6032"
+            },
+            {
+              "label": "не_наш_рынок",
+              "msg_id": 577927,
+              "similarity": 0.098214,
+              "thread": "@matusi_ukr:22133"
+            },
+            {
+              "label": "null",
+              "msg_id": 2598,
+              "similarity": 0.295455,
+              "thread": "@ya_Nenka:844"
+            }
+          ],
+          "id": "@VARUS_channel:10360#20741@marked",
+          "membership": {
+            "dev_200": false,
+            "gold_14": false,
+            "holdout_100": false,
+            "probe_64": false,
+            "reference_thread": true
+          },
+          "msg_id": 20741,
+          "post_id": "non_dairy_brand",
+          "rendered_chars": 5519,
+          "rendering_sha256": "ee6c5d7e6b6530fb70d6a0df7ecf4a1e9e17216ddf8dfa54364d255b3ae9aaa0",
+          "task": "pass1_comment_gm4_v3",
+          "text": "Вітаємо! Вже пишемо вам в особисті",
+          "thread": "@VARUS_channel:10360",
+          "topic": "(synthetic training row — this thread has no post)",
+          "topic_source": "reader verdict",
+          "unit": "@VARUS_channel:10360#20741",
+          "variant": "marked"
+        },
+        {
+          "channel": "@VARUS_channel",
+          "entities": [
+            {
+              "msg_id": null,
+              "name": "VARUS",
+              "quote": "сертифікати VARUS по 1000 грн",
+              "reading": "мережа супермаркетів",
+              "subject_type": "сеть_ритейлер"
+            }
+          ],
+          "error_class": null,
+          "examples": [
+            {
+              "label": "молочный_бренд",
+              "rationale": "коментар ПРО сам сир із допису — як його доводити після покупки (cue: «цей сир»)",
+              "text": "Уцей сир треба пару днів як купив потримати в пакеті щоб він став мокрим, тоді його лупашить можна на ура."
+            },
+            {
+              "label": "сеть_ритейлер",
+              "rationale": "коментар ПРО промокод мережі з допису, який не спрацював (cue: «не застосовується»)",
+              "text": "А можна перевірити, а то не застосовується."
+            },
+            {
+              "label": "категория_личное",
+              "rationale": "коментар ПРО власний варіант сирної запіканки з допису (cue: «Роблю за Вашим рецептом з курагою»)",
+              "text": "Роблю за Вашим рецептом з курагою 😋🤌. Виходить супер ))"
+            },
+            {
+              "label": "не_наш_рынок",
+              "rationale": "коментар ПРО якість рюкзака з допису, поза нашою категорією (cue: «отличное качество»)",
+              "text": "Покупали, отличное качество, супер"
+            },
+            {
+              "label": null,
+              "rationale": "коментар ні про кого — похвала подачі автора (cue: «І доступно і ржачно»)",
+              "text": "Супер! І доступно і ржачно🤣👍"
+            }
+          ],
+          "examples_chosen": [
+            {
+              "label": "молочный_бренд",
+              "msg_id": 20766,
+              "similarity": 0.0,
+              "thread": "@VARUS_channel:10367"
+            },
+            {
+              "label": "сеть_ритейлер",
+              "msg_id": 21507,
+              "similarity": 0.021277,
+              "thread": "@VARUS_channel:10593"
+            },
+            {
+              "label": "категория_личное",
+              "msg_id": 21187,
+              "similarity": 0.090909,
+              "thread": "@klopotenkofood:6032"
+            },
+            {
+              "label": "не_наш_рынок",
+              "msg_id": 578388,
+              "similarity": 0.114286,
+              "thread": "@matusi_ukr:22195"
+            },
+            {
+              "label": "null",
+              "msg_id": 48160,
+              "similarity": 0.103448,
+              "thread": "@mandziak:3700"
+            }
+          ],
+          "id": "@VARUS_channel:10366#20884@as_is",
+          "membership": {
+            "dev_200": true,
+            "gold_14": false,
+            "holdout_100": false,
+            "probe_64": false,
+            "reference_thread": true
+          },
+          "msg_id": 20884,
+          "post_id": 10366,
+          "rendered_chars": 5264,
+          "rendering_sha256": "babdaa146bff74855018e2fda52e9817cf80ae8ebd4611ec62e6a93acc7148c2",
+          "task": "pass1_comment_gm4_v3",
+          "text": "+ супер !",
+          "thread": "@VARUS_channel:10366",
+          "topic": "Повідомлення про святкування 100 000 підписників у Telegram та анонс трьох розіграшів подарунків.",
+          "topic_source": "reader verdict",
+          "unit": "@VARUS_channel:10366#20884",
+          "variant": "as_is"
+        },
+        {
+          "channel": "synthetic",
+          "entities": [
+            {
+              "msg_id": null,
+              "name": "VARUS",
+              "quote": "сертифікати VARUS по 1000 грн",
+              "reading": "мережа супермаркетів",
+              "subject_type": "сеть_ритейлер"
+            }
+          ],
+          "error_class": "mention_vs_about",
+          "examples": [
+            {
+              "label": "молочный_бренд",
+              "rationale": "коментар ПРО сам сир із допису — як його доводити після покупки (cue: «цей сир»)",
+              "text": "Уцей сир треба пару днів як купив потримати в пакеті щоб він став мокрим, тоді його лупашить можна на ура."
+            },
+            {
+              "label": "сеть_ритейлер",
+              "rationale": "коментар ПРО промокод мережі з допису, який не спрацював (cue: «не застосовується»)",
+              "text": "А можна перевірити, а то не застосовується."
+            },
+            {
+              "label": "категория_личное",
+              "rationale": "коментар ПРО власний варіант сирної запіканки з допису (cue: «Роблю за Вашим рецептом з курагою»)",
+              "text": "Роблю за Вашим рецептом з курагою 😋🤌. Виходить супер ))"
+            },
+            {
+              "label": "не_наш_рынок",
+              "rationale": "коментар ПРО якість рюкзака з допису, поза нашою категорією (cue: «отличное качество»)",
+              "text": "Покупали, отличное качество, супер"
+            },
+            {
+              "label": null,
+              "rationale": "коментар ні про кого — похвала подачі автора (cue: «І доступно і ржачно»)",
+              "text": "Супер! І доступно і ржачно🤣👍"
+            }
+          ],
+          "examples_chosen": [
+            {
+              "label": "молочный_бренд",
+              "msg_id": 20766,
+              "similarity": 0.0,
+              "thread": "@VARUS_channel:10367"
+            },
+            {
+              "label": "сеть_ритейлер",
+              "msg_id": 21507,
+              "similarity": 0.021277,
+              "thread": "@VARUS_channel:10593"
+            },
+            {
+              "label": "категория_личное",
+              "msg_id": 21187,
+              "similarity": 0.090909,
+              "thread": "@klopotenkofood:6032"
+            },
+            {
+              "label": "не_наш_рынок",
+              "msg_id": 578388,
+              "similarity": 0.114286,
+              "thread": "@matusi_ukr:22195"
+            },
+            {
+              "label": "null",
+              "msg_id": 48160,
+              "similarity": 0.103448,
+              "thread": "@mandziak:3700"
+            }
+          ],
+          "id": "@VARUS_channel:10366#20884@marked",
+          "membership": {
+            "dev_200": true,
+            "gold_14": false,
+            "holdout_100": false,
+            "probe_64": false,
+            "reference_thread": true
+          },
+          "msg_id": 20884,
+          "post_id": "mention_vs_about",
+          "rendered_chars": 5223,
+          "rendering_sha256": "0522a9aa933aefa40da12c0aaba676be7e4fd6e2db3ff373ed6c2ca4d6164663",
+          "task": "pass1_comment_gm4_v3",
+          "text": "+ супер !",
+          "thread": "@VARUS_channel:10366",
+          "topic": "(synthetic training row — this thread has no post)",
+          "topic_source": "reader verdict",
+          "unit": "@VARUS_channel:10366#20884",
+          "variant": "marked"
+        },
+        {
+          "channel": "@VARUS_channel",
+          "entities": [
+            {
+              "msg_id": null,
+              "name": "VARUS",
+              "quote": "сертифікати VARUS по 1000 грн",
+              "reading": "мережа супермаркетів",
+              "subject_type": "сеть_ритейлер"
+            }
+          ],
+          "error_class": null,
+          "examples": [
+            {
+              "label": "молочный_бренд",
+              "rationale": "коментар ПРО сам сир із допису — як його доводити після покупки (cue: «цей сир»)",
+              "text": "Уцей сир треба пару днів як купив потримати в пакеті щоб він став мокрим, тоді його лупашить можна на ура."
+            },
+            {
+              "label": "сеть_ритейлер",
+              "rationale": "коментар ПРО акційний день мережі (cue: «знижкосереда»)",
+              "text": "А чи буде #знижкосереда?"
+            },
+            {
+              "label": "категория_личное",
+              "rationale": "коментар ПРО власний рецепт соусу з молока і сиру (cue: «С молока и сыра»)",
+              "text": "С молока и сыра сделать соус, не доводя молоко до кипения.  Будет очень вкусно"
+            },
+            {
+              "label": "не_наш_рынок",
+              "rationale": "коментар ПРО серіал, поза нашою категорією (cue: «Вне кампуса»)",
+              "text": "Новый сериал \"Вне кампуса\" вообще супер🔥🔥🔥"
+            },
+            {
+              "label": null,
+              "rationale": "коментар ні про кого — реакція на допис (cue: «Цей допис в саме серце»)",
+              "text": "Цей допис в саме серце!"
+            }
+          ],
+          "examples_chosen": [
+            {
+              "label": "молочный_бренд",
+              "msg_id": 20766,
+              "similarity": 0.0,
+              "thread": "@VARUS_channel:10367"
+            },
+            {
+              "label": "сеть_ритейлер",
+              "msg_id": 21504,
+              "similarity": 0.02439,
+              "thread": "@VARUS_channel:10532"
+            },
+            {
+              "label": "категория_личное",
+              "msg_id": 20680,
+              "similarity": 0.022472,
+              "thread": "@VARUS_channel:10349"
+            },
+            {
+              "label": "не_наш_рынок",
+              "msg_id": 579301,
+              "similarity": 0.052632,
+              "thread": "@matusi_ukr:22265"
+            },
+            {
+              "label": "null",
+              "msg_id": 2595,
+              "similarity": 0.078947,
+              "thread": "@ya_Nenka:836"
+            }
+          ],
+          "id": "@VARUS_channel:10366#20923@as_is",
+          "membership": {
+            "dev_200": false,
+            "gold_14": false,
+            "holdout_100": false,
+            "probe_64": false,
+            "reference_thread": true
+          },
+          "msg_id": 20923,
+          "post_id": 10366,
+          "rendered_chars": 5209,
+          "rendering_sha256": "a69e29e05bc3dffb0d0edb1288d8df89818ed0379fd08a03c963bada94a4e731",
+          "task": "pass1_comment_gm4_v3",
+          "text": "Феерические дол.... сер",
+          "thread": "@VARUS_channel:10366",
+          "topic": "Повідомлення про святкування 100 000 підписників у Telegram та анонс трьох розіграшів подарунків.",
+          "topic_source": "reader verdict",
+          "unit": "@VARUS_channel:10366#20923",
+          "variant": "as_is"
+        },
+        {
+          "channel": "synthetic",
+          "entities": [
+            {
+              "msg_id": null,
+              "name": "VARUS",
+              "quote": "сертифікати VARUS по 1000 грн",
+              "reading": "мережа супермаркетів",
+              "subject_type": "сеть_ритейлер"
+            }
+          ],
+          "error_class": "brand_vs_retailer",
+          "examples": [
+            {
+              "label": "молочный_бренд",
+              "rationale": "коментар ПРО сам сир із допису — як його доводити після покупки (cue: «цей сир»)",
+              "text": "Уцей сир треба пару днів як купив потримати в пакеті щоб він став мокрим, тоді його лупашить можна на ура."
+            },
+            {
+              "label": "сеть_ритейлер",
+              "rationale": "коментар ПРО акційний день мережі (cue: «знижкосереда»)",
+              "text": "А чи буде #знижкосереда?"
+            },
+            {
+              "label": "категория_личное",
+              "rationale": "коментар ПРО власний рецепт соусу з молока і сиру (cue: «С молока и сыра»)",
+              "text": "С молока и сыра сделать соус, не доводя молоко до кипения.  Будет очень вкусно"
+            },
+            {
+              "label": "не_наш_рынок",
+              "rationale": "коментар ПРО серіал, поза нашою категорією (cue: «Вне кампуса»)",
+              "text": "Новый сериал \"Вне кампуса\" вообще супер🔥🔥🔥"
+            },
+            {
+              "label": null,
+              "rationale": "коментар ні про кого — реакція на допис (cue: «Цей допис в саме серце»)",
+              "text": "Цей допис в саме серце!"
+            }
+          ],
+          "examples_chosen": [
+            {
+              "label": "молочный_бренд",
+              "msg_id": 20766,
+              "similarity": 0.0,
+              "thread": "@VARUS_channel:10367"
+            },
+            {
+              "label": "сеть_ритейлер",
+              "msg_id": 21504,
+              "similarity": 0.02439,
+              "thread": "@VARUS_channel:10532"
+            },
+            {
+              "label": "категория_личное",
+              "msg_id": 20680,
+              "similarity": 0.022472,
+              "thread": "@VARUS_channel:10349"
+            },
+            {
+              "label": "не_наш_рынок",
+              "msg_id": 579301,
+              "similarity": 0.052632,
+              "thread": "@matusi_ukr:22265"
+            },
+            {
+              "label": "null",
+              "msg_id": 2595,
+              "similarity": 0.078947,
+              "thread": "@ya_Nenka:836"
+            }
+          ],
+          "id": "@VARUS_channel:10366#20923@marked",
+          "membership": {
+            "dev_200": false,
+            "gold_14": false,
+            "holdout_100": false,
+            "probe_64": false,
+            "reference_thread": true
+          },
+          "msg_id": 20923,
+          "post_id": "brand_vs_retailer",
+          "rendered_chars": 5169,
+          "rendering_sha256": "338334794e6275c74da87d9bd012aad4d002e5b64e6f322a82d8ad3a56d561e1",
+          "task": "pass1_comment_gm4_v3",
+          "text": "Феерические дол.... сер",
+          "thread": "@VARUS_channel:10366",
+          "topic": "(synthetic training row — this thread has no post)",
+          "topic_source": "reader verdict",
+          "unit": "@VARUS_channel:10366#20923",
+          "variant": "marked"
+        },
+        {
+          "channel": "@VARUS_channel",
+          "entities": [
+            {
+              "msg_id": null,
+              "name": "Craft family",
+              "quote": "від Craft family",
+              "reading": "бренд м'ясних виробів",
+              "subject_type": "молочный_бренд"
+            },
+            {
+              "msg_id": null,
+              "name": "VARUS",
+              "quote": "Завітай у VARUS",
+              "reading": "мережа супермаркетів",
+              "subject_type": "сеть_ритейлер"
+            },
+            {
+              "msg_id": null,
+              "name": "VARUS.UA",
+              "quote": "на VARUS.UA",
+              "reading": "інтернет-магазин мережі",
+              "subject_type": "сеть_ритейлер"
+            }
+          ],
+          "error_class": null,
+          "examples": [
+            {
+              "label": "молочный_бренд",
+              "rationale": "коментар ПРО сам сир із допису — як його доводити після покупки (cue: «цей сир»)",
+              "text": "Уцей сир треба пару днів як купив потримати в пакеті щоб він став мокрим, тоді його лупашить можна на ура."
+            },
+            {
+              "label": "сеть_ритейлер",
+              "rationale": "коментар ПРО якість товару в магазині мережі (cue: «такий карась привезли»)",
+              "text": "Ось  такий   карась  привезли"
+            },
+            {
+              "label": "категория_личное",
+              "rationale": "коментар ПРО власний досвід із сирною запіканкою з допису (cue: «Не осідає, не підгорає»)",
+              "text": "Не осідає, не підгорає))"
+            },
+            {
+              "label": "не_наш_рынок",
+              "rationale": "коментар ПРО шкільний рюкзак і канцелярію, поза нашою категорією (cue: «дали рюкзак»)",
+              "text": "Мы ничего не покупали,дали рюкзак там была канцелярия,этим и пользовались"
+            },
+            {
+              "label": null,
+              "rationale": "коментар ні про кого — власний досвід завершення ГВ (cue: «Самоотлучились»)",
+              "text": "Самоотлучились"
+            }
+          ],
+          "examples_chosen": [
+            {
+              "label": "молочный_бренд",
+              "msg_id": 20766,
+              "similarity": 0.013986,
+              "thread": "@VARUS_channel:10367"
+            },
+            {
+              "label": "сеть_ритейлер",
+              "msg_id": 21566,
+              "similarity": 0.059701,
+              "thread": "@VARUS_channel:10603"
+            },
+            {
+              "label": "категория_личное",
+              "msg_id": 21182,
+              "similarity": 0.046875,
+              "thread": "@klopotenkofood:6032"
+            },
+            {
+              "label": "не_наш_рынок",
+              "msg_id": 577265,
+              "similarity": 0.085714,
+              "thread": "@matusi_ukr:22131"
+            },
+            {
+              "label": "null",
+              "msg_id": 576882,
+              "similarity": 0.074074,
+              "thread": "@matusi_ukr:22092"
+            }
+          ],
+          "id": "@VARUS_channel:10470#21238@as_is",
+          "membership": {
+            "dev_200": true,
+            "gold_14": false,
+            "holdout_100": true,
+            "probe_64": false,
+            "reference_thread": false
+          },
+          "msg_id": 21238,
+          "post_id": 10470,
+          "rendered_chars": 5366,
+          "rendering_sha256": "1b8fff7459a4644683007bd8fc9bd79b5dfc3a9ba269aeaa18345dc5dc655c31",
+          "task": "pass1_comment_gm4_v3",
+          "text": "100%... лучше бы не позорились с такими акциями🙈",
+          "thread": "@VARUS_channel:10470",
+          "topic": "Повідомлення про новинку — сирокопчені палички зі свинини від Craft family у мережі VARUS.",
+          "topic_source": "reader verdict",
+          "unit": "@VARUS_channel:10470#21238",
+          "variant": "as_is"
+        },
+        {
+          "channel": "synthetic",
+          "entities": [
+            {
+              "msg_id": null,
+              "name": "Craft family",
+              "quote": "від Craft family",
+              "reading": "бренд м'ясних виробів",
+              "subject_type": "молочный_бренд"
+            },
+            {
+              "msg_id": null,
+              "name": "VARUS",
+              "quote": "Завітай у VARUS",
+              "reading": "мережа супермаркетів",
+              "subject_type": "сеть_ритейлер"
+            },
+            {
+              "msg_id": null,
+              "name": "VARUS.UA",
+              "quote": "на VARUS.UA",
+              "reading": "інтернет-магазин мережі",
+              "subject_type": "сеть_ритейлер"
+            }
+          ],
+          "error_class": "retailer_non_dairy",
+          "examples": [
+            {
+              "label": "молочный_бренд",
+              "rationale": "коментар ПРО сам сир із допису — як його доводити після покупки (cue: «цей сир»)",
+              "text": "Уцей сир треба пару днів як купив потримати в пакеті щоб він став мокрим, тоді його лупашить можна на ура."
+            },
+            {
+              "label": "сеть_ритейлер",
+              "rationale": "коментар ПРО якість товару в магазині мережі (cue: «такий карась привезли»)",
+              "text": "Ось  такий   карась  привезли"
+            },
+            {
+              "label": "категория_личное",
+              "rationale": "коментар ПРО власний досвід із сирною запіканкою з допису (cue: «Не осідає, не підгорає»)",
+              "text": "Не осідає, не підгорає))"
+            },
+            {
+              "label": "не_наш_рынок",
+              "rationale": "коментар ПРО шкільний рюкзак і канцелярію, поза нашою категорією (cue: «дали рюкзак»)",
+              "text": "Мы ничего не покупали,дали рюкзак там была канцелярия,этим и пользовались"
+            },
+            {
+              "label": null,
+              "rationale": "коментар ні про кого — власний досвід завершення ГВ (cue: «Самоотлучились»)",
+              "text": "Самоотлучились"
+            }
+          ],
+          "examples_chosen": [
+            {
+              "label": "молочный_бренд",
+              "msg_id": 20766,
+              "similarity": 0.013986,
+              "thread": "@VARUS_channel:10367"
+            },
+            {
+              "label": "сеть_ритейлер",
+              "msg_id": 21566,
+              "similarity": 0.059701,
+              "thread": "@VARUS_channel:10603"
+            },
+            {
+              "label": "категория_личное",
+              "msg_id": 21182,
+              "similarity": 0.046875,
+              "thread": "@klopotenkofood:6032"
+            },
+            {
+              "label": "не_наш_рынок",
+              "msg_id": 577265,
+              "similarity": 0.085714,
+              "thread": "@matusi_ukr:22131"
+            },
+            {
+              "label": "null",
+              "msg_id": 576882,
+              "similarity": 0.074074,
+              "thread": "@matusi_ukr:22092"
+            }
+          ],
+          "id": "@VARUS_channel:10470#21238@marked",
+          "membership": {
+            "dev_200": true,
+            "gold_14": false,
+            "holdout_100": true,
+            "probe_64": false,
+            "reference_thread": false
+          },
+          "msg_id": 21238,
+          "post_id": "retailer_non_dairy",
+          "rendered_chars": 5334,
+          "rendering_sha256": "e1d9a0a6e09ba767a3c8a5462d73674cffe1e47fd83afc2ad238b3236822ae6d",
+          "task": "pass1_comment_gm4_v3",
+          "text": "100%... лучше бы не позорились с такими акциями🙈",
+          "thread": "@VARUS_channel:10470",
+          "topic": "(synthetic training row — this thread has no post)",
+          "topic_source": "reader verdict",
+          "unit": "@VARUS_channel:10470#21238",
+          "variant": "marked"
+        },
+        {
+          "channel": "@VARUS_channel",
+          "entities": [],
+          "error_class": null,
+          "examples": [
+            {
+              "label": "молочный_бренд",
+              "rationale": "коментар ПРО сам сир із допису — як його доводити після покупки (cue: «цей сир»)",
+              "text": "Уцей сир треба пару днів як купив потримати в пакеті щоб він став мокрим, тоді його лупашить можна на ура."
+            },
+            {
+              "label": "сеть_ритейлер",
+              "rationale": "коментар ПРО промокод мережі з допису, який не спрацював (cue: «не застосовується»)",
+              "text": "А можна перевірити, а то не застосовується."
+            },
+            {
+              "label": "категория_личное",
+              "rationale": "коментар ПРО власну страву з сиром (cue: «Сирно-макаронна запіканка»)",
+              "text": "Сирно-макаронна запіканка це вау"
+            },
+            {
+              "label": "не_наш_рынок",
+              "rationale": "коментар ПРО польські товари загалом, а не про молочку чи мережу (cue: «польські товари»)",
+              "text": "Дуже низької якості польські товари"
+            },
+            {
+              "label": null,
+              "rationale": "лише ЗГАДУЄ коров'яче молоко в раціоні дитини; насправді про завершення ГВ (cue: «молоко коровье»)",
+              "text": "Закончили ГВ в 2 года, 1 мес. Малявка отошла сама. Общий стол и молоко коровье немного до 3х лет было"
+            }
+          ],
+          "examples_chosen": [
+            {
+              "label": "молочный_бренд",
+              "msg_id": 20766,
+              "similarity": 0.014925,
+              "thread": "@VARUS_channel:10367"
+            },
+            {
+              "label": "сеть_ритейлер",
+              "msg_id": 21507,
+              "similarity": 0.054054,
+              "thread": "@VARUS_channel:10593"
+            },
+            {
+              "label": "категория_личное",
+              "msg_id": 21181,
+              "similarity": 0.046875,
+              "thread": "@klopotenkofood:6032"
+            },
+            {
+              "label": "не_наш_рынок",
+              "msg_id": 20945,
+              "similarity": 0.076923,
+              "thread": "@VARUS_channel:10367"
+            },
+            {
+              "label": "null",
+              "msg_id": 576884,
+              "similarity": 0.0625,
+              "thread": "@matusi_ukr:22092"
+            }
+          ],
+          "id": "@VARUS_channel:10529#21420@as_is",
+          "membership": {
+            "dev_200": true,
+            "gold_14": false,
+            "holdout_100": false,
+            "probe_64": false,
+            "reference_thread": true
+          },
+          "msg_id": 21420,
+          "post_id": 10529,
+          "rendered_chars": 5397,
+          "rendering_sha256": "4c8fc6820c9cf0182c27a102a40dbeb9f587855cc0a8c8b806ab9f7770eca74c",
+          "task": "pass1_comment_gm4_v3",
+          "text": "Половина товаров закончилась, гениально",
+          "thread": "@VARUS_channel:10529",
+          "topic": "На наших молочних полицях підвищився рівень білка! І все завдяки поживним профі від ТМ Pro Milk 💪\n\n🔸 Високобілкові йогурти:\n・ з манго й маракуєю;\n・ з полуницею.…",
+          "topic_source": "the store's post text, bounded",
+          "unit": "@VARUS_channel:10529#21420",
+          "variant": "as_is"
+        },
+        {
+          "channel": "synthetic",
+          "entities": [],
+          "error_class": "non_dairy_brand",
+          "examples": [
+            {
+              "label": "молочный_бренд",
+              "rationale": "коментар ПРО сам сир із допису — як його доводити після покупки (cue: «цей сир»)",
+              "text": "Уцей сир треба пару днів як купив потримати в пакеті щоб він став мокрим, тоді його лупашить можна на ура."
+            },
+            {
+              "label": "сеть_ритейлер",
+              "rationale": "коментар ПРО промокод мережі з допису, який не спрацював (cue: «не застосовується»)",
+              "text": "А можна перевірити, а то не застосовується."
+            },
+            {
+              "label": "категория_личное",
+              "rationale": "коментар ПРО власну страву з сиром (cue: «Сирно-макаронна запіканка»)",
+              "text": "Сирно-макаронна запіканка це вау"
+            },
+            {
+              "label": "не_наш_рынок",
+              "rationale": "коментар ПРО польські товари загалом, а не про молочку чи мережу (cue: «польські товари»)",
+              "text": "Дуже низької якості польські товари"
+            },
+            {
+              "label": null,
+              "rationale": "лише ЗГАДУЄ коров'яче молоко в раціоні дитини; насправді про завершення ГВ (cue: «молоко коровье»)",
+              "text": "Закончили ГВ в 2 года, 1 мес. Малявка отошла сама. Общий стол и молоко коровье немного до 3х лет было"
+            }
+          ],
+          "examples_chosen": [
+            {
+              "label": "молочный_бренд",
+              "msg_id": 20766,
+              "similarity": 0.014925,
+              "thread": "@VARUS_channel:10367"
+            },
+            {
+              "label": "сеть_ритейлер",
+              "msg_id": 21507,
+              "similarity": 0.054054,
+              "thread": "@VARUS_channel:10593"
+            },
+            {
+              "label": "категория_личное",
+              "msg_id": 21181,
+              "similarity": 0.046875,
+              "thread": "@klopotenkofood:6032"
+            },
+            {
+              "label": "не_наш_рынок",
+              "msg_id": 20945,
+              "similarity": 0.076923,
+              "thread": "@VARUS_channel:10367"
+            },
+            {
+              "label": "null",
+              "msg_id": 576884,
+              "similarity": 0.0625,
+              "thread": "@matusi_ukr:22092"
+            }
+          ],
+          "id": "@VARUS_channel:10529#21420@marked",
+          "membership": {
+            "dev_200": true,
+            "gold_14": false,
+            "holdout_100": false,
+            "probe_64": false,
+            "reference_thread": true
+          },
+          "msg_id": 21420,
+          "post_id": "non_dairy_brand",
+          "rendered_chars": 5291,
+          "rendering_sha256": "31162596b7f79a1fd51acfd6bd20869a5ab41f9169a9c9131fa7f61aedb4f1f1",
+          "task": "pass1_comment_gm4_v3",
+          "text": "Половина товаров закончилась, гениально",
+          "thread": "@VARUS_channel:10529",
+          "topic": "(synthetic training row — this thread has no post)",
+          "topic_source": "the store's post text, bounded",
+          "unit": "@VARUS_channel:10529#21420",
+          "variant": "marked"
+        },
+        {
+          "channel": "@klopotenkofood",
+          "entities": [],
+          "error_class": null,
+          "examples": [
+            {
+              "label": "молочный_бренд",
+              "rationale": "коментар ПРО сам сир із допису — як його доводити після покупки (cue: «цей сир»)",
+              "text": "Уцей сир треба пару днів як купив потримати в пакеті щоб він став мокрим, тоді його лупашить можна на ура."
+            },
+            {
+              "label": "сеть_ритейлер",
+              "rationale": "коментар ПРО чесність розіграшу мережі (cue: «боти без реальних імен»)",
+              "text": "Що за боти без реальних імен і фото. Виходимо всі на протести з картОнками!"
+            },
+            {
+              "label": "категория_личное",
+              "rationale": "коментар ПРО власний досвід із сирною запіканкою за рецептом автора (cue: «спробувала за Вашим рецептом»)",
+              "text": "Раніше постійно осідала, спробувала за Вашим рецептом і тепер все 👌"
+            },
+            {
+              "label": "не_наш_рынок",
+              "rationale": "коментар ні про кого — прохання рецепта (cue: «Поділись рецептом»)",
+              "text": "Привіт\nПоділись рецептом будь ласка?!"
+            },
+            {
+              "label": null,
+              "rationale": "коментар ні про кого — прохання рецепта (cue: «А можна рецепт»)",
+              "text": "А можна рецепт?"
+            }
+          ],
+          "examples_chosen": [
+            {
+              "label": "молочный_бренд",
+              "msg_id": 20766,
+              "similarity": 0.038462,
+              "thread": "@VARUS_channel:10367"
+            },
+            {
+              "label": "сеть_ритейлер",
+              "msg_id": 21396,
+              "similarity": 0.072848,
+              "thread": "@VARUS_channel:10528"
+            },
+            {
+              "label": "категория_личное",
+              "msg_id": 21184,
+              "similarity": 0.107914,
+              "thread": "@klopotenkofood:6032"
+            },
+            {
+              "label": "не_наш_рынок",
+              "msg_id": 177,
+              "similarity": 0.096491,
+              "thread": "@tarilka_malyuka:764"
+            },
+            {
+              "label": "null",
+              "msg_id": 82,
+              "similarity": 0.072917,
+              "thread": "@tarilka_malyuka:746"
+            }
+          ],
+          "id": "@klopotenkofood:6035#21207@as_is",
+          "membership": {
+            "dev_200": true,
+            "gold_14": false,
+            "holdout_100": true,
+            "probe_64": false,
+            "reference_thread": false
+          },
+          "msg_id": 21207,
+          "post_id": 6035,
+          "rendered_chars": 5316,
+          "rendering_sha256": "15ba04f81e664d72edc741aee1ce3e5f465923efcc81285275df2e175ca2b4ef",
+          "task": "pass1_comment_gm4_v3",
+          "text": "Так, завтра пробую ще раз, дотримуючись всіх поданих тут порад. А так - за рецептом пана Євгена",
+          "thread": "@klopotenkofood:6035",
+          "topic": "Пост містить візуальний контент (зображення або відео) з рецептом запіканки.",
+          "topic_source": "reader verdict",
+          "unit": "@klopotenkofood:6035#21207",
+          "variant": "as_is"
+        },
+        {
+          "channel": "synthetic",
+          "entities": [],
+          "error_class": "mention_vs_about",
+          "examples": [
+            {
+              "label": "молочный_бренд",
+              "rationale": "коментар ПРО сам сир із допису — як його доводити після покупки (cue: «цей сир»)",
+              "text": "Уцей сир треба пару днів як купив потримати в пакеті щоб він став мокрим, тоді його лупашить можна на ура."
+            },
+            {
+              "label": "сеть_ритейлер",
+              "rationale": "коментар ПРО чесність розіграшу мережі (cue: «боти без реальних імен»)",
+              "text": "Що за боти без реальних імен і фото. Виходимо всі на протести з картОнками!"
+            },
+            {
+              "label": "категория_личное",
+              "rationale": "коментар ПРО власний досвід із сирною запіканкою за рецептом автора (cue: «спробувала за Вашим рецептом»)",
+              "text": "Раніше постійно осідала, спробувала за Вашим рецептом і тепер все 👌"
+            },
+            {
+              "label": "не_наш_рынок",
+              "rationale": "коментар ні про кого — прохання рецепта (cue: «Поділись рецептом»)",
+              "text": "Привіт\nПоділись рецептом будь ласка?!"
+            },
+            {
+              "label": null,
+              "rationale": "коментар ні про кого — прохання рецепта (cue: «А можна рецепт»)",
+              "text": "А можна рецепт?"
+            }
+          ],
+          "examples_chosen": [
+            {
+              "label": "молочный_бренд",
+              "msg_id": 20766,
+              "similarity": 0.038462,
+              "thread": "@VARUS_channel:10367"
+            },
+            {
+              "label": "сеть_ритейлер",
+              "msg_id": 21396,
+              "similarity": 0.072848,
+              "thread": "@VARUS_channel:10528"
+            },
+            {
+              "label": "категория_личное",
+              "msg_id": 21184,
+              "similarity": 0.107914,
+              "thread": "@klopotenkofood:6032"
+            },
+            {
+              "label": "не_наш_рынок",
+              "msg_id": 177,
+              "similarity": 0.096491,
+              "thread": "@tarilka_malyuka:764"
+            },
+            {
+              "label": "null",
+              "msg_id": 82,
+              "similarity": 0.072917,
+              "thread": "@tarilka_malyuka:746"
+            }
+          ],
+          "id": "@klopotenkofood:6035#21207@marked",
+          "membership": {
+            "dev_200": true,
+            "gold_14": false,
+            "holdout_100": true,
+            "probe_64": false,
+            "reference_thread": false
+          },
+          "msg_id": 21207,
+          "post_id": "mention_vs_about",
+          "rendered_chars": 5296,
+          "rendering_sha256": "e043445038bce72363b24ecad5352a189cbf09dd5952dd93235bb71415ee9b5b",
+          "task": "pass1_comment_gm4_v3",
+          "text": "Так, завтра пробую ще раз, дотримуючись всіх поданих тут порад. А так - за рецептом пана Євгена",
+          "thread": "@klopotenkofood:6035",
+          "topic": "(synthetic training row — this thread has no post)",
+          "topic_source": "reader verdict",
+          "unit": "@klopotenkofood:6035#21207",
+          "variant": "marked"
+        },
+        {
+          "channel": "@klopotenkofood",
+          "entities": [],
+          "error_class": null,
+          "examples": [
+            {
+              "label": "молочный_бренд",
+              "rationale": "коментар ПРО сам сир із допису — як його доводити після покупки (cue: «цей сир»)",
+              "text": "Уцей сир треба пару днів як купив потримати в пакеті щоб він став мокрим, тоді його лупашить можна на ура."
+            },
+            {
+              "label": "сеть_ритейлер",
+              "rationale": "коментар ПРО чесність розіграшу мережі (cue: «боти без реальних імен»)",
+              "text": "Що за боти без реальних імен і фото. Виходимо всі на протести з картОнками!"
+            },
+            {
+              "label": "категория_личное",
+              "rationale": "коментар ПРО власний спосіб робити сирну запіканку (cue: «Додаю манку»)",
+              "text": "Додаю манку. Жовток окремо, а білок взбиваю і ввожу обережно. Запіканка виходить ніжна, як суфле."
+            },
+            {
+              "label": "не_наш_рынок",
+              "rationale": "коментар ПРО заміну крохмалю в млинцях, поза нашою категорією (cue: «цільнозернове борошно»)",
+              "text": "Замінити крохмаль треба на цільнозернове борошно!!!"
+            },
+            {
+              "label": null,
+              "rationale": "коментар ні про кого — власний досвід завершення ГВ (cue: «завершила ГВ»)",
+              "text": "Вони всі не хочуть, щось буде їсти потрохи. Далі взагалі треш дуже велика вибірковість після 2 років. Мені було не норм заміняти їжу грудьми і я вже фізично цього не хотіла, тому в 1,7 завершила ГВ."
+            }
+          ],
+          "examples_chosen": [
+            {
+              "label": "молочный_бренд",
+              "msg_id": 20766,
+              "similarity": 0.043243,
+              "thread": "@VARUS_channel:10367"
+            },
+            {
+              "label": "сеть_ритейлер",
+              "msg_id": 21396,
+              "similarity": 0.077922,
+              "thread": "@VARUS_channel:10528"
+            },
+            {
+              "label": "категория_личное",
+              "msg_id": 21191,
+              "similarity": 0.169811,
+              "thread": "@klopotenkofood:6032"
+            },
+            {
+              "label": "не_наш_рынок",
+              "msg_id": 48394,
+              "similarity": 0.125984,
+              "thread": "@mandziak:3718"
+            },
+            {
+              "label": "null",
+              "msg_id": 576919,
+              "similarity": 0.086275,
+              "thread": "@matusi_ukr:22092"
+            }
+          ],
+          "id": "@klopotenkofood:6035#21221@as_is",
+          "membership": {
+            "dev_200": true,
+            "gold_14": false,
+            "holdout_100": true,
+            "probe_64": false,
+            "reference_thread": false
+          },
+          "msg_id": 21221,
+          "post_id": 6035,
+          "rendered_chars": 5550,
+          "rendering_sha256": "e1b0d4feddee6665a83eb9578e81161f508312de7e092363358c41194a1a4690",
+          "task": "pass1_comment_gm4_v3",
+          "text": "Я додаю крохмаль замість манки чи борошна, і сир має бути не дуже вологим. Запіканка завжди виходить",
+          "thread": "@klopotenkofood:6035",
+          "topic": "Пост містить візуальний контент (зображення або відео) з рецептом запіканки.",
+          "topic_source": "reader verdict",
+          "unit": "@klopotenkofood:6035#21221",
+          "variant": "as_is"
+        },
+        {
+          "channel": "synthetic",
+          "entities": [],
+          "error_class": "brand_vs_retailer",
+          "examples": [
+            {
+              "label": "молочный_бренд",
+              "rationale": "коментар ПРО сам сир із допису — як його доводити після покупки (cue: «цей сир»)",
+              "text": "Уцей сир треба пару днів як купив потримати в пакеті щоб він став мокрим, тоді його лупашить можна на ура."
+            },
+            {
+              "label": "сеть_ритейлер",
+              "rationale": "коментар ПРО чесність розіграшу мережі (cue: «боти без реальних імен»)",
+              "text": "Що за боти без реальних імен і фото. Виходимо всі на протести з картОнками!"
+            },
+            {
+              "label": "категория_личное",
+              "rationale": "коментар ПРО власний спосіб робити сирну запіканку (cue: «Додаю манку»)",
+              "text": "Додаю манку. Жовток окремо, а білок взбиваю і ввожу обережно. Запіканка виходить ніжна, як суфле."
+            },
+            {
+              "label": "не_наш_рынок",
+              "rationale": "коментар ПРО заміну крохмалю в млинцях, поза нашою категорією (cue: «цільнозернове борошно»)",
+              "text": "Замінити крохмаль треба на цільнозернове борошно!!!"
+            },
+            {
+              "label": null,
+              "rationale": "коментар ні про кого — власний досвід завершення ГВ (cue: «завершила ГВ»)",
+              "text": "Вони всі не хочуть, щось буде їсти потрохи. Далі взагалі треш дуже велика вибірковість після 2 років. Мені було не норм заміняти їжу грудьми і я вже фізично цього не хотіла, тому в 1,7 завершила ГВ."
+            }
+          ],
+          "examples_chosen": [
+            {
+              "label": "молочный_бренд",
+              "msg_id": 20766,
+              "similarity": 0.043243,
+              "thread": "@VARUS_channel:10367"
+            },
+            {
+              "label": "сеть_ритейлер",
+              "msg_id": 21396,
+              "similarity": 0.077922,
+              "thread": "@VARUS_channel:10528"
+            },
+            {
+              "label": "категория_личное",
+              "msg_id": 21191,
+              "similarity": 0.169811,
+              "thread": "@klopotenkofood:6032"
+            },
+            {
+              "label": "не_наш_рынок",
+              "msg_id": 48394,
+              "similarity": 0.125984,
+              "thread": "@mandziak:3718"
+            },
+            {
+              "label": "null",
+              "msg_id": 576919,
+              "similarity": 0.086275,
+              "thread": "@matusi_ukr:22092"
+            }
+          ],
+          "id": "@klopotenkofood:6035#21221@marked",
+          "membership": {
+            "dev_200": true,
+            "gold_14": false,
+            "holdout_100": true,
+            "probe_64": false,
+            "reference_thread": false
+          },
+          "msg_id": 21221,
+          "post_id": "brand_vs_retailer",
+          "rendered_chars": 5531,
+          "rendering_sha256": "61e7138aebc1a1c8b1ebb25596a320b555fe28c57668685b2a1e530295551d70",
+          "task": "pass1_comment_gm4_v3",
+          "text": "Я додаю крохмаль замість манки чи борошна, і сир має бути не дуже вологим. Запіканка завжди виходить",
+          "thread": "@klopotenkofood:6035",
+          "topic": "(synthetic training row — this thread has no post)",
+          "topic_source": "reader verdict",
+          "unit": "@klopotenkofood:6035#21221",
+          "variant": "marked"
+        },
+        {
+          "channel": "@kopiyochka1",
+          "entities": [
+            {
+              "msg_id": null,
+              "name": "Копійочка",
+              "quote": "забігай до Копійочка",
+              "reading": "мережа магазинів",
+              "subject_type": "сеть_ритейлер"
+            }
+          ],
+          "error_class": null,
+          "examples": [
+            {
+              "label": "молочный_бренд",
+              "rationale": "коментар ПРО сам сир із допису — як його доводити після покупки (cue: «цей сир»)",
+              "text": "Уцей сир треба пару днів як купив потримати в пакеті щоб він став мокрим, тоді його лупашить можна на ура."
+            },
+            {
+              "label": "сеть_ритейлер",
+              "rationale": "коментар ПРО готову їжу мережі — намір знову завітати до магазину за нею (cue: «завітаю до магазину»)",
+              "text": "Хочу просто свіжозвареною кукурудзи.\nМинулого разу, коли придбала таку у Варус, просто не встигла, дитина швидко посмакувала без мене. \nГадаю, при нагоді обов'язково завітаю до магазину за ще однією порцією."
+            },
+            {
+              "label": "категория_личное",
+              "rationale": "коментар ПРО власний досвід із морозивом як помічним при болю в горлі (cue: «Мені чудово допомагає»)",
+              "text": "Морозиво. Мені чудово допомагає прохолодне пиття обільне, цукерки Mintex рошенівськи. Але 2 тижні, то вже краще до лікаря звернутися, знайти, чому воно болить. За 2 тижні розвинутися могли і бактеріальні інфекції, коли просто чаю попити вже не працює"
+            },
+            {
+              "label": "не_наш_рынок",
+              "rationale": "коментар ПРО продаж дитячого взуття, поза нашою категорією (cue: «святкове та комфортне взуття»)",
+              "text": "#Продаю святкове та комфортне взуття 27 розміру🩵\n\nВзували на випускний у садочок, на 2 години святкової фотосесії\n\nКупували у магазині за 450 грн, віддам зараз за 250 грн\n\nДніпро, або відправка поштами по 🇺🇦 завтра\n📲0634629252\n\n* У наявності ексклюзивна сукня і аксесуари ручної роботи, доступно в оренду вигідно😊"
+            },
+            {
+              "label": null,
+              "rationale": "коментар ні про кого — відповідь співрозмовниці власним прикладом (cue: «не довелося зцежувати»)",
+              "text": "Майже ні, пару крапель, навіть не довелося зцежувати. Але воно, мені здається, просто стало пропадати ще до того, як я кинула годувати. В мене взагалі його було дуууже мало"
+            }
+          ],
+          "examples_chosen": [
+            {
+              "label": "молочный_бренд",
+              "msg_id": 20766,
+              "similarity": 0.032258,
+              "thread": "@VARUS_channel:10367"
+            },
+            {
+              "label": "сеть_ритейлер",
+              "msg_id": 21334,
+              "similarity": 0.052632,
+              "thread": "@VARUS_channel:10496"
+            },
+            {
+              "label": "категория_личное",
+              "msg_id": 578032,
+              "similarity": 0.036545,
+              "thread": "@matusi_ukr:22158"
+            },
+            {
+              "label": "не_наш_рынок",
+              "msg_id": 580196,
+              "similarity": 0.051429,
+              "thread": "@matusi_ukr:22295"
+            },
+            {
+              "label": "null",
+              "msg_id": 576969,
+              "similarity": 0.061135,
+              "thread": "@matusi_ukr:22092"
+            }
+          ],
+          "id": "@kopiyochka1:21720#391544@as_is",
+          "membership": {
+            "dev_200": false,
+            "gold_14": false,
+            "holdout_100": true,
+            "probe_64": false,
+            "reference_thread": false
+          },
+          "msg_id": 391544,
+          "post_id": 21720,
+          "rendered_chars": 6172,
+          "rendering_sha256": "470918630fa87efaf5f7946895489dca2df1b5e43be843d9f4f2993926483843",
+          "task": "pass1_comment_gm4_v3",
+          "text": "Вітаю! ☀\nЄ в наявності за адресою: Біла Церква №3,вул.Ак.Кримського, в р-ні ж/б№5\nЗавітайте до нас💘",
+          "thread": "@kopiyochka1:21720",
+          "topic": "Рекламна добірка новинок товарів для дому, саду та солодощів у мережі Копійочка.",
+          "topic_source": "reader verdict",
+          "unit": "@kopiyochka1:21720#391544",
+          "variant": "as_is"
+        },
+        {
+          "channel": "synthetic",
+          "entities": [
+            {
+              "msg_id": null,
+              "name": "Копійочка",
+              "quote": "забігай до Копійочка",
+              "reading": "мережа магазинів",
+              "subject_type": "сеть_ритейлер"
+            }
+          ],
+          "error_class": "retailer_non_dairy",
+          "examples": [
+            {
+              "label": "молочный_бренд",
+              "rationale": "коментар ПРО сам сир із допису — як його доводити після покупки (cue: «цей сир»)",
+              "text": "Уцей сир треба пару днів як купив потримати в пакеті щоб він став мокрим, тоді його лупашить можна на ура."
+            },
+            {
+              "label": "сеть_ритейлер",
+              "rationale": "коментар ПРО готову їжу мережі — намір знову завітати до магазину за нею (cue: «завітаю до магазину»)",
+              "text": "Хочу просто свіжозвареною кукурудзи.\nМинулого разу, коли придбала таку у Варус, просто не встигла, дитина швидко посмакувала без мене. \nГадаю, при нагоді обов'язково завітаю до магазину за ще однією порцією."
+            },
+            {
+              "label": "категория_личное",
+              "rationale": "коментар ПРО власний досвід із морозивом як помічним при болю в горлі (cue: «Мені чудово допомагає»)",
+              "text": "Морозиво. Мені чудово допомагає прохолодне пиття обільне, цукерки Mintex рошенівськи. Але 2 тижні, то вже краще до лікаря звернутися, знайти, чому воно болить. За 2 тижні розвинутися могли і бактеріальні інфекції, коли просто чаю попити вже не працює"
+            },
+            {
+              "label": "не_наш_рынок",
+              "rationale": "коментар ПРО продаж дитячого взуття, поза нашою категорією (cue: «святкове та комфортне взуття»)",
+              "text": "#Продаю святкове та комфортне взуття 27 розміру🩵\n\nВзували на випускний у садочок, на 2 години святкової фотосесії\n\nКупували у магазині за 450 грн, віддам зараз за 250 грн\n\nДніпро, або відправка поштами по 🇺🇦 завтра\n📲0634629252\n\n* У наявності ексклюзивна сукня і аксесуари ручної роботи, доступно в оренду вигідно😊"
+            },
+            {
+              "label": null,
+              "rationale": "коментар ні про кого — відповідь співрозмовниці власним прикладом (cue: «не довелося зцежувати»)",
+              "text": "Майже ні, пару крапель, навіть не довелося зцежувати. Але воно, мені здається, просто стало пропадати ще до того, як я кинула годувати. В мене взагалі його було дуууже мало"
+            }
+          ],
+          "examples_chosen": [
+            {
+              "label": "молочный_бренд",
+              "msg_id": 20766,
+              "similarity": 0.032258,
+              "thread": "@VARUS_channel:10367"
+            },
+            {
+              "label": "сеть_ритейлер",
+              "msg_id": 21334,
+              "similarity": 0.052632,
+              "thread": "@VARUS_channel:10496"
+            },
+            {
+              "label": "категория_личное",
+              "msg_id": 578032,
+              "similarity": 0.036545,
+              "thread": "@matusi_ukr:22158"
+            },
+            {
+              "label": "не_наш_рынок",
+              "msg_id": 580196,
+              "similarity": 0.051429,
+              "thread": "@matusi_ukr:22295"
+            },
+            {
+              "label": "null",
+              "msg_id": 576969,
+              "similarity": 0.061135,
+              "thread": "@matusi_ukr:22092"
+            }
+          ],
+          "id": "@kopiyochka1:21720#391544@marked",
+          "membership": {
+            "dev_200": false,
+            "gold_14": false,
+            "holdout_100": true,
+            "probe_64": false,
+            "reference_thread": false
+          },
+          "msg_id": 391544,
+          "post_id": "retailer_non_dairy",
+          "rendered_chars": 6152,
+          "rendering_sha256": "88317a5442f7e9f157b08a1ca8ea9fad6405c851ac32279965b943ab1bf0689e",
+          "task": "pass1_comment_gm4_v3",
+          "text": "Вітаю! ☀\nЄ в наявності за адресою: Біла Церква №3,вул.Ак.Кримського, в р-ні ж/б№5\nЗавітайте до нас💘",
+          "thread": "@kopiyochka1:21720",
+          "topic": "(synthetic training row — this thread has no post)",
+          "topic_source": "reader verdict",
+          "unit": "@kopiyochka1:21720#391544",
+          "variant": "marked"
+        },
+        {
+          "channel": "@mandziak",
+          "entities": [],
+          "error_class": null,
+          "examples": [
+            {
+              "label": "молочный_бренд",
+              "rationale": "коментар ПРО сам сир із допису — як його доводити після покупки (cue: «цей сир»)",
+              "text": "Уцей сир треба пару днів як купив потримати в пакеті щоб він став мокрим, тоді його лупашить можна на ура."
+            },
+            {
+              "label": "сеть_ритейлер",
+              "rationale": "коментар ПРО магазини мережі — уточнення SMM про місто (cue: «яке місто маєте на увазі»)",
+              "text": "Вітаємо, підкажіть яке місто маєте на увазі?"
+            },
+            {
+              "label": "категория_личное",
+              "rationale": "коментар ПРО власну заміну сметани дитячими сирками в кремі (cue: «із дитячих творожків»)",
+              "text": "https://youtu.be/kol67WIqHHk?si=MjrjbZJboPlgRJZw\n\nДівчата, прикріплюю посилання 🫶🏻\nТільки в рецепті в кремі сметана, а я зробила із дитячих творожків (те що було вдома)"
+            },
+            {
+              "label": "не_наш_рынок",
+              "rationale": "коментар ПРО тренерський канал автора, поза нашою категорією (cue: «sport_food_life»)",
+              "text": "Доброго дня, Пишіть сюди 👉🏻 https://t.me/sport_food_life"
+            },
+            {
+              "label": null,
+              "rationale": "коментар ні про кого — самé посилання на сторонній канал (cue: «t.me/istorium_ua»)",
+              "text": "https://t.me/istorium_ua/6342"
+            }
+          ],
+          "examples_chosen": [
+            {
+              "label": "молочный_бренд",
+              "msg_id": 20766,
+              "similarity": 0.007194,
+              "thread": "@VARUS_channel:10367"
+            },
+            {
+              "label": "сеть_ритейлер",
+              "msg_id": 391539,
+              "similarity": 0.024691,
+              "thread": "@kopiyochka1:21720"
+            },
+            {
+              "label": "категория_личное",
+              "msg_id": 48,
+              "similarity": 0.030303,
+              "thread": "@tarilka_malyuka:715"
+            },
+            {
+              "label": "не_наш_рынок",
+              "msg_id": 48187,
+              "similarity": 0.759259,
+              "thread": "@mandziak:3700"
+            },
+            {
+              "label": "null",
+              "msg_id": 47830,
+              "similarity": 0.192982,
+              "thread": "@mandziak:3667"
+            }
+          ],
+          "id": "@mandziak:3684#48018@as_is",
+          "membership": {
+            "dev_200": false,
+            "gold_14": false,
+            "holdout_100": false,
+            "probe_64": false,
+            "reference_thread": true
+          },
+          "msg_id": 48018,
+          "post_id": 3684,
+          "rendered_chars": 5430,
+          "rendering_sha256": "6bbb2e57bb60570a0ce73b136da215d7a20e3dfc0d25b5605ebc61c1a5666f9c",
+          "task": "pass1_comment_gm4_v3",
+          "text": "Пишіть сюди 👉🏻 https://t.me/sport_food_life",
+          "thread": "@mandziak:3684",
+          "topic": "Пост про результати схуднення клієнтки Лізи за допомогою програми збалансованого харчування та тренувань.",
+          "topic_source": "reader verdict",
+          "unit": "@mandziak:3684#48018",
+          "variant": "as_is"
+        },
+        {
+          "channel": "synthetic",
+          "entities": [],
+          "error_class": "non_dairy_brand",
+          "examples": [
+            {
+              "label": "молочный_бренд",
+              "rationale": "коментар ПРО сам сир із допису — як його доводити після покупки (cue: «цей сир»)",
+              "text": "Уцей сир треба пару днів як купив потримати в пакеті щоб він став мокрим, тоді його лупашить можна на ура."
+            },
+            {
+              "label": "сеть_ритейлер",
+              "rationale": "коментар ПРО магазини мережі — уточнення SMM про місто (cue: «яке місто маєте на увазі»)",
+              "text": "Вітаємо, підкажіть яке місто маєте на увазі?"
+            },
+            {
+              "label": "категория_личное",
+              "rationale": "коментар ПРО власну заміну сметани дитячими сирками в кремі (cue: «із дитячих творожків»)",
+              "text": "https://youtu.be/kol67WIqHHk?si=MjrjbZJboPlgRJZw\n\nДівчата, прикріплюю посилання 🫶🏻\nТільки в рецепті в кремі сметана, а я зробила із дитячих творожків (те що було вдома)"
+            },
+            {
+              "label": "не_наш_рынок",
+              "rationale": "коментар ПРО тренерський канал автора, поза нашою категорією (cue: «sport_food_life»)",
+              "text": "Доброго дня, Пишіть сюди 👉🏻 https://t.me/sport_food_life"
+            },
+            {
+              "label": null,
+              "rationale": "коментар ні про кого — самé посилання на сторонній канал (cue: «t.me/istorium_ua»)",
+              "text": "https://t.me/istorium_ua/6342"
+            }
+          ],
+          "examples_chosen": [
+            {
+              "label": "молочный_бренд",
+              "msg_id": 20766,
+              "similarity": 0.007194,
+              "thread": "@VARUS_channel:10367"
+            },
+            {
+              "label": "сеть_ритейлер",
+              "msg_id": 391539,
+              "similarity": 0.024691,
+              "thread": "@kopiyochka1:21720"
+            },
+            {
+              "label": "категория_личное",
+              "msg_id": 48,
+              "similarity": 0.030303,
+              "thread": "@tarilka_malyuka:715"
+            },
+            {
+              "label": "не_наш_рынок",
+              "msg_id": 48187,
+              "similarity": 0.759259,
+              "thread": "@mandziak:3700"
+            },
+            {
+              "label": "null",
+              "msg_id": 47830,
+              "similarity": 0.192982,
+              "thread": "@mandziak:3667"
+            }
+          ],
+          "id": "@mandziak:3684#48018@marked",
+          "membership": {
+            "dev_200": false,
+            "gold_14": false,
+            "holdout_100": false,
+            "probe_64": false,
+            "reference_thread": true
+          },
+          "msg_id": 48018,
+          "post_id": "non_dairy_brand",
+          "rendered_chars": 5386,
+          "rendering_sha256": "a97efcb81e5340883cfdce34a5b1cc7b26bbeae550ba0e67721a0557241636eb",
+          "task": "pass1_comment_gm4_v3",
+          "text": "Пишіть сюди 👉🏻 https://t.me/sport_food_life",
+          "thread": "@mandziak:3684",
+          "topic": "(synthetic training row — this thread has no post)",
+          "topic_source": "reader verdict",
+          "unit": "@mandziak:3684#48018",
+          "variant": "marked"
+        },
+        {
+          "channel": "@mandziak",
+          "entities": [],
+          "error_class": null,
+          "examples": [
+            {
+              "label": "молочный_бренд",
+              "rationale": "коментар ПРО сам сир із допису — як його доводити після покупки (cue: «цей сир»)",
+              "text": "Уцей сир треба пару днів як купив потримати в пакеті щоб він став мокрим, тоді його лупашить можна на ура."
+            },
+            {
+              "label": "сеть_ритейлер",
+              "rationale": "коментар ПРО промокод мережі з допису, який не спрацював (cue: «не застосовується»)",
+              "text": "А можна перевірити, а то не застосовується."
+            },
+            {
+              "label": "категория_личное",
+              "rationale": "коментар ПРО кисломолочний сир як джерело жиру в раціоні (cue: «Творогом»)",
+              "text": "Всі тот жир не люблять але забувають що жир теж потрібен. Творогом як раз його можна спожити"
+            },
+            {
+              "label": "не_наш_рынок",
+              "rationale": "коментар ПРО калорійність олії, поза нашою категорією (cue: «Олія найбільш калорійний продукт»)",
+              "text": "Олія найбільш калорійний продукт."
+            },
+            {
+              "label": null,
+              "rationale": "коментар ні про кого — поправка співрозмовниці про білок (cue: «90 гр м'яса»)",
+              "text": "90 гр м'яса -це не 90 гр білка!, це 20 гр білка. Яйця  подивіться калорійність, і їжте. Вам треба 90 г білка!!! А не просто 90 г м'яса"
+            }
+          ],
+          "examples_chosen": [
+            {
+              "label": "молочный_бренд",
+              "msg_id": 20766,
+              "similarity": 0.006757,
+              "thread": "@VARUS_channel:10367"
+            },
+            {
+              "label": "сеть_ритейлер",
+              "msg_id": 21507,
+              "similarity": 0.045977,
+              "thread": "@VARUS_channel:10593"
+            },
+            {
+              "label": "категория_личное",
+              "msg_id": 47859,
+              "similarity": 0.08871,
+              "thread": "@mandziak:3667"
+            },
+            {
+              "label": "не_наш_рынок",
+              "msg_id": 48220,
+              "similarity": 0.08,
+              "thread": "@mandziak:3707"
+            },
+            {
+              "label": "null",
+              "msg_id": 48207,
+              "similarity": 0.10219,
+              "thread": "@mandziak:3702"
+            }
+          ],
+          "id": "@mandziak:3689#48057@as_is",
+          "membership": {
+            "dev_200": false,
+            "gold_14": false,
+            "holdout_100": false,
+            "probe_64": false,
+            "reference_thread": true
+          },
+          "msg_id": 48057,
+          "post_id": 3689,
+          "rendered_chars": 5471,
+          "rendering_sha256": "c2af7b5f1b87c4e3c5f3f1b8d3cb6ea24980c94af5d9bf4543eb29cef376677b",
+          "task": "pass1_comment_gm4_v3",
+          "text": "Короче... головне -це загальна спожита каллорійність",
+          "thread": "@mandziak:3689",
+          "topic": "Автор пояснює, що білок також містить калорії та впливає на енергетичний баланс організму, заперечуючи міф про те, що він не перетворюється на жир.",
+          "topic_source": "reader verdict",
+          "unit": "@mandziak:3689#48057",
+          "variant": "as_is"
+        },
+        {
+          "channel": "synthetic",
+          "entities": [],
+          "error_class": "mention_vs_about",
+          "examples": [
+            {
+              "label": "молочный_бренд",
+              "rationale": "коментар ПРО сам сир із допису — як його доводити після покупки (cue: «цей сир»)",
+              "text": "Уцей сир треба пару днів як купив потримати в пакеті щоб він став мокрим, тоді його лупашить можна на ура."
+            },
+            {
+              "label": "сеть_ритейлер",
+              "rationale": "коментар ПРО промокод мережі з допису, який не спрацював (cue: «не застосовується»)",
+              "text": "А можна перевірити, а то не застосовується."
+            },
+            {
+              "label": "категория_личное",
+              "rationale": "коментар ПРО кисломолочний сир як джерело жиру в раціоні (cue: «Творогом»)",
+              "text": "Всі тот жир не люблять але забувають що жир теж потрібен. Творогом як раз його можна спожити"
+            },
+            {
+              "label": "не_наш_рынок",
+              "rationale": "коментар ПРО калорійність олії, поза нашою категорією (cue: «Олія найбільш калорійний продукт»)",
+              "text": "Олія найбільш калорійний продукт."
+            },
+            {
+              "label": null,
+              "rationale": "коментар ні про кого — поправка співрозмовниці про білок (cue: «90 гр м'яса»)",
+              "text": "90 гр м'яса -це не 90 гр білка!, це 20 гр білка. Яйця  подивіться калорійність, і їжте. Вам треба 90 г білка!!! А не просто 90 г м'яса"
+            }
+          ],
+          "examples_chosen": [
+            {
+              "label": "молочный_бренд",
+              "msg_id": 20766,
+              "similarity": 0.006757,
+              "thread": "@VARUS_channel:10367"
+            },
+            {
+              "label": "сеть_ритейлер",
+              "msg_id": 21507,
+              "similarity": 0.045977,
+              "thread": "@VARUS_channel:10593"
+            },
+            {
+              "label": "категория_личное",
+              "msg_id": 47859,
+              "similarity": 0.08871,
+              "thread": "@mandziak:3667"
+            },
+            {
+              "label": "не_наш_рынок",
+              "msg_id": 48220,
+              "similarity": 0.08,
+              "thread": "@mandziak:3707"
+            },
+            {
+              "label": "null",
+              "msg_id": 48207,
+              "similarity": 0.10219,
+              "thread": "@mandziak:3702"
+            }
+          ],
+          "id": "@mandziak:3689#48057@marked",
+          "membership": {
+            "dev_200": false,
+            "gold_14": false,
+            "holdout_100": false,
+            "probe_64": false,
+            "reference_thread": true
+          },
+          "msg_id": 48057,
+          "post_id": "mention_vs_about",
+          "rendered_chars": 5386,
+          "rendering_sha256": "e491ce87afd48e814e4c3703b778f6952349092ceef92d61ae41c510d67f9aec",
+          "task": "pass1_comment_gm4_v3",
+          "text": "Короче... головне -це загальна спожита каллорійність",
+          "thread": "@mandziak:3689",
+          "topic": "(synthetic training row — this thread has no post)",
+          "topic_source": "reader verdict",
+          "unit": "@mandziak:3689#48057",
+          "variant": "marked"
+        },
+        {
+          "channel": "@mandziak",
+          "entities": [],
+          "error_class": null,
+          "examples": [
+            {
+              "label": "молочный_бренд",
+              "rationale": "коментар ПРО сам сир із допису — як його доводити після покупки (cue: «цей сир»)",
+              "text": "Уцей сир треба пару днів як купив потримати в пакеті щоб він став мокрим, тоді його лупашить можна на ура."
+            },
+            {
+              "label": "сеть_ритейлер",
+              "rationale": "коментар ПРО сервіс мережі — відповідь SMM, що вже пише у приват (cue: «написали вам у приватні повідомлення»)",
+              "text": "Вітаємо! Вже написали вам у приватні повідомлення"
+            },
+            {
+              "label": "категория_личное",
+              "rationale": "коментар ПРО власну запіканку із сирною заливкою (cue: «з сиром заливкою»)",
+              "text": "Надумала) Зроблю запіканку з цвітної капусти з печерицями та яєчно вершковою з сиром заливкою, зеленню притрушу."
+            },
+            {
+              "label": "не_наш_рынок",
+              "rationale": "коментар ПРО торт із допису, поза молочною категорією (cue: «Кто пробовал»)",
+              "text": "Кто пробовал?"
+            },
+            {
+              "label": null,
+              "rationale": "коментар ні про кого — подяка авторові каналу (cue: «Дякую Богу за Вітю»)",
+              "text": "Дякую Богу за Вітю🙏🥰"
+            }
+          ],
+          "examples_chosen": [
+            {
+              "label": "молочный_бренд",
+              "msg_id": 20766,
+              "similarity": 0.0,
+              "thread": "@VARUS_channel:10367"
+            },
+            {
+              "label": "сеть_ритейлер",
+              "msg_id": 20947,
+              "similarity": 0.035714,
+              "thread": "@VARUS_channel:10367"
+            },
+            {
+              "label": "категория_личное",
+              "msg_id": 21256,
+              "similarity": 0.026316,
+              "thread": "@klopotenkofood:6040"
+            },
+            {
+              "label": "не_наш_рынок",
+              "msg_id": 21123,
+              "similarity": 0.047619,
+              "thread": "@VARUS_channel:10451"
+            },
+            {
+              "label": "null",
+              "msg_id": 48530,
+              "similarity": 0.035714,
+              "thread": "@mandziak:3736"
+            }
+          ],
+          "id": "@mandziak:3718#48405@as_is",
+          "membership": {
+            "dev_200": true,
+            "gold_14": false,
+            "holdout_100": true,
+            "probe_64": false,
+            "reference_thread": false
+          },
+          "msg_id": 48405,
+          "post_id": 3718,
+          "rendered_chars": 5221,
+          "rendering_sha256": "723a5537230478aea8948833b0f783338b4d52ef0ce20e74f903add843527cb4",
+          "task": "pass1_comment_gm4_v3",
+          "text": "Воду зливали?",
+          "thread": "@mandziak:3718",
+          "topic": "Рецепт млинців, які допомагають схуднути.",
+          "topic_source": "reader verdict",
+          "unit": "@mandziak:3718#48405",
+          "variant": "as_is"
+        },
+        {
+          "channel": "synthetic",
+          "entities": [],
+          "error_class": "brand_vs_retailer",
+          "examples": [
+            {
+              "label": "молочный_бренд",
+              "rationale": "коментар ПРО сам сир із допису — як його доводити після покупки (cue: «цей сир»)",
+              "text": "Уцей сир треба пару днів як купив потримати в пакеті щоб він став мокрим, тоді його лупашить можна на ура."
+            },
+            {
+              "label": "сеть_ритейлер",
+              "rationale": "коментар ПРО сервіс мережі — відповідь SMM, що вже пише у приват (cue: «написали вам у приватні повідомлення»)",
+              "text": "Вітаємо! Вже написали вам у приватні повідомлення"
+            },
+            {
+              "label": "категория_личное",
+              "rationale": "коментар ПРО власну запіканку із сирною заливкою (cue: «з сиром заливкою»)",
+              "text": "Надумала) Зроблю запіканку з цвітної капусти з печерицями та яєчно вершковою з сиром заливкою, зеленню притрушу."
+            },
+            {
+              "label": "не_наш_рынок",
+              "rationale": "коментар ПРО торт із допису, поза молочною категорією (cue: «Кто пробовал»)",
+              "text": "Кто пробовал?"
+            },
+            {
+              "label": null,
+              "rationale": "коментар ні про кого — подяка авторові каналу (cue: «Дякую Богу за Вітю»)",
+              "text": "Дякую Богу за Вітю🙏🥰"
+            }
+          ],
+          "examples_chosen": [
+            {
+              "label": "молочный_бренд",
+              "msg_id": 20766,
+              "similarity": 0.0,
+              "thread": "@VARUS_channel:10367"
+            },
+            {
+              "label": "сеть_ритейлер",
+              "msg_id": 20947,
+              "similarity": 0.035714,
+              "thread": "@VARUS_channel:10367"
+            },
+            {
+              "label": "категория_личное",
+              "msg_id": 21256,
+              "similarity": 0.026316,
+              "thread": "@klopotenkofood:6040"
+            },
+            {
+              "label": "не_наш_рынок",
+              "msg_id": 21123,
+              "similarity": 0.047619,
+              "thread": "@VARUS_channel:10451"
+            },
+            {
+              "label": "null",
+              "msg_id": 48530,
+              "similarity": 0.035714,
+              "thread": "@mandziak:3736"
+            }
+          ],
+          "id": "@mandziak:3718#48405@marked",
+          "membership": {
+            "dev_200": true,
+            "gold_14": false,
+            "holdout_100": true,
+            "probe_64": false,
+            "reference_thread": false
+          },
+          "msg_id": 48405,
+          "post_id": "brand_vs_retailer",
+          "rendered_chars": 5243,
+          "rendering_sha256": "137bc6aca923a76234a9ee4a4c60122a12130225eda2d0d8fc65a59c5c84aadc",
+          "task": "pass1_comment_gm4_v3",
+          "text": "Воду зливали?",
+          "thread": "@mandziak:3718",
+          "topic": "(synthetic training row — this thread has no post)",
+          "topic_source": "reader verdict",
+          "unit": "@mandziak:3718#48405",
+          "variant": "marked"
+        },
+        {
+          "channel": "@mandziak",
+          "entities": [
+            {
+              "msg_id": 48445,
+              "name": "sladosvit",
+              "quote": "згущонку нульовку (sladosvit)",
+              "reading": "виробник згущеного молока",
+              "subject_type": "молочный_бренд"
+            }
+          ],
+          "error_class": null,
+          "examples": [
+            {
+              "label": "молочный_бренд",
+              "rationale": "коментар ПРО сам сир із допису — як його доводити після покупки (cue: «цей сир»)",
+              "text": "Уцей сир треба пару днів як купив потримати в пакеті щоб він став мокрим, тоді його лупашить можна на ура."
+            },
+            {
+              "label": "сеть_ритейлер",
+              "rationale": "коментар ПРО віддаленість магазину мережі (cue: «їхати дві години»)",
+              "text": "Ого, їхати дві години , все Одеса сідаємо на дієту 😉"
+            },
+            {
+              "label": "категория_личное",
+              "rationale": "коментар ПРО власний смак — торт із вареним згущеним молоком (cue: «крем з молоком згущеним»)",
+              "text": "Я пробувала. Ніжний сочний бісквіт медовий і крем з молоком згущеним вареним. Для тих хто любить медовик і молоко згущене варене"
+            },
+            {
+              "label": "не_наш_рынок",
+              "rationale": "коментар ПРО попкорн і олію, поза нашою категорією (cue: «До попкорну додають ще масло»)",
+              "text": "До попкорну додають ще масло.. до солодкого мабуть ні, але до солоного додають. Маю на увазі той, що для мікрохвильовки.."
+            },
+            {
+              "label": null,
+              "rationale": "коментар ні про кого — жарт про секс і тренування (cue: «Перед тренуванням»)",
+              "text": "Перед тренуванням кльово потрахаться - досить бодрить на вправах;\nПісля тренування - теж непогано але ефект сексу не той.\nБа..навіть на тренуванні палочку можна присунуть - але то треба умови..щоб дружина теж робила вправи поруч"
+            }
+          ],
+          "examples_chosen": [
+            {
+              "label": "молочный_бренд",
+              "msg_id": 20766,
+              "similarity": 0.032609,
+              "thread": "@VARUS_channel:10367"
+            },
+            {
+              "label": "сеть_ритейлер",
+              "msg_id": 21383,
+              "similarity": 0.06015,
+              "thread": "@VARUS_channel:10525"
+            },
+            {
+              "label": "категория_личное",
+              "msg_id": 21125,
+              "similarity": 0.073446,
+              "thread": "@VARUS_channel:10451"
+            },
+            {
+              "label": "не_наш_рынок",
+              "msg_id": 48302,
+              "similarity": 0.079545,
+              "thread": "@mandziak:3701"
+            },
+            {
+              "label": "null",
+              "msg_id": 48097,
+              "similarity": 0.071429,
+              "thread": "@mandziak:3694"
+            }
+          ],
+          "id": "@mandziak:3721#48445@as_is",
+          "membership": {
+            "dev_200": true,
+            "gold_14": false,
+            "holdout_100": true,
+            "probe_64": false,
+            "reference_thread": false
+          },
+          "msg_id": 48445,
+          "post_id": 3721,
+          "rendered_chars": 5709,
+          "rendering_sha256": "3e5150faed8b13ecf5ab222ab1b51f773ed9e5d18ae69b9377eec121c3b82e0e",
+          "task": "pass1_comment_gm4_v3",
+          "text": "Спробував на дієті згущонку нульовку (sladosvit) : така херня шо ппц , вона навіть не солодка ...",
+          "thread": "@mandziak:3721",
+          "topic": "Автор розвінчує міфи про шкідливість знежирених молочних продуктів та застерігає від орторексії.",
+          "topic_source": "reader verdict",
+          "unit": "@mandziak:3721#48445",
+          "variant": "as_is"
+        },
+        {
+          "channel": "synthetic",
+          "entities": [
+            {
+              "msg_id": 48445,
+              "name": "sladosvit",
+              "quote": "згущонку нульовку (sladosvit)",
+              "reading": "виробник згущеного молока",
+              "subject_type": "молочный_бренд"
+            }
+          ],
+          "error_class": "retailer_non_dairy",
+          "examples": [
+            {
+              "label": "молочный_бренд",
+              "rationale": "коментар ПРО сам сир із допису — як його доводити після покупки (cue: «цей сир»)",
+              "text": "Уцей сир треба пару днів як купив потримати в пакеті щоб він став мокрим, тоді його лупашить можна на ура."
+            },
+            {
+              "label": "сеть_ритейлер",
+              "rationale": "коментар ПРО віддаленість магазину мережі (cue: «їхати дві години»)",
+              "text": "Ого, їхати дві години , все Одеса сідаємо на дієту 😉"
+            },
+            {
+              "label": "категория_личное",
+              "rationale": "коментар ПРО власний смак — торт із вареним згущеним молоком (cue: «крем з молоком згущеним»)",
+              "text": "Я пробувала. Ніжний сочний бісквіт медовий і крем з молоком згущеним вареним. Для тих хто любить медовик і молоко згущене варене"
+            },
+            {
+              "label": "не_наш_рынок",
+              "rationale": "коментар ПРО попкорн і олію, поза нашою категорією (cue: «До попкорну додають ще масло»)",
+              "text": "До попкорну додають ще масло.. до солодкого мабуть ні, але до солоного додають. Маю на увазі той, що для мікрохвильовки.."
+            },
+            {
+              "label": null,
+              "rationale": "коментар ні про кого — жарт про секс і тренування (cue: «Перед тренуванням»)",
+              "text": "Перед тренуванням кльово потрахаться - досить бодрить на вправах;\nПісля тренування - теж непогано але ефект сексу не той.\nБа..навіть на тренуванні палочку можна присунуть - але то треба умови..щоб дружина теж робила вправи поруч"
+            }
+          ],
+          "examples_chosen": [
+            {
+              "label": "молочный_бренд",
+              "msg_id": 20766,
+              "similarity": 0.032609,
+              "thread": "@VARUS_channel:10367"
+            },
+            {
+              "label": "сеть_ритейлер",
+              "msg_id": 21383,
+              "similarity": 0.06015,
+              "thread": "@VARUS_channel:10525"
+            },
+            {
+              "label": "категория_личное",
+              "msg_id": 21125,
+              "similarity": 0.073446,
+              "thread": "@VARUS_channel:10451"
+            },
+            {
+              "label": "не_наш_рынок",
+              "msg_id": 48302,
+              "similarity": 0.079545,
+              "thread": "@mandziak:3701"
+            },
+            {
+              "label": "null",
+              "msg_id": 48097,
+              "similarity": 0.071429,
+              "thread": "@mandziak:3694"
+            }
+          ],
+          "id": "@mandziak:3721#48445@marked",
+          "membership": {
+            "dev_200": true,
+            "gold_14": false,
+            "holdout_100": true,
+            "probe_64": false,
+            "reference_thread": false
+          },
+          "msg_id": 48445,
+          "post_id": "retailer_non_dairy",
+          "rendered_chars": 5677,
+          "rendering_sha256": "8f49b0973e642c573abbc90fa30bc545a4470e155deaf838af41bc14f52c59aa",
+          "task": "pass1_comment_gm4_v3",
+          "text": "Спробував на дієті згущонку нульовку (sladosvit) : така херня шо ппц , вона навіть не солодка ...",
+          "thread": "@mandziak:3721",
+          "topic": "(synthetic training row — this thread has no post)",
+          "topic_source": "reader verdict",
+          "unit": "@mandziak:3721#48445",
+          "variant": "marked"
+        },
+        {
+          "channel": "@matusi_ukr",
+          "entities": [
+            {
+              "msg_id": 578032,
+              "name": "Mintex",
+              "quote": "цукерки Mintex рошенівськи",
+              "reading": "бренд цукерок",
+              "subject_type": "не_наш_рынок"
+            }
+          ],
+          "error_class": null,
+          "examples": [
+            {
+              "label": "молочный_бренд",
+              "rationale": "коментар ПРО сам сир із допису — як його доводити після покупки (cue: «цей сир»)",
+              "text": "Уцей сир треба пару днів як купив потримати в пакеті щоб він став мокрим, тоді його лупашить можна на ура."
+            },
+            {
+              "label": "сеть_ритейлер",
+              "rationale": "коментар ПРО готову їжу мережі — намір знову завітати до магазину за нею (cue: «завітаю до магазину»)",
+              "text": "Хочу просто свіжозвареною кукурудзи.\nМинулого разу, коли придбала таку у Варус, просто не встигла, дитина швидко посмакувала без мене. \nГадаю, при нагоді обов'язково завітаю до магазину за ще однією порцією."
+            },
+            {
+              "label": "категория_личное",
+              "rationale": "коментар ПРО власний досвід із домашнім сиром у запіканці (cue: «взяла домашній сир на ярмарку»)",
+              "text": "за вашим рецептом улюблена просто!!\nале одного разу взяла домашній сир на ярмарку, вона через надмірний жир не піднялася як слід і стала тверда🫠\n(робила вже разів 50 мабуть, завжди гарний результат, крім цього)"
+            },
+            {
+              "label": "не_наш_рынок",
+              "rationale": "коментар ПРО заморожування кабачків, поза нашою категорією (cue: «натерті кабачки»)",
+              "text": "Я минулим літом заморожувала різними способами, початок прикорма якраз припадав на листопад\n\nТо найбільш мені сподобались натерті кабачки при приготуванні страв (після розморожування майже не відчувається різниці), я робила оладки, запіканки, супи, котлети\n\nЯкщо кільцями чи шматочками заморожувати, то потрібно спочатку бланшувати, але навіть після цього смак і текстура все одно не така як у свіжих\n\nВ цьому році буду заморожувати натерті і спробую ще зробити на пробу пусті половинки для фаршированих човників"
+            },
+            {
+              "label": null,
+              "rationale": "коментар ні про кого — власний досвід операції на хребті (cue: «Робила операцію, були ускладнення»)",
+              "text": "Робила операцію, були ускладнення, але все пройшло і врешті решт задоволена що зробила. Все залежить від розміру грижі, від 9 мм краще вже оперувати, бо може паралізувати. Так мені декілька лікарів сказали. Операцію раджу робити не класичну, як раніше, а під мікроскопом. Трохи важче загоєння, прибирається лише грижа, без шматочка хребта. Але в майбутньому, для хребта це набагато краще. Варто ретельно обирати лікаря і читати відгуки. В мене оперуючий був чудовий, але лікуючий довів до парезу стопи. Тож треба читати відгуки не лише про хірурга, а й про всю команду. \nОперувалася в Києві."
+            }
+          ],
+          "examples_chosen": [
+            {
+              "label": "молочный_бренд",
+              "msg_id": 20766,
+              "similarity": 0.0301,
+              "thread": "@VARUS_channel:10367"
+            },
+            {
+              "label": "сеть_ритейлер",
+              "msg_id": 21334,
+              "similarity": 0.11236,
+              "thread": "@VARUS_channel:10496"
+            },
+            {
+              "label": "категория_личное",
+              "msg_id": 21210,
+              "similarity": 0.09589,
+              "thread": "@klopotenkofood:6035"
+            },
+            {
+              "label": "не_наш_рынок",
+              "msg_id": 185,
+              "similarity": 0.101476,
+              "thread": "@tarilka_malyuka:825"
+            },
+            {
+              "label": "null",
+              "msg_id": 579480,
+              "similarity": 0.103806,
+              "thread": "@matusi_ukr:22217"
+            }
+          ],
+          "id": "@matusi_ukr:22158#578075@as_is",
+          "membership": {
+            "dev_200": true,
+            "gold_14": false,
+            "holdout_100": true,
+            "probe_64": false,
+            "reference_thread": false
+          },
+          "msg_id": 578075,
+          "post_id": 22158,
+          "rendered_chars": 6902,
+          "rendering_sha256": "078f21b276e3a0eba6ac955b89c1688effdc80a9bce435b274b8cde2c3e8330e",
+          "task": "pass1_comment_gm4_v3",
+          "text": "Фортеза спрей мені завжди допомагав і дітям і дозволено при гв, я питала \n\nА ще, все життя допомагає лимон 🍋, просто при сильному болі кожен день по 1-2 рази на день по шматочку. \nНе на голодний шлунок звичайно \n\nОт одразу за 2-3 дні проходило",
+          "thread": "@matusi_ukr:22158",
+          "topic": "Нічний чат для спілкування матерів, де вони можуть ставити питання, ділитися досвідом або просто виговоритися.",
+          "topic_source": "reader verdict",
+          "unit": "@matusi_ukr:22158#578075",
+          "variant": "as_is"
+        },
+        {
+          "channel": "synthetic",
+          "entities": [
+            {
+              "msg_id": 578032,
+              "name": "Mintex",
+              "quote": "цукерки Mintex рошенівськи",
+              "reading": "бренд цукерок",
+              "subject_type": "не_наш_рынок"
+            }
+          ],
+          "error_class": "non_dairy_brand",
+          "examples": [
+            {
+              "label": "молочный_бренд",
+              "rationale": "коментар ПРО сам сир із допису — як його доводити після покупки (cue: «цей сир»)",
+              "text": "Уцей сир треба пару днів як купив потримати в пакеті щоб він став мокрим, тоді його лупашить можна на ура."
+            },
+            {
+              "label": "сеть_ритейлер",
+              "rationale": "коментар ПРО готову їжу мережі — намір знову завітати до магазину за нею (cue: «завітаю до магазину»)",
+              "text": "Хочу просто свіжозвареною кукурудзи.\nМинулого разу, коли придбала таку у Варус, просто не встигла, дитина швидко посмакувала без мене. \nГадаю, при нагоді обов'язково завітаю до магазину за ще однією порцією."
+            },
+            {
+              "label": "категория_личное",
+              "rationale": "коментар ПРО власний досвід із домашнім сиром у запіканці (cue: «взяла домашній сир на ярмарку»)",
+              "text": "за вашим рецептом улюблена просто!!\nале одного разу взяла домашній сир на ярмарку, вона через надмірний жир не піднялася як слід і стала тверда🫠\n(робила вже разів 50 мабуть, завжди гарний результат, крім цього)"
+            },
+            {
+              "label": "не_наш_рынок",
+              "rationale": "коментар ПРО заморожування кабачків, поза нашою категорією (cue: «натерті кабачки»)",
+              "text": "Я минулим літом заморожувала різними способами, початок прикорма якраз припадав на листопад\n\nТо найбільш мені сподобались натерті кабачки при приготуванні страв (після розморожування майже не відчувається різниці), я робила оладки, запіканки, супи, котлети\n\nЯкщо кільцями чи шматочками заморожувати, то потрібно спочатку бланшувати, але навіть після цього смак і текстура все одно не така як у свіжих\n\nВ цьому році буду заморожувати натерті і спробую ще зробити на пробу пусті половинки для фаршированих човників"
+            },
+            {
+              "label": null,
+              "rationale": "коментар ні про кого — власний досвід операції на хребті (cue: «Робила операцію, були ускладнення»)",
+              "text": "Робила операцію, були ускладнення, але все пройшло і врешті решт задоволена що зробила. Все залежить від розміру грижі, від 9 мм краще вже оперувати, бо може паралізувати. Так мені декілька лікарів сказали. Операцію раджу робити не класичну, як раніше, а під мікроскопом. Трохи важче загоєння, прибирається лише грижа, без шматочка хребта. Але в майбутньому, для хребта це набагато краще. Варто ретельно обирати лікаря і читати відгуки. В мене оперуючий був чудовий, але лікуючий довів до парезу стопи. Тож треба читати відгуки не лише про хірурга, а й про всю команду. \nОперувалася в Києві."
+            }
+          ],
+          "examples_chosen": [
+            {
+              "label": "молочный_бренд",
+              "msg_id": 20766,
+              "similarity": 0.0301,
+              "thread": "@VARUS_channel:10367"
+            },
+            {
+              "label": "сеть_ритейлер",
+              "msg_id": 21334,
+              "similarity": 0.11236,
+              "thread": "@VARUS_channel:10496"
+            },
+            {
+              "label": "категория_личное",
+              "msg_id": 21210,
+              "similarity": 0.09589,
+              "thread": "@klopotenkofood:6035"
+            },
+            {
+              "label": "не_наш_рынок",
+              "msg_id": 185,
+              "similarity": 0.101476,
+              "thread": "@tarilka_malyuka:825"
+            },
+            {
+              "label": "null",
+              "msg_id": 579480,
+              "similarity": 0.103806,
+              "thread": "@matusi_ukr:22217"
+            }
+          ],
+          "id": "@matusi_ukr:22158#578075@marked",
+          "membership": {
+            "dev_200": true,
+            "gold_14": false,
+            "holdout_100": true,
+            "probe_64": false,
+            "reference_thread": false
+          },
+          "msg_id": 578075,
+          "post_id": "non_dairy_brand",
+          "rendered_chars": 6850,
+          "rendering_sha256": "501341efeb37a71d7e7594436aa2b9f6227e543ea243b1b316758406b033594e",
+          "task": "pass1_comment_gm4_v3",
+          "text": "Фортеза спрей мені завжди допомагав і дітям і дозволено при гв, я питала \n\nА ще, все життя допомагає лимон 🍋, просто при сильному болі кожен день по 1-2 рази на день по шматочку. \nНе на голодний шлунок звичайно \n\nОт одразу за 2-3 дні проходило",
+          "thread": "@matusi_ukr:22158",
+          "topic": "(synthetic training row — this thread has no post)",
+          "topic_source": "reader verdict",
+          "unit": "@matusi_ukr:22158#578075",
+          "variant": "marked"
+        },
+        {
+          "channel": "@matusi_ukr",
+          "entities": [
+            {
+              "msg_id": 578835,
+              "name": "Бабалян",
+              "quote": "Бабалян в обласной",
+              "reading": "прізвище лікаря",
+              "subject_type": "не_наш_рынок"
+            },
+            {
+              "msg_id": 578838,
+              "name": "Козырев Станислав Александрович",
+              "quote": "Козырев Станислав Александрович в областной травмотологии",
+              "reading": "прізвище лікаря",
+              "subject_type": "не_наш_рынок"
+            },
+            {
+              "msg_id": 578845,
+              "name": "Сітенко",
+              "quote": "робила в Сітенко",
+              "reading": "назва клініки або прізвище лікаря",
+              "subject_type": "не_наш_рынок"
+            },
+            {
+              "msg_id": 578895,
+              "name": "Євмінова",
+              "quote": "Євмінова, ж кінезіотерапевти",
+              "reading": "прізвище фахівця",
+              "subject_type": "не_наш_рынок"
+            }
+          ],
+          "error_class": null,
+          "examples": [
+            {
+              "label": "молочный_бренд",
+              "rationale": "коментар ПРО сам сир із допису — як його доводити після покупки (cue: «цей сир»)",
+              "text": "Уцей сир треба пару днів як купив потримати в пакеті щоб він став мокрим, тоді його лупашить можна на ура."
+            },
+            {
+              "label": "сеть_ритейлер",
+              "rationale": "коментар ПРО наявність товару в магазинах мережі (cue: «Чи є в магазинах»)",
+              "text": "Брелок-трекер. Чи є в магазинах м. Біла Церква, Київська обл.?"
+            },
+            {
+              "label": "категория_личное",
+              "rationale": "коментар ПРО власну звичку пекти сирну запіканку з допису (cue: «роблю без борошна»)",
+              "text": "не осідає в духовці, навпаки піднімається. осідає трохи вже коли охолоджується. роблю без борошна, а з кукурудзяним крохмалем."
+            },
+            {
+              "label": "не_наш_рынок",
+              "rationale": "коментар ПРО продаж книг, поза нашою категорією (cue: «Книги у гарному стані»)",
+              "text": "Книги у гарному стані, м'яка обкладинка, 100 грн комплект. Відправлення УП, НП."
+            },
+            {
+              "label": null,
+              "rationale": "лише ЗГАДУЄ коров'яче молоко в раціоні дитини; насправді про завершення ГВ (cue: «молоко коровье»)",
+              "text": "Закончили ГВ в 2 года, 1 мес. Малявка отошла сама. Общий стол и молоко коровье немного до 3х лет было"
+            }
+          ],
+          "examples_chosen": [
+            {
+              "label": "молочный_бренд",
+              "msg_id": 20766,
+              "similarity": 0.033333,
+              "thread": "@VARUS_channel:10367"
+            },
+            {
+              "label": "сеть_ритейлер",
+              "msg_id": 391542,
+              "similarity": 0.026549,
+              "thread": "@kopiyochka1:21720"
+            },
+            {
+              "label": "категория_личное",
+              "msg_id": 21177,
+              "similarity": 0.030675,
+              "thread": "@klopotenkofood:6032"
+            },
+            {
+              "label": "не_наш_рынок",
+              "msg_id": 576335,
+              "similarity": 0.047244,
+              "thread": "@matusi_ukr:22058"
+            },
+            {
+              "label": "null",
+              "msg_id": 576884,
+              "similarity": 0.047297,
+              "thread": "@matusi_ukr:22092"
+            }
+          ],
+          "id": "@matusi_ukr:22217#578838@as_is",
+          "membership": {
+            "dev_200": true,
+            "gold_14": false,
+            "holdout_100": true,
+            "probe_64": false,
+            "reference_thread": false
+          },
+          "msg_id": 578838,
+          "post_id": 22217,
+          "rendered_chars": 5718,
+          "rendering_sha256": "054ddbc1ea3c169b07b9eb9e4a7c2a20ac05f687e3e03460c1f7dc19c216a8a0",
+          "task": "pass1_comment_gm4_v3",
+          "text": "Козырев Станислав Александрович в областной травмотологии.",
+          "thread": "@matusi_ukr:22217",
+          "topic": "Користувач шукає рекомендації спеціаліста або хірурга для лікування гриж у попереково-крижовому відділі хребта в Харкові для своєї матері.",
+          "topic_source": "reader verdict",
+          "unit": "@matusi_ukr:22217#578838",
+          "variant": "as_is"
+        },
+        {
+          "channel": "synthetic",
+          "entities": [
+            {
+              "msg_id": 578835,
+              "name": "Бабалян",
+              "quote": "Бабалян в обласной",
+              "reading": "прізвище лікаря",
+              "subject_type": "не_наш_рынок"
+            },
+            {
+              "msg_id": 578838,
+              "name": "Козырев Станислав Александрович",
+              "quote": "Козырев Станислав Александрович в областной травмотологии",
+              "reading": "прізвище лікаря",
+              "subject_type": "не_наш_рынок"
+            },
+            {
+              "msg_id": 578845,
+              "name": "Сітенко",
+              "quote": "робила в Сітенко",
+              "reading": "назва клініки або прізвище лікаря",
+              "subject_type": "не_наш_рынок"
+            },
+            {
+              "msg_id": 578895,
+              "name": "Євмінова",
+              "quote": "Євмінова, ж кінезіотерапевти",
+              "reading": "прізвище фахівця",
+              "subject_type": "не_наш_рынок"
+            }
+          ],
+          "error_class": "mention_vs_about",
+          "examples": [
+            {
+              "label": "молочный_бренд",
+              "rationale": "коментар ПРО сам сир із допису — як його доводити після покупки (cue: «цей сир»)",
+              "text": "Уцей сир треба пару днів як купив потримати в пакеті щоб він став мокрим, тоді його лупашить можна на ура."
+            },
+            {
+              "label": "сеть_ритейлер",
+              "rationale": "коментар ПРО наявність товару в магазинах мережі (cue: «Чи є в магазинах»)",
+              "text": "Брелок-трекер. Чи є в магазинах м. Біла Церква, Київська обл.?"
+            },
+            {
+              "label": "категория_личное",
+              "rationale": "коментар ПРО власну звичку пекти сирну запіканку з допису (cue: «роблю без борошна»)",
+              "text": "не осідає в духовці, навпаки піднімається. осідає трохи вже коли охолоджується. роблю без борошна, а з кукурудзяним крохмалем."
+            },
+            {
+              "label": "не_наш_рынок",
+              "rationale": "коментар ПРО продаж книг, поза нашою категорією (cue: «Книги у гарному стані»)",
+              "text": "Книги у гарному стані, м'яка обкладинка, 100 грн комплект. Відправлення УП, НП."
+            },
+            {
+              "label": null,
+              "rationale": "лише ЗГАДУЄ коров'яче молоко в раціоні дитини; насправді про завершення ГВ (cue: «молоко коровье»)",
+              "text": "Закончили ГВ в 2 года, 1 мес. Малявка отошла сама. Общий стол и молоко коровье немного до 3х лет было"
+            }
+          ],
+          "examples_chosen": [
+            {
+              "label": "молочный_бренд",
+              "msg_id": 20766,
+              "similarity": 0.033333,
+              "thread": "@VARUS_channel:10367"
+            },
+            {
+              "label": "сеть_ритейлер",
+              "msg_id": 391542,
+              "similarity": 0.026549,
+              "thread": "@kopiyochka1:21720"
+            },
+            {
+              "label": "категория_личное",
+              "msg_id": 21177,
+              "similarity": 0.030675,
+              "thread": "@klopotenkofood:6032"
+            },
+            {
+              "label": "не_наш_рынок",
+              "msg_id": 576335,
+              "similarity": 0.047244,
+              "thread": "@matusi_ukr:22058"
+            },
+            {
+              "label": "null",
+              "msg_id": 576884,
+              "similarity": 0.047297,
+              "thread": "@matusi_ukr:22092"
+            }
+          ],
+          "id": "@matusi_ukr:22217#578838@marked",
+          "membership": {
+            "dev_200": true,
+            "gold_14": false,
+            "holdout_100": true,
+            "probe_64": false,
+            "reference_thread": false
+          },
+          "msg_id": 578838,
+          "post_id": "mention_vs_about",
+          "rendered_chars": 5639,
+          "rendering_sha256": "f5d35b013331d5127aa9eb03a93367aba6a022b4429c7c89269c1297583fabbd",
+          "task": "pass1_comment_gm4_v3",
+          "text": "Козырев Станислав Александрович в областной травмотологии.",
+          "thread": "@matusi_ukr:22217",
+          "topic": "(synthetic training row — this thread has no post)",
+          "topic_source": "reader verdict",
+          "unit": "@matusi_ukr:22217#578838",
+          "variant": "marked"
+        },
+        {
+          "channel": "@matusi_ukr",
+          "entities": [
+            {
+              "msg_id": 579652,
+              "name": "Некст",
+              "quote": "Нові 15.5 см Некст 600 грн",
+              "reading": "бренд дитячого одягу/взуття",
+              "subject_type": "не_наш_рынок"
+            },
+            {
+              "msg_id": 579685,
+              "name": "old navy",
+              "quote": "Демі куртка old navy на три роки",
+              "reading": "бренд одягу",
+              "subject_type": "не_наш_рынок"
+            }
+          ],
+          "error_class": null,
+          "examples": [
+            {
+              "label": "молочный_бренд",
+              "rationale": "коментар ПРО сам сир із допису — як його доводити після покупки (cue: «цей сир»)",
+              "text": "Уцей сир треба пару днів як купив потримати в пакеті щоб він став мокрим, тоді його лупашить можна на ура."
+            },
+            {
+              "label": "сеть_ритейлер",
+              "rationale": "коментар ПРО те, у якому магазині мережі купити торт (cue: «там можна купити»)",
+              "text": "Ось там можна купити цей торт"
+            },
+            {
+              "label": "категория_личное",
+              "rationale": "коментар ПРО власну звичку робити сирну запіканку замість сирників (cue: «Сирна запіканка з ягодами»)",
+              "text": "Сирна запіканка з ягодами, бананом тощо, часто замінює сирники. Роблю без борошна та крохмалю, так моїм подобається більше. Спочатку осідала трохи, як виймала з духовки, потім стала робити ще меншу t  і трохи залишати в духовці."
+            },
+            {
+              "label": "не_наш_рынок",
+              "rationale": "лише ЗГАДУЄ молоко в назві приладу й пакетів; насправді про продаж молоковідсмоктувача (cue: «Продам молоковідсмоктувач»)",
+              "text": "Продам молоковідсмоктувач, в користуванні був 5 разів. В подарунок пакети для зберігання молока. \n1300 грн"
+            },
+            {
+              "label": null,
+              "rationale": "коментар ні про кого — прохання про особисте листування (cue: «в особисті вам написати»)",
+              "text": "Доброго дня. Можна якось в особисті вам написати?"
+            }
+          ],
+          "examples_chosen": [
+            {
+              "label": "молочный_бренд",
+              "msg_id": 20766,
+              "similarity": 0.074468,
+              "thread": "@VARUS_channel:10367"
+            },
+            {
+              "label": "сеть_ритейлер",
+              "msg_id": 21381,
+              "similarity": 0.07438,
+              "thread": "@VARUS_channel:10525"
+            },
+            {
+              "label": "категория_личное",
+              "msg_id": 21188,
+              "similarity": 0.071685,
+              "thread": "@klopotenkofood:6032"
+            },
+            {
+              "label": "не_наш_рынок",
+              "msg_id": 576336,
+              "similarity": 0.171598,
+              "thread": "@matusi_ukr:22058"
+            },
+            {
+              "label": "null",
+              "msg_id": 48165,
+              "similarity": 0.086957,
+              "thread": "@mandziak:3700"
+            }
+          ],
+          "id": "@matusi_ukr:22295#579786@as_is",
+          "membership": {
+            "dev_200": true,
+            "gold_14": false,
+            "holdout_100": true,
+            "probe_64": false,
+            "reference_thread": false
+          },
+          "msg_id": 579786,
+          "post_id": 22295,
+          "rendered_chars": 5685,
+          "rendering_sha256": "b35cd2307f262c9324aaec0df2c877052607a3cca8d3de8f21225747ee7d0910",
+          "task": "pass1_comment_gm4_v3",
+          "text": "Продам колисальний центр 2в1  потім можна використовувати як стілець для годування в гарному стані 3000 грн",
+          "thread": "@matusi_ukr:22295",
+          "topic": "Пост містить правила для учасників чату щодо продажу та пошуку дитячих речей.",
+          "topic_source": "reader verdict",
+          "unit": "@matusi_ukr:22295#579786",
+          "variant": "as_is"
+        },
+        {
+          "channel": "synthetic",
+          "entities": [
+            {
+              "msg_id": 579652,
+              "name": "Некст",
+              "quote": "Нові 15.5 см Некст 600 грн",
+              "reading": "бренд дитячого одягу/взуття",
+              "subject_type": "не_наш_рынок"
+            },
+            {
+              "msg_id": 579685,
+              "name": "old navy",
+              "quote": "Демі куртка old navy на три роки",
+              "reading": "бренд одягу",
+              "subject_type": "не_наш_рынок"
+            }
+          ],
+          "error_class": "brand_vs_retailer",
+          "examples": [
+            {
+              "label": "молочный_бренд",
+              "rationale": "коментар ПРО сам сир із допису — як його доводити після покупки (cue: «цей сир»)",
+              "text": "Уцей сир треба пару днів як купив потримати в пакеті щоб він став мокрим, тоді його лупашить можна на ура."
+            },
+            {
+              "label": "сеть_ритейлер",
+              "rationale": "коментар ПРО те, у якому магазині мережі купити торт (cue: «там можна купити»)",
+              "text": "Ось там можна купити цей торт"
+            },
+            {
+              "label": "категория_личное",
+              "rationale": "коментар ПРО власну звичку робити сирну запіканку замість сирників (cue: «Сирна запіканка з ягодами»)",
+              "text": "Сирна запіканка з ягодами, бананом тощо, часто замінює сирники. Роблю без борошна та крохмалю, так моїм подобається більше. Спочатку осідала трохи, як виймала з духовки, потім стала робити ще меншу t  і трохи залишати в духовці."
+            },
+            {
+              "label": "не_наш_рынок",
+              "rationale": "лише ЗГАДУЄ молоко в назві приладу й пакетів; насправді про продаж молоковідсмоктувача (cue: «Продам молоковідсмоктувач»)",
+              "text": "Продам молоковідсмоктувач, в користуванні був 5 разів. В подарунок пакети для зберігання молока. \n1300 грн"
+            },
+            {
+              "label": null,
+              "rationale": "коментар ні про кого — прохання про особисте листування (cue: «в особисті вам написати»)",
+              "text": "Доброго дня. Можна якось в особисті вам написати?"
+            }
+          ],
+          "examples_chosen": [
+            {
+              "label": "молочный_бренд",
+              "msg_id": 20766,
+              "similarity": 0.074468,
+              "thread": "@VARUS_channel:10367"
+            },
+            {
+              "label": "сеть_ритейлер",
+              "msg_id": 21381,
+              "similarity": 0.07438,
+              "thread": "@VARUS_channel:10525"
+            },
+            {
+              "label": "категория_личное",
+              "msg_id": 21188,
+              "similarity": 0.071685,
+              "thread": "@klopotenkofood:6032"
+            },
+            {
+              "label": "не_наш_рынок",
+              "msg_id": 576336,
+              "similarity": 0.171598,
+              "thread": "@matusi_ukr:22058"
+            },
+            {
+              "label": "null",
+              "msg_id": 48165,
+              "similarity": 0.086957,
+              "thread": "@mandziak:3700"
+            }
+          ],
+          "id": "@matusi_ukr:22295#579786@marked",
+          "membership": {
+            "dev_200": true,
+            "gold_14": false,
+            "holdout_100": true,
+            "probe_64": false,
+            "reference_thread": false
+          },
+          "msg_id": 579786,
+          "post_id": "brand_vs_retailer",
+          "rendered_chars": 5668,
+          "rendering_sha256": "67afbb57a7240816b697b7060c352ddd5054b9de08ae6d9392db63362d1677ce",
+          "task": "pass1_comment_gm4_v3",
+          "text": "Продам колисальний центр 2в1  потім можна використовувати як стілець для годування в гарному стані 3000 грн",
+          "thread": "@matusi_ukr:22295",
+          "topic": "(synthetic training row — this thread has no post)",
+          "topic_source": "reader verdict",
+          "unit": "@matusi_ukr:22295#579786",
+          "variant": "marked"
+        },
+        {
+          "channel": "@matusi_ukr",
+          "entities": [
+            {
+              "msg_id": 580148,
+              "name": "Рубікус",
+              "quote": "можна звернутися в Рубікус. Це благодійна міжнародна організація",
+              "reading": "благодійна міжнародна організація",
+              "subject_type": "не_наш_рынок"
+            }
+          ],
+          "error_class": null,
+          "examples": [
+            {
+              "label": "молочный_бренд",
+              "rationale": "коментар ПРО сам сир із допису — як його доводити після покупки (cue: «цей сир»)",
+              "text": "Уцей сир треба пару днів як купив потримати в пакеті щоб він став мокрим, тоді його лупашить можна на ура."
+            },
+            {
+              "label": "сеть_ритейлер",
+              "rationale": "коментар ПРО сервіс мережі — відповідь SMM на скаргу (cue: «розібратися в усьому разом»)",
+              "text": "Вітаємо! Вже написали вам у приватні повідомлення, щоб розібратися в усьому разом"
+            },
+            {
+              "label": "категория_личное",
+              "rationale": "коментар ПРО власний досвід із морозивом як помічним при болю в горлі (cue: «Мені чудово допомагає»)",
+              "text": "Морозиво. Мені чудово допомагає прохолодне пиття обільне, цукерки Mintex рошенівськи. Але 2 тижні, то вже краще до лікаря звернутися, знайти, чому воно болить. За 2 тижні розвинутися могли і бактеріальні інфекції, коли просто чаю попити вже не працює"
+            },
+            {
+              "label": "не_наш_рынок",
+              "rationale": "коментар ПРО шкільний рюкзак і його якість, поза нашою категорією (cue: «рюкзак фірми Nike»)",
+              "text": "Купували не на тему рюкзак фірми Nike.Проходив син весь 4 клас і він наче новий ,хоча ж Ви знаєте як хлопці відносяться до речей.Так от і в 5 з ним точно походить,а може ще і в 6.Він був самий дешевий ,але якість все одно топова.Так виходить ,що один раз купив фірмову річ і не треба брати на Тему декілька дешевих прямо ."
+            },
+            {
+              "label": null,
+              "rationale": "коментар ні про кого — розповідь про власний шлях схуднення (cue: «відмовилась від алкоголю»)",
+              "text": "У мене теж сидячя робота і зайва вага.Почала скидати ,вже третій місяць.Повільно поступово .Ви інтуітивно подумайте ,що можно змінити,щоб змінити себе.Я вживала алкоголь і не рухалась і їла все підряд ,що хотіла.Перше ,що зробила ,то відмовилась від алкоголю,потіп стала ходити на роботу пішки.Без дефециту каллорій ні як тут,але я теж поступово тут підішла.Мені 51 і тут не про красоту ,про здоровья.Почала робити посильні фіз вправи.Стала мінятись і від цього такий кайф ."
+            }
+          ],
+          "examples_chosen": [
+            {
+              "label": "молочный_бренд",
+              "msg_id": 20766,
+              "similarity": 0.035088,
+              "thread": "@VARUS_channel:10367"
+            },
+            {
+              "label": "сеть_ритейлер",
+              "msg_id": 21571,
+              "similarity": 0.078431,
+              "thread": "@VARUS_channel:10603"
+            },
+            {
+              "label": "категория_личное",
+              "msg_id": 578032,
+              "similarity": 0.07513,
+              "thread": "@matusi_ukr:22158"
+            },
+            {
+              "label": "не_наш_рынок",
+              "msg_id": 578389,
+              "similarity": 0.096386,
+              "thread": "@matusi_ukr:22195"
+            },
+            {
+              "label": "null",
+              "msg_id": 48234,
+              "similarity": 0.094188,
+              "thread": "@mandziak:3708"
+            }
+          ],
+          "id": "@matusi_ukr:22308#580142@as_is",
+          "membership": {
+            "dev_200": false,
+            "gold_14": false,
+            "holdout_100": true,
+            "probe_64": false,
+            "reference_thread": false
+          },
+          "msg_id": 580142,
+          "post_id": 22308,
+          "rendered_chars": 6522,
+          "rendering_sha256": "9d71d4fa3934290f732670e437081f57422ecbf6dfa13bdf75d06daa908a34ac",
+          "task": "pass1_comment_gm4_v3",
+          "text": "Ви якось прочитали не так і почали чомусь агресивно сперечатися зі мною \n\nЦитую себе - «Десь певно в якихось віддалених землях Німеччини (чи якихось окремих країнах) може щось і лишилося, але це все вже в дуже обмеженому обсязі»",
+          "thread": "@matusi_ukr:22308",
+          "topic": "Користувачка шукає поради щодо вибору країни для переїзду з дітьми, цікавлячись умовами проживання, садочками та витратами.",
+          "topic_source": "reader verdict",
+          "unit": "@matusi_ukr:22308#580142",
+          "variant": "as_is"
+        },
+        {
+          "channel": "synthetic",
+          "entities": [
+            {
+              "msg_id": 580148,
+              "name": "Рубікус",
+              "quote": "можна звернутися в Рубікус. Це благодійна міжнародна організація",
+              "reading": "благодійна міжнародна організація",
+              "subject_type": "не_наш_рынок"
+            }
+          ],
+          "error_class": "retailer_non_dairy",
+          "examples": [
+            {
+              "label": "молочный_бренд",
+              "rationale": "коментар ПРО сам сир із допису — як його доводити після покупки (cue: «цей сир»)",
+              "text": "Уцей сир треба пару днів як купив потримати в пакеті щоб він став мокрим, тоді його лупашить можна на ура."
+            },
+            {
+              "label": "сеть_ритейлер",
+              "rationale": "коментар ПРО сервіс мережі — відповідь SMM на скаргу (cue: «розібратися в усьому разом»)",
+              "text": "Вітаємо! Вже написали вам у приватні повідомлення, щоб розібратися в усьому разом"
+            },
+            {
+              "label": "категория_личное",
+              "rationale": "коментар ПРО власний досвід із морозивом як помічним при болю в горлі (cue: «Мені чудово допомагає»)",
+              "text": "Морозиво. Мені чудово допомагає прохолодне пиття обільне, цукерки Mintex рошенівськи. Але 2 тижні, то вже краще до лікаря звернутися, знайти, чому воно болить. За 2 тижні розвинутися могли і бактеріальні інфекції, коли просто чаю попити вже не працює"
+            },
+            {
+              "label": "не_наш_рынок",
+              "rationale": "коментар ПРО шкільний рюкзак і його якість, поза нашою категорією (cue: «рюкзак фірми Nike»)",
+              "text": "Купували не на тему рюкзак фірми Nike.Проходив син весь 4 клас і він наче новий ,хоча ж Ви знаєте як хлопці відносяться до речей.Так от і в 5 з ним точно походить,а може ще і в 6.Він був самий дешевий ,але якість все одно топова.Так виходить ,що один раз купив фірмову річ і не треба брати на Тему декілька дешевих прямо ."
+            },
+            {
+              "label": null,
+              "rationale": "коментар ні про кого — розповідь про власний шлях схуднення (cue: «відмовилась від алкоголю»)",
+              "text": "У мене теж сидячя робота і зайва вага.Почала скидати ,вже третій місяць.Повільно поступово .Ви інтуітивно подумайте ,що можно змінити,щоб змінити себе.Я вживала алкоголь і не рухалась і їла все підряд ,що хотіла.Перше ,що зробила ,то відмовилась від алкоголю,потіп стала ходити на роботу пішки.Без дефециту каллорій ні як тут,але я теж поступово тут підішла.Мені 51 і тут не про красоту ,про здоровья.Почала робити посильні фіз вправи.Стала мінятись і від цього такий кайф ."
+            }
+          ],
+          "examples_chosen": [
+            {
+              "label": "молочный_бренд",
+              "msg_id": 20766,
+              "similarity": 0.035088,
+              "thread": "@VARUS_channel:10367"
+            },
+            {
+              "label": "сеть_ритейлер",
+              "msg_id": 21571,
+              "similarity": 0.078431,
+              "thread": "@VARUS_channel:10603"
+            },
+            {
+              "label": "категория_личное",
+              "msg_id": 578032,
+              "similarity": 0.07513,
+              "thread": "@matusi_ukr:22158"
+            },
+            {
+              "label": "не_наш_рынок",
+              "msg_id": 578389,
+              "similarity": 0.096386,
+              "thread": "@matusi_ukr:22195"
+            },
+            {
+              "label": "null",
+              "msg_id": 48234,
+              "similarity": 0.094188,
+              "thread": "@mandziak:3708"
+            }
+          ],
+          "id": "@matusi_ukr:22308#580142@marked",
+          "membership": {
+            "dev_200": false,
+            "gold_14": false,
+            "holdout_100": true,
+            "probe_64": false,
+            "reference_thread": false
+          },
+          "msg_id": 580142,
+          "post_id": "retailer_non_dairy",
+          "rendered_chars": 6460,
+          "rendering_sha256": "8acd7b8aae1d5f0ed378592706532042d6bee75047e5feb9e69f77e6cb6df662",
+          "task": "pass1_comment_gm4_v3",
+          "text": "Ви якось прочитали не так і почали чомусь агресивно сперечатися зі мною \n\nЦитую себе - «Десь певно в якихось віддалених землях Німеччини (чи якихось окремих країнах) може щось і лишилося, але це все вже в дуже обмеженому обсязі»",
+          "thread": "@matusi_ukr:22308",
+          "topic": "(synthetic training row — this thread has no post)",
+          "topic_source": "reader verdict",
+          "unit": "@matusi_ukr:22308#580142",
+          "variant": "marked"
+        },
+        {
+          "channel": "@msuaaaa",
+          "entities": [
+            {
+              "msg_id": null,
+              "name": "KFC",
+              "quote": "KFC запускає одразу три новинки!",
+              "reading": "мережа ресторанів швидкого харчування",
+              "subject_type": "сеть_ритейлер"
+            }
+          ],
+          "error_class": null,
+          "examples": [
+            {
+              "label": "молочный_бренд",
+              "rationale": "коментар ПРО сам сир із допису — як його доводити після покупки (cue: «цей сир»)",
+              "text": "Уцей сир треба пару днів як купив потримати в пакеті щоб він став мокрим, тоді його лупашить можна на ура."
+            },
+            {
+              "label": "сеть_ритейлер",
+              "rationale": "коментар ПРО доставку мережі — скарга на сервіс (cue: «налагодити доставку замовлень»)",
+              "text": "Який сенс ві ваших реклам якщо ви не можете налагодити доставку замовлень?"
+            },
+            {
+              "label": "категория_личное",
+              "rationale": "коментар ПРО кисломолочний сир як джерело жиру в раціоні (cue: «Творогом»)",
+              "text": "Всі тот жир не люблять але забувають що жир теж потрібен. Творогом як раз його можна спожити"
+            },
+            {
+              "label": "не_наш_рынок",
+              "rationale": "коментар ПРО заморожування кабачка з допису, поза нашою категорією (cue: «Чи можна заморозити його»)",
+              "text": "Чи можна заморозити його?"
+            },
+            {
+              "label": null,
+              "rationale": "лише ЗГАДУЄ морозиво і магазин як мотивацію; насправді про навчання дитини цифрам (cue: «купити тобі морозиво»)",
+              "text": "Кажіть, щоб піти  в магазин і купити тобі морозиво, треба вивчити цифри, подивитись скільки воно коштує і заплатити за нього гроші))"
+            }
+          ],
+          "examples_chosen": [
+            {
+              "label": "молочный_бренд",
+              "msg_id": 20766,
+              "similarity": 0.021277,
+              "thread": "@VARUS_channel:10367"
+            },
+            {
+              "label": "сеть_ритейлер",
+              "msg_id": 21256,
+              "similarity": 0.035398,
+              "thread": "@VARUS_channel:10471"
+            },
+            {
+              "label": "категория_личное",
+              "msg_id": 47859,
+              "similarity": 0.065574,
+              "thread": "@mandziak:3667"
+            },
+            {
+              "label": "не_наш_рынок",
+              "msg_id": 182,
+              "similarity": 0.114754,
+              "thread": "@tarilka_malyuka:825"
+            },
+            {
+              "label": "null",
+              "msg_id": 579246,
+              "similarity": 0.050314,
+              "thread": "@matusi_ukr:22263"
+            }
+          ],
+          "id": "@msuaaaa:10651#13584@as_is",
+          "membership": {
+            "dev_200": true,
+            "gold_14": false,
+            "holdout_100": true,
+            "probe_64": false,
+            "reference_thread": false
+          },
+          "msg_id": 13584,
+          "post_id": 10651,
+          "rendered_chars": 5510,
+          "rendering_sha256": "fcd44303702f6c633f279d84ad11231f31061d8fbf549165bcfaf8aa6029de63",
+          "task": "pass1_comment_gm4_v3",
+          "text": "Ох, як спокусивши морозивом... Пряме дитинство!",
+          "thread": "@msuaaaa:10651",
+          "topic": "KFC анонсує запуск трьох видів морозива: «Пряне печиво Міньйон», «Міньйон» та «Фісташковий Дубайськ».",
+          "topic_source": "reader verdict",
+          "unit": "@msuaaaa:10651#13584",
+          "variant": "as_is"
+        },
+        {
+          "channel": "synthetic",
+          "entities": [
+            {
+              "msg_id": null,
+              "name": "KFC",
+              "quote": "KFC запускає одразу три новинки!",
+              "reading": "мережа ресторанів швидкого харчування",
+              "subject_type": "сеть_ритейлер"
+            }
+          ],
+          "error_class": "non_dairy_brand",
+          "examples": [
+            {
+              "label": "молочный_бренд",
+              "rationale": "коментар ПРО сам сир із допису — як його доводити після покупки (cue: «цей сир»)",
+              "text": "Уцей сир треба пару днів як купив потримати в пакеті щоб він став мокрим, тоді його лупашить можна на ура."
+            },
+            {
+              "label": "сеть_ритейлер",
+              "rationale": "коментар ПРО доставку мережі — скарга на сервіс (cue: «налагодити доставку замовлень»)",
+              "text": "Який сенс ві ваших реклам якщо ви не можете налагодити доставку замовлень?"
+            },
+            {
+              "label": "категория_личное",
+              "rationale": "коментар ПРО кисломолочний сир як джерело жиру в раціоні (cue: «Творогом»)",
+              "text": "Всі тот жир не люблять але забувають що жир теж потрібен. Творогом як раз його можна спожити"
+            },
+            {
+              "label": "не_наш_рынок",
+              "rationale": "коментар ПРО заморожування кабачка з допису, поза нашою категорією (cue: «Чи можна заморозити його»)",
+              "text": "Чи можна заморозити його?"
+            },
+            {
+              "label": null,
+              "rationale": "лише ЗГАДУЄ морозиво і магазин як мотивацію; насправді про навчання дитини цифрам (cue: «купити тобі морозиво»)",
+              "text": "Кажіть, щоб піти  в магазин і купити тобі морозиво, треба вивчити цифри, подивитись скільки воно коштує і заплатити за нього гроші))"
+            }
+          ],
+          "examples_chosen": [
+            {
+              "label": "молочный_бренд",
+              "msg_id": 20766,
+              "similarity": 0.021277,
+              "thread": "@VARUS_channel:10367"
+            },
+            {
+              "label": "сеть_ритейлер",
+              "msg_id": 21256,
+              "similarity": 0.035398,
+              "thread": "@VARUS_channel:10471"
+            },
+            {
+              "label": "категория_личное",
+              "msg_id": 47859,
+              "similarity": 0.065574,
+              "thread": "@mandziak:3667"
+            },
+            {
+              "label": "не_наш_рынок",
+              "msg_id": 182,
+              "similarity": 0.114754,
+              "thread": "@tarilka_malyuka:825"
+            },
+            {
+              "label": "null",
+              "msg_id": 579246,
+              "similarity": 0.050314,
+              "thread": "@matusi_ukr:22263"
+            }
+          ],
+          "id": "@msuaaaa:10651#13584@marked",
+          "membership": {
+            "dev_200": true,
+            "gold_14": false,
+            "holdout_100": true,
+            "probe_64": false,
+            "reference_thread": false
+          },
+          "msg_id": 13584,
+          "post_id": "non_dairy_brand",
+          "rendered_chars": 5470,
+          "rendering_sha256": "aa2143b4580c44c5cbbb0e7411f4dba7c2a3167581ce2b7e7cd58fa786235fe6",
+          "task": "pass1_comment_gm4_v3",
+          "text": "Ох, як спокусивши морозивом... Пряме дитинство!",
+          "thread": "@msuaaaa:10651",
+          "topic": "(synthetic training row — this thread has no post)",
+          "topic_source": "reader verdict",
+          "unit": "@msuaaaa:10651#13584",
+          "variant": "marked"
+        },
+        {
+          "channel": "@retsepty",
+          "entities": [],
+          "error_class": null,
+          "examples": [
+            {
+              "label": "молочный_бренд",
+              "rationale": "коментар ПРО сам сир із допису — як його доводити після покупки (cue: «цей сир»)",
+              "text": "Уцей сир треба пару днів як купив потримати в пакеті щоб він став мокрим, тоді його лупашить можна на ура."
+            },
+            {
+              "label": "сеть_ритейлер",
+              "rationale": "коментар ПРО новинки меню мережі — чи справді вони нові (cue: «з початку нового меню»)",
+              "text": "Міньйони ж в продажу з початку нового меню\nДубайськ це хіба не те, що ще з минулого року?\nПовне печиво наче реально нове"
+            },
+            {
+              "label": "категория_личное",
+              "rationale": "коментар ПРО власний досвід із тортом на кремі з допису (cue: «робила майже ідентичний»)",
+              "text": "робила майже ідентичний сину на рік 🤎\nдуже смачниййййй навіть для дорослих"
+            },
+            {
+              "label": "не_наш_рынок",
+              "rationale": "коментар ПРО рецепт свинини, поза нашою категорією (cue: «Свиняча вирізка»)",
+              "text": "Свиняча вирізка (тендерлойн) - найкращий варіант.\nНайніжніше м’ясо.\nМайже без жиру та жилок.\nПісля тушкування буквально розпадається на волокна\n\nРецепт \nІнгредієнти \n\nсвиняча вирізка — 400 г\nцибуля — ½ невеликої\nморква — ½ середньої\nвершкове масло — 5 г\nоливкова олія — 1 ч. л.\nгаряча вода або несолоний бульйон — 250–300 мл\n\nПриготування 🧑‍🍳 \n\n1. Нарізати мʼясо кубиками приблизно 1,5–2 см.\n\n2. Легка обсмажка\nУ каструлі або сотейнику розігріти 1 ч. л. оливкової олії.\n\nОбсмажити м’ясо по 30–40 секунд з кожного боку, тільки щоб воно побіліло. Не потрібно сильно засмажувати до темної скоринки.\n\n3. Додати овочі\nДрібно нарізану цибулю і натерту моркву.\nПротушкувати 2–3 хвилини.\n\n4. Тушкування\nЗалити гарячою водою так, щоб вона майже покривала м’ясо.\n\nТушкувати:\n1–1,5 години на мінімальному вогні під кришкою.\n\nЯкщо вирізка зовсім молода й ніжна, може вистачити і 50–60 хвилин, але краще орієнтуватися на м’якість.\n\n5. Наприкінці\nДодати 5 г вершкового масла.\n\nЦе дуже смачно 🤤\n\nМаленький секрет\nПісля того як м’ясо стане м’яким, залишити його ще на 20–30 хвилин під закритою кришкою у вимкненій каструлі. За цей час воно ще більше насититься соком і стане ще ніжнішим."
+            },
+            {
+              "label": null,
+              "rationale": "коментар ні про кого — емоційний вигук у відповідь на пораду (cue: «Кабачок? Серйозно»)",
+              "text": "Кабачок? Серйозно???"
+            }
+          ],
+          "examples_chosen": [
+            {
+              "label": "молочный_бренд",
+              "msg_id": 20766,
+              "similarity": 0.0,
+              "thread": "@VARUS_channel:10367"
+            },
+            {
+              "label": "сеть_ритейлер",
+              "msg_id": 13583,
+              "similarity": 0.0,
+              "thread": "@msuaaaa:10651"
+            },
+            {
+              "label": "категория_личное",
+              "msg_id": 45,
+              "similarity": 0.0,
+              "thread": "@tarilka_malyuka:715"
+            },
+            {
+              "label": "не_наш_рынок",
+              "msg_id": 83,
+              "similarity": 0.0,
+              "thread": "@tarilka_malyuka:746"
+            },
+            {
+              "label": "null",
+              "msg_id": 8,
+              "similarity": 0.0,
+              "thread": "@tarilka_malyuka:695"
+            }
+          ],
+          "id": "@retsepty:7323#49592@as_is",
+          "membership": {
+            "dev_200": false,
+            "gold_14": false,
+            "holdout_100": true,
+            "probe_64": false,
+            "reference_thread": false
+          },
+          "msg_id": 49592,
+          "post_id": 7323,
+          "rendered_chars": 6521,
+          "rendering_sha256": "e408bc13cc9a63e8a8d5690aaa4aa8bbf1876af9140f1149864eabee2cb2da89",
+          "task": "pass1_comment_gm4_v3",
+          "text": "💕",
+          "thread": "@retsepty:7323",
+          "topic": "НІЖНИЙ ШОКОЛАДНО-СИРНИЙ ПИРІГ З ЯГОДАМИ🫐\n\nДля основи:\n\n🔸борошно - 200 г\n🔸какао - 15 г\n🔸розпушувач - 1/2 ч. л.\n🔸вершкове масло - 100 г\n🔸цукор - 70 г\n🔸яйце - 1…",
+          "topic_source": "the store's post text, bounded",
+          "unit": "@retsepty:7323#49592",
+          "variant": "as_is"
+        },
+        {
+          "channel": "synthetic",
+          "entities": [],
+          "error_class": "mention_vs_about",
+          "examples": [
+            {
+              "label": "молочный_бренд",
+              "rationale": "коментар ПРО сам сир із допису — як його доводити після покупки (cue: «цей сир»)",
+              "text": "Уцей сир треба пару днів як купив потримати в пакеті щоб він став мокрим, тоді його лупашить можна на ура."
+            },
+            {
+              "label": "сеть_ритейлер",
+              "rationale": "коментар ПРО новинки меню мережі — чи справді вони нові (cue: «з початку нового меню»)",
+              "text": "Міньйони ж в продажу з початку нового меню\nДубайськ це хіба не те, що ще з минулого року?\nПовне печиво наче реально нове"
+            },
+            {
+              "label": "категория_личное",
+              "rationale": "коментар ПРО власний досвід із тортом на кремі з допису (cue: «робила майже ідентичний»)",
+              "text": "робила майже ідентичний сину на рік 🤎\nдуже смачниййййй навіть для дорослих"
+            },
+            {
+              "label": "не_наш_рынок",
+              "rationale": "коментар ПРО рецепт свинини, поза нашою категорією (cue: «Свиняча вирізка»)",
+              "text": "Свиняча вирізка (тендерлойн) - найкращий варіант.\nНайніжніше м’ясо.\nМайже без жиру та жилок.\nПісля тушкування буквально розпадається на волокна\n\nРецепт \nІнгредієнти \n\nсвиняча вирізка — 400 г\nцибуля — ½ невеликої\nморква — ½ середньої\nвершкове масло — 5 г\nоливкова олія — 1 ч. л.\nгаряча вода або несолоний бульйон — 250–300 мл\n\nПриготування 🧑‍🍳 \n\n1. Нарізати мʼясо кубиками приблизно 1,5–2 см.\n\n2. Легка обсмажка\nУ каструлі або сотейнику розігріти 1 ч. л. оливкової олії.\n\nОбсмажити м’ясо по 30–40 секунд з кожного боку, тільки щоб воно побіліло. Не потрібно сильно засмажувати до темної скоринки.\n\n3. Додати овочі\nДрібно нарізану цибулю і натерту моркву.\nПротушкувати 2–3 хвилини.\n\n4. Тушкування\nЗалити гарячою водою так, щоб вона майже покривала м’ясо.\n\nТушкувати:\n1–1,5 години на мінімальному вогні під кришкою.\n\nЯкщо вирізка зовсім молода й ніжна, може вистачити і 50–60 хвилин, але краще орієнтуватися на м’якість.\n\n5. Наприкінці\nДодати 5 г вершкового масла.\n\nЦе дуже смачно 🤤\n\nМаленький секрет\nПісля того як м’ясо стане м’яким, залишити його ще на 20–30 хвилин під закритою кришкою у вимкненій каструлі. За цей час воно ще більше насититься соком і стане ще ніжнішим."
+            },
+            {
+              "label": null,
+              "rationale": "коментар ні про кого — емоційний вигук у відповідь на пораду (cue: «Кабачок? Серйозно»)",
+              "text": "Кабачок? Серйозно???"
+            }
+          ],
+          "examples_chosen": [
+            {
+              "label": "молочный_бренд",
+              "msg_id": 20766,
+              "similarity": 0.0,
+              "thread": "@VARUS_channel:10367"
+            },
+            {
+              "label": "сеть_ритейлер",
+              "msg_id": 13583,
+              "similarity": 0.0,
+              "thread": "@msuaaaa:10651"
+            },
+            {
+              "label": "категория_личное",
+              "msg_id": 45,
+              "similarity": 0.0,
+              "thread": "@tarilka_malyuka:715"
+            },
+            {
+              "label": "не_наш_рынок",
+              "msg_id": 83,
+              "similarity": 0.0,
+              "thread": "@tarilka_malyuka:746"
+            },
+            {
+              "label": "null",
+              "msg_id": 8,
+              "similarity": 0.0,
+              "thread": "@tarilka_malyuka:695"
+            }
+          ],
+          "id": "@retsepty:7323#49592@marked",
+          "membership": {
+            "dev_200": false,
+            "gold_14": false,
+            "holdout_100": true,
+            "probe_64": false,
+            "reference_thread": false
+          },
+          "msg_id": 49592,
+          "post_id": "mention_vs_about",
+          "rendered_chars": 6425,
+          "rendering_sha256": "20a67b2e77f536e61aed7123be6c530adaff29fcdca49afe73d10dd58f66c84e",
+          "task": "pass1_comment_gm4_v3",
+          "text": "💕",
+          "thread": "@retsepty:7323",
+          "topic": "(synthetic training row — this thread has no post)",
+          "topic_source": "the store's post text, bounded",
+          "unit": "@retsepty:7323#49592",
+          "variant": "marked"
+        }
+      ],
+      "n": 40,
+      "name": "marker_census",
+      "out": "lora_c_marker_census.jsonl",
+      "task": "pass1_comment_gm4_v3"
+    }
+  ],
+  "pairs": [
+    {
+      "error_class": "brand_vs_retailer",
+      "gold": null,
+      "header_lines_that_moved": [
+        "  →  (synthetic training row — this thread has no post)",
+        "  →  <thread channel=\"synthetic\" post_id=\"brand_vs_retailer\">",
+        "<thread channel=\"@VARUS_channel\" post_id=\"10349\">  →  ",
+        "Запит до користувачів запропонувати рецепти страв із набору продуктів.  →  "
+      ],
+      "unit": "@VARUS_channel:10349#20660"
+    },
+    {
+      "error_class": "retailer_non_dairy",
+      "gold": "категория_личное",
+      "header_lines_that_moved": [
+        "  →  (synthetic training row — this thread has no post)",
+        "  →  <thread channel=\"synthetic\" post_id=\"retailer_non_dairy\">",
+        "<thread channel=\"@VARUS_channel\" post_id=\"10349\">  →  ",
+        "Запит до користувачів запропонувати рецепти страв із набору продуктів.  →  "
+      ],
+      "unit": "@VARUS_channel:10349#20678"
+    },
+    {
+      "error_class": "non_dairy_brand",
+      "gold": "сеть_ритейлер",
+      "header_lines_that_moved": [
+        "  →  (synthetic training row — this thread has no post)",
+        "  →  <thread channel=\"synthetic\" post_id=\"non_dairy_brand\">",
+        "<thread channel=\"@VARUS_channel\" post_id=\"10360\">  →  ",
+        "Анонс акційних пропозицій на печиво Roshen, каву L’OR, молоко Селянське та гель Ariel у мережі VARUS.  →  "
+      ],
+      "unit": "@VARUS_channel:10360#20741"
+    },
+    {
+      "error_class": "mention_vs_about",
+      "gold": null,
+      "header_lines_that_moved": [
+        "  →  (synthetic training row — this thread has no post)",
+        "  →  <thread channel=\"synthetic\" post_id=\"mention_vs_about\">",
+        "<thread channel=\"@VARUS_channel\" post_id=\"10366\">  →  ",
+        "Повідомлення про святкування 100 000 підписників у Telegram та анонс трьох розіграшів подарунків.  →  "
+      ],
+      "unit": "@VARUS_channel:10366#20884"
+    },
+    {
+      "error_class": "brand_vs_retailer",
+      "gold": null,
+      "header_lines_that_moved": [
+        "  →  (synthetic training row — this thread has no post)",
+        "  →  <thread channel=\"synthetic\" post_id=\"brand_vs_retailer\">",
+        "<thread channel=\"@VARUS_channel\" post_id=\"10366\">  →  ",
+        "Повідомлення про святкування 100 000 підписників у Telegram та анонс трьох розіграшів подарунків.  →  "
+      ],
+      "unit": "@VARUS_channel:10366#20923"
+    },
+    {
+      "error_class": "retailer_non_dairy",
+      "gold": "сеть_ритейлер",
+      "header_lines_that_moved": [
+        "  →  (synthetic training row — this thread has no post)",
+        "  →  <thread channel=\"synthetic\" post_id=\"retailer_non_dairy\">",
+        "<thread channel=\"@VARUS_channel\" post_id=\"10470\">  →  ",
+        "Повідомлення про новинку — сирокопчені палички зі свинини від Craft family у мережі VARUS.  →  "
+      ],
+      "unit": "@VARUS_channel:10470#21238"
+    },
+    {
+      "error_class": "non_dairy_brand",
+      "gold": "сеть_ритейлер",
+      "header_lines_that_moved": [
+        "  →  (synthetic training row — this thread has no post)",
+        "  →  <thread channel=\"synthetic\" post_id=\"non_dairy_brand\">",
+        "<thread channel=\"@VARUS_channel\" post_id=\"10529\">  →  ",
+        "На наших молочних полицях підвищився рівень білка! І все завдяки поживним профі від ТМ Pro Milk 💪  →  ",
+        "・ з манго й маракуєю;  →  ",
+        "・ з полуницею.…  →  ",
+        "🔸 Високобілкові йогурти:  →  "
+      ],
+      "unit": "@VARUS_channel:10529#21420"
+    },
+    {
+      "error_class": "mention_vs_about",
+      "gold": "категория_личное",
+      "header_lines_that_moved": [
+        "  →  (synthetic training row — this thread has no post)",
+        "  →  <thread channel=\"synthetic\" post_id=\"mention_vs_about\">",
+        "<thread channel=\"@klopotenkofood\" post_id=\"6035\">  →  ",
+        "Пост містить візуальний контент (зображення або відео) з рецептом запіканки.  →  "
+      ],
+      "unit": "@klopotenkofood:6035#21207"
+    },
+    {
+      "error_class": "brand_vs_retailer",
+      "gold": "категория_личное",
+      "header_lines_that_moved": [
+        "  →  (synthetic training row — this thread has no post)",
+        "  →  <thread channel=\"synthetic\" post_id=\"brand_vs_retailer\">",
+        "<thread channel=\"@klopotenkofood\" post_id=\"6035\">  →  ",
+        "Пост містить візуальний контент (зображення або відео) з рецептом запіканки.  →  "
+      ],
+      "unit": "@klopotenkofood:6035#21221"
+    },
+    {
+      "error_class": "retailer_non_dairy",
+      "gold": "сеть_ритейлер",
+      "header_lines_that_moved": [
+        "  →  (synthetic training row — this thread has no post)",
+        "  →  <thread channel=\"synthetic\" post_id=\"retailer_non_dairy\">",
+        "<thread channel=\"@kopiyochka1\" post_id=\"21720\">  →  ",
+        "Рекламна добірка новинок товарів для дому, саду та солодощів у мережі Копійочка.  →  "
+      ],
+      "unit": "@kopiyochka1:21720#391544"
+    },
+    {
+      "error_class": "non_dairy_brand",
+      "gold": "не_наш_рынок",
+      "header_lines_that_moved": [
+        "  →  (synthetic training row — this thread has no post)",
+        "  →  <thread channel=\"synthetic\" post_id=\"non_dairy_brand\">",
+        "<thread channel=\"@mandziak\" post_id=\"3684\">  →  ",
+        "Пост про результати схуднення клієнтки Лізи за допомогою програми збалансованого харчування та тренувань.  →  "
+      ],
+      "unit": "@mandziak:3684#48018"
+    },
+    {
+      "error_class": "mention_vs_about",
+      "gold": null,
+      "header_lines_that_moved": [
+        "  →  (synthetic training row — this thread has no post)",
+        "  →  <thread channel=\"synthetic\" post_id=\"mention_vs_about\">",
+        "<thread channel=\"@mandziak\" post_id=\"3689\">  →  ",
+        "Автор пояснює, що білок також містить калорії та впливає на енергетичний баланс організму, заперечуючи міф про те, що він не перетворюється на жир.  →  "
+      ],
+      "unit": "@mandziak:3689#48057"
+    },
+    {
+      "error_class": "brand_vs_retailer",
+      "gold": "не_наш_рынок",
+      "header_lines_that_moved": [
+        "  →  (synthetic training row — this thread has no post)",
+        "  →  <thread channel=\"synthetic\" post_id=\"brand_vs_retailer\">",
+        "<thread channel=\"@mandziak\" post_id=\"3718\">  →  ",
+        "Рецепт млинців, які допомагають схуднути.  →  "
+      ],
+      "unit": "@mandziak:3718#48405"
+    },
+    {
+      "error_class": "retailer_non_dairy",
+      "gold": "молочный_бренд",
+      "header_lines_that_moved": [
+        "  →  (synthetic training row — this thread has no post)",
+        "  →  <thread channel=\"synthetic\" post_id=\"retailer_non_dairy\">",
+        "<thread channel=\"@mandziak\" post_id=\"3721\">  →  ",
+        "Автор розвінчує міфи про шкідливість знежирених молочних продуктів та застерігає від орторексії.  →  "
+      ],
+      "unit": "@mandziak:3721#48445"
+    },
+    {
+      "error_class": "non_dairy_brand",
+      "gold": "не_наш_рынок",
+      "header_lines_that_moved": [
+        "  →  (synthetic training row — this thread has no post)",
+        "  →  <thread channel=\"synthetic\" post_id=\"non_dairy_brand\">",
+        "<thread channel=\"@matusi_ukr\" post_id=\"22158\">  →  ",
+        "Нічний чат для спілкування матерів, де вони можуть ставити питання, ділитися досвідом або просто виговоритися.  →  "
+      ],
+      "unit": "@matusi_ukr:22158#578075"
+    },
+    {
+      "error_class": "mention_vs_about",
+      "gold": "не_наш_рынок",
+      "header_lines_that_moved": [
+        "  →  (synthetic training row — this thread has no post)",
+        "  →  <thread channel=\"synthetic\" post_id=\"mention_vs_about\">",
+        "<thread channel=\"@matusi_ukr\" post_id=\"22217\">  →  ",
+        "Користувач шукає рекомендації спеціаліста або хірурга для лікування гриж у попереково-крижовому відділі хребта в Харкові для своєї матері.  →  "
+      ],
+      "unit": "@matusi_ukr:22217#578838"
+    },
+    {
+      "error_class": "brand_vs_retailer",
+      "gold": "не_наш_рынок",
+      "header_lines_that_moved": [
+        "  →  (synthetic training row — this thread has no post)",
+        "  →  <thread channel=\"synthetic\" post_id=\"brand_vs_retailer\">",
+        "<thread channel=\"@matusi_ukr\" post_id=\"22295\">  →  ",
+        "Пост містить правила для учасників чату щодо продажу та пошуку дитячих речей.  →  "
+      ],
+      "unit": "@matusi_ukr:22295#579786"
+    },
+    {
+      "error_class": "retailer_non_dairy",
+      "gold": null,
+      "header_lines_that_moved": [
+        "  →  (synthetic training row — this thread has no post)",
+        "  →  <thread channel=\"synthetic\" post_id=\"retailer_non_dairy\">",
+        "<thread channel=\"@matusi_ukr\" post_id=\"22308\">  →  ",
+        "Користувачка шукає поради щодо вибору країни для переїзду з дітьми, цікавлячись умовами проживання, садочками та витратами.  →  "
+      ],
+      "unit": "@matusi_ukr:22308#580142"
+    },
+    {
+      "error_class": "non_dairy_brand",
+      "gold": "категория_личное",
+      "header_lines_that_moved": [
+        "  →  (synthetic training row — this thread has no post)",
+        "  →  <thread channel=\"synthetic\" post_id=\"non_dairy_brand\">",
+        "<thread channel=\"@msuaaaa\" post_id=\"10651\">  →  ",
+        "KFC анонсує запуск трьох видів морозива: «Пряне печиво Міньйон», «Міньйон» та «Фісташковий Дубайськ».  →  "
+      ],
+      "unit": "@msuaaaa:10651#13584"
+    },
+    {
+      "error_class": "mention_vs_about",
+      "gold": null,
+      "header_lines_that_moved": [
+        "  →  (synthetic training row — this thread has no post)",
+        "  →  <thread channel=\"synthetic\" post_id=\"mention_vs_about\">",
+        "<thread channel=\"@retsepty\" post_id=\"7323\">  →  ",
+        "Для основи:  →  ",
+        "НІЖНИЙ ШОКОЛАДНО-СИРНИЙ ПИРІГ З ЯГОДАМИ🫐  →  ",
+        "🔸борошно - 200 г  →  ",
+        "🔸вершкове масло - 100 г  →  ",
+        "🔸какао - 15 г  →  ",
+        "🔸розпушувач - 1/2 ч. л.  →  ",
+        "🔸цукор - 70 г  →  ",
+        "🔸яйце - 1…  →  "
+      ],
+      "unit": "@retsepty:7323#49592"
+    }
+  ],
+  "phase": "lora-c",
+  "produced_by": {
+    "script": "scripts/build_lora_c_marker_census.py",
+    "sha256": "a947947e6a29528494d8562e3ecdb77ea64b6f6ed3c784078df407cb81dc91d9"
+  },
+  "serving": {
+    "adapter": null,
+    "chat_template": {
+      "add_generation_prompt": true,
+      "enable_thinking": false
+    },
+    "decoding": "greedy",
+    "do_sample": false,
+    "forward_batch_size": 1,
+    "gpu_class_preference": [
+      "ADA_24",
+      "ADA_24_PRO",
+      "AMPERE_24"
+    ],
+    "gpu_rule": "requested fastest-first and never asserted. probe-a asked for the display name «NVIDIA L4», the endpoint came back `gpuIds: AMPERE_24` and the worker reported an L4 runtime — so the CLASS is what is requested and the RUNTIME string is what lands in provenance. Seconds per thread are reported per card",
+    "merge_state": "base-no-adapter",
+    "model": "google/gemma-4-31b-it",
+    "model_revision": "842da3794eaa0b77d5f08bae87a17459d91ff475",
+    "output_tokens": 256,
+    "quantization": {
+      "bnb_4bit_compute_dtype": "bfloat16",
+      "bnb_4bit_quant_type": "nf4",
+      "bnb_4bit_use_double_quant": true,
+      "load_in_4bit": true
+    },
+    "serving_config": "READER",
+    "template_note": "a NEW serving template for this run. `settings()` refuses config-mixing by design; the srv-2d, CAPTION and probe-a templates are never edited"
+  },
+  "substitution": {
+    "channel": "synthetic",
+    "checked": "every pair differs in HEADER lines only, or this producer stops",
+    "not_substituted": "the entities block. 284 of the 506 real rows already render «(this thread resolved no entity)», so it is not a tell, and moving it would change what the request says",
+    "post_id": "the error class, rotated over the four so all five tells are exercised",
+    "topic": "(synthetic training row — this thread has no post)"
+  },
+  "what_this_is": "twenty E requests, each answered TWICE by arm B's adapter — as the eval pack renders it, and with the synthetic header substituted in. It separates «synthetic did not help» from «the adapter learned the marker»",
+  "when": "after arm B's eval leg, when both arms' bars are already scored"
+}

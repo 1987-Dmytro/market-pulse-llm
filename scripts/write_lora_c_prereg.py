@@ -51,6 +51,7 @@ TRAIN_FILE = REPO_ROOT / "results" / "pass1_sft_v3_train.jsonl"
 ARM_B_FILE = REPO_ROOT / "results" / "pass1_sft_v3_arm_b.jsonl"
 ARM_B_RECORD = REPO_ROOT / "results" / "lora_c_arm_b.json"
 STOCK_PROBE = REPO_ROOT / "results" / "lora_c_stock_probe.json"
+MARKER_CENSUS_PACK = REPO_ROOT / "results" / "lora_c_marker_census_pack.json"
 RATIONALES = REPO_ROOT / "results" / "rationales_pass1_v1.jsonl"
 SYNTHETIC_FILE = REPO_ROOT / "results" / "synthetic_pass1_v1.jsonl"
 TOKENS = REPO_ROOT / "results" / "lora_c_tokens.json"
@@ -1062,6 +1063,43 @@ def rungs(fixed: dict, at: dict, steps: dict, pass2_threads: int) -> list[dict]:
     ]
 
 
+def transport() -> dict:
+    """The four things that RUN on the pod, with the shas the pod's own handshakes check.
+
+    A registered leg whose runner cannot serve its pack is a leg with no producer, and this line had
+    four of them until `lora-c-run r2` drove the shipped chain against the frozen packs at $0: the
+    pass-1 handshake refused the v3 family, the pass-1 render sent a v3 item to the READER's
+    renderer, the leg runner had no `--adapter`, and the pass-2 pack carried neither the instrument
+    block nor the `carried` block nor the `serving` block its runner reads. Every one of them would
+    have fired on a billed pod with the model loaded
+    ([[a_frozen_record_is_an_input_to_shipped_code]]).
+    """
+    files = {
+        "scripts/train_qlora_v3.py": "the two guards re-bound; everything else CALLED",
+        "scripts/pass1_v3_pod_runner.py": "the v3 family served and --adapter carried",
+        "scripts/pass2_r2_pod_runner.py": "pass2-signals-r2's own runner, unchanged",
+        "scripts/gate_lora_c.py": "the nine rungs, graded on the Mac",
+    }
+    return {
+        "rule": (
+            "each was DRIVEN against this line's frozen packs with a fake client before any pod"
+            " existed — the handshake, and every per-item rendering sha"
+        ),
+        "files": {
+            name: {
+                "sha256": data.sha_text((REPO_ROOT / name).read_text(encoding="utf-8")),
+                "what": why,
+            }
+            for name, why in files.items()
+        },
+        "what_the_drive_proved": {
+            "pass_1": "198 requests per leg re-rendered and matched against the pack's own shas",
+            "pass_2": "11 threads, the handshake and the carried-row guard",
+            "marker_census": "40 requests, 20 pairs, differing in the header alone",
+        },
+    }
+
+
 def the_marker_fix(arm_b_record: dict) -> dict:
     """Ruling (о)'s step 0.75, registered as the two counts it turns on — not as a sentence.
 
@@ -1602,6 +1640,7 @@ def build() -> dict:
                 "results/lora_c_synthetic.json": sha(SYNTHETIC_RECORD),
                 "results/lora_c_eval_pack.json": sha(EVAL_PACK),
                 "results/lora_c_pass2_pack.json": sha(PASS2_PACK),
+                "results/lora_c_marker_census_pack.json": sha(MARKER_CENSUS_PACK),
                 "results/pass1_sft_v3_train.jsonl": sha(TRAIN_FILE),
             },
             "written_inputs": {
@@ -1688,6 +1727,7 @@ def build() -> dict:
                 "max": max(len(one["prompt"]) + len(one["target"]) for one in rows),
             },
         },
+        "transport": transport(),
         "frozen_when_the_pod_exists": [
             "results/prereg_lora_c.json",
             "results/lora_c_data.json",
@@ -1699,6 +1739,7 @@ def build() -> dict:
             "results/synthetic_pass1_v1.jsonl",
             "results/lora_c_eval_pack.json",
             "results/lora_c_pass2_pack.json",
+            "results/lora_c_marker_census_pack.json",
             "src/market_pulse/pass1_v3.py",
             "config/qlora.yaml",
         ],
