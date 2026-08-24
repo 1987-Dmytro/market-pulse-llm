@@ -1,0 +1,231 @@
+{
+  "arm_b_file": "results/pass1_sft_v3_arm_b.jsonl",
+  "arm_b_sha256": "85a5b278550e8771e3cf9da675b64f8303d50f26f9fc1e79e68a19a29f87005b",
+  "authority": {
+    "record": "docs/STATUS.md «Открытые решения» п. 1 (н), 2026-08-24",
+    "ruling": "синтетический запрос рендерится ТЕМ ЖЕ правилом на ТОМ ЖЕ пуле 515 (закон уже запрещает синтетику только как СОСЕДА; запрет двойника действует)"
+  },
+  "class_weights": {
+    "arm_a": {
+      "null": 0.617073,
+      "категория_личное": 2.53,
+      "не_наш_рынок": 0.377612,
+      "сеть_ритейлер": 2.976471
+    },
+    "arm_b": {
+      "null": 0.679592,
+      "категория_личное": 1.85,
+      "молочный_бренд": 4.1625,
+      "не_наш_рынок": 0.444,
+      "сеть_ритейлер": 2.018182
+    },
+    "classes": 5,
+    "rule": "w_c = N/(5·n_c) capped at 8.0 — train_qlora.class_weights, CALLED",
+    "why_five": "arm A's four classes plus молочный_бренд, whose 32 targets are ALL synthetic — the only positive supervision that class gets anywhere in this line",
+    "молочный_бренд": 4.1625,
+    "молочный_бренд_arithmetic": "666/(5·32) = 4.1625"
+  },
+  "contract": "docs/PROMPT-lora-c-armb.md D1",
+  "isolation": {
+    "1_every_example_of_the_160_is_a_pool_row": {
+      "distinct_examples": 228,
+      "examples": 800,
+      "outside_the_pool": []
+    },
+    "2_no_synthetic_row_is_an_example_anywhere": {
+      "checked_over_rows": 666,
+      "pool_rows_with_a_synthetic_thread": [],
+      "synthetic_ids_used_as_examples": []
+    },
+    "3_no_example_text_equals_its_query": {
+      "equal_pairs": [],
+      "rule": "amendment 3.25 (2), through neighbours_v3's pre-filter — whitespace-collapsed, casefolded",
+      "synthetic_texts_that_are_in_the_pool_at_all": []
+    },
+    "4_synthetic_meets_no_eval_set": {
+      "eval_E": [],
+      "gold_14": [],
+      "holdout_100": [],
+      "sizes": {
+        "E": 198,
+        "gold": 14,
+        "holdout": 100
+      }
+    },
+    "5_the_header_tell": {
+      "header_lines_of_the_160": [
+        {
+          "line": "(this post has no text of its own — it is an image or a video)",
+          "real_rows_carrying_it": 0,
+          "synthetic_rows_carrying_it": 160
+        },
+        {
+          "line": "<thread channel=\"synthetic\" post_id=\"brand_vs_retailer\">",
+          "real_rows_carrying_it": 0,
+          "synthetic_rows_carrying_it": 40
+        },
+        {
+          "line": "<thread channel=\"synthetic\" post_id=\"retailer_non_dairy\">",
+          "real_rows_carrying_it": 0,
+          "synthetic_rows_carrying_it": 40
+        },
+        {
+          "line": "<thread channel=\"synthetic\" post_id=\"non_dairy_brand\">",
+          "real_rows_carrying_it": 0,
+          "synthetic_rows_carrying_it": 40
+        },
+        {
+          "line": "<thread channel=\"synthetic\" post_id=\"mention_vs_about\">",
+          "real_rows_carrying_it": 0,
+          "synthetic_rows_carrying_it": 40
+        },
+        {
+          "line": "(this thread resolved no entity)",
+          "real_rows_carrying_it": 284,
+          "synthetic_rows_carrying_it": 160
+        },
+        {
+          "line": "- «жирність у таких йогуртах давно вже не та», under a post from a chain → «категория_личное». It survives every chain, so it is not «сеть_ритейлер».",
+          "real_rows_carrying_it": 506,
+          "synthetic_rows_carrying_it": 160
+        },
+        {
+          "line": "<topic>",
+          "real_rows_carrying_it": 506,
+          "synthetic_rows_carrying_it": 160
+        },
+        {
+          "line": "The entities block is CONTEXT and not a menu. It says which names this thread has already been read to carry and how, so that a comment saying «вони», «ця мережа» or «воно» can be resolved to one of them. A name the block does not list is still a name — read it off the comment. And a comment that points at none of them is not obliged to pick one.",
+          "real_rows_carrying_it": 506,
+          "synthetic_rows_carrying_it": 160
+        },
+        {
+          "line": "ATTRIBUTION. This is what decides `subject_type`. The subject is read off THE COMMENT ITSELF and never off the thread's protagonist: not off the channel, not off the trade mark the post is about, not off the shop the comment beside it discusses. One test settles it — would the complaint or the praise still stand if the chain were a different chain, or the trade mark a different trade mark? If it would, the comment is about the KIND of product: «категория_личное», and neither the chain nor the brand. «сеть_ритейлер» is the subject only where the shop AS a shop is what is being talked about — its service, its checkout, its delivery, its shelves, its queues. «молочный_бренд» only where the named trade mark is what the attitude is about. Three examples, invented for this instruction and taken from no thread:",
+          "real_rows_carrying_it": 506,
+          "synthetic_rows_carrying_it": 160
+        },
+        {
+          "line": "</topic>",
+          "real_rows_carrying_it": 506,
+          "synthetic_rows_carrying_it": 160
+        },
+        {
+          "line": "</entities>",
+          "real_rows_carrying_it": 506,
+          "synthetic_rows_carrying_it": 160
+        },
+        {
+          "line": "- «на касі простояла сорок хвилин із повним візком», under a post about a trade mark → «сеть_ритейлер». It does not survive swapping the shop, so it is not «молочный_бренд».",
+          "real_rows_carrying_it": 506,
+          "synthetic_rows_carrying_it": 160
+        },
+        {
+          "line": "You are given ONE comment from a discussion under a Ukrainian Telegram post, the topic of that post, and the entities this thread has already been resolved to. Decide who the comment is ABOUT and what attitude it carries towards them. Nothing else is asked of you.",
+          "real_rows_carrying_it": 506,
+          "synthetic_rows_carrying_it": 160
+        },
+        {
+          "line": "`subject_type` is what the comment is ABOUT, never what it mentions. A retailer or brand named inside a personal category habit (where one buys the curd, which shop's kefir) is `категория_личное`. A retailer's own reply that answers a category demand with products is `категория_личное`, not `сеть_ритейлер`. A comment about the retailer's service, stock, prices or stores is `сеть_ритейлер`. A comment about a named dairy producer or its product as such is `молочный_бренд`.",
+          "real_rows_carrying_it": 506,
+          "synthetic_rows_carrying_it": 160
+        },
+        {
+          "line": "The request carries a block of LABELLED EXAMPLES after the entities: one comment per reading, with the reading a human wrote for it. It is one example of EACH and never a distribution — how often a reading appears there says nothing about how often it is the right answer. Read them as the boundary between the four readings and the null, not as a menu to match against: a comment that resembles none of them still gets the reading the law above gives it.",
+          "real_rows_carrying_it": 506,
+          "synthetic_rows_carrying_it": 160
+        },
+        {
+          "line": "<entities>",
+          "real_rows_carrying_it": 506,
+          "synthetic_rows_carrying_it": 160
+        },
+        {
+          "line": "Answer with ONE JSON object and nothing else — no preamble, no fence, no second object:",
+          "real_rows_carrying_it": 506,
+          "synthetic_rows_carrying_it": 160
+        },
+        {
+          "line": "Before the label, write ONE sentence saying what the comment is ABOUT as against what it merely MENTIONS, and name the cue in the comment that decides it. Ukrainian, one sentence, at most 160 characters, in one of two shapes: «коментар ПРО X (cue: …)» where the comment is about the thing it names, or «лише ЗГАДУЄ X; насправді про Y (cue: …)» where a name appears but the comment is about something else. The cue is a word or phrase you can point to in the comment itself — not a restatement of the label. Write it FIRST, in the field `rationale`, and let it decide `subject_type`; a sentence written to agree with a label already chosen teaches nothing.",
+          "real_rows_carrying_it": 506,
+          "synthetic_rows_carrying_it": 160
+        },
+        {
+          "line": "- «сирки з родзинками ніхто вже не робить такі, як колись», beside a comment naming one maker → «категория_личное». It is about the kind, so it is not «молочный_бренд».",
+          "real_rows_carrying_it": 506,
+          "synthetic_rows_carrying_it": 160
+        },
+        {
+          "line": "{\"msg_id\": the id of the comment you were given, copied back exactly; \"subject_type\": one of \"молочный_бренд\", \"сеть_ритейлер\", \"категория_личное\", \"не_наш_рынок\", or null where the comment is about nobody; \"subject_id\": the subject's name as the comment writes it — or the name from the entities block where the comment points at it without spelling it — and null where there is no name; \"stance\": one of \"positive\", \"negative\", \"neutral\", or null where the comment carries no attitude towards its subject}",
+          "real_rows_carrying_it": 506,
+          "synthetic_rows_carrying_it": 160
+        }
+      ],
+      "real_rows": 506,
+      "rule": "a header line carried by synthetic rows and by 0 of the 506 real prompts is a marker the adapter can condition on and the eval never shows it",
+      "synthetic_rows": 160,
+      "synthetic_rows_marked_by_at_least_one_tell": 160,
+      "tells": [
+        "(this post has no text of its own — it is an image or a video)",
+        "<thread channel=\"synthetic\" post_id=\"brand_vs_retailer\">",
+        "<thread channel=\"synthetic\" post_id=\"retailer_non_dairy\">",
+        "<thread channel=\"synthetic\" post_id=\"non_dairy_brand\">",
+        "<thread channel=\"synthetic\" post_id=\"mention_vs_about\">"
+      ]
+    },
+    "6_the_example_slots": {
+      "real_506": {
+        "null": 132,
+        "категория_личное": 38,
+        "молочный_бренд": 1,
+        "не_наш_рынок": 193,
+        "сеть_ритейлер": 33
+      },
+      "rule": "distinct pool rows used in each class's example slot",
+      "synthetic_160": {
+        "null": 70,
+        "категория_личное": 37,
+        "молочный_бренд": 1,
+        "не_наш_рынок": 90,
+        "сеть_ритейлер": 30
+      }
+    }
+  },
+  "length": {
+    "ceiling_chars": 12000,
+    "headroom_chars": 2759,
+    "median_synthetic_chars": 5381,
+    "synthetic_headroom_chars": 5564,
+    "widest_request": "@tarilka_malyuka:746#83",
+    "widest_request_chars": 9241,
+    "widest_synthetic_request": "synthetic:non_dairy_brand#38",
+    "widest_synthetic_request_chars": 6436
+  },
+  "phase": "lora-c-armb",
+  "prefix_rule": "the first 506 lines of results/pass1_sft_v3_arm_b.jsonl are BYTE-IDENTICAL to results/pass1_sft_v3_train.jsonl — re-rendered by this build and compared, never copied, so a pool that drifted would be a STOP here and not a silent pass",
+  "produced_by": {
+    "script": "scripts/build_lora_c_data.py --arm-b-out",
+    "sha256": "feab33005cc874c07db17b03da98ec25b96ed0e735e64eb1fd664d5bc1ec9e19"
+  },
+  "rows": {
+    "arithmetic": "506 + 160 = 666",
+    "by_error_class": {
+      "brand_vs_retailer": 40,
+      "mention_vs_about": 40,
+      "non_dairy_brand": 40,
+      "retailer_non_dairy": 40
+    },
+    "distribution": {
+      "null": 196,
+      "категория_личное": 72,
+      "молочный_бренд": 32,
+      "не_наш_рынок": 300,
+      "сеть_ритейлер": 66
+    },
+    "real": 506,
+    "synthetic": 160,
+    "total": 666
+  },
+  "synthetic_file": "results/synthetic_pass1_v1.jsonl",
+  "synthetic_sha256": "247b0db1bc10bc41d9ada7406e9cc08edd2214d57fdbf7f991c7195b9a7daf5c",
+  "train_sha256": "cf55d3f20216139845d320b4283d543c5283e3475f3c6afa42ea98cf20997c18"
+}

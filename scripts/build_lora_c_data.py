@@ -22,8 +22,15 @@ The shipped row keeps `examples_chosen` — the five `(thread, msg_id, label, si
 convention records — and NOT the five example texts: those are already inside `prompt`, and a second
 copy is 1.5 MB of the same bytes with nothing holding the two together.
 
+**Arm B is rendered by the same file, behind `--arm-b-out`** (`docs/PROMPT-lora-c-armb.md` D1,
+team-lead ruling (н) of 24.08). A synthetic row becomes a v3 QUERY through the SAME renderer against
+the SAME pool of 515, under every rule a real query obeys; the 506 real rows are re-rendered and
+compared BYTE FOR BYTE against the shipped file before anything is appended to them, so a pool that
+drifted is a STOP here and not a silent prefix.
+
     PYTHONPATH=src python3.11 scripts/build_lora_c_data.py
-    PYTHONPATH=src python3.11 scripts/build_lora_c_data.py --sample   # review gate 1's file
+    PYTHONPATH=src python3.11 scripts/build_lora_c_data.py --sample     # review gate 1's file
+    PYTHONPATH=src python3.11 scripts/build_lora_c_data.py --arm-b-out  # arm B's 666 rows
 """
 
 import argparse
@@ -56,6 +63,8 @@ LABELS_R3 = REPO_ROOT / "results" / "labels_pass1_r3.jsonl"
 LABELS_R3_PROVENANCE = REPO_ROOT / "results" / "labels_pass1_r3_provenance.json"
 TRAIN_OUT = REPO_ROOT / "results" / "pass1_sft_v3_train.jsonl"
 RECORD_OUT = REPO_ROOT / "results" / "lora_c_data.json"
+ARM_B_OUT = REPO_ROOT / "results" / "pass1_sft_v3_arm_b.jsonl"
+ARM_B_RECORD_OUT = REPO_ROOT / "results" / "lora_c_arm_b.json"
 SAMPLE_OUT = REPO_ROOT / "docs" / "reviews" / "lora-c-rationales-sample.md"
 VERDICT = REPO_ROOT / "docs" / "reviews" / "lora-c-rationales-verdict.md"
 WATCHLIST_RULES = REPO_ROOT / "config" / "watchlist_rules.yaml"
@@ -648,6 +657,8 @@ def build() -> dict:
         },
         "train_file": "results/pass1_sft_v3_train.jsonl",
         "rows_data": trained,
+        "pool_data": pool,
+        "joined_data": rows,
     }
 
 
@@ -1057,28 +1068,425 @@ def sample_is_closed(verdict, sample_out):
     return True
 
 
+def refuse_to_drop_the_review_gate(record_out: Path, sample: bool) -> None:
+    """A rebuild without `--sample` may not silently delete the review gate's own block.
+
+    `review_gate_1` is written only under `--sample`, so a plain rebuild REPLACES the record with
+    one that has never heard of it — fifteen keys, including the boundary census the team lead's
+    verdict ruled on, gone with no guard raising and no line of output saying so. Caught here by a
+    key-path diff and not by anything in the build, which is the failure
+    ([[rewriting_a_record_resets_state_you_do_not_own]]).
+
+    The refusal is one-directional on purpose: it fires only when the block is ALREADY on disk, so
+    the first build of a fresh record still works.
+    """
+    if sample or not record_out.exists():
+        return
+    stored = json.loads(record_out.read_text(encoding="utf-8"))
+    if "review_gate_1" in stored:
+        raise SystemExit(
+            f"{summary.rel(record_out)} carries a `review_gate_1` block and this build has no"
+            " --sample, so writing it would delete the review gate's record. Re-run with --sample."
+        )
+
+
+def as_jsonl(rows: list[dict]) -> str:
+    """The shipped line for every row — one spelling, used by both writers.
+
+    `fields` and `examples` are dropped: the five example texts are already inside `prompt`, and a
+    second copy is 1.5 MB of the same bytes with nothing holding the two together.
+    """
+    return "".join(
+        json.dumps(
+            {key: one[key] for key in one if key not in ("fields", "examples")},
+            ensure_ascii=False,
+            sort_keys=True,
+        )
+        + "\n"
+        for one in rows
+    )
+
+
+def refuse_a_drifted_prefix(shipped: bytes | None, rebuilt: str, path: Path) -> None:
+    """A rebuild that does not reproduce the SHIPPED rows is a STOP, whatever the build is for.
+
+    Arm B is «the 506 real rows BYTE-IDENTICAL as a prefix, plus 160 rendered synthetic rows», and
+    the only way that claim can be checked is against what is ON DISK: comparing the prefix with the
+    bytes this same call is about to write proves nothing ([[reproducible_means_try_it]]). So the
+    shipped file is read BEFORE it is overwritten and compared with the rebuild.
+
+    The refusal guards the plain rebuild too, not only `--arm-b-out`:
+    `results/pass1_sft_v3_train.jsonl` is a DRAFT-pinned artifact and sits on
+    `docs/PROMPT-lora-c-armb.md`'s DO-NOT list by name. A build against a path that does not exist
+    yet has nothing to drift from and passes.
+    """
+    if shipped is None or shipped == rebuilt.encode("utf-8"):
+        return
+    was = shipped.decode("utf-8").splitlines()
+    now = rebuilt.splitlines()
+    first = next(
+        (
+            number
+            for number, (before, after) in enumerate(zip(was, now, strict=False), start=1)
+            if before != after
+        ),
+        min(len(was), len(now)) + 1,
+    )
+    raise SystemExit(
+        f"{summary.rel(path)} on disk has {len(was)} rows and this build renders {len(now)}, first"
+        f" differing at line {first}. The shipped rows are the ones every downstream record pins"
+        " and arm B's prefix claim rests on — stop and report the drift rather than write over it."
+    )
+
+
+def synthetic_fields(one: dict) -> dict:
+    """The header of a synthetic query — the thread id split exactly where a real one splits.
+
+    A real row's thread is `«{channel}:{post_id}»` and `build_pass1_sft.request` reads both out of
+    the store; a synthetic row has no store, and the ruling of 24.08 that makes it a QUERY says the
+    SAME renderer under ALL existing rules and rules nothing else. So the two header fields come
+    from the id the row already carries — `synthetic:brand_vs_retailer` splits into `synthetic` and
+    `brand_vs_retailer` — and the two block fields take the branch the existing rules take when
+    there is no post and no reader verdict: `topic=""` renders `prompts.NO_POST_TEXT` and an empty
+    entity list renders «(this thread resolved no entity)». Nothing is invented, and nothing is
+    borrowed from a real thread: a synthetic row wearing a real channel would fabricate provenance
+    inside training data AND break the one property `build_lora_c_synthetic.py` rests its isolation
+    on — that the `synthetic:` prefix makes every downstream refusal one string comparison.
+
+    **The consequence is measured, not assumed** — see :func:`header_tell`. `post_id` is a string
+    here where a real row's is an `int`; the renderer only interpolates it, and the field never
+    leaves this file (the shipped row drops `fields`).
+    """
+    channel, _, post_id = one["thread"].partition(":")
+    return {
+        "id": f"{one['thread']}#{one['msg_id']}",
+        "thread": one["thread"],
+        "channel": channel,
+        "post_id": post_id,
+        "topic": "",
+        "entities": [],
+        "msg_id": int(one["msg_id"]),
+        "text": one["text"],
+    }
+
+
+def synthetic_written() -> list[dict]:
+    """The 160 rows, through the validator that already refuses them.
+
+    `build_lora_c_synthetic.rows()` is CALLED — it checks the thread prefix, the error class, the
+    label and stance vocabularies, the cue-in-text rule, the rationale's own cue quotation, the
+    rationale ceiling and the provenance block. A second reading of the same file here would be a
+    second answer the day one of them moved. The import is local because that module imports THIS
+    one at module level ([[a_moved_guard_that_left_its_copy]]).
+    """
+    import build_lora_c_synthetic as synth
+
+    return synth.rows()
+
+
+def arm_b_rendered(pool: list[dict], by_key: dict) -> list[dict]:
+    """The 160 synthetic rows rendered as v3 QUERIES — the ruling of 24.08, and nothing more.
+
+    Every piece is the one arm A used: :func:`examples_for` (so `fewshot.neighbours` through
+    amendment 3.25 (2)'s pre-filter), :func:`render_v3` and :func:`target_v3`. The own-thread block
+    is satisfied trivially — no `synthetic:` thread is in the pool — and the equality refusal is
+    reached the same way it is for a real query.
+    """
+    out = []
+    for one in synthetic_written():
+        unit = {
+            "thread": one["thread"],
+            "msg_id": int(one["msg_id"]),
+            "text": one["text"],
+            "grams": fewshot.grams(one["text"]),
+        }
+        chosen, examples = examples_for(unit, pool, by_key)
+        fields = synthetic_fields(one)
+        prompt = render_v3(fields, examples)
+        target, learn_chars = target_v3(unit["msg_id"], one["subject_type"], one["rationale"])
+        out.append(
+            {
+                "id": fields["id"],
+                "thread": unit["thread"],
+                "msg_id": unit["msg_id"],
+                "pack": "synthetic",
+                "subject_type": one["subject_type"],
+                "rationale": one["rationale"],
+                "cue": one["cue"],
+                "task": pass1_v3.PASS1_TASK_V3,
+                "prompt": prompt,
+                "target": target,
+                "learn_chars": learn_chars,
+                "fields": fields,
+                "examples": examples,
+                "examples_chosen": [
+                    {
+                        "thread": neighbour["thread"],
+                        "msg_id": neighbour["msg_id"],
+                        "label": fewshot.key(neighbour["label"]),
+                        "similarity": neighbour["similarity"],
+                    }
+                    for neighbour in chosen
+                ],
+                "rendering_sha256": sha_text(prompt),
+                "synthetic": True,
+                "error_class": one["error_class"],
+                "author": one["author"],
+                "context": {
+                    "topic_from": "no post — a synthetic query has no thread behind it",
+                    "entities": 0,
+                    "verdict": None,
+                },
+            }
+        )
+    return out
+
+
+def header_tell(synthetic: list[dict], real: list[dict]) -> dict:
+    """Which lines of the synthetic header a real prompt never carries — and how many rows they mark.
+
+    This is the fifth isolation row and the contract does not ask for it. It is here because the
+    160 rows carry the only positive `молочный_бренд` supervision anywhere in this line — 32
+    targets against arm A's zero — and if every one of them sits behind a marker that appears in no
+    eval request, an adapter can condition the class on the marker and «synthetic did not help»
+    becomes indistinguishable from «the model learned the marker». That is a confound on the one
+    comparison arm B exists to make, so it is MEASURED rather than argued.
+
+    **Every header line of the 160 is counted, not only the ones common to all of them.** The first
+    version of this function intersected the 160 headers and reported one tell; the thread tag
+    `<thread channel="synthetic" post_id="…">` carries the error class, so it differs between the
+    four classes and the intersection could not see it. A rule that finds a marker only when it
+    marks the whole batch is the wrong instrument for a batch built in four groups
+    ([[a_prefilter_cannot_certify_the_population]]).
+
+    The header is everything before the examples block: the thread tag, the topic and the entities.
+    The examples block is measured separately, by :func:`neighbour_census` — it is the place a
+    reader would look for a tell first, and it is the place there is none.
+    """
+
+    def header(row: dict) -> list[str]:
+        return [line for line in row["prompt"].split("<examples>")[0].splitlines() if line.strip()]
+
+    seen: dict[str, int] = {}
+    for row in synthetic:
+        for line in set(header(row)):
+            seen[line] = seen.get(line, 0) + 1
+    counted = sorted(
+        (
+            {
+                "line": line,
+                "synthetic_rows_carrying_it": count,
+                "real_rows_carrying_it": len([one for one in real if line in one["prompt"]]),
+            }
+            for line, count in seen.items()
+        ),
+        key=lambda cell: (cell["real_rows_carrying_it"], -cell["synthetic_rows_carrying_it"]),
+    )
+    tells = [cell for cell in counted if cell["real_rows_carrying_it"] == 0]
+    marked = {row["id"] for row in synthetic for cell in tells if cell["line"] in row["prompt"]}
+    return {
+        "rule": (
+            "a header line carried by synthetic rows and by 0 of the 506 real prompts is a marker"
+            " the adapter can condition on and the eval never shows it"
+        ),
+        "header_lines_of_the_160": counted,
+        "tells": [cell["line"] for cell in tells],
+        "synthetic_rows_marked_by_at_least_one_tell": len(marked),
+        "real_rows": len(real),
+        "synthetic_rows": len(synthetic),
+    }
+
+
+def neighbour_census(synthetic: list[dict], real: list[dict]) -> dict:
+    """How many DISTINCT rows fill each class's example slot — for the 506 and for the 160.
+
+    The examples block is where a reader looks for a tell first, and the answer is that there is
+    none to find: the pool holds exactly ONE `молочный_бренд` row, so every query in this line —
+    real and synthetic — is shown the same one in that slot. Stated as the count rather than as the
+    sentence, because the sentence is a property of the pool and the pool can change.
+    """
+
+    def per_class(rows: list[dict]) -> dict:
+        table: dict[str, set] = {}
+        for row in rows:
+            for one in row["examples_chosen"]:
+                table.setdefault(one["label"], set()).add(f"{one['thread']}#{one['msg_id']}")
+        return {name: len(ids) for name, ids in sorted(table.items())}
+
+    return {
+        "rule": "distinct pool rows used in each class's example slot",
+        "real_506": per_class(real),
+        "synthetic_160": per_class(synthetic),
+    }
+
+
+def arm_b_isolation(synthetic: list[dict], real: list[dict], pool: list[dict]) -> dict:
+    """The four isolation readings the contract names, and the fifth :func:`header_tell` adds.
+
+    Every one is a COUNT, printed whether it is zero or not. «zero synthetic ids as examples» is
+    checked over all 666 rows and not only the 160, because the failure it guards against is a
+    synthetic row reaching the neighbour pool, and that would show up first in arm A's own block.
+    """
+    eval_pack = json.loads((REPO_ROOT / "results" / "lora_c_eval_pack.json").read_text("utf-8"))
+    e_ids = {item["id"] for leg in eval_pack["legs"] for item in leg["items"]}
+    holdout = sft.holdout_units()
+    gold = set(sft.r2pack.gold_msg_ids())
+    pool_ids = {f"{one['thread']}#{one['msg_id']}" for one in pool}
+    pool_texts = {norm(one["text"]) for one in pool}
+
+    def example_ids(rows: list[dict]) -> list[str]:
+        return [
+            f"{one['thread']}#{one['msg_id']}" for row in rows for one in row["examples_chosen"]
+        ]
+
+    synthetic_ids = {row["id"] for row in synthetic}
+    return {
+        "1_every_example_of_the_160_is_a_pool_row": {
+            "examples": len(example_ids(synthetic)),
+            "outside_the_pool": sorted(set(example_ids(synthetic)) - pool_ids),
+            "distinct_examples": len(set(example_ids(synthetic))),
+        },
+        "2_no_synthetic_row_is_an_example_anywhere": {
+            "checked_over_rows": len(real) + len(synthetic),
+            "synthetic_ids_used_as_examples": sorted(
+                set(example_ids(real + synthetic)) & synthetic_ids
+            ),
+            "pool_rows_with_a_synthetic_thread": sorted(
+                one["thread"] for one in pool if one["thread"].startswith("synthetic:")
+            ),
+        },
+        "3_no_example_text_equals_its_query": {
+            "rule": "amendment 3.25 (2), through neighbours_v3's pre-filter — whitespace-collapsed, casefolded",
+            "equal_pairs": sorted(
+                row["id"]
+                for row in synthetic
+                if any(norm(one["text"]) == norm(row["fields"]["text"]) for one in row["examples"])
+            ),
+            "synthetic_texts_that_are_in_the_pool_at_all": sorted(
+                row["id"] for row in synthetic if norm(row["fields"]["text"]) in pool_texts
+            ),
+        },
+        "4_synthetic_meets_no_eval_set": {
+            "eval_E": sorted(synthetic_ids & e_ids),
+            "holdout_100": sorted(
+                row["id"] for row in synthetic if (row["thread"], row["msg_id"]) in holdout
+            ),
+            "gold_14": sorted(row["id"] for row in synthetic if row["msg_id"] in gold),
+            "sizes": {"E": len(e_ids), "holdout": len(holdout), "gold": len(gold)},
+        },
+        "5_the_header_tell": header_tell(synthetic, real),
+        "6_the_example_slots": neighbour_census(synthetic, real),
+    }
+
+
+def arm_b_record(real: list[dict], synthetic: list[dict], pool: list[dict]) -> dict:
+    """Arm B's censuses — the file's own record, beside `lora_c_data.json` and never inside it.
+
+    Arm A's record keeps arm A's numbers: its `length`, `tokens` and `sampler` blocks are computed
+    on the 506 and a build that quietly widened them would move a DRAFT-pinned record's meaning
+    without moving its subject ([[the_old_record_with_one_field_replaced]]).
+    """
+    rows = real + synthetic
+    weights = trainer.class_weights([{"subject_type": one["subject_type"]} for one in rows])
+    widest = max(rows, key=lambda one: len(one["prompt"]))
+    widest_synthetic = max(synthetic, key=lambda one: len(one["prompt"]))
+    return {
+        "phase": "lora-c-armb",
+        "contract": "docs/PROMPT-lora-c-armb.md D1",
+        "authority": {
+            "record": "docs/STATUS.md «Открытые решения» п. 1 (н), 2026-08-24",
+            "ruling": (
+                "синтетический запрос рендерится ТЕМ ЖЕ правилом на ТОМ ЖЕ пуле 515 (закон уже"
+                " запрещает синтетику только как СОСЕДА; запрет двойника действует)"
+            ),
+        },
+        "rows": {
+            "real": len(real),
+            "synthetic": len(synthetic),
+            "total": len(rows),
+            "arithmetic": f"{len(real)} + {len(synthetic)} = {len(rows)}",
+            "distribution": dict(
+                sorted(Counter(fewshot.key(one["subject_type"]) for one in rows).items())
+            ),
+            "by_error_class": dict(
+                sorted(Counter(one["error_class"] for one in synthetic).items())
+            ),
+        },
+        "class_weights": {
+            "rule": f"w_c = N/({trainer.PASS1_K}·n_c) capped at {trainer.PASS1_WEIGHT_CAP}"
+            " — train_qlora.class_weights, CALLED",
+            "arm_b": weights,
+            "arm_a": trainer.class_weights([{"subject_type": one["subject_type"]} for one in real]),
+            "classes": len(weights),
+            "молочный_бренд": weights.get("молочный_бренд"),
+            "молочный_бренд_arithmetic": (
+                f"{len(rows)}/({trainer.PASS1_K}·"
+                f"{len([one for one in rows if one['subject_type'] == 'молочный_бренд'])})"
+                f" = {weights.get('молочный_бренд')}"
+            ),
+            "why_five": (
+                "arm A's four classes plus молочный_бренд, whose 32 targets are ALL synthetic —"
+                " the only positive supervision that class gets anywhere in this line"
+            ),
+        },
+        "length": {
+            "ceiling_chars": prompts.PASS1_MAX_INPUT_CHARS,
+            "widest_request": widest["id"],
+            "widest_request_chars": len(widest["prompt"]),
+            "widest_synthetic_request": widest_synthetic["id"],
+            "widest_synthetic_request_chars": len(widest_synthetic["prompt"]),
+            "headroom_chars": prompts.PASS1_MAX_INPUT_CHARS - len(widest["prompt"]),
+            "synthetic_headroom_chars": (
+                prompts.PASS1_MAX_INPUT_CHARS - len(widest_synthetic["prompt"])
+            ),
+            "median_synthetic_chars": sorted(len(one["prompt"]) for one in synthetic)[
+                len(synthetic) // 2
+            ],
+        },
+        "isolation": arm_b_isolation(synthetic, real, pool),
+        "prefix_rule": (
+            "the first 506 lines of results/pass1_sft_v3_arm_b.jsonl are BYTE-IDENTICAL to"
+            " results/pass1_sft_v3_train.jsonl — re-rendered by this build and compared, never"
+            " copied, so a pool that drifted would be a STOP here and not a silent pass"
+        ),
+        "produced_by": {
+            "script": "scripts/build_lora_c_data.py --arm-b-out",
+            "sha256": sha_text(Path(__file__).read_text(encoding="utf-8")),
+        },
+        "arm_b_file": "results/pass1_sft_v3_arm_b.jsonl",
+        "synthetic_file": "results/synthetic_pass1_v1.jsonl",
+        "synthetic_sha256": hashlib.sha256(
+            (REPO_ROOT / "results" / "synthetic_pass1_v1.jsonl").read_bytes()
+        ).hexdigest(),
+    }
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--sample", action="store_true", help="also write review gate 1's file")
     parser.add_argument("--train-out", type=Path, default=TRAIN_OUT)
     parser.add_argument("--record-out", type=Path, default=RECORD_OUT)
     parser.add_argument("--sample-out", type=Path, default=SAMPLE_OUT)
+    parser.add_argument(
+        "--arm-b-out",
+        nargs="?",
+        type=Path,
+        const=ARM_B_OUT,
+        default=None,
+        help="also render the 160 synthetic rows as v3 queries and write arm B's dataset",
+    )
+    parser.add_argument("--arm-b-record-out", type=Path, default=ARM_B_RECORD_OUT)
     args = parser.parse_args(argv)
+    refuse_to_drop_the_review_gate(args.record_out, args.sample)
 
     record = build()
     rows = record.pop("rows_data")
-    args.train_out.write_text(
-        "".join(
-            json.dumps(
-                {key: one[key] for key in one if key not in ("fields", "examples")},
-                ensure_ascii=False,
-                sort_keys=True,
-            )
-            + "\n"
-            for one in rows
-        ),
-        encoding="utf-8",
-    )
+    pool = record.pop("pool_data")
+    joined_rows = record.pop("joined_data")
+    shipped = args.train_out.read_bytes() if args.train_out.exists() else None
+    rebuilt = as_jsonl(rows)
+    refuse_a_drifted_prefix(shipped, rebuilt, args.train_out)
+    args.train_out.write_text(rebuilt, encoding="utf-8")
     record["train_sha256"] = hashlib.sha256(args.train_out.read_bytes()).hexdigest()
     args.record_out.write_text(
         json.dumps(record, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8"
@@ -1093,6 +1501,37 @@ def main(argv: list[str] | None = None) -> int:
         f"  widest request {record['length']['widest_request_chars']} chars"
         f" (headroom {record['length']['headroom_chars']})"
     )
+    if args.arm_b_out is not None:
+        by_key = {(one["thread"], one["msg_id"]): one for one in joined_rows}
+        synthetic = arm_b_rendered(pool, by_key)
+        args.arm_b_out.write_text(rebuilt + as_jsonl(synthetic), encoding="utf-8")
+        arm_b = arm_b_record(rows, synthetic, pool)
+        arm_b["arm_b_sha256"] = hashlib.sha256(args.arm_b_out.read_bytes()).hexdigest()
+        arm_b["train_sha256"] = record["train_sha256"]
+        args.arm_b_record_out.write_text(
+            json.dumps(arm_b, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
+            encoding="utf-8",
+        )
+        print(f"wrote {summary.rel(args.arm_b_out)}  {arm_b['rows']['arithmetic']} rows")
+        print(f"wrote {summary.rel(args.arm_b_record_out)}")
+        print(f"  prefix: the first {len(rows)} lines re-render BYTE-IDENTICAL to the shipped file")
+        print(f"  distribution {arm_b['rows']['distribution']}")
+        print(
+            f"  class_weights {arm_b['class_weights']['classes']} classes,"
+            f" молочный_бренд {arm_b['class_weights']['молочный_бренд_arithmetic']}"
+        )
+        print(
+            f"  widest arm-B request {arm_b['length']['widest_request_chars']} chars"
+            f" (headroom {arm_b['length']['headroom_chars']}); widest SYNTHETIC"
+            f" {arm_b['length']['widest_synthetic_request_chars']}"
+            f" (headroom {arm_b['length']['synthetic_headroom_chars']})"
+        )
+        for name, cell in arm_b["isolation"].items():
+            if name == "5_the_header_tell":
+                print(f"  {name}: tells {cell['tells']}")
+                continue
+            print(f"  {name}: " + " · ".join(f"{k}={v}" for k, v in cell.items() if k != "rule"))
+
     if args.sample:
         record["rows_data"] = rows
         args.sample_out.parent.mkdir(parents=True, exist_ok=True)

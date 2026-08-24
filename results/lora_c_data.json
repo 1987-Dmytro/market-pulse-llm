@@ -85,7 +85,7 @@
   },
   "produced_by": {
     "script": "scripts/build_lora_c_data.py",
-    "sha256": "e94afe31e984f0b57dbdd5f44b13fc14b0e9174374479a8b5cb607473b5d0ee0"
+    "sha256": "feab33005cc874c07db17b03da98ec25b96ed0e735e64eb1fd664d5bc1ec9e19"
   },
   "rationales": {
     "author": "claude-code",
