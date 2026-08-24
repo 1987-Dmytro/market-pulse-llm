@@ -13,18 +13,25 @@ are taken BEFORE and AFTER the suite, and a move makes this target exit non-zero
 — the tree moved». The suite's own exit code is reported beside it and never replaces it: a green
 suite over a moved tree is still VOID.
 
-**The one whitelisted path.** `knowledge/daily_logs/` — the Stop hook appends a
-`- HH:MM: session ended (auto)` line there on its own schedule, and the day file may appear as `??`
-mid-run. It is whitelisted because NO TEST OPENS IT, and that is a grep, not a belief:
+**The whitelisted paths.** Both are written by the Stop hook, `scripts/brain-session-end.py`, on
+its own schedule and not by anything a contract does: `knowledge/daily_logs/` (it appends a
+`- HH:MM: session ended (auto)` line, so the day file may appear as `??` mid-run) and
+`knowledge/index.md` (it regenerates the vault index whenever a vault file is added — which is what
+voided Dv802's first closing reading, over a GREEN suite). Both are whitelisted for ONE registered
+reason: NO TEST OPENS EITHER. That is a check, not a belief —
+`tests/test_lora_c_armb.py::test_the_whitelisted_directory_is_read_by_no_test` parses every test
+module and fails the day one of these names is passed to a call, so the whitelist stops being true
+the moment its licence stops being true.
 
-    grep -rn "daily_logs" tests/          # → no matches
-
-`tests/test_lora_c_armb.py::test_the_whitelisted_directory_is_read_by_no_test` runs exactly that
-grep, so the whitelist stops being true the day a test starts reading the directory.
+`knowledge/index.md` joined the list by the team lead's ruling (о) of 2026-08-24, on that criterion
+and after re-running it — an inherited claim about a directory that grows every week is the shape
+this instrument exists to refuse ([[a_claim_no_number_can_check]]).
 
 **What the whitelist does NOT license.** `scripts/refresh-hot-cache.py` reads `knowledge/daily_logs/`
-and WRITES `knowledge/hot.md`. The whitelist covers the day-log file appearing; it covers no cache
-refresh, and `knowledge/hot.md` and `knowledge/index.md` are outside it by name.
+and WRITES `knowledge/hot.md`. The whitelist covers the two hook outputs appearing; it covers no
+cache refresh, and `knowledge/hot.md` stays outside it BY NAME — `scripts/volume_calc_5c1.py` greps
+a price literal out of that file and nine tests read the result, so it is a suite input and a
+mid-run edit there is precisely the move that voided Dv785 and Dv792.
 
 Nothing is written to the repository: the reading is this command's own output, and a stamp file
 under a tracked path would be the very move it is checking for.
@@ -38,8 +45,12 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
-WHITELIST = ("knowledge/daily_logs/",)
-"""Path prefixes whose porcelain lines may appear or change while the suite runs."""
+WHITELIST = ("knowledge/daily_logs/", "knowledge/index.md")
+"""Path prefixes whose porcelain lines may appear or change while the suite runs.
+
+Both are Stop-hook outputs that no test reads. `knowledge/hot.md` is deliberately absent: it IS a
+suite input, and a whitelist wide enough to be convenient is a whitelist that licenses the move it
+was built to catch."""
 
 
 def head() -> str:

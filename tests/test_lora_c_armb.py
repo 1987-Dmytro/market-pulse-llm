@@ -55,12 +55,22 @@ def test_the_whitelisted_directory_is_read_by_no_test():
     The two files in the repo that DO read the directory — `scripts/refresh-hot-cache.py` and
     `scripts/brain-session-end.py` — are hooks, and the second half of this test is that no test
     drives either of them. That is the caveat `check_stamped.py` carries: the whitelist licenses the
-    day-log file appearing, never a cache refresh mid-run.
+    hook outputs appearing, never a cache refresh mid-run.
+
+    `knowledge/index.md` joined the whitelist on 2026-08-24 by ruling (о), which licensed it on THIS
+    criterion — so the criterion runs over it too. It is scanned by its full path: a bare
+    `index.md` would match half the repo and would fail on a name that has nothing to do with the
+    vault ([[the_subject_of_a_query_never_names_itself]]).
     """
     import ast
 
     # Spelled in halves so this file's own assertions are not what the scan finds.
-    needles = ("daily" + "_logs", "refresh-hot" + "-cache", "brain-session" + "-end")
+    needles = (
+        "daily" + "_logs",
+        "refresh-hot" + "-cache",
+        "brain-session" + "-end",
+        "knowledge/" + "index.md",
+    )
     for path in sorted((REPO_ROOT / "tests").rglob("*.py")):
         tree = ast.parse(path.read_text(encoding="utf-8"))
         docstrings = {
@@ -89,24 +99,34 @@ def test_the_whitelisted_directory_is_read_by_no_test():
 
 
 def test_the_stamped_verifier_voids_a_reading_when_a_suite_input_moves():
-    """The whitelist accepts the Stop hook's day log and refuses `hot.md` — both directions.
+    """Both Stop-hook outputs pass and `hot.md` is refused — both directions, one assertion each.
 
     `knowledge/hot.md` is the case the instrument exists for: `scripts/volume_calc_5c1.py` greps a
     price literal out of it and nine tests read the result, so a mid-run edit there is exactly the
     move that voided Dv785 and Dv792 ([[while_a_verifier_runs_the_repo_is_read_only]]).
+
+    `knowledge/index.md` is the case Dv802 found: the SAME hook regenerates it whenever a vault file
+    is added, so a session that adds an ADR gets a VOID over a green suite. Ruling (о) widened the
+    whitelist to it on the registered criterion, tested above. The two names are one line apart in
+    the same directory and land on opposite sides of the list, which is why this asserts each
+    direction rather than «the whitelist works».
     """
     before = [" M docs/STATUS.md"]
     day_log_appeared = before + ["?? knowledge/daily_logs/2026-08-24.md"]
     day_log_changed = before + [" M knowledge/daily_logs/2026-08-24.md"]
-    hot_changed = before + [" M knowledge/hot.md"]
     index_changed = before + [" M knowledge/index.md"]
+    hot_changed = before + [" M knowledge/hot.md"]
+    both_hooks = before + [" M knowledge/index.md", "?? knowledge/daily_logs/2026-08-24.md"]
 
     assert check_stamped.moved(before, day_log_appeared) == []
     assert check_stamped.moved(before, day_log_changed) == []
+    assert check_stamped.moved(before, index_changed) == []
+    assert check_stamped.moved(before, both_hooks) == []
     assert check_stamped.moved(before, hot_changed) == [" M knowledge/hot.md"]
-    assert check_stamped.moved(before, index_changed) == [" M knowledge/index.md"]
+    assert check_stamped.moved(before, hot_changed + index_changed[1:]) == [" M knowledge/hot.md"]
     assert check_stamped.moved(before, before) == []
     assert check_stamped.moved(day_log_appeared, before) == [], "a line DISAPPEARING is also a move"
+    assert check_stamped.moved(index_changed, before) == [], "and so is the index line disappearing"
 
 
 def test_the_stamped_verifier_reports_the_suites_own_exit_code():

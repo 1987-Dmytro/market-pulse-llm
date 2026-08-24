@@ -8,7 +8,8 @@ check:
 # The same verifier, with a proof that the tree did not move under it. Twice — Dv785, Dv792 —
 # a ten-minute reading had to be killed rather than quoted because something that ARRIVED mid-run
 # got written down. HEAD and porcelain are stamped on both sides; a move exits non-zero and the
-# reading may not be quoted. Whitelist: knowledge/daily_logs/ only (the Stop hook; no test reads it).
+# reading may not be quoted. Whitelist: the two Stop-hook outputs no test reads —
+# knowledge/daily_logs/ and knowledge/index.md (ruling (о), 24.08). hot.md is OUT: it is a suite input.
 check-stamped:
 	python3.11 scripts/check_stamped.py
 
