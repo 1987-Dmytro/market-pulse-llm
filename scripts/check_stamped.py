@@ -54,6 +54,21 @@ def run(command: list[str]) -> str:
     return subprocess.run(command, cwd=REPO_ROOT, capture_output=True, text=True, check=True).stdout
 
 
+def stamp(when: str, at: str, lines: list[str]) -> None:
+    """One side's reading, FLUSHED before the next thing writes to the terminal.
+
+    The suite is a subprocess writing straight to the inherited file descriptor, so a buffered
+    `print` here lands after ten minutes of pytest output and the line that says BEFORE appears
+    below the run it was taken before. The stamps are correct either way; the ORDER is the whole
+    legibility of the proof, and a reader who has to reconstruct it will not.
+    """
+    print(f"{when:<7} HEAD {at}", flush=True)
+    for line in lines:
+        print(f"        {line}", flush=True)
+    if not lines:
+        print("        (working tree clean)", flush=True)
+
+
 def path_of(line: str) -> str:
     """The path a porcelain line is about — the rename target where there is one."""
     return line[3:].split(" -> ")[-1].strip().strip('"')
@@ -70,27 +85,27 @@ def main(argv: list[str] | None = None) -> int:
     command = argv or ["make", "check"]
 
     head_before, porcelain_before = head(), porcelain()
-    print(f"BEFORE  HEAD {head_before}")
-    for line in porcelain_before:
-        print(f"        {line}")
+    stamp("BEFORE", head_before, porcelain_before)
 
     suite = subprocess.run(command, cwd=REPO_ROOT)
 
     head_after, porcelain_after = head(), porcelain()
-    print(f"AFTER   HEAD {head_after}")
-    for line in porcelain_after:
-        print(f"        {line}")
-    print(f"suite   {' '.join(command)} → exit {suite.returncode}")
+    stamp("AFTER", head_after, porcelain_after)
+    print(f"suite   {' '.join(command)} → exit {suite.returncode}", flush=True)
 
     drifted = moved(porcelain_before, porcelain_after)
     if head_before != head_after or drifted:
         print(
             f"reading VOID — the tree moved: HEAD {head_before} → {head_after},"
             f" porcelain {drifted or 'unchanged outside the whitelist'}."
-            " The suite's exit code above describes neither tree and may not be quoted."
+            " The suite's exit code above describes neither tree and may not be quoted.",
+            flush=True,
         )
         return 2
-    print(f"reading HOLDS — HEAD {head_after}, tree unmoved outside {list(WHITELIST)}")
+    print(
+        f"reading HOLDS — HEAD {head_after}, tree unmoved outside {list(WHITELIST)}",
+        flush=True,
+    )
     return suite.returncode
 
 
