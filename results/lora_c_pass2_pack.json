@@ -19,6 +19,131 @@
     "rule": "nothing is carried into a lora-c pass-2 leg. Each leg is rebuilt from its own arm's pass-1 out-file, so a row already in the target file would be a row from another leg and the runner stops before the model is loaded",
     "units": 0
   },
+  "ceiling_reachability": {
+    "headroom_under_r2": 3170,
+    "over_r1_ceiling": [
+      "@matusi_ukr:22272"
+    ],
+    "over_r2_ceiling": [],
+    "per_thread": [
+      {
+        "over_r1_ceiling": false,
+        "over_r2_ceiling": false,
+        "rendered_chars": 6749,
+        "rows_if_every_one_is_filtered_in": 7,
+        "thread": "@VARUS_channel:10348"
+      },
+      {
+        "over_r1_ceiling": false,
+        "over_r2_ceiling": false,
+        "rendered_chars": 6424,
+        "rows_if_every_one_is_filtered_in": 2,
+        "thread": "@VARUS_channel:10360"
+      },
+      {
+        "over_r1_ceiling": false,
+        "over_r2_ceiling": false,
+        "rendered_chars": 7643,
+        "rows_if_every_one_is_filtered_in": 12,
+        "thread": "@VARUS_channel:10366"
+      },
+      {
+        "over_r1_ceiling": false,
+        "over_r2_ceiling": false,
+        "rendered_chars": 6264,
+        "rows_if_every_one_is_filtered_in": 2,
+        "thread": "@VARUS_channel:10529"
+      },
+      {
+        "over_r1_ceiling": false,
+        "over_r2_ceiling": false,
+        "rendered_chars": 8373,
+        "rows_if_every_one_is_filtered_in": 10,
+        "thread": "@VARUS_channel:10613"
+      },
+      {
+        "over_r1_ceiling": false,
+        "over_r2_ceiling": false,
+        "rendered_chars": 8366,
+        "rows_if_every_one_is_filtered_in": 9,
+        "thread": "@mandziak:3676"
+      },
+      {
+        "over_r1_ceiling": false,
+        "over_r2_ceiling": false,
+        "rendered_chars": 7711,
+        "rows_if_every_one_is_filtered_in": 12,
+        "thread": "@mandziak:3684"
+      },
+      {
+        "over_r1_ceiling": false,
+        "over_r2_ceiling": false,
+        "rendered_chars": 9089,
+        "rows_if_every_one_is_filtered_in": 8,
+        "thread": "@mandziak:3689"
+      },
+      {
+        "over_r1_ceiling": false,
+        "over_r2_ceiling": false,
+        "rendered_chars": 8859,
+        "rows_if_every_one_is_filtered_in": 9,
+        "thread": "@mandziak:3703"
+      },
+      {
+        "over_r1_ceiling": false,
+        "over_r2_ceiling": false,
+        "rendered_chars": 8441,
+        "rows_if_every_one_is_filtered_in": 12,
+        "thread": "@matusi_ukr:22242"
+      },
+      {
+        "over_r1_ceiling": true,
+        "over_r2_ceiling": false,
+        "rendered_chars": 12399,
+        "rows_if_every_one_is_filtered_in": 15,
+        "thread": "@matusi_ukr:22272"
+      },
+      {
+        "over_r1_ceiling": false,
+        "over_r2_ceiling": false,
+        "rendered_chars": 7409,
+        "rows_if_every_one_is_filtered_in": 2,
+        "thread": "@matusi_ukr:22303"
+      },
+      {
+        "over_r1_ceiling": false,
+        "over_r2_ceiling": false,
+        "rendered_chars": 6816,
+        "rows_if_every_one_is_filtered_in": 3,
+        "thread": "@retsepty:7312"
+      },
+      {
+        "over_r1_ceiling": false,
+        "over_r2_ceiling": false,
+        "rendered_chars": 6977,
+        "rows_if_every_one_is_filtered_in": 2,
+        "thread": "@retsepty:7325"
+      },
+      {
+        "over_r1_ceiling": false,
+        "over_r2_ceiling": false,
+        "rendered_chars": 5952,
+        "rows_if_every_one_is_filtered_in": 1,
+        "thread": "@retsepty:7327"
+      }
+    ],
+    "r1_ceiling": 12000,
+    "r2_ceiling": 15569,
+    "rendered_at": "pass2_r2.PASS2_MAX_INPUT_CHARS — the ceiling this pack declares",
+    "rule": "every reference thread rendered with EVERY one of its rows filtered in — the widest request any arm's labels can produce, so no leg of this line can exceed it",
+    "widest": {
+      "over_r1_ceiling": true,
+      "over_r2_ceiling": false,
+      "rendered_chars": 12399,
+      "rows_if_every_one_is_filtered_in": 15,
+      "thread": "@matusi_ukr:22272"
+    }
+  },
   "contract": "docs/PROMPT-lora-c-prep.md D0 — the pass-2 eval pack, per leg",
   "instruments": {
     "ceiling_chars": 15569,
@@ -826,7 +951,7 @@
   },
   "produced_by": {
     "script": "scripts/build_lora_c_pass2_pack.py",
-    "sha256": "9d4b8061ad8becdf9b3c1da5e4ebae44bf67d0ab3080f7100ee33c3ee234714c"
+    "sha256": "9e548acd4ddbf6f6e9d85a869c9921e60418857aa7e02acf206cbd4869ae483f"
   },
   "serving": {
     "adapter": null,

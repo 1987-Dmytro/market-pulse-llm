@@ -311,6 +311,7 @@ def test_the_transport_block_pins_what_actually_runs():
     assert sorted(PREREG["transport"]["files"]) == [
         "scripts/gate_lora_c.py",
         "scripts/pass1_v3_pod_runner.py",
+        "scripts/pass2_lora_c_pod_runner.py",
         "scripts/pass2_r2_pod_runner.py",
         "scripts/train_qlora_v3.py",
     ]

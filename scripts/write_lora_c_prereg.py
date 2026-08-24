@@ -388,6 +388,26 @@ USD_PER_HOUR_LAST_FIVE_PODS = 0.74
 """What the last five pods of this stack actually billed, on a 4090 24 GB in EU-RO-1. A second
 reading of the same quantity, never a substitute for the worst one under a cap."""
 
+AUTHORISED_CARDS = {
+    "RTX PRO 4500": {
+        "gpu_id": "NVIDIA RTX PRO 4500 Blackwell",
+        "memory_gb": 32,
+        "usd_per_hour": 0.72,
+        "role": "ruling (о)'s card",
+    },
+    "RTX 4090": {
+        "gpu_id": "NVIDIA GeForce RTX 4090",
+        "memory_gb": 24,
+        "usd_per_hour": 0.74,
+        "role": "the ONE pre-authorised fallback, if the first is out of stock at create-time",
+    },
+}
+"""The two cards ruling (о) authorises, with the platform's own `gpuId` strings.
+
+Both are copied from `results/lora_c_stock_probe.json`, which read them off `runpodctl gpu list`.
+Anything else is a STOP — including a third card at an authorised PRICE, which is why rung 0 grades
+the name as well as the number."""
+
 USD_PER_HOUR_THE_RULED_CARD = 0.72
 """RTX PRO 4500 32 GB in EU-RO-1 — the card ruling (о) names, at the price the stock probe listed.
 
@@ -404,7 +424,7 @@ help» from «the adapter learned the marker», and it is never a bar."""
 
 
 def pre_pod_arithmetic(
-    calls: int, steps: dict, pass2_threads: int, pass2_legs: int, stock: dict
+    calls: int, steps: dict, pass2_threads: int, pass2_legs: int, pass2_bound: int, stock: dict
 ) -> dict:
     """lora-c-run's price derivation, at the CHARGED rates, before any pod exists.
 
@@ -598,6 +618,43 @@ def pre_pod_arithmetic(
                 " signals, already bought; base v3 takes no bar and therefore needs no pass 2"
             ),
         },
+        "the_pass_2_thread_count_is_a_READING_of_the_arms_labels": {
+            "charged": pass2_threads,
+            "charged_source": (
+                "`results/lora_c_pass2_pack.json::population"
+                ".threads_with_at_least_one_filtered_row` — what the WINDOW's v2 leg produced"
+            ),
+            "bound": pass2_bound,
+            "bound_source": (
+                "`ceiling_reachability.per_thread` — every reference thread that carries an E row"
+                " at all. An adapter marks more or fewer rows `OURS` than base v2 did, and the"
+                " pass-2 pack is rebuilt from ITS answers, so the thread count is measured after"
+                " the eval leg and cannot be known before it"
+            ),
+            "extra_seconds_at_the_bound": round(
+                pass2_legs * (pass2_bound - pass2_threads) * PASS_2_SECONDS_PER_THREAD, 2
+            ),
+            "break_even_seconds_per_step_at_the_bound": {
+                price: round(
+                    (
+                        cell["left_for_training_seconds"]
+                        - marker_seconds
+                        - pass2_legs * (pass2_bound - pass2_threads) * PASS_2_SECONDS_PER_THREAD
+                    )
+                    / total_steps,
+                    2,
+                )
+                for price, cell in at.items()
+            },
+            "what_it_costs_the_decision": (
+                "nothing that changes the answer. At the WORST case — both arms labelling a row"
+                f" `OURS` in every one of the {pass2_bound} reachable threads, and the marker census"
+                " charged too — the break-even at the ruled card stays above both s/step readings"
+                " this repo holds. It is carried as a BOUND because the rung that would discover it"
+                " late is the projection after eval A, and by then arm B is the only thing left to"
+                " cut ([[bound_instead_of_recompute]])"
+            ),
+        },
         "the_marker_census_is_not_inside_the_fixed_part": {
             "what": (
                 f"ruling (о) buys a report-only marker census: {MARKER_CENSUS_ROWS} E requests, each"
@@ -682,6 +739,7 @@ def money(
     synthetic_rows: int,
     counted: dict,
     pass2_threads: int,
+    pass2_bound: int,
     stock: dict,
 ) -> dict:
     """LEFT OPEN by the contract: formulas, named rates, and no sum.
@@ -702,7 +760,9 @@ def money(
         "arm_a": math.floor(math.ceil(train_rows / micro) / accum) * epochs,
         "arm_b": math.floor(math.ceil((train_rows + synthetic_rows) / micro) / accum) * epochs,
     }
-    arithmetic = pre_pod_arithmetic(calls, steps, pass2_threads, PASS_2_LEGS, stock)
+    arithmetic = pre_pod_arithmetic(
+        calls, steps, pass2_threads, PASS_2_LEGS, pass2_bound, stock
+    )
     return {
         "state": (
             "RE-DERIVED by lora-c-armb at the charged rates, for the scope ruling (н) fixes, and"
@@ -896,6 +956,15 @@ def rungs(fixed: dict, at: dict, steps: dict, pass2_threads: int) -> list[dict]:
             "unit": "usd_per_hour",
             "read": "costPerHr and gpu displayName, out of the create response",
             "registered_prices": sorted(at),
+            "authorised_cards": AUTHORISED_CARDS,
+            "the_card_is_graded_too": (
+                "ruling (о) authorises TWO cards and makes anything else a STOP, and the price is"
+                " not a proxy for the card: a third card at $0.72 or $0.74 would pass a"
+                " price-only rung. The gpuId strings are the PLATFORM's own, copied out of"
+                " results/lora_c_stock_probe.json rather than spelled — a name this repo invented"
+                " is refused by the create, which reads exactly like a stock refusal and burns one"
+                " of the two creates the recovery clause allows"
+            ),
             "on_failure": "delete the pod, prove it by listing, STOP. Nothing is trained.",
             "flag": "--open --pod-id <id> --created-at <ISO> --usd-per-hour <costPerHr> --card <name> --terminate-after <stamp>",
             "why": (
@@ -1077,7 +1146,12 @@ def transport() -> dict:
     files = {
         "scripts/train_qlora_v3.py": "the two guards re-bound; everything else CALLED",
         "scripts/pass1_v3_pod_runner.py": "the v3 family served and --adapter carried",
-        "scripts/pass2_r2_pod_runner.py": "pass2-signals-r2's own runner, unchanged",
+        "scripts/pass2_lora_c_pod_runner.py": (
+            "eleven lines: r2's runner CALLED at r2's own 15 569 ceiling, because"
+            " pass2_r2_pod_runner renders through pass2.pass2_messages_gm4 at 12 000 and one"
+            " reference thread can cross it"
+        ),
+        "scripts/pass2_r2_pod_runner.py": "pass2-signals-r2's own runner, PINNED and unchanged",
         "scripts/gate_lora_c.py": "the nine rungs, graded on the Mac",
     }
     return {
@@ -1094,7 +1168,11 @@ def transport() -> dict:
         },
         "what_the_drive_proved": {
             "pass_1": "198 requests per leg re-rendered and matched against the pack's own shas",
-            "pass_2": "11 threads, the handshake and the carried-row guard",
+            "pass_2": (
+                "the window leg's 11 threads, and the arm-A REBUILD from a synthesised v3 out-file"
+                " — 15 threads at the bound, the handshake, the carried-row guard and every"
+                " per-item sha"
+            ),
             "marker_census": "40 requests, 20 pairs, differing in the header alone",
         },
     }
@@ -1381,6 +1459,7 @@ def build() -> dict:
         synthetic_rows,
         counted,
         pass2_pack["population"]["threads_with_at_least_one_filtered_row"],
+        len(pass2_pack["ceiling_reachability"]["per_thread"]),
         stock,
     )
     arithmetic = money_block["pre_pod_arithmetic"]

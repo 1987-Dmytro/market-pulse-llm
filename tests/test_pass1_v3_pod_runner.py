@@ -287,3 +287,95 @@ def test_the_pass_2_transport_is_driven_end_to_end_with_a_fake_client(tmp_path):
     )
     assert code == 0
     assert len(answered) == PASS2["population"]["threads_with_at_least_one_filtered_row"] == 11
+
+
+def test_the_arm_rebuild_path_runs_end_to_end_on_a_synthesised_v3_out_file(tmp_path):
+    """The pass-2 pack rebuilt from an ARM's own replies — the path the runbook takes mid-session.
+
+    The builder was only ever driven on the window's v2 out-files. §7 of the runbook calls it on a
+    **v3** out-file that this session writes, while a pod is billing, and a crash there is a crash
+    with the meter running. So the out-file is synthesised in the shape the eval leg writes — 198
+    rows, five-key replies with `rationale` in front — and the whole chain is run: rebuild, then the
+    pinned pass-2 runner with a fake client.
+
+    Every row is labelled `сеть_ритейлер`, which is the WORST case: it filters in every reference
+    row and renders the widest request any arm's labels can produce. That is what found the ceiling
+    mismatch — `@matusi_ukr:22272` at 12 399 characters against `pass2`'s 12 000.
+    """
+    import build_lora_c_pass2_pack as builder
+    import pass2_lora_c_pod_runner as p2runner
+
+    v3 = LEGS["v3"]
+    out = tmp_path / "lora_c_eval_arm_a.jsonl"
+    out.write_text(
+        "".join(
+            json.dumps(
+                {
+                    "index": n,
+                    "id": one["id"],
+                    "thread": one["thread"],
+                    "part": None,
+                    "rendering_sha256": one["rendering_sha256"],
+                    "reply": json.dumps(
+                        {
+                            "rationale": "коментар ПРО мережу (cue: «в магазині»)",
+                            "msg_id": int(one["msg_id"]),
+                            "subject_type": "сеть_ритейлер",
+                            "subject_id": "Varus",
+                            "stance": "negative",
+                        },
+                        ensure_ascii=False,
+                    ),
+                    "balanced": True,
+                    "cut_chars": 0,
+                },
+                ensure_ascii=False,
+            )
+            + "\n"
+            for n, one in enumerate(v3["items"])
+        ),
+        encoding="utf-8",
+    )
+    record = builder.build((out,), "arm_a")
+    pack = tmp_path / "lora_c_pass2_arm_a.json"
+    pack.write_text(json.dumps(record, ensure_ascii=False, sort_keys=True), encoding="utf-8")
+
+    reach = record["ceiling_reachability"]
+    assert reach["over_r2_ceiling"] == [], "no thread can cross the ceiling this pack renders at"
+    assert reach["over_r1_ceiling"] == ["@matusi_ukr:22272"], "and exactly one crosses r1's"
+
+    answered = []
+
+    class Fake:
+        def read(self, task, items):
+            answered.append(items[0]["id"])
+            return [{"content": '{"signals": [], "drops": [], "subject_doubt": []}'}]
+
+    code = p2runner.main(
+        ["--pack", str(pack), "--outdir", str(tmp_path / "run"), "--repo", str(REPO_ROOT)],
+        loader=lambda p, r: Fake(),
+    )
+    assert code == 0
+    assert len(answered) == record["population"]["threads_with_at_least_one_filtered_row"]
+
+
+def test_the_lora_c_pass_2_runner_raises_the_ceiling_and_puts_it_back():
+    """Eleven lines whose whole job is one number — so the number is what is asserted."""
+    import pass2_lora_c_pod_runner as p2runner
+
+    from market_pulse import pass2, pass2_r2
+
+    assert pass2_r2.PASS2_MAX_INPUT_CHARS > pass2.PASS2_MAX_INPUT_CHARS
+    before = pass2.PASS2_MAX_INPUT_CHARS
+    with pass2_r2._ceiling(pass2_r2.PASS2_MAX_INPUT_CHARS):
+        assert pass2.PASS2_MAX_INPUT_CHARS == pass2_r2.PASS2_MAX_INPUT_CHARS
+    assert pass2.PASS2_MAX_INPUT_CHARS == before
+    assert p2runner.sibling.__name__ == "pass2_r2_pod_runner"
+
+
+def test_the_pass_2_builder_refuses_to_overwrite_the_frozen_default():
+    """A per-arm rebuild happens WHILE a pod is billing and the frozen path is one keystroke away."""
+    import build_lora_c_pass2_pack as builder
+
+    with pytest.raises(SystemExit, match="frozen_when_the_pod_exists"):
+        builder.main(["--leg", "arm_a", "--out-file", str(PACK_PATH)])

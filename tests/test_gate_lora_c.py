@@ -113,18 +113,31 @@ def test_the_plan_table_is_derived_and_sums_to_the_registered_work():
     "price, card, want",
     (
         (0.72, "RTX PRO 4500", 0),
+        (0.72, "NVIDIA RTX PRO 4500 Blackwell", 0),
         (0.74, "RTX 4090", 0),
-        (0.80, "RTX A6000", 0),
+        (0.74, "NVIDIA GeForce RTX 4090", 0),
         (0.69, "RTX 2000 Ada", 2),
         (0.89, "RTX PRO 6000", 2),
+        (0.80, "RTX A6000", 2),
+        (0.72, "RTX PRO 4000", 2),
+        (0.74, "L4", 2),
     ),
 )
-def test_rung_0_refuses_a_price_with_no_registered_column(run, price, card, want):
-    """Both failure modes: over the ceiling, and — the one ruling (о) creates — simply unregistered.
+def test_rung_0_refuses_an_unregistered_price_and_an_unauthorised_card(run, price, card, want):
+    """Three failure modes, and the two that a price-only rung would miss.
 
-    $0.69/h is CHEAPER than every column and it is still a KILL. The plan's break-even was never
-    solved at it, so every projection rung after the create would divide by a price this record
-    does not hold ([[a_rate_is_a_property_of_the_pod]]).
+    $0.69/h is CHEAPER than every column and is still a KILL: the break-even was never solved at
+    it, so every projection rung after the create would divide by a price this record does not hold
+    ([[a_rate_is_a_property_of_the_pod]]).
+
+    The last three are the card. `RTX A6000` is what ruling (к) originally named and ruling (о)
+    replaced — an authorised PRICE on a card nobody authorised. `RTX PRO 4000` is 24 GB at exactly
+    $0.72, and `L4` is 24 GB at a listed price the plan happens to hold a column for. Every one of
+    them would pass a rung that graded the number alone, and the seconds this plan is charged in
+    are a property of the CARD ([[capability_gate_is_not_a_theme_gate]]).
+
+    Both spellings of each authorised card are accepted: the create response names the platform's
+    own `gpuId`, and the record carries the short displayName beside it.
     """
     assert opened(run, usd_per_hour=price, card=card) == want
 

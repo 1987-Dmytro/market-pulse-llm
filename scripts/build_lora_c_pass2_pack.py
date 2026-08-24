@@ -41,7 +41,7 @@ import build_pass2_pack as p2  # noqa: E402
 import census_pass1_window as census  # noqa: E402
 import score_pass2_signals as r1score  # noqa: E402
 import window_summary_5c2 as summary  # noqa: E402
-from market_pulse import pass2_r2  # noqa: E402
+from market_pulse import pass2, pass2_r2  # noqa: E402
 
 WINDOW_PACK = REPO_ROOT / "results" / "pass1_window_pack.json"
 WINDOW_OUT = (
@@ -86,6 +86,61 @@ def filtered(pack: dict, out_files: tuple[Path, ...]) -> tuple[dict, dict, set]:
     return parsed, table, refused_ids
 
 
+def the_widest_a_leg_can_render(reference: set, pack: dict, store, blocks, flags) -> dict:
+    """The WORST case any arm's labels can produce, per reference thread — a BOUND, not a sample.
+
+    This pack is rebuilt on the MAC from a leg's own pass-1 answers, while a pod is billing. A
+    thread's rendered size grows with the number of rows pass 1 marked `OURS`, so an adapter that
+    marks more of them renders a wider request than the window's v2 leg did — and a `ValueError` at
+    that moment is a crash on the Mac with the meter running.
+
+    So the ceiling is not hoped for, it is BOUNDED: every reference thread is rendered with EVERY
+    one of its rows filtered in, which no labelling can exceed
+    ([[an_absolute_bar_needs_a_reachability_state]]).
+
+    The answer on 2026-08-24: one thread, `@matusi_ukr:22272`, renders 12 399 characters in the
+    worst case — 399 over `pass2.PASS2_MAX_INPUT_CHARS` and 3 170 under
+    `pass2_r2.PASS2_MAX_INPUT_CHARS`. It is also a FLAGSHIP thread of bar 1
+    (`results/prereg_pass2_signals_r2.json::reachability.flagship_signals`), so dropping it would
+    make the bar unscoreable. That is why this builder renders at r2's ceiling — the one this pack
+    has always declared and never used.
+    """
+    worst = {}
+    for item in pack["legs"][0]["items"]:
+        if item["thread"] in reference:
+            worst.setdefault(item["thread"], []).append(
+                {**item, "subject_type": "сеть_ритейлер", "subject_id": "?", "stance": "neutral"}
+            )
+    table = []
+    for thread in sorted(worst):
+        with pass2_r2._ceiling(10**9):
+            rendered = p2.unit(thread, worst[thread], store, blocks[thread], flags.get(thread, {}))
+        table.append(
+            {
+                "thread": thread,
+                "rows_if_every_one_is_filtered_in": len(worst[thread]),
+                "rendered_chars": rendered["rendered_chars"],
+                "over_r1_ceiling": rendered["rendered_chars"] > pass2.PASS2_MAX_INPUT_CHARS,
+                "over_r2_ceiling": rendered["rendered_chars"] > pass2_r2.PASS2_MAX_INPUT_CHARS,
+            }
+        )
+    return {
+        "rule": (
+            "every reference thread rendered with EVERY one of its rows filtered in — the widest"
+            " request any arm's labels can produce, so no leg of this line can exceed it"
+        ),
+        "r1_ceiling": pass2.PASS2_MAX_INPUT_CHARS,
+        "r2_ceiling": pass2_r2.PASS2_MAX_INPUT_CHARS,
+        "rendered_at": "pass2_r2.PASS2_MAX_INPUT_CHARS — the ceiling this pack declares",
+        "per_thread": table,
+        "over_r1_ceiling": [one["thread"] for one in table if one["over_r1_ceiling"]],
+        "over_r2_ceiling": [one["thread"] for one in table if one["over_r2_ceiling"]],
+        "widest": max(table, key=lambda one: one["rendered_chars"]),
+        "headroom_under_r2": pass2_r2.PASS2_MAX_INPUT_CHARS
+        - max(one["rendered_chars"] for one in table),
+    }
+
+
 def build(out_files: tuple[Path, ...], leg_name: str) -> dict:
     """The pass-2 units for the 16 reference threads under one leg's pass-1 answers."""
     pack = json.loads(summary.read_text_or_refuse(WINDOW_PACK))
@@ -117,9 +172,16 @@ def build(out_files: tuple[Path, ...], leg_name: str) -> dict:
                 f" {None if cell is None else cell['filtered_rows']}. The filter is the authority"
                 " and this selection is what is being checked — stop and report."
             )
-        units.append(p2.unit(thread, rows, store, blocks[thread], flags.get(thread, {})))
+        # r2's ceiling, not r1's. `p2.unit` calls `pass2.pass2_messages_gm4`, which reads its
+        # ceiling as a module global at call time — the only way to move it is the contextmanager
+        # `pass2_r2` already owns for exactly this. This pack has ALWAYS declared
+        # `instruments.ceiling_chars = pass2_r2.PASS2_MAX_INPUT_CHARS` and never rendered at it, and
+        # one reference thread crosses r1's 12 000 in the worst case — see `ceiling_reachability`.
+        with pass2_r2._ceiling(pass2_r2.PASS2_MAX_INPUT_CHARS):
+            units.append(p2.unit(thread, rows, store, blocks[thread], flags.get(thread, {})))
 
     empty = sorted(one for one in reference if one not in by_thread)
+    reach = the_widest_a_leg_can_render(reference, pack, store, blocks, flags)
     return {
         "phase": "lora-c-prep",
         "contract": "docs/PROMPT-lora-c-prep.md D0 — the pass-2 eval pack, per leg",
@@ -209,6 +271,7 @@ def build(out_files: tuple[Path, ...], leg_name: str) -> dict:
             "ceiling_chars": pass2_r2.PASS2_MAX_INPUT_CHARS,
             "widest_request": max((one["rendered_chars"] for one in units), default=0),
         },
+        "ceiling_reachability": reach,
         "produced_by": {
             "script": "scripts/build_lora_c_pass2_pack.py",
             "sha256": data.sha_text(Path(__file__).read_text(encoding="utf-8")),
@@ -306,6 +369,14 @@ def main(argv: list[str] | None = None) -> int:
         print(f"  AGREES: {check['agrees']}")
         return 0 if check["agrees"] else 1
 
+    if args.leg != "window_v2" and args.out == OUT:
+        raise SystemExit(
+            f"--leg {args.leg} would overwrite {summary.rel(OUT)}, which is pinned in"
+            " results/prereg_lora_c.json::instruments.packs and listed in"
+            " frozen_when_the_pod_exists. A per-arm rebuild happens WHILE a pod is billing and the"
+            " default path is one keystroke away — name --out explicitly"
+            " ([[a_guard_that_runs_after_the_write]] is what this avoids: the refusal is before it)."
+        )
     out_files = tuple(args.out_file or WINDOW_OUT)
     record = build(out_files, args.leg)
     args.out.write_text(

@@ -209,17 +209,23 @@ def seconds_for(
 def price_gate(record: dict, usd_per_hour: float, card: str) -> dict:
     """The create response's own `costPerHr`, against the price columns this record holds.
 
-    Two conditions and not one. The ceiling is lora-b's registered rung 1 and it refuses an
-    expensive pod; the COLUMN check refuses a pod whose price the plan was never derived at, which
-    is the case ruling (о) creates by naming a card this repo has never billed. Every projection
+    THREE conditions, not one. The ceiling is lora-b's registered rung 1 and it refuses an expensive
+    pod. The COLUMN check refuses a pod whose price the plan was never derived at — every projection
     rung after this divides by the price, and a price with no column is a projection nobody can
-    check ([[a_rate_is_a_property_of_the_pod]]).
+    check ([[a_rate_is_a_property_of_the_pod]]). And the CARD is graded by name, because ruling (о)
+    authorises exactly two and the price is not a proxy for the card: a third card at $0.72 would
+    pass a price-only rung, and its seconds are what the whole plan is charged in.
     """
-    rule = rung(record, 0)["rule"]
+    entry = rung(record, 0)
+    rule = entry["rule"]
     ceiling = first_number(rule)
     columns = {float(one) for one in record["money"]["pre_pod_arithmetic"]["at_each_price"]}
+    cards = entry["authorised_cards"]
+    names = {one for name, spec in cards.items() for one in (name, spec["gpu_id"])}
     registered = any(abs(usd_per_hour - one) < 1e-9 for one in columns)
+    authorised = card in names
     over = usd_per_hour > ceiling
+    good = registered and authorised and not over
     return {
         "rung": 0,
         "usd_per_hour": usd_per_hour,
@@ -227,12 +233,15 @@ def price_gate(record: dict, usd_per_hour: float, card: str) -> dict:
         "price_ceiling_usd_per_hour": ceiling,
         "registered_price_columns": sorted(columns),
         "price_has_a_registered_column": registered,
+        "authorised_cards": sorted(names),
+        "card_is_authorised": authorised,
         "over_the_ceiling": over,
-        "verdict": "GO" if registered and not over else "KILL",
+        "verdict": "GO" if good else "KILL",
         "rule": rule,
+        "why_the_card_is_graded": entry["the_card_is_graded_too"],
         "next_step": (
-            "the price is one this plan was derived at; poll --gate0"
-            if registered and not over
+            "the card and the price are both ones this plan was derived at; poll --gate0"
+            if good
             else "DELETE the pod now and STOP — no load, no generation, no training"
         ),
     }

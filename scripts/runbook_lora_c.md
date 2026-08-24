@@ -44,6 +44,12 @@ own datacenter. `results/lora_c_stock_probe.json` read A6000 as `none` there. **
 refused for stock, ONE fallback create on a 4090 at $0.74 is pre-authorized; anything else is a
 STOP.**
 
+The `--gpu-id` strings below are the PLATFORM's own, copied out of
+`results/lora_c_stock_probe.json` — `NVIDIA RTX PRO 4500 Blackwell` and, for the fallback,
+`NVIDIA GeForce RTX 4090`. A name this repo invented is refused by the create, and that refusal
+reads exactly like a stock refusal while burning one of the two creates the recovery clause allows.
+Rung 0 grades BOTH the price and the card name.
+
 ```bash
 runpodctl pod create --name mp-lora-c --gpu-id 'NVIDIA RTX PRO 4500 Blackwell' --gpu-count 1 \
   --network-volume-id qw4nwleanc --data-center-ids EU-RO-1 --cloud-type SECURE \
@@ -110,9 +116,9 @@ a replacement pod mounts the same volume, and an adapter directory left by a kil
 mounted by `--adapter` as if this pod had trained it.
 
 Everything the pod runs is IN the bundle: `scripts/pass1_v3_pod_runner.py`,
-`scripts/pass2_r2_pod_runner.py` and `scripts/train_qlora_v3.py`, with their shas in
+`scripts/pass2_lora_c_pod_runner.py` and `scripts/train_qlora_v3.py`, with their shas in
 `results/prereg_lora_c.json::transport`. Each was driven against this line's frozen packs with a
-fake client before the pod existed.
+fake client before the pod existed — the handshake and every per-item rendering sha.
 
 ## 4 — base v2 and base v3, ONE load, watched on the rate
 
@@ -199,14 +205,30 @@ PYTHONPATH=/workspace/repo/src /workspace/venv/bin/python -u \
 Pass 2 per arm, rebuilt on the Mac from THAT arm's out-file and copied back:
 
 ```bash
+# the arm's eval replies come back first — the pack is rebuilt from THEM, on the Mac:
+scp ... root@<HOST>:/workspace/run/eval_a/lora_c_eval_v3.jsonl results/lora_c_eval_arm_a.jsonl
 PYTHONPATH=src python3.11 scripts/build_lora_c_pass2_pack.py --leg arm_a \
   --out-file results/lora_c_eval_arm_a.jsonl --out results/lora_c_pass2_arm_a.json
 scp ... results/lora_c_pass2_arm_a.json root@<HOST>:/workspace/
 PYTHONPATH=/workspace/repo/src /workspace/venv/bin/python -u \
-  /workspace/repo/scripts/pass2_r2_pod_runner.py \
+  /workspace/repo/scripts/pass2_lora_c_pod_runner.py \
   --pack /workspace/lora_c_pass2_arm_a.json --outdir /workspace/run/pass2_a \
   --repo /workspace/repo 2>&1 | tee /workspace/run/pass2_a.log
 ```
+
+**`--out` is REQUIRED here and the builder refuses without it:** its default is
+`results/lora_c_pass2_pack.json`, which the registration pins and the create freezes. This rebuild
+happens while a pod is billing, and the frozen path is one keystroke away.
+
+**The runner is `pass2_lora_c_pod_runner.py`, not the r2 one.** r2's renders through
+`pass2.pass2_messages_gm4` at 12 000 characters while this line's pack declares — and renders at —
+r2's own 15 569. One reference thread, `@matusi_ukr:22272`, reaches 12 399 in the worst case and it
+is a FLAGSHIP thread of bar 1, so it cannot be dropped. The bound is in the pack:
+`ceiling_reachability`.
+
+**The thread count is a READING, not the charged 11.** An adapter marks more or fewer rows `OURS`
+than base v2 did; the reachable maximum is 15. The money block carries what that costs
+(`the_pass_2_thread_count_is_a_READING_of_the_arms_labels`) and the projection rung sees it.
 
 Ruling (н): pass 2 runs for the two ARMS only. Base v2's end-to-end BEFORE column is
 `pass2-signals-r2`'s registered 4/5 · 2 signals and is not re-bought; base v3 takes no bar.
