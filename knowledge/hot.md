@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-23 18:16:05 (every SessionStart)
+**Auto-refreshed:** 2026-08-24 09:50:19 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
+a8ad7de docs(report): the closing reading covers the report's own commit, and the thirteen are counted
+0377e66 docs(report): the closing verifier, taken on a tree that did not move under it
+7c0719b docs(report): the operator ruled -- arm B's dataset first at $0, and the cap stays $4.00
 e25c79d chore(vault): the price is derived and it does not fit, and arm B has no file
 6f7e65d docs(report): lora-c-run STOPS at $0 -- the cap does not cover four legs, and arm B has no dataset
-1c84944 feat(lora-c): the pre-pod derivation -- and the cap does not cover the four legs
-7c7035e feat(lora-c): the sibling trainer -- two guards re-bound, everything else called
-251afcd test(lora-c): the two close debts -- a grep nobody had watched refuse, and a threshold with two homes
 ```
 
 ## 📋 Recent decisions
@@ -23,18 +23,18 @@ e25c79d chore(vault): the price is derived and it does not fit, and arm B has no
 
 ## 📅 Recent daily logs
 
+- `2026-08-24.md`
 - `2026-08-23.md`
 - `2026-08-22.md`
-- `2026-08-21.md`
 
 <!-- AUTO-GEN END (everything below preserved across refreshes) -->
 # Hot Cache — curated
 
-**Last update:** 2026-08-23 18:09 `lora-c-run` ОСТАНОВЛЕН ДО СОЗДАНИЯ ПОДА — **$0 потрачено,
-попытка не израсходована, регистрация всё ещё DRAFT**. Весь $0-объём контракта сдан и зелён: два
-долга close, sibling-тренер с прогоном в обе стороны, вывод цены в записи. Две находки держат
-контракт: **капа не хватает на четыре леги** и **у арма B нет датасета**. Отчёт —
-`docs/reports/lora-c-run.md`, решение за оператором.
+**Last update:** 2026-08-24 09:46 (checkpoint) `lora-c-run` ОСТАНОВЛЕН ДО СОЗДАНИЯ ПОДА и **ЖДЁТ
+ПРИЁМКИ** — **$0 потрачено, попытка не израсходована, регистрация всё ещё DRAFT**. Весь $0-объём
+контракта сдан и зелён: два долга close, sibling-тренер с прогоном в обе стороны, вывод цены в
+записи. Две находки держат контракт: **капа не хватает на четыре леги** и **у арма B нет
+датасета**. Верификатор **3 682/2 на `7c0719b`**, дерево чистое, HEAD `a8ad7de`, подов нет.
 
 > Этот блок курируется руками. Археология закрытых контрактов живёт в отчётах, ADR и логах дня — не
 > восстанавливать сюда то, у чего есть дом. Ценз буста мерить ДО и ПОСЛЕ каждой правки.
