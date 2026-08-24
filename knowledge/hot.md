@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-24 11:15:17 (every SessionStart)
+**Auto-refreshed:** 2026-08-24 20:38:27 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
+aec3b11 docs: hot.md carries the closing reading, and Dv802 says what it actually costs
 cb0af81 chore(vault): the day log records the closing reading and the two takes before it
 1cd3e95 docs(report): the closing reading, taken after the instrument refused its own first one
 8ef994e chore(vault): the Stop hook's own output, landed so the closing reading has a clean tree
 b659dea fix(verify): the stamps bracket the suite instead of arriving after it
-cafd446 chore(vault): lora-c-armb -- the price that now fits, and the marker that does not
 ```
 
 ## 📋 Recent decisions
@@ -30,7 +30,7 @@ cafd446 chore(vault): lora-c-armb -- the price that now fits, and the marker tha
 <!-- AUTO-GEN END (everything below preserved across refreshes) -->
 # Hot Cache — curated
 
-**Last update:** 2026-08-24 `lora-c-armb` ИСПОЛНЕН за **$0** и ЖДЁТ ПРИЁМКИ — подов нет,
+**Last update:** 2026-08-24 20:34 (checkpoint) `lora-c-armb` ИСПОЛНЕН за **$0** и ЖДЁТ ПРИЁМКИ — подов нет,
 попытка цела, регистрация всё ещё DRAFT. **Арм B стал ФАЙЛОМ** (666 = 506 префиксом байт в байт +
 160 отрендеренных синтетических), **проход-2 = 2 ноги по рулингу (н) → break-even вырос 48.47/58.61
 → 63.29/73.43 с/шаг, и замер lora-b 61.047 теперь ВЛЕЗАЕТ при обеих ценах**. Находка, которую
@@ -112,6 +112,12 @@ High** · RTX 4090 $0.74 Low · RTX PRO 6000 $2.09 Low · B200 $6.79 Low. Пер
 
 ## 🚧 Blockers
 
+**⛔ ВАЙТЛИСТ `check-stamped` ПРОТИВ STOP-ХУКА (Dv802, ждёт тимлида).** Хук бьёт по ПРОСТОЮ и
+пишет ДВА пути: `daily_logs/` (в вайтлисте) и `index.md` (нет). Значит **сессия, тихо ждущая свой
+десятиминутный верификатор, не получит цитируемое чтение** — 24.08 первый прогон вернул VOID при
+ЗЕЛЁНОЙ суите, третий удержался только потому, что сессию держали занятой. Не расширял: список
+исключений верификатора — гейт. Обход: не уходить в простой под прогоном.
+
 **✅ У АРМА B ТЕПЕРЬ ЕСТЬ ДАТАСЕТ.** `results/pass1_sft_v3_arm_b.jsonl`, 666 строк:
 506 реальных БАЙТ В БАЙТ префиксом (перерендерены и сверены с ОТГРУЖЕННЫМ файлом до записи;
 расхождение — STOP) + 160 синтетических, отрендеренных ТЕМ ЖЕ рендерером на ТОМ ЖЕ пуле 515 по
@@ -146,7 +152,7 @@ High** · RTX 4090 $0.74 Low · RTX PRO 6000 $2.09 Low · B200 $6.79 Low. Пер
 **⛔ A6000 48 GB В EU-RO-1 — `none`.** 4090 24 GB $0.74 берётся с первой попытки, доказан пятью
 подами подряд.
 
-**🧹 BOOT TAX 11.6K при цели 10.7K** — измерено `scripts/context-census.py` 24.08 после правки
+**🧹 BOOT TAX 11.8K при цели 10.7K** — измерено `scripts/context-census.py` 24.08 после правки
 этого файла (до правки 11.2K). Цель превышена и до `lora-c-armb`; де-блоат — отдельное решение.
 
 ## 🔫 Footguns этого файла
