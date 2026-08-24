@@ -107,10 +107,10 @@ So the frozen law was not edited on the pod and did not need to be: the trainer 
 to the smallest batch the config permits and the card still could not hold the graph. `loss.jsonl`
 was never written, `/workspace/run/smoke/` is empty, and **zero optimizer steps** ran.
 
-**What this does and does not say.** It says this card cannot train THIS dataset at THIS ceiling. It
-does not say 3 072 is wrong, or that the line is dead: 48 GB is what lora-b's readings were taken
-on, and the ceiling is a property of the rows, which have not moved. The reachable remedies are the
-operator's to rule on and none was taken here:
+**What this does and does not say.** It says this card cannot train THIS dataset — and the bullet
+below settles that the ceiling is not what makes it so. It does not say 3 072 is wrong, or that the
+line is dead: 48 GB is what lora-b's readings were taken on, and the rows have not moved. The
+reachable remedies are the operator's to rule on and none was taken here:
 
 - **a 48 GB card** — A6000 reads `none` in EU-RO-1, the volume's own datacenter, in both the 08:24Z
   probe and the 20:2xZ reading taken before the create. A different datacenter means a different
