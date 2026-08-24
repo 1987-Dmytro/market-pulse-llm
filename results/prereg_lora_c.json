@@ -23,6 +23,10 @@
     "ruling_n_pass_2": "проход-2 в ране — ТОЛЬКО для армов (2 ноги, не 4): база v2 сквозной уже измерена (r2: 4/5 · 2), база v3 бара не берёт — экономия ~$0.47 по заряду.",
     "ruling_n_rendering": "синтетический запрос рендерится ТЕМ ЖЕ правилом на ТОМ ЖЕ пуле 515 (закон уже запрещает синтетику только как СОСЕДА; запрет двойника действует)",
     "ruling_n_what_it_settled": "(н) of 24.08 answers the two questions lora-c-run STOPPED on. The first makes a synthetic row a v3 QUERY under the rules a real one obeys, which is what makes arm B a file rather than an arithmetic; the second fixes the pass-2 leg count at two, which is the only term of the money block that moved",
+    "ruling_o_cap": "кап lora-c-run **остаётся $4.00** (оба существующих замера s/step влезают по фактической цене; смок решает, рунг проекции убивает честно)",
+    "ruling_o_card": "карта — **RTX PRO 4500, 32 GB, $0.72/ч, EU-RO-1** (A6000 в датацентре тома none; 32 GB — запас против OOM при замороженном micro_batch; фолбэк 4090 преавторизован)",
+    "ruling_o_marker": "ложная строка топика в синтетических заголовках заменяется выделенной константой (продовая строка NO_POST_TEXT в синтетике запрещена); конфаунд маркера принят и именован; в ран добавлен отчётный маркер-ценз (~$0.05) — отделяет «не помогло» от «выучил маркер»",
+    "ruling_o_what_it_settled": "(о) of 24.08, taken at the acceptance of lora-c-armb and ON the numbers that contract derived, answers the three things it STOPPED on. The cap stays $4.00 because the re-derived break-even now covers both s/step readings this repo holds. The card is named — RTX PRO 4500 32 GB at $0.72/h in EU-RO-1, the volume's own datacenter, because the probe read A6000 as `none` there — with a 4090 fallback pre-authorised and anything else a STOP. And the header marker Dv795 found is answered in two parts: the FALSE production string comes out of the synthetic header (see `the_marker_fix`), and the marker that remains is accepted, named, and measured by a report-only census",
     "ruling_v": "(в) **Затем — (4) LoRA «рассуждение→метка» поверх v2 с (3) синтетикой как армом B** одной регистрации; цель обучения — из (б)."
   },
   "bars": {
@@ -106,7 +110,7 @@
       "sha256": "9baab0e92078c137d17d5275158ef6360b9f349213a671b9249f3d4433b680c7"
     },
     "packs": {
-      "results/lora_c_data.json": "2c288b96e10eb5773986e722a624fed88e68b7546e69fbf097a926f55c6f0333",
+      "results/lora_c_data.json": "fa6a970a07703aa5ac6579150441921974b55119fa55fd0a1ad30cac3a83fea0",
       "results/lora_c_eval_pack.json": "049e0a5883192007b18cb4d46ef76b8f5b339b7aec2472cca03e063d4566b99a",
       "results/lora_c_pass2_pack.json": "4438ab0b4c9f6e9a7ec59639a3ae1fef982735d583409f04ce7aa529d704fcaa",
       "results/lora_c_synthetic.json": "dc1ea0e759843d57e17dda693461407ef626cddb7d044d64ee9d6fc05d689a46",
@@ -183,6 +187,118 @@
       }
     }
   },
+  "kill_clock": [
+    {
+      "before": "anything is trained",
+      "flag": "--open --pod-id <id> --created-at <ISO> --usd-per-hour <costPerHr> --card <name> --terminate-after <stamp>",
+      "name": "the price and the card at create",
+      "on_failure": "delete the pod, prove it by listing, STOP. Nothing is trained.",
+      "read": "costPerHr and gpu displayName, out of the create response",
+      "registered_prices": [
+        "0.72",
+        "0.74",
+        "0.80"
+      ],
+      "rule": "$0.80/h is the ceiling a create is allowed at, and costPerHr must equal one of the registered price columns ['0.72', '0.74', '0.80'] — a price this record holds no column for is a STOP",
+      "rung": 0,
+      "threshold": 0.8,
+      "unit": "usd_per_hour",
+      "why": "ruling (о) names RTX PRO 4500 32 GB — a card this stack has never billed. Every projection rung divides by the price, so an unregistered one makes every rung after it uncheckable"
+    },
+    {
+      "before": "the model is loaded",
+      "flag": "--gate0 [--ssh-ok]",
+      "name": "the boot gate",
+      "rule": "500 s from create to the first ssh that answers, else kill and recreate — 1 re-creation is authorised and a third pod is a STOP",
+      "rung": 1,
+      "threshold": 500,
+      "unit": "seconds"
+    },
+    {
+      "before": "every stage, while it runs",
+      "flag": "--liveness --last-event <ISO>",
+      "name": "liveness",
+      "rule": "600 s since the LAST log line or event is a KILL, at every stage",
+      "rung": 2,
+      "threshold": 600,
+      "unit": "seconds",
+      "why_it_is_not_a_poll_interval": "the deadline is measured from the last thing that HAPPENED, not from the last time anyone looked. A run quiet because it died and a run quiet because nothing prints look identical to a poll ([[no_rung_watches_an_idle_pod]])"
+    },
+    {
+      "before": "the second base leg, and the smoke",
+      "flag": "--rate --leg <name> --replies <file> --started-at <ISO>",
+      "name": "the realised rate of the base legs",
+      "on_failure": "KILL before the next leg — the finding is the card, and a card that cannot pay for the plan is an answer",
+      "read": "rows answered ÷ elapsed, off the growing out-file DURING the leg",
+      "rule": "$4.00 all-in must still cover the plan when the base leg's OWN realised s/call is extended over every remaining charged call and the 150 optimizer steps are charged at 61.047 s/step",
+      "rung": 3,
+      "steps_charged_at_seconds_per_step": 61.047,
+      "threshold": 4.0,
+      "unit": "usd",
+      "why_that_number_and_not_the_smoke_ceiling": "61.047 is the CHEAPEST s/step any pod of this stack has ever been registered at, and this rung is not projecting the run's rate — the contract forbids that and the smoke buys it. It asks a BOUND: after the generation this card is realising, is there still room for the cheapest training anyone has measured? If not, no plausible s/step fits and the session is already over ([[bound_instead_of_recompute]]). Charging the smoke's 181.5 s/step kill-clock instead would refuse EVERY session at the first base leg: 150 × 181.5 s alone is more than the cap buys",
+      "why_this_rung_exists": "the charged 6.14 s/call was measured on a 4090 and ruling (о) names a card this repo has never run. The first projection rung fires after the smoke — about 4320 charged seconds in — and a card 1.65× slower on identical work is inside this stack's own measured spread"
+    },
+    {
+      "before": "arm A",
+      "flag": "--smoke --loss <file>",
+      "name": "the smoke buys s/step and tests the VRAM",
+      "on_failure": "an OOM at 3 072 is a KILL and a STOP, not a retry: `micro_batch_size` is frozen law in config/qlora.yaml and is NOT edited on a pod. Ruling (о) makes the smoke the VRAM test, and 32 GB against the 48 GB every prior reading was taken on is why",
+      "rule": "181.5 s/step is the ceiling for the smoke's 6 optimizer steps at 3 072, and an OOM there is a KILL and a STOP",
+      "rung": 4,
+      "steps": 6,
+      "threshold": 181.5,
+      "unit": "seconds_per_step",
+      "what_it_buys": "the ONLY s/step this line may use. No reading at 3 072 exists and neither lora-b reading is one — both were taken at ≤1 222 tokens against this line's 1 445–2 975"
+    },
+    {
+      "before": "after the smoke and after EVERY leg",
+      "flag": "--projection --after <milestone> --reading <the guard's USD>",
+      "name": "the projection",
+      "on_failure": "KILL, pull every artifact, prove the teardown by listing, STOP to the team lead with the ledger. A KILL here is compliance, not failure",
+      "remaining_work_after_each_milestone": {
+        "arm_a": "82 steps + 2 eval legs + 2 × 11 threads",
+        "arm_b": "1 eval leg + 11 threads + the marker census",
+        "eval_a": "82 steps + 1 eval leg + 11 threads",
+        "eval_b": "the marker census only",
+        "smoke": "144 steps + 2 adapter eval legs + 2 × 11 pass-2 threads"
+      },
+      "rule": "$4.00 all-in: cumulative spend on the pod clock plus the remainder projected at the rates this session MEASURED must not pass the cap",
+      "rung": 5,
+      "threshold": 4.0,
+      "unit": "usd"
+    },
+    {
+      "before": "it is stamped at create and enforced by the platform",
+      "derivation": "cap ÷ the worst price a create is allowed at — the shortest window, deliberately",
+      "flag": "--open … --terminate-after '<the stamp pod create was given>'",
+      "name": "the hard stop",
+      "rule": "18000.0 s from create, LESS whatever a closed pod of this attempt already billed, stamped on `--terminate-after`",
+      "rung": 6,
+      "threshold": 18000.0,
+      "unit": "seconds",
+      "why_not_the_ruled_cards_price": "at $0.72/h the cap would pay for 20000.0 s. The stop is stamped at the WORST price because a backstop that assumes the good case is not one, and the runbook already accepts rounding the window down"
+    },
+    {
+      "before": "every create",
+      "flag": "--pre-create-check",
+      "name": "one billing resource",
+      "on_failure": "STOP before the create — never a refusal after the second meter starts",
+      "read": "`runpodctl pod list -a`, `serverless list`, `network-volume list`",
+      "rule": "1 billing resource at a time: never a second pod while one exists, never a serverless endpoint, and the network volume is beside the run and not inside it",
+      "rung": 7,
+      "threshold": 1,
+      "unit": "resources"
+    },
+    {
+      "before": "it is spent",
+      "consequence": "no retry, no second draw, no tuning after any eval output is seen",
+      "name": "the attempt",
+      "rule": "1 attempt, SPENT at the first reply generated against eval set E by an ADAPTER leg. The base legs are the BEFORE column and spend nothing; the smoke trains and generates no eval reply",
+      "rung": 8,
+      "threshold": 1,
+      "unit": "attempts"
+    }
+  ],
   "legs": {
     "arm_a": {
       "adapter": "QLoRA on the real rows with their rationales",
@@ -249,6 +365,12 @@
     "hard_stop_seconds": "TO BE DERIVED in lora-c-run's contract, from the cap and the live price at create. Registering one here would be a number with no run behind it",
     "pre_pod_arithmetic": {
       "at_each_price": {
+        "0.72": {
+          "break_even_seconds_per_step": 77.18,
+          "budget_seconds": 20000.0,
+          "fixed_usd": 1.7772,
+          "left_for_training_seconds": 11114.1
+        },
         "0.74": {
           "break_even_seconds_per_step": 73.43,
           "budget_seconds": 19459.5,
@@ -279,6 +401,9 @@
       "hard_stop_seconds": 18000.0,
       "price_usd_per_hour": {
         "last_five_pods": 0.74,
+        "rule": "a create whose costPerHr matches no column here is a STOP: every projection rung divides by a price, and one nobody registered cannot be checked",
+        "the_ruled_card": 0.72,
+        "the_ruled_card_source": "ruling (о) of 24.08 names RTX PRO 4500 32 GB at $0.72/h in EU-RO-1; the stock probe of 2026-08-24T08:24Z listed that price and read the card «High». A LISTING is not a create and the create response's costPerHr is the reading rung 0 grades",
         "worst": 0.8,
         "worst_source": "results/prereg_lora_b.json::kill_clock rung 1 — the create refuses above it"
       },
@@ -292,6 +417,10 @@
         "registered_by_lora_b": 61.047
       },
       "readings_under_the_break_even": {
+        "0.72": [
+          "measured_on_lora_b_arm_a",
+          "registered_by_lora_b"
+        ],
         "0.74": [
           "measured_on_lora_b_arm_a",
           "registered_by_lora_b"
@@ -387,6 +516,25 @@
         },
         "what_a_different_card_would_move": "every second in `fixed_seconds` was measured on a 4090 or charged from one, and the break-even above is priced at $0.80/h and $0.74/h. A card at another price re-prices the budget but not the seconds; a card of another CLASS re-prices the seconds too, and this record holds no reading of any of them"
       },
+      "the_marker_census_is_not_inside_the_fixed_part": {
+        "arithmetic": "20 × 2 = 40 calls × 6.14 s/call charged",
+        "break_even_seconds_per_step_with_it_charged": {
+          "0.72": 75.48,
+          "0.74": 71.72,
+          "0.80": 61.59
+        },
+        "ruling": "ложная строка топика в синтетических заголовках заменяется выделенной константой (продовая строка NO_POST_TEXT в синтетике запрещена); конфаунд маркера принят и именован; в ран добавлен отчётный маркер-ценз (~$0.05) — отделяет «не помогло» от «выучил маркер»",
+        "seconds": 245.6,
+        "the_contract_says_inside_the_fixed_part": "`docs/PROMPT-lora-c-run-r2.md` amendment 4 prices it «~$0.05, inside the fixed part», and amendment 1 pins that fixed part at 8885.88 s. The two cannot both be literal: the sum above decomposes exactly into boot + load + two base legs + pass 2 + smoke + two adapter evals, with no term for 40 calls. So the census is charged HERE, beside the registered total rather than silently inside it — a new leg joining the denominator moves the knife-edge even when the rule does not move ([[a_new_leg_joins_the_gates_denominator]])",
+        "usd_at_each_price": {
+          "0.72": 0.0491,
+          "0.74": 0.0505,
+          "0.80": 0.0546
+        },
+        "what": "ruling (о) buys a report-only marker census: 20 E requests, each answered 2× by arm B's adapter — as-is and with the synthetic header block substituted in — so «synthetic did not help» and «the adapter learned the marker» stop being the same reading",
+        "what_it_costs_the_decision": "nothing at the card ruling (о) names — at $0.72/h the break-even falls 77.18 → 75.48 s/step and both readings this repo holds stay under it. At the WORST price a create is allowed at it falls 63.29 → 61.59, which sits 0.54 s/step above lora-b's registered 61.047 — a real margin and a thin one. Carried as a BOUND, not as a blocker: the census is the LAST thing the session buys, after every bar is already scored, so a projection rung that cannot afford it drops it and loses a report-only table",
+        "when": "after arm B's eval leg, which is after both arms' bars are answered. It is report-only and it is never a bar"
+      },
       "the_pass_2_leg_count_was_ruled": {
         "now": 2,
         "ruling": "проход-2 в ране — ТОЛЬКО для армов (2 ноги, не 4): база v2 сквозной уже измерена (r2: 4/5 · 2), база v3 бара не берёт — экономия ~$0.47 по заряду.",
@@ -399,6 +547,7 @@
       "what_changed_since_lora_c_run_reported_this": "nothing but the pass-2 leg count, which ruling (н) fixed at 2. lora-c-run charged four and reported the plan SHORT: 11 019.88 s fixed and a break-even of 48.47–58.61 s/step against readings of 61.047 and 68.442. The 2134 s that came off is the whole of the difference — no rate moved, no term was re-estimated, and the row count of both arms was registered before either contract",
       "what_the_projection_rung_would_see": {
         "break_even_seconds_per_step": {
+          "0.72": 107.32,
           "0.74": 103.57,
           "0.80": 93.43
         },
@@ -567,7 +716,7 @@
           },
           "file": "results/pass1_sft_v3_arm_b.jsonl",
           "rows": 666,
-          "sha256": "85a5b278550e8771e3cf9da675b64f8303d50f26f9fc1e79e68a19a29f87005b"
+          "sha256": "311571555169300c0fc69092a619c5129b29bdd19c49fabeb9a6a29af730bde7"
         }
       ],
       "record": "results/lora_c_arm_b.json",
@@ -610,12 +759,47 @@
         }
       ],
       "rendering_ruling": "синтетический запрос рендерится ТЕМ ЖЕ правилом на ТОМ ЖЕ пуле 515 (закон уже запрещает синтетику только как СОСЕДА; запрет двойника действует)",
-      "rule": "arm A's file is arm B's BYTE-IDENTICAL prefix — the 506 real rows, then the 160 rendered synthetic ones — so the ablation's one variable is the top-up and nothing else. `scripts/build_lora_c_data.py` re-renders the 506 and refuses to write when they do not reproduce the shipped bytes"
+      "rule": "arm A's file is arm B's BYTE-IDENTICAL prefix — the 506 real rows, then the 160 rendered synthetic ones — so the ablation's one variable is the top-up and nothing else. `scripts/build_lora_c_data.py` re-renders the 506 and refuses to write when they do not reproduce the shipped bytes",
+      "the_marker_fix": {
+        "constant": {
+          "name": "scripts/build_lora_c_data.py::SYNTHETIC_NO_POST",
+          "value": "(synthetic training row — this thread has no post)"
+        },
+        "ruling": "ложная строка топика в синтетических заголовках заменяется выделенной константой (продовая строка NO_POST_TEXT в синтетике запрещена); конфаунд маркера принят и именован; в ран добавлен отчётный маркер-ценз (~$0.05) — отделяет «не помогло» от «выучил маркер»",
+        "the_false_string_it_replaces": {
+          "in_the_160": 0,
+          "in_the_506": 0,
+          "name": "src/market_pulse/prompts.py::NO_POST_TEXT",
+          "value": "(this post has no text of its own — it is an image or a video)",
+          "was_before_the_fix": {
+            "in_the_160": 160,
+            "in_the_506": 0
+          }
+        },
+        "the_marker_that_remains": {
+          "state": "ACCEPTED and NAMED by ruling (о); measured by the report-only marker census",
+          "synthetic_rows_marked_by_at_least_one_tell": 160,
+          "tells": [
+            "(synthetic training row — this thread has no post)",
+            "<thread channel=\"synthetic\" post_id=\"brand_vs_retailer\">",
+            "<thread channel=\"synthetic\" post_id=\"mention_vs_about\">",
+            "<thread channel=\"synthetic\" post_id=\"non_dairy_brand\">",
+            "<thread channel=\"synthetic\" post_id=\"retailer_non_dairy\">"
+          ],
+          "why_it_cannot_be_removed": "a synthetic row has no post and no resolved entity. Any topic line that says so truthfully is a line none of the 506 renders, and any line that does NOT say so would be a fabricated provenance inside training data. The thread tag carries the error class by the same argument. The confound is priced, not argued away"
+        },
+        "the_prefix_did_not_move": "the 506 real rows re-render BYTE-IDENTICAL against the shipped file; the producer refuses to write otherwise. Only the 160 synthetic prompts changed, and with them arm B's sha above",
+        "the_registered_string": {
+          "in_the_160": 160,
+          "in_the_506": 0
+        },
+        "why_prompts_py_is_not_edited": "it is pinned by every sealed record of this stack and it is on the contract's DO-NOT list. The constant is passed AS the topic, so `topic.strip()` is truthy and `pass1_v3.pass1_messages_gm4_v3` takes its ordinary branch — no renderer moved"
+      }
     }
   },
   "producer": {
     "script": "scripts/write_lora_c_prereg.py",
-    "sha256": "ff5136679fb2fcd59c7153fa88ce039d1835b7d017d73f423003c6d38bd92a68"
+    "sha256": "c4e8fe95a7522b840783e57afd8db2691166bb519de4fe03b7285d641dd3bb21"
   },
   "question": "does rationale-supervised QLoRA on pass 1 fix the subject-attribution errors pass 2 measured — brand ↔ retailer, a retailer in a non-dairy context, non-dairy «brands», and mention-vs-about — WITHOUT learning the prior the way line B did",
   "reachability": {
@@ -864,7 +1048,16 @@
       ],
       "remedy_named_not_taken": "a SIBLING trainer that imports train_qlora and re-binds the two guards, the way scripts/gate_pass2_signals_r2.py is a sibling of the r1 gate. Editing the pinned file turns `make check` red on lora-b's own sealed artifacts. lora-c-run's FIRST $0 deliverable, and registering train_qlora.py as THE trainer without saying this would be a bar with no producer",
       "sha256": "1a1a0b5983db60d8e17d86a14fb1410af35d31d0dbbb14e66f81a382072e7907",
-      "what_PASSES": "the learn_chars guard and the prompt_sha256 equality both pass. The v3 target's supervised head still ends at the subject_type value plus its separator — the prefix arithmetic in build_lora_c_data.target_v3 preserves the +1 END-offset rule — and the sha the trainer compares is v1's prompt, which has not moved"
+      "state": "CLOSED-BY-SIBLING",
+      "the_sibling_that_closes_it": {
+        "built_by": "lora-c-run D1, at $0",
+        "how": "it IMPORTS train_qlora and re-binds exactly the two guards above — guard 1 by swapping `prompts.PASS1_TASK` inside a contextmanager that puts it back (a module-level guard cannot be told anything by a parameter), guard 2 by reading this record's `population.train.files`. load_sft, class_weights, content_hash, load_for_training, encode_pass1, collate, train, save and main are the PINNED implementations, reached through the module object",
+        "path": "scripts/train_qlora_v3.py",
+        "sha256": "2f265e6d895670bbe9be6380b7682aaa29a3c67cab2539ff82f329e8319c0155",
+        "what_did_not_move": "scripts/train_qlora.py itself. Its sha above is the sha lora-b's sealed records pin, and this block is kept — not deleted — because the refusals are still true of the pinned file and a reader has to be able to see WHY a second trainer exists ([[a_moved_guard_that_left_its_copy]])"
+      },
+      "what_PASSES": "the learn_chars guard and the prompt_sha256 equality both pass. The v3 target's supervised head still ends at the subject_type value plus its separator — the prefix arithmetic in build_lora_c_data.target_v3 preserves the +1 END-offset rule — and the sha the trainer compares is v1's prompt, which has not moved",
+      "why_the_block_stays": "the unreachability was real and it was answered by building something, not by re-reading the record. Deleting it would leave the sibling looking like a fork someone made for convenience. Ruling (о)'s amendment 5 is this wording"
     },
     "the_smallest_class_has_no_fifth_neighbour": {
       "blocked_pool_rows": [

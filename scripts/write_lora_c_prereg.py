@@ -91,6 +91,25 @@ RULING_N_PASS_2 = (
 back into that file by :func:`quoted` on every build; the first is what makes arm B renderable at
 all, the second is what this money block is re-derived under."""
 
+RULING_O_CAP = (
+    "кап lora-c-run **остаётся $4.00** (оба существующих замера s/step влезают по фактической цене;"
+    " смок решает, рунг проекции убивает честно)"
+)
+RULING_O_CARD = (
+    "карта — **RTX PRO 4500, 32 GB, $0.72/ч, EU-RO-1** (A6000 в датацентре тома none; 32 GB —"
+    " запас против OOM при замороженном micro_batch; фолбэк 4090 преавторизован)"
+)
+RULING_O_MARKER = (
+    "ложная строка топика в синтетических заголовках заменяется выделенной константой (продовая"
+    " строка NO_POST_TEXT в синтетике запрещена); конфаунд маркера принят и именован; в ран"
+    " добавлен отчётный маркер-ценз (~$0.05) — отделяет «не помогло» от «выучил маркер»"
+)
+"""Ruling (о) of 2026-08-24, `docs/STATUS.md` п. 1, taken at the acceptance of `lora-c-armb` and on
+the numbers that contract derived. Three clauses, each grepped back into STATUS by :func:`quoted`:
+the cap stands at $4.00, the card is named with its price and its region, and the false production
+string is forbidden inside a synthetic header. It is the ruling this r2 registration exists to
+record, and the first one in this line that names a card the repo has never measured."""
+
 CAP_USD = 4.00
 """The ruling's own number, and the only money figure this record may carry."""
 
@@ -368,6 +387,20 @@ USD_PER_HOUR_LAST_FIVE_PODS = 0.74
 """What the last five pods of this stack actually billed, on a 4090 24 GB in EU-RO-1. A second
 reading of the same quantity, never a substitute for the worst one under a cap."""
 
+USD_PER_HOUR_THE_RULED_CARD = 0.72
+"""RTX PRO 4500 32 GB in EU-RO-1 — the card ruling (о) names, at the price the stock probe listed.
+
+A LISTED price, not a billed one: the create response's `costPerHr` is the reading, and rung 0
+refuses a create whose price this record holds no column for. Registered because every projection
+rung after the create divides by a price, and a price nobody registered is a projection nobody can
+check ([[a_published_ratio_is_not_the_gates]])."""
+
+MARKER_CENSUS_ROWS = 20
+MARKER_CENSUS_VARIANTS = 2
+"""The report-only marker census of ruling (о): ~20 E requests, each bought TWICE from arm B's
+adapter — as-is, and with the synthetic header block substituted in. It separates «synthetic did not
+help» from «the adapter learned the marker», and it is never a bar."""
+
 
 def pre_pod_arithmetic(
     calls: int, steps: dict, pass2_threads: int, pass2_legs: int, stock: dict
@@ -396,7 +429,7 @@ def pre_pod_arithmetic(
     }
     fixed["total"] = round(sum(fixed.values()), 2)
     at = {}
-    for price in (USD_PER_HOUR_WORST, USD_PER_HOUR_LAST_FIVE_PODS):
+    for price in (USD_PER_HOUR_WORST, USD_PER_HOUR_THE_RULED_CARD, USD_PER_HOUR_LAST_FIVE_PODS):
         budget = CAP_USD / price * 3600
         left = budget - fixed["total"]
         at[f"{price:.2f}"] = {
@@ -405,6 +438,14 @@ def pre_pod_arithmetic(
             "left_for_training_seconds": round(left, 1),
             "break_even_seconds_per_step": round(left / total_steps, 2),
         }
+    marker_seconds = MARKER_CENSUS_ROWS * MARKER_CENSUS_VARIANTS * PASS_1_SECONDS_PER_CALL
+    marker_break_even = {
+        price: round(
+            (cell["left_for_training_seconds"] - marker_seconds) / total_steps,
+            2,
+        )
+        for price, cell in at.items()
+    }
     readings = {
         "registered_by_lora_b": SECONDS_PER_STEP_REGISTERED,
         "measured_on_lora_b_arm_a": SECONDS_PER_STEP_MEASURED,
@@ -443,7 +484,17 @@ def pre_pod_arithmetic(
         "price_usd_per_hour": {
             "worst": USD_PER_HOUR_WORST,
             "worst_source": "results/prereg_lora_b.json::kill_clock rung 1 — the create refuses above it",
+            "the_ruled_card": USD_PER_HOUR_THE_RULED_CARD,
+            "the_ruled_card_source": (
+                "ruling (о) of 24.08 names RTX PRO 4500 32 GB at $0.72/h in EU-RO-1; the stock probe"
+                " of 2026-08-24T08:24Z listed that price and read the card «High». A LISTING is not"
+                " a create and the create response's costPerHr is the reading rung 0 grades"
+            ),
             "last_five_pods": USD_PER_HOUR_LAST_FIVE_PODS,
+            "rule": (
+                "a create whose costPerHr matches no column here is a STOP: every projection rung"
+                " divides by a price, and one nobody registered cannot be checked"
+            ),
         },
         "hard_stop_seconds": round(CAP_USD / USD_PER_HOUR_WORST * 3600, 1),
         "hard_stop_rule": "cap / worst rate, stamped on `--terminate-after` at create",
@@ -499,7 +550,11 @@ def pre_pod_arithmetic(
             "fixed_seconds_at_sibling_rates": sibling_fixed,
             "break_even_seconds_per_step": {
                 f"{price:.2f}": round((CAP_USD / price * 3600 - sibling_fixed) / total_steps, 2)
-                for price in (USD_PER_HOUR_WORST, USD_PER_HOUR_LAST_FIVE_PODS)
+                for price in (
+                    USD_PER_HOUR_WORST,
+                    USD_PER_HOUR_THE_RULED_CARD,
+                    USD_PER_HOUR_LAST_FIVE_PODS,
+                )
             },
             "one_accounting_for_the_smoke": (
                 f"the smoke's {SMOKE_STEPS} steps are charged at"
@@ -541,6 +596,53 @@ def pre_pod_arithmetic(
                 " v2's end-to-end BEFORE column is pass2-signals-r2's registered 4 of 5 on two"
                 " signals, already bought; base v3 takes no bar and therefore needs no pass 2"
             ),
+        },
+        "the_marker_census_is_not_inside_the_fixed_part": {
+            "what": (
+                f"ruling (о) buys a report-only marker census: {MARKER_CENSUS_ROWS} E requests, each"
+                f" answered {MARKER_CENSUS_VARIANTS}× by arm B's adapter — as-is and with the"
+                " synthetic header block substituted in — so «synthetic did not help» and «the"
+                " adapter learned the marker» stop being the same reading"
+            ),
+            "the_contract_says_inside_the_fixed_part": (
+                "`docs/PROMPT-lora-c-run-r2.md` amendment 4 prices it «~$0.05, inside the fixed"
+                f" part», and amendment 1 pins that fixed part at {fixed['total']:.2f} s. The two"
+                " cannot both be literal: the sum above decomposes exactly into boot + load + two"
+                " base legs + pass 2 + smoke + two adapter evals, with no term for"
+                f" {MARKER_CENSUS_ROWS * MARKER_CENSUS_VARIANTS} calls. So the census is charged"
+                " HERE, beside the registered total rather than silently inside it — a new leg"
+                " joining the denominator moves the knife-edge even when the rule does not move"
+                " ([[a_new_leg_joins_the_gates_denominator]])"
+            ),
+            "seconds": round(marker_seconds, 2),
+            "arithmetic": (
+                f"{MARKER_CENSUS_ROWS} × {MARKER_CENSUS_VARIANTS} ="
+                f" {MARKER_CENSUS_ROWS * MARKER_CENSUS_VARIANTS} calls ×"
+                f" {PASS_1_SECONDS_PER_CALL} s/call charged"
+            ),
+            "usd_at_each_price": {
+                price: round(marker_seconds / 3600 * float(price), 4) for price in at
+            },
+            "break_even_seconds_per_step_with_it_charged": marker_break_even,
+            "what_it_costs_the_decision": (
+                "nothing at the card ruling (о) names — at"
+                f" ${USD_PER_HOUR_THE_RULED_CARD:.2f}/h the break-even falls"
+                f" {at[f'{USD_PER_HOUR_THE_RULED_CARD:.2f}']['break_even_seconds_per_step']:.2f} →"
+                f" {marker_break_even[f'{USD_PER_HOUR_THE_RULED_CARD:.2f}']:.2f} s/step and both"
+                " readings this repo holds stay under it. At the WORST price a create is allowed at"
+                f" it falls {at[f'{USD_PER_HOUR_WORST:.2f}']['break_even_seconds_per_step']:.2f} →"
+                f" {marker_break_even[f'{USD_PER_HOUR_WORST:.2f}']:.2f}, which sits"
+                f" {marker_break_even[f'{USD_PER_HOUR_WORST:.2f}'] - SECONDS_PER_STEP_REGISTERED:.2f}"
+                f" s/step above lora-b's registered {SECONDS_PER_STEP_REGISTERED} — a real margin"
+                " and a thin one. Carried as a BOUND, not as a blocker: the census is the LAST thing"
+                " the session buys, after every bar is already scored, so a projection rung that"
+                " cannot afford it drops it and loses a report-only table"
+            ),
+            "when": (
+                "after arm B's eval leg, which is after both arms' bars are answered. It is"
+                " report-only and it is never a bar"
+            ),
+            "ruling": quoted(RULING_O_MARKER),
         },
         "stock_probe": {
             "record": "results/lora_c_stock_probe.json",
@@ -599,6 +701,7 @@ def money(
         "arm_a": math.floor(math.ceil(train_rows / micro) / accum) * epochs,
         "arm_b": math.floor(math.ceil((train_rows + synthetic_rows) / micro) / accum) * epochs,
     }
+    arithmetic = pre_pod_arithmetic(calls, steps, pass2_threads, PASS_2_LEGS, stock)
     return {
         "state": (
             "RE-DERIVED by lora-c-armb at the charged rates, for the scope ruling (н) fixes, and"
@@ -607,7 +710,7 @@ def money(
             " and nothing else moved. Still not SEALED: sealing is the first `pod create` and no"
             " pod exists"
         ),
-        "pre_pod_arithmetic": pre_pod_arithmetic(calls, steps, pass2_threads, PASS_2_LEGS, stock),
+        "pre_pod_arithmetic": arithmetic,
         "cap_usd_all_in": CAP_USD,
         "cap_rule": (
             "the operator's ruling (к): «один A6000, кап $4.00». Raising it is the operator's word"
@@ -734,6 +837,289 @@ def money(
             "a worst_case_usd, a total_seconds and a projected price. r1 of pass1-window registered"
             " a rate it had not measured and the number outlived the correction"
         ),
+    }
+
+
+LIVENESS_SECONDS = 600
+"""«Liveness: deadline 600 s from the LAST log line or event, at every stage» — the contract's own
+term, and the one rung that applies while nothing is happening."""
+
+BOOT_GATE_RETRIES = 1
+"""«ssh ≤500 s from create, else kill+recreate (once; third pod = STOP)»."""
+
+
+def rungs(fixed: dict, at: dict, steps: dict, pass2_threads: int) -> list[dict]:
+    """The session's GO/KILL conditions, as CONDITIONS with an instrument that evaluates them.
+
+    `docs/PROMPT-lora-c-run.md` D2 registers rungs and not numbers, and a rung with no producer is
+    not a rung ([[a_registered_bar_may_have_no_producer]]). `scripts/gate_lora_c.py` is that
+    producer; the runbook copies its commands from the `flag` field here rather than restating them.
+
+    **The shape is lora-b's on purpose** — a list of `{rung, rule, …}` — because `gate_lora_c.py`
+    is a SIBLING of `scripts/gate_lora_b.py` and CALLS its clock, its backstop check and its
+    dead-man unchanged. A second shape would have meant a second copy of all three.
+
+    Every rung carries `threshold` as a NUMBER beside its prose rule, and every rule is worded so
+    its FIRST number is that threshold. `gate_lora_b.first_number` reads thresholds out of prose,
+    and a rule with four words in front of its figure once turned a 600 s deadline into 5 s
+    ([[a_threshold_that_lives_in_prose]]); `tests/test_lora_c_run_r2.py` asserts the two agree for
+    every rung here, so the parse can never quietly disagree with the number.
+
+    Rung 0 exists because ruling (о) names a card this repo has NEVER billed. Every second in
+    `fixed_seconds` was measured on a 4090 or charged from one, and every projection rung divides by
+    a price — so the create response's own `costPerHr` is graded against the price columns this
+    record holds ([[a_rate_is_a_property_of_the_pod]]).
+
+    Rung 3 is the one lora-b did not have. Its first spend decision fired at the arm-A milestone;
+    here the first projection rung is after the SMOKE — boot + load + two base legs + the smoke.
+    On a card whose s/call this repo has never read, a slow pod
+    would be discovered two eval legs late, so the base legs are graded on their OWN realised rate
+    while they are being paid for ([[two_instruments_two_inputs]]).
+    """
+    total_steps = steps["arm_a"] + steps["arm_b"]
+    smoke_ceiling = SECONDS_PER_STEP_COMPLIANT_SLOW * SMOKE_KILL_CLOCK_MULTIPLIER
+    before_the_first_projection = (
+        fixed["boot"] + fixed["load"] + fixed["base_legs"] + fixed["training_smoke"]
+    )
+    return [
+        {
+            "rung": 0,
+            "name": "the price and the card at create",
+            "before": "anything is trained",
+            "rule": (
+                f"${USD_PER_HOUR_WORST:.2f}/h is the ceiling a create is allowed at, and costPerHr"
+                f" must equal one of the registered price columns {sorted(at)} — a price this"
+                " record holds no column for is a STOP"
+            ),
+            "threshold": USD_PER_HOUR_WORST,
+            "unit": "usd_per_hour",
+            "read": "costPerHr and gpu displayName, out of the create response",
+            "registered_prices": sorted(at),
+            "on_failure": "delete the pod, prove it by listing, STOP. Nothing is trained.",
+            "flag": "--open --pod-id <id> --created-at <ISO> --usd-per-hour <costPerHr> --card <name> --terminate-after <stamp>",
+            "why": (
+                "ruling (о) names RTX PRO 4500 32 GB — a card this stack has never billed. Every"
+                " projection rung divides by the price, so an unregistered one makes every rung"
+                " after it uncheckable"
+            ),
+        },
+        {
+            "rung": 1,
+            "name": "the boot gate",
+            "before": "the model is loaded",
+            "rule": (
+                f"{BOOT_SECONDS} s from create to the first ssh that answers, else kill and"
+                f" recreate — {BOOT_GATE_RETRIES} re-creation is authorised and a third pod is a STOP"
+            ),
+            "threshold": BOOT_SECONDS,
+            "unit": "seconds",
+            "flag": "--gate0 [--ssh-ok]",
+        },
+        {
+            "rung": 2,
+            "name": "liveness",
+            "before": "every stage, while it runs",
+            "rule": (
+                f"{LIVENESS_SECONDS} s since the LAST log line or event is a KILL, at every stage"
+            ),
+            "threshold": LIVENESS_SECONDS,
+            "unit": "seconds",
+            "flag": "--liveness --last-event <ISO>",
+            "why_it_is_not_a_poll_interval": (
+                "the deadline is measured from the last thing that HAPPENED, not from the last time"
+                " anyone looked. A run quiet because it died and a run quiet because nothing prints"
+                " look identical to a poll ([[no_rung_watches_an_idle_pod]])"
+            ),
+        },
+        {
+            "rung": 3,
+            "name": "the realised rate of the base legs",
+            "before": "the second base leg, and the smoke",
+            "rule": (
+                f"${CAP_USD:.2f} all-in must still cover the plan when the base leg's OWN realised"
+                " s/call is extended over every remaining charged call and the 150 optimizer steps"
+                f" are charged at {SECONDS_PER_STEP_REGISTERED} s/step"
+            ),
+            "threshold": CAP_USD,
+            "unit": "usd",
+            "steps_charged_at_seconds_per_step": SECONDS_PER_STEP_REGISTERED,
+            "why_that_number_and_not_the_smoke_ceiling": (
+                f"{SECONDS_PER_STEP_REGISTERED} is the CHEAPEST s/step any pod of this stack has"
+                " ever been registered at, and this rung is not projecting the run's rate — the"
+                " contract forbids that and the smoke buys it. It asks a BOUND: after the"
+                " generation this card is realising, is there still room for the cheapest training"
+                " anyone has measured? If not, no plausible s/step fits and the session is already"
+                " over ([[bound_instead_of_recompute]]). Charging the smoke's"
+                f" {smoke_ceiling:.1f} s/step kill-clock instead would refuse EVERY session at the"
+                f" first base leg: 150 × {smoke_ceiling:.1f} s alone is more than the cap buys"
+            ),
+            "read": "rows answered ÷ elapsed, off the growing out-file DURING the leg",
+            "on_failure": (
+                "KILL before the next leg — the finding is the card, and a card that cannot pay for"
+                " the plan is an answer"
+            ),
+            "flag": "--rate --leg <name> --replies <file> --started-at <ISO>",
+            "why_this_rung_exists": (
+                f"the charged {PASS_1_SECONDS_PER_CALL} s/call was measured on a 4090 and ruling (о)"
+                " names a card this repo has never run. The first projection rung fires after the"
+                f" smoke — about {before_the_first_projection:.0f} charged seconds in — and a card"
+                " 1.65× slower on identical work is inside this stack's own measured spread"
+            ),
+        },
+        {
+            "rung": 4,
+            "name": "the smoke buys s/step and tests the VRAM",
+            "before": "arm A",
+            "rule": (
+                f"{smoke_ceiling:.1f} s/step is the ceiling for the smoke's {SMOKE_STEPS} optimizer"
+                " steps at 3 072, and an OOM there is a KILL and a STOP"
+            ),
+            "threshold": smoke_ceiling,
+            "unit": "seconds_per_step",
+            "steps": SMOKE_STEPS,
+            "on_failure": (
+                "an OOM at 3 072 is a KILL and a STOP, not a retry: `micro_batch_size` is frozen law"
+                " in config/qlora.yaml and is NOT edited on a pod. Ruling (о) makes the smoke the"
+                " VRAM test, and 32 GB against the 48 GB every prior reading was taken on is why"
+            ),
+            "flag": "--smoke --loss <file>",
+            "what_it_buys": (
+                "the ONLY s/step this line may use. No reading at 3 072 exists and neither lora-b"
+                " reading is one — both were taken at ≤1 222 tokens against this line's 1 445–2 975"
+            ),
+        },
+        {
+            "rung": 5,
+            "name": "the projection",
+            "before": "after the smoke and after EVERY leg",
+            "rule": (
+                f"${CAP_USD:.2f} all-in: cumulative spend on the pod clock plus the remainder"
+                " projected at the rates this session MEASURED must not pass the cap"
+            ),
+            "threshold": CAP_USD,
+            "unit": "usd",
+            "on_failure": (
+                "KILL, pull every artifact, prove the teardown by listing, STOP to the team lead"
+                " with the ledger. A KILL here is compliance, not failure"
+            ),
+            "flag": "--projection --after <milestone> --reading <the guard's USD>",
+            "remaining_work_after_each_milestone": {
+                "smoke": (
+                    f"{total_steps} steps + 2 adapter eval legs + 2 × {pass2_threads} pass-2 threads"
+                ),
+                "arm_a": f"{steps['arm_b']} steps + 2 eval legs + 2 × {pass2_threads} threads",
+                "eval_a": f"{steps['arm_b']} steps + 1 eval leg + {pass2_threads} threads",
+                "arm_b": f"1 eval leg + {pass2_threads} threads + the marker census",
+                "eval_b": "the marker census only",
+            },
+        },
+        {
+            "rung": 6,
+            "name": "the hard stop",
+            "before": "it is stamped at create and enforced by the platform",
+            "rule": (
+                f"{round(CAP_USD / USD_PER_HOUR_WORST * 3600, 1)} s from create, LESS whatever a"
+                " closed pod of this attempt already billed, stamped on `--terminate-after`"
+            ),
+            "threshold": round(CAP_USD / USD_PER_HOUR_WORST * 3600, 1),
+            "unit": "seconds",
+            "derivation": "cap ÷ the worst price a create is allowed at — the shortest window, deliberately",
+            "why_not_the_ruled_cards_price": (
+                f"at ${USD_PER_HOUR_THE_RULED_CARD:.2f}/h the cap would pay for"
+                f" {round(CAP_USD / USD_PER_HOUR_THE_RULED_CARD * 3600, 1)} s. The stop is stamped"
+                " at the WORST price because a backstop that assumes the good case is not one, and"
+                " the runbook already accepts rounding the window down"
+            ),
+            "flag": "--open … --terminate-after '<the stamp pod create was given>'",
+        },
+        {
+            "rung": 7,
+            "name": "one billing resource",
+            "before": "every create",
+            "rule": (
+                "1 billing resource at a time: never a second pod while one exists, never a"
+                " serverless endpoint, and the network volume is beside the run and not inside it"
+            ),
+            "threshold": 1,
+            "unit": "resources",
+            "read": "`runpodctl pod list -a`, `serverless list`, `network-volume list`",
+            "flag": "--pre-create-check",
+            "on_failure": "STOP before the create — never a refusal after the second meter starts",
+        },
+        {
+            "rung": 8,
+            "name": "the attempt",
+            "before": "it is spent",
+            "rule": (
+                "1 attempt, SPENT at the first reply generated against eval set E by an ADAPTER leg."
+                " The base legs are the BEFORE column and spend nothing; the smoke trains and"
+                " generates no eval reply"
+            ),
+            "threshold": 1,
+            "unit": "attempts",
+            "consequence": "no retry, no second draw, no tuning after any eval output is seen",
+        },
+    ]
+
+
+def the_marker_fix(arm_b_record: dict) -> dict:
+    """Ruling (о)'s step 0.75, registered as the two counts it turns on — not as a sentence.
+
+    Dv795 found five header lines carried by 160 of the synthetic rows and by 0 of the 506 real
+    ones, and the loudest was `prompts.NO_POST_TEXT` — a sentence about an IMAGE post, false on a
+    synthetic row and true on the real image posts the eval genuinely contains. The team lead's
+    ruling forbids it there. `build_lora_c_data.SYNTHETIC_NO_POST` replaces it.
+
+    What the fix does NOT do is remove the marker, and the record says so in the same breath it
+    reports the fix: a synthetic row has no post, every honest topic line saying so is a line no
+    real row of this pool renders, and all 32 `молочный_бренд` targets in this line sit behind it.
+    That confound is ACCEPTED and measured by the report-only marker census
+    ([[a_default_is_a_marker_when_nothing_takes_it]]).
+    """
+    tell = arm_b_record["isolation"]["5_the_header_tell"]
+    lines = {cell["line"]: cell for cell in tell["header_lines_of_the_160"]}
+    false_line = lines.get(prompts.NO_POST_TEXT)
+    registered = lines.get(data.SYNTHETIC_NO_POST)
+    return {
+        "ruling": quoted(RULING_O_MARKER),
+        "constant": {
+            "name": "scripts/build_lora_c_data.py::SYNTHETIC_NO_POST",
+            "value": data.SYNTHETIC_NO_POST,
+        },
+        "the_false_string_it_replaces": {
+            "name": "src/market_pulse/prompts.py::NO_POST_TEXT",
+            "value": prompts.NO_POST_TEXT,
+            "in_the_160": false_line["synthetic_rows_carrying_it"] if false_line else 0,
+            "in_the_506": false_line["real_rows_carrying_it"] if false_line else 0,
+            "was_before_the_fix": {"in_the_160": 160, "in_the_506": 0},
+        },
+        "the_registered_string": {
+            "in_the_160": registered["synthetic_rows_carrying_it"] if registered else 0,
+            "in_the_506": registered["real_rows_carrying_it"] if registered else 0,
+        },
+        "why_prompts_py_is_not_edited": (
+            "it is pinned by every sealed record of this stack and it is on the contract's DO-NOT"
+            " list. The constant is passed AS the topic, so `topic.strip()` is truthy and"
+            " `pass1_v3.pass1_messages_gm4_v3` takes its ordinary branch — no renderer moved"
+        ),
+        "the_prefix_did_not_move": (
+            "the 506 real rows re-render BYTE-IDENTICAL against the shipped file; the producer"
+            " refuses to write otherwise. Only the 160 synthetic prompts changed, and with them"
+            " arm B's sha above"
+        ),
+        "the_marker_that_remains": {
+            "tells": tell["tells"],
+            "synthetic_rows_marked_by_at_least_one_tell": tell[
+                "synthetic_rows_marked_by_at_least_one_tell"
+            ],
+            "state": "ACCEPTED and NAMED by ruling (о); measured by the report-only marker census",
+            "why_it_cannot_be_removed": (
+                "a synthetic row has no post and no resolved entity. Any topic line that says so"
+                " truthfully is a line none of the 506 renders, and any line that does NOT say so"
+                " would be a fabricated provenance inside training data. The thread tag carries the"
+                " error class by the same argument. The confound is priced, not argued away"
+            ),
+        },
     }
 
 
@@ -906,6 +1292,33 @@ def reachability(data_record: dict, counted: dict) -> dict:
                 " $0 deliverable, and registering train_qlora.py as THE trainer without saying this"
                 " would be a bar with no producer"
             ),
+            "state": "CLOSED-BY-SIBLING",
+            "the_sibling_that_closes_it": {
+                "path": "scripts/train_qlora_v3.py",
+                "sha256": data.sha_text(
+                    (REPO_ROOT / "scripts" / "train_qlora_v3.py").read_text(encoding="utf-8")
+                ),
+                "built_by": "lora-c-run D1, at $0",
+                "how": (
+                    "it IMPORTS train_qlora and re-binds exactly the two guards above — guard 1 by"
+                    " swapping `prompts.PASS1_TASK` inside a contextmanager that puts it back"
+                    " (a module-level guard cannot be told anything by a parameter), guard 2 by"
+                    " reading this record's `population.train.files`. load_sft, class_weights,"
+                    " content_hash, load_for_training, encode_pass1, collate, train, save and main"
+                    " are the PINNED implementations, reached through the module object"
+                ),
+                "what_did_not_move": (
+                    "scripts/train_qlora.py itself. Its sha above is the sha lora-b's sealed records"
+                    " pin, and this block is kept — not deleted — because the refusals are still"
+                    " true of the pinned file and a reader has to be able to see WHY a second"
+                    " trainer exists ([[a_moved_guard_that_left_its_copy]])"
+                ),
+            },
+            "why_the_block_stays": (
+                "the unreachability was real and it was answered by building something, not by"
+                " re-reading the record. Deleting it would leave the sibling looking like a fork"
+                " someone made for convenience. Ruling (о)'s amendment 5 is this wording"
+            ),
         },
     }
 
@@ -923,9 +1336,27 @@ def build() -> dict:
     synthetic_rows = synthetic_record["rows"]
     rows = [json.loads(one) for one in TRAIN_FILE.read_text(encoding="utf-8").splitlines() if one]
 
+    money_block = money(
+        eval_pack,
+        data_record,
+        train_rows,
+        synthetic_rows,
+        counted,
+        pass2_pack["population"]["threads_with_at_least_one_filtered_row"],
+        stock,
+    )
+    arithmetic = money_block["pre_pod_arithmetic"]
+    session_rungs = rungs(
+        arithmetic["fixed_seconds"],
+        arithmetic["at_each_price"],
+        money_block["formulas"]["steps"],
+        pass2_pack["population"]["threads_with_at_least_one_filtered_row"],
+    )
+
     return {
         "phase": "lora-c",
         "state": "DRAFT — frozen only by lora-c-run's first `pod create`",
+        "kill_clock": session_rungs,
         "contract": "docs/PROMPT-lora-c-prep.md",
         "authority": {
             "record": "docs/STATUS.md «Открытые решения» п. 1",
@@ -933,6 +1364,20 @@ def build() -> dict:
             "ruling_k": quoted(RULING_K),
             "ruling_n_rendering": quoted(RULING_N_RENDERING),
             "ruling_n_pass_2": quoted(RULING_N_PASS_2),
+            "ruling_o_cap": quoted(RULING_O_CAP),
+            "ruling_o_card": quoted(RULING_O_CARD),
+            "ruling_o_marker": quoted(RULING_O_MARKER),
+            "ruling_o_what_it_settled": (
+                "(о) of 24.08, taken at the acceptance of lora-c-armb and ON the numbers that"
+                " contract derived, answers the three things it STOPPED on. The cap stays $4.00"
+                " because the re-derived break-even now covers both s/step readings this repo"
+                " holds. The card is named — RTX PRO 4500 32 GB at $0.72/h in EU-RO-1, the volume's"
+                " own datacenter, because the probe read A6000 as `none` there — with a 4090"
+                " fallback pre-authorised and anything else a STOP. And the header marker Dv795"
+                " found is answered in two parts: the FALSE production string comes out of the"
+                " synthetic header (see `the_marker_fix`), and the marker that remains is accepted,"
+                " named, and measured by a report-only census"
+            ),
             "ruling_n_what_it_settled": (
                 "(н) of 24.08 answers the two questions lora-c-run STOPPED on. The first makes a"
                 " synthetic row a v3 QUERY under the rules a real one obeys, which is what makes"
@@ -1017,6 +1462,7 @@ def build() -> dict:
                 "refused": data_record["rows"]["refused"],
                 "record": "results/lora_c_arm_b.json",
                 "rendering_ruling": quoted(RULING_N_RENDERING),
+                "the_marker_fix": the_marker_fix(arm_b_record),
             },
             "synthetic": {
                 "rows": synthetic_rows,
@@ -1215,15 +1661,7 @@ def build() -> dict:
             "gold": {"record": "results/reader_gold_w1_r2.json", "sha256": sha(GOLD)},
             "holdout": {"record": "results/pass1_holdout_100.json", "sha256": sha(HOLDOUT)},
         },
-        "money": money(
-            eval_pack,
-            data_record,
-            train_rows,
-            synthetic_rows,
-            counted,
-            pass2_pack["population"]["threads_with_at_least_one_filtered_row"],
-            stock,
-        ),
+        "money": money_block,
         "ready_to_price": {
             "rule": "every number here comes from a file this contract built, at $0",
             "train_rows": train_rows,

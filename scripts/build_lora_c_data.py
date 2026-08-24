@@ -69,6 +69,24 @@ SAMPLE_OUT = REPO_ROOT / "docs" / "reviews" / "lora-c-rationales-sample.md"
 VERDICT = REPO_ROOT / "docs" / "reviews" / "lora-c-rationales-verdict.md"
 WATCHLIST_RULES = REPO_ROOT / "config" / "watchlist_rules.yaml"
 
+SYNTHETIC_NO_POST = "(synthetic training row — this thread has no post)"
+"""The topic line of a synthetic query — a REGISTERED constant, not a production string.
+
+Ruling (о) of 2026-08-24, on Dv795. Until it, `synthetic_fields` left `topic=""` and let
+`pass1_v3.pass1_messages_gm4_v3` render `prompts.NO_POST_TEXT` — «(this post has no text of its own
+— it is an image or a video)». That is a TRUE sentence about a real image post and a FALSE one about
+a synthetic row, and it was carried by 160 of the 160 synthetic rows and by 0 of the 506 real ones.
+The team lead's ruling is that the false production string may not appear in a synthetic header:
+teaching the adapter that a real image-post topic line correlates with synthetic patterns would
+poison a header shape the eval genuinely contains.
+
+The marker does not go away — it CANNOT, because a synthetic row has no post and every honest way of
+saying so is a line no real row of this pool renders. It is moved onto a string that is true and
+that production never emits, and the confound it leaves is accepted, named, and measured by the
+report-only marker census. `prompts.py` and `pass1_v3.py` are pinned and are not edited: this
+constant is passed AS the topic, so `topic.strip()` is truthy and the renderer takes its ordinary
+branch."""
+
 OUR = ("категория_личное", "молочный_бренд")
 BOUNDARY_SEED = 20260822
 BOUNDARY_TARGET = 40
@@ -1147,8 +1165,10 @@ def synthetic_fields(one: dict) -> dict:
     SAME renderer under ALL existing rules and rules nothing else. So the two header fields come
     from the id the row already carries — `synthetic:brand_vs_retailer` splits into `synthetic` and
     `brand_vs_retailer` — and the two block fields take the branch the existing rules take when
-    there is no post and no reader verdict: `topic=""` renders `prompts.NO_POST_TEXT` and an empty
-    entity list renders «(this thread resolved no entity)». Nothing is invented, and nothing is
+    there is no reader verdict: an empty entity list renders «(this thread resolved no entity)».
+    The topic is :data:`SYNTHETIC_NO_POST` and NOT the empty string — an empty topic renders
+    `prompts.NO_POST_TEXT`, a sentence about an image post that is false here and that ruling (о)
+    of 24.08 forbids in a synthetic header. Nothing is invented, and nothing is
     borrowed from a real thread: a synthetic row wearing a real channel would fabricate provenance
     inside training data AND break the one property `build_lora_c_synthetic.py` rests its isolation
     on — that the `synthetic:` prefix makes every downstream refusal one string comparison.
@@ -1163,7 +1183,7 @@ def synthetic_fields(one: dict) -> dict:
         "thread": one["thread"],
         "channel": channel,
         "post_id": post_id,
-        "topic": "",
+        "topic": SYNTHETIC_NO_POST,
         "entities": [],
         "msg_id": int(one["msg_id"]),
         "text": one["text"],
@@ -1280,7 +1300,15 @@ def header_tell(synthetic: list[dict], real: list[dict]) -> dict:
             }
             for line, count in seen.items()
         ),
-        key=lambda cell: (cell["real_rows_carrying_it"], -cell["synthetic_rows_carrying_it"]),
+        # The line itself breaks ties: `seen` is filled from a `set`, whose iteration order changes
+        # with PYTHONHASHSEED, and every prompt paragraph shares the cell (506, -160). Without the
+        # third key this record is a different file on every run and no byte-for-byte test can hold
+        # it ([[a_moved_constant_fails_green]] — the shape where the producer stops being checkable).
+        key=lambda cell: (
+            cell["real_rows_carrying_it"],
+            -cell["synthetic_rows_carrying_it"],
+            cell["line"],
+        ),
     )
     tells = [cell for cell in counted if cell["real_rows_carrying_it"] == 0]
     marked = {row["id"] for row in synthetic for cell in tells if cell["line"] in row["prompt"]}

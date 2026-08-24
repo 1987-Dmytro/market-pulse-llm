@@ -1,6 +1,6 @@
 {
   "arm_b_file": "results/pass1_sft_v3_arm_b.jsonl",
-  "arm_b_sha256": "85a5b278550e8771e3cf9da675b64f8303d50f26f9fc1e79e68a19a29f87005b",
+  "arm_b_sha256": "311571555169300c0fc69092a619c5129b29bdd19c49fabeb9a6a29af730bde7",
   "authority": {
     "record": "docs/STATUS.md «Открытые решения» п. 1 (н), 2026-08-24",
     "ruling": "синтетический запрос рендерится ТЕМ ЖЕ правилом на ТОМ ЖЕ пуле 515 (закон уже запрещает синтетику только как СОСЕДА; запрет двойника действует)"
@@ -55,7 +55,7 @@
     "5_the_header_tell": {
       "header_lines_of_the_160": [
         {
-          "line": "(this post has no text of its own — it is an image or a video)",
+          "line": "(synthetic training row — this thread has no post)",
           "real_rows_carrying_it": 0,
           "synthetic_rows_carrying_it": 160
         },
@@ -65,7 +65,7 @@
           "synthetic_rows_carrying_it": 40
         },
         {
-          "line": "<thread channel=\"synthetic\" post_id=\"retailer_non_dairy\">",
+          "line": "<thread channel=\"synthetic\" post_id=\"mention_vs_about\">",
           "real_rows_carrying_it": 0,
           "synthetic_rows_carrying_it": 40
         },
@@ -75,7 +75,7 @@
           "synthetic_rows_carrying_it": 40
         },
         {
-          "line": "<thread channel=\"synthetic\" post_id=\"mention_vs_about\">",
+          "line": "<thread channel=\"synthetic\" post_id=\"retailer_non_dairy\">",
           "real_rows_carrying_it": 0,
           "synthetic_rows_carrying_it": 40
         },
@@ -90,22 +90,12 @@
           "synthetic_rows_carrying_it": 160
         },
         {
-          "line": "<topic>",
+          "line": "- «на касі простояла сорок хвилин із повним візком», under a post about a trade mark → «сеть_ритейлер». It does not survive swapping the shop, so it is not «молочный_бренд».",
           "real_rows_carrying_it": 506,
           "synthetic_rows_carrying_it": 160
         },
         {
-          "line": "The entities block is CONTEXT and not a menu. It says which names this thread has already been read to carry and how, so that a comment saying «вони», «ця мережа» or «воно» can be resolved to one of them. A name the block does not list is still a name — read it off the comment. And a comment that points at none of them is not obliged to pick one.",
-          "real_rows_carrying_it": 506,
-          "synthetic_rows_carrying_it": 160
-        },
-        {
-          "line": "ATTRIBUTION. This is what decides `subject_type`. The subject is read off THE COMMENT ITSELF and never off the thread's protagonist: not off the channel, not off the trade mark the post is about, not off the shop the comment beside it discusses. One test settles it — would the complaint or the praise still stand if the chain were a different chain, or the trade mark a different trade mark? If it would, the comment is about the KIND of product: «категория_личное», and neither the chain nor the brand. «сеть_ритейлер» is the subject only where the shop AS a shop is what is being talked about — its service, its checkout, its delivery, its shelves, its queues. «молочный_бренд» only where the named trade mark is what the attitude is about. Three examples, invented for this instruction and taken from no thread:",
-          "real_rows_carrying_it": 506,
-          "synthetic_rows_carrying_it": 160
-        },
-        {
-          "line": "</topic>",
+          "line": "- «сирки з родзинками ніхто вже не робить такі, як колись», beside a comment naming one maker → «категория_личное». It is about the kind, so it is not «молочный_бренд».",
           "real_rows_carrying_it": 506,
           "synthetic_rows_carrying_it": 160
         },
@@ -115,27 +105,22 @@
           "synthetic_rows_carrying_it": 160
         },
         {
-          "line": "- «на касі простояла сорок хвилин із повним візком», under a post about a trade mark → «сеть_ритейлер». It does not survive swapping the shop, so it is not «молочный_бренд».",
-          "real_rows_carrying_it": 506,
-          "synthetic_rows_carrying_it": 160
-        },
-        {
-          "line": "You are given ONE comment from a discussion under a Ukrainian Telegram post, the topic of that post, and the entities this thread has already been resolved to. Decide who the comment is ABOUT and what attitude it carries towards them. Nothing else is asked of you.",
-          "real_rows_carrying_it": 506,
-          "synthetic_rows_carrying_it": 160
-        },
-        {
-          "line": "`subject_type` is what the comment is ABOUT, never what it mentions. A retailer or brand named inside a personal category habit (where one buys the curd, which shop's kefir) is `категория_личное`. A retailer's own reply that answers a category demand with products is `категория_личное`, not `сеть_ритейлер`. A comment about the retailer's service, stock, prices or stores is `сеть_ритейлер`. A comment about a named dairy producer or its product as such is `молочный_бренд`.",
-          "real_rows_carrying_it": 506,
-          "synthetic_rows_carrying_it": 160
-        },
-        {
-          "line": "The request carries a block of LABELLED EXAMPLES after the entities: one comment per reading, with the reading a human wrote for it. It is one example of EACH and never a distribution — how often a reading appears there says nothing about how often it is the right answer. Read them as the boundary between the four readings and the null, not as a menu to match against: a comment that resembles none of them still gets the reading the law above gives it.",
+          "line": "</topic>",
           "real_rows_carrying_it": 506,
           "synthetic_rows_carrying_it": 160
         },
         {
           "line": "<entities>",
+          "real_rows_carrying_it": 506,
+          "synthetic_rows_carrying_it": 160
+        },
+        {
+          "line": "<topic>",
+          "real_rows_carrying_it": 506,
+          "synthetic_rows_carrying_it": 160
+        },
+        {
+          "line": "ATTRIBUTION. This is what decides `subject_type`. The subject is read off THE COMMENT ITSELF and never off the thread's protagonist: not off the channel, not off the trade mark the post is about, not off the shop the comment beside it discusses. One test settles it — would the complaint or the praise still stand if the chain were a different chain, or the trade mark a different trade mark? If it would, the comment is about the KIND of product: «категория_личное», and neither the chain nor the brand. «сеть_ритейлер» is the subject only where the shop AS a shop is what is being talked about — its service, its checkout, its delivery, its shelves, its queues. «молочный_бренд» only where the named trade mark is what the attitude is about. Three examples, invented for this instruction and taken from no thread:",
           "real_rows_carrying_it": 506,
           "synthetic_rows_carrying_it": 160
         },
@@ -150,7 +135,22 @@
           "synthetic_rows_carrying_it": 160
         },
         {
-          "line": "- «сирки з родзинками ніхто вже не робить такі, як колись», beside a comment naming one maker → «категория_личное». It is about the kind, so it is not «молочный_бренд».",
+          "line": "The entities block is CONTEXT and not a menu. It says which names this thread has already been read to carry and how, so that a comment saying «вони», «ця мережа» or «воно» can be resolved to one of them. A name the block does not list is still a name — read it off the comment. And a comment that points at none of them is not obliged to pick one.",
+          "real_rows_carrying_it": 506,
+          "synthetic_rows_carrying_it": 160
+        },
+        {
+          "line": "The request carries a block of LABELLED EXAMPLES after the entities: one comment per reading, with the reading a human wrote for it. It is one example of EACH and never a distribution — how often a reading appears there says nothing about how often it is the right answer. Read them as the boundary between the four readings and the null, not as a menu to match against: a comment that resembles none of them still gets the reading the law above gives it.",
+          "real_rows_carrying_it": 506,
+          "synthetic_rows_carrying_it": 160
+        },
+        {
+          "line": "You are given ONE comment from a discussion under a Ukrainian Telegram post, the topic of that post, and the entities this thread has already been resolved to. Decide who the comment is ABOUT and what attitude it carries towards them. Nothing else is asked of you.",
+          "real_rows_carrying_it": 506,
+          "synthetic_rows_carrying_it": 160
+        },
+        {
+          "line": "`subject_type` is what the comment is ABOUT, never what it mentions. A retailer or brand named inside a personal category habit (where one buys the curd, which shop's kefir) is `категория_личное`. A retailer's own reply that answers a category demand with products is `категория_личное`, not `сеть_ритейлер`. A comment about the retailer's service, stock, prices or stores is `сеть_ритейлер`. A comment about a named dairy producer or its product as such is `молочный_бренд`.",
           "real_rows_carrying_it": 506,
           "synthetic_rows_carrying_it": 160
         },
@@ -165,11 +165,11 @@
       "synthetic_rows": 160,
       "synthetic_rows_marked_by_at_least_one_tell": 160,
       "tells": [
-        "(this post has no text of its own — it is an image or a video)",
+        "(synthetic training row — this thread has no post)",
         "<thread channel=\"synthetic\" post_id=\"brand_vs_retailer\">",
-        "<thread channel=\"synthetic\" post_id=\"retailer_non_dairy\">",
+        "<thread channel=\"synthetic\" post_id=\"mention_vs_about\">",
         "<thread channel=\"synthetic\" post_id=\"non_dairy_brand\">",
-        "<thread channel=\"synthetic\" post_id=\"mention_vs_about\">"
+        "<thread channel=\"synthetic\" post_id=\"retailer_non_dairy\">"
       ]
     },
     "6_the_example_slots": {
@@ -193,18 +193,18 @@
   "length": {
     "ceiling_chars": 12000,
     "headroom_chars": 2759,
-    "median_synthetic_chars": 5381,
-    "synthetic_headroom_chars": 5564,
+    "median_synthetic_chars": 5369,
+    "synthetic_headroom_chars": 5576,
     "widest_request": "@tarilka_malyuka:746#83",
     "widest_request_chars": 9241,
     "widest_synthetic_request": "synthetic:non_dairy_brand#38",
-    "widest_synthetic_request_chars": 6436
+    "widest_synthetic_request_chars": 6424
   },
   "phase": "lora-c-armb",
   "prefix_rule": "the first 506 lines of results/pass1_sft_v3_arm_b.jsonl are BYTE-IDENTICAL to results/pass1_sft_v3_train.jsonl — re-rendered by this build and compared, never copied, so a pool that drifted would be a STOP here and not a silent pass",
   "produced_by": {
     "script": "scripts/build_lora_c_data.py --arm-b-out",
-    "sha256": "feab33005cc874c07db17b03da98ec25b96ed0e735e64eb1fd664d5bc1ec9e19"
+    "sha256": "6a1b103911f1f7e631d24f96ac069adaa5bc446a2188d39cd7da04b3574eb470"
   },
   "rows": {
     "arithmetic": "506 + 160 = 666",

@@ -6,10 +6,10 @@
   "quantity": "len(apply_chat_template(prompt)) + len(target) — train_qlora.encode_pass1's own expression, called, not re-implemented",
   "refused": [],
   "rows": 666,
-  "sha256": "85a5b278550e8771e3cf9da675b64f8303d50f26f9fc1e79e68a19a29f87005b",
+  "sha256": "311571555169300c0fc69092a619c5129b29bdd19c49fabeb9a6a29af730bde7",
   "tokens": {
     "max": 2975,
-    "median": 1603,
+    "median": 1601,
     "min": 1445,
     "narrowest_row": "@mandziak:3718#48397",
     "widest_row": "@tarilka_malyuka:746#83"

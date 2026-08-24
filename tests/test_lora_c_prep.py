@@ -673,6 +673,11 @@ PRODUCERS = [
         {
             "--train-out": "results/pass1_sft_v3_train.jsonl",
             "--record-out": "results/lora_c_data.json",
+            # arm B's two outputs joined this list in lora-c-run r2: until then the file the run
+            # trains arm B on was written by a producer no test drove, so the marker fix could have
+            # landed in the script and not in the bytes.
+            "--arm-b-out": "results/pass1_sft_v3_arm_b.jsonl",
+            "--arm-b-record-out": "results/lora_c_arm_b.json",
         },
     ),
     (
