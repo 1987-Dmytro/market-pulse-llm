@@ -12,8 +12,11 @@ Everything below was bought on this Mac. The stock probe is a listing and create
 | `ba14ca4` | (b) step 0.5 — `make check-stamped`, the moving-tree verifier as an instrument |
 | `fe0cc87` | (c) the producer, `results/pass1_sft_v3_arm_b.jsonl`, the censuses, the D1 tests |
 | `b2ed1b3` | (d) the registration DRAFT v3, the re-derived money block, the stock probe, the D2 tests |
-| (e) | this report + the ADR |
-| (f) | the vault tail |
+| `a51f39e` | (e) this report + the ADR |
+| `cafd446` | (f) the vault tail — landed BEFORE the closing reading, because `hot.md` is a suite input |
+| `b659dea` | the stamps flushed, so they bracket the suite instead of arriving after it (Dv801) |
+| `8ef994e` | the Stop hook's own output, after it VOIDED the first closing reading (Dv802) |
+| `<this>` | the closing reading |
 
 ---
 
@@ -62,7 +65,8 @@ whitelist. It writes nothing — a stamp file under a tracked path would be the 
 for. The suite's own exit code is printed beside the verdict and never replaces it: a green suite
 over a moved tree is still VOID.
 
-**Driven three ways on the real git surface, not reasoned about:**
+**Driven three ways on the real git surface, not reasoned about** — at `34cc939`, the tree step
+0.5 landed on, and NOT the closing run of §6:
 
 ```
 $ python3.11 scripts/check_stamped.py true
@@ -349,6 +353,74 @@ Artifact shas (first 16), the tree this report is written against:
 
 ---
 
+## 6 — the closing verifier, and the instrument refusing its own first reading
+
+**Baseline, before a single edit**, at `34cc939` with the team lead's files in the tree, stamped by
+hand because step 0.5 did not exist yet:
+
+```
+=== BEFORE 2026-08-24T08:04:57Z HEAD=34cc939        porcelain: (clean)
+ruff check .   All checks passed!
+pytest -q      3682 passed, 2 skipped in 620.72s (0:10:20)
+=== AFTER  2026-08-24T08:15:20Z HEAD=34cc939        porcelain: (clean)
+```
+
+**The first closing take was VOIDED — by the instrument this contract built, over a GREEN suite:**
+
+```
+BEFORE  HEAD b659dea
+        (working tree clean)
+…
+3701 passed, 2 skipped in 595.70s (0:09:55)
+AFTER   HEAD b659dea
+         M knowledge/daily_logs/2026-08-24.md
+         M knowledge/index.md
+suite   make check → exit 0
+reading VOID — the tree moved: HEAD b659dea → b659dea, porcelain [' M knowledge/index.md'].
+The suite's exit code above describes neither tree and may not be quoted.          exit 2
+```
+
+The Stop hook fired mid-run and wrote **two** paths: the day log, which the whitelist covers, and
+`knowledge/index.md`, which it regenerates — this contract's own ADR took `decisions/` from 68 to 69.
+That is Dv802, and **the whitelist was not widened to make the reading pass.** The hook's output was
+committed (`8ef994e`) and the reading re-taken.
+
+**The closing reading, on a tree that did not move under it:**
+
+```
+BEFORE  HEAD 8ef994e
+        (working tree clean)
+ruff check .
+All checks passed!
+pytest -q
+3701 passed, 2 skipped in 627.20s (0:10:27)
+AFTER   HEAD 8ef994e
+        (working tree clean)
+suite   make check → exit 0
+reading HOLDS — HEAD 8ef994e, tree unmoved outside ['knowledge/daily_logs/']
+```
+
+`ruff format --check .` → **438 files already formatted**, run separately because `make check` does
+not include the formatter.
+
+**The suite grew by 19, counted by collection and not by subtracting totals** (3 682 → 3 701 agrees,
+which is the cross-check and not the count):
+
+```
+$ pytest tests/test_lora_c_armb.py --collect-only -q
+19 tests collected
+```
+
+Four of them are step 0.5's, twelve are D1's and D2's, and three sit in the two suites this contract
+rewrote. `tests/test_lora_c_run.py` still collects 13 — the gap test was replaced, not removed.
+
+**Every artifact sha in §5 was re-hashed against this tree after the report's own commit** and all
+fourteen agree, including `scripts/train_qlora.py` at `1a1a0b5983db60d8`: the pinned trainer did not
+move.
+
+---
+
+
 ## Deviations from Dv793
 
 Each with its cause tag from the closed enum v2. **Every one was found at $0.**
@@ -362,26 +434,29 @@ Each with its cause tag from the closed enum v2. **Every one was found at $0.**
 | **Dv797** | `[cause: tooling]` [[run_the_instrument_on_the_named_example]] | **The stock probe's card filter matched a 16 GB card for a 48 GB one.** `WANTED = ("A6000", "A40")` matched by substring, and `"A40" in "RTX A4000"` is true — so the first reading reported `{'RTX A4000': 'none', 'A40': None, 'RTX A6000': 'none'}` and a reader would have taken the A4000 row for the card ruling (к) names. Matched by `displayName` equality now, and the constant carries the reason. Caught by reading the instrument's own output against the example it is about. |
 | **Dv798** | `[cause: verify-gap]` [[a_flag_that_asserts_turns_a_poll_into_a_verdict]] | **Two shipped tests asserted a FINDING that ruling (н) superseded, and fixing them looks exactly like fixing a broken test.** `test_the_derivation_solves_the_cap_inequality_backwards` asserted «neither reading fits under the bar» — true at four pass-2 legs, false at two — and `test_the_registration_names_no_arm_b_dataset` asserted a gap this contract closed. The first now re-derives WHICH readings fit and compares that against the record's own machine-readable field, so it stops pinning a direction; the second is renamed `test_the_registration_now_names_arm_bs_dataset`, because the old name is cited by `docs/reports/lora-c-run.md` and describes a state that no longer exists. Both changes are disclosed here rather than folded into a rebuild. |
 | **Dv799** | `[cause: tooling]` [[a_frozen_record_is_an_input_to_shipped_code]] | **`train_qlora_v3.py --census` crashed on a relative `--data`.** `Path.relative_to(REPO_ROOT)` on `results/pass1_sft_v3_arm_b.jsonl` raises, and the command form in the file's own docstring is relative — so the shipped census command would have died on a pod, on the line after the tokenizer had loaded. Found by running it. `path.resolve()` first; the docstring now carries the arm-B command. |
-| **Dv800** | `[cause: process]` | **The report's own commit lands after the closing reading, and that is licensed by a check, not by memory.** No test module passes a string containing `docs/reports` to a call; the eleven mentions in `tests/` are docstring prose. Two directories that ARE suite inputs were found by the same scan and both are committed BEFORE the verifier runs: `knowledge/templates/daily-log.md` (`test_templates.py`) and `knowledge/decisions/reader-sitting-16-08.md` (`test_reader_gold_r2.py`). |
+| **Dv800** | `[cause: process]` | **The report's own commit lands after the closing reading, and that is licensed by a check, not by memory.** No test module passes a string containing `docs/reports` to a call; the thirteen mentions in `tests/` are docstring prose. Two directories that ARE suite inputs were found by the same scan and both are committed BEFORE the verifier runs: `knowledge/templates/daily-log.md` (`test_templates.py`) and `knowledge/decisions/reader-sitting-16-08.md` (`test_reader_gold_r2.py`). |
 
-**Tally:** contract-gap 2 · verify-gap 3 · tooling 2 · process 1 · spec-gap 0 · model 0 — **8 total**,
-by the grep below.
+| **Dv801** | `[cause: tooling]` [[a_checker_whose_failure_is_silence]] | **The instrument built in step 0.5 printed its BEFORE stamp AFTER the suite.** `check_stamped.py` printed through Python's buffered stdout while `make check` wrote straight to the inherited file descriptor, so ten minutes of pytest output landed first and the line saying BEFORE appeared below the run it was taken before. The stamps were correct; the ORDER is the whole legibility of the proof. Found on the first real closing run — the three step-0.5 drives all had trivially short commands, so nothing came between the stamps and the defect could not show. The reading in flight was KILLED rather than quoted, since it was produced by a version this repo no longer ships. `flush=True` on every stamp, and «(working tree clean)» where an empty stamp and a stamp that never ran had looked the same. |
+| **Dv802** | `[cause: contract-gap]` [[a_guard_list_closed_by_its_anchor]] | **The whitelist the contract fixes covers one of the two paths the Stop hook writes.** Step 0.5 says the exception is «`knowledge/daily_logs/` only … since no test reads it». The hook writes the day log AND regenerates `knowledge/index.md` — my own ADR took its `decisions/` count from 68 to 69 — so the second closing reading came back **VOID over a GREEN suite (3 701 passed / 2 skipped)**, which is the instrument doing exactly its job on its first real use. **The whitelist was NOT widened.** `knowledge/index.md` satisfies the contract's own stated criterion (no test opens it, by the same AST scan), so widening would be defensible — and a verifier's exemption list is a safety gate whose safe direction is the narrow one, and the word on it is the team lead's. Resolved by committing the hook's output and re-reading on a clean tree. |
+
+**Tally:** contract-gap 3 · verify-gap 3 · tooling 3 · process 1 · spec-gap 0 · model 0 —
+**10 total**, by the grep below.
 
 The pattern carries the BRACKETS. Without them each command counts its own line in this block and
-every tag reads one too high — the tally would have been 3 · 4 · 3 · 2 · 1 · 1 for eight deviations,
+every tag reads one too high — the tally would read 4 · 4 · 4 · 2 · 1 · 1 for ten deviations,
 which does not even sum ([[a_count_in_prose_is_not_the_enumeration]]).
 
 ```
 $ for t in contract-gap verify-gap tooling process spec-gap model; do
     printf "%-13s %s\n" "$t" "$(grep -c "\[cause: $t\]" docs/reports/lora-c-armb.md)"; done
-contract-gap  2
+contract-gap  3
 verify-gap    3
-tooling       2
+tooling       3
 process       1
 spec-gap      0
 model         0
 $ grep -c "^| \*\*Dv" docs/reports/lora-c-armb.md
-8
+10
 ```
 
 ---
