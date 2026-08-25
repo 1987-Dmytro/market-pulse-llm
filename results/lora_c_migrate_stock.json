@@ -1,0 +1,493 @@
+{
+  "authority": "ruling (р), docs/STATUS.md — «линия обучения переезжает в EU-SE-1 на A6000 48 GB, $0.53/ч». D1 asks for a fresh read-only stock check of that card in that datacenter at issue time; this probe takes it, and the volume-capability reading the ruling presupposes",
+  "candidate_count": 19,
+  "candidates": [
+    {
+      "card": "PRO 6000 MIG 48GB",
+      "datacenter": "US-NE-1",
+      "gpu_id": "NVIDIA RTX PRO 6000 Blackwell Server Edition MIG 2g.48gb",
+      "secure_usd_per_hour": 1.09,
+      "stock": "Low",
+      "vram_gb": 48
+    },
+    {
+      "card": "A100 PCIe",
+      "datacenter": "CA-MTL-3",
+      "gpu_id": "NVIDIA A100 80GB PCIe",
+      "secure_usd_per_hour": 1.39,
+      "stock": "Low",
+      "vram_gb": 80
+    },
+    {
+      "card": "RTX PRO 6000",
+      "datacenter": "EU-NL-1",
+      "gpu_id": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+      "secure_usd_per_hour": 2.09,
+      "stock": "Low",
+      "vram_gb": 96
+    },
+    {
+      "card": "RTX PRO 6000",
+      "datacenter": "EU-RO-1",
+      "gpu_id": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+      "secure_usd_per_hour": 2.09,
+      "stock": "Low",
+      "vram_gb": 96
+    },
+    {
+      "card": "RTX PRO 6000",
+      "datacenter": "EUR-IS-1",
+      "gpu_id": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+      "secure_usd_per_hour": 2.09,
+      "stock": "Low",
+      "vram_gb": 96
+    },
+    {
+      "card": "RTX PRO 6000",
+      "datacenter": "US-KS-2",
+      "gpu_id": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+      "secure_usd_per_hour": 2.09,
+      "stock": "Low",
+      "vram_gb": 96
+    },
+    {
+      "card": "RTX PRO 6000",
+      "datacenter": "US-MO-2",
+      "gpu_id": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+      "secure_usd_per_hour": 2.09,
+      "stock": "Low",
+      "vram_gb": 96
+    },
+    {
+      "card": "RTX PRO 6000",
+      "datacenter": "US-NC-2",
+      "gpu_id": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+      "secure_usd_per_hour": 2.09,
+      "stock": "Low",
+      "vram_gb": 96
+    },
+    {
+      "card": "RTX PRO 6000",
+      "datacenter": "US-NE-1",
+      "gpu_id": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+      "secure_usd_per_hour": 2.09,
+      "stock": "Low",
+      "vram_gb": 96
+    },
+    {
+      "card": "H100 NVL",
+      "datacenter": "US-KS-2",
+      "gpu_id": "NVIDIA H100 NVL",
+      "secure_usd_per_hour": 3.19,
+      "stock": "Low",
+      "vram_gb": 94
+    },
+    {
+      "card": "H100 SXM",
+      "datacenter": "EU-NL-1",
+      "gpu_id": "NVIDIA H100 80GB HBM3",
+      "secure_usd_per_hour": 3.29,
+      "stock": "Low",
+      "vram_gb": 80
+    },
+    {
+      "card": "H100 SXM",
+      "datacenter": "EUR-NO-2",
+      "gpu_id": "NVIDIA H100 80GB HBM3",
+      "secure_usd_per_hour": 3.29,
+      "stock": "Low",
+      "vram_gb": 80
+    },
+    {
+      "card": "H200 SXM",
+      "datacenter": "AP-JP-1",
+      "gpu_id": "NVIDIA H200",
+      "secure_usd_per_hour": 4.59,
+      "stock": "Low",
+      "vram_gb": 141
+    },
+    {
+      "card": "H200 SXM",
+      "datacenter": "EU-FR-1",
+      "gpu_id": "NVIDIA H200",
+      "secure_usd_per_hour": 4.59,
+      "stock": "Low",
+      "vram_gb": 141
+    },
+    {
+      "card": "H200 SXM",
+      "datacenter": "EUR-IS-4",
+      "gpu_id": "NVIDIA H200",
+      "secure_usd_per_hour": 4.59,
+      "stock": "Low",
+      "vram_gb": 141
+    },
+    {
+      "card": "H200 SXM",
+      "datacenter": "US-CA-2",
+      "gpu_id": "NVIDIA H200",
+      "secure_usd_per_hour": 4.59,
+      "stock": "Low",
+      "vram_gb": 141
+    },
+    {
+      "card": "B200",
+      "datacenter": "EU-RO-1",
+      "gpu_id": "NVIDIA B200",
+      "secure_usd_per_hour": 6.79,
+      "stock": "Low",
+      "vram_gb": 180
+    },
+    {
+      "card": "B200",
+      "datacenter": "US-CA-2",
+      "gpu_id": "NVIDIA B200",
+      "secure_usd_per_hour": 6.79,
+      "stock": "Low",
+      "vram_gb": 180
+    },
+    {
+      "card": "B300",
+      "datacenter": "EU-NL-1",
+      "gpu_id": "NVIDIA B300 SXM6 AC",
+      "secure_usd_per_hour": 7.89,
+      "stock": "Low",
+      "vram_gb": 288
+    }
+  ],
+  "cards_at_or_above_the_minimum": {
+    "A100 PCIe": {
+      "by_datacenter": {
+        "CA-MTL-3": "Low",
+        "EU-RO-1": "none",
+        "US-KS-2": "none",
+        "US-MO-1": "none"
+      },
+      "gpu_id": "NVIDIA A100 80GB PCIe",
+      "secure_usd_per_hour": 1.39,
+      "vram_gb": 80
+    },
+    "A100 SXM": {
+      "by_datacenter": {
+        "EU-RO-1": "none",
+        "EUR-IS-1": "none",
+        "US-CA-2": "none",
+        "US-KS-2": "none",
+        "US-MD-1": "Low",
+        "US-MO-1": "none",
+        "US-WA-1": "none"
+      },
+      "gpu_id": "NVIDIA A100-SXM4-80GB",
+      "secure_usd_per_hour": 1.59,
+      "vram_gb": 80
+    },
+    "A40": {
+      "by_datacenter": {
+        "CA-MTL-1": "Low",
+        "EU-SE-1": "Low",
+        "US-MO-1": "none"
+      },
+      "gpu_id": "NVIDIA A40",
+      "secure_usd_per_hour": 0.44,
+      "vram_gb": 48
+    },
+    "B200": {
+      "by_datacenter": {
+        "EU-RO-1": "Low",
+        "US-CA-2": "Low",
+        "US-NC-2": "none",
+        "US-NE-1": "none",
+        "US-TX-6": "none"
+      },
+      "gpu_id": "NVIDIA B200",
+      "secure_usd_per_hour": 6.79,
+      "vram_gb": 180
+    },
+    "B300": {
+      "by_datacenter": {
+        "EU-NL-1": "Low",
+        "EUR-IS-1": "none",
+        "US-WA-2": "none"
+      },
+      "gpu_id": "NVIDIA B300 SXM6 AC",
+      "secure_usd_per_hour": 7.89,
+      "vram_gb": 288
+    },
+    "H100 NVL": {
+      "by_datacenter": {
+        "US-CA-2": "none",
+        "US-GA-2": "none",
+        "US-KS-2": "Low"
+      },
+      "gpu_id": "NVIDIA H100 NVL",
+      "secure_usd_per_hour": 3.19,
+      "vram_gb": 94
+    },
+    "H100 PCIe": {
+      "by_datacenter": {
+        "US-KS-2": "none"
+      },
+      "gpu_id": "NVIDIA H100 PCIe",
+      "secure_usd_per_hour": 2.89,
+      "vram_gb": 80
+    },
+    "H100 SXM": {
+      "by_datacenter": {
+        "AP-IN-1": "Low",
+        "AP-IN-2": "none",
+        "AP-JP-1": "none",
+        "CA-MTL-1": "Low",
+        "EU-FR-1": "none",
+        "EU-NL-1": "Low",
+        "EUR-IS-3": "none",
+        "EUR-NO-2": "Low",
+        "US-CA-2": "none",
+        "US-GA-2": "Low",
+        "US-KS-2": "none",
+        "US-MO-1": "Low",
+        "US-NE-1": "none"
+      },
+      "gpu_id": "NVIDIA H100 80GB HBM3",
+      "secure_usd_per_hour": 3.29,
+      "vram_gb": 80
+    },
+    "H200 NVL": {
+      "by_datacenter": {
+        "US-MD-1": "none"
+      },
+      "gpu_id": "NVIDIA H200 NVL",
+      "secure_usd_per_hour": 3.79,
+      "vram_gb": 143
+    },
+    "H200 SXM": {
+      "by_datacenter": {
+        "AP-JP-1": "Low",
+        "CA-MTL-3": "none",
+        "CA-MTL-4": "none",
+        "EU-FR-1": "Low",
+        "EUR-IS-2": "Low",
+        "EUR-IS-4": "Low",
+        "EUR-IS-5": "Low",
+        "US-CA-2": "Low",
+        "US-CO-1": "none",
+        "US-GA-2": "Low",
+        "US-NC-1": "Low",
+        "US-PA-1": "none"
+      },
+      "gpu_id": "NVIDIA H200",
+      "secure_usd_per_hour": 4.59,
+      "vram_gb": 141
+    },
+    "L40": {
+      "by_datacenter": {
+        "EUR-IS-2": "none",
+        "US-KS-2": "none"
+      },
+      "gpu_id": "NVIDIA L40",
+      "secure_usd_per_hour": 0.82,
+      "vram_gb": 48
+    },
+    "L40S": {
+      "by_datacenter": {
+        "EU-NL-1": "none",
+        "EUR-IS-2": "none",
+        "OC-AU-1": "Low",
+        "US-IL-1": "none",
+        "US-MO-1": "Low",
+        "US-NC-1": "none",
+        "US-TX-3": "none",
+        "US-TX-4": "Low"
+      },
+      "gpu_id": "NVIDIA L40S",
+      "secure_usd_per_hour": 0.99,
+      "vram_gb": 48
+    },
+    "MI300X": {
+      "by_datacenter": {
+        "EU-RO-1": "none"
+      },
+      "gpu_id": "AMD Instinct MI300X OAM",
+      "secure_usd_per_hour": 2.39,
+      "vram_gb": 192
+    },
+    "PRO 6000 MIG 48GB": {
+      "by_datacenter": {
+        "EUR-IS-2": "Low",
+        "US-NE-1": "Low",
+        "US-PA-1": "Low",
+        "US-WA-1": "none"
+      },
+      "gpu_id": "NVIDIA RTX PRO 6000 Blackwell Server Edition MIG 2g.48gb",
+      "secure_usd_per_hour": 1.09,
+      "vram_gb": 48
+    },
+    "RTX 6000 Ada": {
+      "by_datacenter": {
+        "US-CA-2": "none",
+        "US-IL-1": "none",
+        "US-KS-2": "none",
+        "US-KS-3": "none",
+        "US-WA-1": "none"
+      },
+      "gpu_id": "NVIDIA RTX 6000 Ada Generation",
+      "secure_usd_per_hour": 0.84,
+      "vram_gb": 48
+    },
+    "RTX A6000": {
+      "by_datacenter": {
+        "CA-MTL-3": "none",
+        "EU-RO-1": "none",
+        "EU-SE-1": "Low",
+        "US-KS-2": "none",
+        "US-TX-1": "none"
+      },
+      "gpu_id": "NVIDIA RTX A6000",
+      "secure_usd_per_hour": 0.53,
+      "vram_gb": 48
+    },
+    "RTX PRO 5000": {
+      "by_datacenter": {},
+      "gpu_id": "NVIDIA RTX PRO 5000 Blackwell",
+      "secure_usd_per_hour": 0.96,
+      "vram_gb": 48
+    },
+    "RTX PRO 6000": {
+      "by_datacenter": {
+        "CA-MTL-3": "none",
+        "EU-CZ-1": "Low",
+        "EU-NL-1": "Low",
+        "EU-RO-1": "Low",
+        "EUR-IS-1": "Low",
+        "EUR-IS-2": "Low",
+        "US-CA-2": "none",
+        "US-KS-2": "Low",
+        "US-MO-2": "Low",
+        "US-NC-1": "Low",
+        "US-NC-2": "Low",
+        "US-NE-1": "Low",
+        "US-PA-1": "Low"
+      },
+      "gpu_id": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+      "secure_usd_per_hour": 2.09,
+      "vram_gb": 96
+    },
+    "RTX PRO 6000 MaxQ": {
+      "by_datacenter": {},
+      "gpu_id": "NVIDIA RTX PRO 6000 Blackwell Max-Q Workstation Edition",
+      "secure_usd_per_hour": null,
+      "vram_gb": 96
+    },
+    "RTX PRO 6000 WK": {
+      "by_datacenter": {
+        "EU-CZ-1": "none",
+        "EU-RO-1": "none",
+        "EUR-IS-1": "none"
+      },
+      "gpu_id": "NVIDIA RTX PRO 6000 Blackwell Workstation Edition",
+      "secure_usd_per_hour": 1.89,
+      "vram_gb": 96
+    }
+  },
+  "caveat": "a listing is not a create: stock at create-time may differ, in both directions, and the only free test of a create is the create itself. This reading dates the question. The volume-capability half is stronger — it comes from the create endpoint's own refusal — but it is still a reading, not a promise",
+  "commands": [
+    "runpodctl network-volume list",
+    "runpodctl network-volume create --name probe --size 1 --data-center-id NOPE",
+    "runpodctl datacenter list",
+    "runpodctl gpu list --include-unavailable"
+  ],
+  "contract": "docs/PROMPT-lora-c-migrate.md",
+  "creates_nothing": "four listings and one REFUSED create. No pod, no endpoint, no volume, no template was created, started or stopped. `network-volume list` is recorded before and after as the positive control that the refusal created nothing",
+  "cross_check": {
+    "agree": true,
+    "disagreements": [],
+    "pairs_compared": 137,
+    "pairs_in_datacenter_list": 137,
+    "pairs_in_gpu_list": 137
+  },
+  "minimum_vram_gb": 48,
+  "network_volume_list_after": [
+    {
+      "dataCenterId": "EU-RO-1",
+      "id": "qw4nwleanc",
+      "name": "mp-srv2",
+      "size": 100
+    }
+  ],
+  "network_volume_list_before": [
+    {
+      "dataCenterId": "EU-RO-1",
+      "id": "qw4nwleanc",
+      "name": "mp-srv2",
+      "size": 100
+    }
+  ],
+  "phase": "lora-c-migrate",
+  "read_at": "2026-08-25T18:01:18Z",
+  "the_listing_did_not_move": true,
+  "the_rulings_card": {
+    "card": "RTX A6000",
+    "datacenters": [
+      {
+        "datacenter": "CA-MTL-3",
+        "stock": "none",
+        "takes_a_network_volume": true
+      },
+      {
+        "datacenter": "EU-RO-1",
+        "stock": "none",
+        "takes_a_network_volume": true
+      },
+      {
+        "datacenter": "EU-SE-1",
+        "stock": "Low",
+        "takes_a_network_volume": false
+      },
+      {
+        "datacenter": "US-KS-2",
+        "stock": "none",
+        "takes_a_network_volume": true
+      },
+      {
+        "datacenter": "US-TX-1",
+        "stock": "none",
+        "takes_a_network_volume": false
+      }
+    ],
+    "found": true,
+    "in_stock_and_volume_capable": [],
+    "secure_usd_per_hour": 0.53,
+    "vram_gb": 48
+  },
+  "the_rulings_datacenter": "EU-SE-1",
+  "the_rulings_datacenter_takes_a_network_volume": false,
+  "volume_capable_datacenters": {
+    "command": "runpodctl network-volume create --name probe --size 1 --data-center-id NOPE",
+    "datacenters": [
+      "AP-IN-2",
+      "AP-JP-1",
+      "CA-MTL-3",
+      "CA-MTL-4",
+      "EU-FR-1",
+      "EU-NL-1",
+      "EU-RO-1",
+      "EUR-IS-1",
+      "EUR-IS-3",
+      "EUR-IS-4",
+      "EUR-NO-1",
+      "EUR-NO-2",
+      "US-CA-2",
+      "US-CO-1",
+      "US-IL-1",
+      "US-KS-2",
+      "US-MO-2",
+      "US-NC-2",
+      "US-NE-1",
+      "US-TX-3",
+      "US-WA-1"
+    ],
+    "how": "the create endpoint's own refusal of an unknown datacenter id, which enumerates them. Free, and it is the create path answering rather than a catalogue beside it",
+    "message": "{\"error\":\"failed to create volume: create network volume: Data center \\\"NOPE\\\" not found or does not support network volumes. Available data centers: AP-IN-2, AP-JP-1, CA-MTL-3, CA-MTL-4, EU-FR-1, EU-NL-1, EU-RO-1, EUR-IS-1, EUR-IS-3, EUR-IS-4, EUR-NO-1, EUR-NO-2, US-CA-2, US-CO-1, US-IL-1, US-KS-2, US-MO-2, US-NC-2, US-NE-1, US-TX-3, US-WA-1.\",\"code\":\"server_error\",\"status\":500}",
+    "the_create_was_refused": true
+  },
+  "why_48": "results/lora_c_vramprobe.json closed 32 GB twice, the second time with the allocator setting PROVEN to have reached the trainer and still 0.64 GiB short; the only s/step this repo has measured (lora-b, 61.047) was taken on a 48 GB A6000"
+}
