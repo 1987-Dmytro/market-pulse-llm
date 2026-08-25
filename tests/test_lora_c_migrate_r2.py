@@ -530,3 +530,161 @@ def test_both_ruff_format_drifted_files_are_still_pinned_by_a_record(script, rec
         text=True,
     )
     assert drifted.returncode != 0, f"{script} is no longer ruff-format-drifted — re-read the note"
+
+
+# --- every command this session will type, driven before the meter starts -------------------------
+
+
+def test_the_whole_session_runs_as_COMMANDS_before_any_pod_exists(tmp_path, monkeypatch, capsys):
+    """`main()` end to end — the preamble, the parsing and the dispatch, not just the gate bodies.
+
+    Every gate command below is one I will type at the meter. A rung whose BODY is unit-tested and
+    whose entry point has never run dies on the line before the branch, with the pod billing
+    ([[the_entry_points_preamble_is_untested_code]]). The registration is the committed one; only
+    the run record moves into `tmp_path`.
+    """
+    monkeypatch.setattr(gate, "RECORD", tmp_path / "lora_c_migrate_r2.json")
+    created = "2026-08-25T20:00:00+00:00"
+    backstop = at(3600).isoformat()
+
+    assert gate.main(["--pre-create-check"]) == gate.GO
+
+    assert (
+        gate.main(
+            [
+                "--open",
+                "--pod-id",
+                "mp-mig-r2-1",
+                "--created-at",
+                created,
+                "--usd-per-hour",
+                str(PRICE),
+                "--card",
+                "A100 PCIe",
+                "--terminate-after",
+                backstop,
+            ],
+            at(5),
+        )
+        == gate.GO
+    )
+    assert "3884.9" in capsys.readouterr().out
+
+    assert gate.main(["--gate0"], at(60)) == gate.WAIT
+    assert gate.main(["--gate0", "--ssh-ok"], at(60)) == gate.GO
+
+    venv_proof = tmp_path / "venv.txt"
+    venv_proof.write_text(STACK + "\n", encoding="utf-8")
+    assert gate.main(["--venv", "--started-at", at(120).isoformat()], at(200)) == gate.WAIT
+    assert (
+        gate.main(
+            [
+                "--venv",
+                "--started-at",
+                at(120).isoformat(),
+                "--done-at",
+                at(500).isoformat(),
+                "--proof",
+                str(venv_proof),
+            ],
+            at(505),
+        )
+        == gate.GO
+    )
+
+    written = tmp_path / "bytes.jsonl"
+    written.write_text(
+        json.dumps({"at": at(560).isoformat(), "bytes": 10**9}) + "\n", encoding="utf-8"
+    )
+    started = at(520).isoformat()
+    assert gate.main(["--download", "--started-at", started, "--polls", str(written)], at(600)) == (
+        gate.WAIT
+    )
+    with written.open("a", encoding="utf-8") as handle:
+        handle.write(json.dumps({"at": at(700).isoformat(), "bytes": FLOOR}) + "\n")
+    assert gate.main(["--download", "--started-at", started, "--polls", str(written)], at(710)) == (
+        gate.GO
+    )
+
+    assert gate.main(["--liveness", "--last-event", at(700).isoformat()], at(760)) == gate.GO
+
+    proof = a_proof(tmp_path)
+    assert (
+        gate.main(
+            ["--load-proof", "--started-at", at(720).isoformat(), "--proof", str(proof)], at(900)
+        )
+        == gate.GO
+    )
+
+    assert gate.main(
+        ["--close-pod", "--deleted-at", at(950).isoformat(), "--outcome", "done"], at(960)
+    ) == (gate.GO)
+
+    state = json.loads((tmp_path / "lora_c_migrate_r2.json").read_text("utf-8"))
+    assert [one["kind"] for one in state["gates"]] == [
+        "open",
+        "gate0",
+        "gate0",
+        "venv",
+        "venv",
+        "download",
+        "download",
+        "liveness",
+        "load-proof",
+        "close-pod",
+    ]
+    pod = state["pods"][-1]
+    assert pod["billed_seconds"] == 950.0
+    assert pod["billed_usd"] == round(950.0 / 3600.0 * PRICE, 6)
+    assert gate.main(["--pre-create-check"]) == gate.GO
+
+
+def test_a_second_pod_is_refused_while_the_first_is_open(tmp_path, monkeypatch):
+    """Rung 7, as a COMMAND: a pod open in the record blocks the next create."""
+    monkeypatch.setattr(gate, "RECORD", tmp_path / "lora_c_migrate_r2.json")
+    opened = [
+        "--open",
+        "--pod-id",
+        "mp-mig-r2-1",
+        "--created-at",
+        CREATE,
+        "--usd-per-hour",
+        str(PRICE),
+        "--card",
+        "A100 PCIe",
+        "--terminate-after",
+        at(3600).isoformat(),
+    ]
+    assert gate.main(opened, at(5)) == gate.GO
+    assert gate.main(["--pre-create-check"]) == gate.KILL
+    with pytest.raises(SystemExit):
+        gate.main(opened, at(10))
+
+
+def test_rung_0_refuses_at_the_command_and_the_pod_is_recorded_anyway(tmp_path, monkeypatch):
+    """A KILL on rung 0 still writes the pod: it EXISTS and it is billing until it is deleted.
+
+    A refusal that forgot to record the pod would leave a meter running against no counter
+    ([[a_gate_command_is_a_write]]).
+    """
+    monkeypatch.setattr(gate, "RECORD", tmp_path / "lora_c_migrate_r2.json")
+    code = gate.main(
+        [
+            "--open",
+            "--pod-id",
+            "mp-mig-r2-1",
+            "--created-at",
+            CREATE,
+            "--usd-per-hour",
+            "1.09",
+            "--card",
+            "A100 PCIe",
+            "--terminate-after",
+            at(3600).isoformat(),
+        ],
+        at(5),
+    )
+    assert code == gate.KILL
+    state = json.loads((tmp_path / "lora_c_migrate_r2.json").read_text("utf-8"))
+    assert state["pods"][-1]["pod_id"] == "mp-mig-r2-1"
+    assert state["gates"][-1]["price_has_a_registered_column"] is False
