@@ -26,6 +26,25 @@ frozen = json.loads(Path("results/prereg_lora_c.json").read_text("utf-8"))
 r2run = json.loads(Path("results/lora_c_run.json").read_text("utf-8"))
 spend = json.loads(Path("results/spend_lora_c_vramprobe.json").read_text("utf-8"))
 cyc = json.loads(Path("results/spend_cycle2.json").read_text("utf-8"))
+
+THE_PROBES_OWN_READING = "2026-08-25T14:46:50+00:00"
+"""The stamp of the reading this report is ABOUT, in every ledger that carries one.
+
+Both money rows below used to read `[-1]` — the last row — and that was true only while nothing
+else wrote. `lora-c-migrate`'s step-0.5 close appended a later reading to the LIVE ledger on
+2026-08-25 and the derivation started grading this sealed report against another session's number.
+The last row is not an identity ([[select_one_row_refuse_ambiguity]],
+[[rewriting_a_record_resets_state_you_do_not_own]]). Both ledgers are selected by stamp now, and a
+stamp that is absent or duplicated raises instead of picking a neighbour."""
+
+
+def the_row_at(rows: list[dict], stamp: str = THE_PROBES_OWN_READING) -> dict:
+    hit = [one for one in rows if one["at"] == stamp]
+    if len(hit) != 1:
+        raise SystemExit(f"{len(hit)} rows stamped {stamp} — a reading must be exactly one row")
+    return hit[0]
+
+
 lorab = Path("results/prereg_lora_b.json").read_text("utf-8")
 pod = rec["pods"][0]
 gates = {g["kind"] + "-" + g["verdict"]: g for g in rec["gates"]}
@@ -117,10 +136,14 @@ checks = [
     (
         "guard delta $0.0495",
         "$0.0495",
-        round(spend["gpu_sessions"][-1]["step_spent_usd"], 4) == 0.0495,
+        round(the_row_at(spend["gpu_sessions"])["step_spent_usd"], 4) == 0.0495,
     ),
-    ("cycle2 $9.4105", "$9.4105", round(cyc["sessions"][-1]["spent_usd"], 4) == 9.4105),
-    ("cycle2 left $10.5895", "$10.5895", round(cyc["sessions"][-1]["remaining_usd"], 4) == 10.5895),
+    ("cycle2 $9.4105", "$9.4105", round(the_row_at(cyc["sessions"])["spent_usd"], 4) == 9.4105),
+    (
+        "cycle2 left $10.5895",
+        "$10.5895",
+        round(the_row_at(cyc["sessions"])["remaining_usd"], 4) == 10.5895,
+    ),
     ("r2 spent $0.7606", "$0.7606", r2_spent == 0.7606),
     ("cap left $3.2394", "$3.2394", left_usd == 3.2394),
     ("16197 s left", "16 197 s", round(left_s) == 16197),

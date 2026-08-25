@@ -246,8 +246,10 @@ it or shrinking the plan is a decision this session does not own.
 | `results/lora_c_vramprobe_environ.txt` | `032a002f248e3bd2` |
 | `results/spend_lora_c_vramprobe.json` | `5103b8745985f87a` |
 | `scripts/gate_lora_c_vramprobe.py` | `c3341d36e7f8c9f9` |
-| `scripts/check_lora_c_vramprobe_report.py` | `29abf7046d79a72c` |
+| `scripts/check_lora_c_vramprobe_report.py` | `29abf7046d79a72c` — **moved, see below** |
 | `tests/test_lora_c_vramprobe.py` | `d4a303b279cd3f82` |
+
+> **One sha in the table above has moved since acceptance, and the measurement it witnesses has not.** On 2026-08-25 `lora-c-migrate`'s step 0.5 appended a closing reading to `results/spend_cycle2.json`, and two of this checker's rows derived their figure from that ledger's **last** row — true only while nothing else wrote. They now select this report's own reading by its stamp (`2026-08-25T14:46:50+00:00`), and raise rather than pick a neighbour if it is absent or duplicated. The checker is `42a6efd767b91bce` from that commit on; every number on this page is unchanged and still re-derives, 61 of 61. Nothing else in this report was edited ([[select_one_row_refuse_ambiguity]]).
 
 ---
 

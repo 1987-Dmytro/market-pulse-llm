@@ -236,14 +236,14 @@ quarter of an hour, in both directions, and a listing dates the question rather 
 | formatter | 2 files drifted, both left alone, **both pinned by a record** — checked by sha, not assumed |
 | numbers in this report re-derived from their own file | **`python3.11 scripts/check_lora_c_migrate_report.py`** — and the suite drives it |
 | suite, baseline | **3 806 passed / 2 skipped**, `make check-stamped` «reading HOLDS» at `e3fc756` |
-| suite, closing | see the closing stamped reading below |
+| suite, closing | **CLOSING_COUNT**, «reading HOLDS» at `HEAD_CLOSING`, tree unmoved outside the two whitelisted Stop-hook outputs. The first attempt of this reading was **killed** at 3 842/1 and is reported as killed, never as a pass — the one failure it surfaced is Dv828 |
 
 | file | sha256 (first 16) |
 |---|---|
 | `results/lora_c_migrate_stock.json` | `90b70c914e9a5623` |
 | `results/prereg_lora_c_migrate.json` | `089f3a740511c7ba` |
 | `scripts/probe_lora_c_migrate_stock.py` | `6d4e1a5fa60f311b` |
-| `scripts/check_lora_c_migrate_report.py` | `388a857edc19377d` |
+| `scripts/check_lora_c_migrate_report.py` | `e7b17139a2e83d8f` |
 | `tests/test_lora_c_migrate.py` | `9fa09ccf8028ddd3` |
 
 ---
@@ -260,8 +260,9 @@ quarter of an hour, in both directions, and a listing dates the question rather 
 | **825** | verify-gap | `first_number` on a rung-0 rule worded card-first returns **6 000.0** out of «RTX A6000», making the price ceiling vacuous with the suite green. §3 (d) |
 | **826** | process | **no gate script was written.** `scripts/gate_lora_c_migrate.py` would have been the producer of six rungs for a plan that cannot execute, and every number in it — cap, hard stop, price column, card — changes with the operator's answer. Named as a deliberate non-deliverable rather than shipped as speculative code |
 | **827** | tooling | the `--close` of the cheaper of the two debts is **unreachable at the registered tolerance**: a fixed absolute settlement lag (~$0.026–0.031 at 16–21 s after the delete) is 4.2% of an $0.73 step and 53.0% of a $0.075 one. The refusal is recorded as the contract asks; the band is not touched. §4 |
+| **828** | verify-gap | **step 0.5's close broke the PREVIOUS contract's report checker, and the suite is what said so.** `check_lora_c_vramprobe_report.py` derived cycle 2's spend from `results/spend_cycle2.json`'s **last** row — true only while nothing else wrote — and the close appended a later reading. Fixed by selecting that report's own row by stamp, raising on absent-or-duplicated rather than picking a neighbour; the sealed report's numbers are untouched and a provenance note records that the checker's sha moved to `42a6efd7…` ([[select_one_row_refuse_ambiguity]], [[rewriting_a_record_resets_state_you_do_not_own]]) |
 
-`contract-gap 3 · verify-gap 3 · tooling 1 · process 1` — eight, against eight rows.
+`contract-gap 3 · verify-gap 4 · tooling 1 · process 1` — nine, against nine rows.
 
 ---
 

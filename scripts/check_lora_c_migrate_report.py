@@ -317,10 +317,12 @@ for row in rows:
     kinds[kind] = kinds.get(kind, 0) + 1
 for kind, count in sorted(kinds.items()):
     says(f"the tally's own count of {kind}", f"{kind} {count}")
+WORDS = ["", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"]
+"""The tally spells its own row count in words; nine rows must not still read «eight»."""
 says(
     "the tally counts every row it has",
-    "eight, against eight rows",
-    len(rows) == sum(kinds.values()) == 8,
+    f"{WORDS[len(rows)]}, against {WORDS[len(rows)]} rows",
+    len(rows) == sum(kinds.values()),
 )
 
 # --- the contract's own words ---------------------------------------------------------------------
