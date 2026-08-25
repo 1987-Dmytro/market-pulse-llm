@@ -23,7 +23,9 @@ settled and one of which refused.
 | `a609b0e` | `results/prereg_lora_c_migrate.json` — D1, registered as EVIDENCE and marked as not law |
 | `9003c0b` | step 0.5's two closes — r2 settled and appended, the vramprobe refused and left open |
 | `aa9d946` | `tests/test_lora_c_migrate.py` — 37 tests |
-| *(this)* | `scripts/check_lora_c_migrate_report.py` and this report |
+| `e925ab7` | `scripts/check_lora_c_migrate_report.py` and this report — 63 of 63 numbers re-derived |
+| `03cb8fd` | the vault tail: `hot.md`'s curated block and today's log |
+| *(this)* | the closing stamped reading, and the commit table completed |
 
 ---
 
@@ -251,7 +253,7 @@ quarter of an hour, in both directions, and a listing dates the question rather 
 | Dv | cause | what |
 |---|---|---|
 | **820** | contract-gap | **the contract's first action is refused by the platform.** Ruling (р) and D2 name EU-SE-1, which does not support network volumes; the create endpoint's own refusal lists 21 that do and EU-SE-1 is not one. D2 was not executed and D1 was written as EVIDENCE rather than as law. $0 spent |
-| **821** | verify-gap | **the ruling rests on a table this executor produced, and that table answered a different question.** `docs/reports/lora-c-vramprobe.md` §5 read where the A6000 is and never asked where a volume may live — a capability the whole plan depends on. **all four** datacenters §5 named (EU-SE-1, US-TX-1, EUR-IS-2, US-PA-1) cannot hold one — the capable list has US-TX-**3** and EUR-IS-1/3/4, which are different datacenters ([[a_capability_gate_is_not_a_theme_gate]]) |
+| **821** | verify-gap | **the ruling rests on a table this executor produced, and that table answered a different question.** `docs/reports/lora-c-vramprobe.md` §5 read where the A6000 is and never asked where a volume may live — a capability the whole plan depends on: **all four** datacenters §5 named (EU-SE-1, US-TX-1, EUR-IS-2, US-PA-1) cannot hold one — the capable list has US-TX-**3** and EUR-IS-1/3/4, which are different datacenters ([[a_capability_gate_is_not_a_theme_gate]]) |
 | **822** | contract-gap | boot 500 + download 2 400 + load 600 = 3 500 s against a 3 600 s hard stop, with the mount, the bundle, the venv, the packs and the teardown still owed — and the **venv stage is named by no rung at all** and measured nowhere in this repo. §3 (b) |
 | **823** | verify-gap | the vramprobe's hard-stop helper asserts an EQUALITY that held only at that probe's numbers; at $1.00 and $0.53 it raises `SystemExit` on `--open`, after the meter starts. §3 (a) |
 | **824** | contract-gap | rung 2 words its liveness as «the last progress line», and `hf download`'s CR-based progress bars make that a false-KILL instrument on a healthy pod; and it carries two thresholds in one rule where `first_number` reaches only the first. §3 (c) |
