@@ -463,6 +463,16 @@
       "billing_since_usd": 9.351237,
       "billing_read": "read",
       "note": "vramprobe pod deleted; OOM again at 3 072 with expandable_segments proven in the process env; 0 of 6 steps, no adapter"
+    },
+    {
+      "at": "2026-08-25T17:59:54+00:00",
+      "balance": 13.0439063851,
+      "spent_usd": 9.4659,
+      "remaining_usd": 10.5341,
+      "balance_delta_usd": 9.4659,
+      "billing_since_usd": 9.456133,
+      "billing_read": "read",
+      "note": "lora-c CLOSED at $0.7650 — lora-c-run r2 settled — the debt Step 0.5 of lora-c-migrate carries"
     }
   ]
 }
