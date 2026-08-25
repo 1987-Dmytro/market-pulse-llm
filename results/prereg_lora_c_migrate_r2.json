@@ -141,8 +141,16 @@
         "summed_seconds": 3290.0,
         "teardown_margin_seconds": 90.0,
         "the_previous_contract_crossed_its_own_stop": "boot 500 + download 2400 + load 600 = 3500 s against a 3600 s stop, with the mount, the bundle, the venv, the packs and the teardown unbounded and unnamed. That is Dv822, found at $0. Here the five bounds sum to 3290 and the stop is 3600",
-        "the_two_stages_inside_the_310_s_of_headroom": "the repo bundle's scp + clone BEFORE the venv (the venv installs `-e .` and the loader lives in `src/`, so the checkout has to exist first), and the pack/SFT staging AFTER the load proof. Neither carries its own rung: the contract's five bounds are registered exactly as written and these two are named as what the headroom is for. The repo bundle is ~1 MB; the packs and the two SFT files are sized in the report before the claim is made",
-        "venv_seconds": 900.0
+        "the_staging_bytes_measured_on_this_head": 13931068,
+        "the_two_stages_inside_the_310_s_of_headroom": "ONE stage, measured, not two. §4 lists «the repo bundle, both SFT files, the eval/pass-2/marker-census packs» as staging that happens AFTER the load proof, inside the 90 s teardown margin. All five of those files are TRACKED (`git ls-files` names every one), so they ride INSIDE the bundle — and the bundle has to land BEFORE the venv, because `pip install -e .` and the shipped loader both need the checkout. So the staging is a single scp of 13 931 068 bytes measured on this HEAD, before the venv, and the post-load staging §4 asks for is already done by then. The runbook's «~1 MB, whole history» predates the packs and the SFT files by four phases. 13.9 MB is seconds of transfer and it sits in the 310 s of headroom ([[a_count_in_prose_is_not_the_enumeration]])",
+        "venv_seconds": 900.0,
+        "what_rides_in_the_bundle": {
+          "results/lora_c_eval_pack.json": 1999190,
+          "results/lora_c_marker_census_pack.json": 211987,
+          "results/lora_c_pass2_pack.json": 58971,
+          "results/pass1_sft_v3_arm_b.jsonl": 5937614,
+          "results/pass1_sft_v3_train.jsonl": 4608297
+        }
       },
       "what_the_1200_s_download_bound_actually_rests_on": {
         "the_bound_holds_against_the_WORST_of_the_three": "1200 s is 2.86× the slowest reading this repo owns and 6.67× the one taken on this transport in this datacenter",
@@ -227,6 +235,7 @@
     "the_900_s_venv_bound": "HOLDS as a bound and is unmeasured, exactly as the contract says. This step produces the first reading",
     "the_affordability_inequality": "HOLDS at 3884.9 >= 3600 with 284.9 s of slack, and it coincides with rung 0's ceiling at this cap and this stop, so it can never fire independently. Registered in the general form and driven to its refusing branch on a synthetic pair",
     "the_price_first_rung_0_wording": "HOLDS: `first_number` on the registered string returns 1.5. The card-first wording the previous contract used returns 100.0 out of the card's NAME (Dv825)",
+    "the_stage_ORDER_in_clause_4": "REFUTED as written, and the work still fits. §4 puts the staging after the load proof; the venv and the loader both need the checkout, so the bundle has to be there first, and the five files §4 names are tracked and ride in it. The order that can actually happen is boot -> scp 13.9 MB + clone -> venv -> download -> load proof -> teardown, and nothing after the load proof needs staging at all",
     "the_target_row_at_issue_time": "HOLDS: A100 PCIe, 80 GB, $1.39/h secure, CA-MTL-3, stock `Low`, volume-capable"
   }
 }
