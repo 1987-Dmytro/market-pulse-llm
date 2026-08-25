@@ -22,7 +22,8 @@ enumeration.
 | `4475907` | every command of the paid session, driven at $0 |
 | `997a2a2` | the step ledger anchored at $13.02, before the volume |
 | `a004ba6` | D2 — the paid step's artifacts |
-| *(this)* | `docs/reports/lora-c-migrate-r2.md` and its checker |
+| `0b18366` | D3 — `docs/reports/lora-c-migrate-r2.md` and its checker, 79 of 79 re-derived |
+| *(this)* | the closing stamped reading, the derived download span, and the vault tail |
 
 ---
 
@@ -53,7 +54,11 @@ records the pod.
 
 **The venv — the first measurement of this stage this repo owns: 132.0 s.** No reading of it existed
 before; the nearest thing was a 37-minute envelope containing the venv, a 62 GB download and two
-other stages. The registered bound was 900 s and it is 6.8× the measurement. The venv's own
+other stages. The registered bound was 900 s and it is 6.8× the measurement. **What is inside the
+132.0 s**, so the next plan does not budget it twice: `python3 -m venv --system-site-packages`, then
+`pip install -e '.[dev,gpu]'` (27 packages resolved and installed over the image's torch), then the
+proof line — which imports torch, transformers and bitsandbytes and asks the driver for the card.
+The three are not decomposed; the span is the launch stamp to the proof file's mtime. The venv's own
 interpreter named the stack and the card, which is what makes it a reading rather than a caller's
 claim:
 
@@ -169,7 +174,7 @@ $0.37–0.45 can close however correct it is. n = 2, and the band is not this co
 | pods alive at any moment | **1** |
 | `make fmt` | not run; both drifted files still pinned |
 | suite, baseline | **3 843 passed / 2 skipped**, `make check-stamped` «reading HOLDS» at `8d3727e` |
-| suite, closing | *(below)* |
+| suite, closing | **3 905 passed / 2 skipped**, `make check-stamped` «reading HOLDS» at `0b18366`, tree unmoved outside the two whitelisted Stop-hook outputs. The count was PREDICTED before the reading — 3 843 baseline + 1 (the selector's negative control) + 61 (the new file) — and it landed on the prediction, so it is accounted for and not merely observed |
 
 | file | sha256 (first 16) |
 |---|---|

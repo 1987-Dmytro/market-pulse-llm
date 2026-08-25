@@ -130,9 +130,32 @@ says(
     f"**{the_gate('venv')['measured_seconds']} s** | {rung(3)['threshold']:.0f} s",
 )
 downloaded = the_gate("download")
+
+
+def the_download_span() -> float:
+    """From the download's own start to the FIRST poll that read the final byte count.
+
+    An UPPER bound at the poll cadence: the transfer finished somewhere inside the 41 s between the
+    last growing poll and this one, and `hf download`'s own clock says 02:32. Both are printed and
+    neither is averaged ([[two_values_for_one_input_get_quoted_kindly]]). Derived here rather than
+    typed, because a figure asserted on the page AND in its checker is checked by nobody
+    ([[preregistration_is_a_file_not_a_constant]]).
+    """
+    from datetime import datetime
+
+    rows = [
+        json.loads(one) for one in POLLS.read_text(encoding="utf-8").splitlines() if one.strip()
+    ]
+    top = max(int(one["bytes"]) for one in rows)
+    first = next(one for one in rows if int(one["bytes"]) == top)
+    began = datetime.fromisoformat(the_gate("download")["started_at"])
+    return (datetime.fromisoformat(first["at"]) - began).total_seconds()
+
+
+SPAN = the_download_span()
 says(
     "rung 4's bytes and polls",
-    f"**{spaced(downloaded['bytes_now'])} B** in ~**184 s**, {downloaded['polls_seen']} polls",
+    f"**{spaced(downloaded['bytes_now'])} B** in ~**{SPAN:.0f} s**, {downloaded['polls_seen']} polls",
     downloaded["polls_seen"] == len(POLLS.read_text(encoding="utf-8").strip().splitlines()),
 )
 says(
@@ -170,7 +193,7 @@ says(
 )
 says(
     "the download rate on the wall clock",
-    f"**{proof['hf_bytes_before'] / 184 / 1e6:.1f} MB/s**",
+    f"**{proof['hf_bytes_before'] / SPAN / 1e6:.1f} MB/s**",
 )
 says(
     "the download rate on hf's own clock",
@@ -224,7 +247,7 @@ says(
 stages = (
     the_gate("gate0")["elapsed_on_this_pod_seconds"]
     + the_gate("venv")["measured_seconds"]
-    + 184.0
+    + SPAN
     + proof["load_seconds"]
 )
 allowed = sum(float(rung(one)["threshold"]) for one in (1, 3, 4, 5))
