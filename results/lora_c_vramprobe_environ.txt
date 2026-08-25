@@ -1,0 +1,5 @@
+# the TRAINING process — /proc/215/environ, read while it ran
+# cmdline: /workspace/venv/bin/python -u /workspace/repo/scripts/train_qlora_v3.py --class-weights --max-steps 6 --data results/pass1_sft_v3_train.jsonl --out /workspace/run/smoke 
+# started: Tue Aug 25 14:41:42 2026
+HF_HOME=/workspace/hf
+PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True

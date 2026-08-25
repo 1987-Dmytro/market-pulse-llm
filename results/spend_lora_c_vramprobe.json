@@ -8,6 +8,12 @@
       "balance": 13.1488024739,
       "step_spent_usd": 0.0,
       "note": "vramprobe anchor, before the pod"
+    },
+    {
+      "at": "2026-08-25T14:46:50+00:00",
+      "balance": 13.0992674517,
+      "step_spent_usd": 0.0495,
+      "note": "vramprobe pod deleted; OOM again at 3 072 with expandable_segments proven in the process env; 0 of 6 steps, no adapter"
     }
   ],
   "gpu_note": "RunPod account balance read before the first pod of lora-c-vramprobe. Step spend = the pessimistic maximum of this anchor minus the balance now and the billing walk since `anchored_at` (SPEC 3.23 (4), Dv411), enforced against $0.30. The SPEC amendment 3.4 (4) phase cap is enforced separately, against results/spend_phase4.json, and neither anchor may be regenerated."

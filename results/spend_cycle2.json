@@ -453,6 +453,16 @@
       "billing_since_usd": 9.351237,
       "billing_read": "read",
       "note": "vramprobe anchor, before the pod"
+    },
+    {
+      "at": "2026-08-25T14:46:50+00:00",
+      "balance": 13.0992674517,
+      "spent_usd": 9.4105,
+      "remaining_usd": 10.5895,
+      "balance_delta_usd": 9.4105,
+      "billing_since_usd": 9.351237,
+      "billing_read": "read",
+      "note": "vramprobe pod deleted; OOM again at 3 072 with expandable_segments proven in the process env; 0 of 6 steps, no adapter"
     }
   ]
 }
