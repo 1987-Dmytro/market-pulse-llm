@@ -38,6 +38,7 @@ Both lines below are grepped out of the two logs by one regular expression, neve
 | this process in use | 29.70 GiB | 30.01 GiB |
 | allocated by PyTorch | 28.07 GiB | **29.17 GiB** |
 | **reserved but unallocated** | **1.33 GiB** | **544.22 MiB = 0.531 GiB** |
+| **it missed by** | **0.06 GiB** | **0.64 GiB** |
 | the trainer's own halving fired | yes | yes |
 | optimizer steps | 0 of 6 | **0 of 6** |
 
@@ -53,6 +54,15 @@ try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentat
 The last sentence is the machine recommending a setting that was already on. A live `nvidia-smi`
 half a minute before the failure read **31 964 of 32 623 MiB** — a session reading, not a kept
 artifact, and it is quoted as one.
+
+**The shortfall row is the one to read twice.** r2 missed by 0.06 GiB; with the fragmentation
+reclaimed the run got materially further into the same `backward()` — 28.07 → 29.17 GiB live —
+and then missed by **0.64 GiB**, ten times as much. That kills the «just a little more VRAM» read.
+
+**And it bounds the deficit from BELOW only.** Zero optimizer steps completed on either pod, so
+no later batch was ever attempted and the widest row (2 975 tokens) was never reached. This probe
+says 32 GB is not enough; **nothing here sizes a card that would be**, and any number that claims
+to would be a projection ([[bound_instead_of_recompute]]).
 
 **The setting reached the process, and that is a reading and not a claim.** A shell that exported a
 variable and a process that inherited it are two different facts, and an inline `VAR=x cmd` never
@@ -186,14 +196,27 @@ second ~$0.24/day rent, and neither is priced by any registration this line hold
 **And there is a second constraint that does not care which card is chosen.** What is left of the
 r2 cap is $3.2394 = **16 197 s** at $0.72/h. An r3 that trains both arms owes, at ruling (п)'s
 charged rates: boot 500 + load 300 + 396 adapter-eval calls × **9.20** = 3 643.2 + pass 2 2 134 =
-**6 577.2 s** fixed, leaving 9 619.8 s for 150 optimizer steps (144 + a re-run smoke):
+**6 577.2 s** fixed, leaving 9 619.8 s for 150 optimizer steps (144 + a re-run smoke). That is the
+cheapest reading and it is not the only one, because two registered costs sit outside those 6 577.2 s:
 
-> **r3 fits the remaining cap only at ≤ 64.13 s/step** — 66.80 if the smoke is not re-bought.
+| what r3 is charged | fixed s | ≤ s/step over 150 steps |
+|---|---|---|
+| the cheapest reading — census dropped, pass 2 at the CHARGED 11 threads | 6 577.2 | **64.13** |
+| \+ ruling (о)'s marker census, 20 × 2 = 40 calls × 9.20 = 368 s | 6 945.2 | **61.68** |
+| \+ pass 2 at its own registered **bound of 15** threads (`+776 s`) | 7 721.2 | **56.51** |
+
+The thread count is a READING of what an arm labels `OURS`, not a constant — the frozen registration
+says so in `the_pass_2_thread_count_is_a_READING_of_the_arms_labels`, with 11 charged and 15
+reachable — and the census is the last thing a session buys, so a projection rung that cannot afford
+it drops it. So the honest ceiling is a **range, 56.5 to 64.1 s/step**, and only its top end is the
+64.13 above.
 
 lora-b measured **61.047 s/step** on a 48 GB A6000 (`results/baselines.json`) with rows of at most
 **1 222** tokens (`results/prereg_lora_b.json::longest_kept`). This line's rows run to **2 975**
-(`results/lora_c_encode_census.json::tokens.max`). So the remaining cap is very probably not enough even on a card that fits, and
-raising the cap or shrinking the plan is a decision this session does not own.
+(`results/lora_c_encode_census.json::tokens.max`). So the remaining cap sits between **+3.1 and
+−4.5 s/step** of the only step-rate this repo has ever measured, taken on rows less than half
+as wide. The remaining cap is very probably not enough even on a card that fits, and raising
+it or shrinking the plan is a decision this session does not own.
 
 ---
 
@@ -209,6 +232,7 @@ raising the cap or shrinking the plan is a decision this session does not own.
 | eval replies | **0** — the attempt is NOT SPENT |
 | bars scored | **0** — `results/prereg_lora_c.json` is FROZEN and untouched, sha `4d5a8f1d34765b4a` unchanged |
 | artifacts pulled before the delete | 3 files, hashes equal on both machines |
+| numbers in this report re-derived from their own file | **61 of 61**, `python3.11 scripts/check_lora_c_vramprobe_report.py` — and the suite drives it |
 | suite | **3 805 passed / 2 skipped**, `make check-stamped` «reading HOLDS» at `c9b0e71`, before the create |
 
 | file | sha256 (first 16) |
@@ -233,9 +257,10 @@ raising the cap or shrinking the plan is a decision this session does not own.
 | **815** | tooling | `$!` after `VAR=x nohup cmd &` inside `bash -c` recorded the WRAPPER's pid, and `pgrep -f train_qlora_v3.py` matched the same wrapper because its command line contains the script's name. The env proof came back EMPTY — which reads exactly like «the setting is not set», the one false negative that would have destroyed this probe's answer. Fixed by walking `ps -eo pid,ppid` to the real trainer |
 | **816** | process | `nohup … &` inside an `ssh` one-liner without `< /dev/null` held the ssh channel open; the call timed out at 120 s while the trainer ran on correctly. Two blind minutes, no extra pod seconds |
 | **817** | tooling | zsh does not word-split an unquoted `$SSHOPT`; the first `scp` died with «Identity file … not accessible». `scripts/runbook_lora_c.md` names this defect by name and the shortcut was taken anyway. ~11 s of pod time |
-| **818** | process | rung 2 (liveness) was never reached — the run died between 207 s and 239 s into the smoke, never near a 600 s silence. Reported as not-reached, never as a passing reading, and the death itself is reported as a BOUND because no artifact stamps it |
+| **818** | process | the contract asks for a «short report, one page» with five named parts; this one runs to six sections. §5 is invited by «the datacenter question goes back to the operator» and §3 carries the two verify-gaps below, but the contract's own words were exceeded and that belongs here beside the mechanical slips |
+| **819** | process | rung 2 (liveness) was never reached — the run died between 207 s and 239 s into the smoke, never near a 600 s silence. Reported as not-reached, never as a passing reading, and the death itself is reported as a BOUND because no artifact stamps it |
 
-`contract-gap 1 · verify-gap 2 · tooling 2 · process 2` — seven, against seven rows.
+`contract-gap 1 · verify-gap 2 · tooling 2 · process 3` — eight, against eight rows.
 
 ---
 

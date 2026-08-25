@@ -388,3 +388,21 @@ def test_the_probe_leaves_lora_c_s_own_gates_reading_lora_c(run):
     with gate.the_gate_reads_the_probe():
         assert parent.PREREG == gate.PREREG
     assert (parent.PHASE, parent.PREREG, parent.RECORD) == before
+
+
+def test_every_number_in_the_report_is_re_derived_from_the_file_that_owns_it():
+    """`scripts/check_lora_c_vramprobe_report.py`, driven as a COMMAND — its exit code is the claim.
+
+    The report says «61 of 61 re-derived»; this is what makes that sentence checkable rather than
+    something I once ran ([[a_claim_no_number_can_check]]). It reads shipped artifacts, so it is red
+    in every commit before they land — which is the correct direction for a claim about them
+    ([[a_test_that_reads_a_shipped_artifact]]).
+    """
+    got = subprocess.run(
+        [sys.executable, str(REPO_ROOT / "scripts" / "check_lora_c_vramprobe_report.py")],
+        cwd=REPO_ROOT,
+        capture_output=True,
+        text=True,
+    )
+    assert got.returncode == 0, got.stdout + got.stderr
+    assert "0 FAILED" in got.stdout
