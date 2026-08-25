@@ -1,0 +1,232 @@
+{
+  "artifacts": {
+    "results/lora_c_migrate_r2.json": "this step's run record — pods, gates, the load proof, the money",
+    "results/lora_c_migrate_r2_bytes.jsonl": "the download's byte polls: {at, bytes} per poll, `du -sb /workspace/hf` over ssh, stamped on the MAC",
+    "results/lora_c_migrate_r2_load_proof.json": "what the pod's loader wrote — load seconds, VRAM, the volume's bytes before and after, the runtime block",
+    "results/lora_c_migrate_r2_stock.json": "the read-only stock reading taken at issue time, and the volume-capability list the create endpoint itself enumerates",
+    "the_venv_measurement_lands_here_not_in_this_file": "rung 3 is the first bound this repo has ever put on the venv build and NO measurement of it exists (grepped: `implementation-notes.md:596` is a 37-minute envelope holding the venv, a 62 GB download and two other stages — an upper bound on three stages, not a reading of one). The measured seconds land in `results/lora_c_migrate_r2.json` and in the report. They may NOT land here: this file is committed before the create and frozen by it, and writing a measurement back into a frozen record is how a registration stops predating its own numbers"
+  },
+  "authority": "ruling (с), docs/STATUS.md п. 1 — «A100 PCIe 80 GB, ≤$1.50/ч, CA-MTL-3». Hand-written, like the vramprobe's: ~40 constants and three formulas, and a producer for it would be one more file to pin. Every sum in it is RE-DERIVED by `tests/test_lora_c_migrate_r2.py`, which is what makes the arithmetic derived rather than asserted",
+  "contract": "docs/PROMPT-lora-c-migrate-r2.md",
+  "do_not": [
+    "touch results/prereg_lora_c.json — FROZEN by lora-c-run r2's create; it is an INPUT here and its sha is asserted at every build",
+    "touch any pack, any bar, or mp-srv2 (no deletion, no writes, no mount) — the old volume is the project's serving stack",
+    "edit team-lead files — docs/STATUS.md, docs/SPEC.md, docs/PROMPT-*.md are committed verbatim and never edited",
+    "train anything, evaluate anything, or generate a single scored reply",
+    "keep two billing resources alive at once — rung 7",
+    "exceed $1.50 all-in",
+    "poll the download by log lines — `hf download`'s CR-progress is not a liveness signal (rung 4)",
+    "run `make fmt` repo-wide — two files are ruff-format-drifted and one of them is pinned by the FROZEN registration's producer sha",
+    "buy anything after the load proof lands"
+  ],
+  "kill_clock": [
+    {
+      "authorised_cards": {
+        "A100 PCIe": {
+          "gpu_id": "NVIDIA A100 80GB PCIe",
+          "vram_gb": 80
+        }
+      },
+      "rule": "≤$1.50/h is the ceiling, and the card must equal A100 PCIe; the price must ALSO equal a column this step was solved at",
+      "rung": 0,
+      "the_card_is_graded_too": "ruling (с) names exactly this card, and the 80 GB is the whole point: 32 GB refused this line's training twice and 48 GB has never been measured at max_seq_len 3 072. A cheaper card at $1.39 would pass a price-only rung and answer a different question",
+      "the_rule_is_worded_PRICE_FIRST_on_purpose": "`gate_lora_b.first_number` returns the FIRST number in the rule string. A card-first wording — «card A100 PCIe at ≤$1.50/h» — hands it «100» out of the card's NAME and the ceiling silently becomes $100/h with the suite green. That is Dv825, found at $0 on the previous contract's registration, and this wording is its remedy",
+      "threshold": 1.5,
+      "verdict_on_fail": "DELETE the pod now and STOP — no mount, no download, no load",
+      "what": "the price and the card, at create"
+    },
+    {
+      "measured_on_this_lines_last_two_pods_seconds": [
+        23.2,
+        29.4
+      ],
+      "rule": "500 s from this pod's create for the ssh endpoint to answer, or KILL",
+      "rung": 1,
+      "threshold": 500.0,
+      "what": "the boot gate"
+    },
+    {
+      "rule": "600 s of silence since the LAST THING THAT HAPPENED, not since the last poll, or KILL",
+      "rung": 2,
+      "the_download_rung_reads_THIS_threshold": "rung 4's liveness clock is this number and not a second copy of it. A threshold with two homes acquires two values ([[two_values_for_one_input_get_quoted_kindly]]); rung 4 carries the POLL CADENCE, which is its own quantity, and reads the silence deadline from here",
+      "threshold": 600.0,
+      "what": "liveness — the silence clock every stage is graded on"
+    },
+    {
+      "rule": "900 s to build the venv, or KILL",
+      "rung": 3,
+      "the_bound_is_NEW_and_unmeasured": "no reading of this stage exists in this repo. The nearest thing is a 37-minute envelope (`implementation-notes.md:596`, 2026-08-01 13:33→14:10) that contains the venv, a 62 GB download and two other stages — an upper bound on three stages together. 900 s is therefore a REGISTERED BOUND, not a projection, and its purpose is to produce the first measurement this line can plan on",
+      "threshold": 900.0,
+      "what": "the venv build — `python3 -m venv --system-site-packages` plus `pip install -e '.[dev,gpu]'`"
+    },
+    {
+      "a_blind_window_is_recorded_not_graded": "a gap between polls longer than the cadence cannot fire a rung: a stall inside it that recovered is indistinguishable from a healthy transfer, and killing on it would kill compliant work. It is LISTED in the gate, so a KILL that happened inside an unpolled window is visible as one ([[a_checker_whose_failure_is_silence]])",
+      "poll_cadence_seconds": 120.0,
+      "rule": "1200 s to download the weights, or KILL",
+      "rung": 4,
+      "the_download_is_complete_at_bytes": 59055800320,
+      "the_first_poll_has_no_predecessor": "it defines the baseline and is never graded for growth; the liveness clock starts at the download's own start stamp until the second poll exists",
+      "the_liveness_signal_is_BYTES": "growth of `du -sb /workspace/hf` between two stamped polls. A poll whose byte count did not move starts the silence clock of rung 2; a poll that moved resets it. `hf download` writes carriage-return progress lines that keep printing while a transfer is stalled, so a line-based liveness rung reads a dead transfer as alive and a quiet healthy one as dead ([[no_rung_watches_an_idle_pod]])",
+      "the_polls_are_stamped_on_ONE_clock": "the Mac's. Every other stamp in this record is the Mac's, and a byte count timed by the pod against deadlines timed by the Mac is two clocks in one inequality",
+      "threshold": 1200.0,
+      "what": "the weights download onto the NEW volume",
+      "why_that_floor": "55 GiB = 59 055 800 320 bytes, and it sits BELOW every reading this repo owns of these weights: `implementation-notes.md`:335 records the repo as 62.6 GB (58.3 GiB) at HuggingFace, and Dv19 read `du -sh /workspace/hf` on mp-srv2 as 59 GiB. A floor below both refuses a partial transfer without refusing a legitimate layout — the HF cache is blobs plus a snapshot of symlinks, and `du -sb` counts the links at their own size. Completion is this READING and not a caller's flag ([[a_flag_that_asserts_turns_a_poll_into_a_verdict]])"
+    },
+    {
+      "rule": "600 s to load the model to GPU through the shipped loader, or KILL",
+      "rung": 5,
+      "the_shipped_loader_is_CALLED_not_copied": "`market_pulse.local_llm.load(model_id, revision)` — the same function `scripts/eval_zero_shot.py --backend local` calls. A load proof that used its own `from_pretrained` would prove a volume can feed transformers, not that it can feed THIS stack",
+      "threshold": 600.0,
+      "what": "the load proof — the deliverable"
+    },
+    {
+      "rule": "3600 s of --terminate-after at create, and it is the only thing enforcing the hard stop when nobody is polling",
+      "rung": 6,
+      "threshold": 3600.0,
+      "what": "the platform backstop"
+    },
+    {
+      "rule": "1 billing resource at a time, and a pod that is open in the record with no deleted_at blocks the next create",
+      "rung": 7,
+      "the_volume_is_not_counted_here": "the network volume is not a pod and rents whether or not one is attached. Rung 7 is about pods; the volume's rent is named beside the step and never inside it",
+      "threshold": 1.0,
+      "what": "never two pods"
+    }
+  ],
+  "money": {
+    "cap_usd_all_in": 1.5,
+    "pre_pod_arithmetic": {
+      "at_each_price": {
+        "1.39": {
+          "card": "A100 PCIe",
+          "datacenter": "CA-MTL-3",
+          "hard_stop_buys_seconds": 3884.9,
+          "the_full_hard_stop_costs_usd": 1.39,
+          "what_the_cap_has_left_after_it_usd": 0.11,
+          "where_the_price_comes_from": "`runpodctl gpu list` :: securePricePerHr, read at issue time and recorded in results/lora_c_migrate_r2_stock.json with its stamp"
+        }
+      },
+      "hard_stop_formula": "cap_usd_all_in / usd_per_hour * 3600 >= hard_stop_seconds",
+      "hard_stop_seconds": 3600.0,
+      "stock_read_before_the_create": {
+        "at": "2026-08-25T19:48:13Z",
+        "commands": [
+          "runpodctl network-volume list",
+          "runpodctl network-volume create --name probe --size 1 --data-center-id NOPE",
+          "runpodctl datacenter list",
+          "runpodctl gpu list --include-unavailable"
+        ],
+        "pairs_cross_checked": 137,
+        "record": "results/lora_c_migrate_r2_stock.json",
+        "the_rulings_row": {
+          "card": "A100 PCIe",
+          "datacenter": "CA-MTL-3",
+          "gpu_id": "NVIDIA A100 80GB PCIe",
+          "secure_usd_per_hour": 1.39,
+          "stock": "Low",
+          "takes_a_network_volume": true,
+          "vram_gb": 80
+        },
+        "the_two_listings_agree": true,
+        "volume_capable_datacenters": 21,
+        "what_it_does_not_promise": "a listing is not a create. This reading DATES the question and the create is the only free test of itself; a refused create costs $0 and is a STOP report"
+      },
+      "the_formula_is_an_INEQUALITY_and_why": "the vramprobe registered the same relation as an EQUALITY and it held only because $0.30 ÷ $0.72 × 3600 was 1500.0 exactly. That is a coincidence, not a law: an equality refuses every price the cap can comfortably afford. Here $1.50 ÷ $1.39 × 3600 = 3884.9 s against a registered stop of 3600 s — 284.9 s of slack, and the plan is solved at the STOP, not at what the cap happens to buy",
+      "the_inequality_COINCIDES_with_rung_0_at_these_numbers": "cap / price × 3600 ≥ 3600 reduces to price ≤ $1.50, which IS rung 0's ceiling. So no price rung 0 admits can fail this check today, and it is registered as the general form rather than as a second guard: at another cap or another stop the two separate, and the helper is driven to its refusing branch in `tests/test_lora_c_migrate_r2.py` on a synthetic pair. Naming a check that cannot fire as if it were an independent gate is how a plan acquires guards it does not have",
+      "the_stage_bounds_SUM_inside_the_stop": {
+        "boot_seconds": 500.0,
+        "download_seconds": 1200.0,
+        "headroom_seconds": 310.0,
+        "load_proof_seconds": 600.0,
+        "summed_seconds": 3290.0,
+        "teardown_margin_seconds": 90.0,
+        "the_previous_contract_crossed_its_own_stop": "boot 500 + download 2400 + load 600 = 3500 s against a 3600 s stop, with the mount, the bundle, the venv, the packs and the teardown unbounded and unnamed. That is Dv822, found at $0. Here the five bounds sum to 3290 and the stop is 3600",
+        "the_two_stages_inside_the_310_s_of_headroom": "the repo bundle's scp + clone BEFORE the venv (the venv installs `-e .` and the loader lives in `src/`, so the checkout has to exist first), and the pack/SFT staging AFTER the load proof. Neither carries its own rung: the contract's five bounds are registered exactly as written and these two are named as what the headroom is for. The repo bundle is ~1 MB; the packs and the two SFT files are sized in the report before the claim is made",
+        "venv_seconds": 900.0
+      },
+      "what_the_1200_s_download_bound_actually_rests_on": {
+        "the_bound_holds_against_the_WORST_of_the_three": "1200 s is 2.86× the slowest reading this repo owns and 6.67× the one taken on this transport in this datacenter",
+        "the_contract_cites_the_middle_reading": "«the runbook measured 240 s for 62 GB» — traced to `scripts/runbook_4b.md`:54 and `docs/reports/lora-b-run.md`, and that measurement was taken on a VOLUME-LESS pod's 80 GB container disk in US-TX-1 (`knowledge/decisions/4b-training-contract.md`:190). A rate measured on one transport does not carry to another ([[the_smokes_rate_carries_the_smokes_transport]])",
+        "the_reading_that_matches_this_transport": "`implementation-notes.md`:340 — 2026-08-01 08:41 UTC, volume `gfwa2an8fn` (100 GB, CA-MTL-3) and an A6000 pod: «Weights downloaded in 3 minutes». Same datacenter, same volume size, weights onto the NETWORK VOLUME. ~180 s",
+        "the_three_readings_seconds": {
+          "container_disk_US-TX-1_4b_smoke": 240,
+          "network_volume_CA-MTL-3_4a": 180,
+          "volume_less_pods_4c": 420
+        }
+      }
+    },
+    "the_second_volume_rents_beside_the_step_not_inside_it": {
+      "both_volumes_daily_usd": 0.4667,
+      "cycle_2_remaining_usd_at_this_reading": 10.5147,
+      "days_of_two_volumes_the_remaining_balance_would_cover": 22.5,
+      "one_volume_daily_usd": 0.2333,
+      "the_operator_is_choosing_to_carry_it": "this step ADDS a second 100 GB volume and the project keeps mp-srv2. ~$0.07/GB/month × 100 GB is ~$0.2333/day each, ~$0.4667/day for the pair, against $10.5147 left in cycle 2 — about three idle weeks. That is the contract's design, not a defect: a second volume is the hedge against the datacenter a GPU keeps leaving (`knowledge/decisions/4b-training-contract.md` §g). It is written down beside the balance because carrying it is a choice and not a rounding error",
+      "the_rent_is_never_inside_the_cap": "$1.50 is the POD, all-in. The volume's rent is continuous, starts at create and does not stop when the pod is deleted"
+    },
+    "the_step_is_all_in": "$1.50 covers the pod and nothing else is created except the volume, whose rent is named above and is not inside the cap"
+  },
+  "phase": "lora-c-migrate-r2",
+  "question": "does a 100 GB network volume in CA-MTL-3 hold this line's weights, and does an A100 PCIe 80 GB pod in CA-MTL-3 load them to GPU through the shipped loader?",
+  "state": "DRAFT — frozen by this step's first `network-volume create`",
+  "target": {
+    "card": "A100 PCIe",
+    "container_disk_gb": 30,
+    "datacenter": "CA-MTL-3",
+    "gpu_id": "NVIDIA A100 80GB PCIe",
+    "image": "runpod/pytorch:1.0.2-cu1281-torch280-ubuntu2404",
+    "model_id": "google/gemma-4-31b-it",
+    "revision": "842da3794eaa0b77d5f08bae87a17459d91ff475",
+    "volume_gb": 100,
+    "volume_mount_path": "/workspace",
+    "why_100_gb": "parity with mp-srv2, and `scripts/runbook_4a.md` §1's own reason: the weights are ~62 GB as HuggingFace reports them and ~59 GB on the volume, and the HF cache holds a blob plus a snapshot link",
+    "why_CA_MTL_3": "ruling (с). It is volume-capable by the create endpoint's own enumeration, and it is the datacenter `scripts/runbook_4a.md` §1 chose on the same intersection on 2026-08-01"
+  },
+  "the_known_formatter_state": {
+    "both_files_are_pinned_by_a_record": {
+      "scripts/build_lora_c_marker_census.py": "producer sha in results/lora_c_marker_census_pack.json, which is itself pinned inside the FROZEN registration",
+      "scripts/write_lora_c_prereg.py": "producer sha in results/prereg_lora_c.json::producer"
+    },
+    "make_check_does_not_see_it": "`make check` runs `ruff check`, never `ruff format --check`, so the drift is invisible to the single verifier and has to be carried by hand ([[verifier_format_gap]])",
+    "no_reformatting_in_this_contract": "`make fmt` is forbidden REPO-WIDE while those pins live. Files this contract creates are formatted individually by path, never by a repo-wide sweep ([[the_formatter_voids_a_frozen_producer_pin]])",
+    "state": "KNOWN — two files are ruff-format-drifted and both are pinned by a record"
+  },
+  "the_stock_moved_while_this_file_was_being_written": {
+    "what_it_means_for_the_ruling": "ruling (с) was written on the 18:01:18Z table, in which the A6000 at $0.53 was in stock in NO volume-capable datacenter and the A100/CA-MTL-3 was the cheapest reachable row above 48 GB. Ninety minutes later four CHEAPER volume-capable rows exist, three of them in one datacenter that ALSO carries the ruling's own card. That is recorded, not acted on: the datacenter and the card are the ruling's to name and the DO-NOT list forbids choosing either ([[a_reproducible_probe_can_be_unrepresentative]])",
+    "what_it_means_for_this_plan": "the create is the only reading that binds, and a stock table minutes old is already a different table. It does NOT weaken the volume-capability half, which comes from the create endpoint's own refusal and did not move across any reading",
+    "what_was_observed": "three read-only readings of `A100 PCIe` inside 17 minutes on 2026-08-25 returned three different availability rows. At ~19:28Z `gpu list --include-unavailable` read CA-MTL-3 `none` and EU-RO-1 `Low`; at 19:31:47Z the plain listing read CA-MTL-3 `Low`, EU-RO-1 `none`, US-KS-2 `none`; at 19:48:13Z it read CA-MTL-3 `Low` AND US-KS-2 `Low`"
+  },
+  "the_two_guard_close_debts": {
+    "lora-c": {
+      "outcome": "CLOSED, and closed BEFORE this session — not re-run here",
+      "recorded_reading_usd": 0.7338,
+      "settled_usd": 0.764952,
+      "state": "closed 2026-08-25T17:59:54+00:00 by the previous contract's step 0.5",
+      "why_it_is_not_re_run": "the step was already done. Re-running a `--close` that has landed would append a second closing row to a ledger a sealed report re-derives from ([[check_the_step_was_not_already_done]])"
+    },
+    "lora-c-vramprobe": {
+      "off_fraction": 0.53,
+      "outcome": "REFUSED AGAIN, structurally. Nothing was written; the ledger stays OPEN and named",
+      "recorded_reading_usd": 0.0495,
+      "settled_usd": 0.075729,
+      "the_contract_says_the_walk_has_had_a_day_and_it_has_had_five_hours": "the base contract's step 0.5 says «the billing walk has had a day». The vramprobe pod was deleted at 2026-08-25T14:46:29Z and this retry ran at 19:52Z — five hours and six minutes, not a day. The retry was taken anyway and returned the SAME two figures to the cent, so the refusal is not a settlement delay",
+      "the_settled_figure_is_the_accurate_one": "$0.075729 settled against the pod's own clock of $0.0752 — 0.7%. The recorded $0.0495 is a balance delta taken 21 s after the deletion, and it is the stale half",
+      "tolerance_used": 0.07,
+      "why_the_band_cannot_grade_it": "both of this line's records lag settlement by about the same ABSOLUTE amount — $0.031152 on r2 and $0.026229 on the probe — which is 4.2% of a $0.76 step and 53.0% of a $0.075 one. At a 7% band no step cheaper than about $0.37-0.45 can close, however correct it is. n = 2, and the band is not this contract's to move ([[a_relative_band_cannot_grade_a_cheap_step]])"
+    }
+  },
+  "this_is_not_the_registered_attempt": {
+    "read_not_written": "the frozen registration is an INPUT here and is not touched. Its sha is asserted at every build of this file and at every gate",
+    "sha256": "4d5a8f1d34765b4a93a5fd23e35ef71c95e38505c457702c2b912c23f8c9110a",
+    "state_there": "FROZEN by lora-c-run r2's create, 2026-08-24T20:29:20Z",
+    "the_frozen_registration": "results/prereg_lora_c.json",
+    "what_this_step_spends": "nothing of the attempt. No adapter is trained, no eval reply is generated, and the r2 attempt stays UNSPENT"
+  },
+  "what_the_readings_did_to_each_clause": {
+    "the_1200_s_download_bound": "HOLDS, and its stated prior is the wrong transport. The contract cites 240 s measured on a volume-LESS pod's container disk; the reading that matches this contract's transport is `implementation-notes.md`:340 — 62 GB onto a 100 GB network volume in CA-MTL-3, ~180 s. The slowest reading this repo owns is ~420 s, so 1200 s carries 2.86x the worst case",
+    "the_3290_s_stage_sum": "HOLDS at 3290 <= 3600 and OMITS two stages that must happen: the repo bundle's scp and clone BEFORE the venv (`pip install -e .` and the shipped loader both need the checkout), and the pack/SFT staging AFTER the load proof. Both are named in the money block and both live inside the 310 s of headroom; neither is given a rung, because the contract's five bounds are registered exactly as written",
+    "the_900_s_venv_bound": "HOLDS as a bound and is unmeasured, exactly as the contract says. This step produces the first reading",
+    "the_affordability_inequality": "HOLDS at 3884.9 >= 3600 with 284.9 s of slack, and it coincides with rung 0's ceiling at this cap and this stop, so it can never fire independently. Registered in the general form and driven to its refusing branch on a synthetic pair",
+    "the_price_first_rung_0_wording": "HOLDS: `first_number` on the registered string returns 1.5. The card-first wording the previous contract used returns 100.0 out of the card's NAME (Dv825)",
+    "the_target_row_at_issue_time": "HOLDS: A100 PCIe, 80 GB, $1.39/h secure, CA-MTL-3, stock `Low`, volume-capable"
+  }
+}
