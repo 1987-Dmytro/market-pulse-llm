@@ -132,6 +132,15 @@ On `mp-lora-c`: `hf/` 59 GiB at the pinned revision, `venv/` 1.8 GiB with the st
 146 MB checked out at `997a2a23db7978d32e50675d29306f10e0a1d098` — carrying the three packs and both
 SFT files, byte-identical to this Mac's.
 
+**The venv is bound to a PATH, and r3 has to know which one.** `pip install -e '.[dev,gpu]'` ran
+from `/workspace/repo`, so the editable install resolves imports through that exact directory. The
+checkout there is already several commits stale and will be staler. Two ways to start r3, and the
+first is the cheap one: **clone the fresh bundle over `/workspace/repo`** — same path, venv stays
+valid, seconds of work. Rebuild the venv only if `pyproject.toml`'s dependency set has moved, and
+that now has a price: **132 s**. What must NOT happen is a clone to a different directory on the
+assumption the venv follows it — that is Dv19's shape one phase later
+([[a_running_process_holds_its_old_code]]).
+
 ## 6. What the free readings said that the ruling could not have known
 
 Ruling (с) was written on the 18:01:18Z stock table, in which the A6000 at $0.53 was in stock in **no**
@@ -176,7 +185,7 @@ $0.37–0.45 can close however correct it is. n = 2, and the band is not this co
 | pods alive at any moment | **1** |
 | `make fmt` | not run; both drifted files still pinned |
 | suite, baseline | **3 843 passed / 2 skipped**, `make check-stamped` «reading HOLDS» at `8d3727e` |
-| suite, closing | **3 905 passed / 2 skipped**, `make check-stamped` «reading HOLDS» at `0b18366`, tree unmoved outside the two whitelisted Stop-hook outputs. The count was PREDICTED before the reading — 3 843 baseline + 1 (the selector's negative control) + 61 (the new file) — and it landed on the prediction, so it is accounted for and not merely observed |
+| suite, closing | **3 905 passed / 2 skipped**, `make check-stamped` «reading HOLDS» at **`16d302d`**, tree unmoved outside the two whitelisted Stop-hook outputs. Taken TWICE: first at `0b18366`, then again after four more commits, two of which the suite reads as INPUTS — `knowledge/hot.md` and this report's own checker. A verify gate measured before the commits that follow it has not measured them. The count was PREDICTED before the reading — 3 843 baseline + 1 (the selector's negative control) + 61 (the new file) — and it landed on the prediction, so it is accounted for and not merely observed |
 
 | file | sha256 (first 16) |
 |---|---|

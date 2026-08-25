@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-25 22:24:29 (every SessionStart)
+**Auto-refreshed:** 2026-08-25 22:40:53 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
+16d302d docs(report): the commit table names the two commits that closed the page
+b6f8de4 chore(vault): lora-c-migrate r2 -- the volume is warm and the r3 premise moved
 76aba89 docs(report): the closing reading -- 3 905/2 green, and the span stops being typed
 0b18366 docs(report): lora-c-migrate-r2 -- 79 of 79 re-derived, and the KILL is rung 5's own
 a004ba6 feat(migrate-r2): D2 -- the volume is built and the model loads from it in 40.22 s
-997a2a2 chore(migrate-r2): the step ledger anchored at $13.02, before the volume
-4475907 test(migrate-r2): every command of the paid session, driven at $0
 ```
 
 ## 📋 Recent decisions
@@ -68,7 +68,10 @@ v3 66/98**, заряд v3 = **9.20 с/звонок** (рулинг (п)).
 
 1. **КОНТРАКТ r3 ПИШЕТ ТИМЛИД** — смок на A100 покупает с/шаг на 3 072, дальше кап словом
    оператора на этих числах. Том тёплый: `hf/` 59 GiB, `venv/` 1.8 GiB, `repo/` 146 MB на
-   `997a2a2`, три пака и оба SFT внутри. Повторной закачки НЕ НУЖНО.
+   `997a2a2`, три пака и оба SFT внутри. Повторной закачки НЕ НУЖНО. **Но venv привязан к ПУТИ:**
+   `pip install -e` ставился из `/workspace/repo`, поэтому свежий бандл клонировать В ТОТ ЖЕ путь —
+   venv останется валиден. Пересборка venv нужна только если сдвинулись зависимости в
+   `pyproject.toml`, и она теперь стоит **132 с**. Клон в другой каталог venv за собой НЕ ТЯНЕТ.
 2. **`money-anchors` ($0)** — девять открытых шагов. `lora-c` ЗАКРЫТ, `lora-c-vramprobe` ОТКАЗАН
    структурно и остаётся открытым (см. Blockers), `lora-c-migrate-r2` открыт.
 3. **prep-b** — коллекция Сільпо/Varus/Маркетопт ($0), после читательского тракта.
