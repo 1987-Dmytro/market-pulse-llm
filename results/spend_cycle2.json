@@ -443,6 +443,16 @@
       "billing_since_usd": 8.481184,
       "billing_read": "read",
       "note": "lora-c r2 pod deleted; base v2 + base v3 bought, smoke OOM, no arm trained"
+    },
+    {
+      "at": "2026-08-25T14:39:29+00:00",
+      "balance": 13.1488024739,
+      "spent_usd": 9.361,
+      "remaining_usd": 10.639,
+      "balance_delta_usd": 9.361,
+      "billing_since_usd": 9.351237,
+      "billing_read": "read",
+      "note": "vramprobe anchor, before the pod"
     }
   ]
 }
