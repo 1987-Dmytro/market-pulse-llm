@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-25 20:15:50 (every SessionStart)
+**Auto-refreshed:** 2026-08-25 21:06:34 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
-e925ab7 docs(report): lora-c-migrate -- STOP at $0, the ruling's datacenter takes no volume
-aa9d946 test(migrate): 37 tests -- the refusal parsed, the intersection, the four findings
-9003c0b chore(money): step 0.5 -- r2 settles at $0.7650, the vramprobe close REFUSES
-a609b0e docs(migrate): D1 -- the registration, marked EVIDENCE and not law
-42a0ccb feat(migrate): the free reading that refutes the ruling -- EU-SE-1 takes no volume
+171ae1d docs(report): the commit table completed, and the day log caught up to Dv828
+367cb52 docs(report): the closing stamped reading -- 3 843/2 green at 295815f
+295815f fix(vramprobe): the checker selected the LEDGER's last row, not this report's
+21fb708 docs(report): Dv821 counts four of four, and the commit table catches up
+03cb8fd chore(vault): lora-c-migrate -- the tail, and the boot tax sized rather than blamed
 ```
 
 ## 📋 Recent decisions
@@ -30,13 +30,13 @@ a609b0e docs(migrate): D1 -- the registration, marked EVIDENCE and not law
 <!-- AUTO-GEN END (everything below preserved across refreshes) -->
 # Hot Cache — curated
 
-**Last update:** 2026-08-25 20:15 **`lora-c-migrate` — STOP на $0.0000 из $1.00: ДЦ, который
-называет рулинг (р), НЕ ДЕРЖИТ СЕТЕВОЙ ТОМ.** Отказанный create (бесплатный) перечисляет **21** ДЦ,
-где том возможен, — **EU-SE-1 среди них НЕТ**, как нет US-TX-1, EUR-IS-2 и US-PA-1: всех четырёх,
-что назвал §5 прошлого отчёта. И сама A6000 `Low` ТОЛЬКО в EU-SE-1, `none` во всех трёх «томовых»
-ДЦ, где она есть. Ни тома, ни пода не создано; замороженная регистрация побайтово та же, попытка
-цела. Отчёт `docs/reports/lora-c-migrate.md`; предыдущий шаг —
-[[lora-c-the-card-cannot-train-at-3072]].
+**Last update:** 2026-08-25 21:02 (checkpoint) **`lora-c-migrate` — STOP на $0.0000 из $1.00: ДЦ,
+который называет рулинг (р), НЕ ДЕРЖИТ СЕТЕВОЙ ТОМ.** Отказанный create (бесплатный) перечисляет
+**21** ДЦ, где том возможен, — **EU-SE-1 среди них НЕТ**, как нет US-TX-1, EUR-IS-2 и US-PA-1: всех
+четырёх, что назвал §5 прошлого отчёта. И сама A6000 `Low` ТОЛЬКО в EU-SE-1, `none` во всех трёх
+«томовых» ДЦ, где она есть. Ни тома, ни пода не создано; замороженная регистрация побайтово та же,
+попытка цела. Суита **3 843/2** на `295815f`, чекеры 64/64 и 61/61. Отчёт
+`docs/reports/lora-c-migrate.md`; предыдущий шаг — [[lora-c-the-card-cannot-train-at-3072]].
 
 > Этот блок курируется руками. Археология закрытых контрактов живёт в отчётах, ADR и логах дня — не
 > восстанавливать сюда то, у чего есть дом. Ценз буста мерить ДО и ПОСЛЕ каждой правки.
