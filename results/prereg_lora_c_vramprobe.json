@@ -1,0 +1,162 @@
+{
+  "artifacts": {
+    "results/lora_c_vramprobe.json": "this probe's run record — pods, gates, the answer",
+    "results/lora_c_vramprobe_environ.txt": "the training process's own environment, grepped",
+    "results/lora_c_vramprobe_loss.jsonl": "<out>/loss.jsonl — absent on the OOM path",
+    "results/lora_c_vramprobe_provenance.json": "<out>/provenance.json — absent on the OOM path",
+    "results/lora_c_vramprobe_smoke.log": "the pod's stdout, the only artifact that always exists",
+    "the_adapter_is_discarded_on_the_pod": "train_qlora.save writes <out>/adapter even for a 6-step smoke. The contract keeps no adapter: it is removed on the pod, before the delete, and the removal is proven by ls",
+    "the_pull_is_outcome_shaped": "train_qlora.main writes provenance.json AFTER train() returns, so an OOM leaves neither it nor loss.jsonl — the paired pod's /workspace/run/smoke/ came back empty. The log is pulled first because it is the one that always exists, and the absence of the other two is READ as the OOM signature rather than retried as a transport error while a pod bills ([[fetch_before_you_delete]])",
+    "the_volume_remembers_r2": "rm -rf /workspace/run BEFORE the smoke, proven with ls — a stale smoke/loss.jsonl left by another attempt would be read as this probe's output ([[a_retry_inherits_the_last_attempts_output]])"
+  },
+  "authority": "ruling (п), docs/STATUS.md — «проба `expandable_segments` на том же PRO 4500, кап $0.30». This file is hand-written: it is ~40 constants and two formulas, not derived arithmetic, and it has no generator. What keeps it from drifting is tests/test_lora_c_vramprobe.py, which drives every rung as a command and greps every threshold back into the contract",
+  "contract": "docs/PROMPT-lora-c-vramprobe.md",
+  "do_not": [
+    "touch results/prereg_lora_c.json, the packs, the bars or any team-lead file",
+    "train past 6 steps",
+    "keep the adapter",
+    "run any eval leg",
+    "create a second billing resource",
+    "leave the pod unpolled past the liveness deadline",
+    "edit micro_batch_size or max_seq_len on a pod"
+  ],
+  "instrument": {
+    "command": "PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True HF_HOME=/workspace/hf PYTHONPATH=/workspace/repo/src /workspace/venv/bin/python -u /workspace/repo/scripts/train_qlora_v3.py --class-weights --max-steps 6 --data results/pass1_sft_v3_train.jsonl --out /workspace/run/smoke",
+    "env": "PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True",
+    "exactly_as_r2_ran_it": "the command is r2's, plus the environment variable. Nothing in the trainer, the config or the data moves: micro_batch_size 2 and max_seq_len 3 072 are frozen law and are not edited on a pod",
+    "inputs_pinned": {
+      "config/qlora.yaml": "96b4b31865576c24a7dd3a995fa93b267f021451cd8444b8855e8f856972d435",
+      "results/pass1_sft_v3_train.jsonl": "cf55d3f20216139845d320b4283d543c5283e3475f3c6afa42ea98cf20997c18",
+      "scripts/train_qlora.py": "1a1a0b5983db60d8e17d86a14fb1410af35d31d0dbbb14e66f81a382072e7907",
+      "scripts/train_qlora_v3.py": "2f265e6d895670bbe9be6380b7682aaa29a3c67cab2539ff82f329e8319c0155"
+    },
+    "paired_with": {
+      "pod": "ob1svfs3y23teh — results/lora_c_run.json::pods[0], 2026-08-24",
+      "proven_before_the_create": {
+        "and_they_equal_the_paired_pods_own_logged_line": true,
+        "class_weights_recomputed_on_the_mac": {
+          "null": 0.617073,
+          "категория_личное": 2.53,
+          "не_наш_рынок": 0.377612,
+          "сеть_ритейлер": 2.976471
+        },
+        "command": "PYTHONPATH=src python3.11 -c \"import json,sys; sys.path.insert(0,'scripts'); import train_qlora as t; ...\" — spelled out in docs/reports/lora-c-vramprobe.md",
+        "how": "train_qlora.sampling_order is random.Random(seed).choices(range(n), weights, k=n) — a pure function of the row count, the per-row weights and the seed, all three of which come from a data file pinned by sha. So the draw order is the paired pod's, row for row",
+        "the_first_micro_batch_at_micro_batch_2": [
+          231,
+          4
+        ],
+        "the_six_steps_draw": "96 draws, 79 distinct rows of 506",
+        "which_is_the_pair_that_OOMed_the_paired_pod": "it OOMed in the FIRST backward, so this probe's first backward is the same two rows on the same card — the environment variable is the only thing that differs"
+      },
+      "why_it_is_a_control": "same card, same datacenter, same image, same repo HEAD's trainer, same data sha, same seed 42 — so train_qlora.sampling_order draws the SAME rows in the same order and the two smokes differ in the environment variable alone"
+    },
+    "the_env_var_must_be_PROVEN_to_have_reached_the_process": "a shell that exported it and a process that inherited it are two facts. While the trainer runs: tr '\\0' '\\n' < /proc/<pid>/environ | grep PYTORCH, saved to a file and copied back as results/lora_c_vramprobe_environ.txt. Rung 3 READS that file ([[a_flag_that_asserts_turns_a_poll_into_a_verdict]]); without it a SURVIVED verdict could be the card having a good day"
+  },
+  "kill_clock": [
+    {
+      "authorised_cards": {
+        "RTX PRO 4500": {
+          "gpu_id": "NVIDIA RTX PRO 4500 Blackwell",
+          "vram_gb": 32
+        }
+      },
+      "rule": "$0.80 per hour is the ceiling; the price must ALSO equal a column this probe was solved at, and the card is graded by name",
+      "rung": 0,
+      "the_card_is_graded_too": "ruling (о) authorises this card and ruling (п) names it again; a third card at $0.72 would pass a price-only rung, and the whole question is about THIS card's 32 GB. The 4090 fallback of the r2 contract is NOT carried: this probe's question is about the PRO 4500 and a 24 GB card cannot answer it",
+      "threshold": 0.8,
+      "verdict_on_fail": "DELETE the pod now and STOP — no load, no training",
+      "what": "the price and the card, at create"
+    },
+    {
+      "measured_on_the_paired_pod_seconds": 23.2,
+      "rule": "500 s from this pod's create for the ssh endpoint to answer, or KILL",
+      "rung": 1,
+      "threshold": 500.0,
+      "what": "the boot gate"
+    },
+    {
+      "rule": "600 s of silence since the LAST LOG LINE, not since the last poll, or KILL",
+      "rung": 2,
+      "threshold": 600.0,
+      "what": "liveness"
+    },
+    {
+      "load_allowance_seconds": 300.0,
+      "log_every": 5,
+      "log_every_is_read_from_the_config_and_not_assumed": "config/qlora.yaml sets log_every: 5, and train_qlora.train writes a loss line when `step % log_every == 0 or step == total`. At --max-steps 6 that is TWO lines, at step 5 and step 6 — not six. A rung waiting for six would wait for ever on a surviving smoke ([[the_expectation_no_reading_reaches]])",
+      "rule": "181.5 s/step is the registered ceiling, and the CAP is the other bound: whichever is smaller binds, and the gate says which",
+      "rung": 3,
+      "steps": 6,
+      "teardown_margin_seconds": 90.0,
+      "the_step_6_line_is_not_a_rate": "its seconds_per_step is (t6 - t5) / log_every — one step's time divided by five. Only the step-5 line is a true five-step average. The number this probe REPORTS is <out>/provenance.json::run.seconds_per_step, the whole loop's wall time over its steps, which excludes the model load because `began` is stamped after model.train(). The two are printed side by side and never averaged ([[two_values_for_one_input_get_quoted_kindly]])",
+      "the_teardown_margin_is_measured": "the paired pod recorded its rung-4 KILL at 21:32:24Z and was deleted at 21:32:43Z — 19 s. 90 s carries that plus the pull of the log and the two output files",
+      "threshold": 181.5,
+      "what": "the smoke — the whole probe"
+    },
+    {
+      "rule": "1500 s of --terminate-after at create, and it is the only thing enforcing the hard stop when nobody is polling",
+      "rung": 6,
+      "threshold": 1500.0,
+      "what": "the platform backstop"
+    },
+    {
+      "rule": "1 pod at a time, and a pod that is open in the record with no deleted_at blocks the next create",
+      "rung": 7,
+      "threshold": 1.0,
+      "what": "never two billing resources"
+    }
+  ],
+  "money": {
+    "cap_usd_all_in": 0.3,
+    "pre_pod_arithmetic": {
+      "at_each_price": {
+        "0.72": {
+          "card": "RTX PRO 4500",
+          "hard_stop_seconds": 1500.0,
+          "read_from": "runpodctl gpu list --include-unavailable, 2026-08-25T14:09Z — securePricePerHr 0.72, memoryInGb 32. Read BEFORE the create so an unregistered price costs a listing and not a create",
+          "usd_per_hour": 0.72
+        }
+      },
+      "hard_stop_formula": "cap_usd_all_in / usd_per_hour * 3600",
+      "hard_stop_seconds": 1500.0,
+      "stock_read_before_the_create": {
+        "EU-RO-1": {
+          "RTX 4090": "",
+          "RTX A6000": "",
+          "RTX PRO 4500": "Medium",
+          "RTX PRO 6000 Blackwell Server Edition": ""
+        },
+        "at": "2026-08-25T14:10Z",
+        "command": "runpodctl datacenter list",
+        "what_it_says": "the volume's own datacenter offers no 48 GB card at all today — A6000 reads empty for the third reading running, and the 4090 the r2 contract pre-authorised as a fallback is empty too. A listing dates the question and does not answer it: the only free test of a create is the create"
+      },
+      "the_formula_is_the_law_and_1500_is_its_value_at_0.72": "0.30 / 0.72 * 3600 = 1500.0 exactly — the cap and the hard stop are the SAME constraint here, with zero headroom between them. At any other price the literal over- or under-spends the cap ($0.79/h buys 1 367 s), so the gate re-solves the formula at the price the create response actually returns and refuses a pod whose observed price does not reproduce this number ([[one_constant_answering_two_questions]])"
+    },
+    "the_probe_is_all_in": "$0.30 covers the pod and nothing else is created. The network volume rents beside this probe at ~$0.24/day and is never inside it"
+  },
+  "outcomes": {
+    "OOM": "torch.OutOfMemoryError in the log again — the card is CLOSED for this line",
+    "OTHER": "a traceback that is not an OutOfMemoryError — an allocator or bitsandbytes failure under paged_adamw_8bit is neither of the contract's two answers and is reported as itself",
+    "SURVIVED": "six optimizer steps logged and <out>/provenance.json written — the memory question is YES and the s/step at 3 072 is BOUGHT",
+    "SURVIVED_NO_RATE": "at least one optimizer step completed — the memory question is YES — but the pod's own clock rung killed the run before step 6. The verdict stands; the s/step is not bought",
+    "UNRESOLVED": "the clock rung fired before the step-5 loss line, so no optimizer step is known to have completed and the memory question is NOT answered. The money is spent and the probe owes a re-run, which is worth saying plainly rather than reading as an OOM",
+    "the_contract_names_two_and_there_are_four": "«SURVIVES → …; OOMs AGAIN → …». A run can also clear the memory question and lose the clock before step 6, it can fail in a way that is not an OOM at all, and it can be killed before the first loss line ever appears — which resolves nothing. Forcing any of those into one of the two named buckets would misreport the card"
+  },
+  "phase": "lora-c-vramprobe",
+  "question": "does PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True let RTX PRO 4500 32 GB survive the 6-step smoke of arm A's config at max_seq_len 3 072?",
+  "reachability": {
+    "affordable_seconds_per_step_formula": "(hard_stop - smoke_start - teardown_margin - load_allowance) / steps",
+    "s_at_which_the_two_bounds_cross_seconds": 21.0,
+    "the_registered_ceiling_and_the_cap_are_solved_against_each_other": "the contract registers BOTH «smoke ceiling 6 × 181.5 s + load 300 s» = 1389 s and a 1500 s hard stop. They are two bounds on one run and the smaller binds. With the smoke starting `s` seconds after create and 90 s held back for the teardown, the affordable rate is (1500 - s - 90 - 300) / 6 = (1110 - s) / 6 s/step, which equals the registered 181.5 only at s = 21.0 s. The paired pod's ssh answered at 23.2 s and staging a 14 MB bundle takes longer than nothing, so s > 21 on any real pod and the CAP binds, not the 181.5 ceiling. The gate computes this on the smoke's actual start and names the binding number rather than assuming either ([[an_absolute_bar_needs_a_reachability_state]])",
+    "what_six_steps_do_and_do_not_bound": "six steps at micro_batch 2 touch 96 of the 506 rows, so SURVIVED bounds six steps and not a 150-step arm — a later batch can still hold a wider row. It is a real bound anyway: the paired pod OOMed on its FIRST backward, so the failure it answers is structural and not a tail event",
+    "worked_example_not_a_threshold": "at a smoke starting 200 s after create the affordable rate is (1110 - 200) / 6 = 151.7 s/step. lora-b measured 61.047 s/step on a 48 GB A6000 at a narrower ceiling; no reading at 3 072 exists on any card, which is exactly what this probe buys"
+  },
+  "state": "DRAFT — frozen only by this probe's pod create",
+  "this_is_not_the_registered_attempt": {
+    "read_not_written": "scripts/train_qlora_v3.py READS that file — guard 2's dataset sha list lives in it — so the frozen registration is an INPUT to this probe and is not touched ([[a_frozen_record_is_an_input_to_shipped_code]]). No bar is scored, no eval leg runs, no adapter is kept, and rung 8's attempt is not spent: an adapter that never reaches eval set E generates no reply against it",
+    "sha256": "4d5a8f1d34765b4a93a5fd23e35ef71c95e38505c457702c2b912c23f8c9110a",
+    "state_there": "FROZEN by lora-c-run r2's create, 2026-08-24T20:29:20Z",
+    "the_frozen_registration": "results/prereg_lora_c.json"
+  }
+}
