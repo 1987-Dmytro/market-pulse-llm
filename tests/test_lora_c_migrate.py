@@ -404,3 +404,39 @@ def test_every_number_in_the_report_is_re_derived_from_the_file_that_owns_it():
         text=True,
     )
     assert done.returncode == 0, done.stdout + done.stderr
+
+
+def test_the_sealed_report_selects_the_close_it_is_about_and_refuses_a_neighbour():
+    """The Dv828 class, in a second place: this report is sealed and its ledger is not.
+
+    `gpu_sessions[-1]` was true only while nothing else wrote to `results/spend_lora_c.json`. Run
+    r3's very first `--note` on `--step lora-c` appends a row with no `settled_usd`, and a checker
+    that reaches for the last row crashes on a page nobody touched. Both branches are driven here,
+    because a selector that has only ever seen one row has not been shown to select
+    ([[a_sealed_reports_checker_reads_a_live_file]], [[guard_selftest_negative_control]]).
+    """
+    sys.path.insert(0, str(REPO_ROOT / "scripts"))
+    import importlib.util
+
+    spec = importlib.util.spec_from_file_location(
+        "check_migrate", REPO_ROOT / "scripts" / "check_lora_c_migrate_report.py"
+    )
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+
+    ledger = json.loads((REPO_ROOT / "results" / "spend_lora_c.json").read_text("utf-8"))
+    rows = ledger["gpu_sessions"]
+    picked = module.the_close_at(rows)
+    assert picked["at"] == module.THE_CLOSE_THIS_REPORT_IS_ABOUT
+    assert picked["settled_usd"] == PREREG["the_two_guard_close_debts"]["lora-c"]["settled_usd"]
+
+    # what r3's anchor will do to this ledger, and what the old selector would have returned
+    later = [*rows, {"at": "2026-08-26T09:00:00+00:00", "step_spent_usd": 0.0, "note": "r3 anchor"}]
+    assert later[-1] is not picked
+    assert "settled_usd" not in later[-1]
+    assert module.the_close_at(later) == picked
+
+    with pytest.raises(SystemExit):
+        module.the_close_at([one for one in rows if one.get("at") != picked["at"]])
+    with pytest.raises(SystemExit):
+        module.the_close_at([*rows, dict(picked)])

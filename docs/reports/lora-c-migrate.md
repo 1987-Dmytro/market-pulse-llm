@@ -246,8 +246,10 @@ quarter of an hour, in both directions, and a listing dates the question rather 
 | `results/lora_c_migrate_stock.json` | `90b70c914e9a5623` |
 | `results/prereg_lora_c_migrate.json` | `089f3a740511c7ba` |
 | `scripts/probe_lora_c_migrate_stock.py` | `6d4e1a5fa60f311b` |
-| `scripts/check_lora_c_migrate_report.py` | `52ea8139f2deb92f` |
-| `tests/test_lora_c_migrate.py` | `9fa09ccf8028ddd3` |
+| `scripts/check_lora_c_migrate_report.py` | `0c7ccb40f1c84936` |
+
+> **The checker's sha above has moved since acceptance, and no measurement on this page has.** Its money section selected the r2 close as `results/spend_lora_c.json :: gpu_sessions[-1]` — true only while nothing else writes to that ledger, which is the Dv828 defect this report itself records, in a second place nobody had grepped for. Run r3's very first `--note` on `--step lora-c` would have appended a row with no `settled_usd` and turned this page red without anyone touching it. The row is now selected by its own stamp (`2026-08-25T17:59:54+00:00`) and «exactly one» is asserted rather than assumed; the checker was `52ea8139f2deb92f` at acceptance and is `0c7ccb40f1c84936` from `lora-c-migrate r2`'s step 0.5 on. Its reporting and its exit code moved behind a `__main__` guard in the same commit, so the suite can drive the selector in-process — a module whose import always raises `SystemExit` cannot be unit-tested at all — and `tests/test_lora_c_migrate.py` grew the negative control that drives both branches, which moved its sha above too. Every number on this page still re-derives, 64 of 64, and no measurement here was edited ([[a_sealed_reports_checker_reads_a_live_file]], [[select_one_row_refuse_ambiguity]]).
+| `tests/test_lora_c_migrate.py` | `6277899b85a648e7` |
 
 ---
 

@@ -168,7 +168,25 @@ says(
 
 # --- §4, the money -------------------------------------------------------------------------------
 
-closed = ledger["gpu_sessions"][-1]
+THE_CLOSE_THIS_REPORT_IS_ABOUT = "2026-08-25T17:59:54+00:00"
+"""The r2 session's closing entry, by its own stamp.
+
+`gpu_sessions[-1]` was here first and it is the Dv828 defect: this report is SEALED and the ledger
+it re-derives from is not. The next `--note` on `--step lora-c` — run r3's anchor, for one — appends
+a row with no `settled_usd` and this checker crashes on a page nobody touched. The row is selected
+by the reading it is about, and «exactly one» is asserted rather than assumed
+([[a_sealed_reports_checker_reads_a_live_file]], [[select_one_row_refuse_ambiguity]]).
+"""
+
+
+def the_close_at(rows: list[dict], stamp: str = THE_CLOSE_THIS_REPORT_IS_ABOUT) -> dict:
+    hit = [one for one in rows if one.get("at") == stamp]
+    if len(hit) != 1:
+        raise SystemExit(f"{len(hit)} rows stamped {stamp} — a reading must be exactly one row")
+    return hit[0]
+
+
+closed = the_close_at(ledger["gpu_sessions"])
 debts = prereg["the_two_guard_close_debts"]
 says(
     "the tolerance and where it comes from",
@@ -342,8 +360,12 @@ says(
 )
 
 
-bad = [one for one in checks if not one[1]]
-for what, ok, printed in checks:
-    print(f"{'ok  ' if ok else 'FAIL'} {what}" + ("" if ok else f"  — expected {printed!r}"))
-print(f"\n{len(checks) - len(bad)} of {len(checks)} checks hold")
-sys.exit(1 if bad else 0)
+if __name__ == "__main__":
+    # the reporting and the exit code sit behind the guard so the suite can drive `the_close_at`
+    # in-process; the checks above are computed on import either way, and the command's behaviour
+    # is unchanged. A module whose import always raises SystemExit cannot be unit-tested at all.
+    bad = [one for one in checks if not one[1]]
+    for what, ok, printed in checks:
+        print(f"{'ok  ' if ok else 'FAIL'} {what}" + ("" if ok else f"  — expected {printed!r}"))
+    print(f"\n{len(checks) - len(bad)} of {len(checks)} checks hold")
+    sys.exit(1 if bad else 0)
