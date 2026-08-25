@@ -23,7 +23,9 @@ bigger than the fragmentation was.
 | 3 | `c9b0e71` | the registration and its rungs — **the HEAD the pod cloned**, committed before the create |
 | 4 | `04dd942` | the spend anchor, committed before the create |
 | 5 | `01e4eb5` | the paid session: the log, the env proof, the record |
-| 6 | this | the report |
+| 6 | `61f07d6` | this report |
+| 7 | `e2a2abd` | §5's ceiling published as a RANGE, §1's shortfall, Dv818, and the number-checker |
+| 8 | this | the closing stamped reading and this table |
 
 ---
 
@@ -233,7 +235,8 @@ it or shrinking the plan is a decision this session does not own.
 | bars scored | **0** — `results/prereg_lora_c.json` is FROZEN and untouched, sha `4d5a8f1d34765b4a` unchanged |
 | artifacts pulled before the delete | 3 files, hashes equal on both machines |
 | numbers in this report re-derived from their own file | **61 of 61**, `python3.11 scripts/check_lora_c_vramprobe_report.py` — and the suite drives it |
-| suite | **3 805 passed / 2 skipped**, `make check-stamped` «reading HOLDS» at `c9b0e71`, before the create |
+| suite, before the create | **3 805 passed / 2 skipped**, `make check-stamped` «reading HOLDS» at `c9b0e71` |
+| suite, closing | **3 806 passed / 2 skipped**, «reading HOLDS» at `e2a2abd`, tree clean — the extra test is the one that drives the number-checker |
 
 | file | sha256 (first 16) |
 |---|---|
@@ -243,6 +246,7 @@ it or shrinking the plan is a decision this session does not own.
 | `results/lora_c_vramprobe_environ.txt` | `032a002f248e3bd2` |
 | `results/spend_lora_c_vramprobe.json` | `5103b8745985f87a` |
 | `scripts/gate_lora_c_vramprobe.py` | `c3341d36e7f8c9f9` |
+| `scripts/check_lora_c_vramprobe_report.py` | `29abf7046d79a72c` |
 | `tests/test_lora_c_vramprobe.py` | `d4a303b279cd3f82` |
 
 ---
@@ -257,7 +261,7 @@ it or shrinking the plan is a decision this session does not own.
 | **815** | tooling | `$!` after `VAR=x nohup cmd &` inside `bash -c` recorded the WRAPPER's pid, and `pgrep -f train_qlora_v3.py` matched the same wrapper because its command line contains the script's name. The env proof came back EMPTY — which reads exactly like «the setting is not set», the one false negative that would have destroyed this probe's answer. Fixed by walking `ps -eo pid,ppid` to the real trainer |
 | **816** | process | `nohup … &` inside an `ssh` one-liner without `< /dev/null` held the ssh channel open; the call timed out at 120 s while the trainer ran on correctly. Two blind minutes, no extra pod seconds |
 | **817** | tooling | zsh does not word-split an unquoted `$SSHOPT`; the first `scp` died with «Identity file … not accessible». `scripts/runbook_lora_c.md` names this defect by name and the shortcut was taken anyway. ~11 s of pod time |
-| **818** | process | the contract asks for a «short report, one page» with five named parts; this one runs to six sections. §5 is invited by «the datacenter question goes back to the operator» and §3 carries the two verify-gaps below, but the contract's own words were exceeded and that belongs here beside the mechanical slips |
+| **818** | process | the contract asks for a «short report, one page» with five named parts; this one runs to six sections. §5 is invited by «the datacenter question goes back to the operator» and §3 carries the two verify-gaps in this table, but the contract's own words were exceeded and that belongs here beside the mechanical slips |
 | **819** | process | rung 2 (liveness) was never reached — the run died between 207 s and 239 s into the smoke, never near a 600 s silence. Reported as not-reached, never as a passing reading, and the death itself is reported as a BOUND because no artifact stamps it |
 
 `contract-gap 1 · verify-gap 2 · tooling 2 · process 3` — eight, against eight rows.
