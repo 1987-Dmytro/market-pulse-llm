@@ -23,7 +23,9 @@ enumeration.
 | `997a2a2` | the step ledger anchored at $13.02, before the volume |
 | `a004ba6` | D2 — the paid step's artifacts |
 | `0b18366` | D3 — `docs/reports/lora-c-migrate-r2.md` and its checker, 79 of 79 re-derived |
-| *(this)* | the closing stamped reading, the derived download span, and the vault tail |
+| `76aba89` | the closing stamped reading, and the download span derived instead of typed |
+| `b6f8de4` | the vault tail — `hot.md` still said this line had spent $0 and had no volume |
+| *(this)* | the commit table completed |
 
 ---
 
