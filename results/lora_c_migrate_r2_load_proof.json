@@ -1,0 +1,16 @@
+{
+  "generated_nothing": "no prompt was rendered, no token was produced, no adapter was loaded",
+  "gpu": "NVIDIA A100 80GB PCIe",
+  "hf_bytes_after": 62580183557,
+  "hf_bytes_before": 62580183517,
+  "hf_home": "/workspace/hf",
+  "load_seconds": 40.22,
+  "loaded": true,
+  "model_id": "google/gemma-4-31b-it",
+  "revision": "842da3794eaa0b77d5f08bae87a17459d91ff475",
+  "snapshot_dir": "/workspace/hf/hub/models--google--gemma-4-31b-it/snapshots/842da3794eaa0b77d5f08bae87a17459d91ff475",
+  "vram_bytes_allocated": 18302838272,
+  "vram_bytes_peak": 18302838272,
+  "vram_bytes_reserved": 18335399936,
+  "vram_bytes_total": 84974239744
+}

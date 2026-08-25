@@ -1,0 +1,46 @@
+{
+  "delta_bytes": 40,
+  "hf_bytes_after_the_load": 62580183557,
+  "hf_bytes_before_the_load": 62580183517,
+  "how": "find /workspace/hf -newermt '2026-08-25 20:04:36' -type f, on the pod, before the delete",
+  "phase": "lora-c-migrate-r2",
+  "read_at": "2026-08-25T20:06:20Z",
+  "the_defect_is_in_the_RUNG_not_in_the_load": "the load read 62.58 GB off the volume and fetched none of it. The rung asks whether a cache DIRECTORY moved, and a HuggingFace cache is not immutable under a read: the loader records the ref it resolved and marks the four optional files this repo does not ship. The invariant worth registering is that no BLOB grows — the blobs are the weights and they are what a re-download would touch. The rule was registered before the reading and is NOT edited after it: the KILL is recorded as the rung's own, and the remedy belongs to the next contract ([[a_registered_threshold_that_is_really_a_function]])",
+  "the_weights_themselves": {
+    "blob_count": 12,
+    "blobs_bytes": 62578686256,
+    "blobs_written_after_the_download_finished": 0,
+    "command": "find .../blobs -type f -newermt '2026-08-25 20:03:00' | wc -l",
+    "incomplete_blobs": 0,
+    "snapshot_dir": "/workspace/hf/hub/models--google--gemma-4-31b-it/snapshots/842da3794eaa0b77d5f08bae87a17459d91ff475"
+  },
+  "what_the_blob_invariant_would_have_returned": "GO — 0 blobs written after the download",
+  "what_the_load_wrote": [
+    {
+      "bytes": 40,
+      "path": "hub/models--google--gemma-4-31b-it/refs/main",
+      "what": "the revision sha, written as a ref"
+    },
+    {
+      "bytes": 0,
+      "path": "hub/models--google--gemma-4-31b-it/.no_exist/842da3794eaa0b77d5f08bae87a17459d91ff475/added_tokens.json",
+      "what": "an absence marker"
+    },
+    {
+      "bytes": 0,
+      "path": "hub/models--google--gemma-4-31b-it/.no_exist/842da3794eaa0b77d5f08bae87a17459d91ff475/adapter_config.json",
+      "what": "an absence marker"
+    },
+    {
+      "bytes": 0,
+      "path": "hub/models--google--gemma-4-31b-it/.no_exist/842da3794eaa0b77d5f08bae87a17459d91ff475/model.safetensors",
+      "what": "an absence marker"
+    },
+    {
+      "bytes": 0,
+      "path": "hub/models--google--gemma-4-31b-it/.no_exist/842da3794eaa0b77d5f08bae87a17459d91ff475/special_tokens_map.json",
+      "what": "an absence marker"
+    }
+  ],
+  "what_this_is": "the enumeration behind rung 5's KILL. The rung compares `du -sb /workspace/hf` either side of the load and refuses any movement; it moved by 40 bytes. This lists every file the load wrote, so «something was fetched» is answered with names and sizes rather than with a delta ([[a_count_in_prose_is_not_the_enumeration]])"
+}

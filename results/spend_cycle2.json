@@ -473,6 +473,26 @@
       "billing_since_usd": 9.456133,
       "billing_read": "read",
       "note": "lora-c CLOSED at $0.7650 — lora-c-run r2 settled — the debt Step 0.5 of lora-c-migrate carries"
+    },
+    {
+      "at": "2026-08-25T19:54:04+00:00",
+      "balance": 13.0244619407,
+      "spent_usd": 9.4853,
+      "remaining_usd": 10.5147,
+      "balance_delta_usd": 9.4853,
+      "billing_since_usd": 9.475577,
+      "billing_read": "read",
+      "note": "lora-c-migrate-r2 anchor, before the volume"
+    },
+    {
+      "at": "2026-08-25T20:07:27+00:00",
+      "balance": 12.7791986518,
+      "spent_usd": 9.7306,
+      "remaining_usd": 10.2694,
+      "balance_delta_usd": 9.7306,
+      "billing_since_usd": 9.4853,
+      "billing_read": "read",
+      "note": "lora-c-migrate-r2 pod deleted; volume mp-lora-c built in CA-MTL-3, weights on it, model loaded 40.22 s / 17.046 GiB on the A100; rung 5 KILL on its own byte rule"
     }
   ]
 }
