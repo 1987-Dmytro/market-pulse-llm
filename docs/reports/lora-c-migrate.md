@@ -236,14 +236,14 @@ quarter of an hour, in both directions, and a listing dates the question rather 
 | formatter | 2 files drifted, both left alone, **both pinned by a record** — checked by sha, not assumed |
 | numbers in this report re-derived from their own file | **`python3.11 scripts/check_lora_c_migrate_report.py`** — and the suite drives it |
 | suite, baseline | **3 806 passed / 2 skipped**, `make check-stamped` «reading HOLDS» at `e3fc756` |
-| suite, closing | **CLOSING_COUNT**, «reading HOLDS» at `HEAD_CLOSING`, tree unmoved outside the two whitelisted Stop-hook outputs. The first attempt of this reading was **killed** at 3 842/1 and is reported as killed, never as a pass — the one failure it surfaced is Dv828 |
+| suite, closing | **3 843 passed / 2 skipped**, «reading HOLDS» at `295815f`, tree unmoved outside the two whitelisted Stop-hook outputs. The first attempt of this reading was **killed** at 3 842/1 and is reported as killed, never as a pass — the one failure it surfaced is Dv828 |
 
 | file | sha256 (first 16) |
 |---|---|
 | `results/lora_c_migrate_stock.json` | `90b70c914e9a5623` |
 | `results/prereg_lora_c_migrate.json` | `089f3a740511c7ba` |
 | `scripts/probe_lora_c_migrate_stock.py` | `6d4e1a5fa60f311b` |
-| `scripts/check_lora_c_migrate_report.py` | `e7b17139a2e83d8f` |
+| `scripts/check_lora_c_migrate_report.py` | `52ea8139f2deb92f` |
 | `tests/test_lora_c_migrate.py` | `9fa09ccf8028ddd3` |
 
 ---

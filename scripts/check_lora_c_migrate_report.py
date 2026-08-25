@@ -286,6 +286,13 @@ says(
     stock["network_volume_list_after"][0]["id"] == "qw4nwleanc",
 )
 says("nothing was billed", "**$0.0000** of $1.00")
+says(
+    "the closing reading's own count",
+    f"**{spaced(3806 + 37)} passed / 2 skipped**, «reading HOLDS» at `295815f`",
+    # the baseline plus this contract's own tests: a closing count that is not the one the
+    # baseline predicts is a signal, not noise ([[rerun_diagnosis_same_rows]])
+    3806 + 37 == 3843,
+)
 
 for name, path in (
     ("results/lora_c_migrate_stock.json", STOCK),
