@@ -25,7 +25,10 @@ settled and one of which refused.
 | `aa9d946` | `tests/test_lora_c_migrate.py` — 37 tests |
 | `e925ab7` | `scripts/check_lora_c_migrate_report.py` and this report — 63 of 63 numbers re-derived |
 | `03cb8fd` | the vault tail: `hot.md`'s curated block and today's log |
-| *(this)* | the closing stamped reading, and the commit table completed |
+| `21fb708` | Dv821 counts four of four — the checker derives that count from the capable list |
+| `295815f` | **the vramprobe checker fixed** — it selected the ledger's last row, not that report's own. The only place the reason for `29abf704…` → `42a6efd7…` is written down |
+| `367cb52` | the closing stamped reading, `3 843 passed / 2 skipped` at `295815f` |
+| *(this)* | the commit table completed and the day log caught up — the last row cannot name itself, the same limit as this report's own sha |
 
 ---
 
