@@ -7804,3 +7804,76 @@ and given a home, which is what routing it means ([[an_absolute_bar_needs_a_reac
 **Also open, from the same backlog (STATUS п. 2):** closing steps by settled billing rather than the
 balance walk (the walk lags 30–40 min — Dv504/658/678), the hung `pass1-probe` walk, and `anchored_at`
 for the 19 refused ledgers.
+
+## Deviations — PROMPT-think-zero-shot-d2 (one pod, four of seven stages, $6.0187)
+
+Report: `docs/reports/think-zero-shot.md`. Numbers: `results/think_zero_shot_table.json`,
+`results/measurements.jsonl`. Pod `lf989hmhk9diso`, RTX PRO 4500 32 GB, EU-RO-1, $0.72/h,
+14:00:04Z → 22:06:39Z.
+
+**Dv853 `[cause: verify-gap]` — the `length` cut-off was live, and what step 0's fix actually
+saved.** The fresh reviewer's finding fired in the wild at 1 % of pass-1 rows: a thought that spends
+its whole 4 000-token ceiling and never closes the channel. Driving the OLD rule over
+`@klopotenkofood:6032#21177`'s real bytes, it would NOT have flipped `balanced` — that working-out
+carries no top-level `{`, so no truncation on that row. What it WOULD have got wrong is
+`thought_chars: 0` instead of 13 614: the largest observation of a registered reading, zeroed
+silently. The truncation arm remains real and is driven by its own test with both controls; this row
+is not an instance of it, and saying otherwise would be claiming a save that did not happen
+([[the_empty_class_eats_the_parse_failures]]).
+
+**Dv854 `[cause: tooling]` — the preflight's own preamble hid the blocks that mattered.**
+`scripts/preflight_serving_guards.py` exits at block 10 on the pod: it needs
+`data/annotation/captions_5c1/posts_media/atb_market_official_4476.jpg`, which a git bundle of the
+repo does not carry. Blocks 14b/14c — the five READER_THINK assertions that decide whether $8.00
+measures thinking at all — are downstream of it and never ran. They were extracted verbatim and run
+alone on the pod's own `AutoProcessor` at the pinned revision, before a token was generated: all
+PASS, and the control says `enable_thinking: false` still closes the channel. A guard whose subject
+is downstream of an unrelated fixture is a guard that goes quiet exactly when a new environment is
+the thing being tested ([[the_entry_points_preamble_is_untested_code]]).
+
+**Dv855 `[cause: contract-gap]` — the registration is not re-pinned.** `results/prereg_think_zero_shot.json`
+pins `scripts/reader_v5_pod_runner.py` and `docs/STATUS.md` at their pre-step-0 shas, and D2's own
+step 0 ordered both moved. Neither is re-pinned: `test_the_registration_rebuilds_except_where_step_0_moved_a_pin`
+derives the allowance from which paths carry each file's live sha and asserts it in both directions,
+with a witness token per file so a rename cannot pass as a move. The packs the pod reads pin
+`prompts.py`, `pass2.py` and `pass2_r2.py`, none of which moved — asserted positively by
+`test_what_the_pod_reads_did_not_move`, because «the handshake was fine» is only worth saying if
+something would have failed had it not been.
+
+**Dv856 `[cause: verify-gap]` — peak VRAM has no producer in the reader runner.** Stage 1 owes the
+ledger a VRAM row and `reader_v5_pod_runner` records seconds and thought tokens only; one attempt per
+stage makes the number unrecoverable after teardown. An `nvidia-smi memory.used` sampler ran beside
+the run at 5 s — no code, no moved pin. It is a DIFFERENT instrument from
+`torch.cuda.max_memory_allocated()`, which is what `results/train/*/provenance.json` carries as
+`gpu_gb_peak`, and the ledger row says so in `instrument` so the two are never quoted against each
+other ([[two_instruments_two_inputs]]). Reading: **31 920 MiB = 31.17 GiB of 32** (97.4 %).
+
+**Dv857 `[cause: process]` — a ledger row's prose was wrong while its value was right.** The pass-1
+rate 110.180 s/call is over all 200 rows of the v2 leg; I described it as n=197. The split I used,
+`boot_seconds > 160`, does not separate the two stages that wrote that file — stage 3 booted in
+167.854 s and the stage-2 smoke in 174.047. The ledger is append-only, so the correction is a
+superseding row naming both sub-populations (197 → 110.262 mean, 3 → 104.816); the mis-described row
+stays readable beside the projection it fed. A registry of physical constants is read by the next
+contract as fact, and a population named wrong is the half a reader cannot check
+([[a_reading_is_not_an_identity]]).
+
+**Dv858 `[cause: tooling]` — two shell defects on a live clock.** `grep -c … || echo 0` yields
+`"0 0"` when there is no match (grep exits 1 on zero), which killed the poller on `int()`; and zsh
+does not word-split an unquoted variable holding ssh flags, which the pass2-r2 runbook already warns
+about in as many words. One poll cycle each, no stage lost, and the poller's four exit arms —
+including the control that a BUSY card with no new row is ALIVE — are driven on a stub.
+
+**Dv859 `[cause: contract-gap]` — `make check` is not green at the pod's HEAD, and it is not this
+tier's to fix.** One red: `test_repair_phase4_ledger::test_the_silence_check_fires_on_the_LINE_ledger_too`.
+r3's line-ledger session (`$12.0176685803`, 2026-08-26T09:14:45Z) has no step file behind it, so with
+the line ledger emptied the check cannot name it. That is r3's closing, whose report is open on the
+team lead's desk, and repairing it means writing into another contract's money record. STATUS's
+«Долги исполнителя» routes both this and `test_lora_c_prep` to «шаг 0 следующего контракта»; the
+sibling WAS fixed here — D1 moved `pass2_r2_pod_runner.py` and that red is this line's — and this one
+is reported instead. Reading at HEAD: `1 failed, 4063 passed, 2 skipped`.
+
+**Dv860 `[cause: model]` — there is no single «thinking is N× slower».** pass-1 is 40× its BEFORE
+rate and pass-2 is 17×, because the thought is near-constant per unit (1 130 and 3 646 tokens) while
+the answers are not: pass 1's answer is four fields, so the working-out dominates it. The practical
+consequence is that a rate measured on one family may not be carried to the other, and the ledger
+rows are keyed by family for that reason.

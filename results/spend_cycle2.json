@@ -513,6 +513,16 @@
       "billing_since_usd": 10.550426,
       "billing_read": "read",
       "note": "think-zero-shot D2, before the create"
+    },
+    {
+      "at": "2026-08-26T22:07:05+00:00",
+      "balance": 5.9212256497,
+      "spent_usd": 16.5885,
+      "remaining_usd": 3.4115,
+      "balance_delta_usd": 16.5885,
+      "billing_since_usd": 15.905438,
+      "billing_read": "read",
+      "note": "think-zero-shot D2, pod lf989hmhk9diso deleted; stages 1-4 of 7 bought, rung 2 stopped the programme at the cap; 8h06m35s on the pod clock"
     }
   ]
 }

@@ -8,6 +8,12 @@
       "balance": 11.9398908027,
       "step_spent_usd": 0.0,
       "note": "think-zero-shot D2, before the create"
+    },
+    {
+      "at": "2026-08-26T22:07:05+00:00",
+      "balance": 5.9212256497,
+      "step_spent_usd": 6.0187,
+      "note": "think-zero-shot D2, pod lf989hmhk9diso deleted; stages 1-4 of 7 bought, rung 2 stopped the programme at the cap; 8h06m35s on the pod clock"
     }
   ],
   "gpu_note": "RunPod account balance read before the first pod of think-zero-shot. Step spend = the pessimistic maximum of this anchor minus the balance now and the billing walk since `anchored_at` (SPEC 3.23 (4), Dv411), enforced against $8.00. The SPEC amendment 3.4 (4) phase cap is enforced separately, against results/spend_phase4.json, and neither anchor may be regenerated."

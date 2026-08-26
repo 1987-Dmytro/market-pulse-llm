@@ -134,6 +134,53 @@ def pass1_leg(pack_name: str, leg_name: str, before: dict) -> dict | None:
     }
 
 
+def scored(rows: list[dict]) -> dict:
+    """`score_pass2_signals_r2.build()` over exactly these rows, with the constant put back."""
+    where = Path(tempfile.mkdtemp(prefix="p2-column-")) / "column.jsonl"
+    where.write_text(
+        "".join(json.dumps(row, ensure_ascii=False) + "\n" for row in rows), encoding="utf-8"
+    )
+    was = pass2_scorer.EVIDENCE
+    try:
+        pass2_scorer.EVIDENCE = where
+        return pass2_scorer.build()
+    finally:
+        pass2_scorer.EVIDENCE = was
+
+
+def on_the_same_threads(think: list[dict]) -> dict:
+    """Both columns over the THREADS THE POD ACTUALLY BOUGHT, which is the only paired reading.
+
+    The shipped verdict's counts are over 79 threads and this column has 12, so putting the two
+    side by side compares a rate with a total. The bars are already per-case and need no such care
+    — every case they read is inside the reference eleven — but «signals found» and «report-only
+    fields the reader could not read» are counts, and a count needs its denominator
+    ([[a_relative_band_cannot_grade_a_cheap_step]]).
+    """
+    bought = {row["thread"] for row in think}
+    before = [
+        row for row in rows_of(RESULTS / "pass2_signals_r2_v1.jsonl") if row["thread"] in bought
+    ]
+    out = {"threads": sorted(bought)}
+    for label, rows in (("before", before), ("thinking", think)):
+        if len(rows) != len(bought):
+            out[label] = {"incomplete": f"{len(rows)} rows for {len(bought)} threads"}
+            continue
+        verdict = scored(rows)
+        reply = verdict["replies"]
+        out[label] = {
+            "parsed": reply["parsed"],
+            "refused": reply["refused"],
+            "relabellings": reply["relabellings"],
+            "signals": reply["signals"],
+            "signal_bearing_units": reply["signal_bearing_units"],
+            "no_signal_units": reply["no_signal_units"],
+            "signal_types": reply["signal_types"],
+            "unreadable_report_only_rows": verdict["unreadable_report_only_fields"]["rows"],
+        }
+    return out
+
+
 def pass_2() -> dict:
     """The three bars, re-read by the SHIPPED gate over whatever threads the pod bought."""
     parts = [
@@ -143,17 +190,9 @@ def pass_2() -> dict:
     rows = [row for part in parts for row in rows_of(part)]
     if not rows:
         return {"threads": 0, "bars": None, "why": "no pass-2 thread was bought"}
-    merged = Path(tempfile.mkdtemp(prefix="p2-think-")) / "merged.jsonl"
-    merged.write_text(
-        "".join(json.dumps(row, ensure_ascii=False) + "\n" for row in rows), encoding="utf-8"
-    )
-    was = pass2_scorer.EVIDENCE
-    try:
-        pass2_scorer.EVIDENCE = merged
-        verdict = pass2_scorer.build()
-    finally:
-        pass2_scorer.EVIDENCE = was
+    verdict = scored(rows)
     return {
+        "on_the_same_threads": on_the_same_threads(rows),
         "threads": len(rows),
         "sources": {part.name: len(rows_of(part)) for part in parts},
         "evidence": verdict["evidence"],

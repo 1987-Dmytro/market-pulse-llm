@@ -221,48 +221,227 @@
   "pass_2": {
     "bars": {
       "1_flagships": {
-        "collapsed": null,
-        "passed": null,
-        "threads_not_read": [
-          "@VARUS_channel:10613",
-          "@mandziak:3676",
-          "@mandziak:3703",
-          "@matusi_ukr:22272",
-          "@matusi_ukr:22303"
-        ]
+        "collapsed": {
+          "cases": 5,
+          "cases_answered": 4,
+          "passed": false,
+          "per_case": [
+            {
+              "answered": true,
+              "id": "F1",
+              "signals": [
+                {
+                  "found": true,
+                  "id": "F1a",
+                  "index": 1,
+                  "signal_type": "жалоба"
+                },
+                {
+                  "found": true,
+                  "id": "F1b",
+                  "index": 0,
+                  "signal_type": "спрос"
+                },
+                {
+                  "found": true,
+                  "id": "F1c",
+                  "index": 2,
+                  "signal_type": "похвала"
+                }
+              ],
+              "thread": "@VARUS_channel:10613"
+            },
+            {
+              "answered": false,
+              "id": "F2",
+              "signals": [
+                {
+                  "found": false,
+                  "id": "F2a",
+                  "index": null,
+                  "signal_type": null
+                }
+              ],
+              "thread": "@matusi_ukr:22303"
+            },
+            {
+              "answered": true,
+              "id": "F3",
+              "signals": [
+                {
+                  "found": true,
+                  "id": "F3a",
+                  "index": 0,
+                  "signal_type": "похвала"
+                }
+              ],
+              "thread": "@mandziak:3676"
+            },
+            {
+              "answered": true,
+              "id": "F4",
+              "signals": [
+                {
+                  "found": true,
+                  "id": "F4a",
+                  "index": 0,
+                  "signal_type": "привычка"
+                }
+              ],
+              "thread": "@mandziak:3703"
+            },
+            {
+              "answered": true,
+              "id": "F5",
+              "signals": [
+                {
+                  "found": true,
+                  "id": "F5a",
+                  "index": 2,
+                  "signal_type": "спрос"
+                }
+              ],
+              "thread": "@matusi_ukr:22272"
+            }
+          ],
+          "per_signal": [
+            {
+              "case": "F1",
+              "found": true,
+              "id": "F1a"
+            },
+            {
+              "case": "F1",
+              "found": true,
+              "id": "F1b"
+            },
+            {
+              "case": "F1",
+              "found": true,
+              "id": "F1c"
+            },
+            {
+              "case": "F2",
+              "found": false,
+              "id": "F2a"
+            },
+            {
+              "case": "F3",
+              "found": true,
+              "id": "F3a"
+            },
+            {
+              "case": "F4",
+              "found": true,
+              "id": "F4a"
+            },
+            {
+              "case": "F5",
+              "found": true,
+              "id": "F5a"
+            }
+          ],
+          "per_signal_reading": "plan §5 (1) names five SIGNALS and the reference five THREADS carrying seven; the bar is the case reading and this table is where the narrower one is read off"
+        },
+        "passed": false,
+        "threads_not_read": []
       },
       "2_entity_cases": {
-        "collapsed": null,
-        "passed": null,
-        "threads_not_read": [
-          "@VARUS_channel:10348",
-          "@VARUS_channel:10360",
-          "@mandziak:3684",
-          "@mandziak:3689"
-        ]
+        "collapsed": {
+          "cases": 4,
+          "cases_answered": 3,
+          "passed": false,
+          "per_case": {
+            "E1": false,
+            "E2": true,
+            "E3": true,
+            "E4": true
+          },
+          "per_row": [
+            {
+              "answered": false,
+              "brand_id": "garmonija",
+              "expected": "не_наш_рынок",
+              "id": "E1",
+              "thread": "@matusi_ukr:22242"
+            },
+            {
+              "answered": true,
+              "brand_id": "selianske",
+              "expected": "молочный_бренд",
+              "id": "E2",
+              "reported": [
+                "молочный_бренд"
+              ],
+              "thread": "@VARUS_channel:10360"
+            },
+            {
+              "answered": true,
+              "brand_id": "varus-pl",
+              "expected": "сеть_ритейлер",
+              "id": "E3",
+              "reported": [
+                "сеть_ритейлер"
+              ],
+              "thread": "@VARUS_channel:10348"
+            },
+            {
+              "answered": true,
+              "brand_id": "varto",
+              "expected": "absent",
+              "id": "E4a",
+              "reported": [],
+              "thread": "@mandziak:3684"
+            },
+            {
+              "answered": true,
+              "brand_id": "varto",
+              "expected": "absent",
+              "id": "E4b",
+              "reported": [],
+              "thread": "@mandziak:3689"
+            }
+          ]
+        },
+        "passed": false,
+        "threads_not_read": []
       },
       "3_noise": {
-        "collapsed": null,
-        "passed": null,
-        "threads_not_read": [
-          "@VARUS_channel:10366"
-        ]
+        "collapsed": {
+          "entities": {
+            "@VARUS_channel:10366": 1
+          },
+          "passed": false,
+          "per_thread": {
+            "@VARUS_channel:10366": 2
+          },
+          "reported_beside": {
+            "N1": 1
+          },
+          "scored_over": [
+            "N2"
+          ],
+          "signals": 2,
+          "threads": 1
+        },
+        "passed": false,
+        "threads_not_read": []
       }
     },
     "emission": {
       "length_cutoffs": 0,
-      "n": 1,
+      "n": 12,
       "seconds": {
-        "max": 638.492,
-        "mean": 638.492,
-        "total": 638.5
+        "max": 732.346,
+        "mean": 415.933,
+        "total": 4991.2
       },
-      "stop_trimmed_the_answer": 1,
+      "stop_trimmed_the_answer": 10,
       "thought_tokens": {
-        "max": 5127,
-        "mean": 5127.0,
-        "median": 5127,
-        "min": 5127
+        "max": 6462,
+        "mean": 3645.8,
+        "median": 3691.5,
+        "min": 1341
       },
       "unbalanced": 0
     },
@@ -284,16 +463,62 @@
       ],
       "carried_is_keyed_on_the_field": "the row's own `carried_from`, never the pack's id list. A thread the pod re-bought because the seed never landed carries no such field, and keyed on the list it would be reported as carried — hiding the one thing the contract forbids",
       "carried_rule": "copied into this pack's out-file by `--seed`, each held to the id and the `rendering_sha256` of its unit HERE. Decoding is greedy (results/reader_v5b_pack.json::serving.decoding) and pass 1 answered 200 of 200 identically across three pods, so re-asking them would buy the same strings",
-      "record": "/var/folders/tl/1253ltg5091cxls3v5mstrqr0000gn/T/p2-think-hglm49al/merged.jsonl",
-      "sha256": "c1e681f25c3203168e27069d5b9de36f293124d914722af91aa366463d8a8a22",
-      "units_bought_by_this_pod": 1,
+      "record": "/var/folders/tl/1253ltg5091cxls3v5mstrqr0000gn/T/p2-column-fkiue6ei/column.jsonl",
+      "sha256": "33f6d414ec636742b25ab0297cc5d229ec938b6b5d37e38901967f75d02dad8f",
+      "units_bought_by_this_pod": 12,
       "units_carried_from_r1": 0,
-      "units_read": 1,
+      "units_read": 12,
       "units_registered": 79
     },
+    "on_the_same_threads": {
+      "before": {
+        "no_signal_units": 4,
+        "parsed": 12,
+        "refused": 0,
+        "relabellings": 0,
+        "signal_bearing_units": 8,
+        "signal_types": {
+          "жалоба": 4,
+          "похвала": 5,
+          "привычка": 4,
+          "спрос": 2
+        },
+        "signals": 15,
+        "unreadable_report_only_rows": 15
+      },
+      "thinking": {
+        "no_signal_units": 3,
+        "parsed": 12,
+        "refused": 0,
+        "relabellings": 0,
+        "signal_bearing_units": 9,
+        "signal_types": {
+          "жалоба": 5,
+          "похвала": 10,
+          "привычка": 3,
+          "спрос": 3
+        },
+        "signals": 21,
+        "unreadable_report_only_rows": 39
+      },
+      "threads": [
+        "@VARUS_channel:10348",
+        "@VARUS_channel:10360",
+        "@VARUS_channel:10366",
+        "@VARUS_channel:10529",
+        "@VARUS_channel:10613",
+        "@mandziak:3676",
+        "@mandziak:3679",
+        "@mandziak:3684",
+        "@mandziak:3689",
+        "@mandziak:3703",
+        "@matusi_ukr:22272",
+        "@matusi_ukr:22303"
+      ]
+    },
     "replies": {
-      "no_signal_units": 1,
-      "parsed": 1,
+      "no_signal_units": 3,
+      "parsed": 12,
       "per_comment_subject_omitted": 0,
       "proposed_signal_types": [],
       "reading": "«no signal» is counted over PARSED replies only. A reply that could not be read is not a thread with nothing in it, and the two are never added together ([[the_empty_class_eats_the_parse_failures]])",
@@ -310,19 +535,28 @@
       "refused": 0,
       "relabellings": 0,
       "repairs": {},
-      "signal_bearing_units": 0,
-      "signal_types": {},
+      "signal_bearing_units": 9,
+      "signal_types": {
+        "жалоба": 5,
+        "похвала": 10,
+        "привычка": 3,
+        "спрос": 3
+      },
       "signal_types_the_parser_could_not_read": 0,
-      "signals": 0,
-      "subject_types": {},
+      "signals": 21,
+      "subject_types": {
+        "категория_личное": 13,
+        "молочный_бренд": 1,
+        "сеть_ритейлер": 7
+      },
       "vocabulary_synonyms_used": []
     },
     "sources": {
-      "pass2_signals_r2_reference.READER_THINK.jsonl": 0,
+      "pass2_signals_r2_reference.READER_THINK.jsonl": 11,
       "pass2_signals_r2_remainder.READER_THINK.jsonl": 1
     },
-    "threads": 1,
-    "unreadable_report_only_fields": 17
+    "threads": 12,
+    "unreadable_report_only_fields": 39
   },
   "pass_2_before": {
     "1_flagships": {
