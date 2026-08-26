@@ -1,0 +1,378 @@
+{
+  "artifacts": {
+    "results/lora_c_run_r3.json": "this session's run record — pods, gates, the measured rates, the money. NOT results/lora_c_run.json: that file is r2's and `scripts/check_lora_c_vramprobe_report.py` sums every pod row in it, so an append here would re-derive a SEALED report's money against this session's pod ([[a_sealed_reports_checker_reads_a_live_file]])",
+    "results/lora_c_run_r3_load_proof.json": "what the pod's loader wrote — load seconds, VRAM, and the HF cache's BLOB inventory either side of the load",
+    "results/lora_c_run_r3_smoke_provenance.json": "the smoke's own `provenance.json`, copied back. `run.seconds_per_step` is the quotable rate; `run.micro_batch_final` is what says whether the instrument stayed the registered one",
+    "results/lora_c_run_r3_stock.json": "the read-only stock reading taken before the create, with its stamp",
+    "the_measurements_land_in_the_run_record_not_in_this_file": "this file is committed before the create and frozen by it. s/step, s/call, realised threads and every dollar land in `results/lora_c_run_r3.json` and in the report. A registration that is written back into after the reading is not a registration ([[preregistration_is_a_file_not_a_constant]])"
+  },
+  "authority": "ruling (т), docs/STATUS.md п. 1 — «кап `lora-c-run r3` = $7.00 all-in, преавторизован; рунг проекции исполняет кап (KILL = соблюдение)». Hand-written, like `results/prereg_lora_c_migrate_r2.json` and the vramprobe's: every sum in it is RE-DERIVED by `tests/test_lora_c_run_r3.py`, which is what makes the arithmetic derived rather than asserted",
+  "contract": "docs/PROMPT-lora-c-run-r3.md",
+  "do_not": [
+    "edit results/prereg_lora_c.json — FROZEN, and this session SPENDS its one attempt. Its sha is asserted at every gate",
+    "re-buy the base legs — results/lora_c_base_v2.jsonl and _v3.jsonl were bought by r2 and are the BEFORE columns",
+    "edit any pack byte, config/qlora.yaml, prompts.py, a sealed record, or a team-lead file (docs/STATUS.md, docs/SPEC.md, docs/PROMPT-*.md are committed verbatim)",
+    "retry a bar or tune anything after seeing any eval output",
+    "exceed $7.00 all-in or create a second billing resource — rung 7",
+    "merge adapters",
+    "clone the bundle to a new directory — the venv is an editable install bound to /workspace/repo",
+    "quote a loss line's seconds_per_step as a rate — it divides by log_every, not by the window (Dv814)",
+    "run `make fmt` repo-wide — two files are ruff-format-drifted and both are pinned by records",
+    "touch mp-srv2 — no deletion, no writes, no mount"
+  ],
+  "kill_clock": [
+    {
+      "authorised_cards": {
+        "A100 PCIe": {
+          "gpu_id": "NVIDIA A100 80GB PCIe",
+          "vram_gb": 80,
+          "why_only_this_one": "32 GB refused this line's training twice, the second time with expandable_segments and a deficit that GREW. 48 GB has never been measured at max_seq_len 3 072. This card loaded the model on 2026-08-26 at 17.0 of 79.1 GiB — 21.5% — which is the only reading that closes the memory class"
+        }
+      },
+      "flag": "--open --pod-id <id> --created-at <ISO> --usd-per-hour <costPerHr> --card <name> --terminate-after <stamp>",
+      "on_failure": "DELETE the pod now and STOP — no clone, no load, no training",
+      "read": "costPerHr and gpu displayName, out of the create response",
+      "rule": "≤$1.50/h is the ceiling, the card must equal A100 PCIe, and the price must ALSO equal a column this step was solved at ['1.39']",
+      "rung": 0,
+      "the_card_is_graded_too": "the price is not a proxy for the card. A cheaper 48 GB row at $1.39 would pass a price-only rung and answer a question no reading in this repo can grade",
+      "the_rule_is_worded_PRICE_FIRST_on_purpose": "`gate_lora_b.first_number` returns the FIRST number in the rule string. A card-first wording — «card A100 PCIe at ≤$1.50/h» — hands it «100» out of the card's NAME and the ceiling silently becomes $100/h with the suite green. That is Dv825",
+      "threshold": 1.5,
+      "unit": "usd_per_hour",
+      "what": "the price and the card, at create"
+    },
+    {
+      "flag": "--gate0 [--ssh-ok]",
+      "measured_on_this_lines_last_three_pods_seconds": [
+        23.2,
+        29.4,
+        35.3
+      ],
+      "rule": "500 s from create to the first ssh that answers, else kill and recreate — 1 re-creation is authorised and a third pod is a STOP",
+      "rung": 1,
+      "threshold": 500.0,
+      "unit": "seconds",
+      "what": "the boot gate"
+    },
+    {
+      "flag": "--liveness --last-event <ISO>",
+      "rule": "600 s since the LAST log line or byte-growth poll is a KILL, at every stage",
+      "rung": 2,
+      "the_deadline_is_not_a_poll_interval": "it is measured from the last thing that HAPPENED, not from the last time anyone looked. A run quiet because it died and a run quiet because nothing prints are the same output to a poll ([[no_rung_watches_an_idle_pod]])",
+      "the_stages_with_no_log_line_are_polled_on_BYTES": "the adapter directory and the out-files grow; `du -sb` over a stamped poll is the event when stdout is silent ([[an_invariant_on_the_container_not_the_payload]])",
+      "threshold": 600.0,
+      "unit": "seconds",
+      "what": "liveness — the silence clock every stage is graded on"
+    },
+    {
+      "flag": "--rate --leg <eval_a|eval_b> --replies <file> --started-at <ISO>",
+      "on_failure": "KILL before the next leg — pull what exists, prove the teardown by listing, STOP",
+      "read": "rows answered ÷ elapsed, off the growing out-file DURING the leg",
+      "rule": "$7.00 all-in must still cover the plan when the eval leg's OWN realised s/call is extended over every remaining charged call and the remaining optimizer steps are charged at the s/step this session measured",
+      "rung": 3,
+      "steps_charged_at_seconds_per_step": 61.047,
+      "the_base_legs_are_not_graded_here": "r2 bought them. This rung fires after the EVAL legs, which are the only pass-1 generation this session pays for",
+      "the_charged_step_is_a_FLOOR_and_is_replaced_once_the_smoke_has_read_one": "61.047 is the cheapest s/step any pod of this stack has ever been registered at, and it is a BOUND, not a projection. By the time this rung can fire, the smoke has MEASURED one — the gate charges the measured value and says which it used. A rung that keeps charging the floor after the real number arrives is a projection quietly falling back to the rosier number ([[projected_rate_versus_measured_rate]])",
+      "threshold": 7.0,
+      "unit": "usd",
+      "what": "the realised rate of an eval leg"
+    },
+    {
+      "flag": "--smoke --provenance <file> --loss <file>",
+      "on_failure": "an OOM at 3 072 is a KILL and a STOP, not a retry: `micro_batch_size` is frozen law in config/qlora.yaml and is NOT edited on a pod",
+      "rule": "181.5 s/step is the ceiling for the smoke's 6 optimizer steps at 3 072, and an OOM there is a KILL and a STOP",
+      "rung": 4,
+      "steps": 6,
+      "the_OOM_is_READ_and_not_asserted": "`train_qlora.train` catches `torch.cuda.OutOfMemoryError` and, while micro_batch > 1, HALVES it and doubles grad_accum and CARRIES ON. So an OOM at the registered micro_batch_size of 2 does not necessarily crash — it silently changes the instrument the registration prices. The gate reads `run.micro_batch_final` and `run.grad_accum_final` out of the smoke's own provenance and KILLs on a move. A caller's `--oom` flag records the reading the caller gave it, not the world ([[a_flag_that_asserts_turns_a_poll_into_a_verdict]])",
+      "the_quotable_rate_is_the_PROVENANCE_one": "`provenance.json::run.seconds_per_step` — the whole loop's wall over its steps. The loss log's per-line `seconds_per_step` divides by `log_every` regardless of how many steps the window actually held, so the step-6 line (a window of ONE step over five) reads about a fifth of the truth. That is Dv814, already registered by the vramprobe report; `gate_lora_b.measured_step` takes max(mean, last) of exactly those lines and would hand this session a rate about 60% of the real one. Both numbers are printed, labelled, and never averaged",
+      "the_two_loss_lines_are_the_whole_log": "`log_every: 5` and `--max-steps 6` write a line at step 5 and a line at step 6 — TWO, not six. `gate_lora_c.smoke_gate` waits for six and would WAIT for ever on a surviving smoke; the defect never showed because r2's `--oom` flag short-circuited the count. That is Dv813",
+      "threshold": 181.5,
+      "unit": "seconds_per_step",
+      "what": "the smoke buys the line's FIRST s/step at 3 072",
+      "what_it_buys": "the ONLY s/step this line may use. Both readings this repo owns — 61.047 registered and 68.442 measured on lora-b's arm A — were taken at ≤1 222 tokens against this line's 1 445–2 975, and the contract forbids projecting one from the other"
+    },
+    {
+      "flag": "--projection --after <milestone> --reading <the guard's USD>",
+      "on_failure": "KILL, pull every artifact, prove the teardown by listing, STOP to the team lead with the ledger. A KILL here is compliance, not failure",
+      "rule": "$7.00 all-in: cumulative spend on the pod clock plus the remainder projected at the rates this session MEASURED, plus the registered teardown-and-pull tail, must not pass the cap or the hard stop",
+      "rung": 5,
+      "the_TAIL_is_added_because_the_sibling_does_not_carry_it": "`gate_lora_c.projection` prices the remainder out of calls, steps and threads only. Pulling nine artifacts and proving a deletion is billed work that appears in none of those units, and a session that projects to exactly the cap has no room to end. The tail is `money.pre_pod_arithmetic.fixed_seconds.teardown_and_pull`",
+      "threshold": 7.0,
+      "unit": "usd",
+      "what": "the projection, after the smoke and after EVERY leg"
+    },
+    {
+      "derivation": "cap ÷ the price the create actually returned, as an INEQUALITY: cap / usd_per_hour × 3600 ≥ hard_stop_seconds",
+      "flag": "--open … --terminate-after '<the stamp pod create was given>'",
+      "rule": "18000.0 s from create, LESS whatever a closed pod of this attempt already billed, stamped on `--terminate-after`",
+      "rung": 6,
+      "threshold": 18000.0,
+      "unit": "seconds",
+      "what": "the platform backstop",
+      "why_18000_and_not_18129": "$7.00 at $1.39/h buys 18 129.5 s. The stop is registered at 18 000 s — the round number BELOW what the cap pays for, so the backstop can never outlive the money behind it. The 129.5 s of slack is the room the inequality leaves"
+    },
+    {
+      "flag": "--pre-create-check",
+      "on_failure": "STOP before the create — never a refusal after the second meter starts",
+      "read": "`runpodctl pod list -a`, `serverless list`, `network-volume list`",
+      "rule": "1 billing resource at a time: never a second pod while one exists, never a serverless endpoint, and the two network volumes are beside the run and not inside it",
+      "rung": 7,
+      "the_volumes_are_not_counted_here": "a network volume is not a pod and rents whether or not one is attached. Rung 7 is about pods; the rent of the two volumes is named beside the step and never inside the cap",
+      "threshold": 1.0,
+      "unit": "resources",
+      "what": "never two billing resources"
+    }
+  ],
+  "legs": {
+    "arm_a": {
+      "adapter": "QLoRA on the 506 real rows with their rationales",
+      "eval_calls": 198,
+      "prompt": "pass1_comment_gm4_v3",
+      "reads": "results/lora_c_eval_pack.json::legs.v3",
+      "train_file": "results/pass1_sft_v3_train.jsonl",
+      "train_rows": 506
+    },
+    "arm_b": {
+      "adapter": "QLoRA on arm A's rows PLUS the 160 synthetic rows",
+      "eval_calls": 198,
+      "prompt": "pass1_comment_gm4_v3",
+      "reads": "results/lora_c_eval_pack.json::legs.v3",
+      "train_file": "results/pass1_sft_v3_arm_b.jsonl",
+      "train_rows": 666
+    },
+    "base_v2": {
+      "eval_calls": 0,
+      "eval_calls_in_the_frozen_registration": 198,
+      "out_file": "results/lora_c_base_v2.jsonl",
+      "why_zero": "BOUGHT by lora-c-run r2 for $0.76 and pulled — 61 of 98 on the holdout. It is a column of the four-column table and this session generates not one reply for it. Charging it again would price work nobody is going to do ([[check_the_step_was_not_already_done]])"
+    },
+    "base_v3": {
+      "eval_calls": 0,
+      "eval_calls_in_the_frozen_registration": 198,
+      "out_file": "results/lora_c_base_v3.jsonl",
+      "why_zero": "BOUGHT by r2 — 66 of 98. Same reason. Base v3 takes no bar (ruling (к))"
+    }
+  },
+  "money": {
+    "cap_rule": "ruling (т), operator, 2026-08-26: «кап `lora-c-run r3` = $7.00 all-in, преавторизован — сессия проходит смок → армы → бары БЕЗ паузы на слово, рунг проекции исполняет кап (KILL = соблюдение)». Raising it is the operator's word BEFORE any endpoint, never after a reading",
+    "cap_usd_all_in": 7.0,
+    "formulas": {
+      "eval_calls_per_adapter_leg": 198,
+      "legs_this_session_generates": 2,
+      "steps": {
+        "arm_a": 62,
+        "arm_b": 82
+      },
+      "steps_rule": "floor(ceil(n / micro_batch_size) / grad_accum) × epochs — the number of optimizer.step() calls. `train_qlora.train` steps only when `seen % accum == 0` over MICRO-batches, so each epoch's leftover micro-batches never complete a group (lora-b's Dv576: 62 run against 64 registered)",
+      "steps_the_other_number": {
+        "rule": "ceil(n / (micro × accum)) × epochs — `train_qlora.train`'s own `planned`",
+        "value": {
+          "arm_a": 64,
+          "arm_b": 84
+        },
+        "what_it_drives": "the cosine schedule's total and its warmup, and the progress display. It is a REAL number of this run and it is NOT the step count the money formula wants",
+        "why_both_are_here": "one input with two values gets quoted kindly, and this line has already made that mistake five times ([[two_values_for_one_input_get_quoted_kindly]])"
+      },
+      "training_seconds_per_arm": "<steps> × <the s/step the smoke measured>"
+    },
+    "pre_pod_arithmetic": {
+      "at_each_price": {
+        "1.39": {
+          "card": "A100 PCIe",
+          "datacenter": "CA-MTL-3",
+          "hard_stop_buys_seconds": 18129.5,
+          "the_full_hard_stop_costs_usd": 6.95,
+          "what_the_cap_has_left_after_it_usd": 0.05,
+          "where_the_price_comes_from": "the price `lora-c-migrate r2`'s create actually returned on 2026-08-26 for this card in this datacenter, and the price its 744 billed seconds were charged at"
+        }
+      },
+      "fixed_seconds": {
+        "boot": 500.0,
+        "load": 60.0,
+        "marker_census": 368.0,
+        "pass_1_evals_of_the_two_adapters": 3643.2,
+        "pass_2": 2910.0,
+        "staging": 180.0,
+        "teardown_and_pull": 300.0,
+        "total": 9050.2,
+        "training_smoke": 1089.0,
+        "what_each_addend_is": {
+          "boot": "rung 1's own deadline, 500 s. The three pods this line has created answered ssh at 23.2, 29.4 and 35.3 s; the deadline is charged, not the readings",
+          "load": "the shipped loader measured 40.22 s on this exact card, datacenter and volume on 2026-08-26, charged at 60 s — 1.49× the reading",
+          "marker_census": "40 requests × 9.20 s/call. Twenty E units, each answered TWICE by arm B's adapter, one as the eval pack renders it and one with the synthetic header substituted. Report-only, never a bar",
+          "pass_1_evals_of_the_two_adapters": "2 legs × 198 calls × 9.20 s/call. The base legs are NOT here: r2 bought them",
+          "pass_2": "2 legs × 15 threads × 97 s/thread. FIFTEEN is the registered BOUND, not a count — the pack is rebuilt from each arm's own pass-1 answers and a thread enters it only if that arm marked at least one of its rows OURS. r2's v2 leg produced 11. Charging the bound is deliberate conservatism and it costs 5.39 s/step of break-even (see the_break_even_is_a_FUNCTION_not_a_number); the realised count is recorded beside the charge so a bound-attributable KILL is visible as one",
+          "staging": "scp of the bundle plus `git clone` OVER /workspace/repo plus the one-line stack print that proves the venv still resolves. `pyproject.toml` is byte-identical between 997a2a2 — the checkout on the volume — and this HEAD (`git diff 997a2a2 HEAD -- pyproject.toml` is empty), so the 132 s venv rebuild is NOT in this plan and the stack print is what proves it was not needed",
+          "teardown_and_pull": "pulling the two adapters, four out-files, two loss curves, two provenance files, the census and the ledgers, hashing both sides, deleting the pod and proving the deletion by listing. Billed work in none of the units the projection rung prices, which is why rung 5 adds it as a tail",
+          "training_smoke": "6 steps × the 181.5 s/step CEILING of rung 4. The smoke is charged at its kill-clock ceiling because no reading of it exists — that is what the smoke is for"
+        }
+      },
+      "hard_stop_formula": "cap_usd_all_in / usd_per_hour * 3600 >= hard_stop_seconds",
+      "hard_stop_seconds": 18000.0,
+      "rates_used": {
+        "pass_1_seconds_per_call": 9.2,
+        "pass_1_seconds_per_call_authority": "ruling (п), 2026-08-25: «во всех будущих выводах v3 заряжается ИЗМЕРЕННЫМИ 9.20 с/звонок (не 6.14)». 6.14 was measured on a 4090 under v1/v2 widths; v3 carries a rationale per example and is wider",
+        "pass_2_seconds_per_thread": 97,
+        "training_seconds_per_step": "NONE. No reading at 3 072 exists, and neither of the two this repo owns is one — both were taken at ≤1 222 tokens. The smoke buys it"
+      },
+      "the_break_even_is_a_FUNCTION_not_a_number": {
+        "readings_this_repo_holds": {
+          "measured_on_lora_b_arm_a": 68.442,
+          "registered_by_lora_b": 61.047
+        },
+        "rows": [
+          {
+            "break_even_seconds_per_step": 63.05,
+            "fixed_seconds": 9050.2,
+            "fixed_usd": 3.4944,
+            "hard_stop_bound_seconds_per_step": 62.15,
+            "pass_1_seconds_per_call": 9.2,
+            "pass_2_threads_per_leg": 15,
+            "what_it_is": "THE REGISTERED CHARGE — ruling (п)'s s/call and the contract's thread bound"
+          },
+          {
+            "break_even_seconds_per_step": 68.44,
+            "fixed_seconds": 8274.2,
+            "fixed_usd": 3.1948,
+            "hard_stop_bound_seconds_per_step": 67.54,
+            "pass_1_seconds_per_call": 9.2,
+            "pass_2_threads_per_leg": 11,
+            "what_it_is": "if each arm's rebuilt pack produces the 11 threads r2's v2 leg produced"
+          },
+          {
+            "break_even_seconds_per_step": 72.32,
+            "fixed_seconds": 7716.0,
+            "fixed_usd": 2.9792,
+            "hard_stop_bound_seconds_per_step": 71.42,
+            "pass_1_seconds_per_call": 6.14,
+            "pass_2_threads_per_leg": 15,
+            "what_it_is": "if the A100 realises the OLD 4090 s/call. Ruling (п) forbids CHARGING this; it is here so a KILL can be read as «the charge» rather than «the card»"
+          },
+          {
+            "break_even_seconds_per_step": 77.7,
+            "fixed_seconds": 6940.0,
+            "fixed_usd": 2.6796,
+            "hard_stop_bound_seconds_per_step": 76.81,
+            "pass_1_seconds_per_call": 6.14,
+            "pass_2_threads_per_leg": 11,
+            "what_it_is": "the most favourable corner both unmeasured inputs allow"
+          }
+        ],
+        "the_binding_bound_is_the_HARD_STOP_not_the_cap": "at every row above, 18 000 s runs out about a second per step before $7.00 does. The stop is what a projection rung will fire on first",
+        "the_charged_row_lands_BETWEEN_the_two_readings": "62.15 s/step sits above 61.047 and below 68.442. So this session's outcome is not knowable before the smoke, and both KILL and GO are compliant readings of a plan that was solved honestly. This block exists so that a KILL after the smoke can be attributed: to the measured s/step, to the 9.20 s/call charge, or to the 15-thread bound — and the report can carry the inequality instead of the missing number ([[name_what_the_range_protects]], [[bound_instead_of_recompute]])",
+        "what_it_answers": "the s/step at which the plan stops fitting, as a function of the two rates this session has NOT yet measured. All four rows carry 144 optimizer steps (62 + 82) at $1.39/h against a $7.00 cap and an 18 000 s stop",
+        "why_the_pass_1_rate_is_unmeasured_here": "the base legs were bought by r2 and are not re-bought, so the first projection rung of this session — the one after the smoke — has NO measured s/call to use and charges the registered 9.20 for the whole remainder. That is compliance with ruling (п), not pessimism to be argued away"
+      },
+      "the_formula_is_an_INEQUALITY_and_why": "the vramprobe registered the same relation as an EQUALITY and it survived only because $0.30 ÷ $0.72 × 3600 was 1500.0 exactly. An equality refuses every price the cap can comfortably afford. Here $7.00 ÷ $1.39 × 3600 = 18 129.5 s against a registered stop of 18 000 s — 129.5 s of slack ([[a_published_ratio_is_not_the_gates]])",
+      "the_marker_census_is_not_inside_the_fixed_part": {
+        "calls": 40,
+        "seconds": 368.0,
+        "the_KEY_NAME_is_inherited_and_it_is_wrong_here": "`gate_lora_c.plan` reads this path to derive the census's CALL COUNT, and the path is the frozen registration's. In r2 the census sat outside the fixed part; here it is inside it, as `fixed_seconds.marker_census`, and `fixed_seconds.total` includes it. The name is kept because the reader that needs it is pinned and this file is the thing that moved ([[a_history_field_means_what_its_reader_means]])",
+        "usd": 0.142
+      },
+      "the_stage_bounds_SUM_inside_the_stop": {
+        "hard_stop_seconds": 18000.0,
+        "headroom_seconds": 8949.8,
+        "summed_seconds": 9050.2,
+        "the_headroom_IS_the_training": "unlike the migration, this session's headroom is not slack — it is the 144 optimizer steps, and it is exactly what the smoke prices. 8 949.8 s over 144 steps is 62.15 s/step",
+        "what_is_summed": "every addend of fixed_seconds, which is why teardown and staging are addends and not margins ([[a_count_in_prose_is_not_the_enumeration]])"
+      },
+      "what_the_two_readings_this_repo_holds_would_cost": {
+        "61.047": {
+          "over_the_cap": false,
+          "over_the_stop": false,
+          "session_seconds": 17841.0,
+          "session_usd": 6.8886,
+          "training_seconds": 8790.8
+        },
+        "68.442": {
+          "over_the_cap": true,
+          "over_the_stop": true,
+          "session_seconds": 18905.8,
+          "session_usd": 7.2998,
+          "the_projection_rung_never_lets_this_be_paid": "$7.2998 is what the plan WOULD cost at this rate. It is not a price anyone can be charged: the projection rung fires after the smoke, reads the rate, and KILLs. The number is here so the KILL has an arithmetic behind it",
+          "training_seconds": 9855.6
+        },
+        "what_this_is_not": "a projection of this line's rate. Both readings were taken at ≤1 222 tokens on an A6000 and this line runs at 1 445–2 975 tokens on an A100. They are here to show that the plan's break-even lands between them, which is the honest statement of what is unknown"
+      }
+    },
+    "the_step_is_all_in": "$7.00 covers the pod and nothing else is created. No volume is created by this session",
+    "the_two_volumes_rent_beside_the_step_not_inside_it": {
+      "both_volumes_daily_usd": 0.4667,
+      "cycle_2_remaining_at_the_team_leads_reading_usd": 9.993,
+      "one_volume_daily_usd": 0.2333,
+      "the_rent_is_never_inside_the_cap": "$7.00 is the POD, all-in. The two volumes rent continuously and do not stop when the pod is deleted. mp-lora-c is deleted when this line closes, on the operator's word",
+      "why_two": "mp-srv2 (100 GB, EU-RO-1) is the serving stack and is untouched; mp-lora-c (100 GB, CA-MTL-3) holds this line's weights, venv and checkout"
+    }
+  },
+  "phase": "lora-c-run-r3",
+  "question": "what does this line cost per optimizer step at 3 072 on an A100 PCIe, and do either of the two adapters clear the three registered bars?",
+  "state": "DRAFT — frozen by this session's first `pod create`",
+  "target": {
+    "card": "A100 PCIe",
+    "container_disk_gb": 30,
+    "datacenter": "CA-MTL-3",
+    "gpu_id": "NVIDIA A100 80GB PCIe",
+    "image": "runpod/pytorch:1.0.2-cu1281-torch280-ubuntu2404",
+    "model_id": "google/gemma-4-31b-it",
+    "revision": "842da3794eaa0b77d5f08bae87a17459d91ff475",
+    "volume_gb": 100,
+    "volume_mount_path": "/workspace",
+    "volume_name": "mp-lora-c",
+    "what_is_already_on_the_volume": {
+      "hf/": "59 GiB at the pinned revision — no download is priced in this plan",
+      "repo/": "146 MB checked out at 997a2a23db7978d32e50675d29306f10e0a1d098, carrying the three packs and both SFT files",
+      "venv/": "1.8 GiB, `pip install -e '.[dev,gpu]'` run FROM /workspace/repo — the editable install resolves imports through that exact directory"
+    }
+  },
+  "the_frozen_registration": {
+    "one_attempt": "rung 8 there — 1 attempt, SPENT at the first reply generated against eval set E by an ADAPTER leg. This session spends it. No retry, no second draw, no tuning after any eval output is seen",
+    "path": "results/prereg_lora_c.json",
+    "read_not_written": "it is an INPUT here. Its sha is asserted at every build of this file and at every gate; the bars, the leg definitions and the step counts are READ from it, never restated",
+    "sha256": "4d5a8f1d34765b4a93a5fd23e35ef71c95e38505c457702c2b912c23f8c9110a",
+    "state_there": "FROZEN by lora-c-run r2's create, 2026-08-24T20:29:20Z"
+  },
+  "the_known_formatter_state": {
+    "both_files_are_pinned_by_a_record": {
+      "scripts/build_lora_c_marker_census.py": "producer sha in results/lora_c_marker_census_pack.json, which is itself pinned inside the FROZEN registration",
+      "scripts/write_lora_c_prereg.py": "producer sha in results/prereg_lora_c.json::producer"
+    },
+    "make_check_does_not_see_it": "`make check` runs `ruff check`, never `ruff format --check`, so the drift is invisible to the single verifier ([[verifier_format_gap]])",
+    "no_reformatting_in_this_contract": "`make fmt` is forbidden REPO-WIDE while those pins live. Files this contract creates are formatted individually by path ([[the_formatter_voids_a_frozen_producer_pin]])",
+    "state": "KNOWN — two files are ruff-format-drifted and both are pinned by a record"
+  },
+  "the_load_proof": {
+    "flag": "--load-proof --started-at <ISO> --proof results/lora_c_run_r3_load_proof.json",
+    "it_is_not_rung_5": "the contract's D2.3 calls this «rung 5», which is the MIGRATION's numbering; in this session's rung table rung 5 is the projection. One integer, two rungs, so this one is registered by NAME and never by number ([[two_values_for_one_input_get_quoted_kindly]])",
+    "rule": "600 s to load the model to GPU through the shipped loader, or KILL; and no BLOB of the HF cache may grow across the load",
+    "the_invariant_is_BLOBS_and_why_it_moved": "`lora-c-migrate r2`'s rung 5 graded `du -sb /workspace/hf` either side of the load and KILLed on a 40-byte move. Enumerated on the pod before the delete, those 40 bytes were `refs/main` (the revision sha written as a ref) plus four zero-byte `.no_exist` absence markers; blobs written: 0 of 12, totalling 62 578 686 256 bytes. A HuggingFace cache is not immutable under a read — the loader records the ref it resolved and marks the optional files the repo does not ship. The blobs ARE the weights and they are what a re-download would touch, so the invariant worth registering is that no blob grows ([[an_invariant_on_the_container_not_the_payload]])",
+    "the_old_reading_is_kept_and_REPORTED": "the whole-cache byte count is still recorded either side of the load, and the bookkeeping delta is printed. What changed is which of the two readings can KILL",
+    "the_shipped_loader_is_CALLED_not_copied": "`market_pulse.local_llm.load(model_id, revision)` — the same function `scripts/eval_zero_shot.py --backend local` calls",
+    "threshold": 600.0,
+    "unit": "seconds",
+    "what": "the load, and the proof that it read from the volume rather than the internet"
+  },
+  "the_order_is_law": [
+    "0. pre-create check (rung 7) · stock read · the read-back refusal gate",
+    "1. create A100 PCIe CA-MTL-3 (rung 0) → boot gate (rung 1) → mount mp-lora-c",
+    "2. scp the bundle → `git clone` OVER /workspace/repo → the one-line stack print (the venv is NOT rebuilt: pyproject.toml has not moved)",
+    "3. load through the shipped loader → the load proof (blob invariant)",
+    "4. the smoke: 6 optimizer steps of arm A's config at 3 072 → rung 4",
+    "5. the projection rung (5) — GO continues, KILL pulls everything, tears down and STOPs",
+    "6. arm A, 62 steps → save → pull the adapter immediately → eval A (pass-1 on E-198 v3 leg, then pass-2 rebuilt from arm A's own out-file) → rung 3 on the eval leg → rung 5",
+    "7. arm B, 82 steps → save → pull → eval B likewise → the marker census (40 requests, report-only) → rung 5",
+    "8. pull every artifact not yet pulled, hash both sides, teardown, prove the deletion by listing with BOTH volumes as positive controls"
+  ],
+  "the_recovery_clause": {
+    "a_refused_create_is_free": "stock flickers minute to minute — three read-only readings of A100 PCIe inside 17 minutes on 2026-08-25 returned three different availability rows. A create the platform refuses costs $0 and IS the test ([[a_stock_window_needs_the_create_not_a_poll]])",
+    "artifacts_already_pulled_are_never_re_bought": "and the attempt is not re-spent: rung 8 of the frozen registration is spent at the first ADAPTER reply, whichever pod produced it",
+    "one_re_create": "after a PROVEN deletion, one re-create within the cap is authorised. A third pod is a STOP",
+    "the_backstop_shrinks": "`gate_lora_b.terminate_after` stamps the second pod at its own create plus what the 18 000 s stop has LEFT after the first pod's billed seconds — never a fresh window"
+  },
+  "what_this_registration_fixes_before_it_can_fire": {
+    "the_blob_invariant": "the migration's rung 5 KILLed on 40 bytes of cache bookkeeping. Fixed HERE, in this session's own gate and its own pod-side producer — never in `scripts/gate_lora_c_migrate_r2.py` or `scripts/load_proof_pod_runner.py`, whose shas are pinned by the SEALED `docs/reports/lora-c-migrate-r2.md` and re-derived by a checker the suite drives ([[the_gates_evidence_outlived_its_artifact]])",
+    "the_eval_leg_cannot_be_rated": "`gate_lora_c.main`'s `--leg` is `choices=('base_v2','base_v3')`. This session buys no base leg, so the rung that grades a realised rate could never fire. The body generalises; only the argparse blocked it",
+    "the_rate_rung_charged_a_floor_for_ever": "`rate_gate` charges remaining steps at the registered 61.047 even after the smoke has measured a real one. The r3 gate hands it the measured value through a record VIEW and says which it used",
+    "the_smoke_gate_graded_the_wrong_number": "Dv814 — `gate_lora_b.measured_step` reads the loss lines, whose `seconds_per_step` divides by `log_every` and not by the window",
+    "the_smoke_gate_waited_for_six_lines": "Dv813 — `log_every: 5` writes two. It would have WAITed for ever on a surviving smoke"
+  }
+}
