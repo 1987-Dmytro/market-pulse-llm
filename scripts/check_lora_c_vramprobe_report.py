@@ -48,8 +48,19 @@ def the_row_at(rows: list[dict], stamp: str = THE_PROBES_OWN_READING) -> dict:
 lorab = Path("results/prereg_lora_b.json").read_text("utf-8")
 pod = rec["pods"][0]
 gates = {g["kind"] + "-" + g["verdict"]: g for g in rec["gates"]}
+THE_SMOKE_WAIT_AT = "2026-08-25T14:45:25+00:00"
+THE_SMOKE_KILL_AT = "2026-08-25T14:46:16+00:00"
+"""The two smoke gates this report is ABOUT, by their own stamps.
+
+`smokes[-1]` and `smokes[0]` were here first and they are the Dv828 class one file later: the last
+row is not an identity, and `results/lora_c_vramprobe.json` is a ledger a re-run of that gate would
+append to ([[select_one_row_refuse_ambiguity]]). Selected by stamp now, raising on
+absent-or-duplicated rather than picking a neighbour. Routed here by `lora-c-run r3` step 0.5 (3);
+every number on the page is unchanged."""
+
 smokes = [g for g in rec["gates"] if g["kind"] == "smoke"]
-smoke = smokes[-1]
+waited = the_row_at(smokes, THE_SMOKE_WAIT_AT)
+smoke = the_row_at(smokes, THE_SMOKE_KILL_AT)
 
 pat = re.compile(
     r"Tried to allocate ([\d.]+) GiB.*?of which ([\d.]+) GiB is free.*?this process has"
@@ -99,7 +110,7 @@ checks = [
         "1 150.8 s",
         smoke["next_line_due_by_seconds_into_the_smoke"] == 1150.8,
     ),
-    ("smoke WAIT at 223.8 s", "223.8 s", smokes[0]["running_seconds"] == 223.8),
+    ("smoke WAIT at 223.8 s", "223.8 s", waited["running_seconds"] == 223.8),
     (
         "crossover s = 21.0",
         "**s = 21.0 s**",

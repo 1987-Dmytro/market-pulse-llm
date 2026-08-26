@@ -7775,3 +7775,32 @@ pool = [
 print(Counter("r1" if u in drawn["r1"] else "r2" if u in drawn["r2"] else "free" for u in pool))
 # Counter({'r1': 38, 'r2': 12, 'free': 9})
 ```
+
+## money-anchors backlog — the two open guard `--close` debts (2026-08-26, $0)
+
+`docs/PROMPT-lora-c-run-r3.md` step 0.5 (2): the vramprobe's `--close` is routed here rather than
+retried again. It has now been REFUSED TWICE for the same structural reason, and the band it fails
+is not this contract's to move.
+
+| step | recorded reading | settled | absolute lag | as a fraction | state |
+|---|---:|---:|---:|---:|---|
+| `lora-c` (run r2) | $0.7338 | $0.764952 | $0.031152 | **4.2%** | CLOSED 2026-08-25T17:59:54Z |
+| `lora-c-vramprobe` | $0.0495 | $0.075729 | $0.026229 | **53.0%** | **OPEN — refused, twice** |
+
+**Why the band cannot grade it.** Both records lag settlement by about the same ABSOLUTE amount, so
+a 7% relative tolerance grades a $0.76 step green and a $0.075 step red on the same defect. At that
+band no step cheaper than about $0.37–0.45 can close, however correct it is
+([[a_relative_band_cannot_grade_a_cheap_step]]).
+
+**It is not a settlement delay.** The pod was deleted at 2026-08-25T14:46:29Z and the retry ran at
+19:52Z — five hours and six minutes later — and returned the SAME two figures to the cent. The
+evidence and its enumeration are `docs/reports/lora-c-migrate-r2.md` §7.
+
+**n = 2.** Two readings are not a population, and the fix (an absolute floor beside the relative
+band, or an anchored settled-billing close) is `money-anchors`'s to design and the operator's to
+authorise. Nothing here changes `--tolerance`, the guard, or either ledger: the debt is named, dated
+and given a home, which is what routing it means ([[an_absolute_bar_needs_a_reachability_state]]).
+
+**Also open, from the same backlog (STATUS п. 2):** closing steps by settled billing rather than the
+balance walk (the walk lags 30–40 min — Dv504/658/678), the hung `pass1-probe` walk, and `anchored_at`
+for the 19 refused ledgers.
