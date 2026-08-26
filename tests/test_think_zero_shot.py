@@ -827,3 +827,139 @@ def test_stop_after_names_the_last_stage_that_fits_under_the_cap(tmp_path):
 
     broke = projector.project(RECORD, rows, usd_per_hour=0.79, elapsed=8.0 * 3600 / 0.79)
     assert broke["stop_after_stage"] is None and broke["verdict"] == "KILL"
+
+
+# --- the pod's own sequence: the stages that share an out-file ------------------------------------
+
+
+def thinking_client(payload_of):
+    """A fake client that records what it was ASKED — the number a stage is charged for."""
+
+    class Client:
+        def __init__(self):
+            self.asked = []
+
+        def read(self, task, items):
+            self.asked.extend(one["id"] for one in items)
+            return [
+                {
+                    "content": BRACED_THOUGHT + payload_of(one),
+                    "finish_reason": "stop",
+                    "cost": 0.0,
+                    "usage": {"prompt_tokens": 9, "completion_tokens": 9},
+                    "generation_id": None,
+                    "thought": "…",
+                    "thought_tokens": 9,
+                }
+                for one in items
+            ]
+
+    return Client()
+
+
+def test_stage_7_resumes_over_the_smokes_row_and_buys_67(tmp_path):
+    """Stage 1 buys the longest thread into the REMAINDER's out-file and stage 7 runs over it.
+
+    Two guards meet on that file and only one of them was ever driven in this state. `carried`
+    refuses an out-file whose carried rows are not the pack's — and the smoke's row has no
+    `carried_from`, so it is this pod's work and not a seed; `already_answered` then skips it. The
+    packs say `carried.ids: []`, so a version of `carried` that counted every LINE would refuse
+    stage 7 outright, after the model is loaded, at full pod price
+    ([[a_file_guard_is_not_a_row_filter]], [[check_the_step_was_not_already_done]]).
+    """
+    bought = []
+    for pack in ("pass2_r2_pack_think_smoke.json", "pass2_r2_pack_think_remainder.json"):
+        client = thinking_client(lambda one: VERDICT)
+        assert (
+            pass2runner.main(
+                [
+                    "--pack",
+                    str(RESULTS / pack),
+                    "--outdir",
+                    str(tmp_path),
+                    "--repo",
+                    str(REPO_ROOT),
+                    "--serving",
+                    "READER_THINK",
+                ],
+                loader=lambda *a, **kw: client,
+            )
+            == 0
+        )
+        bought.append(len(client.asked))
+    assert bought == [1, 67], "the smoke's thread is one of the 68 and is never re-asked"
+    rows = [
+        json.loads(one)
+        for one in (tmp_path / "pass2_signals_r2_remainder.READER_THINK.jsonl")
+        .read_text(encoding="utf-8")
+        .splitlines()
+        if one.strip()
+    ]
+    ids = [row["id"] for row in rows]
+    assert len(ids) == len(set(ids)) == 68
+
+
+def test_the_three_dev_stages_run_in_order_and_never_cross_legs(tmp_path):
+    """Stages 2, 3 and 5 in the record's own order. 3 and 5 share ONE pack and are selected by
+    `--only`, so a stage that answered both legs would buy 400 units for a 200-unit command and
+    leave the other stage free — the shape the projector's `legs_of` prices."""
+    bought = []
+    for pack, extra in (
+        ("pass1_dev_smoke_think.json", []),
+        ("pass1_dev_pack_think.json", ["--only", "v2"]),
+        ("pass1_dev_pack_think.json", ["--only", "base"]),
+    ):
+        client = thinking_client(
+            lambda one: json.dumps(
+                {
+                    "msg_id": int(one["msg_id"]),
+                    "subject_type": None,
+                    "subject_id": None,
+                    "stance": None,
+                }
+            )
+        )
+        assert (
+            fewshot.main(
+                [
+                    "--pack",
+                    str(RESULTS / pack),
+                    "--outdir",
+                    str(tmp_path),
+                    "--repo",
+                    str(REPO_ROOT),
+                    "--serving",
+                    "READER_THINK",
+                    *extra,
+                ],
+                loader=lambda *a, **kw: client,
+            )
+            == 0
+        )
+        bought.append(len(client.asked))
+    assert bought == [3, 197, 200]
+    counted = {
+        one.name: sum(1 for line in one.read_text(encoding="utf-8").splitlines() if line.strip())
+        for one in sorted(tmp_path.glob("*.jsonl"))
+    }
+    assert counted == {
+        "pass1_dev_base.READER_THINK.jsonl": 200,
+        "pass1_dev_v2.READER_THINK.jsonl": 200,
+    }
+
+
+def test_no_stage_can_write_onto_a_pinned_BEFORE_file():
+    """The left column of the paired table is three files pinned by sha in the record. `.READER_THINK`
+    in every out-name is what keeps them out of the write path — asserted, not assumed."""
+    before = {
+        "results/pass1_dev_base.jsonl",
+        "results/pass1_dev_v2.jsonl",
+        "results/pass2_signals_r2_v1.jsonl",
+    }
+    written = {
+        f"results/{runner.out_name(leg['out'], stage['serving_config'])}"
+        for stage in RECORD["stages"]
+        for leg in stage["legs"]
+    }
+    assert not written & before, sorted(written & before)
+    assert all(one.endswith(".READER_THINK.jsonl") for one in written)

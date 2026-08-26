@@ -161,3 +161,54 @@ Then re-hash the three BEFORE files against the record — nothing may have been
 * Nothing is tuned after a reply is seen — no prompt, no pack, no ceiling.
 * Never a second billing resource. **Never touch `mp-lora-c`.**
 * No number invented that a file does not carry.
+## AMENDMENT — five things settled at $0 after the runbook was written
+
+**1. `--terminate-after` is 9 h 45 min, not cap ÷ price, and it CANNOT be changed after create.**
+`runpodctl pod update` has no such flag (`--help` is the authority), so the number typed into the
+create is final. Rung 3 says «hard stop from the cap at the observed price», and the guard's step
+counter is a BALANCE DELTA — it counts the network volumes too. So the window is computed at the
+rung-0 CEILING price plus the measured volume drip, and a create that comes back dearer than
+expected still cannot cross the cap:
+
+    $8.00 / ($0.80 + 2 x $0.0103/h) = 9.749 h  ->  9 h 45 m
+    at the expected $0.72/h that window costs $7.2208; at the $0.80 ceiling, $8.0008
+
+The volume rate is the guard's own reading: network-volume $2.4986 since the 2026-08-16 anchor.
+
+**2. EU-RO-1 stock, read before the create ($0).** `RTX PRO 4500 Blackwell` — **Low** (the
+contract's card, available). `NVIDIA GeForce RTX 4090` — **none**. `NVIDIA RTX A6000` — **none**
+(and $0.53/h, so ruling (о)'s «A6000 в датацентре тома none» still describes EU-RO-1 today). The
+pre-authorized fallback has no stock: if the create is refused, the contract's next step is a STOP,
+not a second card. A refused create costs $0.
+
+**3. Before the first launch, run the preflight ON THE POD.** The venv lives on the volume and its
+`transformers` was installed by an earlier contract. A version that ignores `enable_thinking`
+renders a CLOSED channel and every stage silently re-buys the BEFORE column at thinking prices —
+the whole $8.00 measuring nothing, and no reply would look wrong. The tokenizer is already in
+`/workspace/hf`, so this costs under a minute of pod time:
+
+```bash
+/workspace/venv/bin/python -c "import transformers, torch; \
+  print(transformers.__version__, torch.__version__, torch.cuda.is_available())"   # Mac: 5.14.1 / 2.13.0
+cd /workspace/repo && HF_HOME=/workspace/hf PYTHONPATH=src \
+  /workspace/venv/bin/python scripts/preflight_serving_guards.py | grep -E "THINK|thought channel"
+df -h /workspace && du -sh /workspace/hf     # 100 GB volume, ~62.58 GB of weights
+ls -l /workspace/repo/results/*think*.json   # six packs arrived with the bundle
+```
+
+The line that must PASS is `enable_thinking:true leaves the thought channel OPEN on every reader
+request`, with its control `READER and READER_THINK render differently for every text`.
+
+**4. Proven at $0 on the Mac, so it is not discovered on the pod.** The two shared out-files were
+driven through the pod's own stage order with a fake client: stage 1 → stage 7 buys **1 then 67**
+and the file ends at 68 unique threads (the `carried` guard does NOT refuse the smoke's row — it
+filters on `carried_from`, and the pod's own row has none); stages 2 → 3 → 5 buy **3, 197, 200**
+and stage 5 never touches the v2 file.
+
+**5. D3 will need a merge, and it is not free to discover after teardown.** The pass-2 thinking
+column lands in TWO files (11 reference + 68 remainder) and both
+`scripts/gate_pass2_signals_r2.py` and `scripts/score_pass2_signals_r2.py` hold their reply path as
+a MODULE CONSTANT (`OUT_FILE`, `EVIDENCE`), pointing at `results/pass2_signals_r2_v1.jsonl` — which
+is the BEFORE column and may not be written to. D3 merges the two into
+`results/pass2_signals_r2_v1.READER_THINK.jsonl` and redirects the constant; the gate's LOGIC is
+what the contract means by «via the shipped gate», and it does not move.
