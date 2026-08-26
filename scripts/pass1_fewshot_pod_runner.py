@@ -122,19 +122,25 @@ def main(argv: list[str] | None = None, loader=None) -> int:
     parser.add_argument("--outdir", type=Path, required=True)
     parser.add_argument("--repo", type=Path, default=Path("/workspace/repo"))
     parser.add_argument("--only", help="answer just this leg (default: every leg, in pack order)")
+    parser.add_argument(
+        "--serving",
+        default=runner.DEFAULT_SERVING,
+        choices=sorted(runner.SERVING_TEMPLATES),
+        help="which registered instrument to render with; the out-files carry the name",
+    )
     args = parser.parse_args(sys.argv[1:] if argv is None else argv)
 
-    pack = json.loads(args.pack.read_text(encoding="utf-8"))
+    pack = runner.with_serving(json.loads(args.pack.read_text(encoding="utf-8")), args.serving)
     legs = legs_of(pack, args.only)
     args.outdir.mkdir(parents=True, exist_ok=True)
     shared = once(loader or runner.load_reader)
 
     with as_fewshot():
         for leg in legs:
-            out = args.outdir / leg["out"]
+            out = args.outdir / runner.out_name(leg["out"], args.serving)
             print(
                 f"\n=== leg {leg['name']} · task {leg['task']} · {len(leg['items'])} units"
-                f" · {out} ===",
+                f" · serving {args.serving} · {out} ===",
                 flush=True,
             )
             code = runner.run(

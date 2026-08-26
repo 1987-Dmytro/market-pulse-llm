@@ -31,13 +31,19 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
 import gate_pass1_fewshot as r2gate  # noqa: E402
+import moved_pins  # noqa: E402
 import gate_pass1_window as gate  # noqa: E402
 import pass1_fewshot_pod_runner as transport  # noqa: E402
 
 from market_pulse import prompts  # noqa: E402
 
 RECORD = json.loads((REPO_ROOT / "results" / "prereg_pass1_window.json").read_text("utf-8"))
-PACK = json.loads((REPO_ROOT / "results" / "pass1_window_pack.json").read_text("utf-8"))
+PACK = moved_pins.servable(
+    json.loads((REPO_ROOT / "results" / "pass1_window_pack.json").read_text("utf-8"))
+)
+"""The sealed pack with its ONE moved pin brought up to date, in memory only — ruling (ф) moved
+`src/market_pulse/prompts.py` and the handshake refuses the sealed value, correctly. The file on
+disk is never written and the registered prompt shas are untouched ([[tests/moved_pins.py]])."""
 RUNG3 = next(one for one in RECORD["kill_clock"] if one["rung"] == 3)
 CEILING = gate.first_number(RUNG3["rule"])
 BACKSTOP = float(RUNG3["backstop_seconds"])

@@ -17,6 +17,7 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
+import moved_pins  # noqa: E402
 import write_pass1_holdout as holdout  # noqa: E402
 
 RECORD = json.loads((REPO_ROOT / holdout.OUT_NAME).read_text("utf-8"))
@@ -26,7 +27,10 @@ PROBE = json.loads((REPO_ROOT / "results" / "pass1_probe_b_pack.json").read_text
 
 def test_the_shipped_record_is_what_the_producer_builds_today(tmp_path):
     assert holdout.main(["--outdir", str(tmp_path)]) == 0
-    assert (tmp_path / holdout.OUT_NAME).read_bytes() == (REPO_ROOT / holdout.OUT_NAME).read_bytes()
+    again = json.loads((tmp_path / holdout.OUT_NAME).read_text(encoding="utf-8"))
+    shipped = json.loads((REPO_ROOT / holdout.OUT_NAME).read_text(encoding="utf-8"))
+    # EXCEPT where it pins `src/market_pulse/prompts.py`, moved again by ruling (ф)'s parser change
+    moved_pins.assert_only_the_prompts_pin_moved(shipped, again)
 
 
 def test_the_draw_is_the_registered_tuple_and_the_floor_is_what_makes_it_reachable():

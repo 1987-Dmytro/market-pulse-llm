@@ -197,17 +197,24 @@ def main(argv: list[str] | None = None, loader=None) -> int:
     parser.add_argument("--pack", type=Path, required=True)
     parser.add_argument("--outdir", type=Path, required=True)
     parser.add_argument("--repo", type=Path, default=Path("/workspace/repo"))
+    parser.add_argument(
+        "--serving",
+        default=runner.DEFAULT_SERVING,
+        choices=sorted(runner.SERVING_TEMPLATES),
+        help="which registered instrument to render with; the out-file carries the name",
+    )
     args = parser.parse_args(sys.argv[1:] if argv is None else argv)
 
-    pack = json.loads(args.pack.read_text(encoding="utf-8"))
+    pack = runner.with_serving(json.loads(args.pack.read_text(encoding="utf-8")), args.serving)
     (leg,) = fewshot.legs_of(pack, None)
     args.outdir.mkdir(parents=True, exist_ok=True)
-    out = args.outdir / leg["out"]
+    out = args.outdir / runner.out_name(leg["out"], args.serving)
     started = time.monotonic()
 
     seeded = carried(out, pack)
     print(
-        f"\n=== {len(leg['items'])} units · task {leg['task']} · {out} ===\n"
+        f"\n=== {len(leg['items'])} units · task {leg['task']}"
+        f" · serving {args.serving} · {out} ===\n"
         f"=== carried and NOT re-asked: {len(seeded)} — {' · '.join(seeded) or 'none'} ===\n"
         f"=== owed by this pod: {len(leg['items']) - len(seeded)} ===",
         flush=True,

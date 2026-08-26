@@ -20,6 +20,8 @@ import probe_b_population as subset  # noqa: E402
 import window_summary_5c2 as summary  # noqa: E402
 import write_reader_prereg_v3 as prereg  # noqa: E402
 from test_prompts import (  # noqa: E402
+    MOVED_BY_THE_THINKING_READER,
+    MOVED_BY_THE_V5_READER,
     assert_pinned,
     put_the_sealed_shas_back,
     sealed_sha256,
@@ -51,7 +53,13 @@ def test_the_committed_registration_is_what_the_producer_writes_today(tmp_path):
     # a fourth reader text. This record froze when v3's endpoint existed and is NOT re-pinned: the
     # one byte range allowed to differ is put back to the sealing commit's, and the swap must fire
     # TWICE in this record: `instruments.parser.sha256` and `producer.borrowed`
-    rebuilt = put_the_sealed_shas_back(out.read_bytes(), times=2)
+    # and ruling (ф) moved `src/market_pulse/local_llm.py` too — `THINK_CHAT_TEMPLATE` and the
+    # `chat_template=` argument — which this record borrows ONCE. Two files, two counts.
+    rebuilt = put_the_sealed_shas_back(
+        out.read_bytes(),
+        times={"src/market_pulse/prompts.py": 2, "src/market_pulse/local_llm.py": 1},
+        moved=MOVED_BY_THE_V5_READER + MOVED_BY_THE_THINKING_READER,
+    )
     # and this producer derives `instruments.prompt_sha256` LIVE over `prompts.READER`, so a rebuild
     # today gains the fourth text. The record's own `prompt_rule` says that is expected — «a text
     # registered LATER is not in this map and is not expected to be» — so the later entry is dropped

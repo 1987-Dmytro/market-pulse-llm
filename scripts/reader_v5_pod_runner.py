@@ -41,6 +41,60 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from reader_v4_pod_runner import check_instrument, sha256_of_text  # noqa: E402
 
+DEFAULT_SERVING = "READER"
+SERVING_TEMPLATES = {DEFAULT_SERVING: "CHAT_TEMPLATE", "READER_THINK": "THINK_CHAT_TEMPLATE"}
+"""The instrument names `--serving` accepts, and the `local_llm` template each one renders with.
+
+A CLOSED table, the same shape `serving.CONFIG_OPS` is: a name outside it is refused rather than
+falling through to the shipped default, because the one failure worth money here is a run that
+believed it was thinking and rendered the closed-channel prompt.
+
+`READER_THINK` is deliberately NOT in `market_pulse.serving.CONFIGS`. No HTTP worker serves it —
+`load_reader` builds the client in this process — and `serve_handler.settings` refusing the unknown
+name is the correct guard until one does. The name is registered where it is used: in the pack, and
+in `results/prereg_think_zero_shot.json`.
+
+The values are ATTRIBUTE NAMES and not the dicts themselves: this module is imported on the pod
+before `repo/src` is on the path, so a table holding `local_llm.CHAT_TEMPLATE` could not be built
+at import time at all.
+"""
+
+
+def template_of(config: str, local_llm):
+    """The template `--serving <config>` renders with, or a refusal naming the closed table."""
+    if config not in SERVING_TEMPLATES:
+        raise SystemExit(
+            f"{config}: not a serving name this runner knows — {sorted(SERVING_TEMPLATES)}."
+            " A run under an unregistered instrument is a run nobody can read; stop and report."
+        )
+    return getattr(local_llm, SERVING_TEMPLATES[config])
+
+
+def with_serving(pack: dict, config: str) -> dict:
+    """The pack with ``serving.serving_config`` set — what :func:`load_reader` picks a template by.
+
+    `serving_config` is the field every pack of this family already carries — the shipped ones say
+    `READER` — so the switch writes into the record's own vocabulary rather than beside it. Carried
+    in the PACK and not passed as an argument, for the reason the output ceiling is: what the run
+    was served under has to be in the thing the record pins, not in an argv nobody kept.
+    """
+    return {**pack, "serving": {**pack["serving"], "serving_config": config}}
+
+
+def out_name(name: str, config: str) -> str:
+    """``leg["out"]``, carrying the serving name unless it is the shipped default.
+
+    The default keeps the shipped filename, so nothing already on disk moves and the resume clause
+    still finds what it wrote. Every other instrument says so in its own filename: a paired table is
+    two files over the same rows, and the failure that would make it meaningless is reading one of
+    them as the other ([[a_retry_inherits_the_last_attempts_output]]).
+    """
+    if config == DEFAULT_SERVING:
+        return name
+    stem, dot, ext = name.rpartition(".")
+    return f"{stem}.{config}{dot}{ext}" if dot else f"{name}.{config}"
+
+
 STOP_EVERY = 4
 """Tokens between two balance checks inside the generation loop.
 
@@ -96,11 +150,36 @@ def check_requests(pack: dict, prompts) -> list[dict]:
     return rendered
 
 
-def stop_at_balanced(processor, width: int, reader_v5):  # pragma: no cover — needs transformers
+def stops_here(text: str, prompts, reader_v5) -> bool:
+    """Has the ANSWER closed its first top-level object? The rule the criterion below applies.
+
+    Split out of the `StoppingCriteria` so it can be driven with no GPU: the class needs
+    `transformers`, this needs a string.
+
+    **The thought is not the answer, and a thought contains braces.** Under
+    `local_llm.THINK_CHAT_TEMPLATE` the model writes its working-out first, and a model reasoning
+    about the object it is about to emit writes `{` inside it — `balanced_prefix` would balance
+    that, generation would stop mid-thought, and `run` below would persist half a thought as the
+    verdict. So: while a channel is open and unclosed, nothing stops. That state is invisible to a
+    fake client — it lives in `generate` — which is why it has a test of its own with both controls
+    ([[a_stub_replaces_the_guard_it_should_trigger]]).
+    """
+    thought, answer = prompts.split_thought(text)
+    if not thought and prompts.THOUGHT_OPEN in text:
+        return False
+    return reader_v5.balanced_prefix(answer) is not None
+
+
+def stop_at_balanced(processor, width: int, reader_v5, prompts):  # pragma: no cover — transformers
     """A `StoppingCriteria` that ends generation at the first balanced top-level object.
 
     Built here and not in `market_pulse` because it is the only thing in this file that needs
     `transformers` on the path, and the Mac's suite has to be able to import everything else.
+
+    Decoded with the specials KEPT: `<|channel>` and `<channel|>` are special tokens, and the rule
+    above cannot see a boundary that `skip_special_tokens=True` has erased. No reply this repo has
+    bought carries either marker in its generated half, so the shipped path reads the same text it
+    always did with `<turn|>` on the end of it — which has no braces and no quotes.
     """
     from transformers import StoppingCriteria
 
@@ -109,8 +188,8 @@ def stop_at_balanced(processor, width: int, reader_v5):  # pragma: no cover — 
             new = input_ids[0].tolist()[width:]
             if len(new) % STOP_EVERY:
                 return False
-            text = processor.tokenizer.decode(new, skip_special_tokens=True)
-            return reader_v5.balanced_prefix(text) is not None
+            text = processor.tokenizer.decode(new, skip_special_tokens=False)
+            return stops_here(text, prompts, reader_v5)
 
     return Balanced()
 
@@ -126,9 +205,10 @@ def load_reader(pack: dict, repo: Path):  # pragma: no cover — needs the GPU a
     sys.path.insert(0, str(repo / "scripts"))
     import serve_handler
 
-    from market_pulse import local_llm, reader_v5
+    from market_pulse import local_llm, prompts, reader_v5
 
     serving = pack["serving"]
+    template = template_of(serving.get("serving_config", DEFAULT_SERVING), local_llm)
     ceiling = serving.get("output_tokens")
     if not ceiling:
         raise SystemExit(
@@ -143,20 +223,20 @@ def load_reader(pack: dict, repo: Path):  # pragma: no cover — needs the GPU a
 
     class Client(local_llm.ReaderClient):
         def render(self, task, item):
-            from market_pulse import prompts
-
             return processor.apply_chat_template(
                 [{"role": "user", "content": render(prompts, item, task)}],
                 tokenize=False,
-                **local_llm.CHAT_TEMPLATE,
+                **self.chat_template,
             )
 
-    client = Client(processor, model, max_new_tokens=int(ceiling))
+    client = Client(processor, model, max_new_tokens=int(ceiling), chat_template=template)
     generate = model.generate
 
     def stopping(**kwargs):
         width = kwargs["input_ids"].shape[1]
-        return generate(**kwargs, stopping_criteria=[stop_at_balanced(processor, width, reader_v5)])
+        return generate(
+            **kwargs, stopping_criteria=[stop_at_balanced(processor, width, reader_v5, prompts)]
+        )
 
     model.generate = stopping
     return client
@@ -242,7 +322,9 @@ def run(pack: dict, out: Path, repo: Path, loader=load_reader) -> int:
     say(started, f"instrument OK · parser {instrument['parser_sha256'][:16]}…")
     say(started, f"{len(items)} requests match the registration's per-item shas")
     say(
-        started, f"ceiling {pack['serving'].get('output_tokens')} output tokens · stop at the brace"
+        started,
+        f"serving {pack['serving'].get('serving_config', DEFAULT_SERVING)}"
+        f" · ceiling {pack['serving'].get('output_tokens')} output tokens · stop at the brace",
     )
 
     order = {item["id"]: index for index, item in enumerate(items)}
@@ -266,7 +348,12 @@ def run(pack: dict, out: Path, repo: Path, loader=load_reader) -> int:
             at = time.monotonic()
             reply = client.read(task, [item])[0]
             emitted = reply["content"]
-            prefix = reader_v5.balanced_prefix(emitted)
+            # the working-out is cut off the FRONT before the brace is looked for, and put back on
+            # the persisted bytes: the thought is evidence (its length is a registered reading) and
+            # it is not the answer. With no thinking channel `split_thought` is the identity and
+            # both lines read exactly as they always have.
+            thought, answer = prompts.split_thought(emitted)
+            prefix = reader_v5.balanced_prefix(answer)
             row = {
                 "index": index,
                 "id": item["id"],
@@ -276,10 +363,12 @@ def run(pack: dict, out: Path, repo: Path, loader=load_reader) -> int:
                 # the PREFIX is what is persisted: the reply as the model emitted it, up to the
                 # brace that closed its object. `cut_chars` is what the stop removed, so a reader
                 # can always tell a stop from an answer that ended on its own
-                "reply": emitted if prefix is None else prefix,
+                "reply": emitted if prefix is None else thought + prefix,
                 "balanced": prefix is not None,
                 "emitted_chars": len(emitted),
-                "cut_chars": 0 if prefix is None else len(emitted) - len(prefix),
+                "cut_chars": 0 if prefix is None else len(answer) - len(prefix),
+                "thought_chars": len(thought),
+                "thought_tokens": reply.get("thought_tokens"),
                 "finish_reason": reply.get("finish_reason"),
                 "usage": reply.get("usage"),
                 "seconds": round(time.monotonic() - at, 3),
@@ -292,6 +381,7 @@ def run(pack: dict, out: Path, repo: Path, loader=load_reader) -> int:
                 started,
                 f"reply {index + 1:2d}/{len(items)} {item['id']:38s}"
                 f" {row['seconds']:6.1f}s · {row['emitted_chars']:5d} chars"
+                f" · thought {row['thought_tokens'] if row['thought_tokens'] is not None else '-'}"
                 f" · cut {row['cut_chars']:4d} · balanced {row['balanced']}"
                 f" · finish {row['finish_reason']}",
             )

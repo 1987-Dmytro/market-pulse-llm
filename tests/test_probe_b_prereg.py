@@ -64,10 +64,19 @@ arrived).
     git show 48c974a:scripts/write_reader_prereg_v2.py
 """
 
-MOVED = MOVED_BY_THE_V3_READER + MOVED_BY_NAMING_THE_TWO_TEXTS
+MOVED_BY_THE_THINKING_READER = ("src/market_pulse/local_llm.py",)
+"""Ruling (ф), 2026-08-26: `local_llm` grew `THINK_CHAT_TEMPLATE` and a `chat_template=` argument,
+so the module this record BORROWS moved. A tuple of its own, the way the two above are: each group
+has its own witness, and a shared one would assert a token about a file that never met it.
+
+    git show 48c974a:src/market_pulse/local_llm.py
+"""
+
+MOVED = MOVED_BY_THE_V3_READER + MOVED_BY_NAMING_THE_TWO_TEXTS + MOVED_BY_THE_THINKING_READER
 WITNESS = {
     "src/market_pulse/prompts.py": "reader_thread_gm4_v3",
     "scripts/write_reader_prereg_v2.py": "sorted((prompts.READER_TASK, prompts.READER_TASK_V2))",
+    "src/market_pulse/local_llm.py": "THINK_CHAT_TEMPLATE",
 }
 """What each moved file learned, read BOTH ways below — absent from the sealed blob and present on
 disk — so a recovery from the wrong commit fails instead of passing."""
@@ -75,6 +84,7 @@ disk — so a recovery from the wrong commit fails instead of passing."""
 NAMED_IN_THE_RECORD = {
     "src/market_pulse/prompts.py": 2,  # instruments.parser.sha256 AND producer.borrowed
     "scripts/write_reader_prereg_v2.py": 1,  # producer.sha256
+    "src/market_pulse/local_llm.py": 1,  # producer.borrowed
 }
 """How many times each moved file's sha appears in the record — stated, so a swap that put back one
 of two mentions cannot pass."""

@@ -24,6 +24,7 @@ import pytest
 REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
+import moved_pins  # noqa: E402
 import pass1_fewshot_pod_runner as fewshot  # noqa: E402
 import pass1_pod_runner as pass1  # noqa: E402
 import pass1_v3_pod_runner as v3runner  # noqa: E402
@@ -35,6 +36,16 @@ from market_pulse import pass1_v3, prompts  # noqa: E402
 PACK_PATH = REPO_ROOT / "results" / "lora_c_eval_pack.json"
 PACK = json.loads(PACK_PATH.read_text("utf-8"))
 LEGS = {leg["name"]: leg for leg in PACK["legs"]}
+
+SERVABLE = moved_pins.servable(PACK)
+SERVABLE_PATH = moved_pins.servable_file(PACK_PATH)
+"""The same pack with its ONE legitimately-moved pin brought up to date, as a dict and as a file.
+
+`docs/PROMPT-think-zero-shot.md` D1.2 moved `src/market_pulse/prompts.py` again — the parser now
+reads past a closed thinking channel — so the frozen pack's `instruments.parser.sha256` describes
+the checkout it was sealed against and the handshake refuses it, correctly. The sealed file is never
+written; what is driven below is a throwaway copy, and the per-task prompt shas in it are untouched
+([[tests/moved_pins.py]])."""
 
 
 def registered_render(item: dict, task: str) -> str:
@@ -109,19 +120,19 @@ def test_the_sibling_renders_each_leg_as_its_own_registered_renderer_does(leg):
 def test_the_siblings_handshake_serves_all_three_texts_and_pins_the_v3_module():
     """The family the pack names, plus a sha the shipped handshake knows nothing about."""
     with v3runner.as_v3(), fewshot.as_fewshot():
-        got = runner.check_instrument(PACK, REPO_ROOT, prompts)
+        got = runner.check_instrument(SERVABLE, REPO_ROOT, prompts)
     assert sorted(got["prompt_sha256"]) == [
         "pass1_comment_gm4_v1",
         "pass1_comment_gm4_v2",
         "pass1_comment_gm4_v3",
     ]
     assert got["module_v3_sha256"] == PACK["instruments"]["module_v3_sha256"]
-    assert got["parser_sha256"] == PACK["instruments"]["parser"]["sha256"]
+    assert got["parser_sha256"] == SERVABLE["instruments"]["parser"]["sha256"]
 
 
 def test_the_handshake_refuses_a_moved_v3_module(tmp_path):
     """The negative control: the pin is worth nothing until it has been seen to fire."""
-    moved = {**PACK, "instruments": {**PACK["instruments"], "module_v3_sha256": "0" * 64}}
+    moved = {**SERVABLE, "instruments": {**SERVABLE["instruments"], "module_v3_sha256": "0" * 64}}
     with v3runner.as_v3(), fewshot.as_fewshot():  # noqa: SIM117 — the nesting IS the thing driven
         with pytest.raises(SystemExit, match="pass1_v3.py hashes"):
             runner.check_instrument(moved, REPO_ROOT, prompts)
@@ -168,7 +179,7 @@ def test_every_request_of_the_leg_matches_the_packs_own_per_item_sha(leg, tmp_pa
     code = v3runner.main(
         [
             "--pack",
-            str(PACK_PATH),
+            str(SERVABLE_PATH),
             "--outdir",
             str(tmp_path),
             "--repo",
@@ -216,7 +227,7 @@ def test_an_adapter_is_recorded_before_the_first_reply(tmp_path, monkeypatch):
     v3runner.main(
         [
             "--pack",
-            str(PACK_PATH),
+            str(SERVABLE_PATH),
             "--outdir",
             str(outdir),
             "--repo",
@@ -252,6 +263,7 @@ def test_the_entry_point_runs_as_a_command():
 
 PASS2_PATH = REPO_ROOT / "results" / "lora_c_pass2_pack.json"
 PASS2 = json.loads(PASS2_PATH.read_text("utf-8"))
+PASS2_SERVABLE_PATH = moved_pins.servable_file(PASS2_PATH)
 
 
 def test_the_pass_2_pack_carries_the_instrument_block_its_runner_reads():
@@ -282,7 +294,7 @@ def test_the_pass_2_transport_is_driven_end_to_end_with_a_fake_client(tmp_path):
             return [{"content": '{"signals": [], "drops": [], "subject_doubt": []}'}]
 
     code = pass2runner.main(
-        ["--pack", str(PASS2_PATH), "--outdir", str(tmp_path), "--repo", str(REPO_ROOT)],
+        ["--pack", str(PASS2_SERVABLE_PATH), "--outdir", str(tmp_path), "--repo", str(REPO_ROOT)],
         loader=lambda pack, repo: Fake(),
     )
     assert code == 0

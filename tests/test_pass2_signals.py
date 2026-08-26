@@ -15,6 +15,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
 import build_pass2_pack as builder  # noqa: E402
+import moved_pins  # noqa: E402
 import gate_pass2_signals as gate  # noqa: E402
 import pass2_pod_runner as runner  # noqa: E402
 import score_pass2_signals as scoring  # noqa: E402
@@ -28,6 +29,10 @@ RECORD = json.loads((RESULTS / "prereg_pass2_signals.json").read_text(encoding="
 RUNBOOK = (REPO_ROOT / "scripts" / "runbook_pass2_signals.md").read_text(encoding="utf-8")
 ITEMS = PACK["legs"][0]["items"]
 BY_ID = {one["id"]: one for one in ITEMS}
+SERVABLE = moved_pins.servable(PACK)
+"""The pack with its ONE moved pin brought up to date — `src/market_pulse/prompts.py`, which
+`docs/PROMPT-think-zero-shot.md` D1.2 moved again. The sealed file is never written and the
+registered prompt shas in the copy are untouched ([[tests/moved_pins.py]])."""
 
 
 # --- the population and the pack -------------------------------------------------------------
@@ -48,9 +53,8 @@ def test_the_pack_is_the_censuss_own_filter_thread_for_thread():
 def test_the_pack_rebuilds_byte_for_byte_from_its_own_inputs():
     """[[reproducible_means_try_it]] — the pack is DERIVED, so building it again must give it back."""
     again = builder.build()
-    assert json.dumps(again, ensure_ascii=False, sort_keys=True) == json.dumps(
-        PACK, ensure_ascii=False, sort_keys=True
-    )
+    moved_pins.assert_only_the_prompts_pin_moved(PACK, again)
+    assert again["instruments"]["prompt_sha256"] == PACK["instruments"]["prompt_sha256"]
 
 
 def test_the_builder_REFUSES_when_its_selection_leaves_the_censuss_filter(monkeypatch):
@@ -1630,8 +1634,7 @@ def test_the_runner_renders_a_pass_2_item_to_the_pinned_sha():
 
 
 def test_the_handshake_refuses_a_moved_pass_2_module(tmp_path):
-    pod = {"instruments": {**PACK["instruments"]}}
-    pod["instruments"] = json.loads(json.dumps(PACK["instruments"]))
+    pod = {"instruments": json.loads(json.dumps(SERVABLE["instruments"]))}
     pod["instruments"]["module"]["sha256"] = "0" * 64
     with pytest.raises(SystemExit, match="src/market_pulse/pass2.py hashes"):
         runner.check_instrument(pod, REPO_ROOT, prompts)
@@ -1702,7 +1705,7 @@ def test_a_STOP_token_answers_nothing_beyond_the_smoke(tmp_path, monkeypatch, ca
             ]
 
     pack = tmp_path / "pack.json"
-    pack.write_text(json.dumps(PACK, ensure_ascii=False), encoding="utf-8")
+    pack.write_text(json.dumps(SERVABLE, ensure_ascii=False), encoding="utf-8")
     token = tmp_path / "go"
     token.write_text('{"verdict": "STOP"}', encoding="utf-8")
     code = runner.main(
@@ -1748,7 +1751,7 @@ def test_a_GO_token_releases_the_remaining_units_and_never_re_asks_the_smoke(tmp
         return FakeClient()
 
     pack = tmp_path / "pack.json"
-    pack.write_text(json.dumps(PACK, ensure_ascii=False), encoding="utf-8")
+    pack.write_text(json.dumps(SERVABLE, ensure_ascii=False), encoding="utf-8")
     token = tmp_path / "go"
     token.write_text('{"verdict": "GO"}', encoding="utf-8")
     assert (

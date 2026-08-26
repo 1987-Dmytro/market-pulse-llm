@@ -21,6 +21,23 @@ import write_pass1_window_prereg_r2 as producer  # noqa: E402
 
 RECORD = json.loads((REPO_ROOT / "results" / "prereg_pass1_window_r2.json").read_text("utf-8"))
 R1 = json.loads((REPO_ROOT / "results" / "prereg_pass1_window.json").read_text("utf-8"))
+
+MOVED_BY_RULING_F = ("parser.sha256", "transport.sha256")
+"""The two copied pins ruling (ф) moved: `src/market_pulse/prompts.py` (the parser now reads past a
+closed thinking channel) and `scripts/pass1_fewshot_pod_runner.py` (the `--serving` switch). This
+record froze when its pod existed and is never re-pinned — the producer's own copy guard REFUSES
+today and names exactly these two, which is asserted below."""
+
+
+def sealed_pins(monkeypatch) -> dict[str, str]:
+    """r1's `live_pins()` as it read on the day this record was written — the record's own values."""
+    import write_pass1_window_prereg as r1prod
+
+    pins = {path: r1prod.dig(R1["instruments"], path) for path in r1prod.live_pins()}
+    monkeypatch.setattr(r1prod, "live_pins", lambda: pins)
+    return pins
+
+
 PACK = json.loads((REPO_ROOT / "results" / "pass1_window_r2_pack.json").read_text("utf-8"))
 
 
@@ -37,7 +54,9 @@ def numeric_paths(node, prefix="", out=None):
     return out
 
 
-def test_the_record_is_what_the_producer_writes_today(tmp_path):
+def test_the_record_is_what_the_producer_writes_today(tmp_path, monkeypatch):
+    """Under the pins this record was SEALED with — the two ruling (ф) moved are put back first."""
+    sealed_pins(monkeypatch)
     assert producer.main(["--out", str(tmp_path / "again.json")]) == 0
     assert (tmp_path / "again.json").read_text("utf-8") == (
         REPO_ROOT / "results" / "prereg_pass1_window_r2.json"
@@ -246,11 +265,21 @@ def test_every_pin_resolves_against_the_live_file():
         node = block
         for key in name.split("."):
             node = node[key]
-        assert node == value, name
+        # every pin EXCEPT the two ruling (ф) moved — and those are asserted to have moved
+        assert (node != value) if name in MOVED_BY_RULING_F else (node == value), name
     # the pack this record registers is the pack on disk
     assert RECORD["population"]["sha256"] == summary.sha256_of(
         REPO_ROOT / "results" / "pass1_window_r2_pack.json"
     )
+
+
+def test_the_copy_REFUSES_today_and_names_exactly_the_pins_ruling_f_moved():
+    """The other half: the guard FIRES, and what it names is the list — so a third pin moving
+    silently cannot pass ([[an_enumerated_diff_is_asserted_in_both_directions]])."""
+    with pytest.raises(SystemExit, match="no longer describes this checkout") as raised:
+        producer.instruments(R1)
+    named = json.loads(str(raised.value).split("checkout: ", 1)[1].rsplit("\nThis contract", 1)[0])
+    assert sorted(named) == sorted(MOVED_BY_RULING_F)
 
 
 def test_the_bar_is_over_the_901_and_the_window_is_reported_beside_it():

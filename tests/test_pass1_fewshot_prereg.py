@@ -27,10 +27,10 @@ sys.path.insert(0, str(REPO_ROOT / "scripts"))
 import build_pass1_fewshot_packs as packs  # noqa: E402
 import moved_pins  # noqa: E402
 import write_pass1_fewshot_prereg as prereg  # noqa: E402
-import write_pass1_prereg_b as prereg_b  # noqa: E402
 
 from market_pulse import prompts  # noqa: E402
 
+TRANSPORT = REPO_ROOT / "scripts" / "pass1_fewshot_pod_runner.py"
 GATE = REPO_ROOT / "scripts" / "gate_pass1_fewshot.py"
 SEALED_AT = "c7cbfd1"
 
@@ -61,10 +61,15 @@ def test_the_shipped_registration_rebuilds_EXCEPT_where_it_pins_the_gate_r2_amen
     assert prereg.main(["--outdir", str(tmp_path)]) == 0
     shipped = json.loads((REPO_ROOT / prereg.OUT_NAME).read_text("utf-8"))
     rebuilt = json.loads((tmp_path / prereg.OUT_NAME).read_text("utf-8"))
-    expected = moved_pins.paths_holding(rebuilt, moved_pins.live_sha(GATE))
-    assert expected, "no path of the rebuild carries the gate's live sha — the check is vacuous"
-    assert set(prereg_b.moved_paths(shipped, rebuilt, opaque=())) == expected
-    assert expected == {"instruments.gate.sha256"}
+    # ruling (ф) added two more movers: `prompts.py` (the parser reads past a closed thought) and
+    # `pass1_fewshot_pod_runner.py` (the `--serving` switch). The claim stays derived and
+    # two-directional — it is the SET of paths carrying a live sha, computed, never typed.
+    moved = moved_pins.assert_only_the_prompts_pin_moved(shipped, rebuilt, GATE, TRANSPORT)
+    assert moved == {
+        "instruments.gate.sha256",
+        "instruments.parser.sha256",
+        "instruments.transport.sha256",
+    }
     assert "generated_at" not in (REPO_ROOT / prereg.OUT_NAME).read_text("utf-8")
 
 
@@ -164,9 +169,8 @@ def test_the_registration_pins_the_instruments_the_run_will_actually_use():
         prompts.PASS1_TASK
     )
     assert instruments["transport"]["script"] == "scripts/pass1_fewshot_pod_runner.py"
-    assert instruments["transport"]["sha256"] == packs.summary.sha256_of(
-        REPO_ROOT / "scripts/pass1_fewshot_pod_runner.py"
-    )
+    # the transport joined the gate the day ruling (ф) gave it `--serving`: r1 is never re-pinned
+    assert instruments["transport"]["sha256"] != moved_pins.live_sha(TRANSPORT)
     # the gate is the ONE pin r2 moved, and r1 is never re-pinned: it holds the sha it shipped with
     assert instruments["gate"]["script"] == "scripts/gate_pass1_fewshot.py"
     assert instruments["gate"]["sha256"] != moved_pins.live_sha(GATE)

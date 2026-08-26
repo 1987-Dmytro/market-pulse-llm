@@ -27,11 +27,17 @@ sys.path.insert(0, str(REPO_ROOT / "src"))
 sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
 import gate_pass1_window as r1gate  # noqa: E402
+import moved_pins  # noqa: E402
 import gate_pass1_window_r2 as gate  # noqa: E402
 import volume_tail_pass1_window as tail  # noqa: E402
 
 RECORD = json.loads((REPO_ROOT / "results" / "prereg_pass1_window_r2.json").read_text("utf-8"))
-PACK = json.loads((REPO_ROOT / "results" / "pass1_window_r2_pack.json").read_text("utf-8"))
+PACK = moved_pins.servable(
+    json.loads((REPO_ROOT / "results" / "pass1_window_r2_pack.json").read_text("utf-8"))
+)
+"""The sealed pack with its ONE moved pin brought up to date, in memory only — ruling (ф) moved
+`src/market_pulse/prompts.py` and the handshake refuses the sealed value, correctly. The file on
+disk is never written and the registered prompt shas are untouched ([[tests/moved_pins.py]])."""
 SUMS = RECORD["money"]["arithmetic"]
 HARD_STOP = SUMS["cumulative"]["hard_stop_seconds"]
 OVERHEAD = SUMS["overhead_seconds"]

@@ -1017,7 +1017,16 @@ and it lives HERE rather than four more times because the file that moved is thi
 """
 
 MOVED_BY_THE_V5_READER = ("src/market_pulse/prompts.py",)
-WITNESS = {"src/market_pulse/prompts.py": "reader_thread_gm4_v5"}
+MOVED_BY_THE_THINKING_READER = ("src/market_pulse/local_llm.py",)
+"""Ruling (ф), 2026-08-26: `local_llm` grew `THINK_CHAT_TEMPLATE` and a `chat_template=` argument,
+so the module the v3/v4 registrations BORROWED moved. A separate tuple, the way the v5 reader's is:
+the two groups have different witnesses, and a shared one would assert a token about a file that
+never met it ([[an_invariant_the_new_member_cannot_satisfy]])."""
+
+WITNESS = {
+    "src/market_pulse/prompts.py": "reader_thread_gm4_v5",
+    "src/market_pulse/local_llm.py": "THINK_CHAT_TEMPLATE",
+}
 """What the moved file LEARNED, read both ways below — absent from the sealed blob and present on
 disk — so a recovery from the wrong commit fails instead of passing quietly."""
 
@@ -1094,7 +1103,7 @@ def live_sha256(path: str) -> str:
 def assert_pinned(name: str, digest: str) -> None:
     """A pinned file is its live sha — or, on the moved tuple, the sha :data:`SEALED_AT` has."""
     live = live_sha256(name)
-    if name in MOVED_BY_THE_V5_READER:
+    if name in MOVED_BY_THE_V5_READER + MOVED_BY_THE_THINKING_READER:
         assert live != digest and sealed_sha256(name) == digest, name
     else:
         assert live == digest, name

@@ -30,12 +30,30 @@ R2 = json.loads((REPO_ROOT / producer.R2_NAME).read_text("utf-8"))
 PACK = json.loads((REPO_ROOT / pack_producer.OUT_NAME).read_text("utf-8"))
 SUMS = RECORD["money"]["arithmetic"]
 
+MOVED_BY_RULING_F = ("parser.sha256", "transport.sha256")
+"""The two copied pins ruling (ф) moved: `src/market_pulse/prompts.py` (the parser now reads past a
+closed thinking channel) and `scripts/pass1_fewshot_pod_runner.py` (the `--serving` switch).
+
+This record froze when its pod existed and is never re-pinned. The producer's copy guard is what
+says so — it REFUSES today, by name — so the rebuild below is driven under the pins the record was
+SEALED with, and the refusal itself is asserted beside it. Both directions, and the list is checked
+against what the guard actually names rather than trusted ([[an_enumerated_diff_is_asserted_in_both_directions]])."""
+
+
+def sealed_pins(monkeypatch) -> dict[str, str]:
+    """`live_pins()` as it read on the day this record was written — the record's own values."""
+    pins = {path: producer.dig(RECORD["instruments"], path) for path in producer.live_pins()}
+    monkeypatch.setattr(producer, "live_pins", lambda: pins)
+    return pins
+
 
 def rows_by_name() -> dict[str, dict]:
     return {one["name"]: one for one in RECORD["h6"]["rows"]}
 
 
-def test_the_shipped_registration_is_what_the_producer_writes_today(tmp_path):
+def test_the_shipped_registration_is_what_the_producer_writes_today(tmp_path, monkeypatch):
+    """Under the pins this record was SEALED with — the two ruling (ф) moved are put back first."""
+    sealed_pins(monkeypatch)
     assert producer.main(["--outdir", str(tmp_path)]) == 0
     assert (tmp_path / producer.OUT_NAME).read_text("utf-8") == (
         REPO_ROOT / producer.OUT_NAME
@@ -74,11 +92,22 @@ def test_the_instruments_are_r2s_with_exactly_two_pins_MOVED():
 
 
 def test_every_copied_pin_resolves_against_the_LIVE_file():
+    """Every one EXCEPT the two ruling (ф) moved — and those are asserted to have moved, by name."""
     for path, value in producer.live_pins().items():
-        assert producer.dig(RECORD["instruments"], path) == value, path
+        pinned = producer.dig(RECORD["instruments"], path)
+        assert (pinned != value) if path in MOVED_BY_RULING_F else (pinned == value), path
     assert RECORD["instruments"]["gate"]["sha256"] == producer.sha(producer.GATE)
     assert RECORD["instruments"]["packs"]["sha256"] == PACK["producer"]["sha256"]
     assert RECORD["population"]["sha256"] == producer.sha(producer.PACK)
+
+
+def test_the_copy_REFUSES_today_and_names_exactly_the_pins_ruling_f_moved():
+    """The other half of the two tests above: the guard is not merely tolerated, it FIRES, and what
+    it names is the list — so a third pin moving silently cannot pass."""
+    with pytest.raises(SystemExit, match="no longer describes this checkout") as raised:
+        producer.instruments(R2)
+    named = json.loads(str(raised.value).split("checkout: ", 1)[1].rsplit("\nThis contract", 1)[0])
+    assert sorted(named) == sorted(MOVED_BY_RULING_F)
 
 
 def test_the_copy_REFUSES_when_a_copied_pin_stops_describing_this_checkout(monkeypatch):

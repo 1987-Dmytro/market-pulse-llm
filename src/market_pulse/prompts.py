@@ -1408,6 +1408,46 @@ class ParseError(ValueError):
         self.reason = reason
 
 
+THOUGHT_OPEN, THOUGHT_CLOSE = "<|channel>", "<channel|>"
+"""Gemma 4's thinking channel, as its own chat template spells it.
+
+Both are `special: True` in the tokenizer (ids 100 and 101), so a decode with
+``skip_special_tokens=True`` erases them and the boundary between the working-out and the answer
+disappears — a thinking reply then reads as prose with a JSON object somewhere in it. The client
+that renders with :data:`local_llm.THINK_CHAT_TEMPLATE` therefore decodes with the specials KEPT,
+and these two strings are what the parser and the transport stop find them by.
+"""
+
+
+def split_thought(reply: str) -> tuple[str, str]:
+    """``(the thought channel with its closer, the answer after it)``; ``("", reply)`` if none.
+
+    The FIRST closer, not the last: the template opens one thought channel per model turn, and a
+    later ``<channel|>`` inside the answer would have to be the model emitting the token itself.
+    A reply with no closer is returned whole as the answer, which is exactly what every reply this
+    repo has bought so far is — ``enable_thinking: false`` closes the channel in the PROMPT, so the
+    generated part carries neither marker and this function is the identity on it.
+    """
+    thought, closer, answer = reply.partition(THOUGHT_CLOSE)
+    return (thought + closer, answer) if closer else ("", reply)
+
+
+def after_thought(reply: str) -> str:
+    """The answer half of :func:`split_thought`, with the unclosed thought REFUSED.
+
+    Three states and not two, because they have three causes and only one of them is an answer:
+    a closed thought (read what follows it), no thought at all (today's shape — read the reply),
+    and a thought that opened and never closed, which is a verdict that spent its whole budget
+    working out and never answered. That last one is a PARSE FAILURE and not an exception: the
+    drivers count `ParseError` by reason, and returning the working-out to `_object` would let it
+    read a brace out of the reasoning and score a row on it ([[the_empty_class_eats_the_parse_failures]]).
+    """
+    thought, answer = split_thought(reply)
+    if not thought and THOUGHT_OPEN in reply:
+        raise ParseError("unclosed thought channel")
+    return answer
+
+
 def prompt_sha256(task: str) -> str:
     """SHA256 of the fixed prompt — the field that makes a record reproducible."""
     return hashlib.sha256(PROMPTS[task].encode("utf-8")).hexdigest()
@@ -1872,8 +1912,13 @@ def _top_level_objects(reply: str) -> list[dict]:
     :func:`_object` reads from the first brace and stops, which is correct for every task whose
     answer is one object and is exactly how probe-b saw half an answer twice. The wrapper handling
     is the same one, deliberately: a fence is formatting whichever branch reads it.
+
+    The thought is dropped BEFORE the scan for the reason the fence is: working-out is not an
+    answer. Here it is load-bearing rather than tidy — a thought that reasons about the object it
+    is about to write contains braces, and merging one into the verdict is repair (1) authoring
+    structure out of the model's notes.
     """
-    text = reply.strip()
+    text = after_thought(reply).strip()
     if text.startswith("```"):
         text = text.split("\n", 1)[-1].rsplit("```", 1)[0]
     decoder, found, index = json.JSONDecoder(), [], 0
@@ -1961,8 +2006,13 @@ def _object(reply: str) -> dict:
     A ```json fence or a sentence before the brace is formatting, not a different
     answer, so unwrapping happens before validation and is not a failure. What is
     inside the braces is judged exactly as it comes.
+
+    A closed thinking channel is dropped first (:func:`after_thought`), so «the first brace» means
+    the first brace of the ANSWER and never one the model wrote while working out. Every family
+    reaches this function — `parse_reply`, `parse_pass1` and the reader's `_top_level_objects` —
+    so the rule is stated once here rather than three times at the call sites.
     """
-    text = reply.strip()
+    text = after_thought(reply).strip()
     if not text:
         raise ParseError("empty reply")
     if text.startswith("```"):

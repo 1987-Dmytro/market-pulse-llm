@@ -766,6 +766,20 @@ def test_every_producer_is_driven_end_to_end_and_rebuilds_its_shipped_bytes(
     for shipped in outputs.values():
         again = tmp_path / Path(shipped).name
         assert again.exists(), f"{script} did not write {shipped}"
+        if shipped.endswith(".json") and again.read_bytes() != (REPO_ROOT / shipped).read_bytes():
+            # BYTE-for-byte is still the claim; where it fails, the ONLY difference allowed is the
+            # pin on `src/market_pulse/prompts.py`. Ruling (ф) moved it, the `lora-c` line is closed
+            # by a stop-rule and its artifacts are never re-pinned — and the allowance is DERIVED
+            # from which paths carry the live sha, never typed ([[tests/moved_pins.py]]).
+            import json
+
+            import moved_pins
+
+            moved_pins.assert_only_the_prompts_pin_moved(
+                json.loads((REPO_ROOT / shipped).read_text(encoding="utf-8")),
+                json.loads(again.read_text(encoding="utf-8")),
+            )
+            continue
         assert again.read_bytes() == (REPO_ROOT / shipped).read_bytes(), (
             f"{shipped} on disk is NOT what {script} emits today — the committed record describes a"
             " producer that has moved since it was written. Re-run the producer and commit."

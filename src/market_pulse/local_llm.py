@@ -65,6 +65,62 @@ flipped it would silently turn every reply into reasoning followed by JSON, and
 `parse_reply` reads the first brace it finds.
 """
 
+THINK_CHAT_TEMPLATE = {"add_generation_prompt": True, "enable_thinking": True}
+"""The same template with the thinking channel LEFT OPEN — ruling (ф), 2026-08-26.
+
+Every reading this repo has bought — v5b, pass-1 v1/v2, pass-2, both probes, both LoRA lines — was
+taken under :data:`CHAT_TEMPLATE`, which closes the channel in the prompt. So the thinking reader
+has never been measured, and it is a NEW instrument rather than a flag: the generation prompt ends
+at ``<|turn>model`` instead of at an already-closed ``<|channel>thought\\n<channel|>``, the model
+opens the channel itself, and the answer arrives after it closes.
+
+A second constant and not an edit to :data:`CHAT_TEMPLATE`, which stays the default of every
+client: three sealed registrations pin that dict, and `srv-2d`, CAPTION and POSITIONS keep serving
+under it. Which template a run used is therefore a field in its record and not an inference from
+the day it ran.
+"""
+
+
+def thought_close_id(tokenizer) -> int:
+    """The id of :data:`prompts.THOUGHT_CLOSE`, refused if this tokenizer does not know the token.
+
+    Resolved once at construction, for the reason the <bos> probe is: a run whose closer came back
+    as ``<unk>`` would count every reply as one unbroken thought and parse none of them — silently,
+    on a paid pod, in a file that looks like a file of answers
+    ([[a_shifted_constant_has_physical_consumers]]).
+    """
+    if tokenizer is None:
+        # `_assert_template_emits_bos` says nothing when a processor exposes no tokenizer, because
+        # the flag it guards then has nothing to drop. This is the opposite case: with no tokenizer
+        # the thought cannot be told from the answer at all, and every reply would read as one
+        # unbroken thought. Silence here would be a measurement, not an abstention.
+        raise RuntimeError(
+            "a thinking client needs a tokenizer to tell the working-out from the answer, and this"
+            " processor exposes none — stop and report"
+        )
+    close = tokenizer.convert_tokens_to_ids(prompts.THOUGHT_CLOSE)
+    if close is None or close == getattr(tokenizer, "unk_token_id", object()):
+        raise RuntimeError(
+            f"this tokenizer does not know {prompts.THOUGHT_CLOSE!r}, so a thinking reply could not"
+            " be told from its answer — stop and report"
+        )
+    return int(close)
+
+
+def thought_fields(tokenizer, new: list[int], close_id: int) -> dict:
+    """``thought`` and ``thought_tokens`` for one thinking reply, counted in TOKEN space.
+
+    Not by re-tokenizing the decoded string: a second tokenization is a second instrument that can
+    disagree with the one that generated, and the index of ``<channel|>`` in the ids the model
+    emitted IS the number. A reply whose channel never closed counts every token it spent as
+    thought — which is what a `length` cut-off in this configuration means.
+    """
+    cut = new.index(close_id) if close_id in new else len(new)
+    return {
+        "thought": tokenizer.decode(new[:cut], skip_special_tokens=True),
+        "thought_tokens": cut,
+    }
+
 
 def quantization_config():
     """:data:`QUANTIZATION` in the form bitsandbytes wants it."""
@@ -302,9 +358,20 @@ class LocalClient:
     counter that says ``max_new_tokens`` is too small.
     """
 
-    def __init__(self, tokenizer, model, *, max_new_tokens: int = MAX_NEW_TOKENS, seed: int = SEED):
+    def __init__(
+        self,
+        tokenizer,
+        model,
+        *,
+        max_new_tokens: int = MAX_NEW_TOKENS,
+        seed: int = SEED,
+        chat_template: dict = CHAT_TEMPLATE,
+    ):
         self.tokenizer, self.model = tokenizer, model
         self.max_new_tokens, self.seed = max_new_tokens, seed
+        self.chat_template = dict(chat_template)
+        self.thinking = bool(self.chat_template.get("enable_thinking"))
+        self.close_id = thought_close_id(tokenizer) if self.thinking else None
         self.usage = Counter()
         stop = getattr(getattr(model, "generation_config", None), "eos_token_id", None)
         stop = stop if stop is not None else tokenizer.eos_token_id
@@ -359,7 +426,9 @@ class LocalClient:
         the mismatch either way, so a caller cannot half-apply the with-post rendering.
         """
         return self.tokenizer.apply_chat_template(
-            prompts.build_messages(task, text, **(post or {})), tokenize=False, **CHAT_TEMPLATE
+            prompts.build_messages(task, text, **(post or {})),
+            tokenize=False,
+            **self.chat_template,
         )
 
     def _trim(self, tokens: list[int]) -> tuple[list[int], bool]:
@@ -407,11 +476,15 @@ class LocalClient:
             self.usage["completion_tokens"] += len(new)
             replies.append(
                 {
-                    "content": self.tokenizer.decode(new, skip_special_tokens=True),
+                    # the specials are KEPT under the thinking template and only there: they are
+                    # what says where the working-out ends, and `skip_special_tokens=True` would
+                    # erase the boundary and leave prose with a JSON object somewhere in it
+                    "content": self.tokenizer.decode(new, skip_special_tokens=not self.thinking),
                     "finish_reason": "stop" if stopped else "length",
                     "cost": 0.0,
                     "usage": {"prompt_tokens": prompt_tokens, "completion_tokens": len(new)},
                     "generation_id": None,
+                    **(thought_fields(self.tokenizer, new, self.close_id) if self.thinking else {}),
                 }
             )
         return replies
@@ -573,9 +646,21 @@ class ReaderClient:
     only field that can say a verdict was cut off at the ceiling rather than finished short.
     """
 
-    def __init__(self, processor, model, *, max_new_tokens: int = READER_MAX_NEW_TOKENS):
+    def __init__(
+        self,
+        processor,
+        model,
+        *,
+        max_new_tokens: int = READER_MAX_NEW_TOKENS,
+        chat_template: dict = CHAT_TEMPLATE,
+    ):
         self.processor, self.model = processor, model
         self.max_new_tokens = max_new_tokens
+        self.chat_template = dict(chat_template)
+        self.thinking = bool(self.chat_template.get("enable_thinking"))
+        self.close_id = (
+            thought_close_id(getattr(processor, "tokenizer", None)) if self.thinking else None
+        )
         self.usage = Counter()
         self._assert_template_emits_bos()
 
@@ -614,7 +699,7 @@ class ReaderClient:
             [(int(msg_id), text) for msg_id, text in item.get("comments") or ()],
             task=task,
         )
-        return self.processor.apply_chat_template(messages, tokenize=False, **CHAT_TEMPLATE)
+        return self.processor.apply_chat_template(messages, tokenize=False, **self.chat_template)
 
     def read(self, task: str, items: list[dict]) -> list[dict]:
         """One reply dict per thread, in order.
@@ -642,13 +727,20 @@ class ReaderClient:
             self.usage["completion_tokens"] += len(new)
             replies.append(
                 {
-                    "content": self.processor.decode(new, skip_special_tokens=True),
+                    # the specials are KEPT under the thinking template and only there — see
+                    # `LocalClient.batch`: `<channel|>` is the boundary, and it is a special token
+                    "content": self.processor.decode(new, skip_special_tokens=not self.thinking),
                     # a verdict that used its whole budget is a PARSE failure, not a short answer:
                     # the JSON stops mid-object and the driver counts it by cause
                     "finish_reason": "length" if len(new) >= self.max_new_tokens else "stop",
                     "cost": 0.0,
                     "usage": {"prompt_tokens": int(width), "completion_tokens": len(new)},
                     "generation_id": None,
+                    **(
+                        thought_fields(self.processor.tokenizer, new, self.close_id)
+                        if self.thinking
+                        else {}
+                    ),
                 }
             )
         return replies

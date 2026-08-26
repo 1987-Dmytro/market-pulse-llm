@@ -25,6 +25,7 @@ import build_pass1_fewshot_packs as fewshot  # noqa: E402
 import build_pass1_sft as sft  # noqa: E402
 import build_pass1_window_pack as window  # noqa: E402
 import gate_census_w1_reader as census  # noqa: E402
+import moved_pins  # noqa: E402
 
 from market_pulse import prompts  # noqa: E402
 
@@ -34,9 +35,10 @@ ITEMS = PACK["legs"][0]["items"]
 
 def test_the_shipped_pack_is_what_the_producer_builds_today(tmp_path):
     assert window.main(["--outdir", str(tmp_path)]) == 0
-    assert (tmp_path / window.OUT_NAME).read_text("utf-8") == (
-        REPO_ROOT / window.OUT_NAME
-    ).read_text("utf-8")
+    again = json.loads((tmp_path / window.OUT_NAME).read_text("utf-8"))
+    shipped = json.loads((REPO_ROOT / window.OUT_NAME).read_text("utf-8"))
+    # EXCEPT where it pins `src/market_pulse/prompts.py`, moved again by ruling (ф)'s parser change
+    moved_pins.assert_only_the_prompts_pin_moved(shipped, again)
 
 
 def test_the_population_is_the_CENSUS_cells_and_the_contract_only_expects_it():

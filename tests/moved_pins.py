@@ -20,6 +20,7 @@ caller below asserts it beside the diff.
 import hashlib
 import json
 import sys
+import tempfile
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -64,6 +65,24 @@ def servable(pack: dict) -> dict:
     copy = json.loads(json.dumps(pack))
     copy["instruments"]["parser"]["sha256"] = live_sha()
     return copy
+
+
+_SERVABLE: dict[Path, Path] = {}
+
+
+def servable_file(path: Path) -> Path:
+    """:func:`servable`'s copy as a FILE, for the runners that are handed a `--pack` path.
+
+    Several transport tests give `main()` a path rather than a dict, and one drives the runner in a
+    subprocess. The sealed file on disk is never written: the copy lives in a temp directory for the
+    length of the session, and is built once per path.
+    """
+    if path not in _SERVABLE:
+        where = Path(tempfile.mkdtemp(prefix="servable-")) / path.name
+        pack = servable(json.loads(path.read_text(encoding="utf-8")))
+        where.write_text(json.dumps(pack, ensure_ascii=False, sort_keys=True), encoding="utf-8")
+        _SERVABLE[path] = where
+    return _SERVABLE[path]
 
 
 def assert_only_the_prompts_pin_moved(

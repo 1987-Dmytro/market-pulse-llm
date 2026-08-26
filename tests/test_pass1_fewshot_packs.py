@@ -20,6 +20,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
 import build_pass1_fewshot_packs as packs  # noqa: E402
+import moved_pins  # noqa: E402
 import pass1_fewshot_pod_runner as fewshot  # noqa: E402
 import reader_v5_pod_runner as runner  # noqa: E402
 
@@ -37,7 +38,12 @@ def leg(pack: dict, name: str) -> dict:
 def test_both_packs_are_what_the_producer_builds_today(tmp_path):
     assert packs.main(["--outdir", str(tmp_path)]) == 0
     for name in (packs.DEV_NAME, packs.SHOT_NAME):
-        assert (tmp_path / name).read_bytes() == (REPO_ROOT / name).read_bytes(), name
+        again = json.loads((tmp_path / name).read_text(encoding="utf-8"))
+        shipped = json.loads((REPO_ROOT / name).read_text(encoding="utf-8"))
+        # EXCEPT where they pin `src/market_pulse/prompts.py`: ruling (ф) moved it again, and
+        # `results/pass1_dev_pack.json` is the BEFORE column of `think-zero-shot`'s paired table —
+        # a re-pinned rebuild committed over it would move the file that column is read from
+        moved_pins.assert_only_the_prompts_pin_moved(shipped, again)
 
 
 def test_the_dev_legs_are_the_same_rows_with_one_difference():
@@ -186,9 +192,16 @@ def test_the_instruments_cover_the_whole_served_family_and_v1s_sha_did_not_move(
         assert block["prompt_sha256"][prompts.PASS1_TASK_V2] == prompts.prompt_sha256(
             prompts.PASS1_TASK_V2
         )
-        assert block["parser"]["sha256"] == packs.summary.sha256_of(
-            REPO_ROOT / "src" / "market_pulse" / "prompts.py"
+        # The pin describes the checkout this pack was SEALED against. Ruling (ф) moved the module
+        # again, and this pack is the BEFORE column of `think-zero-shot`'s paired table, so it is
+        # not re-pinned — the DERIVED pack is what carries the live sha, and it records what the
+        # pin here was. Both halves, so a silent re-pin of the sealed file fails here.
+        think = json.loads(
+            (REPO_ROOT / "results" / "pass1_dev_pack_think.json").read_text(encoding="utf-8")
         )
+        live = packs.summary.sha256_of(REPO_ROOT / "src" / "market_pulse" / "prompts.py")
+        assert think["instruments"]["parser"]["sha256"] == live
+        assert block["parser"]["sha256"] == think["moved_from_the_shipped_pack"]["was"]["parser"]
         assert (
             block["moved_from_the_sealed_pack"]["parser.sha256"]
             == (SEALED["instruments"]["parser"]["sha256"])

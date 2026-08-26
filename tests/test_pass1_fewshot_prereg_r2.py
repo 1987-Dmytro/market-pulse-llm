@@ -40,7 +40,46 @@ RUNG = {one["rung"]: one for one in RECORD["kill_clock"]}
 SUMS = RECORD["money"]["arithmetic"]
 
 
-def test_the_shipped_r2_registration_is_what_the_producer_writes_today(tmp_path):
+MOVED_BY_RULING_F = ("instruments.parser.sha256", "instruments.transport.sha256")
+"""The two copied pins ruling (ф) moved: `src/market_pulse/prompts.py` (the parser now reads past a
+closed thinking channel) and `scripts/pass1_fewshot_pod_runner.py` (the `--serving` switch).
+
+r2 re-registers a line that is already spent, so it is never re-pinned and its producer's copy guard
+REFUSES today by name — asserted below. Everything that drives `build()` therefore runs under the
+pins the record was SEALED with, which is what keeps those tests about what they are about."""
+
+
+@pytest.fixture
+def sealed_pins():
+    """`live_pins()` as it read the day this record was written — the record's own values.
+
+    Set on the module directly rather than through `monkeypatch`: three of the tests below call
+    `monkeypatch.undo()` mid-test to prove the unbent producer builds, and an undo that also put
+    ruling (ф)'s moved pins back would make the second half of each of them fail for the reason the
+    first half is not about.
+    """
+    keep = prereg.live_pins
+    pins = {path: prereg.dig(RECORD, path) for path in keep()}
+    prereg.live_pins = lambda: pins
+    try:
+        yield pins
+    finally:
+        prereg.live_pins = keep
+
+
+def test_the_copy_REFUSES_today_and_names_exactly_the_pins_ruling_f_moved():
+    """The guard FIRES, and what it names is the list — so a third pin moving cannot pass quietly
+    ([[an_enumerated_diff_is_asserted_in_both_directions]])."""
+    with pytest.raises(SystemExit, match="no longer describes this checkout") as raised:
+        prereg.build()
+    named = json.loads(
+        str(raised.value).split("checkout: ", 1)[1].rsplit("\nr2 re-registers", 1)[0]
+    )
+    assert sorted(named) == sorted(MOVED_BY_RULING_F)
+
+
+def test_the_shipped_r2_registration_is_what_the_producer_writes_today(tmp_path, sealed_pins):
+    """Under the pins this record was SEALED with — the two ruling (ф) moved are put back first."""
     assert prereg.main(["--outdir", str(tmp_path)]) == 0
     assert (tmp_path / prereg.OUT_NAME).read_bytes() == (REPO_ROOT / prereg.OUT_NAME).read_bytes()
     assert "generated_at" not in (REPO_ROOT / prereg.OUT_NAME).read_text("utf-8")
@@ -77,7 +116,9 @@ def test_every_block_the_contract_freezes_is_r1s_byte_for_byte():
     assert RECORD["bars"]["P1_per_comment_agreement"]["minimum_agreed"] == 12
 
 
-def test_the_copy_REFUSES_when_a_copied_pin_stops_describing_this_checkout(monkeypatch):
+def test_the_copy_REFUSES_when_a_copied_pin_stops_describing_this_checkout(
+    monkeypatch, sealed_pins
+):
     """The negative control. A copied block that no longer matches the live file is a STOP.
 
     Both directions: bent, the producer refuses and names the path; unbent, it builds. Without this
@@ -218,7 +259,7 @@ def test_every_number_the_r2_contract_prints_re_derives():
         assert reason in named, reason
 
 
-def test_H6_REFUSES_a_number_that_stops_re_deriving(monkeypatch):
+def test_H6_REFUSES_a_number_that_stops_re_deriving(monkeypatch, sealed_pins):
     """Every mode exercised — an equality, a `below` and an `at_least` — and then the premise."""
     for name, bent in (
         ("total_seconds", 999.0),
@@ -247,7 +288,9 @@ def test_H6_REFUSES_a_number_that_stops_re_deriving(monkeypatch):
     assert prereg.build()["h6"]["mismatches"] == []
 
 
-def test_the_call_counts_are_re_derived_from_the_LIVE_packs_and_not_copied(monkeypatch):
+def test_the_call_counts_are_re_derived_from_the_LIVE_packs_and_not_copied(
+    monkeypatch, sealed_pins
+):
     """Two independent derivations that agree — the live packs, and what r1 registered.
 
     A copied count would have made the generation legs a quotation of r1 rather than a reading of

@@ -305,9 +305,17 @@ def test_the_census_is_priced_and_registered_as_report_only():
 
 
 def test_the_transport_block_pins_what_actually_runs():
-    """Four files, each hashed — and each one DRIVEN against a frozen pack before any pod."""
+    """Four files, each hashed — and each one DRIVEN against a frozen pack before any pod.
+
+    EXCEPT `scripts/pass2_r2_pod_runner.py`: ruling (ф) gave it the `--serving READER_THINK` switch,
+    and this registration belongs to a line closed by a stop-rule, so it is never re-pinned. The
+    house idiom for a pin that moved under a frozen record is the inequality — see
+    `tests/test_pass1_fewshot_prereg.py`, where the gate did the same thing one contract earlier.
+    """
+    moved = "scripts/pass2_r2_pod_runner.py"
     for name, one in PREREG["transport"]["files"].items():
-        assert one["sha256"] == data.sha_text((REPO_ROOT / name).read_text(encoding="utf-8")), name
+        live = data.sha_text((REPO_ROOT / name).read_text(encoding="utf-8"))
+        assert (one["sha256"] != live) if name == moved else (one["sha256"] == live), name
     assert sorted(PREREG["transport"]["files"]) == [
         "scripts/gate_lora_c.py",
         "scripts/pass1_v3_pod_runner.py",

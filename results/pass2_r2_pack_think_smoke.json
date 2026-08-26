@@ -1,0 +1,437 @@
+{
+  "carried": {
+    "from": null,
+    "ids": [],
+    "rule": "NOTHING is carried. r1's four rows were answered with the thought channel CLOSED, and seeding them into a thinking out-file would put four BEFORE-column replies into the thinking column of a paired table ([[a_retry_inherits_the_last_attempts_output]])",
+    "units": 0
+  },
+  "contamination": {
+    "comments_edited_against_the_store": [],
+    "fields_the_pod_never_reads": [
+      "membership",
+      "rendered_chars",
+      "id"
+    ],
+    "fields_the_render_reads": [
+      "channel",
+      "post_id",
+      "post",
+      "entities",
+      "comments"
+    ],
+    "labels_outside_the_filter": [],
+    "renderings_that_move_without_the_membership_flags": [],
+    "renderings_that_moved_since_r1": [],
+    "requests_naming_a_case_id": [],
+    "rule": "the pack carries NO labels and NO gold: the pod sees pass-1's own fields and the store's own text. `membership` is a pack field the renderer has no argument for, and list (3) is that sentence measured rather than asserted. r2 adds one list: every unit re-rendered here and compared with r1's sha, and a non-empty list is a build-time STOP rather than a pack field"
+  },
+  "contract": "docs/PROMPT-pass2-signals-r2.md D0′",
+  "instruments": {
+    "module": {
+      "path": "src/market_pulse/pass2.py",
+      "rule": "the TEXT and the RENDERER, r1's and unmoved — pinned here so a checkout that changed them is caught before the model is loaded",
+      "sha256": "f26eb555c54ef80aa0eb275b98ea0292e8eb477bb87d87666dca7b9dfb507e9d"
+    },
+    "module_r2": {
+      "path": "src/market_pulse/pass2_r2.py",
+      "rule": "the ceiling and the tolerant parser. A sibling because r1's pack pins `pass2.py` and that pack is pinned by a sealed record",
+      "sha256": "b0356e73cc4bc98a1baa5928559878ed752eb560311bac029b51a67e65f1af46"
+    },
+    "parser": {
+      "entry_point": "market_pulse.pass2_r2.parse_pass2",
+      "path": "src/market_pulse/prompts.py",
+      "rule": "`prompts._reader_object`, then the thread's bought entity block, then every REPORT-ONLY field checked with the pinned validator that owns it and repaired where it refuses, then `prompts._reader`. The refusal set is closed: ['a relabel — a `subject_type` that is not the pass-1 label of a row the reply cites', \"an id that was not in the request, in `per_comment`, `noise` or a signal's `evidence`\", 'a signal citing no comment', 'a reply about another thread', \"an unbalanced or unreadable object — the pinned container reader's own refusals\", 'a domain violation on a SCORED field']",
+      "sha256": "f45b29c58ba17947fc7aa7c002b0fb6bd6e341ba4b4c3f5203d5309c83dd0b08"
+    },
+    "prompt_sha256": {
+      "pass2_thread_gm4_v1": "a674f284085d43c54df590ce943fb8c02d6ac28b7832c05f2e4b7a54879f61f8"
+    },
+    "r1_out_file": {
+      "path": "results/pass2_signals_v1.jsonl",
+      "sha256": "8794ef976f01f52873d86be264086c4fac0ad8c4202d4b2761309f766d8357ec"
+    }
+  },
+  "legs": [
+    {
+      "items": [
+        {
+          "channel": "@mandziak",
+          "comments": [
+            {
+              "msg_id": 47932,
+              "stance": "neutral",
+              "subject_id": null,
+              "subject_type": "категория_личное",
+              "text": "Віктор,якщо можна, поясніть,будь ласка, з вашої точки зору,як спрацьовує те,що через годину-півтори  після прийому їжі знову іноді є бажання щось поїсти.Мені говорили,що насправді це є хибне враження голоду,що організму насправді в цей час потрібна вода."
+            },
+            {
+              "msg_id": 47933,
+              "stance": "positive",
+              "subject_id": "вода",
+              "subject_type": "категория_личное",
+              "text": "Пишу про свій досвід. Мені вода допомагає худнути/підтримувати вагу. Ймовірно я вірю в неї, і вона стала плацебо. Влітку п'ю 2-3л на добу. І багато хто подумає: дядя боже, батько хрещений, які ж бувають притрушені люди. Боже, вборони і заступи. Так, всі уявляють 3л банку з закрутками на зиму - це велика тара. Але ж ті 3 літри я не п'ю залпом чи за годину, як вміють чоловіки пити пиво під розмови чи на \"рибалці\". Звичайний калькулятор каже, що 3 літри за 12 годин активності людини на день - це всього навсього 250 гр води на годину.\nЦе суто мій досвід, я не сперечаюся з гуру. \nЗ такою кількістю води, я не хочу робити перекуси, не відчуваю голод, не шукаю що б погризти між їжею. Плюс жкт починає працювати ідеально.\nМоже через віру чи обіцянки блогерів 😁- стан шкіри краще.\nЩе раз - так працює у мене.\n\nДодам: не бачу нічого поганого вставити раз на 20 хв у вбиральню. Бо на роботі стільки роботи, що я приклеєна до компа на багато годин поспіль.\nЗвичайно, в дорогу, чи у справах де є багато пересувань між локаціями - я стільки води не п'ю"
+            },
+            {
+              "msg_id": 47935,
+              "stance": "neutral",
+              "subject_id": null,
+              "subject_type": "категория_личное",
+              "text": "Це дуже багато, велика чашка води, щогодини протягом 12 годин....вас не нудить?"
+            },
+            {
+              "msg_id": 47938,
+              "stance": "negative",
+              "subject_id": null,
+              "subject_type": "категория_личное",
+              "text": "Бідні ваши нирки!( А ви точно стільки випиваєте???"
+            },
+            {
+              "msg_id": 47940,
+              "stance": "positive",
+              "subject_id": "вода",
+              "subject_type": "категория_личное",
+              "text": "Ваше питання я сприймаю з повагою.\nА є у мене знайомі,які на якійсь тусі можуть легко лупануть 3-4 алко коктейлі поспіль, або вгасити літрушку пива за півгодини - ці люди питають у мене як я витримую чашку чистої води за годину ))\nА є колега, який починає день 3ма (!!!) поспіль величезними чашками кави. Вони схожі мені на СРСР супниці. Вони такі великі, що я боюся в них втопитися, бо я не вмію плавати. І він часто дивитися на мою склянку води таким поглядом, наче я знаходжуся на термінальній стадії раку 😁😁🤦🏻‍♀️"
+            },
+            {
+              "msg_id": 47941,
+              "stance": "positive",
+              "subject_id": null,
+              "subject_type": "категория_личное",
+              "text": "Я теж випивають по 3-4 л на добу і чудово себе почуваю. Але, правда,  хотілося б ,щоб вода хоч трішечки  перебивала бажання їсти)"
+            },
+            {
+              "msg_id": 47943,
+              "stance": "negative",
+              "subject_id": "вода",
+              "subject_type": "категория_личное",
+              "text": "Правда, я не уявляю,як можна постійно пити воду .. я п'ю багато, але вода на початку дня, потім кава, смачні чаї, молоко, компоти тощо....якось спробувала випити півторашку  води за день, не вийшло("
+            },
+            {
+              "msg_id": 47947,
+              "stance": "neutral",
+              "subject_id": null,
+              "subject_type": "категория_личное",
+              "text": "Я не зрозуміла, невже корисніше пити каву, сік, ніж воду 🤔🤔🤔"
+            },
+            {
+              "msg_id": 47948,
+              "stance": "neutral",
+              "subject_id": null,
+              "subject_type": "категория_личное",
+              "text": "У мене це 2 ковтки, не знаю як розтягувать ці пів чашки на годину, якщо це не кип'яток"
+            },
+            {
+              "msg_id": 47952,
+              "stance": "positive",
+              "subject_id": "пивко",
+              "subject_type": "категория_личное",
+              "text": "Як холодненьке пивко після спеки - перший бокал залпом залітає"
+            },
+            {
+              "msg_id": 47964,
+              "stance": "positive",
+              "subject_id": null,
+              "subject_type": "категория_личное",
+              "text": "Чому ж бідні, я багато рухаюсь і працюю в пекарні(постійна спека)\nТому для мене оптимально так випивати, почуваюсь прекрасно"
+            },
+            {
+              "msg_id": 47965,
+              "stance": "neutral",
+              "subject_id": "вода",
+              "subject_type": "категория_личное",
+              "text": "В кого є проблеми з лімфатичною системою ,набряки ,то лікарі рекомендують пити воду 2.5-3.0 л на день ,поясніть будь ласка,як вода допомагає від набряків і щоб працювала лімфатична система ?!"
+            },
+            {
+              "msg_id": 47976,
+              "stance": "positive",
+              "subject_id": "вода",
+              "subject_type": "категория_личное",
+              "text": "Не знаю мені теж допомагає, я в день 30 літр випиваю і мало)"
+            },
+            {
+              "msg_id": 47986,
+              "stance": "positive",
+              "subject_id": "вода",
+              "subject_type": "категория_личное",
+              "text": "З тої самої причини через що голодування призводить до набору ваги. \nТобто спочатку ви голодаєте робите дефіцит а через деякий час коли ви зриваєтеся у вас організм починає запасатися.\nБо так працює наш організм. \nВін навчений десятками тисяч років виживання і за рахунок цього в принципі ми вижили як вид тому що люди в яких організм не вмів так запасати на гірші часи вимирали. \n\nАналогічна ситуація відбувається із водою. \nЯкщо недостатньо пити води вона вона не йде в сечу і починає запасатися у вигляді набряків. \nА як тільки ви починаєте періодично пити воду 2-3 л води (це те що ви обов'язково маєте випити за добу у вигляді чистої води а вже те що ви з'їсте разом з овочами фруктами чи з кавою це не дораховуємо до загальної кількості). Як тільки організм бачить що в нас достатньо води він починає скидувати воду, бо знає що ми що він її дістане тому нема потреби запасатися водою.\nТому лікарі й рекомендують пити 2-3 л води на день для того щоб позбутися набряків."
+            },
+            {
+              "msg_id": 47987,
+              "stance": "positive",
+              "subject_id": null,
+              "subject_type": "категория_личное",
+              "text": "Тому що принцип такий що ви маєте спочатку випити потрібну кількість води чистої води а вже після цього п'єте що забажаєте. \nАле з особистого досвіду після того як звикаєш до того що пити 3 л води в принципі більше нічого пити і не хочеться"
+            },
+            {
+              "msg_id": 47988,
+              "stance": "neutral",
+              "subject_id": "вода",
+              "subject_type": "категория_личное",
+              "text": "5-6 л можливої забагато, але ниркам навпаки буде легше, бо концентрація сечі буде набагато менша."
+            },
+            {
+              "msg_id": 47998,
+              "stance": "neutral",
+              "subject_id": null,
+              "subject_type": "категория_личное",
+              "text": "Ну, ми за 5 говорили, думаю 2-3 літри можна пити людини понад 100 кг, котра мешкає десь у Африці"
+            },
+            {
+              "msg_id": 48001,
+              "stance": "neutral",
+              "subject_id": "вода",
+              "subject_type": "категория_личное",
+              "text": "Ні, ні 5 л це забагато.\nЯ більше саме про 2-3л говорю"
+            }
+          ],
+          "entities": [],
+          "id": "@mandziak:3679",
+          "membership": {
+            "E": [],
+            "F": [],
+            "N": []
+          },
+          "post": "💧ЩО БУДЕ, ЯКЩО ПИТИ 2Л ВОДИ?",
+          "post_id": 3679,
+          "rendered_chars": 11856,
+          "rendering_sha256": "a46a3d45eb1c2145aace97f24c48b3700b9c40be28d88a49aeb9ef25b4a6037d",
+          "task": "pass2_thread_gm4_v1",
+          "thread": "@mandziak:3679"
+        }
+      ],
+      "name": "smoke",
+      "out": "pass2_signals_r2_remainder.jsonl",
+      "reading": "the ONE leg, all 79 units in r1's order. The four carried rows are already in the out-file when the pod starts, and the shipped resume-skip is what turns «never re-bought» into a property of the transport instead of a promise",
+      "task": "pass2_thread_gm4_v1"
+    }
+  ],
+  "length": {
+    "ceiling_chars": 15569,
+    "ceiling_is_derived_not_typed": {
+      "chars_per_prompt_token": 3.4523,
+      "density_measured_on": "the five PAID pass-2 requests: 41 922 rendered characters over 11 907 prompt tokens. Mean 3.5208; the per-request range is 3.4523 (@mandziak:3703) to 3.6894 (@matusi_ukr:22303). The MINIMUM is used — fewest characters per token is most tokens per character, so it is the conservative direction",
+      "proven_by": "results/reader_v5b_w1.jsonl :: @matusi_ukr:22272 — 15 673 rendered characters, usage.prompt_tokens 4 510, finish_reason `stop`, 1 896 completion tokens. The widest request the READER serving config has been PROVEN to serve on this stack",
+      "proven_prompt_tokens": 4510,
+      "serving_field": "results/reader_v5b_pack.json :: serving.output_tokens = 4000",
+      "serving_rule": "the serving config bounds the ANSWER and names no input bound at all. The proven point already carries that reservation — the reader ran under the same 4 000 — so a pass-2 request of the same prompt length sits inside an envelope this stack has served",
+      "the_model_context_is_not_on_this_stack": "the contract asks for a ceiling derived from «the model's context». No record, pack, config or report in this repository carries a context length for google/gemma-4-31b-it — grepped for context_window / context_length / max_position / n_ctx and for the round numbers, nothing. A ceiling taken from outside would be a typed number wearing a derivation, so the anchor is the largest prompt this exact serving config has been observed to serve, which is a LOWER BOUND on that context and is the only reading with a record behind it"
+    },
+    "headroom_chars": 3713,
+    "headroom_under_pass_1s_constant": 144,
+    "median_chars": 6712,
+    "widest_request": "@mandziak:3679",
+    "widest_request_chars": 11856
+  },
+  "membership": {
+    "cases_outside_the_population": {
+      "E": [
+        "@matusi_ukr:22242"
+      ],
+      "F": [],
+      "N": [
+        "@retsepty:7312",
+        "@retsepty:7325",
+        "@retsepty:7327",
+        "@sashafitnesslife:3939"
+      ]
+    },
+    "per_kind": {
+      "E": [
+        "@VARUS_channel:10348",
+        "@VARUS_channel:10360",
+        "@mandziak:3684",
+        "@mandziak:3689"
+      ],
+      "F": [
+        "@VARUS_channel:10613",
+        "@mandziak:3676",
+        "@mandziak:3703",
+        "@matusi_ukr:22272",
+        "@matusi_ukr:22303"
+      ],
+      "N": [
+        "@VARUS_channel:10366",
+        "@VARUS_channel:10529"
+      ]
+    },
+    "rule": "from results/reader_gold_w1_r2.json; a PACK field the renderer cannot read"
+  },
+  "moved_from_the_shipped_pack": {
+    "recover": "git show 74f4a81:src/market_pulse/prompts.py",
+    "was": {
+      "parser": "b70e2114b03a76dc2c8cfc9b559bf7ef22e9193d841b4fccc5ed8bd0a40294ab"
+    },
+    "why": "docs/PROMPT-think-zero-shot.md D1.2 teaches prompts.parse_reply to read the answer AFTER a closed thought channel, so src/market_pulse/prompts.py's sha moved. The shipped packs and the registrations that pin them are NOT rebuilt — they describe runs that were already paid for; this pack carries the live shas because the pod's handshake compares them against this checkout before the model is loaded"
+  },
+  "owed": {
+    "ids": [
+      "@mandziak:3679"
+    ],
+    "re_asked_after_a_refusal": "@matusi_ukr:22303",
+    "rule": "a refused reply is a transport outcome and not a verdict, so the thread is owed. Every other owed unit is one rung S′ never authorised",
+    "units": 1
+  },
+  "phase": "pass2-signals-r2",
+  "population": {
+    "derived_from": {
+      "r1_pack": "results/pass2_pack.json",
+      "r1_pack_pinned_by": "results/prereg_pass2_signals.json::instruments.population.sha256",
+      "r1_pack_sha256": "361e9cc642ba0191798f8d000dd43d95d49b7173f5a8de6c868c3090c0182dfc",
+      "r1s_own_derivation": {
+        "census": {
+          "reading": "the published table this contract was priced from. It is not READ here — the filter is re-run — and this sha is what a reader compares against",
+          "record": "results/pass1_window_r2_census.json",
+          "sha256": "17741904637a2339ff98022850007e8c1e40461f213577642b4e508765534c8c"
+        },
+        "out_files": {
+          "results/pass1_window_r2_v2.jsonl": "ca35c9ae674a326cee92c3f15168494abc5c7ea6055e20a214f328e5d84bf445",
+          "results/pass1_window_v2.jsonl": "e888d466d36e32a08fa13e5598700bc0cdfffd768eba761df3f51881375eb740"
+        },
+        "pack": "results/pass1_window_pack.json",
+        "pack_pinned_by": "results/prereg_pass1_window.json::population.sha256",
+        "pack_sha256": "799dbca9049a495c6cf31e4335c090d6e4c9d334e2b3204b93ed8dfa30de52da"
+      },
+      "rule": "r2 does not re-derive the population. r1's is sealed by a record of a paid session, and re-running the census filter here would put a second producer between the four carried replies and the requests they answer"
+    },
+    "filter": [
+      "молочный_бренд",
+      "сеть_ритейлер",
+      "категория_личное"
+    ],
+    "filtered_chars": 32756,
+    "filtered_rows": 281,
+    "keyed_on": "the PAIR (thread, msg_id). Seven msg_ids of the window live in two threads each, so a unit keyed on the msg_id alone would carry another channel's comment into this thread's request and the merge would be silent",
+    "no_signal_by_construction": [
+      "@VARUS_channel:10358",
+      "@VARUS_channel:10375",
+      "@VARUS_channel:10450",
+      "@mandziak:3685",
+      "@mandziak:3694",
+      "@mandziak:3736",
+      "@mandziak:3746",
+      "@mandziak:3768",
+      "@matusi_ukr:22058",
+      "@matusi_ukr:22111",
+      "@matusi_ukr:22133",
+      "@matusi_ukr:22195",
+      "@matusi_ukr:22217",
+      "@matusi_ukr:22242",
+      "@matusi_ukr:22263",
+      "@matusi_ukr:22265",
+      "@matusi_ukr:22307",
+      "@matusi_ukr:22308",
+      "@matusi_ukr:22327",
+      "@polyakova_fitness:1143",
+      "@retsepty:7278",
+      "@retsepty:7280",
+      "@retsepty:7289",
+      "@retsepty:7305",
+      "@retsepty:7310",
+      "@retsepty:7312",
+      "@retsepty:7313",
+      "@retsepty:7317",
+      "@retsepty:7318",
+      "@retsepty:7320",
+      "@retsepty:7321",
+      "@retsepty:7323",
+      "@retsepty:7324",
+      "@retsepty:7325",
+      "@retsepty:7327",
+      "@retsepty:7328",
+      "@retsepty:7331",
+      "@retsepty:7335",
+      "@retsepty:7337",
+      "@retsepty:7350",
+      "@retsepty:7354",
+      "@tarilka_malyuka:746",
+      "@tarilka_malyuka:764",
+      "@tarilka_malyuka:827",
+      "@ya_Nenka:834",
+      "@ya_Nenka:838",
+      "@ya_Nenka:840",
+      "@ya_Nenka:844"
+    ],
+    "parse": {
+      "answered": 1032,
+      "refusals_by_cause": {},
+      "refused": 0,
+      "rule": "a pass-1 reply that could not be read carries no label, so its row is not in the filter and its thread is called only if another row of it is. That is a state of the INPUT and it is counted here rather than discovered later"
+    },
+    "payable_comments": 79,
+    "payable_comments_is_the_UNIT_count": "pass 1's word for «how many things this pack asks», carried because `gate_pass1_window.main` compares this key in the pack against the same key in the record before every rung that reads a pack. A pass-2 unit is a THREAD and not a comment, so the NAME is pass 1's and the number is this pack's units. The inherited guard is pinned by a sealed record and cannot be renamed",
+    "producer": "census_pass1_window.pass_2_filter, CALLED over the union view",
+    "producer_sha256": "14571582bd969a345a069440cf65d7860bbc5910204e6009071f2956869e783f",
+    "threads_carrying_a_payable_comment": 127,
+    "threads_pass_2_would_not_call": 48,
+    "units": 79
+  },
+  "producer": {
+    "borrowed": {
+      "borrowed": {
+        "scripts/build_pass1_fewshot_packs.py": "8f52c8ae87bbc339049837ea5ace7e6ae933d331a73fce28ed24db5103cee69e",
+        "scripts/build_pass1_label_pack_r2.py": "7ae4f6e440ffdf4130d94d4cebcab6ed73acac16f3d8071985fb650a0ec83202",
+        "scripts/build_pass1_sft.py": "c1e9bf5ecee005a0f132b7b4e419ff40e0f7d852eb60311b630bf94844709e7d",
+        "scripts/build_pass1_window_r2_pack.py": "c8345df6b747e3ab45b5dabbd799caf34b2c43863c97daae2a6780d68caa3395",
+        "scripts/census_pass1_window.py": "14571582bd969a345a069440cf65d7860bbc5910204e6009071f2956869e783f",
+        "scripts/census_pass1_window_r2.py": "6c0bb86f545ffc4eadfc77530f219b38701d672cf9754ad51134c5b14b8250a6"
+      },
+      "borrowed_rule": "the filter, the union view, the sealed-pack guard, the store, the bought verdicts and the ceiling check. Everything this pack is made of already existed",
+      "script": "scripts/build_pass2_pack.py",
+      "sha256": "ba19cc6fbef0b6cd07497f2db73164dbd4a421ed4834d375a7176b985a3deb37"
+    },
+    "script": "scripts/build_pass2_r2_pack.py",
+    "sha256": "effc4e3c83cbfd00aa7285ec8eba5fdf006a3f24b56183c888e1292cfcb63517"
+  },
+  "reference_split": {
+    "reference": 11,
+    "remainder": 68,
+    "rule": "read off this pack's own `membership`: a thread is a reference thread when the shipped pack says it carries an E, F or N case",
+    "sixteen": "the contract's «16 reference threads» counts the 16 threads named in `membership.per_kind` AND `membership.cases_outside_the_population`; only 11 of them are in this pack's 79 — the other five (@matusi_ukr:22242, @retsepty:7312/7325/7327, @sashafitnesslife:3939) were outside the r2 population and were never bought by the run this is paired against either. So the split here is 11 + 68 = 79, not 16 + 63"
+  },
+  "registration": {
+    "record": "results/prereg_pass2_signals_r2.json"
+  },
+  "serving": {
+    "adapter": null,
+    "chat_template": {
+      "add_generation_prompt": true,
+      "enable_thinking": true
+    },
+    "decoding": "greedy",
+    "do_sample": false,
+    "forward_batch_size": 1,
+    "gpu_class_preference": [
+      "ADA_24",
+      "ADA_24_PRO",
+      "AMPERE_24"
+    ],
+    "gpu_rule": "requested fastest-first and never asserted. probe-a asked for the display name «NVIDIA L4», the endpoint came back `gpuIds: AMPERE_24` and the worker reported an L4 runtime — so the CLASS is what is requested and the RUNTIME string is what lands in provenance. Seconds per thread are reported per card",
+    "merge_state": "base-no-adapter",
+    "model": "google/gemma-4-31b-it",
+    "model_revision": "842da3794eaa0b77d5f08bae87a17459d91ff475",
+    "output_tokens": 8000,
+    "quantization": {
+      "bnb_4bit_compute_dtype": "bfloat16",
+      "bnb_4bit_quant_type": "nf4",
+      "bnb_4bit_use_double_quant": true,
+      "load_in_4bit": true
+    },
+    "serving_config": "READER_THINK",
+    "template_note": "ruling (ф), 2026-08-26: the same registered prompts with the thinking channel OPEN. The generation prompt ends at `<|turn>model` and the model writes its working-out before the verdict; `prompts.after_thought` is what the parser reads past it with, and `reader_v5_pod_runner.stops_here` is what keeps the transport stop out of it",
+    "was": {
+      "chat_template": {
+        "add_generation_prompt": true,
+        "enable_thinking": false
+      },
+      "output_tokens": 4000,
+      "serving_config": "READER"
+    }
+  },
+  "source": {
+    "path": "results/pass2_r2_pack.json",
+    "rule": "every item below is this file's item, unedited. Only serving, instruments and the leg split are this pack's own — the rows, their ids and their renderings are the shipped pack's, so the two columns of the paired table are the same population",
+    "sha256": "d058fe1955268e02ddb14fdb936befe90747438e76497fe44b1b0a774881e4ea"
+  },
+  "task": "pass2_thread_gm4_v1",
+  "what_this_run_is": "the 75 threads pass 2 still owes: the 74 rung S′ never authorised plus the one whose reply was REFUSED by r1's parser on a report-only field and therefore never read. The four replies that parsed are carried, re-verified by rendering, and never re-bought"
+}

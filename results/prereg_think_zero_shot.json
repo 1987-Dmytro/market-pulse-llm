@@ -1,0 +1,300 @@
+{
+  "authority": {
+    "contract_file": "docs/PROMPT-think-zero-shot.md",
+    "contract_sha256": "ef5bc3e402cd305c754cf34f40c57f647f565d328767e3068435aff79e4568a9",
+    "file": "docs/STATUS.md",
+    "quoted": [
+      "Система бесполезна, пока не находит сигналы в комментах и тредах на уровне ручного разбора тимлида; **только локальная Gemma-4-31B, thinking ОБЯЗАТЕЛЬНО**; API-модели отклонены.",
+      "читатель с thinking ON ни разу не измерен; регистрации сами пишут «thinking-ON reader = НОВАЯ регистрация»",
+      "Решение о дальнейшем пути — на этой таблице."
+    ],
+    "ruling": "(ф), 2026-08-26",
+    "sha256": "ede191c9057ff7d0ce6d63632eadc3e672ac4c365d36b2aee0a969962572365b"
+  },
+  "before_columns": {
+    "dev_200": {
+      "base": {
+        "agreed": 87,
+        "file": "results/pass1_dev_base.jsonl",
+        "n": 200,
+        "our_agreed": 31,
+        "our_n": 49,
+        "parse_refusals": 0,
+        "per_class": {
+          "null": {
+            "agreed": 36,
+            "n": 54
+          },
+          "категория": {
+            "agreed": 30,
+            "n": 47
+          },
+          "молочный_бренд": {
+            "agreed": 1,
+            "n": 2
+          },
+          "не_наш_рынок": {
+            "agreed": 12,
+            "n": 85
+          },
+          "сеть_ритейлер": {
+            "agreed": 8,
+            "n": 12
+          }
+        },
+        "scorer": "market_pulse.scorer.reader_comment_agreement, through gate_pass1_fewshot.leg_table — the comparison the BEFORE column itself was read with",
+        "sha256": "b1a708d917a19cc4bc3e95caca94dca17ef92bd92404b9dffc346b0f3a24e82f",
+        "task": "pass1_comment_gm4_v1"
+      },
+      "v2": {
+        "agreed": 136,
+        "file": "results/pass1_dev_v2.jsonl",
+        "n": 200,
+        "our_agreed": 38,
+        "our_n": 49,
+        "parse_refusals": 0,
+        "per_class": {
+          "null": {
+            "agreed": 41,
+            "n": 54
+          },
+          "категория": {
+            "agreed": 36,
+            "n": 47
+          },
+          "молочный_бренд": {
+            "agreed": 2,
+            "n": 2
+          },
+          "не_наш_рынок": {
+            "agreed": 46,
+            "n": 85
+          },
+          "сеть_ритейлер": {
+            "agreed": 11,
+            "n": 12
+          }
+        },
+        "scorer": "market_pulse.scorer.reader_comment_agreement, through gate_pass1_fewshot.leg_table — the comparison the BEFORE column itself was read with",
+        "sha256": "979c8f8252ed9b1e805663ac7941f8234adbb97fa76c14b81e65d639ceb35a2a",
+        "task": "pass1_comment_gm4_v2"
+      }
+    },
+    "holdout_100": {
+      "agreed": 64,
+      "answered_by": {
+        "results/pass1_window_r2_v2.jsonl": {
+          "rows": 88,
+          "sha256": "ca35c9ae674a326cee92c3f15168494abc5c7ea6055e20a214f328e5d84bf445"
+        },
+        "results/pass1_window_v2.jsonl": {
+          "rows": 12,
+          "sha256": "e888d466d36e32a08fa13e5598700bc0cdfffd768eba761df3f51881375eb740"
+        }
+      },
+      "labels": "results/pass1_holdout_100.json",
+      "labels_sha256": "5a62c957addfa7211702f38414d6fd2f3d3382ca6dfdb46c92c459c45f0ae647",
+      "n": 100,
+      "rule": "the two window runs are disjoint over these rows and cover all hundred; the fraction is recomputed here because docs/reports/pass1-window-r2.md does not carry it"
+    },
+    "pass_2": {
+      "1_flagships": {
+        "cases": 5,
+        "cases_answered": 4,
+        "passed": false
+      },
+      "2_entity_cases": {
+        "cases": 4,
+        "cases_answered": 3,
+        "passed": false,
+        "unreachable": "E1 (@matusi_ukr:22242) is outside this pack's 79 and no run has read its thread; the thinking column cannot move it either"
+      },
+      "3_noise": {
+        "passed": false,
+        "scored_over": [
+          "N2"
+        ],
+        "signals": 2,
+        "threshold": "0 signals"
+      },
+      "gate": "scripts/gate_pass2_signals_r2.py",
+      "gate_sha256": "a7c06de8d8d654ad3b8c72af5294e79c808d4f83e67114f3b55bb6d88ee7c1b1",
+      "replies": "results/pass2_signals_r2_v1.jsonl",
+      "replies_sha256": "d3c147ac3bab83455953806b8cc63f730ce6388ace8884470ebd99684f852e45",
+      "verdict": "results/pass2_signals_r2_verdict.json",
+      "verdict_sha256": "239f55943f5f120cec31fa8b3c38b721b1136915c91da991ad907fed3b82b3f1"
+    }
+  },
+  "contract": "think-zero-shot",
+  "instrument": {
+    "chat_template": {
+      "add_generation_prompt": true,
+      "enable_thinking": true
+    },
+    "selected_by": "scripts/reader_v5_pod_runner.SERVING_TEMPLATES, a closed table read by the pack's own `serving.serving_config`. READER_THINK is deliberately not in market_pulse.serving.CONFIGS: no HTTP worker serves it, and settings() refusing an unknown name is the correct guard until one does",
+    "serving_config": "READER_THINK",
+    "shas": {
+      "scripts/build_think_packs.py": "26ee2fcc6678082dbe8968f81b0870249ace78fcce779f7daf2f60feb07e208a",
+      "scripts/gate_pass1_fewshot.py": "07a5a07aa8e94d980704b82dbddb4c58abe36b4c6fb3f4f4a42a4f3fcf4d02ff",
+      "scripts/gate_pass2_signals_r2.py": "a7c06de8d8d654ad3b8c72af5294e79c808d4f83e67114f3b55bb6d88ee7c1b1",
+      "scripts/pass1_fewshot_pod_runner.py": "4e86bdea09ad72c1cde54f9f0536ed542e09eaa220a7441bd420c499148fa392",
+      "scripts/pass1_pod_runner.py": "820291c29fc6d35aa2fdb4d659dc3cbe5147b2e67290341c4085c41d114ff9d3",
+      "scripts/pass2_r2_pod_runner.py": "a09217400c5308cdcb06e319d26ed578548f3d234c077279a86665e664437f45",
+      "scripts/reader_v5_pod_runner.py": "944cbad86dc69e6955a40ef8f0a75cb1fcf7d0eda1a15a3f447bad89518ede08",
+      "src/market_pulse/local_llm.py": "27ab1dc6c15c1073d4fcbc8a94d2cb10930972bc982c42245c6c565c8d690f3f",
+      "src/market_pulse/pass2.py": "f26eb555c54ef80aa0eb275b98ea0292e8eb477bb87d87666dca7b9dfb507e9d",
+      "src/market_pulse/pass2_r2.py": "b0356e73cc4bc98a1baa5928559878ed752eb560311bac029b51a67e65f1af46",
+      "src/market_pulse/prompts.py": "f45b29c58ba17947fc7aa7c002b0fb6bd6e341ba4b4c3f5203d5309c83dd0b08",
+      "src/market_pulse/reader_v5.py": "111707f2ce883f9759e52126684d8d17887ba522289a96ca36e03cfcb3dbbe71"
+    },
+    "was": {
+      "add_generation_prompt": true,
+      "enable_thinking": false
+    },
+    "what_changes": "the same registered prompts, the same instances, Gemma-4-31B thinking ON",
+    "what_does_not": "Nothing is tuned:\nno prompt edit, no pack edit, no adapter."
+  },
+  "money": {
+    "cap_usd": 8.0,
+    "measurements": "results/measurements.jsonl — the smoke's s/call, thought length and peak VRAM are written there, one row each, with the source that produced them",
+    "quoted": "ONE pod (RTX PRO 4500 32 GB, EU-RO-1, `mp-srv2`; fallback 4090 $0.74), cap $8.00",
+    "rungs": [
+      "(0) price ≤$0.80/h at create",
+      "(1) liveness — 900 s from the LAST reply or\n`nvidia-smi` activity (thinking is silent longer than JSON)",
+      "(2) projection after the smoke and\nafter every stage at MEASURED s/call — over the cap by ≤20% → **ASK**: hold the pod ≤10 min for the\noperator's typed word (quoted verbatim in the report), silence = KILL; over by more → KILL;",
+      "(3) platform hard stop from the cap at the observed price"
+    ]
+  },
+  "one_attempt": "ONE attempt per stage; no re-runs.",
+  "phase": "6t",
+  "producer": {
+    "rule": "this record rebuilds byte for byte from the files it names",
+    "script": "scripts/write_think_zero_shot_prereg.py",
+    "sha256": "d6ddbdb3474ea486bdad4563829019f1e15ff958dda387f82b1f82382d0e79bf"
+  },
+  "stages": [
+    {
+      "legs": [
+        {
+          "name": "smoke",
+          "out": "pass2_signals_r2_remainder.jsonl",
+          "units": 1
+        }
+      ],
+      "note": "the longest thread — s/call, thought tokens, VRAM",
+      "order": 1,
+      "output_tokens": 8000,
+      "pack": "results/pass2_r2_pack_think_smoke.json",
+      "serving_config": "READER_THINK",
+      "sha256": "878cdee9d7008b91efa1f5de7a28b52d616cf8e968ef75c4c1f9f0153afafa78",
+      "stage": "smoke"
+    },
+    {
+      "legs": [
+        {
+          "name": "smoke",
+          "out": "pass1_dev_v2.jsonl",
+          "units": 3
+        }
+      ],
+      "note": "three dev rows, into the v2 leg's own out-file",
+      "order": 2,
+      "output_tokens": 4000,
+      "pack": "results/pass1_dev_smoke_think.json",
+      "serving_config": "READER_THINK",
+      "sha256": "767184418446626db111655ffff7fb11f48c961472fddf87e3ab831f494bd72e",
+      "stage": "smoke"
+    },
+    {
+      "legs": [
+        {
+          "name": "base",
+          "out": "pass1_dev_base.jsonl",
+          "units": 200
+        },
+        {
+          "name": "v2",
+          "out": "pass1_dev_v2.jsonl",
+          "units": 200
+        }
+      ],
+      "note": "--only v2",
+      "order": 3,
+      "output_tokens": 4000,
+      "pack": "results/pass1_dev_pack_think.json",
+      "serving_config": "READER_THINK",
+      "sha256": "28841175eab48be8ebb77a4a41e90b7109f1b092b0abcf7d90abc4db1e384418",
+      "stage": "v2 + think on dev-200"
+    },
+    {
+      "legs": [
+        {
+          "name": "reference",
+          "out": "pass2_signals_r2_reference.jsonl",
+          "units": 11
+        }
+      ],
+      "note": "the bars re-read",
+      "order": 4,
+      "output_tokens": 8000,
+      "pack": "results/pass2_r2_pack_think_reference.json",
+      "serving_config": "READER_THINK",
+      "sha256": "22c02afa70132d2a9b264421a7e6c566920c2192aa884fc09819b4d8d25612b8",
+      "stage": "pass 2 + think, reference"
+    },
+    {
+      "legs": [
+        {
+          "name": "base",
+          "out": "pass1_dev_base.jsonl",
+          "units": 200
+        },
+        {
+          "name": "v2",
+          "out": "pass1_dev_v2.jsonl",
+          "units": 200
+        }
+      ],
+      "note": "--only base",
+      "order": 5,
+      "output_tokens": 4000,
+      "pack": "results/pass1_dev_pack_think.json",
+      "serving_config": "READER_THINK",
+      "sha256": "28841175eab48be8ebb77a4a41e90b7109f1b092b0abcf7d90abc4db1e384418",
+      "stage": "v1 + think on dev-200"
+    },
+    {
+      "legs": [
+        {
+          "name": "holdout",
+          "out": "pass1_holdout_100_v2.jsonl",
+          "units": 100
+        }
+      ],
+      "note": "the frozen hundred",
+      "order": 6,
+      "output_tokens": 4000,
+      "pack": "results/pass1_holdout_100_think.json",
+      "serving_config": "READER_THINK",
+      "sha256": "0a3b95c92ae364fc92d024a11d1641aa5260c624493518d1d0cc443ded157ecc",
+      "stage": "v2 + think on holdout-100"
+    },
+    {
+      "legs": [
+        {
+          "name": "remainder",
+          "out": "pass2_signals_r2_remainder.jsonl",
+          "units": 68
+        }
+      ],
+      "note": "the other 68 threads",
+      "order": 7,
+      "output_tokens": 8000,
+      "pack": "results/pass2_r2_pack_think_remainder.json",
+      "serving_config": "READER_THINK",
+      "sha256": "ed3385047be453094422b5004a7329f36695e2f577e86eadaa6b0906c7529882",
+      "stage": "pass 2 + think, remainder"
+    }
+  ],
+  "what_this_is": "READINGS, not bars. This record registers no threshold and grades nothing: the deliverable is a paired table and the operator decides on it"
+}

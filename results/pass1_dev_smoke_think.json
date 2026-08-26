@@ -1,0 +1,377 @@
+{
+  "balance": {
+    "examples_per_item": {
+      "5": 200
+    },
+    "label_totals": {
+      "null": 200,
+      "категория_личное": 200,
+      "молочный_бренд": 200,
+      "не_наш_рынок": 200,
+      "сеть_ритейлер": 200
+    },
+    "rule": "exactly five per item, one of each reading. The totals are equal BY CONSTRUCTION and that is the point: nearest-k would have reproduced the 52% не_наш_рынок prior the adapter of line B learned instead of the decision"
+  },
+  "contamination": {
+    "distinct_neighbours_used": 318,
+    "items_shown_a_neighbour_from_their_own_thread": [],
+    "neighbour_ids_in_the_eval_pack_64": [],
+    "neighbour_ids_in_the_gold_14": [],
+    "neighbour_threads_in_the_eval_pack_threads": [],
+    "neighbour_threads_in_the_gold_threads": [],
+    "rule": "all four lists are EMPTY in a correct pack",
+    "why_it_is_empty": "no label shares a thread with a probe unit — build_pass1_label_pack.py::excluded_threads removed those 7 threads WHOLE from the labelling population — so the pool the neighbours are drawn from is disjoint from both exams by construction"
+  },
+  "contract": "docs/PROMPT-pass1-fewshot.md D0.4",
+  "draw": {
+    "ours_rule": "every labelled row of категория_личное and молочный_бренд — the classes the dev gate's first inequality counts. Sampling them would put draw noise in the gate's own numerator",
+    "ours_taken_whole": 49,
+    "rest_allocation": {
+      "null": 54,
+      "не_наш_рынок": 85,
+      "сеть_ритейлер": 12
+    },
+    "rest_formula": "largest remainder of 151 over the class counts of the other 601 labelled rows, tie-broken on (−remainder, class), drawn off one random.Random(SEED) stream in the prompt's own schema order with null last",
+    "rest_population": {
+      "null": 213,
+      "не_наш_рынок": 340,
+      "сеть_ритейлер": 48
+    },
+    "seed": 20260820,
+    "target": 200
+  },
+  "holdout": {
+    "dev_rows_that_are_holdout_rows": 74,
+    "record": "results/pass1_holdout_100.json",
+    "rule": "this line TRAINS NOTHING, so a dev row may also be a holdout row and the overlap is published rather than avoided. It would disqualify a line that trained",
+    "sha256": "5a62c957addfa7211702f38414d6fd2f3d3382ca6dfdb46c92c459c45f0ae647"
+  },
+  "instruments": {
+    "moved_from_the_sealed_pack": {
+      "parser.sha256": "a4a5a5d08546f53af18117c37e49f7e396919555563e16737a633c1df1a86eec",
+      "prompt_sha256": {
+        "pass1_comment_gm4_v1": "5a4a3cb6ce4db89adb304c04de41210fdabfde0c53addfdb75adba0f1d866650"
+      },
+      "why": "prompts.py grew pass1_comment_gm4_v2, so its module sha moved and the served pass-1 family became two texts. The pod's handshake compares the whole family map, so a verbatim copy of the sealed block would refuse this checkout. v1's own sha is UNCHANGED and is in the map beside v2 — that is what makes the paired legs comparable"
+    },
+    "parser": {
+      "entry_point": "market_pulse.prompts.parse_pass1",
+      "module": "src/market_pulse/prompts.py",
+      "rule": "strict single object, domain-checked: the four subject_type readings, the stance domain, and the request's own msg_id echoed back. Everything else is a refusal and no container is repaired",
+      "sha256": "f45b29c58ba17947fc7aa7c002b0fb6bd6e341ba4b4c3f5203d5309c83dd0b08"
+    },
+    "prompt_sha256": {
+      "pass1_comment_gm4_v1": "5a4a3cb6ce4db89adb304c04de41210fdabfde0c53addfdb75adba0f1d866650",
+      "pass1_comment_gm4_v2": "f5f6a5afdd8573ba52bde5cf79041cf9a01d8421ea402c0f39d2ea1c1d430aee"
+    },
+    "renderer": "market_pulse.prompts.pass1_messages_gm4"
+  },
+  "legs": [
+    {
+      "items": [
+        {
+          "channel": "@VARUS_channel",
+          "entities": [],
+          "examples": [
+            {
+              "label": "молочный_бренд",
+              "text": "Спробував на дієті згущонку нульовку (sladosvit) : така херня шо ппц , вона навіть не солодка ..."
+            },
+            {
+              "label": "сеть_ритейлер",
+              "text": "Вітаємо! Вже написали вам у приватні повідомлення"
+            },
+            {
+              "label": "категория_личное",
+              "text": "Надумала) Зроблю запіканку з цвітної капусти з печерицями та яєчно вершковою з сиром заливкою, зеленню притрушу."
+            },
+            {
+              "label": "не_наш_рынок",
+              "text": "Омлет із шпинатом і грибами; салат з буряка, зеленого горошку  й оливок; \"піццу\" з лаваша з куркою, солодким перцем, шпинатом і оливками на додачу до курячого бульйончику з зеленню."
+            },
+            {
+              "label": null,
+              "text": "И молоко не прибывало?"
+            }
+          ],
+          "examples_chosen": [
+            {
+              "label": "молочный_бренд",
+              "msg_id": 48445,
+              "similarity": 0.009346,
+              "thread": "@mandziak:3721"
+            },
+            {
+              "label": "сеть_ритейлер",
+              "msg_id": 20947,
+              "similarity": 0.032258,
+              "thread": "@VARUS_channel:10367"
+            },
+            {
+              "label": "категория_личное",
+              "msg_id": 21256,
+              "similarity": 0.060345,
+              "thread": "@klopotenkofood:6040"
+            },
+            {
+              "label": "не_наш_рынок",
+              "msg_id": 21255,
+              "similarity": 0.063694,
+              "thread": "@klopotenkofood:6040"
+            },
+            {
+              "label": "null",
+              "msg_id": 576968,
+              "similarity": 0.15625,
+              "thread": "@matusi_ukr:22092"
+            }
+          ],
+          "id": "@VARUS_channel:10349#20649",
+          "msg_id": 20649,
+          "post_id": 10349,
+          "rendered_chars": 4328,
+          "rendering_sha256": "473c0312987c39bf523493c41148bb5ba07da3cb89e321fc34441c58620c173c",
+          "task": "pass1_comment_gm4_v2",
+          "text": "Молоко із зеленню 😍",
+          "thread": "@VARUS_channel:10349",
+          "topic": "Запит до користувачів запропонувати рецепти страв із набору продуктів."
+        },
+        {
+          "channel": "@VARUS_channel",
+          "entities": [],
+          "examples": [
+            {
+              "label": "молочный_бренд",
+              "text": "Уцей сир треба пару днів як купив потримати в пакеті щоб він став мокрим, тоді його лупашить можна на ура."
+            },
+            {
+              "label": "сеть_ритейлер",
+              "text": "Так это уже мусорный пакет с  мусором (кишками). А рыба плохая, потому что косточки торчат?"
+            },
+            {
+              "label": "категория_личное",
+              "text": "Надумала) Зроблю запіканку з цвітної капусти з печерицями та яєчно вершковою з сиром заливкою, зеленню притрушу."
+            },
+            {
+              "label": "не_наш_рынок",
+              "text": "Та частником давленим"
+            },
+            {
+              "label": null,
+              "text": "Постепенно убирала дневные промежуточные кормления, оставляла только на засыпание и просыпание, потом остались только на засыпание ночное и на дневной сон. Важно постепенно сокращать, чтоб не было лактостазов"
+            }
+          ],
+          "examples_chosen": [
+            {
+              "label": "молочный_бренд",
+              "msg_id": 20766,
+              "similarity": 0.023077,
+              "thread": "@VARUS_channel:10367"
+            },
+            {
+              "label": "сеть_ритейлер",
+              "msg_id": 21578,
+              "similarity": 0.053571,
+              "thread": "@VARUS_channel:10603"
+            },
+            {
+              "label": "категория_личное",
+              "msg_id": 21256,
+              "similarity": 0.060606,
+              "thread": "@klopotenkofood:6040"
+            },
+            {
+              "label": "не_наш_рынок",
+              "msg_id": 48313,
+              "similarity": 0.081633,
+              "thread": "@mandziak:3708"
+            },
+            {
+              "label": "null",
+              "msg_id": 576899,
+              "similarity": 0.039773,
+              "thread": "@matusi_ukr:22092"
+            }
+          ],
+          "id": "@VARUS_channel:10349#20651",
+          "msg_id": 20651,
+          "post_id": 10349,
+          "rendered_chars": 4425,
+          "rendering_sha256": "bf951cd01666a2749c580fbc5545e8cd76580b30b29e4b575702517406954765",
+          "task": "pass1_comment_gm4_v2",
+          "text": "Паста с сыром, помидором и зеленью!!!!!",
+          "thread": "@VARUS_channel:10349",
+          "topic": "Запит до користувачів запропонувати рецепти страв із набору продуктів."
+        },
+        {
+          "channel": "@VARUS_channel",
+          "entities": [],
+          "examples": [
+            {
+              "label": "молочный_бренд",
+              "text": "Уцей сир треба пару днів як купив потримати в пакеті щоб він став мокрим, тоді його лупашить можна на ура."
+            },
+            {
+              "label": "сеть_ритейлер",
+              "text": "Вітаємо! Вже написали вам у приватні повідомлення"
+            },
+            {
+              "label": "категория_личное",
+              "text": "Надумала) Зроблю запіканку з цвітної капусти з печерицями та яєчно вершковою з сиром заливкою, зеленню притрушу."
+            },
+            {
+              "label": "не_наш_рынок",
+              "text": "Омлет із шпинатом і грибами; салат з буряка, зеленого горошку  й оливок; \"піццу\" з лаваша з куркою, солодким перцем, шпинатом і оливками на додачу до курячого бульйончику з зеленню."
+            },
+            {
+              "label": null,
+              "text": "Краще з картонками-так дієвіше."
+            }
+          ],
+          "examples_chosen": [
+            {
+              "label": "молочный_бренд",
+              "msg_id": 20766,
+              "similarity": 0.029851,
+              "thread": "@VARUS_channel:10367"
+            },
+            {
+              "label": "сеть_ритейлер",
+              "msg_id": 20947,
+              "similarity": 0.036145,
+              "thread": "@VARUS_channel:10367"
+            },
+            {
+              "label": "категория_личное",
+              "msg_id": 21256,
+              "similarity": 0.124031,
+              "thread": "@klopotenkofood:6040"
+            },
+            {
+              "label": "не_наш_рынок",
+              "msg_id": 21255,
+              "similarity": 0.105263,
+              "thread": "@klopotenkofood:6040"
+            },
+            {
+              "label": "null",
+              "msg_id": 21399,
+              "similarity": 0.046154,
+              "thread": "@VARUS_channel:10528"
+            }
+          ],
+          "id": "@VARUS_channel:10349#20655",
+          "msg_id": 20655,
+          "post_id": 10349,
+          "rendered_chars": 4369,
+          "rendering_sha256": "cd2df455d795bfab8d984e53155bc3eafc393d02224cb82caf3990162f660f25",
+          "task": "pass1_comment_gm4_v2",
+          "text": "Паста с сиром, салат з зеленню та яблоками",
+          "thread": "@VARUS_channel:10349",
+          "topic": "Запит до користувачів запропонувати рецепти страв із набору продуктів."
+        }
+      ],
+      "name": "smoke",
+      "out": "pass1_dev_v2.jsonl",
+      "reading": "the same 200 rows, same context, under v2 with five labelled neighbours",
+      "task": "pass1_comment_gm4_v2"
+    }
+  ],
+  "length": {
+    "ceiling_chars": 12000,
+    "headroom_chars": 4061,
+    "median_chars": 4030,
+    "widest_request": "@matusi_ukr:22327#580336",
+    "widest_request_chars": 7939
+  },
+  "moved_from_the_shipped_pack": {
+    "recover": "git show 74f4a81:src/market_pulse/prompts.py",
+    "was": {
+      "parser": "b70e2114b03a76dc2c8cfc9b559bf7ef22e9193d841b4fccc5ed8bd0a40294ab"
+    },
+    "why": "docs/PROMPT-think-zero-shot.md D1.2 teaches prompts.parse_reply to read the answer AFTER a closed thought channel, so src/market_pulse/prompts.py's sha moved. The shipped packs and the registrations that pin them are NOT rebuilt — they describe runs that were already paid for; this pack carries the live shas because the pod's handshake compares them against this checkout before the model is loaded"
+  },
+  "neighbours": {
+    "pool": {
+      "files": {
+        "r1": "776b204f3d3aa1a193f0faad7f68198595c81963199124efca8f6b74a9e1c920",
+        "r2": "8f611437fdd3ed724acda516186bfa2837d94d7e8d74ac6c25e23a8e57d60e50"
+      },
+      "rows": 650
+    },
+    "rule": "for each of the five readings — the four subject types and the null — the single nearest labelled comment by Jaccard similarity over lower-cased character 3-grams of the comment text, from the 650 labels MINUS every row of the query's own thread. Ties to the smaller msg_id, then to the thread",
+    "why_one_per_class": "balance by construction. Nearest-k over this pool is 52% не_наш_рынок, which is the marginal the LoRA of line B learned instead of the decision, and a block that carried it would teach the same prior with none of the training"
+  },
+  "order_rule": "thread-grouped in `channel:post_id` order, and inside a thread the store's own comment order — gold rows and census rows interleaved, never sorted apart. A pack that read the gold rows first would make the gate's first units unrepresentative of the rest",
+  "paired": {
+    "rule": "the two legs carry the SAME 200 (thread, msg_id) rows in the same order, and the only difference between a base item and its v2 twin is the task and the examples block. Asserted below rather than intended",
+    "same_context": true,
+    "same_rows": true
+  },
+  "phase": "pass1-fewshot",
+  "population": {
+    "distribution": {
+      "null": 54,
+      "категория_личное": 47,
+      "молочный_бренд": 2,
+      "не_наш_рынок": 85,
+      "сеть_ритейлер": 12
+    },
+    "our_rows": 49,
+    "rows": 200
+  },
+  "producer": {
+    "borrowed": {
+      "scripts/build_pass1_sft.py": "c1e9bf5ecee005a0f132b7b4e419ff40e0f7d852eb60311b630bf94844709e7d",
+      "scripts/window_summary_5c2.py": "239d2d5fcc0f0c93158ca41383b5ce20beb7f8e9db38974913a302ea4831fdaf",
+      "src/market_pulse/prompts.py": "b70e2114b03a76dc2c8cfc9b559bf7ef22e9193d841b4fccc5ed8bd0a40294ab"
+    },
+    "script": "scripts/build_pass1_fewshot_packs.py",
+    "sha256": "8f52c8ae87bbc339049837ea5ace7e6ae933d331a73fce28ed24db5103cee69e"
+  },
+  "reading": "the pod renders each item itself, from the fields in it, and refuses unless its sha equals the one above. Shipping the rendered string would only prove the two machines agree about a string; what has to be true is that the model is shown what the registration registered",
+  "registration": {
+    "record": "results/prereg_pass1_fewshot.json"
+  },
+  "serving": {
+    "adapter": null,
+    "chat_template": {
+      "add_generation_prompt": true,
+      "enable_thinking": true
+    },
+    "decoding": "greedy",
+    "do_sample": false,
+    "forward_batch_size": 1,
+    "gpu_class_preference": [
+      "ADA_24",
+      "ADA_24_PRO",
+      "AMPERE_24"
+    ],
+    "gpu_rule": "requested fastest-first and never asserted. probe-a asked for the display name «NVIDIA L4», the endpoint came back `gpuIds: AMPERE_24` and the worker reported an L4 runtime — so the CLASS is what is requested and the RUNTIME string is what lands in provenance. Seconds per thread are reported per card",
+    "merge_state": "base-no-adapter",
+    "model": "google/gemma-4-31b-it",
+    "model_revision": "842da3794eaa0b77d5f08bae87a17459d91ff475",
+    "output_tokens": 4000,
+    "quantization": {
+      "bnb_4bit_compute_dtype": "bfloat16",
+      "bnb_4bit_quant_type": "nf4",
+      "bnb_4bit_use_double_quant": true,
+      "load_in_4bit": true
+    },
+    "serving_config": "READER_THINK",
+    "template_note": "ruling (ф), 2026-08-26: the same registered prompts with the thinking channel OPEN. The generation prompt ends at `<|turn>model` and the model writes its working-out before the verdict; `prompts.after_thought` is what the parser reads past it with, and `reader_v5_pod_runner.stops_here` is what keeps the transport stop out of it",
+    "was": {
+      "chat_template": {
+        "add_generation_prompt": true,
+        "enable_thinking": false
+      },
+      "output_tokens": 256,
+      "serving_config": "READER"
+    }
+  },
+  "source": {
+    "path": "results/pass1_dev_pack.json",
+    "rule": "every item below is this file's item, unedited. Only serving, instruments and the leg split are this pack's own — the rows, their ids and their renderings are the shipped pack's, so the two columns of the paired table are the same population",
+    "sha256": "cbdb18c4c0e9dad0e68ea10c865e72d080fb18dc42fb05933d778b1f3eb0cec9"
+  }
+}

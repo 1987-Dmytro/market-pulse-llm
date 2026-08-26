@@ -18,14 +18,21 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
 import build_pass1_fewshot_packs as packs  # noqa: E402
+import moved_pins  # noqa: E402
 import pass1_fewshot_pod_runner as fewshot  # noqa: E402
 import pass1_pod_runner as pass1  # noqa: E402
 import reader_v5_pod_runner as runner  # noqa: E402
 
 from market_pulse import prompts  # noqa: E402
 
-DEV = json.loads((REPO_ROOT / packs.DEV_NAME).read_text("utf-8"))
-SHOT = json.loads((REPO_ROOT / packs.SHOT_NAME).read_text("utf-8"))
+DEV = moved_pins.servable(json.loads((REPO_ROOT / packs.DEV_NAME).read_text("utf-8")))
+SHOT = moved_pins.servable(json.loads((REPO_ROOT / packs.SHOT_NAME).read_text("utf-8")))
+"""The sealed packs with their ONE moved pin brought up to date, in memory only.
+
+Ruling (ф) moved `src/market_pulse/prompts.py` — the parser now reads past a closed thinking
+channel — so the shipped packs' `instruments.parser.sha256` describes the checkout they were sealed
+against and the handshake refuses them, correctly. These tests are about the swap, the single client
+and the per-leg out-files; the files on disk are never written ([[tests/moved_pins.py]])."""
 
 
 class FakeClient:

@@ -610,6 +610,54 @@ def reader_guards(handler) -> dict:
     checks["enable_thinking:false closes the thought channel on every reader request"] = all(
         closed.values()
     )
+
+    # READER_THINK — ruling (ф). The whole instrument is one flag in the template, and the ONE
+    # thing that says it took effect is that the request stops WITHOUT a closer: the model then
+    # opens the channel itself and writes its working-out before the JSON. A render that still
+    # ended `<|channel>thought\n<channel|>` would buy a thinking pod and read a non-thinking run.
+    thinker = local_llm.ReaderClient(processor, None, chat_template=local_llm.THINK_CHAT_TEMPLATE)
+    thinking = {task: thinker.render(task, thread) for task in sorted(prompts.READER)}
+    open_channel = {
+        task: not text.rstrip().endswith(prompts.THOUGHT_CLOSE) and "<|think|>" in text
+        for task, text in thinking.items()
+    }
+    print(f"\n14b. READER_THINK             {len(thinking)} registered texts, same prompts")
+    for task, text in thinking.items():
+        print(
+            f"    {task:22s} <bos>: {text.startswith(bos)} · thought OPEN:"
+            f" {open_channel[task]} · differs from READER: {text != rendered[task]}"
+        )
+    checks["every READER_THINK request renders through the real template and keeps <bos>"] = all(
+        text.startswith(bos) for text in thinking.values()
+    )
+    checks["enable_thinking:true leaves the thought channel OPEN on every reader request"] = all(
+        open_channel.values()
+    )
+    # the control on the two blocks above: they must not be the same string. A template revision
+    # that ignored the flag would pass every check here with both dicts identical.
+    checks["the control: READER and READER_THINK render differently for every text"] = all(
+        thinking[task] != rendered[task] for task in rendered
+    )
+    checks["the closer is a token this tokenizer knows"] = bool(thinker.close_id)
+
+    # srv-2d / CAPTION / POSITIONS are UNTOUCHED by ruling (ф), and «untouched» is checkable:
+    # their clients take no `chat_template` argument at all, so they render the shipped one and
+    # their requests still arrive with the thought already closed.
+    others = {
+        "CAPTION": local_llm.CaptionClient(processor, None).render(prompts.CAPTION_TASK_GM4, 1),
+        "POSITIONS": local_llm.PositionsClient(processor, None).render(
+            prompts.POSITIONS_TASK_TEXT, "проба"
+        ),
+    }
+    print("\n14c. the untouched configs")
+    for name, text in others.items():
+        print(
+            f"    {name:22s} <bos>: {text.startswith(bos)} · thought closed:"
+            f" {text.rstrip().endswith('<|channel>thought' + chr(10) + '<channel|>')}"
+        )
+    checks["CAPTION and POSITIONS still render a CLOSED thought channel"] = all(
+        text.rstrip().endswith("<|channel>thought\n<channel|>") for text in others.values()
+    )
     # the registered texts are different instruments and the worker must not be able to blur them.
     # Against `len(prompts.READER)` and never against a literal: written as `== 2` this check FAILED
     # the moment v3 was registered — a preflight refusing a run for the family having grown, which

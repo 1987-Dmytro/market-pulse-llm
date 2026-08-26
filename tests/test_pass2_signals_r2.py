@@ -22,6 +22,7 @@ sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
 import build_pass2_r2_pack as builder  # noqa: E402
 import gate_pass2_signals_r2 as gate  # noqa: E402
+import moved_pins  # noqa: E402
 import pass2_r2_pod_runner as runner  # noqa: E402
 import score_pass2_signals_r2 as scoring  # noqa: E402
 import write_pass2_prereg_r2 as producer  # noqa: E402
@@ -45,6 +46,10 @@ R1_ROWS = {
 }
 F2 = PACK["owed"]["re_asked_after_a_refusal"]
 OUT_NAME = PACK["legs"][0]["out"]
+SERVABLE = moved_pins.servable(PACK)
+"""The pack with its ONE moved pin brought up to date — `src/market_pulse/prompts.py`, moved again
+by `docs/PROMPT-think-zero-shot.md` D1.2. The sealed file is never written and the registered prompt
+shas in the copy are untouched ([[tests/moved_pins.py]])."""
 
 
 def _seed_text() -> str:
@@ -568,7 +573,9 @@ def test_the_pack_rebuilds_byte_for_byte_from_its_own_inputs(tmp_path, monkeypat
     out = tmp_path / "pack.json"
     monkeypatch.setattr(builder, "OUT", out)
     assert builder.main([]) == 0
-    assert json.loads(out.read_text(encoding="utf-8")) == PACK
+    again = json.loads(out.read_text(encoding="utf-8"))
+    moved_pins.assert_only_the_prompts_pin_moved(PACK, again)
+    assert again["instruments"]["prompt_sha256"] == PACK["instruments"]["prompt_sha256"]
 
 
 def test_r1s_pack_still_rebuilds_byte_for_byte(tmp_path, monkeypatch):
@@ -656,7 +663,14 @@ def test_H6_REFUSES_when_a_registered_number_is_moved(tmp_path, monkeypatch):
 
 def test_the_record_rebuilds_byte_for_byte(tmp_path):
     assert producer.main(["--out", str(tmp_path / "again.json")]) == 0
-    assert json.loads((tmp_path / "again.json").read_text(encoding="utf-8")) == RECORD
+    again = json.loads((tmp_path / "again.json").read_text(encoding="utf-8"))
+    # `--serving READER_THINK` moved both transports too, and this record pins both by sha
+    moved_pins.assert_only_the_prompts_pin_moved(
+        RECORD,
+        again,
+        REPO_ROOT / "scripts" / "pass2_r2_pod_runner.py",
+        REPO_ROOT / "scripts" / "reader_v5_pod_runner.py",
+    )
 
 
 def test_every_clock_rung_carries_its_deadline_by_key():
@@ -1258,10 +1272,10 @@ def test_the_runner_swaps_exactly_the_two_shipped_names_and_puts_them_back():
 
 def test_the_handshake_pins_BOTH_modules(tmp_path):
     repo = REPO_ROOT
-    got = runner.check_instrument(PACK, repo, prompts)
+    got = runner.check_instrument(SERVABLE, repo, prompts)
     assert got["module_sha256"] == PACK["instruments"]["module"]["sha256"]
     assert got["module_r2_sha256"] == PACK["instruments"]["module_r2"]["sha256"]
-    moved = json.loads(json.dumps(PACK))
+    moved = json.loads(json.dumps(SERVABLE))
     moved["instruments"]["module_r2"]["sha256"] = "0" * 64
     with pytest.raises(SystemExit, match="pass2_r2.py hashes"):
         runner.check_instrument(moved, repo, prompts)
@@ -1325,7 +1339,7 @@ def test_a_fake_run_answers_the_75_and_never_re_asks_the_4(tmp_path, capsys):
             ]
 
     pack = tmp_path / "pack.json"
-    pack.write_text(json.dumps(PACK, ensure_ascii=False), encoding="utf-8")
+    pack.write_text(json.dumps(SERVABLE, ensure_ascii=False), encoding="utf-8")
     out = tmp_path / OUT_NAME
     seeded(out)
     code = runner.main(
@@ -1658,7 +1672,7 @@ def test_the_runner_REFUSES_an_ABSENT_seed_file(tmp_path):
 
     # and the refusal happens through main(), BEFORE the loader is ever called
     pack = tmp_path / "pack.json"
-    pack.write_text(json.dumps(PACK, ensure_ascii=False), encoding="utf-8")
+    pack.write_text(json.dumps(SERVABLE, ensure_ascii=False), encoding="utf-8")
     loaded = []
     with pytest.raises(SystemExit, match="does not exist and the pack names"):
         runner.main(
