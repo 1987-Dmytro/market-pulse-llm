@@ -416,6 +416,42 @@ def the_registered_micro_batch() -> tuple[int, int]:
     return int(training["micro_batch_size"]), int(training["grad_accum"])
 
 
+def the_registered_log_every() -> int:
+    import yaml
+
+    return int(yaml.safe_load(CONFIG.read_text(encoding="utf-8"))["training"]["log_every"])
+
+
+def the_last_windows_isolated_wall(
+    rows: list[dict], log_every: int, steps_run: int
+) -> float | None:
+    """The final loss line's ONE step, un-divided — REPORT-ONLY, and it moves no verdict.
+
+    Dv814 says the line's `seconds_per_step` is its window's wall over `log_every` no matter how many
+    steps the window held. On a 6-step smoke at `log_every: 5` the last window holds exactly ONE
+    step, so multiplying that field BACK by `log_every` recovers that single step's wall — the
+    closest thing to a steady-state reading this instrument produces.
+
+    It matters because the quotable rate is the whole loop's wall over its steps, and the loop's
+    first step pays CUDA autotuning, the allocator's first growth and gradient-checkpointing setup.
+    Over 6 steps that overhead is amortised over 6; over arm A's 62 it is amortised over 62. So the
+    number the projection rung fires on is biased HIGH against the arms it is predicting, and at a
+    break-even of 62.15 s/step that bias is inside the decision. A KILL caused by first-step
+    overhead and a KILL caused by the card are the same output unless this is written down
+    ([[a_ceiling_derived_from_one_span_measured_over_another]]).
+
+    Registered BEFORE the smoke lands. Deriving it after seeing a KILL would be post-hoc.
+    """
+    if len(rows) < 2 or not steps_run:
+        return None
+    last, prior = rows[-1], rows[-2]
+    if last.get("seconds_per_step") is None or last.get("step") is None:
+        return None
+    if int(last["step"]) != steps_run or int(last["step"]) - int(prior.get("step", 0)) != 1:
+        return None
+    return round(float(last["seconds_per_step"]) * log_every, 3)
+
+
 def smoke_gate(
     record: dict,
     state: dict,
@@ -462,6 +498,8 @@ def smoke_gate(
 
     measured = float(run["seconds_per_step"])
     steps_run = int(run["steps"])
+    log_every = the_registered_log_every()
+    isolated = the_last_windows_isolated_wall(rows, log_every, steps_run)
     micro_final = int(run["micro_batch_final"])
     accum_final = int(run["grad_accum_final"])
     instrument_moved = micro_final != micro or accum_final != accum
@@ -497,6 +535,22 @@ def smoke_gate(
         },
         "loss_lines": per_line,
         "the_loss_lines_are_NOT_a_rate": entry["the_quotable_rate_is_the_PROVENANCE_one"],
+        "the_decomposition_REPORT_ONLY": {
+            "log_every": log_every,
+            "the_final_steps_isolated_wall_seconds": isolated,
+            "the_graded_rate_seconds_per_step": round(measured, 3),
+            "the_loop_wall_seconds": run.get("seconds"),
+            "the_amortised_start_up_seconds": (
+                None
+                if isolated is None or run.get("seconds") is None
+                else round(float(run["seconds"]) - steps_run * isolated, 1)
+            ),
+            "the_arms_are_10x_and_14x_this_smokes_length": (
+                "62 and 82 optimizer steps against 6, so whatever the loop's start-up costs is"
+                " amortised over ten to fourteen times as many steps there as it is here"
+            ),
+            "it_moves_no_verdict": entry["the_decomposition_is_REPORT_ONLY"],
+        },
         "ceiling_seconds_per_step": ceiling,
         "micro_batch_registered": micro,
         "micro_batch_final": micro_final,

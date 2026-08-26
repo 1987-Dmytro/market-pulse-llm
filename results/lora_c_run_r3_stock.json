@@ -1,0 +1,59 @@
+{
+  "at": "2026-08-26T08:15:20+00:00",
+  "commands": [
+    "runpodctl gpu list",
+    "runpodctl pod list -a",
+    "runpodctl network-volume list",
+    "runpodctl serverless list"
+  ],
+  "every_datacentre_this_card_reads_in": [
+    {
+      "dataCenterId": "CA-MTL-3",
+      "stockStatus": "Low"
+    },
+    {
+      "dataCenterId": "EU-RO-1",
+      "stockStatus": "none"
+    },
+    {
+      "dataCenterId": "US-KS-2",
+      "stockStatus": "none"
+    },
+    {
+      "dataCenterId": "US-MO-1",
+      "stockStatus": "none"
+    }
+  ],
+  "rung_7_at_this_reading": {
+    "network_volumes": [
+      {
+        "dataCenterId": "EU-RO-1",
+        "id": "qw4nwleanc",
+        "name": "mp-srv2",
+        "size": 100
+      },
+      {
+        "dataCenterId": "CA-MTL-3",
+        "id": "soymlju8q0",
+        "name": "mp-lora-c",
+        "size": 100
+      }
+    ],
+    "pods_including_stopped": [],
+    "serverless": [],
+    "verdict": "no pod and no serverless endpoint exists — one billing resource is available"
+  },
+  "the_community_price_is_not_authorised": "$1.19 community is cheaper than the $1.39 secure column and is NOT taken: rung 0 grades the price against a registered column, the volume lives in SECURE, and a cloud type nobody registered is a projection nobody can check",
+  "the_rulings_row": {
+    "card": "A100 PCIe",
+    "community_usd_per_hour": 1.19,
+    "datacenter": "CA-MTL-3",
+    "gpu_id": "NVIDIA A100 80GB PCIe",
+    "secure_usd_per_hour": 1.39,
+    "stock": "Low",
+    "the_price_matches_the_column": true,
+    "the_registered_column": 1.39,
+    "vram_gb": 80
+  },
+  "what_this_is": "the read-only stock reading taken before this session's create. A listing is NOT a create: stock flickers minute to minute — three readings of this same card inside 17 minutes on 2026-08-25 returned three different availability rows. This reading DATES the question; the create is the only free test of itself ([[a_stock_window_needs_the_create_not_a_poll]])"
+}

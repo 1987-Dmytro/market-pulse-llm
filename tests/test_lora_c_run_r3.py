@@ -906,3 +906,67 @@ def test_the_vramprobe_checker_ignores_a_row_appended_after_its_reading(monkeypa
         checker.the_row_at(rows, "2026-08-28T00:00:00+00:00")
     with pytest.raises(SystemExit, match="a reading must be exactly one row"):
         checker.the_row_at(rows + [dict(rows[1])], checker.THE_SMOKE_KILL_AT)
+
+
+def test_the_smoke_prints_the_final_steps_isolated_wall_and_grades_none_of_it():
+    """Dv814 run backwards: the last window holds ONE step and still divides by `log_every`."""
+    rows = [
+        {"step": 5, "seconds_per_step": 55.0},
+        {"step": 6, "seconds_per_step": 10.0},  # 50 s of wall, divided by log_every 5
+    ]
+    assert gate.the_last_windows_isolated_wall(rows, 5, 6) == 50.0
+    assert gate.the_last_windows_isolated_wall(rows, 5, 8) is None, "the line is not the last step"
+    assert gate.the_last_windows_isolated_wall(rows[:1], 5, 6) is None
+    assert (
+        gate.the_last_windows_isolated_wall(
+            [{"step": 5, "seconds_per_step": 55.0}, {"step": 10, "seconds_per_step": 10.0}], 5, 10
+        )
+        is None
+    ), "a five-step window is not one step"
+
+
+def test_the_decomposition_separates_start_up_from_the_card(run, tmp_path):
+    provenance, loss = a_smoke(tmp_path, 55.0)
+    got = gate.smoke_gate(view(), a_pod(), provenance, loss, at(2000))
+    block = got["the_decomposition_REPORT_ONLY"]
+    assert block["log_every"] == 5
+    assert block["the_final_steps_isolated_wall_seconds"] == 55.0  # 11.0 as logged × 5
+    assert block["the_graded_rate_seconds_per_step"] == 55.0
+    assert block["the_loop_wall_seconds"] == 330.0
+    assert block["the_amortised_start_up_seconds"] == 0.0
+    assert got["verdict"] == "GO", "the decomposition grades nothing"
+
+
+def test_a_smoke_whose_start_up_is_the_whole_gap_still_grades_on_the_loop(run, tmp_path):
+    """The case the block exists for: the loop reads over the break-even, one steady step does not."""
+    provenance = tmp_path / "provenance.json"
+    provenance.write_text(
+        json.dumps(
+            {
+                "run": {
+                    "steps": 6,
+                    "seconds": 390.0,  # 65.0 s/step graded
+                    "seconds_per_step": 65.0,
+                    "micro_batch_final": 2,
+                    "grad_accum_final": 8,
+                }
+            }
+        ),
+        encoding="utf-8",
+    )
+    loss = tmp_path / "loss.jsonl"
+    loss.write_text(
+        json.dumps({"step": 5, "seconds_per_step": 68.0})
+        + "\n"
+        + json.dumps({"step": 6, "seconds_per_step": 10.0})  # one step of 50 s
+        + "\n",
+        encoding="utf-8",
+    )
+    got = gate.smoke_gate(view(), a_pod(), provenance, loss, at(2000))
+    block = got["the_decomposition_REPORT_ONLY"]
+    assert got["measured_seconds_per_step"] == 65.0, "the graded rate is the loop's"
+    assert block["the_final_steps_isolated_wall_seconds"] == 50.0
+    assert block["the_amortised_start_up_seconds"] == 90.0
+    assert got["verdict"] == "GO", (
+        "65.0 is under the 181.5 ceiling — the projection decides the rest"
+    )
