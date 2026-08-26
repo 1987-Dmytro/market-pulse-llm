@@ -1,0 +1,2 @@
+{"step": 5, "epoch": 0, "loss": 0.7851967956870795, "lr": 9.900862439242719e-05, "seconds_per_step": 89.93818135261536, "micro_batch": 2, "gpu_gb": 49.54}
+{"step": 6, "epoch": 0, "loss": 0.5803114417940378, "lr": 9.84538643114539e-05, "seconds_per_step": 17.441366815567015, "micro_batch": 2, "gpu_gb": 49.54}

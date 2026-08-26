@@ -1,0 +1,110 @@
+{
+  "arm": "arm_a",
+  "chat_template": {
+    "add_generation_prompt": true,
+    "enable_thinking": false
+  },
+  "class_weights": {
+    "null": 0.617073,
+    "категория_личное": 2.53,
+    "не_наш_рынок": 0.377612,
+    "сеть_ритейлер": 2.976471
+  },
+  "config": {
+    "base": {
+      "revision": "842da3794eaa0b77d5f08bae87a17459d91ff475"
+    },
+    "lora": {
+      "alpha": 32,
+      "dropout": 0.05,
+      "exclude_prefixes": [
+        "vision_tower",
+        "multi_modal_projector",
+        "vision_model"
+      ],
+      "r": 16,
+      "target_suffixes": [
+        "q_proj",
+        "k_proj",
+        "v_proj",
+        "o_proj",
+        "gate_proj",
+        "up_proj",
+        "down_proj"
+      ]
+    },
+    "optimizer": {
+      "learning_rate": 0.0001,
+      "max_grad_norm": 0.3,
+      "name": "paged_adamw_8bit",
+      "scheduler": "cosine",
+      "warmup_ratio": 0.03,
+      "weight_decay": 0.0
+    },
+    "training": {
+      "carve_every": 25,
+      "carve_rows": 24,
+      "epochs": 2,
+      "grad_accum": 8,
+      "gradient_checkpointing": true,
+      "log_every": 5,
+      "max_seq_len": 3072,
+      "micro_batch_size": 2,
+      "save_every": 100,
+      "seed": 42
+    }
+  },
+  "dataset": {
+    "file": "results/pass1_sft_v3_train.jsonl",
+    "rows": 506,
+    "sha256": "cf55d3f20216139845d320b4283d543c5283e3475f3c6afa42ea98cf20997c18"
+  },
+  "environment": {
+    "bitsandbytes": "0.50.1",
+    "cuda_runtime": "12.8",
+    "driver": "580.159.04",
+    "gpu": "NVIDIA A100 80GB PCIe",
+    "gpu_count": 1,
+    "gpu_memory_total": "81920 MiB",
+    "model_revision": null,
+    "pod_id": null,
+    "revision_requested": "842da3794eaa0b77d5f08bae87a17459d91ff475",
+    "torch": "2.8.0+cu128",
+    "transformers": "5.15.1",
+    "weights_requested": "google/gemma-4-31b-it"
+  },
+  "labelled_by": "the TEAM LEAD — results/labels_pass1_r*_provenance.json",
+  "n_carve": 0,
+  "n_train": 506,
+  "prompt_sha256": {
+    "pass1_comment_gm4_v3": "b9b27a53f8f56140657d682f49dd4e8cd1fb1364a915adb888ca999083d5a49c"
+  },
+  "quantization": {
+    "bnb_4bit_compute_dtype": "bfloat16",
+    "bnb_4bit_quant_type": "nf4",
+    "bnb_4bit_use_double_quant": true,
+    "load_in_4bit": true
+  },
+  "registration": {
+    "file": "results/prereg_lora_c.json",
+    "sha256": "4d5a8f1d34765b4a93a5fd23e35ef71c95e38505c457702c2b912c23f8c9110a"
+  },
+  "run": {
+    "adapter": "/workspace/r3/smoke_a/adapter",
+    "gpu_gb_peak": 49.54,
+    "grad_accum_final": 8,
+    "micro_batch_final": 2,
+    "seconds": 539.8,
+    "seconds_per_step": 89.961,
+    "steps": 6,
+    "steps_per_epoch": 32
+  },
+  "sampler": "weighted with replacement, 506 draws per epoch, w_c = N/(5·n_c) capped at 8.0",
+  "supervision": {
+    "boundary_char": ",",
+    "enforced_by": "train_qlora.load_sft, called — not asserted a second time here",
+    "field": "subject_type"
+  },
+  "task": "pass1_comment_gm4_v3",
+  "train_sha256": "afb006628302d926ca30b8ec23f1e4624d27c5a709a113a652a5ffe27be455ec"
+}
