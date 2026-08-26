@@ -998,3 +998,42 @@ def test_the_thread_bound_is_what_makes_the_plan_knife_edge():
 
 def sibling_plan_threads() -> int:
     return parent.plan(view())["eval_a"]["pass_2_threads"]
+
+
+def test_every_number_in_the_report_is_re_derived_from_the_file_that_owns_it():
+    """`scripts/check_lora_c_run_r3_report.py`, driven as a COMMAND — its exit code is the claim.
+
+    The report says «73 of 73 re-derived»; this is what makes that sentence checkable rather than
+    something I once ran ([[a_claim_no_number_can_check]]). It reads the paid session's artifacts,
+    so it is red in every commit before they land, which is the correct direction for a claim about
+    them ([[a_test_that_reads_a_shipped_artifact]]).
+    """
+    import subprocess
+
+    got = subprocess.run(
+        [sys.executable, str(REPO_ROOT / "scripts" / "check_lora_c_run_r3_report.py")],
+        cwd=REPO_ROOT,
+        capture_output=True,
+        text=True,
+    )
+    assert got.returncode == 0, got.stdout + got.stderr
+
+
+def test_the_sibling_gate_would_have_passed_this_smoke():
+    """The report's central counterfactual, driven here too — it is why r3's gate exists.
+
+    `gate_lora_b.measured_step` grades the loss lines, and on this session's own log it reads 53.690
+    against a loop that ran at 89.961. Under the 68.05 s/step the cap afforded, so the projection
+    would have said GO and the session would have burned $6.95 into the terminate flag with no
+    adapter, no eval and no bar ([[projected_rate_versus_measured_rate]]).
+    """
+    loss = REPO_ROOT / "results" / "lora_c_run_r3_smoke_loss.jsonl"
+    if not loss.exists():  # red before the paid session's artifacts land, green after
+        pytest.skip("the paid session's loss log has not landed yet")
+    lines = parent.sibling.log_lines(loss)
+    run = json.loads(
+        (REPO_ROOT / "results" / "lora_c_run_r3_smoke_provenance.json").read_text("utf-8")
+    )["run"]
+    assert round(parent.sibling.measured_step(lines), 3) == 53.690
+    assert run["seconds_per_step"] == 89.961
+    assert round(parent.sibling.measured_step(lines) / run["seconds_per_step"], 3) == 0.597
