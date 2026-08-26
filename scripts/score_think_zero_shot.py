@@ -93,14 +93,16 @@ def pass1_leg(pack_name: str, leg_name: str, before: dict) -> dict | None:
             "why": "the stage was not bought — rung 2 stopped the programme before it",
         }
     record = json.loads(FEWSHOT_PREREG.read_text(encoding="utf-8"))
-    thinking = pass1_gate.leg_table(record, pack, leg_name, served(out, leg["out"]))
+    where = served(out, leg["out"])
+    thinking = pass1_gate.leg_table(record, pack, leg_name, where)
+    # `leg_table` does not report the refusals, and THIS column has them: a `length` cut-off is
+    # an unclosed thought with no answer in it, and it must be COUNTED rather than fall into the
+    # class an empty answer lands in ([[empty_class_eats_the_parse_failures]])
+    refused = pass1_gate.answers_of(where / leg["out"], leg["items"])[1]
     gold = pass1_gate.labels()
     collapse = pass1_gate.probe_b.collapse
     was = {one["id"]: one for one in pass1_gate.answers_of(RESULTS / leg["out"], leg["items"])[0]}
-    now = {
-        one["id"]: one
-        for one in pass1_gate.answers_of(served(out, leg["out"]) / leg["out"], leg["items"])[0]
-    }
+    now = {one["id"]: one for one in pass1_gate.answers_of(where / leg["out"], leg["items"])[0]}
     won, lost = [], []
     for item in leg["items"]:
         want = collapse(gold[(item["thread"], int(item["msg_id"]))])
@@ -117,7 +119,10 @@ def pass1_leg(pack_name: str, leg_name: str, before: dict) -> dict | None:
             "n": thinking["n"],
             "our_agreed": thinking.get("our_agreed"),
             "our_n": thinking.get("our_n"),
-            "parse_refusals": thinking.get("parse_refusals"),
+            "parse_refusals": len(refused),
+            "refused_ids": sorted(
+                one["id"] if isinstance(one, dict) else str(one) for one in refused
+            ),
         },
         "delta": thinking["agreed"] - before["agreed"],
         "flips": {

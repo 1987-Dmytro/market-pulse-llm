@@ -7,10 +7,210 @@
     "why": "the stage was not bought — rung 2 stopped the programme before it"
   },
   "dev_200_v2": {
-    "bought": 3,
-    "owed": 200,
-    "table": null,
-    "why": "the stage was not bought — rung 2 stopped the programme before it"
+    "before": {
+      "agreed": 136,
+      "file": "results/pass1_dev_v2.jsonl",
+      "n": 200,
+      "our_agreed": 38,
+      "our_n": 49,
+      "parse_refusals": 0,
+      "per_class": {
+        "null": {
+          "agreed": 41,
+          "n": 54
+        },
+        "категория": {
+          "agreed": 36,
+          "n": 47
+        },
+        "молочный_бренд": {
+          "agreed": 2,
+          "n": 2
+        },
+        "не_наш_рынок": {
+          "agreed": 46,
+          "n": 85
+        },
+        "сеть_ритейлер": {
+          "agreed": 11,
+          "n": 12
+        }
+      },
+      "scorer": "market_pulse.scorer.reader_comment_agreement, through gate_pass1_fewshot.leg_table — the comparison the BEFORE column itself was read with",
+      "sha256": "979c8f8252ed9b1e805663ac7941f8234adbb97fa76c14b81e65d639ceb35a2a",
+      "task": "pass1_comment_gm4_v2"
+    },
+    "delta": 0,
+    "emission": {
+      "length_cutoffs": 2,
+      "n": 200,
+      "seconds": {
+        "max": 380.173,
+        "mean": 110.18,
+        "total": 22036.0
+      },
+      "stop_trimmed_the_answer": 147,
+      "thought_tokens": {
+        "max": 4000,
+        "mean": 1130.3,
+        "median": 902.5,
+        "min": 315
+      },
+      "unbalanced": 2
+    },
+    "flips": {
+      "away_from_gold": [
+        {
+          "gold": "категория",
+          "id": "@VARUS_channel:10349#20680",
+          "thinking": "не_наш_рынок"
+        },
+        {
+          "gold": "сеть_ритейлер",
+          "id": "@VARUS_channel:10603#21576",
+          "thinking": null
+        },
+        {
+          "gold": "категория",
+          "id": "@klopotenkofood:6032#21177",
+          "thinking": null
+        },
+        {
+          "gold": "категория",
+          "id": "@klopotenkofood:6032#21187",
+          "thinking": "не_наш_рынок"
+        },
+        {
+          "gold": "категория",
+          "id": "@klopotenkofood:6032#21190",
+          "thinking": null
+        },
+        {
+          "gold": "категория",
+          "id": "@mandziak:3667#47860",
+          "thinking": null
+        },
+        {
+          "gold": null,
+          "id": "@mandziak:3721#48423",
+          "thinking": "не_наш_рынок"
+        },
+        {
+          "gold": "не_наш_рынок",
+          "id": "@matusi_ukr:22058#576359",
+          "thinking": null
+        },
+        {
+          "gold": "не_наш_рынок",
+          "id": "@matusi_ukr:22058#576949",
+          "thinking": null
+        },
+        {
+          "gold": null,
+          "id": "@matusi_ukr:22092#576968",
+          "thinking": "категория"
+        },
+        {
+          "gold": "не_наш_рынок",
+          "id": "@tarilka_malyuka:827#179",
+          "thinking": null
+        },
+        {
+          "gold": null,
+          "id": "@ya_Nenka:836#2580",
+          "thinking": "не_наш_рынок"
+        },
+        {
+          "gold": null,
+          "id": "@ya_Nenka:840#2590",
+          "thinking": "не_наш_рынок"
+        }
+      ],
+      "rule": "a row the BEFORE column got wrong and thinking got right, and back",
+      "to_gold": [
+        {
+          "before": "молочный_бренд",
+          "gold": "категория",
+          "id": "@VARUS_channel:10451#21125"
+        },
+        {
+          "before": "категория",
+          "gold": "сеть_ритейлер",
+          "id": "@VARUS_channel:10525#21383"
+        },
+        {
+          "before": "не_наш_рынок",
+          "gold": "категория",
+          "id": "@klopotenkofood:6032#21181"
+        },
+        {
+          "before": "категория",
+          "gold": "не_наш_рынок",
+          "id": "@mandziak:3679#47987"
+        },
+        {
+          "before": "категория",
+          "gold": null,
+          "id": "@mandziak:3684#48004"
+        },
+        {
+          "before": "категория",
+          "gold": "не_наш_рынок",
+          "id": "@mandziak:3708#48244"
+        },
+        {
+          "before": "не_наш_рынок",
+          "gold": null,
+          "id": "@mandziak:3753#48853"
+        },
+        {
+          "before": "не_наш_рынок",
+          "gold": null,
+          "id": "@mandziak:3753#48854"
+        },
+        {
+          "before": "категория",
+          "gold": null,
+          "id": "@mandziak:3753#48881"
+        },
+        {
+          "before": null,
+          "gold": "не_наш_рынок",
+          "id": "@matusi_ukr:22327#580336"
+        },
+        {
+          "before": "не_наш_рынок",
+          "gold": "категория",
+          "id": "@msuaaaa:10651#13584"
+        },
+        {
+          "before": "не_наш_рынок",
+          "gold": null,
+          "id": "@tarilka_malyuka:695#9"
+        },
+        {
+          "before": "категория",
+          "gold": null,
+          "id": "@tarilka_malyuka:695#10"
+        },
+        {
+          "before": "категория",
+          "gold": null,
+          "id": "@tarilka_malyuka:695#16"
+        }
+      ]
+    },
+    "thinking": {
+      "agreed": 136,
+      "n": 200,
+      "our_agreed": 36,
+      "our_n": 49,
+      "parse_refusals": 2,
+      "refused_ids": [
+        "@klopotenkofood:6032#21177",
+        "@matusi_ukr:22308#580147"
+      ]
+    }
   },
   "holdout_100": {
     "bought": 0,
@@ -84,7 +284,7 @@
       ],
       "carried_is_keyed_on_the_field": "the row's own `carried_from`, never the pack's id list. A thread the pod re-bought because the seed never landed carries no such field, and keyed on the list it would be reported as carried — hiding the one thing the contract forbids",
       "carried_rule": "copied into this pack's out-file by `--seed`, each held to the id and the `rendering_sha256` of its unit HERE. Decoding is greedy (results/reader_v5b_pack.json::serving.decoding) and pass 1 answered 200 of 200 identically across three pods, so re-asking them would buy the same strings",
-      "record": "/var/folders/tl/1253ltg5091cxls3v5mstrqr0000gn/T/p2-think-ayxp1zat/merged.jsonl",
+      "record": "/var/folders/tl/1253ltg5091cxls3v5mstrqr0000gn/T/p2-think-hglm49al/merged.jsonl",
       "sha256": "c1e681f25c3203168e27069d5b9de36f293124d914722af91aa366463d8a8a22",
       "units_bought_by_this_pod": 1,
       "units_carried_from_r1": 0,
