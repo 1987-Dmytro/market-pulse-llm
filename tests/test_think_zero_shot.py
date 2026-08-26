@@ -963,3 +963,94 @@ def test_no_stage_can_write_onto_a_pinned_BEFORE_file():
     }
     assert not written & before, sorted(written & before)
     assert all(one.endswith(".READER_THINK.jsonl") for one in written)
+
+
+# --- the paired table's producer -------------------------------------------------------------------
+
+
+def emission_rows(**over):
+    base = {
+        "seconds": 100.0,
+        "thought_tokens": 900,
+        "cut_chars": 0,
+        "finish_reason": "stop",
+        "balanced": True,
+    }
+    return {**base, **over}
+
+
+def test_emission_counts_the_length_cutoffs_and_the_unbalanced_rows():
+    """A `length` finish is a COUNTED parse failure and never a retry, and under this template it
+    is an unclosed thought — so `balanced` is False and every token it spent is working-out. Both
+    are read off the row's own fields, never inferred from the reply text
+    ([[the_empty_class_eats_the_parse_failures]])."""
+    import score_think_zero_shot as table
+
+    rows = [
+        emission_rows(),
+        emission_rows(seconds=200.0, thought_tokens=4000, finish_reason="length", balanced=False),
+        emission_rows(seconds=50.0, thought_tokens=300, cut_chars=17),
+    ]
+    got = table.emission(rows)
+    assert got["n"] == 3
+    assert got["length_cutoffs"] == 1 and got["unbalanced"] == 1
+    assert got["stop_trimmed_the_answer"] == 1, "cut_chars is over the ANSWER, not the emission"
+    assert got["seconds"]["max"] == 200.0 and got["seconds"]["mean"] == 116.667
+    assert got["thought_tokens"] == {"mean": 1733.3, "median": 900, "min": 300, "max": 4000}
+    assert table.emission([]) == {"n": 0}, "no rows is not a distribution of zeros"
+
+
+def test_an_unbought_stage_says_so_instead_of_reporting_zero():
+    """Rung 2 stops the programme where the cap says, so some columns are simply not bought. A
+    column that answered 0/200 would read as a collapse, which is the opposite of what happened
+    ([[an_abstention_is_an_answer]])."""
+    import score_think_zero_shot as table
+
+    leg = table.pass1_leg("pass1_holdout_100_think.json", "holdout", {"agreed": 64, "n": 100})
+    if leg.get("why"):
+        assert leg["table"] is None and leg["owed"] == 100
+        assert leg["bought"] < leg["owed"] and "not bought" in leg["why"]
+    else:  # the stage WAS bought — then it must carry both columns and a delta
+        assert leg["before"]["agreed"] == 64 and leg["thinking"]["n"] == 100
+        assert leg["delta"] == leg["thinking"]["agreed"] - 64
+
+
+def test_the_pass_2_half_puts_the_shipped_constant_back():
+    """The thinking column is served by pointing ONE module constant at a temp file. Leaving it
+    pointed there would make the next caller in the same process score a deleted file and call the
+    result the BEFORE column ([[a_retry_inherits_the_last_attempts_output]])."""
+    import score_pass2_signals_r2 as shipped
+    import score_think_zero_shot as table
+
+    was = shipped.EVIDENCE
+    got = table.pass_2()
+    assert shipped.EVIDENCE == was, "the shipped constant was not restored"
+    assert was == RESULTS / "pass2_signals_r2_v1.jsonl", "and it still names the BEFORE column"
+    if got["threads"]:
+        assert set(got["sources"]) == {
+            "pass2_signals_r2_reference.READER_THINK.jsonl",
+            "pass2_signals_r2_remainder.READER_THINK.jsonl",
+        }
+        assert sum(got["sources"].values()) == got["threads"]
+        for name, bar in got["bars"].items():
+            unread = bar["threads_not_read"]
+            assert (bar["collapsed"] is None) == bool(unread), (name, unread)
+
+
+def test_every_bar_of_pass_2_lives_inside_the_reference_eleven():
+    """Why stages 3 and 4 are a usable table and stage 7 is not load-bearing for the verdict: the
+    shipped gate reads all three bars off threads the REFERENCE pack carries. The one exception is
+    registered — E1 is outside this pack's 79 and no run has ever read it."""
+    import re
+
+    verdict = json.loads((RESULTS / "pass2_signals_r2_verdict.json").read_text(encoding="utf-8"))
+    pack = json.loads((RESULTS / "pass2_r2_pack_think_reference.json").read_text(encoding="utf-8"))
+    reference = {one["thread"] for leg in pack["legs"] for one in leg["items"]}
+    assert len(reference) == 11
+    named = set()
+    for bar in verdict["bars"].values():
+        named |= set(re.findall(r"@[A-Za-z_0-9]+:\d+", json.dumps(bar, ensure_ascii=False)))
+    outside = named - reference
+    assert outside == {"@matusi_ukr:22242"}, sorted(outside)
+    unreachable = RECORD["before_columns"]["pass_2"]["2_entity_cases"]["unreachable"]
+    assert "@matusi_ukr:22242" in unreachable, "the one thread outside is the REGISTERED one"

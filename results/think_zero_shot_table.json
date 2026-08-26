@@ -1,0 +1,158 @@
+{
+  "contract": "think-zero-shot-d2",
+  "dev_200_v1": {
+    "bought": 0,
+    "owed": 200,
+    "table": null,
+    "why": "the stage was not bought — rung 2 stopped the programme before it"
+  },
+  "dev_200_v2": {
+    "bought": 3,
+    "owed": 200,
+    "table": null,
+    "why": "the stage was not bought — rung 2 stopped the programme before it"
+  },
+  "holdout_100": {
+    "bought": 0,
+    "owed": 100,
+    "table": null,
+    "why": "the stage was not bought — rung 2 stopped the programme before it"
+  },
+  "pass_2": {
+    "bars": {
+      "1_flagships": {
+        "collapsed": null,
+        "passed": null,
+        "threads_not_read": [
+          "@VARUS_channel:10613",
+          "@mandziak:3676",
+          "@mandziak:3703",
+          "@matusi_ukr:22272",
+          "@matusi_ukr:22303"
+        ]
+      },
+      "2_entity_cases": {
+        "collapsed": null,
+        "passed": null,
+        "threads_not_read": [
+          "@VARUS_channel:10348",
+          "@VARUS_channel:10360",
+          "@mandziak:3684",
+          "@mandziak:3689"
+        ]
+      },
+      "3_noise": {
+        "collapsed": null,
+        "passed": null,
+        "threads_not_read": [
+          "@VARUS_channel:10366"
+        ]
+      }
+    },
+    "emission": {
+      "length_cutoffs": 0,
+      "n": 1,
+      "seconds": {
+        "max": 638.492,
+        "mean": 638.492,
+        "total": 638.5
+      },
+      "stop_trimmed_the_answer": 1,
+      "thought_tokens": {
+        "max": 5127,
+        "mean": 5127.0,
+        "median": 5127,
+        "min": 5127
+      },
+      "unbalanced": 0
+    },
+    "evidence": {
+      "arm": "GO",
+      "arm_rule": "one arm. There is no rung whose verdict could choose another, and a record with a second arm nothing selects would be a bar that reads its own arm off a field no instrument writes",
+      "carried_disagreement": [
+        "@VARUS_channel:10613",
+        "@mandziak:3676",
+        "@mandziak:3703",
+        "@matusi_ukr:22272"
+      ],
+      "carried_ids": [],
+      "carried_ids_the_pack_names": [
+        "@VARUS_channel:10613",
+        "@mandziak:3676",
+        "@mandziak:3703",
+        "@matusi_ukr:22272"
+      ],
+      "carried_is_keyed_on_the_field": "the row's own `carried_from`, never the pack's id list. A thread the pod re-bought because the seed never landed carries no such field, and keyed on the list it would be reported as carried — hiding the one thing the contract forbids",
+      "carried_rule": "copied into this pack's out-file by `--seed`, each held to the id and the `rendering_sha256` of its unit HERE. Decoding is greedy (results/reader_v5b_pack.json::serving.decoding) and pass 1 answered 200 of 200 identically across three pods, so re-asking them would buy the same strings",
+      "record": "/var/folders/tl/1253ltg5091cxls3v5mstrqr0000gn/T/p2-think-ayxp1zat/merged.jsonl",
+      "sha256": "c1e681f25c3203168e27069d5b9de36f293124d914722af91aa366463d8a8a22",
+      "units_bought_by_this_pod": 1,
+      "units_carried_from_r1": 0,
+      "units_read": 1,
+      "units_registered": 79
+    },
+    "replies": {
+      "no_signal_units": 1,
+      "parsed": 1,
+      "per_comment_subject_omitted": 0,
+      "proposed_signal_types": [],
+      "reading": "«no signal» is counted over PARSED replies only. A reply that could not be read is not a thread with nothing in it, and the two are never added together ([[the_empty_class_eats_the_parse_failures]])",
+      "refusal_rows": [],
+      "refusal_set_is_closed": [
+        "a relabel — a `subject_type` that is not the pass-1 label of a row the reply cites",
+        "an id that was not in the request, in `per_comment`, `noise` or a signal's `evidence`",
+        "a signal citing no comment",
+        "a reply about another thread",
+        "an unbalanced or unreadable object — the pinned container reader's own refusals",
+        "a domain violation on a SCORED field"
+      ],
+      "refusals_by_cause": {},
+      "refused": 0,
+      "relabellings": 0,
+      "repairs": {},
+      "signal_bearing_units": 0,
+      "signal_types": {},
+      "signal_types_the_parser_could_not_read": 0,
+      "signals": 0,
+      "subject_types": {},
+      "vocabulary_synonyms_used": []
+    },
+    "sources": {
+      "pass2_signals_r2_reference.READER_THINK.jsonl": 0,
+      "pass2_signals_r2_remainder.READER_THINK.jsonl": 1
+    },
+    "threads": 1,
+    "unreadable_report_only_fields": 17
+  },
+  "pass_2_before": {
+    "1_flagships": {
+      "cases": 5,
+      "cases_answered": 4,
+      "passed": false
+    },
+    "2_entity_cases": {
+      "cases": 4,
+      "cases_answered": 3,
+      "passed": false,
+      "unreachable": "E1 (@matusi_ukr:22242) is outside this pack's 79 and no run has read its thread; the thinking column cannot move it either"
+    },
+    "3_noise": {
+      "passed": false,
+      "scored_over": [
+        "N2"
+      ],
+      "signals": 2,
+      "threshold": "0 signals"
+    },
+    "gate": "scripts/gate_pass2_signals_r2.py",
+    "gate_sha256": "a7c06de8d8d654ad3b8c72af5294e79c808d4f83e67114f3b55bb6d88ee7c1b1",
+    "replies": "results/pass2_signals_r2_v1.jsonl",
+    "replies_sha256": "d3c147ac3bab83455953806b8cc63f730ce6388ace8884470ebd99684f852e45",
+    "verdict": "results/pass2_signals_r2_verdict.json",
+    "verdict_sha256": "239f55943f5f120cec31fa8b3c38b721b1136915c91da991ad907fed3b82b3f1"
+  },
+  "registration": {
+    "file": "results/prereg_think_zero_shot.json",
+    "what_this_is": "READINGS, not bars. This record registers no threshold and grades nothing: the deliverable is a paired table and the operator decides on it"
+  }
+}
