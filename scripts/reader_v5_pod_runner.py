@@ -150,24 +150,38 @@ def check_requests(pack: dict, prompts) -> list[dict]:
     return rendered
 
 
-def stops_here(text: str, prompts, reader_v5) -> bool:
-    """Has the ANSWER closed its first top-level object? The rule the criterion below applies.
-
-    Split out of the `StoppingCriteria` so it can be driven with no GPU: the class needs
-    `transformers`, this needs a string.
+def thought_and_answer(text: str, prompts) -> tuple[str, str | None]:
+    """The working-out, and the ANSWER — `None` while a thought channel is open and unclosed.
 
     **The thought is not the answer, and a thought contains braces.** Under
     `local_llm.THINK_CHAT_TEMPLATE` the model writes its working-out first, and a model reasoning
     about the object it is about to emit writes `{` inside it — `balanced_prefix` would balance
-    that, generation would stop mid-thought, and `run` below would persist half a thought as the
-    verdict. So: while a channel is open and unclosed, nothing stops. That state is invisible to a
-    fake client — it lives in `generate` — which is why it has a test of its own with both controls
-    ([[a_stub_replaces_the_guard_it_should_trigger]]).
+    that. So while a channel is open and unclosed there is no answer at all, and the whole emission
+    is thought; `local_llm.thought_fields` counts the same state the same way, every token spent.
+
+    Both readers of the rule are here — the stop below decides whether to keep generating, `run`
+    decides what to persist — and they must not drift: a `length` cut-off is precisely the state
+    where the stop never fired, so a second copy of the rule would be exercised only on the rows
+    the first one never saw ([[two_values_for_one_input_get_quoted_kindly]]).
+
+    With no thinking channel this is `split_thought` unchanged, which is the identity.
     """
     thought, answer = prompts.split_thought(text)
     if not thought and prompts.THOUGHT_OPEN in text:
-        return False
-    return reader_v5.balanced_prefix(answer) is not None
+        return text, None
+    return thought, answer
+
+
+def stops_here(text: str, prompts, reader_v5) -> bool:
+    """Has the ANSWER closed its first top-level object? The rule the criterion below applies.
+
+    Split out of the `StoppingCriteria` so it can be driven with no GPU: the class needs
+    `transformers`, this needs a string. That state is invisible to a fake client — it lives in
+    `generate` — which is why it has a test of its own with both controls
+    ([[a_stub_replaces_the_guard_it_should_trigger]]).
+    """
+    _, answer = thought_and_answer(text, prompts)
+    return answer is not None and reader_v5.balanced_prefix(answer) is not None
 
 
 def stop_at_balanced(processor, width: int, reader_v5, prompts):  # pragma: no cover — transformers
@@ -350,10 +364,10 @@ def run(pack: dict, out: Path, repo: Path, loader=load_reader) -> int:
             emitted = reply["content"]
             # the working-out is cut off the FRONT before the brace is looked for, and put back on
             # the persisted bytes: the thought is evidence (its length is a registered reading) and
-            # it is not the answer. With no thinking channel `split_thought` is the identity and
-            # both lines read exactly as they always have.
-            thought, answer = prompts.split_thought(emitted)
-            prefix = reader_v5.balanced_prefix(answer)
+            # it is not the answer. An unclosed channel — what a `length` cut-off looks like here —
+            # has NO answer, so nothing is balanced and the whole emission is thought.
+            thought, answer = thought_and_answer(emitted, prompts)
+            prefix = None if answer is None else reader_v5.balanced_prefix(answer)
             row = {
                 "index": index,
                 "id": item["id"],
@@ -366,7 +380,7 @@ def run(pack: dict, out: Path, repo: Path, loader=load_reader) -> int:
                 "reply": emitted if prefix is None else thought + prefix,
                 "balanced": prefix is not None,
                 "emitted_chars": len(emitted),
-                "cut_chars": 0 if prefix is None else len(answer) - len(prefix),
+                "cut_chars": 0 if prefix is None else len(answer) - len(prefix),  # answer is set
                 "thought_chars": len(thought),
                 "thought_tokens": reply.get("thought_tokens"),
                 "finish_reason": reply.get("finish_reason"),

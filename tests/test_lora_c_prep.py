@@ -735,6 +735,15 @@ def test_a_sample_is_closed_by_its_verdict(tmp_path):
     assert {one: one.read_bytes() for one in (SAMPLE_1, SAMPLE_2)} == before
 
 
+#: Ruling (\u0444) moved `prompts.py` for every record here, and `pass2_r2_pod_runner.py` for the one
+#: record that pins a TRANSPORT — D1 gave both pod runners `--serving`. Keyed by the producer whose
+#: record pins it, so a second producer that starts to differ is not silently excused by this one;
+#: the PATHS inside each record are still derived from the live sha, in both directions.
+ALSO_MOVED_BY_THE_THINKING_READER = {
+    "scripts/write_lora_c_prereg.py": ("scripts/pass2_r2_pod_runner.py",),
+}
+
+
 @pytest.mark.parametrize("script, flags, outputs", PRODUCERS, ids=[one[0] for one in PRODUCERS])
 def test_every_producer_is_driven_end_to_end_and_rebuilds_its_shipped_bytes(
     script, flags, outputs, tmp_path
@@ -778,6 +787,7 @@ def test_every_producer_is_driven_end_to_end_and_rebuilds_its_shipped_bytes(
             moved_pins.assert_only_the_prompts_pin_moved(
                 json.loads((REPO_ROOT / shipped).read_text(encoding="utf-8")),
                 json.loads(again.read_text(encoding="utf-8")),
+                *(REPO_ROOT / one for one in ALSO_MOVED_BY_THE_THINKING_READER.get(script, ())),
             )
             continue
         assert again.read_bytes() == (REPO_ROOT / shipped).read_bytes(), (

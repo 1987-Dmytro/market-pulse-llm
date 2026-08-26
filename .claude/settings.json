@@ -4,7 +4,10 @@
       "Edit(/docs/STATUS.md)",
       "Edit(/docs/SPEC.md)",
       "Edit(/docs/PRODUCT.md)",
-      "Edit(/docs/PROMPT-*.md)"
+      "Edit(/docs/PROMPT-*.md)",
+      "Edit(/docs/PROCESS.md)",
+      "Edit(/docs/PLAN-*.md)",
+      "Edit(/docs/reviews/**)"
     ]
   },
   "hooks": {

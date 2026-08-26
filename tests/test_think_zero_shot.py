@@ -25,11 +25,16 @@ import pytest
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "scripts"))
+sys.path.insert(0, str(REPO_ROOT / "tests"))
 
 import build_think_packs as builder  # noqa: E402
 import pass1_fewshot_pod_runner as fewshot  # noqa: E402
+import project_think_zero_shot as projector  # noqa: E402
 import pass2_r2_pod_runner as pass2runner  # noqa: E402
 import reader_v5_pod_runner as runner  # noqa: E402
+
+import moved_pins  # noqa: E402
+import write_pass1_prereg_b as prereg_b  # noqa: E402
 
 from market_pulse import local_llm, prompts, reader_v5  # noqa: E402
 
@@ -484,6 +489,80 @@ def test_the_persisted_reply_is_cut_at_the_ANSWERS_brace_and_keeps_the_thought(t
     assert row["thought_chars"] == len(BRACED_THOUGHT)
 
 
+def test_a_length_cut_thought_is_never_persisted_as_a_balanced_answer(tmp_path):
+    """The other half of the same rule, on the rows where the stop by definition never fired.
+
+    A `length` cut-off in this configuration is an UNCLOSED thought, and the reviewer's finding is
+    that `run` read it with `split_thought` alone: no closer, so the whole working-out was handed to
+    `balanced_prefix` as if it were the answer, the object the model reasoned about balanced, and
+    the row went to disk `balanced: True` with the thought TRUNCATED at that brace and
+    `thought_chars: 0`. Both readings are wrong in the same direction — a parse failure filed as an
+    answer — and the thought-length distribution is a registered reading, so the row must carry
+    every character it spent ([[the_empty_class_eats_the_parse_failures]]).
+    """
+    unclosed = BRACED_THOUGHT[: BRACED_THOUGHT.index(CLOSE)]
+    assert reader_v5.balanced_prefix(unclosed) is not None, (
+        "the premise: this thought DOES balance an object, so the shipped rule would have cut here"
+    )
+
+    class Client:
+        def read(self, task, items):
+            return [
+                {
+                    "content": unclosed,
+                    "finish_reason": "length",
+                    "cost": 0.0,
+                    "usage": {"prompt_tokens": 11, "completion_tokens": 8000},
+                    "generation_id": None,
+                    "thought": "The answer should be …",
+                    "thought_tokens": 8000,
+                }
+            ]
+
+    code = pass2runner.main(
+        [
+            "--pack",
+            str(RESULTS / "pass2_r2_pack_think_smoke.json"),
+            "--outdir",
+            str(tmp_path),
+            "--repo",
+            str(REPO_ROOT),
+            "--serving",
+            "READER_THINK",
+        ],
+        loader=lambda *a, **kw: Client(),
+    )
+    assert code == 0
+    out = tmp_path / "pass2_signals_r2_remainder.READER_THINK.jsonl"
+    (row,) = [
+        json.loads(one) for one in out.read_text(encoding="utf-8").splitlines() if one.strip()
+    ]
+    assert row["balanced"] is False, "an unclosed thought carries no answer to balance"
+    assert row["cut_chars"] == 0 and row["reply"] == unclosed, "nothing may be trimmed off it"
+    assert row["thought_chars"] == row["emitted_chars"] == len(unclosed)
+    assert row["thought_chars"] > 0, "the registered reading is the LENGTH of the working-out"
+    assert row["finish_reason"] == "length"
+
+
+def test_one_rule_answers_the_stop_and_the_persistence(tmp_path):
+    """The control on the test above: it must fail because the RULE is missing, not because a
+    literal in `run` was tightened. Both callers read `thought_and_answer`, so the state the stop
+    refuses to fire in is the same state the row is written from
+    ([[two_values_for_one_input_get_quoted_kindly]])."""
+    unclosed = BRACED_THOUGHT[: BRACED_THOUGHT.index(CLOSE)]
+    thought, answer = runner.thought_and_answer(unclosed, prompts)
+    assert (thought, answer) == (unclosed, None)
+    assert runner.stops_here(unclosed, prompts, reader_v5) is False
+    assert runner.thought_and_answer(VERDICT, prompts) == ("", VERDICT), "shipped path: identity"
+    assert runner.thought_and_answer(BRACED_THOUGHT + VERDICT, prompts) == (
+        BRACED_THOUGHT,
+        VERDICT,
+    )
+    assert "thought_and_answer" in inspect.getsource(runner.run), (
+        "`run` must read the rule, not a second copy of it"
+    )
+
+
 def test_the_holdout_pack_is_the_hundred_rows_the_before_column_answered():
     """The holdout is a hundred LABELS, not a pack, and its v2 column is TWO reply files — 88 rows
     from the r2 window and 12 from r1, disjoint. Each item comes from the pack that answered it, so
@@ -508,12 +587,54 @@ def test_the_holdout_pack_is_the_hundred_rows_the_before_column_answered():
 # --- the registration and the measurement ledger ---------------------------------------------------
 
 
-def test_the_registration_rebuilds_byte_for_byte():
-    """The record is what its producer emits from the files it names, today."""
+#: The files this registration PINS that `think-zero-shot-d2` step 0 ordered moved, each with the
+#: witness that says the move happened rather than a rename: STATUS gained the §6t row the D2
+#: contract exists to fill, the runner gained the unclosed-thought rule.
+MOVED_BY_D2_STEP_0 = {
+    "docs/STATUS.md": "D1 (\u0438\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442, $0)",
+    "scripts/reader_v5_pod_runner.py": "def thought_and_answer",
+}
+
+
+def test_the_registration_rebuilds_except_where_step_0_moved_a_pin():
+    """The record is what its producer emits from the files it names — except at the two pins that
+    D2's own step 0 moved, and a registration is NEVER re-pinned.
+
+    Both moves are this contract's order: `docs/STATUS.md` (§6t, committed by path) and
+    `scripts/reader_v5_pod_runner.py` (the `length`-cut fix above). The allowance is DERIVED from
+    which paths carry each file's live sha and asserted in BOTH directions — a record that moved
+    anywhere else fails, and an allowance that has gone stale fails too. The packs the pod actually
+    reads pin `prompts.py`, `pass2.py` and `pass2_r2.py`, none of which moved, so the handshake on
+    the pod is unaffected ([[the_guard_hashes_the_half_that_cannot_move]]).
+    """
     import write_think_zero_shot_prereg as producer
 
     shipped = json.loads((RESULTS / producer.OUT_NAME).read_text(encoding="utf-8"))
-    assert producer.build(RESULTS) == shipped
+    rebuilt = producer.build(RESULTS)
+    expected: set[str] = set()
+    for name, witness in MOVED_BY_D2_STEP_0.items():
+        path = REPO_ROOT / name
+        assert witness in path.read_text(encoding="utf-8"), f"{name} does not carry D2's own change"
+        here = moved_pins.paths_holding(rebuilt, moved_pins.live_sha(path))
+        assert here, f"no path in the rebuild carries {name}'s live sha — the check is vacuous"
+        assert not here & moved_pins.paths_holding(shipped, moved_pins.live_sha(path)), (
+            f"{name} has NOT moved since the seal — this allowance is stale, drop it"
+        )
+        expected |= here
+    assert set(prereg_b.moved_paths(shipped, rebuilt, opaque=())) == expected
+
+
+def test_what_the_pod_reads_did_not_move():
+    """The positive half of the test above: the six packs are addressed by sha in the record and
+    their parser is what every handshake refuses on. A step-0 fix that reached either would make
+    every stage refuse before the model is loaded — at full pod price."""
+    record = json.loads((RESULTS / "prereg_think_zero_shot.json").read_text(encoding="utf-8"))
+    for stage in record["stages"]:
+        assert moved_pins.live_sha(RESULTS / Path(stage["pack"]).name) == stage["sha256"], (
+            f"{stage['pack']} moved — stage {stage['order']} would refuse on the pod"
+        )
+    for name in ("src/market_pulse/prompts.py", "src/market_pulse/pass2_r2.py"):
+        assert record["instrument"]["shas"][name] == moved_pins.live_sha(REPO_ROOT / name)
 
 
 def test_every_before_number_is_derived_and_the_contract_agrees_with_it():
@@ -591,3 +712,118 @@ def test_the_seeded_rates_are_the_reply_files_own(tmp_path):
     assert len(measurements.seed("think-zero-shot", ledger)) == len(derived)
     assert measurements.seed("think-zero-shot", ledger) == [], "seeding twice adds nothing"
     assert len(measurements.rows(ledger)) == len(derived)
+
+
+# --- rung 2: the projection that fires seven times on a live clock ---------------------------------
+
+
+RECORD = json.loads((RESULTS / "prereg_think_zero_shot.json").read_text(encoding="utf-8"))
+
+
+def ledger_of(tmp_path: Path, **rates: float) -> Path:
+    path = tmp_path / "measurements.jsonl"
+    path.write_text(
+        "".join(
+            json.dumps({"name": name, "value": value, "unit": "seconds"}) + "\n"
+            for name, value in rates.items()
+        ),
+        encoding="utf-8",
+    )
+    return path
+
+
+def test_the_projection_prices_the_smokes_thread_once(tmp_path):
+    """THE money check. Stage 1 buys the longest thread and writes it into the REMAINDER's out-file
+    — `already_answered` will not re-ask it at stage 7, so a projection that charges 68 there is
+    charging for a unit the pod will never generate. The same holds for the three dev rows against
+    stage 3's 200 ([[check_the_step_was_not_already_done]])."""
+    run = tmp_path / "run"
+    run.mkdir()
+    (run / "pass2_signals_r2_remainder.READER_THINK.jsonl").write_text(
+        json.dumps({"id": "@mandziak:3679"}) + "\n", encoding="utf-8"
+    )
+    (run / "pass1_dev_v2.READER_THINK.jsonl").write_text(
+        "".join(json.dumps({"id": f"row{n}"}) + "\n" for n in range(3)), encoding="utf-8"
+    )
+    rows = projector.plan(
+        RECORD,
+        run,
+        projector.rates(ledger_of(tmp_path, **dict.fromkeys(projector.RATE_OF.values(), 10.0))),
+        load_seconds=0,
+    )
+    owed = {row["order"]: row["units"] for row in rows}
+    assert 1 not in owed and 2 not in owed, "both smokes are answered — they are not owed again"
+    assert owed == {3: 197, 4: 11, 5: 200, 6: 100, 7: 67}
+    assert sum(owed.values()) == 575
+
+
+def test_nothing_is_owed_twice_when_the_run_directory_is_empty(tmp_path):
+    """The control: with nothing answered, the seven stages are the 579 renderings the packs carry
+    — and stages 3 and 5 share two out-files, so a plan that double-counted them would say more."""
+    rows = projector.plan(
+        RECORD,
+        tmp_path,
+        projector.rates(ledger_of(tmp_path, **dict.fromkeys(projector.RATE_OF.values(), 1.0))),
+        load_seconds=0,
+    )
+    assert sum(row["units"] for row in rows) == 579
+    assert [row["order"] for row in rows] == [1, 2, 3, 4, 5, 6, 7]
+
+
+def test_a_rate_the_smoke_has_not_measured_refuses_to_be_projected(tmp_path):
+    """A remembered number is not a prior. The 97 s/thread error of 26.08 was exactly this: a rate
+    quoted from memory priced a stage 4.1x wrong ([[projected_rate_versus_measured_rate]])."""
+    rows = projector.plan(RECORD, tmp_path, {}, load_seconds=0)
+    assert all(row["rate"] is None for row in rows)
+    with pytest.raises(SystemExit, match="is not in the ledger"):
+        projector.project(RECORD, rows, usd_per_hour=0.79, elapsed=0)
+
+
+@pytest.mark.parametrize(
+    "pass1, pass2, verdict",
+    [(10.0, 60.0, "GO"), (30.0, 200.0, "GO"), (40.0, 250.0, "ASK"), (90.0, 600.0, "KILL")],
+)
+def test_the_verdict_bands_are_the_records_own_rung(tmp_path, pass1, pass2, verdict):
+    """GO at or under the cap, ASK within 20% over it, KILL beyond — and the band is read off the
+    record's `cap_usd`, never a literal here."""
+    rows = projector.plan(
+        RECORD,
+        tmp_path,
+        projector.rates(
+            ledger_of(
+                tmp_path,
+                think_pass1_seconds_per_call=pass1,
+                think_pass2_seconds_per_thread=pass2,
+            )
+        ),
+        load_seconds=60,
+    )
+    out = projector.project(RECORD, rows, usd_per_hour=0.79, elapsed=1800)
+    assert out["cap_usd"] == RECORD["money"]["cap_usd"] == 8.0
+    assert out["verdict"] == verdict
+    assert (out["projected_usd"] <= out["cap_usd"]) is (verdict == "GO")
+
+
+def test_stop_after_names_the_last_stage_that_fits_under_the_cap(tmp_path):
+    """A KILL verdict on the whole programme is not the decision — the decision is where to stop,
+    and the value order IS the drop order. `stop_after_stage` is that number, and it is None when
+    even the first stage does not fit."""
+    rows = projector.plan(
+        RECORD,
+        tmp_path,
+        projector.rates(
+            ledger_of(
+                tmp_path,
+                think_pass1_seconds_per_call=90.0,
+                think_pass2_seconds_per_thread=600.0,
+            )
+        ),
+        load_seconds=60,
+    )
+    out = projector.project(RECORD, rows, usd_per_hour=0.79, elapsed=1800)
+    fits = [row for row in out["table"] if row["cumulative_usd"] <= out["cap_usd"]]
+    assert out["stop_after_stage"] == fits[-1]["order"]
+    assert out["table"][len(fits)]["cumulative_usd"] > out["cap_usd"], "the next one does not fit"
+
+    broke = projector.project(RECORD, rows, usd_per_hour=0.79, elapsed=8.0 * 3600 / 0.79)
+    assert broke["stop_after_stage"] is None and broke["verdict"] == "KILL"
