@@ -240,6 +240,15 @@
             "what_it_is": "if each arm's rebuilt pack produces the 11 threads r2's v2 leg produced"
           },
           {
+            "break_even_seconds_per_step": 69.79,
+            "fixed_seconds": 8080.2,
+            "fixed_usd": 3.1199,
+            "hard_stop_bound_seconds_per_step": 68.89,
+            "pass_1_seconds_per_call": 9.2,
+            "pass_2_threads_per_leg": 10,
+            "what_it_is": "at the TEN threads a v3-shaped pass-1 leg actually produced, measured at $0"
+          },
+          {
             "break_even_seconds_per_step": 72.32,
             "fixed_seconds": 7716.0,
             "fixed_usd": 2.9792,
@@ -260,6 +269,13 @@
         ],
         "the_binding_bound_is_the_HARD_STOP_not_the_cap": "at every row above, 18 000 s runs out about a second per step before $7.00 does. The stop is what a projection rung will fire on first",
         "the_charged_row_lands_BETWEEN_the_two_readings": "62.15 s/step sits above 61.047 and below 68.442. So this session's outcome is not knowable before the smoke, and both KILL and GO are compliant readings of a plan that was solved honestly. This block exists so that a KILL after the smoke can be attributed: to the measured s/step, to the 9.20 s/call charge, or to the 15-thread bound — and the report can carry the inequality instead of the missing number ([[name_what_the_range_protects]], [[bound_instead_of_recompute]])",
+        "the_ten_thread_reading_taken_at_0_before_the_create": {
+          "measured": "results/lora_c_base_v3.jsonl, rebuilt through scripts/build_lora_c_pass2_pack.py on 2026-08-26",
+          "r2s_v2_leg_produced": 11,
+          "reading": "10 of 16 reference threads carry a filtered row · 43 rows",
+          "what_it_DOES_do": "it names which input makes this plan knife-edge. At 15 threads the break-even is 62.15 s/step and lora-b's 68.442 does not fit; at the 10 a v3-shaped leg produced it is 68.89 and BOTH readings this repo owns fit. So a KILL after the smoke at a rate between those two is attributable to the thread BOUND and not to the card ([[name_what_the_range_protects]])",
+          "what_it_does_NOT_do": "it does not lower the charge. The contract fixes the bound at 15 threads/leg and the projection rung charges 15 ([[a_flag_that_asserts_turns_a_poll_into_a_verdict]] in reverse: a cheaper number nobody has measured ON THIS ARM is not a measurement). An arm that marks MORE rows OURS than base v3 puts more threads in the pack, which is exactly what a working adapter would do — so the realised count is bounded below by nothing"
+        },
         "what_it_answers": "the s/step at which the plan stops fitting, as a function of the two rates this session has NOT yet measured. All four rows carry 144 optimizer steps (62 + 82) at $1.39/h against a $7.00 cap and an 18 000 s stop",
         "why_the_pass_1_rate_is_unmeasured_here": "the base legs were bought by r2 and are not re-bought, so the first projection rung of this session — the one after the smoke — has NO measured s/call to use and charges the registered 9.20 for the whole remainder. That is compliance with ruling (п), not pessimism to be argued away"
       },

@@ -144,6 +144,13 @@ projection KILLs at Y s/step while one steady step ran at X < 62.15, that inequa
 **68.442**, both taken at ≤1 222 tokens against this line's 1 445–2 975. A KILL here is compliance:
 pull everything bought, tear down, report.
 
+**And name what the range protects.** The 15-thread charge is a BOUND, not a count: rebuilt from
+base v3's own out-file at $0 before the create, the pass-2 pack held **10 threads / 43 rows**, and
+r2's v2 leg held 11. At 10 threads the break-even is **68.89 s/step** and both known readings fit.
+So a KILL at a rate between 62.15 and 68.89 is attributable to the bound. The charge still stands —
+an adapter that marks more rows OURS puts MORE threads in the pack, which is what a working one
+would do — but the report has to carry the inequality.
+
 ## 5 — arm A, then eval A
 
 ```bash

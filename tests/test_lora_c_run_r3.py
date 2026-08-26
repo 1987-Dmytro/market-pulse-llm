@@ -970,3 +970,31 @@ def test_a_smoke_whose_start_up_is_the_whole_gap_still_grades_on_the_loop(run, t
     assert got["verdict"] == "GO", (
         "65.0 is under the 181.5 ceiling — the projection decides the rest"
     )
+
+
+def test_the_thread_bound_is_what_makes_the_plan_knife_edge():
+    """Measured at $0 before the create: a v3-shaped pass-1 leg put TEN threads in the pack.
+
+    At the charged bound of 15 the break-even is 62.15 s/step and lora-b's 68.442 does not fit; at
+    10 it is 68.89 and both readings this repo owns do. The charge does not move — the contract
+    fixes 15 — but a KILL between those two rates is attributable to the BOUND and not to the card
+    ([[name_what_the_range_protects]]).
+    """
+    block = PREREG["money"]["pre_pod_arithmetic"]["the_break_even_is_a_FUNCTION_not_a_number"]
+    by_threads = {
+        one["pass_2_threads_per_leg"]: one
+        for one in block["rows"]
+        if one["pass_1_seconds_per_call"] == 9.20
+    }
+    high = block["readings_this_repo_holds"]["measured_on_lora_b_arm_a"]
+    assert by_threads[15]["hard_stop_bound_seconds_per_step"] < high
+    assert by_threads[10]["hard_stop_bound_seconds_per_step"] > high
+    measured = block["the_ten_thread_reading_taken_at_0_before_the_create"]
+    assert "10 of 16 reference threads" in measured["reading"]
+    assert measured["r2s_v2_leg_produced"] == 11
+    # the charge itself is untouched: the plan still prices 15 threads a leg
+    assert sibling_plan_threads() == 15
+
+
+def sibling_plan_threads() -> int:
+    return parent.plan(view())["eval_a"]["pass_2_threads"]
