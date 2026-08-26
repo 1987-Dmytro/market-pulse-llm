@@ -503,6 +503,16 @@
       "billing_since_usd": 10.026469,
       "billing_read": "read",
       "note": "lora-c-run r3 pod otq63mmt7s2uf1 deleted; KILL at the projection rung after the smoke — 89.961 s/step measured at 3 072 projects 21 284.8 s against an 18 000 s stop and $8.1271 against a $7.00 cap; 1 152 s = $0.4448 on the pod clock; the frozen registration's ONE attempt is UNSPENT"
+    },
+    {
+      "at": "2026-08-26T13:33:17+00:00",
+      "balance": 11.9398908027,
+      "spent_usd": 10.5699,
+      "remaining_usd": 9.4301,
+      "balance_delta_usd": 10.5699,
+      "billing_since_usd": 10.550426,
+      "billing_read": "read",
+      "note": "think-zero-shot D2, before the create"
     }
   ]
 }
