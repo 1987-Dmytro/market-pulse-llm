@@ -282,8 +282,47 @@ says(
 )
 says(
     "the guard against the pod clock",
-    "**0.29%**",
+    "0.29% over the clock",
     round(abs(0.4461 - pod["billed_usd"]) / pod["billed_usd"] * 100, 2) == 0.29,
+)
+
+# --- this step's own row in the LIVE cycle ledger, selected by its stamp ---------------------------
+
+CYCLE = REPO_ROOT / "results" / "spend_cycle2.json"
+THIS_STEPS_ROW = "2026-08-26T09:14:45+00:00"
+BEFORE_THE_CREATE = 10.0265
+
+rows = [
+    one
+    for one in json.loads(CYCLE.read_text(encoding="utf-8"))["sessions"]
+    if one["at"] == THIS_STEPS_ROW
+]
+if len(rows) != 1:
+    raise SystemExit(
+        f"{len(rows)} rows stamped {THIS_STEPS_ROW} in {CYCLE.name} — a reading is exactly one row"
+    )
+ledger = rows[0]
+
+says(
+    "the ledger row this session wrote",
+    "**$10.4921 of $20.00**, $9.5079 left",
+    ledger["spent_usd"] == 10.4921 and ledger["remaining_usd"] == 9.5079,
+)
+says(
+    "the delta fifteen minutes later",
+    "**$0.4656**",
+    round(ledger["spent_usd"] - BEFORE_THE_CREATE, 4) == 0.4656,
+)
+says(
+    "the walk is persisted in the row, and it did not move for this pod",
+    "`billing_since_usd` **$10.026469**",
+    round(ledger["billing_since_usd"], 6) == 10.026469
+    and round(ledger["billing_since_usd"] - BEFORE_THE_CREATE, 4) == 0.0,
+)
+says(
+    "the row names this pod",
+    "`2026-08-26T09:14:45+00:00`",
+    POD_ID in ledger["note"] and "UNSPENT" in ledger["note"],
 )
 
 # --- the stock, the gates, the audit ------------------------------------------------------------------------

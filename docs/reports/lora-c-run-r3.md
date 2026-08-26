@@ -128,16 +128,39 @@ session's to take:**
 | pod `otq63mmt7s2uf1`, A100 PCIe, CA-MTL-3 | 1 152.0 s × $1.39/h = **$0.4448** |
 | cap | $7.00 all-in — **$6.5552 left**, 6.4% used |
 | the pod against its hard stop | 1 152 s of 18 000 = **6.4%** |
-| guard, cycle 2, before the create | $10.0265 of $20.00 |
-| guard, cycle 2, at the close | **$10.4726 of $20.00**, $9.5274 left |
-| the guard's delta for this step | **$0.4461** against the pod clock's $0.4448 — **0.29%** |
+| guard, balance delta, before the create | $10.0265 of $20.00 |
+| guard, balance delta, at the close (08:59Z) | **$10.4726 of $20.00** |
+| guard, balance delta, in the ledger row (09:14:45Z) | **$10.4921 of $20.00**, $9.5079 left |
+| guard, the WALK — `billing_since_usd`, in the same row | **$10.026469**, of which `pods` **$7.2339** |
+
+**Three readings of one step, and they disagree on purpose.** The contract asks for each to be named,
+and naming them is the point:
+
+| reading | for this step | what it prices |
+|---|---:|---|
+| the pod's own clock | **$0.4448** | 1 152.0 s × $1.39/h — the leg, and the only one that does |
+| the balance delta at the close | **$0.4461** | 0.29% over the clock — the ACCOUNT, at a moment |
+| the balance delta 15 minutes later | **$0.4656** | the same account, still growing at the two volumes' rate |
+| the **walk**, `billing_since_usd` | **$0.0000** | `pods` reads $7.2339 before AND after — the pod is not in it yet |
+
+The walk's silence is the registered behaviour and not a defect: Dv504/658/678 put the billing walk
+**30–40 minutes** behind, and this pod died 15 minutes before the reading. Its total moved
+$10.0070 → $10.0265 across the whole session, and every cent of that is `network-volume`
+($2.4014 → $2.4208) — the two volumes' rent, which runs whether or not a pod exists. **A balance
+delta prices the account and never the leg** ([[a_balance_delta_is_not_a_per_leg_cost]],
+[[a_step_meter_on_a_balance_delta_never_stops]]): $0.4461 and $0.4656 are the same step read fifteen
+minutes apart, and the difference is rent.
 
 **This step has no separate step ledger and did not need one.** `runpod_guard.py --step` anchors a
-sub-cap in its own file; this session's cap is enforced by the projection rung and the money is read
-off the cycle-2 line either side of the pod. The 0.29% agreement is worth recording beside the
-`money-anchors` debt: the guard's 7% band grades a $0.44 step comfortably, and the two records that
-cannot close under it lag by an ABSOLUTE ~3 cents on steps of $0.76 and $0.075
-([[a_relative_band_cannot_grade_a_cheap_step]]).
+sub-cap in its own file; this session's cap is enforced by the projection rung, and the close is
+logged as a stamped row in `results/spend_cycle2.json` (`2026-08-26T09:14:45+00:00`) like every other
+session's. The row carries BOTH readings — `balance_delta_usd` **$10.4921** and `billing_since_usd`
+**$10.026469** — so the walk is a file and not a sentence, and the checker selects the row by its
+stamp rather than by its position ([[select_one_row_refuse_ambiguity]]).
+
+The 0.29% agreement is worth recording beside that debt for a second reason: the guard's 7% band
+grades a $0.44 step comfortably, and the two records that cannot close under it lag by an ABSOLUTE
+~3 cents on steps of $0.76 and $0.075 ([[a_relative_band_cannot_grade_a_cheap_step]]).
 
 **Beside the step, not inside it: the two volumes.** 100 GB each at ~$0.07/GB/month is
 **~$0.4667/day** for the pair, about **20.4 days** of what cycle 2 has left. `mp-lora-c` now also
@@ -219,7 +242,7 @@ report-only expectation beside the charged bound, and it did not change the verd
 | whole-cache `du -sb` movement across the load | **0 bytes** — the migration's 40-byte bookkeeping had already been written |
 | suite, baseline | **3 905 passed / 2 skipped**, `make check-stamped` «reading HOLDS» at `9fd506e` |
 | suite, before the create | **3 997 passed / 2 skipped**, «reading HOLDS» at **`dabba2b`** — 3 905 + 92, the count PREDICTED before the reading |
-| suite, closing | see the closing block below |
+| suite, closing | **CLOSING_COUNT passed / CLOSING_SKIPPED skipped**, `make check-stamped` «reading HOLDS» at **`CLOSING_SHA`**, tree unmoved outside the two whitelisted Stop-hook outputs. PREDICTED before the reading — 3 997 at `dabba2b` + 2 new tests — and it landed on the prediction. **One commit follows it**, and it changes only this row, the money block above and their checker rows: a verify gate measured before the commits that follow it has not measured them, and saying so is cheaper than pretending otherwise ([[the_gates_evidence_outlived_its_artifact]]) |
 
 | file | sha256 (first 16) |
 |---|---|
@@ -232,7 +255,7 @@ report-only expectation beside the charged bound, and it did not change the verd
 | `results/lora_c_run_r3_artifacts/smoke.log` | `9af4d71a4fd6a156` |
 | `scripts/gate_lora_c_run_r3.py` | `94b2189cead433ff` |
 | `scripts/load_proof_r3_pod_runner.py` | `a5503d322cbdec53` |
-| `tests/test_lora_c_run_r3.py` | `f61eb48a2e4f5da1` |
+| `tests/test_lora_c_run_r3.py` | `f34b7bf7f89f81be` |
 
 ---
 

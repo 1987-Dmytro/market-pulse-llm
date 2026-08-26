@@ -1003,7 +1003,7 @@ def sibling_plan_threads() -> int:
 def test_every_number_in_the_report_is_re_derived_from_the_file_that_owns_it():
     """`scripts/check_lora_c_run_r3_report.py`, driven as a COMMAND — its exit code is the claim.
 
-    The report says «73 of 73 re-derived»; this is what makes that sentence checkable rather than
+    The report says «77 of 77 re-derived»; this is what makes that sentence checkable rather than
     something I once ran ([[a_claim_no_number_can_check]]). It reads the paid session's artifacts,
     so it is red in every commit before they land, which is the correct direction for a claim about
     them ([[a_test_that_reads_a_shipped_artifact]]).

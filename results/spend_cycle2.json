@@ -493,6 +493,16 @@
       "billing_since_usd": 9.4853,
       "billing_read": "read",
       "note": "lora-c-migrate-r2 pod deleted; volume mp-lora-c built in CA-MTL-3, weights on it, model loaded 40.22 s / 17.046 GiB on the A100; rung 5 KILL on its own byte rule"
+    },
+    {
+      "at": "2026-08-26T09:14:45+00:00",
+      "balance": 12.0176685803,
+      "spent_usd": 10.4921,
+      "remaining_usd": 9.5079,
+      "balance_delta_usd": 10.4921,
+      "billing_since_usd": 10.026469,
+      "billing_read": "read",
+      "note": "lora-c-run r3 pod otq63mmt7s2uf1 deleted; KILL at the projection rung after the smoke — 89.961 s/step measured at 3 072 projects 21 284.8 s against an 18 000 s stop and $8.1271 against a $7.00 cap; 1 152 s = $0.4448 on the pod clock; the frozen registration's ONE attempt is UNSPENT"
     }
   ]
 }

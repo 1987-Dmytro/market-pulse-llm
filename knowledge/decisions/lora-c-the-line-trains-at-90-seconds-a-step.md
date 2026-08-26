@@ -9,7 +9,7 @@ tags: [decision, phase6, lora, training, rate, money, pod, kill, projection]
 
 `lora-c-run r3` executed on 2026-08-26 under ruling (т), cap $7.00 all-in. One pod,
 **1 152 s = $0.4448**, KILLed by the projection rung after the smoke. This record is the English
-long form; `docs/reports/lora-c-run-r3.md` is the report and carries every number, 73 of 73
+long form; `docs/reports/lora-c-run-r3.md` is the report and carries every number, 77 of 77
 re-derived by a checker the suite drives.
 
 ## The reading
