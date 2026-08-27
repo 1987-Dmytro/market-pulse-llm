@@ -145,13 +145,23 @@ def test_the_three_verdicts_are_the_briefs_three():
 
 
 def test_a_channel_with_an_open_group_and_comments_enters():
-    record = {"resolved": True, "telegram_verified": True, "comments_enabled": True, "broadcast": True}
+    record = {
+        "resolved": True,
+        "telegram_verified": True,
+        "comments_enabled": True,
+        "broadcast": True,
+    }
     out = census.census_verdict(record, stats([msg(replies=3)]), is_group=False, messages_open=True)
     assert out["verdict"] == "enter"
 
 
 def test_comments_disabled_is_posts_only_with_the_entry_checks_own_reason():
-    record = {"resolved": True, "telegram_verified": True, "comments_enabled": False, "broadcast": True}
+    record = {
+        "resolved": True,
+        "telegram_verified": True,
+        "comments_enabled": False,
+        "broadcast": True,
+    }
     out = census.census_verdict(record, stats([msg()]), is_group=False, messages_open=True)
     assert out["verdict"] == "posts-only"
     assert "comments disabled (no linked discussion group)" in out["reasons"]
@@ -159,7 +169,12 @@ def test_comments_disabled_is_posts_only_with_the_entry_checks_own_reason():
 
 def test_a_group_is_not_posts_onlyed_for_having_no_linked_group():
     """Every chat has `comments_enabled: False`, and build_verdict would posts-only the theme."""
-    record = {"resolved": True, "telegram_verified": False, "comments_enabled": False, "megagroup": True}
+    record = {
+        "resolved": True,
+        "telegram_verified": False,
+        "comments_enabled": False,
+        "megagroup": True,
+    }
     out = census.census_verdict(
         record, stats([msg(text="продам")], is_group=True), is_group=True, messages_open=True
     )
@@ -167,7 +182,12 @@ def test_a_group_is_not_posts_onlyed_for_having_no_linked_group():
 
 
 def test_a_group_whose_history_needs_a_join_is_rejected_and_says_so():
-    record = {"resolved": True, "telegram_verified": False, "comments_enabled": False, "megagroup": True}
+    record = {
+        "resolved": True,
+        "telegram_verified": False,
+        "comments_enabled": False,
+        "megagroup": True,
+    }
     out = census.census_verdict(
         record, stats([], is_group=True), is_group=True, messages_open=False
     )
@@ -184,25 +204,36 @@ def test_a_scam_flag_is_a_reject_not_a_posts_only():
 # --- the bound is logged, never silent -----------------------------------------------------------
 
 
+BARS = {"retail_chains": 300, "poltava_chats": 100}
+
+
 def test_a_row_below_the_bar_is_not_checked_and_keeps_its_free_fields():
     rows = [
-        {"handle": "@big", "search": {"subscribers": 5000}},
-        {"handle": "@small", "search": {"subscribers": 12}},
+        {"handle": "@big", "found_by": ["retail_chains:АТБ"], "search": {"subscribers": 5000}},
+        {"handle": "@small", "found_by": ["retail_chains:АТБ"], "search": {"subscribers": 12}},
     ]
-    picked = census.to_check(rows, 300, None)
+    picked = census.to_check(rows, BARS, None)
     assert [row["handle"] for row in picked] == ["@big"]
 
 
 def test_the_check_list_is_ordered_by_reach_so_a_floodwait_costs_the_cheapest_rows():
     rows = [
-        {"handle": f"@c{n}", "search": {"subscribers": n}} for n in (400, 9000, 700)
+        {"handle": f"@c{n}", "found_by": ["retail_chains:АТБ"], "search": {"subscribers": n}}
+        for n in (400, 9000, 700)
     ]
-    assert [row["handle"] for row in census.to_check(rows, 300, 2)] == ["@c9000", "@c700"]
+    assert [row["handle"] for row in census.to_check(rows, BARS, 2)] == ["@c9000", "@c700"]
 
 
 def test_an_already_checked_row_is_not_checked_again():
-    rows = [{"handle": "@a", "checked": True, "search": {"subscribers": 5000}}]
-    assert census.to_check(rows, 300, None) == []
+    rows = [
+        {
+            "handle": "@a",
+            "checked": True,
+            "found_by": ["retail_chains:АТБ"],
+            "search": {"subscribers": 5000},
+        }
+    ]
+    assert census.to_check(rows, BARS, None) == []
 
 
 # --- the sort key is the brief's product, and its ties are named ---------------------------------
@@ -219,3 +250,53 @@ def test_two_zero_dairy_rows_break_their_tie_on_traffic_then_reach_then_handle()
     busy = {"handle": "@b", "subscribers": 10, "stats": stats([msg(day=d) for d in range(5)])}
     idle = {"handle": "@a", "subscribers": 99, "stats": stats([msg()])}
     assert census.sort_key(busy) < census.sort_key(idle)
+
+
+def test_a_store_row_never_outranks_an_api_row_on_a_month_old_number():
+    """VARUS reads 15.43 comments/day in the store — a window that ended on 27 July.
+
+    Sorted into one sequence it outranks anything measured this morning, and the ORDER would be
+    asserting a comparison no measurement supports. Each instrument sorts inside its own block.
+    """
+    store = {
+        "handle": "@varus",
+        "measured_by": "store",
+        "subscribers": 1,
+        "search": {"subscribers": 1},
+        "stats": stats([msg(text="молоко", replies=400)]),
+    }
+    api = {
+        "handle": "@fresh",
+        "measured_by": "api",
+        "subscribers": 1,
+        "search": {"subscribers": 1},
+        "stats": stats([msg()]),
+    }
+    assert census.sort_key(api) < census.sort_key(store)
+    assert census.INSTRUMENT_ORDER == {"api": 0, "store": 1}
+
+
+def test_an_unchecked_row_sorts_last_and_does_not_crash_on_a_missing_stats_block():
+    unchecked = {"handle": "@x", "search": {"subscribers": 9_000_000}}
+    api = {"handle": "@a", "measured_by": "api", "search": {"subscribers": 1}, "stats": stats([])}
+    assert census.sort_key(api) < census.sort_key(unchecked)
+
+
+def test_the_two_themes_carry_different_bars_and_a_row_is_checked_if_either_wants_it():
+    """One bar across both populations would answer «Машівка has no chat» with the budget."""
+    bars = BARS
+    town = {
+        "handle": "@m",
+        "found_by": ["poltava_chats:Машівка чат"],
+        "search": {"subscribers": 150},
+    }
+    chain = {"handle": "@c", "found_by": ["retail_chains:АТБ"], "search": {"subscribers": 150}}
+    both = {
+        "handle": "@b",
+        "found_by": ["retail_chains:Коло", "poltava_chats:Полтава чат"],
+        "search": {"subscribers": 150},
+    }
+    assert census.bar_for(town, bars) == 100
+    assert census.bar_for(chain, bars) == 300
+    assert census.bar_for(both, bars) == 100, "the lower bar wins — either theme may want the row"
+    assert [r["handle"] for r in census.to_check([town, chain, both], bars, None)] == ["@m", "@b"]

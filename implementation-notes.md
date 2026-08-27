@@ -7877,3 +7877,59 @@ rate and pass-2 is 17×, because the thought is near-constant per unit (1 130 an
 the answers are not: pass 1's answer is four fields, so the working-out dominates it. The practical
 consequence is that a rate measured on one family may not be carried to the other, and the ledger
 rows are keyed by family for that reason.
+
+## Deviations — PROMPT-retail-census (C1, the census and the registry-revision proposal)
+
+**Dv861 `[cause: contract-gap]` — the brief's price pattern is Latin and this corpus is not.**
+`docs/PROMPT-retail-census.md` writes the price marker as `grn|₴|\d+[,.]\d\d`. Ukrainian retail
+writes «грн»; as given, the first branch fires on almost nothing and the column would have been
+carried entirely by `\d+[,.]\d\d`, which also matches a date («Акція діє з 27.08»). Implemented as
+a superset — `грн|₴|\bgrn\b|\d+[,.]\d\d` — with **both** shares on every row
+(`price_share`, `price_share_contract_regex`) and a per-branch hit count, so the deviation is a
+number the operator reads rather than a claim in prose ([[a_literal_below_the_minimum_is_a_unit_error]]).
+The literal pattern is in the record verbatim under `price_patterns.contract_as_written`.
+
+**Dv862 `[cause: contract-gap]` — «readable after joining» was measured without joining.** The
+census section says a Poltava group is a candidate only if its history is readable *after joining*;
+the Rules section of the same file says read-only against Telegram. Joining is the one action that
+writes on Telegram's side and `collect_5c1.JOIN_PAUSE` prices it at fifteen minutes each, so
+dozens of joins is a multi-hour write campaign, not a read. Resolved in favour of the Rules line
+after a probe: `@TomkaPoltav` returned five messages with `left=True`, i.e. a public supergroup's
+history reads **without** membership. So `messages_open` is measured on the read succeeding. A
+group that genuinely refuses the read is recorded `messages_open: false` and rejected with that
+reason — the operator can authorise joins for those separately.
+
+**Dv863 `[cause: contract-gap]` — the entry-check bar is per theme, and it is a budget.** A single
+subscriber floor across both themes would answer «Машівка has no chat» with this script's request
+budget rather than with Poltava: a national chain's channel with 200 subscribers is not the chain's
+channel, while a district centre of four thousand people has its whole market in a chat of two
+hundred. Two bars, each named in the record beside the subscriber percentiles of the population it
+was read off, and every skipped row kept with its free search-response fields and its reason
+([[a_borrowed_rule_carries_an_unstated_population]], [[a_prefilter_cannot_certify_the_population]]).
+
+**Dv864 `[cause: verify-gap]` — one table, two instruments, and the sort had to stop comparing
+them.** The brief asks for ONE table sorted by `dairy posts/day × (1 + comments/day)`, and it also
+says registered channels are measured from the store. The store's 28-day windows end on 2026-07-27
+or 2026-08-07/08; the API windows end today. Sorted into a single sequence, VARUS's store reading
+of 15.43 comments/day outranks everything measured this morning, and the ORDER asserts a comparison
+no measurement supports. `INSTRUMENT_ORDER` sorts the API block first and the store block second;
+the product orders each block, and an `инстр.` column names the instrument per row
+([[two_instruments_two_inputs]], [[price_the_incumbent_in_the_same_units]]).
+
+**Dv865 `[cause: env]` — the search stage was paid for twice: a background job held its old code.**
+The 236-query search ran in the background while the same file was patched to guard a `KeyError` in
+`sort_key`, which only runs at save time. Every query completed and then the process crashed in the
+code it had imported eighteen minutes earlier; nothing was written. The tell was the traceback
+itself — its line numbers pointed at the new file's docstrings, because a stale frame renders
+against the file as it is on disk now. Re-run after driving the write path offline against
+search-shaped rows. No money: the search spends no `ResolveUsername` and no model call
+([[a_running_process_holds_its_old_code]], [[exercise_the_write_path_not_just_the_compute]]).
+
+**Dv866 `[cause: contract-gap]` — committing STATUS.md turns a green test red, and neither side is
+the executor's to fix.** `scripts/write_think_zero_shot_prereg.py :: quoted()` greps ruling (ф) out
+of `docs/STATUS.md` verbatim. The re-spec compacted that sentence, so
+`tests/test_think_zero_shot.py::test_the_registration_rebuilds_except_where_step_0_moved_a_pin`
+is green at HEAD~ and red from step 0's commit onward. Proved both directions before committing.
+The producer is sealed (never re-pinned) and STATUS.md is team-lead-owned; the defect is that a
+machine-read ruling lived in prose PROCESS.md says may be compacted, outside the MACHINE-READ BLOCK
+it forbids re-flowing ([[a_sealed_reports_checker_reads_a_live_file]], [[team_lead_owns_the_docs]]).

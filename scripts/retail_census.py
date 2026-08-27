@@ -68,9 +68,16 @@ WINDOW_LIMIT = 1200
 A candidate that fills the cap inside the window is `window_truncated` — its rates are floors."""
 
 MIN_SUBSCRIBERS = 300
-"""The default entry-check bar, set on the search population and not before it (see the record's
-`bound` block for the distribution it was read off). It is a BUDGET, not a judgement: every row
-below it is in the record with its free fields, and `--min-subscribers 0` checks the lot."""
+MIN_SUBSCRIBERS_CHATS = 100
+"""The two entry-check bars, one per theme, read off the search population and not set before it
+(the record's `bound.population` block carries the percentiles they were chosen on).
+
+They are a BUDGET, not a judgement: every row below the bar is in the record with its free
+search-response fields and its reason, and `--min-subscribers 0 --min-subscribers-chats 0`
+checks the lot. They differ because the populations do — a national chain's channel with 200
+subscribers is not the chain's channel, while a district centre of four thousand people has its
+whole market in a chat of two hundred, and one bar across both would answer «Машівка has no
+chat» with this script's budget rather than with Poltava."""
 
 CONTRACT_PRICE = re.compile(r"grn|₴|\d+[,.]\d\d", re.IGNORECASE)
 """The price marker exactly as `docs/PROMPT-retail-census.md` writes it."""
@@ -301,13 +308,29 @@ async def search_population(
 # --- stage 2: one candidate at a time, checkpointed --------------------------------------------
 
 
-def to_check(rows: list[dict], minimum: int, limit: int | None) -> list[dict]:
+def themes_of(row: dict) -> set[str]:
+    return {tag.split(":", 1)[0] for tag in row.get("found_by", [])}
+
+
+def bar_for(row: dict, minimums: dict[str, int]) -> int:
+    """The lowest bar any theme that found this row sets — a row is checked if ANY theme wants it.
+
+    The bars differ because the populations do. A national chain's channel with 200 subscribers
+    is not the chain's channel; a district centre of four thousand people has its whole market in
+    a chat of two hundred. One bar across both would answer «Машівка has no chat» with this
+    script's budget rather than with Poltava ([[a_borrowed_rule_carries_an_unstated_population]]).
+    """
+    themes = themes_of(row) & set(minimums)
+    return min((minimums[theme] for theme in themes), default=max(minimums.values()))
+
+
+def to_check(rows: list[dict], minimums: dict[str, int], limit: int | None) -> list[dict]:
     """The rows this pass talks to. Everything else keeps its free fields and says why not."""
     pending = [
         row
         for row in rows
         if not row.get("checked")
-        and (row["search"]["subscribers"] or 0) >= minimum
+        and (row["search"]["subscribers"] or 0) >= bar_for(row, minimums)
         and not row.get("skipped_because")
     ]
     pending.sort(key=lambda row: -(row["search"]["subscribers"] or 0))
@@ -450,23 +473,52 @@ def registry_rows(compiled: dict, today: date) -> list[dict]:
 # --- the record --------------------------------------------------------------------------------
 
 
+INSTRUMENT_ORDER = {"api": 0, "store": 1}
+"""Which instrument's block a row sorts inside. Unmeasured rows come last.
+
+The brief asks for ONE table sorted by one product, and the table holds two instruments: the
+API rows' 28 days end today, the store rows' 28 days end on 2026-07-27 or 2026-08-07/08. Sorting
+them into one sequence would rank VARUS's 15.43 comments/day — read a month ago, when the
+collector last looked — above every candidate measured this morning, and the ORDER would be
+asserting something no measurement supports ([[two_instruments_two_inputs]],
+[[price_the_incumbent_in_the_same_units]]). So the product orders each block and the blocks are
+ordered by instrument: one table, one sort rule, and no comparison across two clocks."""
+
+
 def sort_key(row: dict) -> tuple:
-    """`dairy posts/day × (1 + comments/day)` — the brief's ordering.
+    """`dairy posts/day × (1 + comments/day)` — the brief's ordering, inside its instrument.
 
     `dairy posts/day` is not a measured column: it is posts/day × dairy share, and it is written
     into every row so the product can be checked. The tie at zero is most of the table, so the
     secondary keys are named rather than left to dict order
     ([[the_argmax_and_the_max_are_two_rows]]).
     """
-    stats = row["stats"]
-    dairy = stats["dairy_posts_per_day"]
-    comments = stats["comments_per_day"] or 0.0
+    stats = row.get("stats") or {}
+    dairy = stats.get("dairy_posts_per_day") or 0.0
+    comments = stats.get("comments_per_day") or 0.0
     return (
+        INSTRUMENT_ORDER.get(row.get("measured_by"), 2),
         -(dairy * (1 + comments)),
-        -(stats["posts_per_day"] or 0),
-        -(row.get("subscribers") or 0),
+        -(stats.get("posts_per_day") or 0),
+        -(row.get("subscribers") or row["search"].get("subscribers") or 0),
         row["handle"].lower(),
     )
+
+
+_GIT: dict | None = None
+
+
+def git_once() -> dict:
+    """`git_state` shells out; `save()` runs after every candidate. Read the tree once a pass.
+
+    Also the safer reading: `git status --porcelain` re-read mid-pass would record a tree this
+    very run is dirtying, which is a provenance field that moves under its own record
+    ([[a_provenance_field_can_void_the_gate]]).
+    """
+    global _GIT
+    if _GIT is None:
+        _GIT = git_state(RECORD)
+    return _GIT
 
 
 def build_record(state: dict) -> dict:
@@ -513,7 +565,7 @@ def build_record(state: dict) -> dict:
             "in_registry": len([r for r in rows if r.get("in_registry")]),
         },
         "rows": sorted(rows, key=sort_key),
-        "git": git_state(RECORD),
+        "git": git_once(),
     }
 
 
@@ -615,27 +667,60 @@ async def run_search() -> int:
     return 1 if flood else 0
 
 
-async def run_checks(minimum: int, limit: int | None) -> int:
+def subscriber_percentiles(rows: list[dict]) -> dict:
+    """The distribution each bar was read off, per theme, written into the record beside it.
+
+    A threshold quoted without the population it was chosen on is a number nobody can argue with
+    ([[preregistration_is_a_file_not_a_constant]]).
+    """
+    out = {}
+    for theme in THEMES:
+        counts = sorted(
+            row["search"]["subscribers"] or 0 for row in rows if theme in themes_of(row)
+        )
+        if not counts:
+            out[theme] = {"n": 0}
+            continue
+        out[theme] = {
+            "n": len(counts),
+            "min": counts[0],
+            "p25": counts[len(counts) // 4],
+            "median": counts[len(counts) // 2],
+            "p75": counts[3 * len(counts) // 4],
+            "max": counts[-1],
+        }
+    return out
+
+
+async def run_checks(minimums: dict[str, int], limit: int | None) -> int:
     state = load_state()
     compiled = compile_categories(load_lexicon())
-    pending = to_check(state["rows"], minimum, limit)
+    pending = to_check(state["rows"], minimums, limit)
     below = [
         row
         for row in state["rows"]
-        if not row.get("checked") and (row["search"]["subscribers"] or 0) < minimum
+        if not row.get("checked") and (row["search"]["subscribers"] or 0) < bar_for(row, minimums)
     ]
     for row in below:
-        row["skipped_because"] = f"subscribers < {minimum} (search response, no resolve spent)"
+        bar = bar_for(row, minimums)
+        row["skipped_because"] = f"subscribers < {bar} (search response, no resolve spent)"
     state["bound"] = {
-        "min_subscribers": minimum,
+        "min_subscribers_by_theme": minimums,
         "skipped_below_the_bar": len(below),
+        "skipped_by_theme": {
+            theme: len([row for row in below if theme in themes_of(row)]) for theme in THEMES
+        },
+        "population": subscriber_percentiles(state["rows"]),
         "why": (
             "every ResolveUsername is what an account-wide FloodWait sits on, and this account"
             " has seen one of 55 779 s. The skipped rows keep their search-response fields and"
-            " say so — a logged filter the operator can lower, not a silent truncation."
+            " say so — a logged filter the operator can lower, not a silent truncation. The two"
+            " bars differ because the populations do: a national chain's channel with 200"
+            " subscribers is not the chain's channel, while a district centre of four thousand"
+            " has its whole market in a chat of two hundred."
         ),
     }
-    print(f"{len(pending)} to check at >= {minimum} subscribers; {len(below)} below the bar")
+    print(f"{len(pending)} to check at {minimums}; {len(below)} below the bar")
     if not pending:
         save(state)
         return 0
@@ -690,7 +775,18 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--plan", action="store_true", help="print the queries and stop, no API")
     parser.add_argument("--search", action="store_true", help="stage 1: the queries, no resolves")
     parser.add_argument("--report", action="store_true", help="render the report from the record")
-    parser.add_argument("--min-subscribers", type=int, default=MIN_SUBSCRIBERS)
+    parser.add_argument(
+        "--min-subscribers",
+        type=int,
+        default=MIN_SUBSCRIBERS,
+        help="the bar for retail_chains (a chain channel this small is not the chain)",
+    )
+    parser.add_argument(
+        "--min-subscribers-chats",
+        type=int,
+        default=MIN_SUBSCRIBERS_CHATS,
+        help="the bar for poltava_chats — a small district centre's whole market is small",
+    )
     parser.add_argument("--max-checks", type=int, help="cap the candidates checked this pass")
     parser.add_argument(
         "--registry-rows", action="store_true", help="add the store-measured registry rows"
@@ -741,7 +837,15 @@ def main(argv: list[str] | None = None) -> int:
         REPORT.write_text(render(json.loads(RECORD.read_text(encoding="utf-8"))), encoding="utf-8")
         print(f"wrote {REPORT.relative_to(REPO_ROOT)}")
         return 0
-    return asyncio.run(run_checks(args.min_subscribers, args.max_checks))
+    return asyncio.run(
+        run_checks(
+            {
+                "retail_chains": args.min_subscribers,
+                "poltava_chats": args.min_subscribers_chats,
+            },
+            args.max_checks,
+        )
+    )
 
 
 if __name__ == "__main__":
