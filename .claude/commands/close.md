@@ -11,5 +11,6 @@ Invoked ONLY by the operator at the end of the workday. Order:
 4. If the validator is installed: `python3 scripts/check-wikilinks.py` → 0 broken links in today's log.
 5. Report to the operator: done / next / blockers / updated files. Offer a commit, do NOT run it.
 
-Never write `docs/STATUS.md`, `docs/SPEC.md` or `docs/PROMPT-*.md` — team-lead files; phase-end
-facts go to the daily log / `implementation-notes.md`.
+Never write team-lead files (`docs/STATUS.md`, `docs/SPEC*.md`, `docs/PRODUCT.md`, `docs/PROCESS.md`,
+`docs/PHASE-*.md`, `docs/PROMPT-*.md`, `docs/PLAN-*.md`, `docs/reviews/**`, `docs/labels-*.jsonl`);
+phase-end facts go to the report, the daily log or `implementation-notes.md`.

@@ -3,11 +3,14 @@
     "deny": [
       "Edit(/docs/STATUS.md)",
       "Edit(/docs/SPEC.md)",
+      "Edit(/docs/SPEC-*.md)",
       "Edit(/docs/PRODUCT.md)",
-      "Edit(/docs/PROMPT-*.md)",
       "Edit(/docs/PROCESS.md)",
+      "Edit(/docs/PHASE-*.md)",
+      "Edit(/docs/PROMPT-*.md)",
       "Edit(/docs/PLAN-*.md)",
-      "Edit(/docs/reviews/**)"
+      "Edit(/docs/reviews/**)",
+      "Edit(/docs/labels-*.jsonl)"
     ]
   },
   "hooks": {
@@ -15,26 +18,10 @@
       {
         "matcher": "",
         "hooks": [
-          {
-            "type": "command",
-            "command": "python3 ${CLAUDE_PROJECT_DIR}/scripts/refresh-hot-cache.py 2>&1 | head -3",
-            "timeout": 5000
-          },
-          {
-            "type": "command",
-            "command": "cat ${CLAUDE_PROJECT_DIR}/knowledge/hot.md",
-            "timeout": 3000
-          },
-          {
-            "type": "command",
-            "command": "bash ${CLAUDE_PROJECT_DIR}/scripts/stale-check.sh",
-            "timeout": 3000
-          },
-          {
-            "type": "command",
-            "command": "python3 ${CLAUDE_PROJECT_DIR}/scripts/context-census.py 2>&1 | head -1",
-            "timeout": 5000
-          }
+          { "type": "command", "command": "python3 ${CLAUDE_PROJECT_DIR}/scripts/refresh-hot-cache.py 2>&1 | head -3", "timeout": 5000 },
+          { "type": "command", "command": "cat ${CLAUDE_PROJECT_DIR}/knowledge/hot.md", "timeout": 3000 },
+          { "type": "command", "command": "bash ${CLAUDE_PROJECT_DIR}/scripts/stale-check.sh", "timeout": 3000 },
+          { "type": "command", "command": "python3 ${CLAUDE_PROJECT_DIR}/scripts/context-census.py 2>&1 | head -1", "timeout": 5000 }
         ]
       }
     ],
@@ -42,11 +29,7 @@
       {
         "matcher": "",
         "hooks": [
-          {
-            "type": "command",
-            "command": "python3 ${CLAUDE_PROJECT_DIR}/scripts/brain-session-end.py 2>&1 | tail -2",
-            "timeout": 15000
-          }
+          { "type": "command", "command": "python3 ${CLAUDE_PROJECT_DIR}/scripts/brain-session-end.py 2>&1 | tail -2", "timeout": 15000 }
         ]
       }
     ],
@@ -54,6 +37,11 @@
       {
         "matcher": "Bash",
         "hooks": [
+          {
+            "type": "command",
+            "command": "bash ${CLAUDE_PROJECT_DIR}/scripts/hooks/refuse-sweeping-commands.sh",
+            "timeout": 3000
+          },
           {
             "type": "command",
             "command": "CMD=$(python3 -c \"import json,sys; d=json.load(sys.stdin); print(d.get('tool_input',d).get('command',''))\" 2>/dev/null || true); case \"$CMD\" in *grep*|*rg\\ *|*ripgrep*|*find\\ *|*fd\\ *|*ack\\ *|*ag\\ *)   [ -f graphify-out/graph.json ] &&   echo '{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"additionalContext\":\"graphify: knowledge graph at graphify-out/. For focused questions, run `graphify query \\\"<question>\\\"` (scoped subgraph, usually much smaller than GRAPH_REPORT.md) instead of grepping raw files. Read GRAPH_REPORT.md only for broad architecture context.\"}}'   || true ;; esac"
