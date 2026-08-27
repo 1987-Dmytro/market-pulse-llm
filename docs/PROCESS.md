@@ -1,4 +1,4 @@
-# PROCESS — project overlay for the `team-lead` skill v2 (market-pulse-llm)
+# PROCESS — project overlay for the `team-lead` skill v2.1 (market-pulse-llm)
 
 Team-lead file (executor: read and commit, never edit). Everything here is specific to THIS repo
 and was moved out of the skill on 2026-08-26; the skill states the principle, this file the
@@ -6,16 +6,37 @@ mechanics. Operator-facing digest of the same rules: `docs/STATUS.md` («Пра�
 забыть»). Case chronicles: `docs/reviews/`, `docs/reports/`, `knowledge/decisions/`.
 
 ## File ownership (single writer per file)
-- Team-lead files: `docs/STATUS.md`, `docs/SPEC.md`, `docs/PROMPT-*.md`, `docs/PROCESS.md`,
-  `docs/PLAN-*.md`, `docs/reviews/`, `docs/labels-pass1-r1.jsonl`. Executor commits them by path,
-  never edits. Deny rules for Edit/Write on these paths live in `.claude/settings.json`;
-  `/save` and `/close` carry the negative line.
-- Executor files: `src/`, `tests/`, `scripts/`, `results/`, `knowledge/**`, `implementation-notes.md`,
-  runbooks, the rest of `docs/`. The team lead reads, never edits.
+- Team-lead files: `docs/STATUS.md`, `docs/SPEC.md` (frozen rev. 3.x), `docs/SPEC-*.md` (current product
+  spec), `docs/PRODUCT.md`, `docs/PROCESS.md`, `docs/PHASE-*.md` (executable phase specs), `docs/PROMPT-*.md`
+  (one-sentence contracts and legacy prompts), `docs/PLAN-*.md`, `docs/reviews/`, `docs/labels-*.jsonl`.
+  Executor commits them by path, never edits. Deny rules for Edit/Write on these paths live in
+  `.claude/settings.json`; `/save` and `/close` carry the negative line.
+- Executor files: `src/`, `tests/`, `scripts/`, `results/`, `config/`, `knowledge/**`, `implementation-notes.md`,
+  `docs/plans/**` (the executor's plan per phase), `docs/reports/**`, runbooks, `.claude/**` (harness), the
+  rest of `docs/`. The team lead reads, never edits; harness changes are issued as a contract with the
+  file contents drafted under `docs/reviews/<date>-harness-*/` and applied by the executor.
 - `docs/STATUS.md` is a machine-read INPUT: sealed producers grep rulings out of it verbatim
   (`scripts/write_lora_c_prereg.py :: quoted()`, `write_think_zero_shot_prereg.py`). Quoted rulings
   live in the MACHINE-READ BLOCK at its end and are never re-flowed; STATUS prose above the block
-  may be compacted freely. Before editing any team-lead file, ask who READS it (`make preflight`).
+  may be compacted freely — a quoted sentence compacted by mistake reddened a test on 27.08 (Dv866).
+  Before editing any team-lead file, ask who READS it (`make preflight`).
+
+## Cadence per phase (skill v2.1 §3, §5)
+1. Team lead writes `docs/PHASE-<name>.md`: **question → artifact → checks → files/interfaces → out of
+   scope → stop-points → end-to-end check**; mechanics only as constraints. Phase boundaries are cut at
+   stop-points (operator decision, paid or irreversible step), never at file boundaries.
+2. Executor, fresh session, `/plan-phase <name>` → `docs/plans/<name>.md` → STOP. Team lead reviews the
+   plan (checks named, stop-points respected, every threshold/floor/sample listed) → operator relays «go».
+3. Executor implements by the plan; `/report <name>` → `docs/reports/<name>.md` (answer in ten lines).
+4. Team lead accepts by diff, artifact and check; STATUS refreshed; one retro line.
+One-sentence contracts (`docs/PROMPT-*.md`) remain for fixes and debts whose diff fits in a sentence.
+
+## Hooks and guards (deterministic — "must happen every time")
+- `PreToolUse(Bash)` `scripts/hooks/refuse-sweeping-commands.sh`: refuses `git add -A|--all|.` and
+  `make fmt` / `ruff format .`; both directions asserted in `tests/test_hooks.py`.
+- `permissions.deny` on every team-lead path (list above). `SessionStart`: hot-cache refresh, `hot.md`
+  (curated block ≤40 lines), stale-check, context census. `Stop`: brain-session-end. Git `post-commit`:
+  graphify rebuild.
 
 ## Pins and sealed records
 - Sealed registrations pin `src/market_pulse/prompts.py`, `scorer.py`, `brands.py`, `local_llm.py`,
@@ -49,14 +70,24 @@ mechanics. Operator-facing digest of the same rules: `docs/STATUS.md` («Пра�
 - `implementation-notes.md` keeps a Deviations section; every Dv ends with a cause tag from the
   closed enum `[cause: contract-gap | spec-gap | verify-gap | env | tooling | model | process]`,
   optional trailing `[[lesson-name]]`. Reports close with ≤5 lines of Process signals.
-- Reports are files in `docs/reports/` (≤30 lines under v2; the paired table may be longer), the
-  chat carries only the path. Numbers name the file they come from.
+- Reports are files in `docs/reports/` (≤30 lines under v2), the chat carries only the path. Numbers
+  name the file they come from. **A report opens with the operator's question the contract names and
+  answers it in its first ten lines**; a table longer than 40 rows is a file the report links, and the
+  report carries the top rows that answer the question (D2: 64 lines; C1: 361 lines — the rule's cause).
+- A contract states, before its mechanics, the ONE question the operator will answer from the
+  deliverable; a deliverable that measures everything and answers nothing is not accepted.
 - `make check` is the verifier (ruff + pytest); `make check-stamped` for a HOLDS reading at a HEAD;
   `scripts/preflight_serving_guards.py` renders the real chat template offline (zero cost) — run it
   before any pod that changes a template or serving config.
 - Tools: vault in `knowledge/` (hot.md, daily logs, `knowledge/decisions/` + INDEX), code graph via
   `graphify` (`graphify query "what reads <file>"` before any contract that moves a shared
   artifact; post-commit hook rebuilds; `--update` after doc changes), `/save` at session end.
+- MCP/plugins (decided 27.08, inventory `knowledge/runbooks/tooling.md`): `.mcp.json` stays empty; kept —
+  `context7`/`ref` (docs), `commit-commands`, `security-guidance`, `ponytail`, `graphify` CLI + hooks, `gh`;
+  enable `code-review` (fresh-subagent diff review before `/report` on money/secrets/guard code — skill v2.1
+  §6); deliberately unused here — `blockscout`, `rust-analyzer-lsp`, `serena`, `claude-in-chrome`, `drawio`,
+  account connectors. Team-lead side (Cowork): device folder access to the repo, web search for sources,
+  Project docs for handoffs; it never runs the executor's tools on the repo.
 
 ## Operator language
 - Conversation and `docs/STATUS.md` in Russian; code, commits, prompts, ADRs, reports in English.
