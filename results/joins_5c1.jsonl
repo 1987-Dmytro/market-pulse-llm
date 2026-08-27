@@ -28,3 +28,4 @@
 {"at": "2026-08-08T12:17:50+00:00", "channel": "@mandziak", "group_id": 1834041310, "group_title": "Мандзяк Віктор Chat", "outcome": "joined"}
 {"at": "2026-08-08T12:32:50+00:00", "channel": "@matusi_ukr", "group_id": 1564481268, "group_title": "Чат Матусі України", "outcome": "joined"}
 {"at": "2026-08-08T12:47:49+00:00", "channel": "@mamo_nepsichuy", "group_id": 1884244050, "group_title": "Мамо, не псіхуй!👌 Chat", "outcome": "joined"}
+{"at": "2026-08-27T10:38:35+00:00", "channel": "(census)", "outcome": "floodwait", "seconds": 85352, "clears_at": "2026-08-28T10:21:07+00:00", "note": "hit by scripts/retail_census.py after 200 entry checks in one pass (C1 retail-census); read-only, no joins"}

@@ -7933,3 +7933,57 @@ is green at HEAD~ and red from step 0's commit onward. Proved both directions be
 The producer is sealed (never re-pinned) and STATUS.md is team-lead-owned; the defect is that a
 machine-read ruling lived in prose PROCESS.md says may be compacted, outside the MACHINE-READ BLOCK
 it forbids re-flowing ([[a_sealed_reports_checker_reads_a_live_file]], [[team_lead_owns_the_docs]]).
+
+**Dv867 `[cause: contract-gap]` — the two themes live in `discover_channels.py`, the run does not.**
+The brief says to extend `scripts/discover_channels.py` with the two themes, keep every existing
+theme carried (`--carry`) and run both. The themes ARE there and the carry works — proved at $0,
+no API:
+
+    $ PYTHONPATH=src python3 scripts/discover_channels.py --plan --carry results/discovery_5a1.json
+    9 authorised themes, 2 to scan now:      ← the seven older ones marked `·`, carried
+      retail_chains  …  poltava_chats  …
+    carrying 180 candidates from results/discovery_5a1.json
+
+What did NOT run through that entry point is the scan itself, for three reasons, and a sibling
+runner (`scripts/retail_census.py`) does it instead. (1) `discover_channels.py` writes back into
+`results/discovery_5a1.json`, which `entry_check.prior_rows` reads and `results/entry_gate_5c1.json`
+refers to — a scan through it would rewrite a record this contract does not own
+([[rewriting_a_record_resets_state_you_do_not_own]]). The brief names `results/retail_census.json`
+as the output. (2) 5a's `window_stats` does not compute the census columns (price, leaflet, dairy,
+comments/day, `messages_open`), and its `run()` re-measures all 66 registry channels over the API,
+which the brief explicitly replaces with the store. (3) 5a writes its record once, at the end; the
+census writes after every candidate, which is what made a mid-pass verdict fix cost nothing. The
+shared half is shared for real: the themes, `entry_check.check_channel`, `collapse_albums`,
+`traffic_stats`, `build_verdict` and the lexicon matcher are all imported, not reimplemented.
+
+**Dv868 `[cause: model]` — «share of posts that are leaflet pages or carry a price» is two columns,
+because one of them saturates.** The leaflet half is `has_media` (`scripts/image_census_5c1.py`'s
+own definition) and it is a proxy: without vision a photo is not a proven leaflet page. Measured
+over the store, `media_share` has a median of 0.99 and sits at 1.00 for 28 of 58 channels — recipe
+and city-news channels are photographs end to end — so the union the brief asks for cannot separate
+retail from anything. The union is in the table as specified, and the price share (store median
+0.04) is printed beside it, because that is the column that actually discriminates.
+
+**Dv869 `[cause: env]` — FloodWait at candidate 191 of 315: 85 352 s (23.7 h), and it is now in the
+join log.** The pass stopped as the brief prescribes and kept all 190 rows (200 with the smoke);
+the record carries the event with `at`, `seconds` and `clears_at`. The defect this exposed is that
+the census wrote the wall only into ITS OWN record: `results/joins_5c1.jsonl` is where every phase
+reads "is the account walled" from (`collect_5c1.refuse_inside_flood_wait` is the reader, and
+`entry_check.run_gate` already writes the same row for the same reason), so a wall found here and
+not written there is a wall the collector walks into tomorrow. Fixed both ways — the row is written
+(`channel: "(census)"`, clears 2026-08-28T10:21:07Z) and `run_checks` now refuses to start inside
+the window. Negative control run: a second invocation refuses and names the hour, rather than
+spending a request that would lengthen it ([[guard_selftest_negative_control]]).
+
+**Dv870 `[cause: verify-gap]` — 23 of 266 rows have a rate that is a floor, and the table said so
+only after it was caught.** A candidate whose history fills `WINDOW_LIMIT` inside the 28 days was
+CUT, not counted, and lands at ~42.86/day (1200/28). Printed bare beside a measured 33.89 it reads
+as the busier channel. The table now prefixes those with `≥` and the caption names the ceiling
+([[an_absolute_bar_needs_a_reachability_state]]).
+
+**Dv871 `[cause: model]` — the search brings the RF market and the census must not silently rank
+it.** «METRO» matches METRO Russia and a Moscow-metro newspaper, «Auchan» matches АШАН Россия,
+«Толока» matches a Russian-language channel. 54 measured rows carry no Ukrainian text at all.
+SPEC 3.11 (4)'s market screen is the OPERATOR's — and Ukrainian channels legitimately write Russian
+(SPEC §1) — so this is a marked column (`ua 0.00` → ⚠) and a counted line in the report, never a
+verdict this contract invents.

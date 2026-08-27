@@ -49,6 +49,7 @@ from build_audit_pack import git_state  # noqa: E402
 from telethon import functions  # noqa: E402
 from telethon.errors import FloodWaitError  # noqa: E402
 
+from collect_5c1 import log_join, refuse_inside_flood_wait  # noqa: E402
 from market_pulse.entry_check import build_verdict, collapse_albums, traffic_stats  # noqa: E402
 from market_pulse.langid import detect  # noqa: E402
 from market_pulse.lexicon import load_lexicon  # noqa: E402
@@ -734,7 +735,36 @@ def subscriber_percentiles(rows: list[dict]) -> dict:
     return out
 
 
+def record_the_wall(seconds: int, at: str, checked: int) -> None:
+    """A FloodWait goes into the JOIN LOG, not only into this record.
+
+    `results/joins_5c1.jsonl` is where every phase reads "is the account walled" from —
+    `collect_5c1.refuse_inside_flood_wait` is the reader, and `entry_check.run_gate` writes the
+    same row for the same reason. A wall this pass found and did not write there is a wall the
+    collector walks into tomorrow. The limit is on `ResolveUsernameRequest`, which is not per
+    channel: every join, every comment fetch and every entry check starts by resolving a handle,
+    so one row closes all of them.
+    """
+    clears = datetime.fromisoformat(at) + timedelta(seconds=seconds)
+    log_join(
+        {
+            "at": at,
+            "channel": "(census)",
+            "outcome": "floodwait",
+            "seconds": seconds,
+            "clears_at": clears.isoformat(timespec="seconds"),
+            "note": (
+                f"hit by scripts/retail_census.py after {checked} entry checks in one pass"
+                " (C1 retail-census); read-only, no joins"
+            ),
+        }
+    )
+
+
 async def run_checks(minimums: dict[str, int], limit: int | None) -> int:
+    # Every candidate starts with a ResolveUsernameRequest, which is what the account-wide wall
+    # sits on. Refusing with the hour beats a request that lengthens the window.
+    refuse_inside_flood_wait()
     state = load_state()
     compiled = compile_categories(load_lexicon())
     pending = to_check(state["rows"], minimums, limit)
