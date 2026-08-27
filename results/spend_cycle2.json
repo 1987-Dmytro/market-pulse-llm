@@ -523,6 +523,16 @@
       "billing_since_usd": 15.905438,
       "billing_read": "read",
       "note": "think-zero-shot D2, pod lf989hmhk9diso deleted; stages 1-4 of 7 bought, rung 2 stopped the programme at the cap; 8h06m35s on the pod clock"
+    },
+    {
+      "at": "2026-08-27T09:43:00+00:00",
+      "balance": 5.6783611613,
+      "spent_usd": 16.8314,
+      "remaining_usd": 3.1686,
+      "balance_delta_usd": 16.8314,
+      "billing_since_usd": 16.811956,
+      "billing_read": "read",
+      "note": "C1 retail-census step 0: network volume mp-lora-c (soymlju8q0, 100 GB, CA-MTL-3) DELETED per SPEC v2 §9 / ruling (x) — merge is off stage 1's path and the serving weights live on mp-srv2 (verified: runbook_think_zero_shot_d2.md mounts qw4nwleanc and reads /workspace/hf). mp-srv2 (qw4nwleanc, EU-RO-1) untouched and present in both listings as the positive control. No pod, no serverless, nothing created."
     }
   ]
 }
