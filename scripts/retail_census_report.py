@@ -41,9 +41,9 @@ def group_flag(row: dict) -> str:
 
 def table(rows: list[dict]) -> list[str]:
     out = [
-        "| # | канал | handle | подп. | ✓ | п/д | листовка/цена | комменты | к/д или с/д |"
-        " молочка | мова | инстр. | вердикт · причина |",
-        "|---:|---|---|---:|:-:|---:|---:|---|---:|---:|---|---|---|",
+        "| # | канал | handle | подп. | ✓ | п/д | листовка/цена | цена | комменты |"
+        " к/д или с/д | молочка | мова | инстр. | вердикт · причина |",
+        "|---:|---|---|---:|:-:|---:|---:|---:|---|---:|---:|---|---|---|",
     ]
     for n, row in enumerate(rows, 1):
         stats = row["stats"]
@@ -55,6 +55,7 @@ def table(rows: list[dict]) -> list[str]:
             f" {row.get('subscribers') if row.get('subscribers') is not None else '—'} |"
             f" {'✓' if row.get('telegram_verified') else ''} |"
             f" {rate(stats['posts_per_day'])} | {pct(stats['leaflet_or_price_share'])} |"
+            f" {pct(stats['price_share'])} |"
             f" {group_flag(row)} | {rate(flow)} | {pct(stats['dairy_share'])} | {mix(row)} |"
             f" {row.get('measured_by') or '—'} |"
             f" {VERDICT_MARK.get(verdict, 'in_registry')} · {md(reason)} |"
@@ -63,7 +64,11 @@ def table(rows: list[dict]) -> list[str]:
 
 
 def render(record: dict) -> str:
-    rows = record["rows"]
+    # Only measured rows carry a `stats` block. The unchecked ones stay in the RECORD with their
+    # free search-response fields and the bar that skipped them; putting them in the table would
+    # be a row of dashes claiming to be a reading.
+    rows = [row for row in record["rows"] if row.get("stats")]
+    unmeasured = [row for row in record["rows"] if not row.get("stats")]
     fresh = [row for row in rows if not row.get("in_registry")]
     checked = [row for row in fresh if row.get("checked")]
     verdicts = Counter(row.get("verdict") for row in checked)
@@ -80,9 +85,27 @@ def render(record: dict) -> str:
         for row in checked
         if (row["stats"]["price_share"] or 0) > (row["stats"]["price_share_contract_regex"] or 0)
     ]
+    media = [
+        row["stats"]["media_share"] for row in rows if row["stats"].get("media_share") is not None
+    ]
+    prices = [
+        row["stats"]["price_share"] for row in rows if row["stats"].get("price_share") is not None
+    ]
+    media_n = len(media)
+    media_median = sorted(media)[media_n // 2] if media else 0.0
+    media_full = sum(1 for value in media if value >= 0.99)
+    price_median = sorted(prices)[len(prices) // 2] if prices else 0.0
     step0 = record.get("step_0") or {}
     floods = record.get("flood_wait_events") or []
     bound = record.get("bound") or {}
+    bars = (
+        " · ".join(
+            f"`{theme}` >= {value}"
+            for theme, value in (bound.get("min_subscribers_by_theme") or {}).items()
+        )
+        or "—"
+    )
+    population = bound.get("population") or {}
 
     lines = [
         "# retail-census (C1) — ценз сетей и полтавских чатов, $0",
@@ -116,10 +139,15 @@ def render(record: dict) -> str:
         f" {len(record['themes']['retail_chains'])} запросов;"
         f" `poltava_chats` — {themes.get('poltava_chats', 0)} из"
         f" {len(record['themes']['poltava_chats'])}.",
-        f"- Проверено {len(checked)}; ниже планки `--min-subscribers"
-        f" {bound.get('min_subscribers', '—')}` осталось"
-        f" {bound.get('skipped_below_the_bar', 0)} строк — они В ЗАПИСИ со своими бесплатными"
-        " полями и причиной, а не выброшены молча.",
+        "- **Планки — бюджет, не приговор**, и выставлены ПО найденному населению:"
+        f" {bars}. Ниже них осталось {bound.get('skipped_below_the_bar', 0)} строк"
+        f" ({len(unmeasured)} без замера всего) — они В ЗАПИСИ со своими бесплатными полями"
+        " и причиной, а не выброшены молча; `--min-subscribers 0 --min-subscribers-chats 0`"
+        " проверяет всё. Медиана подписчиков: у сетей"
+        f" {population.get('retail_chains', {}).get('median', '—')}, у чатов"
+        f" {population.get('poltava_chats', {}).get('median', '—')} — планка 100 на чаты"
+        " вычеркнула бы Оржицю, Козельщину и Машівку целиком, поэтому она 0.",
+        "- В таблице только измеренные строки: прочерк вместо замера читался бы как замер.",
         "- Вердикты: " + " · ".join(f"`{v}` {n}" for v, n in verdicts.most_common() if v),
         f"- Молочка > 0 у {len(with_dairy)} из {len(checked)} проверенных;"
         f" `enter` у {len(enterable)}.",
@@ -133,8 +161,12 @@ def render(record: dict) -> str:
         f" Считаются оба: у {len(contract_gap)} строк доля по расширенному паттерну ВЫШЕ, чем по"
         " буквальному. Ветки `грн · ₴ · grn · decimal` посчитаны отдельно в записи —"
         " `decimal` срабатывает и на «27.08», и только по веткам видно, кто несёт колонку.",
-        "- **«Листовка»** — это `has_media` (определение `scripts/image_census_5c1.py`), прокси:"
-        " без vision картинка не доказана листовкой. Доля цены считается отдельно, рядом.",
+        "- **«Листовка» насыщена и потому бесполезна как различитель.** Это `has_media`"
+        " (определение `scripts/image_census_5c1.py`) — прокси, без vision картинка листовкой не"
+        f" доказана. По стору медиана `media_share` = {media_median:.2f}, у {media_full} из"
+        f" {media_n} строк она равна 1.00: рецепты и новости — тоже сплошь фото. Колонка"
+        f" «листовка/цена» (объединение, как просит бриф) стоит в таблице, но различает"
+        f" ритейл именно **«цена»**: её медиана {price_median:.2f}.",
         "",
     ]
     if floods:
@@ -152,7 +184,8 @@ def render(record: dict) -> str:
         lines += ["**FloodWait: ни одного.** Проход дошёл до конца.", ""]
 
     lines += [
-        f"## Таблица — {len(rows)} строк, сортировка `dairy posts/day × (1 + comments/day)`",
+        f"## Таблица — {len(rows)} измеренных строк, сортировка"
+        " `dairy posts/day × (1 + comments/day)`",
         "",
         "`к/д или с/д` = комментов/день для каналов, сообщений/день для чатов (у чата нет"
         " счётчика ответов — там прочерк, а не ноль). Реестровые строки идут без вердикта:"

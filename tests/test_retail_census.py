@@ -300,3 +300,22 @@ def test_the_two_themes_carry_different_bars_and_a_row_is_checked_if_either_want
     assert census.bar_for(chain, bars) == 300
     assert census.bar_for(both, bars) == 100, "the lower bar wins — either theme may want the row"
     assert [r["handle"] for r in census.to_check([town, chain, both], bars, None)] == ["@m", "@b"]
+
+
+def test_a_channel_that_posted_nothing_in_four_weeks_is_not_an_enter():
+    """`build_verdict` grades CAPABILITY and calls a silent channel with a group `usable`.
+
+    It is answering "could this be collected from" — yes. The census asks "should this ENTER the
+    collection", and a channel that published nothing in four weeks contributes nothing to a
+    weekly promo pulse. Measured on @alesya_teperikova in the 10-row smoke, which came back
+    `enter` beside the reason «no posts in the sampled window».
+    """
+    record = {
+        "resolved": True,
+        "telegram_verified": True,
+        "comments_enabled": True,
+        "broadcast": True,
+    }
+    out = census.census_verdict(record, stats([]), is_group=False, messages_open=True)
+    assert out["verdict"] == "reject"
+    assert "no posts in the sampled window" in out["reasons"], "the entry check's own words"

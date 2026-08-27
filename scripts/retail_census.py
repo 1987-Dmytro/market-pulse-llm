@@ -252,6 +252,14 @@ def census_verdict(record: dict, stats: dict, *, is_group: bool, messages_open: 
         stats=stats["traffic"],
         broadcast=bool(record.get("broadcast")),
     )
+    if not stats["n_posts"]:
+        # `build_verdict` grades CAPABILITY and puts a silent channel at `usable` as long as it
+        # has a linked group — it is answering "could this be collected from", and the answer is
+        # yes. The census asks a different question, "should this ENTER the collection", and a
+        # channel that published nothing in four weeks contributes nothing to a weekly promo
+        # pulse. The reason stays the entry check's own words, and every number is still in the
+        # row, so the operator can put it on watch over the top of this.
+        return {"verdict": "reject", "reasons": graded["reasons"]}
     return {"verdict": mapping.get(graded["verdict"], "reject"), "reasons": graded["reasons"]}
 
 
@@ -632,6 +640,40 @@ def record_step_0(before: Path, delete: Path, after: Path, guard: dict) -> int:
     return 0
 
 
+def regrade() -> int:
+    """Re-run `census_verdict` over the rows already measured — no API, no resolve.
+
+    A verdict rule that changes after some rows are checked would otherwise mean re-buying the
+    measurement to re-grade it. Everything the rule reads is in the row, so the grading is
+    re-derived from the record the way `discover_channels --rebuild-ledger` re-derives the
+    ledger, and the measurement itself is never a second day's number.
+    """
+    state = load_state()
+    moved = 0
+    for row in state["rows"]:
+        if not row.get("checked") or row.get("in_registry") or not row.get("resolved"):
+            continue
+        graded = census_verdict(
+            {
+                "resolved": True,
+                "telegram_verified": row.get("telegram_verified"),
+                "scam": row.get("scam", False),
+                "fake": row.get("fake", False),
+                "comments_enabled": row.get("comments_enabled"),
+                "broadcast": row.get("broadcast"),
+                "megagroup": row.get("megagroup"),
+            },
+            row["stats"],
+            is_group=bool(row.get("is_group")),
+            messages_open=bool(row.get("messages_open")),
+        )
+        moved += graded["verdict"] != row.get("verdict")
+        row["verdict"], row["reasons"] = graded["verdict"], graded["reasons"]
+    save(state)
+    print(f"re-graded from the record, no API: {moved} verdicts moved")
+    return 0
+
+
 async def run_search() -> int:
     themes = {theme: discovery.THEMES[theme] for theme in THEMES}
     client = build_client()
@@ -776,6 +818,11 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--search", action="store_true", help="stage 1: the queries, no resolves")
     parser.add_argument("--report", action="store_true", help="render the report from the record")
     parser.add_argument(
+        "--regrade",
+        action="store_true",
+        help="re-run the verdict rule over the rows already measured — no API",
+    )
+    parser.add_argument(
         "--min-subscribers",
         type=int,
         default=MIN_SUBSCRIBERS,
@@ -807,6 +854,8 @@ def main(argv: list[str] | None = None) -> int:
         return 0
     if args.search:
         return asyncio.run(run_search())
+    if args.regrade:
+        return regrade()
     if args.step0:
         ledger = json.loads(
             (REPO_ROOT / "results" / "spend_cycle2.json").read_text(encoding="utf-8")
