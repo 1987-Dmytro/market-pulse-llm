@@ -7987,3 +7987,61 @@ it.** «METRO» matches METRO Russia and a Moscow-metro newspaper, «Auchan» ma
 SPEC 3.11 (4)'s market screen is the OPERATOR's — and Ukrainian channels legitimately write Russian
 (SPEC §1) — so this is a marked column (`ua 0.00` → ⚠) and a counted line in the report, never a
 verdict this contract invents.
+
+## Deviations from `docs/PROMPT-harness-v2.1.md`
+
+Every departure is logged here. Silence is not compliance. Full evidence: `docs/reports/harness-v2.1.md`.
+
+**Dv872 `[cause: contract-gap]` — step 0's `test_the_registration_rebuilds…` is red at HEAD, and not
+over the (ф) quotes.** The contract's step 0 says the quotes now live in STATUS's MACHINE-READ BLOCK
+and asks for a GREEN confirmation. `write_think_zero_shot_prereg.build()` finds all three, so that
+half is fixed; the test fails at the next line, `assert witness in path.read_text()` —
+`MOVED_BY_D2_STEP_0`'s witness `D1 (инструмент, $0)` is absent from `docs/STATUS.md`. Present at
+`09954df`, gone from `370f016` on: the same re-spec washed out two strings, one was restored. Named,
+not fixed — the witness guards a sealed registration and STATUS is the team lead's
+([[a_sealed_reports_checker_reads_a_live_file]]).
+
+**Dv873 `[cause: contract-gap]` — `docs/STATUS.md` joined the step-0 commit though step 0 named only
+PROCESS.md, the review folder and the contract.** Two of the three (ф) sentences existed only in the
+working tree; «GREEN at HEAD» was unmeasurable until STATUS was committed, and an uncommitted
+team-lead file voids `make check-stamped` (Dv852). Committed by path, unedited.
+
+**Dv874 `[cause: tooling]` — the guard matches its patterns anywhere in the command text.** A
+`git commit` whose MESSAGE quotes the refused forms is itself refused; this contract's commits pass
+their messages through `-F <file>`. The regex is not anchored to the command's first word, so an
+`echo`, a `grep` or a message that merely mentions the sweep is blocked.
+
+**Dv875 `[cause: contract-gap]` — the same guard under-matches, and its own test cannot see it.**
+Exit 0 against `scripts/hooks/refuse-sweeping-commands.sh`: bare **`ruff format`** (ruff's
+`[FILES]... [default: .]` — byte-identical file list to `ruff format .`, 475 files here),
+`ruff format src tests scripts config`, `ruff format --check .`, `ruff format --no-cache .`,
+`git add -u`, `git add :/`, `git stage -A`, `git -C . add -A`. Meanwhile `git add -a`, which the
+regex refuses, is not a git switch (`error: unknown switch 'a'`). `tests/test_hooks.py` asserts
+exactly the four strings the regex was written from, so a green suite cannot see the gap
+([[guard_list_closed_by_its_anchor]]). Named, not fixed: script and test are the team lead's draft
+and the contract's order was to copy them. Bare `ruff format` is the one that matters —
+[[the_formatter_voids_a_frozen_producer_pin]].
+
+**Dv876 `[cause: verify-gap]` — the drafted `tests/test_hooks.py` is not `ruff format`-clean** (a
+blank line after the docstring, one tuple exploded per line). `make check` runs `ruff check`, not the
+formatter, so it is green either way ([[verifier_format_gap]]). Kept byte-verbatim per «copy, do not
+paraphrase»; remedy is one allowed command, `ruff format tests/test_hooks.py`.
+
+**Dv877 `[cause: verify-gap]` — the archive's first sweep used one key and moved five files it
+should not have.** `PROMPT-<name>.md` misses every citation that drops the extension or uses the bare
+slug. Moved back: `PROMPT-5a1.md` and `PROMPT-4.5b.md` (six test docstrings, `scripts/poll_census.py`,
+`scripts/normalize_audit_returns.py` — which pins five digests against the prompt — and the sealed
+`results/raw_v1_baseline.sha256`), `PROMPT-5c2-run.md`, `PROMPT-5c2-validate-prep.md`,
+`PROMPT-think-zero-shot-d2.md` (bare slug in a record's `phase`/`contract` field). The sweep now runs
+under three keys; the archived 23 are clean under all of them. `abe56bb`'s 28 / 87 / 84 is superseded
+by 23 / 92 / 89 ([[a_document_is_cited_in_several_shapes]]).
+
+**Dv878 `[cause: process]` — the first curated `hot.md` block asserted a fix that had not happened.**
+It said `make check` had one red and credited step 0 with clearing `test_think_zero_shot`,
+contradicting Dv872 in the same session's report, in the one file injected at every SessionStart.
+Corrected before any other session read it. Both defects (Dv877, Dv878) were found by an adversarial
+re-derivation of this contract's own work, run before hand-over.
+
+**Dv879 `[cause: process]` — the report is over the ≤30 prose lines `/report` sets.** The artifact
+asked for each guard's refusal AND acceptance plus evidence for five checks; the two ceilings do not
+both fit. Prose cut to the shortest that still shows every reading.

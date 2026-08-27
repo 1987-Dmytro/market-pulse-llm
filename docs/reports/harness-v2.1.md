@@ -1,12 +1,14 @@
 # harness-v2.1 — the executor's environment now refuses what it used to only promise
 
 **Question.** Does the executor's environment enforce the v2.1 loop — phase spec → plan → review →
-go → report that answers first — by files and hooks rather than by memory? **Yes for every guard the
-contract names: each was seen refusing and seen accepting.** One assertion in the contract is not
-true — step 0's `test_the_registration_rebuilds…` is **still red at HEAD**, for a string the
-contract does not name (Dv1). Three further defects — one in the drafted guard itself (Dv6), two of
-my own (Dv7, Dv8) — were found by an adversarial re-derivation run against this work before it was
-handed over; Dv7 and Dv8 are repaired here, Dv6 is the team lead's file and is named.
+go → report that answers first — by files and hooks rather than by memory? **Yes: every guard the
+contract names was seen refusing and seen accepting** (table below). Two things qualify it. Step 0's
+`test_the_registration_rebuilds…` is **still red at HEAD**, over a string the contract does not name
+(Dv872). And the guard is keyed on SPELLINGS, not on behaviour: it refuses the four forms the
+contract names and lets bare `ruff format`, `git add -u` and five more sweeps through (Dv875) — its
+own test cannot see that, and the file is the team lead's, so it is named, not fixed. Dv875, Dv877
+and Dv878 all come from an adversarial re-derivation run against this work before hand-over; the two
+that are mine (Dv877, Dv878) are repaired here.
 
 | guard | refusal, shown | acceptance, shown |
 |---|---|---|
@@ -57,7 +59,7 @@ stay.** 89 stay because a script, test or sealed record names them; three stay a
 mechanical rule, which is the judgement it cannot make — `PROMPT-harness-v2.1.md` is the contract
 being executed, `PROMPT-retail-census-r2.md` is untracked and queued (`git mv` could not have
 touched it), `PROMPT-phase7-a1.md` is unexecuted work in `hot.md`'s Next. The reference sweep is run
-under **three** keys, because this repo cites a contract in three shapes (Dv7): `PROMPT-<name>.md`,
+under **three** keys, because this repo cites a contract in three shapes (Dv877): `PROMPT-<name>.md`,
 the bare `PROMPT-<name>` (six test docstrings and `scripts/poll_census.py` cite `PROMPT-5a1 F1..F6`;
 `scripts/normalize_audit_returns.py` pins five digests against `docs/PROMPT-4.5b`), and the bare
 slug inside a record's provenance field (`"phase": "5c2-run"`, `"contract": "think-zero-shot-d2"`).
@@ -75,28 +77,25 @@ operator's one line, inside `enabledPlugins`: `"code-review@claude-plugins-offic
 
 ## Deviations
 
-**Dv1 [cause: contract-gap] — step 0's test is red at HEAD, and not over the quotes.**
+Ledger home, with the lesson links: `implementation-notes.md` § «Deviations from `docs/PROMPT-harness-v2.1.md`».
+
+**Dv872 [cause: contract-gap] — step 0's test is red at HEAD, and not over the quotes.**
 `producer.build()` finds all three (ф) sentences, so that half is fixed; the test fails one line
 later at `assert witness in path.read_text()` — `MOVED_BY_D2_STEP_0`'s witness `D1 (инструмент, $0)`
 is absent from `docs/STATUS.md`. Present at `09954df`, gone from `370f016` on: one re-spec washed
 out two strings and the team lead restored one. Named, not fixed — the witness guards the D2
 registration and what STATUS must carry is the team lead's to decide.
 
-**Dv2 [cause: contract-gap] — `docs/STATUS.md` joined the step-0 commit though step 0 did not name
+**Dv873 [cause: contract-gap] — `docs/STATUS.md` joined the step-0 commit though step 0 did not name
 it.** Two of the three (ф) sentences existed only in the working tree, so «GREEN at HEAD» was
 unmeasurable until STATUS was committed. Committed by path, unedited.
 
-**Dv3 [cause: tooling] — the hook matches its patterns anywhere in the command text.** A `git commit`
+**Dv874 [cause: tooling] — the hook matches its patterns anywhere in the command text.** A `git commit`
 whose *message* quotes the refused forms is itself refused; this contract's commits pass their
 messages through `-F <file>`. The pattern is not anchored to the command's first word, so an `echo`,
 a `grep` or a message that merely mentions the sweep is blocked too.
 
-**Dv4 [cause: verify-gap] — the drafted `tests/test_hooks.py` is not `ruff format`-clean** (a blank
-line after the docstring, one tuple exploded per line). `make check` runs `ruff check`, not the
-formatter, so it is green either way. Kept byte-verbatim per «copy, do not paraphrase»; the remedy
-is one allowed command, `ruff format tests/test_hooks.py`, on the team lead's word.
-
-**Dv6 [cause: contract-gap] — the drafted guard under-matches, and its test cannot see it.** All
+**Dv875 [cause: contract-gap] — the drafted guard under-matches, and its test cannot see it.** All
 of these exit 0 against `scripts/hooks/refuse-sweeping-commands.sh`: bare **`ruff format`** (ruff's
 `[FILES]... [default: .]` — the identical repo-wide sweep, 475 files here),
 `ruff format src tests scripts config`, `ruff format --check .`, `git add -u`, `git add :/`,
@@ -106,7 +105,12 @@ a green suite cannot see the gap ([[guard_list_closed_by_its_anchor]]). Named, n
 and its test are the team lead's draft and this contract's order was to copy them. Bare `ruff format`
 is the one that matters — the formatter voids a frozen producer pin.
 
-**Dv7 [cause: verify-gap] — the archive's first sweep used one key and moved five files it should
+**Dv876 [cause: verify-gap] — the drafted `tests/test_hooks.py` is not `ruff format`-clean** (a blank
+line after the docstring, one tuple exploded per line). `make check` runs `ruff check`, not the
+formatter, so it is green either way. Kept byte-verbatim per «copy, do not paraphrase»; the remedy
+is one allowed command, `ruff format tests/test_hooks.py`, on the team lead's word.
+
+**Dv877 [cause: verify-gap] — the archive's first sweep used one key and moved five files it should
 not have.** `PROMPT-<name>.md` misses every citation that drops the extension or uses the bare slug.
 Caught by an adversarial re-derivation before acceptance, and repaired in-session: `PROMPT-5a1.md`
 and `PROMPT-4.5b.md` (extension-less citations in six tests, two scripts and the sealed
@@ -115,21 +119,26 @@ and `PROMPT-4.5b.md` (extension-less citations in six tests, two scripts and the
 figures in `abe56bb`'s commit message (28 moved / 87 stay / 84 referenced) are superseded by the
 23 / 92 / 89 above. Nothing was ever lost — every move was a rename.
 
-**Dv8 [cause: process] — the first curated block asserted a fix that had not happened.** It said
+**Dv878 [cause: process] — the first curated block asserted a fix that had not happened.** It said
 `make check` had one red and credited step 0 with clearing `test_think_zero_shot`, contradicting
-this report's own Dv1, in the one file injected at every SessionStart. Corrected in the same session
+this report's own Dv872, in the one file injected at every SessionStart. Corrected in the same session
 before the block was read by any other one: two reds, named, with the witness that reddens the
 second.
 
-**Dv5 [cause: process] — this report is over the ≤30 prose lines `/report` sets.** The artifact
+**Dv879 [cause: process] — this report is over the ≤30 prose lines `/report` sets.** The artifact
 asked for each guard's refusal *and* acceptance plus evidence for five checks; the two ceilings do
 not both fit. Prose was cut to the shortest that still shows every reading.
 
+
+
 ## Debts
 
-- **The guard lets the sweep through under another spelling (Dv6)** — bare `ruff format` above all.
+- **The guard lets the sweep through under another spelling (Dv875)** — bare `ruff format` above all.
   One regex each closes it, plus the spellings in `tests/test_hooks.py`; both files are the team
   lead's draft. This is the highest-value follow-up in this report.
+- **The lesson written this session does not reach the loader.** `a-document-is-cited-in-several-shapes`
+  (Dv877's mechanism) is on disk and indexed, but `MEMORY.md` is 207 lines and the loader injects 186
+  — the standing consolidation decision is the operator's, and `hot.md` names it.
 - **The deny list does not follow the archive.** `Edit(/docs/PROMPT-*.md)` is not recursive: the 28
   files under `docs/archive/prompts/` are editable by the Edit tool. One line — `Edit(/docs/archive/**)`
   — closes it; `.claude/settings.json` is the team lead's draft, so it is named here, not changed.
@@ -139,7 +148,7 @@ not both fit. Prose was cut to the shortest that still shows every reading.
 - **Uncommitted, pre-existing, not mine:** `docs/reports/lora-c-run-r3.md` (modified in the tree by
   the team lead), `knowledge/daily_logs/2026-08-26.md` and `knowledge/index.md` (yesterday's
   `/close`), `_to_delete/` (a 0-byte `git-index.lock`), `docs/PROMPT-retail-census-r2.md` (queued).
-- **Two reds, both older than this contract:** `test_the_registration_rebuilds…` (Dv1) and
+- **Two reds, both older than this contract:** `test_the_registration_rebuilds…` (Dv872) and
   `test_repair_phase4_ledger` (the r3 ledger debt).
 
 ## The verifier
@@ -153,13 +162,15 @@ pytest -q
 =========================== short test summary info ============================
 FAILED tests/test_repair_phase4_ledger.py::test_the_silence_check_fires_on_the_LINE_ledger_too
 FAILED tests/test_think_zero_shot.py::test_the_registration_rebuilds_except_where_step_0_moved_a_pin
-2 failed, 4101 passed, 2 skipped in 704.45s (0:11:44)
+2 failed, 4101 passed, 2 skipped in 680.07s (0:11:20)
 
-# before this contract, at e11c9a9 + the uncommitted tree:
+# the same suite before this contract, at e11c9a9 + the uncommitted tree:
 2 failed, 4099 passed, 2 skipped in 706.30s (0:11:46)
 ```
 
-Same two reds before and after, +2 passed — `tests/test_hooks.py`. The reading was taken at
-`abe56bb`, the commit before this report ([[provenance_cannot_name_itself]]).
+Run twice: once at `abe56bb` and again at `25b9931` after Dv877's five restores — identical, `2
+failed, 4101 passed, 2 skipped` both times. The +2 over the baseline are `tests/test_hooks.py`;
+neither red is new and neither is the executor's. The second reading was taken with prose-only edits
+to this report and to `implementation-notes.md` in flight, and no test reads either file.
 
-Commits: `e60a233` step 0 · `8580d1d` the harness files · `9e7ae6e` hot.md at 40 lines and 9.3Ktok · `ce00b70` the tooling runbook · `abe56bb` the archive (superseded by the restores in Dv7) · this report and its corrections.
+Commits: `e60a233` step 0 · `8580d1d` the harness files · `9e7ae6e` the hot.md trim · `ce00b70` the tooling runbook · `abe56bb` the archive · `a607909` this report · `25b9931` the corrections (Dv877, Dv878 — those two commit messages call them Dv7 and Dv8; the ledger numbers here are the file's).

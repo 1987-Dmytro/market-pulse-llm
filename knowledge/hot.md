@@ -48,11 +48,11 @@ acb70dd feat(retail-census): per-theme bars, one sort per instrument, and the de
 2. **Досчёт ценза ($0, ПОСЛЕ стены)** — `retail_census.py --min-subscribers 50 --min-subscribers-chats 0`, накопительно; раньше времени НЕ запускать.
 3. **C2 `positions-scale` (≤$1)** — ждёт (1); полнота таблицы для решения не гейт.
 4. **`phase7-a1` ($0)** — `docs/PROMPT-phase7-a1.md`, неисполнен (том удалён шагом 0 C1).
-5. **`money-anchors` ($0)**; и дыра гарда (`harness-v2.1` Dv6): голый `ruff format`, `git add -u`, `git stage -A` хук НЕ ловит.
+5. **`money-anchors` ($0)**; и дыра гарда (`harness-v2.1` Dv875): голый `ruff format`, `git add -u`, `git stage -A` хук НЕ ловит.
 
 ## 🚧 Blockers
 **⛔ `make check` — ДВА красных, оба не исполнительские:** `2 failed, 4101 passed, 2 skipped`
-(27.08, `abe56bb`). (1) `test_repair_phase4_ledger` — старый долг r3. (2) `test_think_zero_shot::…rebuilds…` — цитаты (ф) тимлид ВЕРНУЛ и они проходят, но тот же `370f016` вымыл из STATUS свидетеля `MOVED_BY_D2_STEP_0` `D1 (инструмент, $0)`. Ярус тимлида, разбор — `docs/reports/harness-v2.1.md` Dv1.
+(27.08, `abe56bb`). (1) `test_repair_phase4_ledger` — старый долг r3. (2) `test_think_zero_shot::…rebuilds…` — цитаты (ф) тимлид ВЕРНУЛ и они проходят, но тот же `370f016` вымыл из STATUS свидетеля `MOVED_BY_D2_STEP_0` `D1 (инструмент, $0)`. Ярус тимлида, разбор — `docs/reports/harness-v2.1.md` Dv872.
 
 **⛔ `MEMORY.md` УПЁРСЯ В ОБА ПОТОЛКА ЗАГРУЗЧИКА** (200 строк → отрез по 25 000 UTF-16 units):
 индекс длиннее окна, часть указателей не доезжает, файлы уроков целы. Рычаг один — убрать строки,
