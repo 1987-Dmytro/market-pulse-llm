@@ -4,7 +4,8 @@ What is wired up, at which scope, how it authenticates, and where it bites. The 
 (`task → tool`) lives in `CLAUDE.md ## Tooling`; this file is the full inventory and is **not**
 loaded at startup. Tool *schemas* are already in the agent's context — nothing here restates them.
 
-Detected 2026-08-11. Re-detect with `/mcp` (live servers) and `claude mcp list`; plugin state is
+Detected 2026-08-11, plugin state re-read 2026-08-27 with `claude plugin list` (name, scope,
+enabled). Re-detect with `/mcp` (live servers) and `claude mcp list`; plugin state is
 `enabledPlugins` in `~/.claude/settings.json`.
 
 ## Scopes — where each server comes from
@@ -36,6 +37,19 @@ the scoping rule in the file's own `_comment`.
 - **`security-guidance`** (plugin) — worth a pass over the collector and any credential path
   (`TELEGRAM_API_*`, session files).
 - **`gh` CLI** — all GitHub work. Preferred over a GitHub MCP: less context, saner rate limits.
+- **`code-review`** (plugin) — decided IN on 27.08 (`docs/PROCESS.md`, «MCP/plugins»): a fresh
+  subagent reviews the diff before `/report` on money, secrets or guard code (team-lead skill v2.1
+  §6). **Not enabled yet** — it is installed at USER scope and `~/.claude/settings.json` disables it
+  by name, which no repo file overrides. The operator's one-line change, inside `enabledPlugins`:
+  `"code-review@claude-plugins-official": true,` (equivalently
+  `claude plugin enable code-review@claude-plugins-official`). `.claude/settings.json` here carries
+  no `enabledPlugins` block by design — the team lead's draft has none, and a repo-side override of
+  an explicit user-level `false` could not be verified from inside the session that wrote it.
+- **`graphify`** (CLI + git `post-commit` hook, not an MCP) — the repo's knowledge graph; see its
+  section below. Kept by the 27.08 decision together with `ref`/`context7`, `commit-commands`,
+  `security-guidance`, `ponytail` and `gh`; `.mcp.json` stays empty.
+- Team-lead side (Cowork, not this session): device folder access to the repo, web search for
+  sources, Project docs for handoffs. It never runs the executor's tools on the repo.
 
 ## Present but irrelevant to this project
 
@@ -44,7 +58,10 @@ the scoping rule in the file's own `_comment`.
   dev stack; this project narrows that.
 - **Canva / Gmail / Google Calendar / Google Drive** — account connectors, unrelated to the pipeline.
 - **`claude-in-chrome`** — no web sources in the MVP (Telegram only, `docs/SPEC.md`).
-- Disabled plugins: `code-review`, `improve`, `drawio`, `serena`.
+- **`serena`**, **`drawio`**, **`improve`** — deliberately unused here (27.08 decision); all three
+  are disabled in `~/.claude/settings.json`. `code-review` is decided IN and listed above.
+- **`pyright-lsp`** (plugin, enabled at user scope) — Python diagnostics while editing; like `ide`
+  it is not the verifier. Not named by the 27.08 decision, listed here so the inventory is complete.
 
 ## graphify — the repo's knowledge graph
 
