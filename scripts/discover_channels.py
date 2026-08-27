@@ -55,6 +55,92 @@ REGISTRY = REPO_ROOT / "config" / "registry.yaml"
 RECORD = REPO_ROOT / "results" / "discovery_5a1.json"
 PRIOR = REPO_ROOT / "results" / "discovery_5a.json"
 
+RETAIL_CHAINS = (
+    # docs/PROMPT-retail-census.md's own list, in its own order: the national chains, then
+    # Poltava region, then the promo aggregators. `Маркетопт/Толока` is one chain under two
+    # names and is searched under both, which is why 35 bases cover 34 chains.
+    "АТБ",
+    "Сільпо",
+    "Novus",
+    "METRO",
+    "Auchan",
+    "Фора",
+    "Varus",
+    "Thrash!",
+    "Fozzy",
+    "ЕКО маркет",
+    "Велмарт",
+    "Близенько",
+    "Наш Край",
+    "Рукавичка",
+    "Коло",
+    "Delikat",
+    "Сім23",
+    "Копійка",
+    "Таврія В",
+    "Ультрамаркет",
+    "MegaMarket",
+    "Zakaz.ua",
+    "Rozetka продукти",
+    "Маркетопт",
+    "Толока",
+    "Гурман",
+    "Файно маркет",
+    "Грош",
+    "Барвінок",
+    "MSUa",
+    "Копійочка",
+    "Знижком",
+    "Хочу дешевше",
+    "Акції та знижки",
+    "Skidka",
+)
+"""The chains, regional chains and promo aggregators C1 was told to look for.
+
+Transcribed name for name from `docs/PROMPT-retail-census.md` (which is SPEC v2 §3's list) and
+held to it by `tests/test_discover_channels.py`: a chain that quietly leaves this tuple is a
+chain the operator's table will not have a row for, and a table with a missing row reads like a
+chain with no channel."""
+
+CHAIN_TERMS = ("акції", "знижки", "каталог")
+"""The brief's three words, appended to every chain name. The bare name is searched too — the
+2026-07-27 discovery runs in `data/` show `contacts.SearchRequest` ranking @silposilpo sixth for
+«Сільпо» and returning nothing at all for «АТБ», so a chain's OFFICIAL channel is exactly what a
+qualified query misses."""
+
+POLTAVA_TOWNS = (
+    # SPEC v2 §3 category B, the district centres in the section's own order.
+    "Полтава",
+    "Кременчук",
+    "Лубни",
+    "Миргород",
+    "Гадяч",
+    "Горішні Плавні",
+    "Пирятин",
+    "Хорол",
+    "Зіньків",
+    "Карлівка",
+    "Кобеляки",
+    "Решетилівка",
+    "Глобине",
+    "Лохвиця",
+    "Гребінка",
+    "Шишаки",
+    "Диканька",
+    "Котельва",
+    "Нові Санжари",
+    "Оржиця",
+    "Чутове",
+    "Семенівка",
+    "Козельщина",
+    "Машівка",
+)
+
+CHAT_TERMS = ("чат", "спільнота", "оголошення", "барахолка")
+"""What a town's open-messaging group calls itself. The theme wants GROUPS, not the news
+broadcasts already in the registry: SPEC v2 §3 measured 0 comments and 0 «Гармонія» mentions
+across all 18 of those, so the buyer's voice is in the chats or nowhere."""
+
 THEMES = {
     "mothers_kids": ("мами", "материнство", "мама і малюк", "дітки"),
     "healthy_lifestyle": ("здорове харчування", "здоровий спосіб життя", "ЗОЖ", "нутриціологія"),
@@ -85,14 +171,29 @@ THEMES = {
         "безпечність харчових продуктів",
         "Держпродспоживслужба",
     ),
+    # --- SPEC v2 §3 / docs/PROMPT-retail-census.md, operator ruling (x) of 2026-08-27 ---
+    "retail_chains": tuple(
+        query
+        for chain in RETAIL_CHAINS
+        for query in (chain, *(f"{chain} {term}" for term in CHAIN_TERMS))
+    ),
+    "poltava_chats": tuple(
+        f"{town} {term}" for town in POLTAVA_TOWNS for term in CHAT_TERMS
+    ),
 }
 """Every theme the operator has authorised, and the exact queries sent.
 
-The first three are the 2026-08-04 ruling; the last four were added 2026-08-06 at the 5a
+The first three are the 2026-08-04 ruling; the next four were added 2026-08-06 at the 5a
 acceptance on `docs/RESEARCH-5a1-themes.md` — `health_fitness` AGAINST the team lead's
 recommendation, on the operator's word that the ledger prices a theme better than a forecast
 does, and `food_quality` as the operator's own addition (dairy is the most falsified category
 in UA retail, so a falsification watch lands inside the mission rather than beside it).
+
+`retail_chains` and `poltava_chats` are the 2026-08-27 re-spec (ruling (x), SPEC v2 §3): stage 1
+is the chains' promo prices and the comments under them, and the Poltava buyer's voice lives in
+open-messaging chats rather than in the 18 registered news broadcasts. Composed from the two
+name tuples above rather than typed out 236 times — the record still echoes every query it sent,
+which is what makes "only the authorised themes were searched" checkable.
 
 Written out rather than composed at run time and echoed into the record, so "only the
 authorised themes were searched" is something a reader checks instead of takes on trust.

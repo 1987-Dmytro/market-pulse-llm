@@ -136,7 +136,7 @@ def test_the_ledger_counts_the_channels_that_can_carry_comments():
 
 
 def test_only_the_authorised_themes_are_searched():
-    """The 2026-08-04 three, plus the four the operator added at the 5a acceptance.
+    """The 2026-08-04 three, the four added at the 5a acceptance, the two of ruling (x).
 
     Pinned as a set rather than a count: a theme nobody authorised costs a rate-limited pass
     and puts channels in front of the operator that the ruling never covered.
@@ -149,7 +149,40 @@ def test_only_the_authorised_themes_are_searched():
         "supermarket_deals",
         "health_fitness",
         "food_quality",
+        "retail_chains",
+        "poltava_chats",
     }
+
+
+def test_every_chain_the_c1_brief_names_is_searched_under_all_four_queries():
+    """The bare name AND the brief's three words — «Сільпо», not only «Сільпо акції».
+
+    `data/discovery_атб.json` is the control: the qualified query «АТБ» returned zero rows and
+    «Сільпо» ranked @silposilpo sixth, so a chain's official channel is precisely what a
+    narrowed query loses. A chain missing from the queries is a chain missing from the table,
+    and a missing row reads like a chain with no channel.
+    """
+    queries = discovery.THEMES["retail_chains"]
+    assert len(discovery.RETAIL_CHAINS) == 35, "34 chains; Маркетопт/Толока is searched twice"
+    for chain in discovery.RETAIL_CHAINS:
+        assert chain in queries, f"{chain}: the bare name is not searched"
+        for term in discovery.CHAIN_TERMS:
+            assert f"{chain} {term}" in queries
+    assert discovery.CHAIN_TERMS == ("акції", "знижки", "каталог")
+    assert len(queries) == 35 * 4
+
+
+def test_every_poltava_district_centre_is_searched_under_all_four_chat_words():
+    """SPEC v2 §3 category B names 24 district centres; a town nobody searched has no chat."""
+    queries = discovery.THEMES["poltava_chats"]
+    assert len(discovery.POLTAVA_TOWNS) == 24
+    assert discovery.POLTAVA_TOWNS[0] == "Полтава"
+    assert "Нові Санжари" in discovery.POLTAVA_TOWNS
+    for town in discovery.POLTAVA_TOWNS:
+        for term in discovery.CHAT_TERMS:
+            assert f"{town} {term}" in queries
+    assert discovery.CHAT_TERMS == ("чат", "спільнота", "оголошення", "барахолка")
+    assert len(queries) == 24 * 4
 
 
 def test_the_seed_handles_are_the_research_notes_own():
@@ -351,8 +384,22 @@ def test_a_theme_already_scanned_is_not_scanned_again():
         "supermarket_deals",
         "health_fitness",
         "food_quality",
+        "retail_chains",
+        "poltava_chats",
     }
     assert set(discovery.themes_to_scan(None)) == set(discovery.THEMES), "nothing carried, all new"
+
+
+def test_carrying_the_5a1_record_leaves_exactly_the_two_c1_themes_to_scan():
+    """C1's own mechanism: `--carry results/discovery_5a1.json` pays for the new themes only.
+
+    The seven themes of the 2026-08-06 scan are in that record's `themes` key, so re-running
+    them would cost another rate-limited pass and would measure a different day.
+    """
+    carried = {"themes": dict.fromkeys(discovery.THEMES, [])}
+    del carried["themes"]["retail_chains"], carried["themes"]["poltava_chats"]
+
+    assert set(discovery.themes_to_scan(carried)) == {"retail_chains", "poltava_chats"}
 
 
 def test_a_seed_a_search_already_found_is_measured_once():
