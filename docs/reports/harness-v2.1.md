@@ -27,13 +27,17 @@ that guard refusing real Bash tool calls in this session, chosen non-destructive
 **(2) `permissions.deny`.** The discriminator: the two refused paths never existed and were never
 created, and `docs/SPEC-v2-promo-pulse.md` was probed with an `old_string` that provably does not
 occur in it — a guard that had failed to load would have answered «string not found» and still
-written nothing. The acceptance half proves the refusal is by PATTERN, not by directory. The
+written nothing. The acceptance half proves the refusal is by PATTERN and not by directory — nor by
+the operator's user-level `PreToolUse` hook, which matches every tool and is the other candidate: the
+same Write tool, the same `docs/` directory, one hyphen apart, `docs/PHASE-x.md` and
+`docs/labels-x.jsonl` **refused** while `docs/PHASEX.md` and `docs/labelsx.jsonl` (matching no glob,
+still carrying the words `PHASE` and `labels`) were **created**. All four probes deleted. The
 replacement of `.claude/settings.json` is purely additive: normalised `diff` against the previous
 version adds the guard and three deny patterns (`SPEC-*.md`, `PHASE-*.md`, `labels-*.jsonl`) and
 drops nothing, the graphify hook included.
 
 **(3) 12.6Ktok → 9.3Ktok — it shrank.** The curated block goes **145 → 38** lines after the
-`AUTO-GEN END` marker (145 measured on the committed predecessor `9e7ae6e~1`; the uncommitted
+`AUTO-GEN END` marker (`git show 9e7ae6e~1:knowledge/hot.md | awk '/AUTO-GEN END/{f=1;next} f' | wc -l` → 145; the uncommitted
 working tree this session opened read 147, and that state is gone — the committed number is the one
 that re-derives). Everything dropped is in `knowledge/daily_logs/2026-08-27.md`, compacted where it
 moved rather than verbatim, each block naming its own home. The two literals `scripts/volume_calc_5c1.py` greps
