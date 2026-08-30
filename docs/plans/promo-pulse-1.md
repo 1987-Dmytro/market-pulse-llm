@@ -29,7 +29,8 @@ Graders first, mechanics after. A check I cannot run today is marked **[BLOCKED]
 
 | # | command | pass condition |
 |---|---|---|
-| K0 | `make check` | ruff + pytest green. **One pre-existing red, not mine**, measured now: `tests/test_repair_phase4_ledger.py::test_the_silence_check_fires_on_the_LINE_ledger_too` (`1 failed, 11 passed` under `-k repair_phase4_ledger`) — the silence-check reads the LIVE `results/spend_cycle2.json`, which grew under it. `docs/STATUS.md` assigns it as the $0 debt of the next contract's step 0, so **S0 fixes it**, by asserting what the check was really protecting rather than by deleting the assertion. |
+| K0 | `make check` | ruff + pytest green. Baseline **measured, twice, independently**: `1 failed · 4 129 passed · 2 skipped`, `ruff check .` clean, `make: *** [check] Error 1`; `.suite-stamp.json` carries the whole-suite run at `81af568`. The one red is pre-existing and not mine: `tests/test_repair_phase4_ledger.py::test_the_silence_check_fires_on_the_LINE_ledger_too` — the silence-check reads the LIVE `results/spend_cycle2.json`, which grew past it (the repo's own `[[a_sealed_reports_checker_reads_a_live_file]]`). `docs/STATUS.md` assigns it as the $0 debt of the next contract's step 0, so **S0 fixes it**, by asserting what the check was really protecting rather than by deleting the assertion. |
+| K0s | `make check-stamped` | the same reading with a proof the tree did not move under it. **The K0 counts above are NOT a HOLDS-at-HEAD baseline**: HEAD moved twice mid-run (this plan's own commits), and `scripts/check_stamped.py` voids on a HEAD change alone — its whitelist is only `knowledge/daily_logs/` and `knowledge/index.md`. The counts are still trustworthy as a reading (no test reads `docs/plans/**`, and `hot.md`, the one suite input outside the whitelist, did not move), but the Baselines block of every step quotes **K0s at a settled tree**, never K0. |
 | K1 | `make preflight ARGS='config/registry.yaml'` | run BEFORE and AFTER S1. `config/registry.yaml` is pinned by **21 sealed records**, live sha `d4e3b2373c43…`. After the edit every record pinning the old sha is claimed through `tests/moved_pins.py` (derived from live shas, both directions) — **never re-pinned**. |
 | K2 | `PYTHONPATH=src python3.11 -m market_pulse.registry config/registry.yaml` | r2 loads; source count and the A1/A2/PAUSED split are what §3 of the phase spec names. |
 | K3 | `python3.11 scripts/promo_census_c2.py` → `results/promo_census_c2.json` | $0. Per channel over the 4-week window: posts, leaflet **pages**, text-price posts, `media_share`, and a `selection.ids_sha256` pin. Pre-registers the paid population **by row count**, never as a date range evaluated at run time (SPEC 3.18 (4)). |
@@ -226,6 +227,15 @@ from the printed % (3.17 (3)), and `depth_disagrees_with_printed()` already flag
 `PRINTED_TOLERANCE_PP = 1.0`. C2 is a **population** change — which carriers are fed to the existing
 instrument — so it lives in the callers. If S4 finds a parser change is truly unavoidable I stop and
 say so (SP-4) rather than move a pinned file inside a paid step.
+
+**5.12a Result files have four envelopes, not one, and each step uses the right one.** A **sealed
+pre-registration** (`results/prereg_5c2_run.json`: `pinned_inputs` as `{path: sha256}`, every number
+carrying an equality test, a `verifier` block) is the shape for the S2 pre-registration and the
+holdout shot. A **derived export** (`results/dashboard_data_w1.json`: `provenance = {evidence,
+inputs, producers, reads}`, a `window` with `"rule": "since <= date < until, half-open"`, written
+sorted-keys with **no clock and no git block** so it is byte-deterministic) is the shape for
+positions, trends and the screen's export. Emitting a clock into a derived export is what makes a
+determinism check unrunnable, so K9 and K10 depend on getting this right.
 
 **5.13 The tick's spine already exists.** `loop.py` carries four watermarks — `posts`, `inference`,
 `leaflet`, `post_text` — and the three passes `inference_pass` / `page_pass` / `post_pass`, each
