@@ -13,24 +13,27 @@ per week × chain: promo positions (brand · product · volume · promo price ·
 SKU, and the reaction feed (signal · quote · `msg_id` · thread) — plus the tables behind it in
 `data/derived/pulse.db`.
 
-**One column of §1's artifact is contested and I do not decide it — see SP-0.** §1 names `price old`
-as a screen column. `docs/SPEC.md` amendment 3.21 (4) says «the extracted old price is never
-printed», 3.18 (1) says it «never reaches a surface that prints it as a price», and 3.22 (1) keeps
-arithmetic depth out of any row that shows its own promo price, because `promo ÷ (1 − depth)`
-reconstructs the old price. Those rulings rest on a measurement SPEC v2 does not move: the extracted
-old price is right as a number on **33 of 80 pairs** (`results/sku_bar_verdicts_skub2.json`, bar 2 =
-0.4125 against 0.80). So the plan **stores** `price_old` — the column already exists in
-`positions` — and **does not print it** until the team lead rules. This is the difference between
-storing and printing, not a scope cut.
+**The one contested column of §1's artifact is now RULED — SP-0 q2, and the phase spec §1 was
+corrected with it.** §1 as written named `price old` as a screen column. `docs/SPEC.md` amendment
+3.21 (4) says «the extracted old price is never printed», 3.18 (1) says it «never reaches a
+surface that prints it as a price», and 3.22 (1) keeps arithmetic depth out of any row that shows
+its own promo price, because `promo ÷ (1 − depth)` reconstructs the old price. Those rulings rest
+on a measurement SPEC v2 does not move: the extracted old price is right as a number on **33 of 80
+pairs** (`results/sku_bar_verdicts_skub2.json`, bar 2 = 0.4125 against 0.80). The team lead ruled
+with those amendments: **the screen does not print `price_old`**, the row is brand · product ·
+volume · promo price · printed `−N%` (absent when none), and depth per chain and brand is a
+**window aggregate** only (3.22 (1)). So `price_old` is **stored and flagged** — the column
+already exists in `positions` — and never rendered. This was the difference between storing and
+printing, and it is settled.
 
 ## 1a. What needs an answer, and what can start without one
 
 | | |
 |---|---|
 | **Answer FIRST — the phase does not fit its money (SP-1)** | The live guard reads **$2.4394** remaining, not $3.17; the phase's own estimate table is $3.20, and the volume eats $0.2333/day. Choose: **(a)** open cycle-3 and name the sum · **(b)** narrow C2 and say which chains are dropped · **(c)** pay to build a positions **pod** runner (2.383× cheaper per 1 000 rows). |
-| **Answer before S7 (SP-0 q3)** | Which population S2 is graded on — **678 / 229 / 449**. Two thirds of the 678 are selected by a regex matching dates. |
+| **~~Answer before S7~~ — ANSWERED (SP-0 q3)** | Operator, 30.08: «Все 678, дро 20/20 по типу». Population = all 678 (a promo post whose price is in the image IS a price post); the draw is 20 + 20 by branch stratum, not by channel. S7 is unblocked and joins the $0 slice. |
 | **Answer at review, cheap** | SP-0 q1–q2 (the S1 price bar's denominator; whether the screen prints `price old`) · SP-5 (my proposed five-table schema) · and **two mechanism changes I made myself**: S1a widens the handle regex to a union, §5.2b makes «paused» a `collect: false` flag instead of a removed row. |
-| **«Go» needs no answer at all** | **S0 · S1a · S1b · S2 · S3 · S6 · S8** — the whole $0 scaffold: the debt fix, the loader, the revision, collection, the census, the five tables, the instrument, hooks and graders. |
+| **«Go» needs no answer at all** | **S0 · S1a · S1b · S2 · S3 · S6 · S7 · S8** — the whole $0 scaffold: the debt fix, the loader, the revision, collection, the census, the six tables, the draw, the instrument, hooks and graders. S7 joined it when q3 was answered. |
 
 ## 2. Checks
 
@@ -46,10 +49,10 @@ Graders first, mechanics after. A check I cannot run today is marked **[BLOCKED]
 | K4 | `python3.11 scripts/promo_projection_c2.py` → `results/promo_projection_c2.json` | $0. Emits a **range, not a number**: K3's page count × each of the three candidate rates (1.729 warm-up marginal · a fitted middle · 10.408 realised) × $/s, against the guard's freshly re-read remainder. It cannot emit a single figure — `results/measurements.jsonl` has **no vision s/page row**, and the projection precedent hard-exits on a missing named rate (`scripts/project_think_zero_shot.py:107`: «the smoke writes it — project nothing until it has»). The range IS the table SP-1 asks the operator to choose against; the single number arrives only after S4's smoke seeds the row. This is a STOP, not a pass/fail. |
 | K5 | `python3.11 scripts/draw_positions_50.py` twice | `results/positions_draw_50.json` — 50 positions, seed 42, from ≥3 chains' flyers/posts of the backfilled 4 weeks; two runs produce an identical sha. Handed to the team lead. |
 | K6 | `python3.11 scripts/grade_positions.py` → `results/grade_positions_50.json` | completeness ≥ 0.90, price accuracy ≥ 0.95. **[BLOCKED]** on `docs/labels-positions-50.jsonl` (team lead's, owed after K5) and on SP-0's answer, which fixes the bar's denominator. |
-| K7 | `python3.11 scripts/draw_promo_threads.py` twice | `results/promo_threads_draw.json` — dev-40 + holdout-40, **disjoint and frozen at the draw**, seed 42, stratified by channel over the 678 price threads; two runs identical. Handed to the team lead. |
+| K7 | `python3.11 scripts/draw_promo_threads.py` twice | `results/promo_threads_draw.json` — dev-40 + holdout-40, **disjoint and frozen at the draw**, seed 42, over **all 678** price threads re-derived by `PRICE_BRANCHES`, stratified **by branch**: 20 from the currency stratum (229 threads matching `грн|₴|grn`) + 20 from the `decimal`-only stratum (449), and holdout-40 the same 20/20 (operator 30.08, review SP-0 q3). Each stratum owes 40 of the 80 across both draws, so 229 and 449 both clear it; a quota that could not be filled is a **refusal**, never a short draw. Channel is a recorded field per thread, not a stratum. The record names the strata, the predicate and the **wordless-comment count the queue rule removed** (§5.6). Two runs identical by sha — the record is sorted and carries no clock. Handed to the team lead. |
 | K8 | `python3.11 scripts/grade_promo_signals.py` → `results/grade_promo_dev40.json` | subject agreement ≥ 0.80 · signal-type agreement ≥ 0.75 on dev-40. **[BLOCKED]** on `docs/labels-promo-dev.jsonl` (team lead's, owed after K7). |
 | K9 | `pytest tests/test_trends_sql.py -q` | S3 recomputed from `positions` twice → identical; a week with no data renders **absent**, never `0`. Asserted in both directions. |
-| K10 | `make tick && make tick` | second run writes **zero** new rows. Asserted per table by count before/after, not by a global total — an aggregate counter cannot see a per-row change. |
+| K10 | `make tick && make tick` | second run writes **zero** new rows. Asserted per table by count before/after, not by a global total — an aggregate counter cannot see a per-row change. The per-table counts are all **six** of §5.7 — `attribution`, `signal`, `evidence`, `digest`, `unsure`, `rollup`: `unsure` is written by the same pass and an idempotence check that skipped it would leave the abstention path unmeasured. |
 | K11 | `pytest tests/test_promo_hooks.py -q` | between calls: `msg_id` exists · quote is a substring of the source text · brand ∈ registry or the store's unresolved state (§5.9) · schema valid. A hook failure is a **counted row**, not an exception — asserted with a negative control (a row that must fail and be counted). |
 | K12 | `make promo-screen` on a **clean clone** after `make tick` | the screen renders from result files only and **fails loudly** on any missing source. Negative control: remove one source, assert a non-zero exit and a named error. |
 | K13 | `python3.11 scripts/draw_truth_20.py` → 20 rows, seed 42 | flyer/post · extracted position · comment · signal · quote, rendered for the operator. The gate is his words, not a number. |
@@ -63,14 +66,14 @@ Each ends in a commit **by path** and the checks named. No `git add -A`; no repo
 | # | what | files | check |
 |---|---|---|---|
 | S0 | Commit the team lead's uncommitted files by path (`docs/STATUS.md`, `docs/PHASE-promo-pulse-1.md`); clear the `test_repair_phase4_ledger` debt STATUS assigns to step 0 of the next contract. | commit by path only; `tests/` | K0 |
-| S1a | **Loader extension first** (§5.2a): two of the 16 A1 rows **cannot be expressed** under today's `_HANDLE` regex. `src/market_pulse/registry.py` is pinned by nothing, so this is a cheap, legal prerequisite — a `chat_id` / `invite` field beside `telegram_channels`, with the regex left intact for real usernames. | `src/market_pulse/registry.py`, `tests/test_registry.py` | K2, K0 |
-| S1b | **Registry revision r2.** 16 A1 rows · 5 A2 · PAUSED 39 leave collection · B deferred. Preflight, edit, then claim the moved pins. Of the **17** A1 entries §3 names (16 rows + ATB_FANatik's discussion group), **7 are in the registry and 10 are not** — derived, not counted by hand: `@ATB_FANatik`, its discussion group, Маркетопт private, `@blyzenkoua`, `@fozzyshopua`, `@sim23_simi`, `@rrozetka`, `@kop1chat`, `@znishkom`, `@xochydeshevshe`; `@atb_market_official` and the PAUSED 39 leave **collection**, and their registry rows **stay** — §5.2b: removing them makes the aggregates build refuse at $0. Every new row needs an `audience` from the closed list of 8 — `test_every_shipped_source_carries_an_audience` forbids a null. | `config/registry.yaml`, `tests/moved_pins.py`, `tests/` | K1, K2, K0 |
-| S2 | **$0 collection.** The population §1 measures does not exist on disk: the newest post across every A1 channel is **2026-08-08** (today is 2026-08-30, so ≥22 days of the 4-week window are uncollected for *every* channel), and **8 of the 17 entries have no store file at all** — the 6 missing handles plus Маркетопт private and the discussion group. Collect them, top up the rest to the window, and collect the `@ATB_FANatik` discussion group (its traffic is measured at entry — r1's 0.25 c/day read post replies, not the group feed). Every NEW channel enters through the adaptation protocol: profile → sealed hundred → gate **before** aggregates. Telegram only. | `scripts/`, `data/raw/`, `results/` | K0 |
-| S3 | **$0 census + projection** of the paid legs (K3, K4), then **STOP** — SP-1. | `scripts/promo_census_c2.py`, `scripts/promo_projection_c2.py`, `results/` | K3, K4, K0 |
-| S4 | **C2 backfill (PAID).** Positions for the 16 channels over the 4 weeks, via the existing 5c2 instrument — vision for image flyers, text for the rest. **`positions.py` is not touched** (§5.12): the scale is in which carriers get fed, not in the parser. Smoke first; rungs per `docs/PROCESS.md`. | `scripts/`, `results/`, `data/derived/` | K0 |
+| S1a | **Loader extension first** (§5.2a): two of the 17 A1 rows **cannot be expressed** under today's `_HANDLE` regex. `src/market_pulse/registry.py` is pinned by nothing, so this is a cheap, legal prerequisite — a `chat_id` / `invite` field beside `telegram_channels`, with the regex left intact for real usernames. | `src/market_pulse/registry.py`, `tests/test_registry.py` | K2, K0 |
+| S1b | **Registry revision r2.** 17 A1 rows · 5 A2 · PAUSED 39 leave collection · B deferred. Preflight, edit, then claim the moved pins. Of the **18** A1 entries §3 names (17 rows + ATB_FANatik's discussion group), **8 are in the registry and 10 are not** — recounted from `config/registry.yaml` against §3's list, printed in §5.3a rather than asserted as a total: the 10 absent are `@ATB_FANatik`, its discussion group, Маркетопт private, `@blyzenkoua`, `@fozzyshopua`, `@sim23_simi`, `@rrozetka`, `@kop1chat`, `@znishkom`, `@xochydeshevshe`. **`@atb_market_official` stays in collection** (review 30.08: it is the leaflet carrier — 159 pages, 106/145 positions — and dropping it would cut the one proven S1 source); only the PAUSED 39 leave **collection**, and their registry rows **stay** — §5.2b: removing them makes the aggregates build refuse at $0. Every new row needs an `audience` from the closed list of 8 — `test_every_shipped_source_carries_an_audience` forbids a null. | `config/registry.yaml`, `tests/moved_pins.py`, `tests/` | K1, K2, K0 |
+| S2 | **$0 collection.** The population §1 measures does not exist on disk: the newest post across every A1 channel is **2026-08-08** (today is 2026-08-30, so ≥22 days of the 4-week window are uncollected for *every* channel), and **8 of the 18 entries have no store file at all** — the 6 missing handles plus Маркетопт private and the discussion group. Collect them, top up the rest to the window, and collect the `@ATB_FANatik` discussion group (its traffic is measured at entry — r1's 0.25 c/day read post replies, not the group feed). Every NEW channel enters through the adaptation protocol: profile → sealed hundred → gate **before** aggregates. Telegram only. | `scripts/`, `data/raw/`, `results/` | K0 |
+| S3 | **$0 census + projection** of the paid legs (K3, K4) over the window S2's top-up fixes (§5.1), then **STOP** — SP-1, decided on this table. The two paths go to the operator the moment they exist; S6/S7/S8 continue meanwhile, since none of them is paid. | `scripts/promo_census_c2.py`, `scripts/promo_projection_c2.py`, `results/` | K3, K4, K0 |
+| S4 | **C2 backfill (PAID).** Positions for the 17 channels over the 4 weeks, via the existing 5c2 instrument — vision for image flyers, text for the rest. **`positions.py` is not touched** (§5.12): the scale is in which carriers get fed, not in the parser. Smoke first; rungs per `docs/PROCESS.md`. | `scripts/`, `results/`, `data/derived/` | K0 |
 | S5 | **S1 draw** (K5) → hand `results/positions_draw_50.json` to the team lead for `docs/labels-positions-50.jsonl`. | `scripts/draw_positions_50.py`, `results/` | K5, K0 |
-| S6 | **The five new tables** — `attribution / signal / evidence / digest / rollup`, uuid5 ids over normalised keys (§5.7). `aggregates.py` extended; `positions` untouched. | `src/market_pulse/aggregates.py`, `tests/` | K0 |
-| S7 | **C3 step 0.** Enumerate the 678 price threads (the yield file carries **counts only, no ids** — see §5.5) and draw dev-40 + holdout-40 (K7) → hand to the team lead. | `scripts/draw_promo_threads.py`, `results/` | K7, K0 |
+| S6 | **The six new tables** — `attribution / signal / evidence / digest / unsure / rollup`, uuid5 ids over normalised keys, `window_id` in no identity but `rollup`'s week (§5.7, the review's amended schema). `aggregates.py` extended; `positions` untouched. | `src/market_pulse/aggregates.py`, `tests/` | K0 |
+| S7 | **C3 step 0.** Enumerate the 678 price threads (the yield file carries **counts only, no ids** — see §5.5), split them into the two branch strata (229 currency / 449 `decimal`-only) and draw dev-40 + holdout-40 at 20/20 each (K7) → hand to the team lead. | `scripts/draw_promo_threads.py`, `results/` | K7, K0 |
 | S8 | **Instrument + hooks + graders**, all $0: a NEW prompt module (`prompts.py` is pinned), the four hooks, `grade_positions.py`, `grade_promo_signals.py`. Graders are written and unit-tested against synthetic gold before any real gold exists. | new module in `src/market_pulse/`, `scripts/grade_*.py`, `tests/` | K11, K0 |
 | S9 | **C3 dev loop (PAID).** 3–5 iterations × dev-40. Thinking OFF, batch 1. Plateau → SP-3. | `scripts/`, `results/` | K8, K0 |
 | S10 | **The ONE holdout shot (PAID)** — pre-registered first (SP-2), then spent once. | `scripts/write_promo_prereg.py`, `results/` | K8, K0 |
@@ -81,20 +84,39 @@ Each ends in a commit **by path** and the checks named. No `git add -A`; no repo
 
 ## 4. Stop-points — asked BEFORE, never reported after
 
-**SP-0 — before S1, and it blocks nothing on the $0 path.** Two questions for the team lead:
+**SP-0 — ANSWERED at the plan review (`docs/reviews/2026-08-30-plan-promo-pulse-1.md`,
+«Рулинги»). All three, so nothing on the $0 path waits.** The questions as asked, each with the
+ruling that closed it:
 1. Does S1's `price accuracy ≥ 0.95` denominate over the **promo price only** (the green leg, 80/80
    in `results/sku_b_pair_verdicts_skub2.json`) or over the **price pair**? At the pair the bar is
    unreachable by measurement — 0.4125 — and the gold file that fixes the denominator is the team
-   lead's to write.
+   lead's to write. → **ANSWERED: the promo price only**, exact after normalisation. Completeness =
+   gold positions matched on (brand surface form, product, volume) by a match rule the grader
+   states. The printed `−N%` and the extracted old price are stored and reported as **readings, no
+   bar**. `docs/labels-positions-50.jsonl` rows: `row_id · brand · product · volume · price_promo ·
+   badge_pct (nullable) · price_old (nullable, unscored) · note`.
 2. Does the §1 screen **print** `price old`, against 3.21 (4) / 3.22 (1)? I store it either way.
+   → **ANSWERED: no.** The screen row is brand · product · volume · promo price · printed `−N%`
+   (absent when none); depth per chain and brand is a **window aggregate** (3.22 (1)), never beside
+   a row's own promo price. `price_old` stays stored and flagged, exactly as today — the phase spec
+   §1 was corrected to match, so §1 of this plan is no longer contested.
 3. **Which population is S2 graded on** — 678, 229 or 449 (§5.5a)? Two thirds of the 678 are
    selected by a regex matching **dates**, not prices, and the operator's ruling says «только треды
-   под ЦЕНОВЫМИ промо». This is the one SP-0 answer that gates a $0 step: S7's draw waits for it.
+   под ЦЕНОВЫМИ промо». → **ANSWERED by the operator, 30.08: «Все 678, дро 20/20 по типу».** A promo
+   post whose price is in the image is a price post, so the population is **all 678** and the
+   `decimal` finding becomes a **stratum**, not a cut: dev-40 = 20 currency + 20 `decimal`-only,
+   holdout-40 the same 20/20, disjoint, frozen at the draw, seed 42 (K7, §5.5a–b). Bars are on the
+   whole 40; per-stratum agreement is a reading beside them.
 
-Questions 1–2 block only K6 (the graded S1 reading) and one screen column; question 3 blocks S7.
-S0–S6 and S8 do not wait for any of them.
+Nothing in SP-0 blocks anything now. K6 has its denominator, the screen has its column list, and S7
+runs in this slice.
 
-**SP-1 — OWED NOW, at plan review, not at S4: the phase does not fit its own remainder.**
+**SP-1 — ASKED at plan review, ANSWERED: «Go на $0, деньги — на стопе S3» (operator, 30.08).**
+The finding below stands unchanged — the phase does not fit its own remainder — and the ruling is
+**where** the choice is made, not that it goes away: the three options are decided by the operator
+at **S3's STOP**, on K3's page count and K4's range, and on a guard remainder re-read at that
+moment. Nothing paid runs before that table exists. **$2.44** is the number STATUS carries from
+now on (guard, 30.08); the phase spec's $3.17 is retired.
 Read live from the guard while writing this plan (`PYTHONPATH=src python3.11 scripts/runpod_guard.py`,
 read-only, `git status --porcelain results/ config/` clean afterwards):
 
@@ -119,10 +141,13 @@ iterations + the holdout + one dead-pod allowance — the programme is **$2.09�
 23.76 s/thread and $2.88–3.29 at a fitted rate**, against $2.4394. It fits only in the optimistic
 corner and only if every paid step closes inside ~36 hours.
 
-§6.1 says «if the projection at any point exceeds the remainder → ASK the operator (cycle-3 is his
-word), do not trim scope silently». It already exceeds it, so the ask is owed at review — deferring
-it to S4 means paying for C2 and then discovering the guard refuses at C3, leaving a bought
-population and no graded reading. Three options, the choice the operator's:
+`docs/SPEC-v2-promo-pulse.md` §6.1 says «if the projection at any point exceeds the remainder → ASK
+the operator (cycle-3 is his word), do not trim scope silently». It already exceeds it, which is why
+the ask was owed at review rather than at S4 — deferring it to S4 would mean paying for C2 and then
+discovering the guard refuses at C3, leaving a bought population and no graded reading. The operator
+took the ask and **deferred the answer to the evidence**: the $0 slice runs, S3 builds the census
+and the range, and he chooses on that table. §6.1's remainder is **$2.44**, not $3.17. Three
+options, still the operator's, still not mine to narrow:
 **(a)** open cycle-3 and name the sum · **(b)** narrow C2 to the pages that fit the remainder after
 C3 and say which chains are dropped · **(c)** build a positions **pod** runner — the pod is 2.383×
 cheaper per 1 000 rows than serverless (`results/srv2d_cost.json`: $0.5993 vs $1.4281) — but no
@@ -153,17 +178,28 @@ lead reworks the codebook/prompt; the executor does not.
 
 **SP-4 — anywhere.** Anything that would edit a sealed record, a frozen set, or a team-lead file.
 
-**SP-5 — the schema, resolved by this plan's review, not by a separate ask.**
+**SP-5 — RESOLVED at the plan review: «accepted with amendments», seven of them.**
 `claude/review-2026-08-27-new-rag-transfer.md` §2 is **not in this repo and not in its git history**;
-SPEC v2 §4 carries the pointer, not the schema. I propose the five tables in §5.7 so the team lead
-can diff mine against theirs in one read. If theirs differs, theirs wins and S6 is rewritten.
+SPEC v2 §4 carries the pointer, not the schema. I proposed five tables so the team lead could diff
+mine against theirs in one read, and the review quoted the missing §2 into this repo and amended
+mine against it. §5.7 now carries **the ruling, not the proposal** — six tables, `unsure` added, and
+`window_id` out of every identity but `rollup`'s. S6 builds that.
 
 ## 5. Assumptions and scope choices
 
-**5.1 Window.** 4 weeks = **28 days**; the anchor is the corpus's own **last day + 1**, the
-ratified precedent of `5c2-stop-ruling-and-cap-33` (a) — a later anchor buys days that are empty by
-construction and measures the collection schedule instead of the content. The window is pinned by
-`ids_sha256`, not by a row count.
+**5.1 Window — and the anchor is read AFTER S2, not before it (review correction 4).** 4 weeks =
+**28 days**; the anchor is the corpus's own **last day + 1**, the ratified precedent of
+`5c2-stop-ruling-and-cap-33` (a) — a later anchor buys days that are empty by construction and
+measures the collection schedule instead of the content.
+
+S2 moves that day. Today the store's newest A1 post is **2026-08-08**, so an anchor computed now
+would open a window over a corpus that S2 is about to extend by three weeks, and K3 would
+pre-register a population that no longer exists by the time it is bought. So the order is fixed:
+**S2 tops up the store first, and the C2 window anchor is the topped-up corpus's last day + 1**,
+read at S3 off the store and never carried in from this document. `results/promo_census_c2.json`
+**states the anchor date it used** beside `selection.ids_sha256`, so the projection, the paid pass
+and the team lead's re-run all read one window and can prove it is the same one. The window is
+pinned by `ids_sha256`, not by a row count (SPEC 3.18 (4)).
 
 **5.2 Registry r2 is an edit, not a new file.** `config/registry.yaml` lives under the executor's
 `config/`; SPEC v2 §3's «правка ревизией, не редактированием» is answered by the r1 proposal's own
@@ -173,7 +209,7 @@ sentence — «ревизия — отдельный шаг после реше�
 **5.2a Two A1 rows have no expressible handle, and the loader must grow first.**
 `src/market_pulse/registry.py:15` is
 `_HANDLE = re.compile(r"^@[A-Za-z][A-Za-z0-9_]{4,31}$")`, enforced in `_sources` with a hard
-`ValueError`. Two of the 16 A1 rows are not public usernames and fail it:
+`ValueError`. Two of the 17 A1 rows are not public usernames and fail it:
 **Маркетопт private** is the invite hash `+Ejz6ubzm21IyMTQy`, and **@ATB_FANatik's discussion
 group «АТБ / ЗНИЖКИ»** is `id: 1925810730` with `"username": null`
 (`results/retail_census.json`). Both verified against the live regex, not assumed. The enabling
@@ -205,12 +241,33 @@ of **collection**, not out of the registry. The data stays, so the row that expl
 too. r2 therefore adds a per-source **`collect: false`** (name at the team lead's discretion) and
 the collector honours it; `segment_for` keeps resolving every historical channel. This is a change
 of mechanism, not of scope: the 39 still stop being collected, exactly as §3 rules.
+`@atb_market_official` is a **different** case and the review corrected me on it: it is not
+paused at all — it stays in A1 **and** in collection as the leaflet carrier, and it appears in
+the refusal list above only because it was one of the 21 channels the A1+A2-only map could not
+resolve. Its row keeps `collect: true`.
 
 **5.3 The 8 uncollected entries.** Six named handles have no store file — `@blyzenkoua`,
 `@fozzyshopua`, `@sim23_simi`, `@rrozetka`, `@kop1chat`, `@xochydeshevshe` — and so do the two of
 §5.2a. `@kop1chat` and the registry's `@kopiyochka1` are **different handles**; I collect the one
 the phase spec names and report the pair rather than merge them on a guess. `@znishkom` is the
 opposite case: 193 posts in the store and no registry row.
+
+**5.3a The 18 A1 entries, one line each — the split is a list, not a total.**
+Recounted against `config/registry.yaml` (66 sources) and `data/raw/posts/`. **8 carry a
+registry row today**: `@atb_market_official` (`atb`), `@atb_aktsiyi` (`atb_aktsiyi`),
+`@VARUS_channel` (`varus`), `@ekomarket_shop` (`ekomarket_shop`), `@epicentrk_sale`
+(`epicentrk_sale`), `@foraINFO` (`forainfo`), `@silposilpo` (`silpo`), `@msuaaaa` (`msuaaaa`).
+**10 do not**: `@ATB_FANatik` (store file, no row), its discussion group, Маркетопт private,
+`@blyzenkoua`, `@fozzyshopua`, `@sim23_simi`, `@rrozetka`, `@kop1chat`, `@znishkom` (193 posts,
+no row), `@xochydeshevshe`.
+
+The 8 rests on **three identity judgments**, written out because the count moves if the team
+lead overturns any of them: `@foraINFO` ≡ the registry's `@forainfo` (case only — Telegram
+usernames are case-insensitive, so this is one channel and I do not add a second row);
+`@kop1chat` ≢ the registry's `@kopiyochka1` (different handles — §5.3); Маркетопт private
+(`+Ejz6ubzm21IyMTQy`) ≢ the registry's `@marketopt_promo` (a private invite is not the public
+promo channel). §3's own arithmetic — 17 rows + the discussion group = **18 entries** — is what
+8 + 10 sums to.
 
 **5.4 The rate — 10.408 s/row, not 1.7.** `docs/STATUS.md` quotes «1.7 с/стр.» That number is
 `results/run_5c2_positions.json :: go_no_go.page_marginal_seconds = 1.729`, a two-call warm-up
@@ -228,40 +285,83 @@ the **same** predicate its producer used — `retail_census.PRICE_BRANCHES` join
 re-ran that logic over `data/raw/` and reproduced **678 / 4 718 exactly**, so the draw is buildable
 at $0 today with no new input.
 
-**5.5a Two thirds of the 678 are selected by a regex firing on DATES — SP-0 question 3.**
+**5.5a Two thirds of the 678 are selected by a regex firing on DATES — SP-0 question 3, ANSWERED.**
 `PRICE_BRANCHES` has four branches; `decimal` is `\d+[,.]\d\d`. Splitting the 678 by branch
 (measured, reproduced twice): **229** threads carry a real currency marker (`грн` / `₴` / `grn`) and
 **449 (66%) match on `decimal` alone.** Ten of those 449 read under seed 42 are **10 of 10 dates**,
 not prices — «Пропозиції діють з 14.08 по 20.08», «з 18.03.26 по 24.03.2026», «Лише по 08.07.26».
 The producer's own docstring already warned it: «a yield carried entirely by `decimal` is a yield to
 distrust». These are still *promo* posts («Знижки в АТБ», «До -67% у Сільпо») — they simply carry no
-price in the text, because the price is in the image. The operator's ruling was «только треды под
-ЦЕНОВЫМИ промо», so which population S2 is graded on is his, not mine:
-**678** (any branch) · **229** (currency marker) · **449** (`decimal`-only). I draw nothing until it
-is answered — a dev-40 from the 678 would put ~2/3 of its threads under posts with no price in them
-and the bars would measure the wrong thing.
+price in the text, because the price is in the image. **The ruling: the finding stands, the
+conclusion is a stratum and not a cut.** The operator answered «Все 678, дро 20/20 по типу» — a
+promo post whose price is in the **image** is a price post, the same reading the review used to keep
+`@atb_market_official` in A1. So the population is all **678**, and the branch split becomes the
+draw's **stratification**: 229 currency (`грн|₴|grn`) and 449 `decimal`-only — measured, disjoint
+and exhaustive (229 + 449 = 678 exactly, reproduced twice). dev-40 = 20 + 20 and holdout-40 = 20 +
+20, so each stratum owes 40 of the 80 and both clear it with room. What the finding buys is no
+longer a smaller population but a **column**: per-stratum agreement is reported beside the bars, so
+if the `decimal`-only half grades worse the number says so, instead of the population having hidden
+it.
 
-**5.5b The draw has two strata, not «stratified by channel».** 665 of the 678 (98.1%) are
-`@msuaaaa` (447) and `@VARUS_channel` (218). Proportional quotas for dev-40 give msuaaaa 27 / VARUS
-13 / **zero from the other seven channels**, and dev-40 + holdout-40 = 80 still reaches no third
-stratum. Six of those seven tail channels are in the **PAUSED 39** that §3 removes from collection,
-which is a second reason the honest population may be 665. The draw record states its quotas and
-what it could not reach rather than implying coverage it does not have.
+**5.5b Channel is a recorded field, not a stratum — accepted by the review (SP-0 q3, «Channel is
+recorded per thread, not a stratum (5.5b accepted)»).** 665 of the 678 (98.1%) are `@msuaaaa` (447)
+and `@VARUS_channel` (218); the tail is `@matusi_ukr` 4, `@HealthPsycholog` 3, `@mandziak` 2 and
+four channels with 1 each. Channel-proportional quotas for dev-40 would have given msuaaaa 27 /
+VARUS 13 / **zero from the other seven**, and dev-40 + holdout-40 = 80 would still have reached no
+third channel — a stratification that cannot discriminate. The strata are the two **branches** of
+§5.5a instead, and channel is written on every drawn thread as a field. Six of the seven tail
+channels are in the **PAUSED 39** that §3 removes from collection; that changes nothing about the
+population — the threads are already on disk and §3 removes those channels from *collection*, not
+their history from the store — but the draw record marks which drawn threads come from a
+no-longer-collected channel, so nobody later reads them as ongoing coverage. The record states its
+quotas, its seed, the predicate (`retail_census.PRICE_BRANCHES`) and what it could not reach.
 
 **5.6 Text-less comments.** SPEC 3.19: they leave the inference queue from the next paid cycle —
 a **queue** rule, never a deletion — and «the volume of wordless reactions is itself a signal», so
 the wordless class is printed as its own named class beside every distribution over comments. The
 S2 draw is taken **after** the queue rule, and the draw record states the count it removed.
 
-**5.7 The five tables (proposal — SP-5).** ids are `uuid5(NAMESPACE, key)` with
+**5.7 The six tables — the team lead's ruling, not my proposal (review 30.08, SP-5 «accepted
+with amendments»).** My five-table proposal was amended on seven points and the amended shape is
+what S6 builds; where the two differ, the ruling wins. ids are `uuid5(NAMESPACE, key)` with
 `NAMESPACE = uuid5(NAMESPACE_URL, "market-pulse-llm/promo-pulse-1")`, keys normalised (NFC, lower,
 whitespace-collapsed) and joined by `\x1f`:
-`attribution(window_id, attribution_id ← channel|msg_id|subject_row_id, subject, role, source ∈ explicit|reply_context|post_context)`;
-`signal(window_id, signal_id ← channel|thread_root|type, type ∈ жалоба|похвала|спрос|привычка|цена)`;
-`evidence(window_id, evidence_id ← signal_id|msg_id|quote, msg_id, quote)`;
-`digest(window_id, digest_id ← channel|thread_root, children_ids, cooled_at)`;
-`rollup(window_id, rollup_id ← week|chain|brand|metric, value)`.
-Existing ids are **not** migrated: `positions.row_id` is already deterministic (`channel:msg_id:ordinal`).
+
+`subject_id` = `uuid5(NAMESPACE, subject_type|name)` with `subject_type ∈ chain|brand|sku|post` —
+amendment (2). The key is fixed; the ruling leaves the carrier to me and I take the **pure
+function**, no `subject` table: `attribution` already carries `subject` and `subject_type` as
+columns, so a table would hold nothing a join does not already have (added when a subject needs
+attributes of its own, not before).
+
+- `attribution(attribution_id ← channel|msg_id|subject_id, channel, msg_id, subject_id,
+  subject_type, subject, role, source ∈ explicit|reply_context|post_context, confidence)`
+- `signal(signal_id ← channel|thread_root|type|subject_id, channel, thread_root, type ∈
+  жалоба|похвала|спрос|привычка|цена, subject_id, confidence, extractor_version)`
+- `evidence(evidence_id ← signal_id|msg_id|quote, signal_id, msg_id, quote, span)` — `span` nullable
+- `digest(digest_id ← channel|thread_root, channel, thread_root, version, text,
+  children_ids, supporting_signal_ids, covers_up_to_msg_id, cooled_at)`
+- `unsure(unsure_id ← channel|msg_id|reason, channel, msg_id, candidates, reason)`
+- `rollup(rollup_id ← week|chain|brand|metric, week, chain, brand, metric, value)`
+
+Four amendments carry a reason I have to build to, so they are written out rather than listed:
+**(1)** `signal`'s key gains `subject_id` — two complaints in one thread about different subjects
+must not collapse into one row. **(3)** `digest` holds the state, not just the children: the
+late-comment delta (phase spec S4) reads digest + delta, so `version`, `text`,
+`supporting_signal_ids` and `covers_up_to_msg_id` sit beside `children_ids` and `cooled_at`.
+**(4)** `window_id` is **not part of any identity** in `attribution` / `signal` / `evidence` /
+`digest` — week is derived from the thread root's post date at query time; a thread that cools
+across a tick boundary would otherwise get a second identity and break K10. This is the one place
+the new tables depart from every existing table in `aggregates.py :: SCHEMA`, each of which carries
+`window_id` in its primary key, so S6 states it in the schema comment. `rollup` is the exception the
+ruling keeps: its identity is `week|chain|brand|metric`, week included, because a rollup **is** a
+per-week fact. **(5)** `unsure` is written by the instrument on low-confidence attribution or on a
+class the codebook lacks (SPEC v2 §4 (в)) — the team lead reads it at SP-3, so an abstention is a
+row, never a silent drop.
+
+`extractor_version` is the sha256 of the **rendered** prompt of the new module (§5.11), not of the
+module file: a row has to say which instrument produced it, and the render is what the model saw.
+Existing ids are **not** migrated: `positions.row_id` is already deterministic
+(`channel:msg_id:ordinal`).
 
 **5.8 Idempotence has one known hole and S12 closes it.** `evidence.KINDS` is
 `("comment", "leaflet_page", "position_row", "post_text")` — there is no member for «read and
@@ -341,4 +441,6 @@ unbuilt, per SPEC 3.18 (2)) · no reopening of bar 2.
 
 ---
 
-**Handed to the operator for the team lead's review. Nothing is implemented until «go».**
+**Reviewed and ACCEPTED — `docs/reviews/2026-08-30-plan-promo-pulse-1.md`, 30.08. This revision
+carries the five corrections that review asked for and nothing else of my own. GO on the $0
+slice: S0 · S1a · S1b · S2 · S3 · S6 · S7 · S8. Every paid step still waits at S3's STOP.**
