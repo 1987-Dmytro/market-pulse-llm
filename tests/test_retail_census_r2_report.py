@@ -7,6 +7,7 @@ as a bot. A number in prose is not the enumeration ([[count_in_prose_is_not_the_
 the enumeration checks the prose here.
 """
 
+import json
 import sys
 from pathlib import Path
 
@@ -77,7 +78,7 @@ def test_the_report_states_the_counts_the_record_supports():
     text = REPORT.read_text(encoding="utf-8")
     for phrase in (
         f"{c['with_channel']} of {c['rows']} rows have a channel",
-        f"{c['open']} of those have comments",
+        f"{c['open']} of those have comments open",
         f"**{c['no_channel']} rows have no channel**",
         f"{c['bot_only']} link a bot and nothing else",
         f"{c['read_no_link']} were read and carry no `t.me`",
@@ -85,6 +86,47 @@ def test_the_report_states_the_counts_the_record_supports():
         f"{c['screened']} aggregators screened out",
     ):
         assert phrase in text, f"the report does not state: {phrase!r}"
+
+
+def test_the_promo_thread_yield_is_the_number_the_report_leads_with():
+    """The operator's ruling: only threads under PRICE posts count, the rest is noise.
+
+    «16.6 comments/day» counts a thread under a recipe the same as a thread under a flyer. The
+    report leads with the filtered number instead, so the filtered number is what is checked.
+    """
+    yielded = json.loads(
+        (Path(__file__).resolve().parents[1] / "results" / "promo_comment_yield.json").read_text(
+            encoding="utf-8"
+        )
+    )["total"]
+    text = REPORT.read_text(encoding="utf-8")
+    assert f"{yielded['under_price']:,}".replace(",", " ") in text
+    assert f"{yielded['price_threads']} price threads" in text
+    # Every comment is filed under exactly one bucket, or the headline is drawn from a partition
+    # that loses rows.
+    assert (
+        yielded["under_price"] + yielded["under_no_price"] + yielded["orphan"]
+        == yielded["comments"]
+    )
+
+
+def test_the_brand_probe_result_is_reported_as_verified_zero():
+    """Four raw hits, hand-read, all false positives — the report must not carry the raw four.
+
+    A count of 4 and a count of 0 are the same file unless the verification is recorded beside
+    them, and the difference is «Гармонія is discussed in Poltava» versus «it is not» (Dv898).
+    """
+    probe = json.loads(
+        (Path(__file__).resolve().parents[1] / "results" / "poltava_brand_probe.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    assert probe["brand_hits_verified"] == 0
+    assert probe["garmonija"] == 0
+    assert probe["hand_verification"]["verdict"].startswith("ALL")
+    text = REPORT.read_text(encoding="utf-8")
+    assert f"{probe['texts_read']:,}".replace(",", " ") in text
+    assert "ZERO real dairy-brand mentions" in text
 
 
 def test_the_headline_row_is_the_one_the_record_ranks_first():

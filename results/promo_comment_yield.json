@@ -1,0 +1,327 @@
+{
+  "channels": [
+    {
+      "channel": "msuaaaa",
+      "posts": 1904,
+      "price_posts": 1462,
+      "price_branch_posts": {
+        "грн": 302,
+        "decimal": 1316,
+        "₴": 1
+      },
+      "comments": 4928,
+      "under_price": 3407,
+      "under_no_price": 1521,
+      "orphan": 0,
+      "price_threads": 447,
+      "brands_under_price": {
+        "varus-pl": 2,
+        "limo": 1
+      },
+      "brands_under_no_price": {
+        "varus-pl": 1
+      }
+    },
+    {
+      "channel": "VARUS_channel",
+      "posts": 2252,
+      "price_posts": 642,
+      "price_branch_posts": {
+        "decimal": 527,
+        "грн": 232
+      },
+      "comments": 6410,
+      "under_price": 1210,
+      "under_no_price": 5200,
+      "orphan": 0,
+      "price_threads": 218,
+      "brands_under_price": {
+        "varus-pl": 29,
+        "varto": 3,
+        "halychyna": 2,
+        "yagotynske": 2,
+        "zlahoda": 2,
+        "limo": 1,
+        "rud": 1
+      },
+      "brands_under_no_price": {
+        "varus-pl": 166,
+        "varto": 4,
+        "ferma": 3,
+        "molokija": 2,
+        "yagotynske": 2,
+        "halychyna": 1,
+        "zlahoda": 1,
+        "lasunka": 1,
+        "limo": 1,
+        "rud": 1,
+        "svoia-liniia": 1
+      }
+    },
+    {
+      "channel": "mandziak",
+      "posts": 123,
+      "price_posts": 2,
+      "price_branch_posts": {
+        "decimal": 2
+      },
+      "comments": 1048,
+      "under_price": 31,
+      "under_no_price": 1017,
+      "orphan": 0,
+      "price_threads": 2,
+      "brands_under_price": {},
+      "brands_under_no_price": {}
+    },
+    {
+      "channel": "matusi_ukr",
+      "posts": 237,
+      "price_posts": 5,
+      "price_branch_posts": {
+        "decimal": 2,
+        "грн": 3
+      },
+      "comments": 2890,
+      "under_price": 30,
+      "under_no_price": 2860,
+      "orphan": 0,
+      "price_threads": 4,
+      "brands_under_price": {},
+      "brands_under_no_price": {
+        "lasunka": 1
+      }
+    },
+    {
+      "channel": "HealthPsycholog",
+      "posts": 17,
+      "price_posts": 4,
+      "price_branch_posts": {
+        "грн": 3,
+        "decimal": 1
+      },
+      "comments": 97,
+      "under_price": 28,
+      "under_no_price": 69,
+      "orphan": 0,
+      "price_threads": 3,
+      "brands_under_price": {},
+      "brands_under_no_price": {}
+    },
+    {
+      "channel": "kopiyochka1",
+      "posts": 52,
+      "price_posts": 2,
+      "price_branch_posts": {
+        "грн": 2
+      },
+      "comments": 223,
+      "under_price": 5,
+      "under_no_price": 218,
+      "orphan": 0,
+      "price_threads": 1,
+      "brands_under_price": {},
+      "brands_under_no_price": {}
+    },
+    {
+      "channel": "ya_Nenka",
+      "posts": 10,
+      "price_posts": 3,
+      "price_branch_posts": {
+        "decimal": 3
+      },
+      "comments": 16,
+      "under_price": 3,
+      "under_no_price": 13,
+      "orphan": 0,
+      "price_threads": 1,
+      "brands_under_price": {},
+      "brands_under_no_price": {}
+    },
+    {
+      "channel": "kkondr_fit",
+      "posts": 2,
+      "price_posts": 1,
+      "price_branch_posts": {
+        "грн": 1,
+        "decimal": 1
+      },
+      "comments": 4,
+      "under_price": 2,
+      "under_no_price": 2,
+      "orphan": 0,
+      "price_threads": 1,
+      "brands_under_price": {},
+      "brands_under_no_price": {}
+    },
+    {
+      "channel": "sashafitnesslife",
+      "posts": 20,
+      "price_posts": 3,
+      "price_branch_posts": {
+        "decimal": 1,
+        "грн": 2
+      },
+      "comments": 83,
+      "under_price": 2,
+      "under_no_price": 81,
+      "orphan": 0,
+      "price_threads": 1,
+      "brands_under_price": {},
+      "brands_under_no_price": {}
+    },
+    {
+      "channel": "chifit_family",
+      "posts": 4,
+      "price_posts": 0,
+      "price_branch_posts": {},
+      "comments": 4,
+      "under_price": 0,
+      "under_no_price": 4,
+      "orphan": 0,
+      "price_threads": 0,
+      "brands_under_price": {},
+      "brands_under_no_price": {}
+    },
+    {
+      "channel": "denisovapro",
+      "posts": 22,
+      "price_posts": 0,
+      "price_branch_posts": {},
+      "comments": 6,
+      "under_price": 0,
+      "under_no_price": 6,
+      "orphan": 0,
+      "price_threads": 0,
+      "brands_under_price": {},
+      "brands_under_no_price": {}
+    },
+    {
+      "channel": "klopotenkofood",
+      "posts": 40,
+      "price_posts": 0,
+      "price_branch_posts": {},
+      "comments": 232,
+      "under_price": 0,
+      "under_no_price": 232,
+      "orphan": 0,
+      "price_threads": 0,
+      "brands_under_price": {},
+      "brands_under_no_price": {}
+    },
+    {
+      "channel": "mamo_nepsichuy",
+      "posts": 48,
+      "price_posts": 1,
+      "price_branch_posts": {
+        "decimal": 1
+      },
+      "comments": 10,
+      "under_price": 0,
+      "under_no_price": 10,
+      "orphan": 0,
+      "price_threads": 0,
+      "brands_under_price": {},
+      "brands_under_no_price": {}
+    },
+    {
+      "channel": "olgaa_trainer",
+      "posts": 8,
+      "price_posts": 0,
+      "price_branch_posts": {},
+      "comments": 4,
+      "under_price": 0,
+      "under_no_price": 4,
+      "orphan": 0,
+      "price_threads": 0,
+      "brands_under_price": {},
+      "brands_under_no_price": {}
+    },
+    {
+      "channel": "polyakova_fitness",
+      "posts": 53,
+      "price_posts": 0,
+      "price_branch_posts": {},
+      "comments": 8,
+      "under_price": 0,
+      "under_no_price": 8,
+      "orphan": 0,
+      "price_threads": 0,
+      "brands_under_price": {},
+      "brands_under_no_price": {}
+    },
+    {
+      "channel": "retsepty",
+      "posts": 91,
+      "price_posts": 0,
+      "price_branch_posts": {},
+      "comments": 105,
+      "under_price": 0,
+      "under_no_price": 105,
+      "orphan": 0,
+      "price_threads": 0,
+      "brands_under_price": {},
+      "brands_under_no_price": {}
+    },
+    {
+      "channel": "smirnov108",
+      "posts": 28,
+      "price_posts": 0,
+      "price_branch_posts": {},
+      "comments": 101,
+      "under_price": 0,
+      "under_no_price": 101,
+      "orphan": 0,
+      "price_threads": 0,
+      "brands_under_price": {},
+      "brands_under_no_price": {}
+    },
+    {
+      "channel": "tarilka_malyuka",
+      "posts": 82,
+      "price_posts": 1,
+      "price_branch_posts": {
+        "decimal": 1
+      },
+      "comments": 45,
+      "under_price": 0,
+      "under_no_price": 45,
+      "orphan": 0,
+      "price_threads": 0,
+      "brands_under_price": {},
+      "brands_under_no_price": {}
+    },
+    {
+      "channel": "tretyakovaele",
+      "posts": 1,
+      "price_posts": 0,
+      "price_branch_posts": {},
+      "comments": 106,
+      "under_price": 0,
+      "under_no_price": 106,
+      "orphan": 0,
+      "price_threads": 0,
+      "brands_under_price": {},
+      "brands_under_no_price": {}
+    },
+    {
+      "channel": "useful_healthy_fitness_menu",
+      "posts": 17,
+      "price_posts": 0,
+      "price_branch_posts": {},
+      "comments": 4,
+      "under_price": 0,
+      "under_no_price": 4,
+      "orphan": 0,
+      "price_threads": 0,
+      "brands_under_price": {},
+      "brands_under_no_price": {}
+    }
+  ],
+  "total": {
+    "comments": 16324,
+    "under_price": 4718,
+    "under_no_price": 11606,
+    "orphan": 0,
+    "price_threads": 678
+  }
+}

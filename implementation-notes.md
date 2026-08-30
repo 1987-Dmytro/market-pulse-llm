@@ -8199,3 +8199,24 @@ What the join bought, and what it did not: 42 378 subscribers, 29 posts in 28 da
 caveat the numbers cannot state themselves: `media_share` is **1.000** and the price branches show
 `decimal: 8` with `грн: 0` and `₴: 0`, so the prices are inside the flyer IMAGES. The 0.276 is what
 the text carries; this row is the 5c2 vision instrument's job, not the text matcher's.
+
+**Dv898 `[cause: model]` — every watchlist hit in the Poltava chats was a false positive, and the
+matcher cannot tell.** The probe read 4 507 messages from the four liveliest chats in the oblast and
+the watchlist fired 4 times: `president` on «третій **президент** України» (Yushchenko — the office),
+and `ferma` three times on «**Ферма** клубники 6600/день» and «Ферма яблок» — job ads. Hand-read, all
+four are noise, so the real count is **0**. `find_watchlist_brands` is word-bounded, which is what
+stops «Ферма» matching «фермерське»; nothing stops it matching the common noun. On a
+classifieds-and-job-ads corpus that boundary is not enough, and shipping the watchlist over these
+chats would manufacture brand signal from nothing. `results/poltava_brand_probe.json` carries the
+snippets and the hand verdict beside the raw counts, because a count of 4 and a count of 0 are the
+same file otherwise.
+
+**Dv899 `[cause: spec-gap]` — `dairy_share` and «a brand is named» are different questions, and only
+the first was ever measured.** The census grades a chat on a CATEGORY lexicon (молоко, сир, йогурт);
+the operator's question is whether Гармонія is discussed. Measured now on both sides: across the
+16 324 comments already in `data/raw/` the watchlist is named 228 times, **198 of them `varus-pl`
+inside Varus's own channel**, ~30 are real competitor dairy brands, and Гармонія is **0** — which
+reproduces SPEC v2 §0's own ≈40/0 independently. In the Poltava chats, 0 of 4 507. The 61 chats
+project **2.6 dairy-category messages a day (~78/month)** for the whole oblast before any brand
+filter. This is a ceiling that should be computed before, not after, buying wider coverage
+([[compute_the_ceiling_first]]).

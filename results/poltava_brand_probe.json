@@ -1,0 +1,99 @@
+{
+  "at": "2026-08-30T10:53:00+00:00",
+  "authorised_by": "operator, 2026-08-30: «нам надо покрыть все двадцать четыре районных центра и найти в них те телеграм-каналы, где идут живые обсуждения... где мы сможем искать информацию непосредственно про гармонию и другие молочные бренды»",
+  "budget": 60,
+  "requests": 52,
+  "pause_measured_min": 14.36,
+  "flood_wait_seconds": null,
+  "chats_probed": 4,
+  "texts_read": 4507,
+  "brand_hits_total": {
+    "ferma": 3,
+    "president": 1
+  },
+  "garmonija": 0,
+  "rows": [
+    {
+      "handle": "@fontan1000000chat",
+      "title": "Чат Фонтан Полтава",
+      "towns": [
+        "Полтава"
+      ],
+      "subscribers": 1017,
+      "n_texts": 1099,
+      "messages_per_day": 41.536,
+      "dairy_share": 0.002,
+      "brand_hits": {
+        "president": 1
+      },
+      "brand_examples": {
+        "president": [
+          "Не ображайте людей які народилися, виросли та проживають в українських селах. Як приклад Віктор Ющенко, третій президент України, родом з села, але це не стало "
+        ]
+      },
+      "measured_by": "api (probe)"
+    },
+    {
+      "handle": "@chat_poltava",
+      "title": "Чат Полтава",
+      "towns": [
+        "Полтава"
+      ],
+      "subscribers": 5582,
+      "n_texts": 1116,
+      "messages_per_day": 42.321,
+      "dairy_share": 0.005,
+      "brand_hits": {},
+      "brand_examples": {},
+      "measured_by": "api (probe)"
+    },
+    {
+      "handle": "@h_globino_official1",
+      "title": "Чат-Глобино/Глобине👹",
+      "towns": [
+        "Глобине"
+      ],
+      "subscribers": 2154,
+      "n_texts": 1110,
+      "messages_per_day": 41.964,
+      "dairy_share": 0.0,
+      "brand_hits": {},
+      "brand_examples": {},
+      "measured_by": "api (probe)"
+    },
+    {
+      "handle": "@Yaroslavski_haltura_shabashka",
+      "title": "ЯР ® JOB — ПГТ Ярославский | ХАЛТУРА ШАБАШКА ВАКАНСИИ ИЩУ РАБОТУ Ярославка ПОДРАБОТКУ РЕЗЮМЕ Объявления Чат Группа Хорольский ра",
+      "towns": [
+        "Хорол"
+      ],
+      "subscribers": 1536,
+      "n_texts": 1182,
+      "messages_per_day": 42.214,
+      "dairy_share": 0.001,
+      "brand_hits": {
+        "ferma": 3
+      },
+      "brand_examples": {
+        "ferma": [
+          "Ферма клубники 6600/день — сбор урожая, сортировка продукции и подготовка к отправке — напитки + питание. Откликайся.",
+          "Ферма яблок 6400/день — сбор заказов, упаковка товара и маркировка коробок — чай + бонусы. Лс открыт.",
+          "Ферма клубники 5000/день — контроль линии, упаковка продукции и подготовка паллет — перекусы + премии. Откликайся."
+        ]
+      },
+      "measured_by": "api (probe)"
+    }
+  ],
+  "hand_verification": {
+    "at": "2026-08-30",
+    "by": "executor, reading every matched snippet",
+    "verdict": "ALL 4 watchlist hits are FALSE POSITIVES — 0 real dairy-brand mentions",
+    "cases": {
+      "president": "«третій президент України» (Viktor Yushchenko) — the office, not the Président dairy brand",
+      "ferma": "«Ферма клубники 6600/день», «Ферма яблок 6400/день» — job ads for a strawberry and an apple farm, not the Ферма dairy brand (3 of 3 hits)"
+    },
+    "why_it_matters": "the matcher is word-bounded, which stops «Ферма» matching «фермерське» but cannot stop it matching the common noun «ферма». On a classifieds/job-ad corpus every hit was noise: deploying the watchlist here would manufacture brand signal that does not exist."
+  },
+  "brand_hits_verified": 0,
+  "sample_note": "4 of 61 chats, chosen as the liveliest by messages/day; 4 507 messages. The other 57 chats carry dairy_share 0.000-0.014, the same band as these four, so the reading is indicative for the population but is NOT a census of it."
+}
