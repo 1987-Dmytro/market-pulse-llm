@@ -55,7 +55,7 @@ Each ends in a commit **by path** and the checks named. No `git add -A`; no repo
 |---|---|---|---|
 | S0 | Commit the team lead's uncommitted files by path (`docs/STATUS.md`, `docs/PHASE-promo-pulse-1.md`); clear the `test_repair_phase4_ledger` debt STATUS assigns to step 0 of the next contract. | commit by path only; `tests/` | K0 |
 | S1a | **Loader extension first** (§5.2a): two of the 16 A1 rows **cannot be expressed** under today's `_HANDLE` regex. `src/market_pulse/registry.py` is pinned by nothing, so this is a cheap, legal prerequisite — a `chat_id` / `invite` field beside `telegram_channels`, with the regex left intact for real usernames. | `src/market_pulse/registry.py`, `tests/test_registry.py` | K2, K0 |
-| S1b | **Registry revision r2.** 16 A1 rows · 5 A2 · PAUSED 39 leave collection · B deferred. Preflight, edit, then claim the moved pins. Of the **17** A1 entries §3 names (16 rows + ATB_FANatik's discussion group), **7 are in the registry and 10 are not** — derived, not counted by hand: `@ATB_FANatik`, its discussion group, Маркетопт private, `@blyzenkoua`, `@fozzyshopua`, `@sim23_simi`, `@rrozetka`, `@kop1chat`, `@znishkom`, `@xochydeshevshe`; `@atb_market_official` **leaves by the file's own convention** — a commented `# <id> removed <date>: <reason>` line, never a deletion (`scripts/apply_gate_rulings_5c1.py :: remove_sources`), per ruling (ц): no promo, no comments. Every new row needs an `audience` from the closed list of 8 — `test_every_shipped_source_carries_an_audience` forbids a null. | `config/registry.yaml`, `tests/moved_pins.py`, `tests/` | K1, K2, K0 |
+| S1b | **Registry revision r2.** 16 A1 rows · 5 A2 · PAUSED 39 leave collection · B deferred. Preflight, edit, then claim the moved pins. Of the **17** A1 entries §3 names (16 rows + ATB_FANatik's discussion group), **7 are in the registry and 10 are not** — derived, not counted by hand: `@ATB_FANatik`, its discussion group, Маркетопт private, `@blyzenkoua`, `@fozzyshopua`, `@sim23_simi`, `@rrozetka`, `@kop1chat`, `@znishkom`, `@xochydeshevshe`; `@atb_market_official` and the PAUSED 39 leave **collection**, and their registry rows **stay** — §5.2b: removing them makes the aggregates build refuse at $0. Every new row needs an `audience` from the closed list of 8 — `test_every_shipped_source_carries_an_audience` forbids a null. | `config/registry.yaml`, `tests/moved_pins.py`, `tests/` | K1, K2, K0 |
 | S2 | **$0 collection.** The population §1 measures does not exist on disk: the newest post across every A1 channel is **2026-08-08** (today is 2026-08-30, so ≥22 days of the 4-week window are uncollected for *every* channel), and **8 of the 17 entries have no store file at all** — the 6 missing handles plus Маркетопт private and the discussion group. Collect them, top up the rest to the window, and collect the `@ATB_FANatik` discussion group (its traffic is measured at entry — r1's 0.25 c/day read post replies, not the group feed). Every NEW channel enters through the adaptation protocol: profile → sealed hundred → gate **before** aggregates. Telegram only. | `scripts/`, `data/raw/`, `results/` | K0 |
 | S3 | **$0 census + projection** of the paid legs (K3, K4), then **STOP** — SP-1. | `scripts/promo_census_c2.py`, `scripts/promo_projection_c2.py`, `results/` | K3, K4, K0 |
 | S4 | **C2 backfill (PAID).** Positions for the 16 channels over the 4 weeks, via the existing 5c2 instrument — vision for image flyers, text for the rest. **`positions.py` is not touched** (§5.12): the scale is in which carriers get fed, not in the parser. Smoke first; rungs per `docs/PROCESS.md`. | `scripts/`, `results/`, `data/derived/` | K0 |
@@ -85,18 +85,56 @@ Each ends in a commit **by path** and the checks named. No `git add -A`; no repo
 Questions 1–2 block only K6 (the graded S1 reading) and one screen column; question 3 blocks S7.
 S0–S6 and S8 do not wait for any of them.
 
-**SP-1 — before S4, the first paid step.** The guard is `scripts/runpod_guard.py`
+**SP-1 — OWED NOW, at plan review, not at S4: the phase does not fit its own remainder.**
+Read live from the guard while writing this plan (`PYTHONPATH=src python3.11 scripts/runpod_guard.py`,
+read-only, `git status --porcelain results/ config/` clean afterwards):
+
+```
+anchor $22.51 at 2026-08-16T12:14:48+00:00 · balance now $4.95
+CYCLE 2 SPENT  $17.5606 of $20.00        REMAINING  $2.4394
+```
+
+**$2.4394, not $3.17.** The phase spec's $3.17 is `results/spend_cycle2.json :: sessions[-1]`
+(2026-08-27T09:43Z) and SPEC v2 §9's $3.41 is `sessions[-2]`; both are stale by the `mp-srv2` drip
+(≈$0.24/day, `currentSpendPerHr` 0.01 with `pod list -a` empty). The phase's own estimate table at
+its caps is **$0.4 + $2.5 + $0.3 = $3.20 — $0.7606 over the remainder before the first paid step**,
+so `enforce()` refuses before the last one. And every day the team lead spends labelling the 50
+positions and 40 threads costs another $0.24 of it.
+
+**The remainder is also a clock.** `mp-srv2` bills $0.009722222574/h settled
+(`results/srv2c_bootlog.json :: price_now_read` — $7.00/month exactly, `per_day 0.2333`) with zero
+pods and zero endpoints, so **$2.4394 is exhausted by the volume alone in 10.4 days**. The compute
+must fit under `$2.4394 − 0.2333 × (days until the last paid step closes)`, and the team lead's
+labelling turnaround sits inside that window. Priced end to end — C2 + one boot retry + five C3
+iterations + the holdout + one dead-pod allowance — the programme is **$2.09–2.51 at the ledger's
+23.76 s/thread and $2.88–3.29 at a fitted rate**, against $2.4394. It fits only in the optimistic
+corner and only if every paid step closes inside ~36 hours.
+
+§6.1 says «if the projection at any point exceeds the remainder → ASK the operator (cycle-3 is his
+word), do not trim scope silently». It already exceeds it, so the ask is owed at review — deferring
+it to S4 means paying for C2 and then discovering the guard refuses at C3, leaving a bought
+population and no graded reading. Three options, the choice the operator's:
+**(a)** open cycle-3 and name the sum · **(b)** narrow C2 to the pages that fit the remainder after
+C3 and say which chains are dropped · **(c)** build a positions **pod** runner — the pod is 2.383×
+cheaper per 1 000 rows than serverless (`results/srv2d_cost.json`: $0.5993 vs $1.4281) — but no
+positions pod runner exists, so it is a new sibling runner and its own work.
+
+**SP-1b — before S4, the mechanics.** The guard is `scripts/runpod_guard.py`
 (`CYCLE2_CAP_USD = 20.00`; `spend()` is the pessimistic max of the balance delta and the billing
 walk; `enforce()` prints refusals and returns 1, and «a cap is not raised to finish a run»). The
 step gets its own ledger — `runpod_guard.py --step promo-pulse-1 --step-cap <usd>` — and both caps
 bind, neither spending the other's room. (`would_exceed` in `scripts/retail_resolve_r2.py` counts
 MTProto requests, not dollars; it is not this phase's guard.) I re-read the guard, run the census
-and the projection, and bring the operator a table. Rung 0 is that the guard's own remainder is
-**stale**:
-`results/spend_cycle2.json` last session (2026-08-27T09:43Z) reads `remaining_usd` **$3.1686**, and
-the `mp-srv2` volume has billed for three days since at ≈$0.24/day. The projection is computed at
-the **measured** rate, not the smoke's — see §5.4. If the projection exceeds the remainder I **ask**;
-I do not trim scope silently (phase spec §6.1). Rungs 0–3 and the cap-2× rule per `docs/PROCESS.md`.
+and the projection, and re-read the remainder at that moment rather than quoting the number above.
+The projection is computed at the **measured** rate, not the smoke's — see §5.4. Rungs 0–3 and the
+cap-2× rule per `docs/PROCESS.md`.
+
+**A $0 prerequisite K4 must not assume away:** `results/measurements.jsonl` (15 rows) carries **no
+vision s/page row at all** and none for C3's new prompt, and the projection precedent hard-exits on
+a missing named rate — `scripts/project_think_zero_shot.py:107` «stage {order} has no rate:
+`{rate_name}` is not in the ledger. The smoke writes it — project nothing until it has.» So the
+smoke seeds those two rows before any projection is quotable. That is why S3's census and S4's smoke
+are separate things and the smoke is inside the paid step, not before it.
 
 **SP-2 — before S10.** The ONE holdout attempt: pre-registered (readings + the two bars + the kill
 rule) in a committed record before the pod exists, and the operator is told it is being spent.
@@ -133,6 +171,23 @@ group «АТБ / ЗНИЖКИ»** is `id: 1925810730` with `"username": null`
 fact: **`registry.py` is pinned by nothing** — zero occurrences across `results/*.json` — so
 extending it is cheap and moves no sealed record. S1a widens the row shape rather than the regex,
 so a malformed *username* still fails loudly.
+
+**5.2b «Paused» is a collection flag, not a removed row — verified by driving the build.**
+`scripts/build_aggregates.py:99 segment_for()` raises `SystemExit` for any channel that carries
+evidence rows and has no registry entry: «SPEC 3.20 (1) fails loudly on a missing source rather than
+aggregating a channel with an empty segment column». I handed it an A1+A2-only segments map against
+the channels actually on disk: **28 channels carry evidence and it refused on 21 of them** —
+`@atb_market_official` first among them, which holds **106 of the 145 positions (73%)** and the
+entire leaflet leg, plus `@matusi_ukr` (2 717 comments) and `@mandziak` (1 026) of the PAUSED 39,
+together ~74% of the 5 075.
+
+So a revision that *deletes* or *comments out* those rows breaks `pulse.db`, and with it
+`export_dashboard_data.py` and the screen — at $0, at step two. SPEC v2 §3 already says the right
+thing and I mis-read it first: «выводится из **сбора**… данные и замороженные тесты остаются» — out
+of **collection**, not out of the registry. The data stays, so the row that explains it must stay
+too. r2 therefore adds a per-source **`collect: false`** (name at the team lead's discretion) and
+the collector honours it; `segment_for` keeps resolving every historical channel. This is a change
+of mechanism, not of scope: the 39 still stop being collected, exactly as §3 rules.
 
 **5.3 The 8 uncollected entries.** Six named handles have no store file — `@blyzenkoua`,
 `@fozzyshopua`, `@sim23_simi`, `@rrozetka`, `@kop1chat`, `@xochydeshevshe` — and so do the two of
@@ -236,6 +291,19 @@ inputs, producers, reads}`, a `window` with `"rule": "since <= date < until, hal
 sorted-keys with **no clock and no git block** so it is byte-deterministic) is the shape for
 positions, trends and the screen's export. Emitting a clock into a derived export is what makes a
 determinism check unrunnable, so K9 and K10 depend on getting this right.
+
+**5.12b The paid steps are sequenced, never shared on one pod — and the guard would refuse the
+shared one anyway.** C2's page leg is a **serverless endpoint** and C3's thread legs are a **pod**,
+so they cannot share a machine at all (and `docs/PROCESS.md` forbids two billing resources
+concurrently — free to satisfy by sequencing). For C3's own five iterations, one long-lived pod
+looks cheaper by five fixed taxes (≈$0.29) but bills every gap between them: break-even is a
+**4.65-minute** turnaround, and a real gap — pull the output, score it against the team lead's
+labels, read the error table, edit the prompt module, re-stage — is nearer 15, i.e. ≈$0.93 of idle
+against $0.29 saved. Two harder reasons settle it: `--terminate-after` is fixed at create
+(`runpodctl pod update` has no such flag), so a shared pod must declare its whole span up front —
+≈4.36 h × $0.74/h = **$3.23, larger than the line has**, and `enforce()` refuses before the create;
+and a pod registered for six legs has already bought legs that §6.3's plateau rule may forbid.
+**One create per iteration.**
 
 **5.13 The tick's spine already exists.** `loop.py` carries four watermarks — `posts`, `inference`,
 `leaflet`, `post_text` — and the three passes `inference_pass` / `page_pass` / `post_pass`, each
