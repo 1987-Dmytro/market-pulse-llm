@@ -101,7 +101,74 @@
         "status": "blocked",
         "n_scripts": 0,
         "assets": []
-      }
+      },
+      "measured": [
+        {
+          "handle": "@silposilpo",
+          "search": {
+            "title": "Сільпо",
+            "subscribers": null
+          },
+          "checked": true,
+          "checked_at": "2026-08-30T06:54:02+00:00",
+          "measured_by": "api (r2)",
+          "window": "2026-08-02..2026-08-30",
+          "resolved": true,
+          "title": "Сільпо",
+          "subscribers": 19714,
+          "telegram_verified": false,
+          "broadcast": true,
+          "megagroup": false,
+          "is_group": false,
+          "messages_open": true,
+          "messages_open_error": null,
+          "comments_enabled": false,
+          "discussion_group": null,
+          "stats": {
+            "window_days": 28,
+            "window_truncated": false,
+            "n_messages_raw": 49,
+            "n_posts": 33,
+            "posts_per_day": 1.179,
+            "messages_per_day": null,
+            "last_post": "2026-08-28T13:26:37+00:00",
+            "n_texts": 33,
+            "comments_per_day": 0.0,
+            "n_posts_with_comments": 0,
+            "price_share": 0.212,
+            "price_share_contract_regex": 0.091,
+            "price_branch_hits": {
+              "грн": 6,
+              "₴": 0,
+              "grn": 0,
+              "decimal": 3
+            },
+            "media_share": 1.0,
+            "leaflet_or_price_share": 1.0,
+            "dairy_share": 0.152,
+            "dairy_posts_per_day": 0.179,
+            "language_mix": {
+              "ua": 1.0
+            },
+            "traffic": {
+              "n_posts": 33,
+              "first_post": "2026-08-03T07:57:25+00:00",
+              "last_post": "2026-08-28T13:26:37+00:00",
+              "window_days": 25.2,
+              "posts_per_day": 1.31,
+              "share_with_comments": 0.0,
+              "median_comments": 0
+            }
+          },
+          "verdict": "posts-only",
+          "reasons": [
+            "no blue check — confirm this is the official channel",
+            "comments disabled (no linked discussion group)"
+          ],
+          "capability_verdict": "posts-only",
+          "error": null
+        }
+      ]
     },
     {
       "name": "Novus",
@@ -198,7 +265,88 @@
         "status": "blocked",
         "n_scripts": 0,
         "assets": []
-      }
+      },
+      "measured": [
+        {
+          "handle": "@HRCNc",
+          "search": {
+            "title": "METRO",
+            "subscribers": null
+          },
+          "checked": true,
+          "checked_at": "2026-08-30T06:54:57+00:00",
+          "measured_by": "api (r2)",
+          "window": "2026-08-02..2026-08-30",
+          "resolved": true,
+          "title": "HoReCaНець",
+          "subscribers": 3359,
+          "telegram_verified": false,
+          "broadcast": true,
+          "megagroup": false,
+          "is_group": false,
+          "messages_open": true,
+          "messages_open_error": null,
+          "comments_enabled": true,
+          "discussion_group": {
+            "present": true,
+            "read": true,
+            "id": 1850629226,
+            "title": "HoReCaНець Chat",
+            "username": null,
+            "megagroup": true,
+            "min": false,
+            "join_request": false,
+            "join_to_send": false,
+            "restricted": false,
+            "already_member": false,
+            "participants_count": null,
+            "open": true,
+            "closed_because": []
+          },
+          "stats": {
+            "window_days": 28,
+            "window_truncated": false,
+            "n_messages_raw": 27,
+            "n_posts": 26,
+            "posts_per_day": 0.929,
+            "messages_per_day": null,
+            "last_post": "2026-08-27T11:40:08+00:00",
+            "n_texts": 12,
+            "comments_per_day": 0.071,
+            "n_posts_with_comments": 2,
+            "price_share": 0.0,
+            "price_share_contract_regex": 0.0,
+            "price_branch_hits": {
+              "грн": 0,
+              "₴": 0,
+              "grn": 0,
+              "decimal": 0
+            },
+            "media_share": 0.962,
+            "leaflet_or_price_share": 0.962,
+            "dairy_share": 0.231,
+            "dairy_posts_per_day": 0.214,
+            "language_mix": {
+              "ua": 1.0
+            },
+            "traffic": {
+              "n_posts": 26,
+              "first_post": "2026-08-04T10:55:04+00:00",
+              "last_post": "2026-08-27T11:40:08+00:00",
+              "window_days": 23.0,
+              "posts_per_day": 1.13,
+              "share_with_comments": 0.08,
+              "median_comments": 0.0
+            }
+          },
+          "verdict": "enter",
+          "reasons": [
+            "no blue check — confirm this is the official channel"
+          ],
+          "capability_verdict": "usable",
+          "error": null
+        }
+      ]
     },
     {
       "name": "Auchan",
@@ -325,7 +473,74 @@
             "links": []
           }
         ]
-      }
+      },
+      "measured": [
+        {
+          "handle": "@foraINFO",
+          "search": {
+            "title": "Фора",
+            "subscribers": null
+          },
+          "checked": true,
+          "checked_at": "2026-08-30T06:55:01+00:00",
+          "measured_by": "api (r2)",
+          "window": "2026-08-02..2026-08-30",
+          "resolved": true,
+          "title": "Фора",
+          "subscribers": 7506,
+          "telegram_verified": false,
+          "broadcast": true,
+          "megagroup": false,
+          "is_group": false,
+          "messages_open": true,
+          "messages_open_error": null,
+          "comments_enabled": false,
+          "discussion_group": null,
+          "stats": {
+            "window_days": 28,
+            "window_truncated": false,
+            "n_messages_raw": 13,
+            "n_posts": 10,
+            "posts_per_day": 0.357,
+            "messages_per_day": null,
+            "last_post": "2026-08-27T08:59:08+00:00",
+            "n_texts": 10,
+            "comments_per_day": 0.0,
+            "n_posts_with_comments": 0,
+            "price_share": 0.6,
+            "price_share_contract_regex": 0.5,
+            "price_branch_hits": {
+              "грн": 5,
+              "₴": 0,
+              "grn": 0,
+              "decimal": 5
+            },
+            "media_share": 1.0,
+            "leaflet_or_price_share": 1.0,
+            "dairy_share": 0.2,
+            "dairy_posts_per_day": 0.071,
+            "language_mix": {
+              "ua": 1.0
+            },
+            "traffic": {
+              "n_posts": 10,
+              "first_post": "2026-08-03T04:38:27+00:00",
+              "last_post": "2026-08-27T08:59:08+00:00",
+              "window_days": 24.2,
+              "posts_per_day": 0.41,
+              "share_with_comments": 0.0,
+              "median_comments": 0
+            }
+          },
+          "verdict": "posts-only",
+          "reasons": [
+            "no blue check — confirm this is the official channel",
+            "comments disabled (no linked discussion group)"
+          ],
+          "capability_verdict": "posts-only",
+          "error": null
+        }
+      ]
     },
     {
       "name": "Varus",
@@ -370,6 +585,88 @@
       },
       "resolvable": [
         "@VARUS_channel"
+      ],
+      "measured": [
+        {
+          "handle": "@VARUS_channel",
+          "search": {
+            "title": "Varus",
+            "subscribers": null
+          },
+          "checked": true,
+          "checked_at": "2026-08-30T06:55:09+00:00",
+          "measured_by": "api (r2)",
+          "window": "2026-08-02..2026-08-30",
+          "resolved": true,
+          "title": "VARUS",
+          "subscribers": 121086,
+          "telegram_verified": false,
+          "broadcast": true,
+          "megagroup": false,
+          "is_group": false,
+          "messages_open": true,
+          "messages_open_error": null,
+          "comments_enabled": true,
+          "discussion_group": {
+            "present": true,
+            "read": true,
+            "id": 2276729687,
+            "title": "VARUS Chat",
+            "username": null,
+            "megagroup": true,
+            "min": false,
+            "join_request": false,
+            "join_to_send": true,
+            "restricted": false,
+            "already_member": false,
+            "participants_count": null,
+            "open": true,
+            "closed_because": []
+          },
+          "stats": {
+            "window_days": 28,
+            "window_truncated": false,
+            "n_messages_raw": 527,
+            "n_posts": 134,
+            "posts_per_day": 4.786,
+            "messages_per_day": null,
+            "last_post": "2026-08-29T15:01:34+00:00",
+            "n_texts": 103,
+            "comments_per_day": 16.643,
+            "n_posts_with_comments": 65,
+            "price_share": 0.246,
+            "price_share_contract_regex": 0.246,
+            "price_branch_hits": {
+              "грн": 7,
+              "₴": 0,
+              "grn": 0,
+              "decimal": 33
+            },
+            "media_share": 1.0,
+            "leaflet_or_price_share": 1.0,
+            "dairy_share": 0.194,
+            "dairy_posts_per_day": 0.929,
+            "language_mix": {
+              "other": 0.17,
+              "ua": 0.83
+            },
+            "traffic": {
+              "n_posts": 134,
+              "first_post": "2026-08-02T10:15:19+00:00",
+              "last_post": "2026-08-29T15:01:34+00:00",
+              "window_days": 27.2,
+              "posts_per_day": 4.93,
+              "share_with_comments": 0.49,
+              "median_comments": 1
+            }
+          },
+          "verdict": "enter",
+          "reasons": [
+            "no blue check — confirm this is the official channel"
+          ],
+          "capability_verdict": "usable",
+          "error": null
+        }
       ]
     },
     {
@@ -482,6 +779,73 @@
       },
       "resolvable": [
         "@fozzyshopua"
+      ],
+      "measured": [
+        {
+          "handle": "@fozzyshopua",
+          "search": {
+            "title": "Fozzy",
+            "subscribers": null
+          },
+          "checked": true,
+          "checked_at": "2026-08-30T06:55:12+00:00",
+          "measured_by": "api (r2)",
+          "window": "2026-08-02..2026-08-30",
+          "resolved": true,
+          "title": "FOZZY Cash&Сarry",
+          "subscribers": 518,
+          "telegram_verified": false,
+          "broadcast": true,
+          "megagroup": false,
+          "is_group": false,
+          "messages_open": true,
+          "messages_open_error": null,
+          "comments_enabled": false,
+          "discussion_group": null,
+          "stats": {
+            "window_days": 28,
+            "window_truncated": false,
+            "n_messages_raw": 11,
+            "n_posts": 11,
+            "posts_per_day": 0.393,
+            "messages_per_day": null,
+            "last_post": "2026-08-28T10:44:19+00:00",
+            "n_texts": 11,
+            "comments_per_day": 0.0,
+            "n_posts_with_comments": 0,
+            "price_share": 0.182,
+            "price_share_contract_regex": 0.182,
+            "price_branch_hits": {
+              "грн": 0,
+              "₴": 0,
+              "grn": 0,
+              "decimal": 2
+            },
+            "media_share": 1.0,
+            "leaflet_or_price_share": 1.0,
+            "dairy_share": 0.091,
+            "dairy_posts_per_day": 0.036,
+            "language_mix": {
+              "ua": 1.0
+            },
+            "traffic": {
+              "n_posts": 11,
+              "first_post": "2026-08-02T12:26:09+00:00",
+              "last_post": "2026-08-28T10:44:19+00:00",
+              "window_days": 25.9,
+              "posts_per_day": 0.42,
+              "share_with_comments": 0.0,
+              "median_comments": 0
+            }
+          },
+          "verdict": "posts-only",
+          "reasons": [
+            "no blue check — confirm this is the official channel",
+            "comments disabled (no linked discussion group)"
+          ],
+          "capability_verdict": "posts-only",
+          "error": null
+        }
       ]
     },
     {
@@ -523,6 +887,73 @@
       },
       "resolvable": [
         "@ekomarket_shop"
+      ],
+      "measured": [
+        {
+          "handle": "@ekomarket_shop",
+          "search": {
+            "title": "ЕКО маркет",
+            "subscribers": null
+          },
+          "checked": true,
+          "checked_at": "2026-08-30T06:55:16+00:00",
+          "measured_by": "api (r2)",
+          "window": "2026-08-02..2026-08-30",
+          "resolved": true,
+          "title": "ЕКО Маркет",
+          "subscribers": 1341,
+          "telegram_verified": false,
+          "broadcast": true,
+          "megagroup": false,
+          "is_group": false,
+          "messages_open": true,
+          "messages_open_error": null,
+          "comments_enabled": false,
+          "discussion_group": null,
+          "stats": {
+            "window_days": 28,
+            "window_truncated": false,
+            "n_messages_raw": 17,
+            "n_posts": 17,
+            "posts_per_day": 0.607,
+            "messages_per_day": null,
+            "last_post": "2026-08-28T08:56:38+00:00",
+            "n_texts": 17,
+            "comments_per_day": 0.0,
+            "n_posts_with_comments": 0,
+            "price_share": 0.882,
+            "price_share_contract_regex": 0.706,
+            "price_branch_hits": {
+              "грн": 15,
+              "₴": 0,
+              "grn": 0,
+              "decimal": 12
+            },
+            "media_share": 1.0,
+            "leaflet_or_price_share": 1.0,
+            "dairy_share": 0.412,
+            "dairy_posts_per_day": 0.25,
+            "language_mix": {
+              "ua": 1.0
+            },
+            "traffic": {
+              "n_posts": 17,
+              "first_post": "2026-08-05T09:11:32+00:00",
+              "last_post": "2026-08-28T08:56:38+00:00",
+              "window_days": 23.0,
+              "posts_per_day": 0.74,
+              "share_with_comments": 0.0,
+              "median_comments": 0
+            }
+          },
+          "verdict": "posts-only",
+          "reasons": [
+            "no blue check — confirm this is the official channel",
+            "comments disabled (no linked discussion group)"
+          ],
+          "capability_verdict": "posts-only",
+          "error": null
+        }
       ]
     },
     {
@@ -1134,6 +1565,87 @@
       },
       "resolvable": [
         "@sim23_simi"
+      ],
+      "measured": [
+        {
+          "handle": "@sim23_simi",
+          "search": {
+            "title": "Сім23",
+            "subscribers": null
+          },
+          "checked": true,
+          "checked_at": "2026-08-30T06:55:19+00:00",
+          "measured_by": "api (r2)",
+          "window": "2026-08-02..2026-08-30",
+          "resolved": true,
+          "title": "Сім23 та Сімі💜",
+          "subscribers": 5266,
+          "telegram_verified": false,
+          "broadcast": true,
+          "megagroup": false,
+          "is_group": false,
+          "messages_open": true,
+          "messages_open_error": null,
+          "comments_enabled": true,
+          "discussion_group": {
+            "present": true,
+            "read": true,
+            "id": 2712138875,
+            "title": "Сім23 та Сімі💜 Chat",
+            "username": null,
+            "megagroup": true,
+            "min": false,
+            "join_request": false,
+            "join_to_send": false,
+            "restricted": false,
+            "already_member": false,
+            "participants_count": null,
+            "open": true,
+            "closed_because": []
+          },
+          "stats": {
+            "window_days": 28,
+            "window_truncated": false,
+            "n_messages_raw": 58,
+            "n_posts": 17,
+            "posts_per_day": 0.607,
+            "messages_per_day": null,
+            "last_post": "2026-08-28T14:00:03+00:00",
+            "n_texts": 9,
+            "comments_per_day": 0.607,
+            "n_posts_with_comments": 7,
+            "price_share": 0.176,
+            "price_share_contract_regex": 0.118,
+            "price_branch_hits": {
+              "грн": 1,
+              "₴": 0,
+              "grn": 0,
+              "decimal": 2
+            },
+            "media_share": 0.882,
+            "leaflet_or_price_share": 0.882,
+            "dairy_share": 0.0,
+            "dairy_posts_per_day": 0.0,
+            "language_mix": {
+              "ua": 1.0
+            },
+            "traffic": {
+              "n_posts": 17,
+              "first_post": "2026-08-03T06:28:29+00:00",
+              "last_post": "2026-08-28T14:00:03+00:00",
+              "window_days": 25.3,
+              "posts_per_day": 0.67,
+              "share_with_comments": 0.41,
+              "median_comments": 0.0
+            }
+          },
+          "verdict": "enter",
+          "reasons": [
+            "no blue check — confirm this is the official channel"
+          ],
+          "capability_verdict": "usable",
+          "error": null
+        }
       ]
     },
     {
@@ -1219,6 +1731,19 @@
       },
       "resolvable": [
         "+Gpo70IWKXOE1NzZi"
+      ],
+      "measured": [
+        {
+          "invite_result": "ChatInvitePeek",
+          "handle": "+Gpo70IWKXOE1NzZi",
+          "title": "🔴 ТАВРІЯ В | Мережа супермаркетів",
+          "subscribers": null,
+          "megagroup": false,
+          "history_readable": false,
+          "peek_expires": "2026-08-30 07:10:22+00:00",
+          "measured_by": "api (r2)",
+          "window": "2026-08-02..2026-08-30"
+        }
       ]
     },
     {
@@ -1450,6 +1975,86 @@
           "http": 403,
           "bytes": 5746,
           "names_the_chain": false
+        }
+      ],
+      "measured": [
+        {
+          "handle": "@rrozetka",
+          "search": {
+            "title": "Rozetka продукти",
+            "subscribers": null
+          },
+          "checked": true,
+          "checked_at": "2026-08-30T06:55:27+00:00",
+          "measured_by": "api (r2)",
+          "window": "2026-08-02..2026-08-30",
+          "resolved": true,
+          "title": "ROZETKA",
+          "subscribers": 369535,
+          "telegram_verified": true,
+          "broadcast": true,
+          "megagroup": false,
+          "is_group": false,
+          "messages_open": true,
+          "messages_open_error": null,
+          "comments_enabled": true,
+          "discussion_group": {
+            "present": true,
+            "read": true,
+            "id": 1374520672,
+            "title": "Чат ROZETKA",
+            "username": null,
+            "megagroup": true,
+            "min": false,
+            "join_request": false,
+            "join_to_send": false,
+            "restricted": false,
+            "already_member": false,
+            "participants_count": null,
+            "open": true,
+            "closed_because": []
+          },
+          "stats": {
+            "window_days": 28,
+            "window_truncated": false,
+            "n_messages_raw": 184,
+            "n_posts": 167,
+            "posts_per_day": 5.964,
+            "messages_per_day": null,
+            "last_post": "2026-08-29T15:02:05+00:00",
+            "n_texts": 147,
+            "comments_per_day": 304.429,
+            "n_posts_with_comments": 42,
+            "price_share": 0.521,
+            "price_share_contract_regex": 0.108,
+            "price_branch_hits": {
+              "грн": 84,
+              "₴": 1,
+              "grn": 0,
+              "decimal": 17
+            },
+            "media_share": 0.91,
+            "leaflet_or_price_share": 0.91,
+            "dairy_share": 0.0,
+            "dairy_posts_per_day": 0.0,
+            "language_mix": {
+              "other": 0.01,
+              "ua": 0.99
+            },
+            "traffic": {
+              "n_posts": 167,
+              "first_post": "2026-08-02T07:24:55+00:00",
+              "last_post": "2026-08-29T15:02:05+00:00",
+              "window_days": 27.3,
+              "posts_per_day": 6.11,
+              "share_with_comments": 0.25,
+              "median_comments": 24.5
+            }
+          },
+          "verdict": "enter",
+          "reasons": [],
+          "capability_verdict": "usable",
+          "error": null
         }
       ]
     },
@@ -2075,5 +2680,57 @@
     "bundle_pass_at": "2026-08-30T06:50:26+00:00",
     "browser_pass_at": "2026-08-30T06:50:20+00:00"
   },
-  "step_2": {}
+  "step_2": {
+    "at": "2026-08-30T06:56:24+00:00",
+    "handles_measured": 1,
+    "handles_left_unmeasured": 0,
+    "requests_measured": 1,
+    "requests_by_type": {
+      "CheckChatInviteRequest": 1
+    },
+    "budget": 40,
+    "cost_per_candidate": 4,
+    "history_requests_per_candidate": 2,
+    "budget_unit": "measured MTProto requests (client.__call__ wrapped), not candidates",
+    "pause_seconds_intended": 3.0,
+    "pause_seconds_measured_min": null,
+    "pause_source": "this script — entry_check.PAUSE_SECONDS is 2.0 and would break the floor",
+    "suggest_disabled": true,
+    "suggest_would_have_fired_for": [],
+    "read_only": "no joins; an invite is read through CheckChatInvite, which does not join",
+    "flood_wait_seconds": null,
+    "passes": [
+      {
+        "at": "2026-08-30T06:54:05+00:00",
+        "handles_measured": 1,
+        "requests": 4,
+        "by_type": {
+          "ResolveUsernameRequest": 1,
+          "GetFullChannelRequest": 1,
+          "GetHistoryRequest": 2
+        },
+        "note": "the smoke — one handle, before the pass"
+      },
+      {
+        "at": "2026-08-30T06:55:30+00:00",
+        "handles_measured": 8,
+        "requests": 35,
+        "by_type": {
+          "ResolveUsernameRequest": 7,
+          "GetFullChannelRequest": 7,
+          "GetHistoryRequest": 20,
+          "CheckChatInviteRequest": 1
+        }
+      },
+      {
+        "at": "2026-08-30T06:56:24+00:00",
+        "handles_measured": 1,
+        "requests": 1,
+        "by_type": {
+          "CheckChatInviteRequest": 1
+        }
+      }
+    ],
+    "requests_all_passes": 40
+  }
 }
