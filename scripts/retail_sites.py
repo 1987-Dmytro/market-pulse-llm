@@ -75,6 +75,35 @@ PROBE_GUESSES = {
     "Гурман": ["gurman.ua", "gurman.poltava.ua"],
     "Файно маркет": ["fayno-market.ua", "faynomarket.ua", "fayno.market"],
     "Барвінок": ["barvinok.ua", "barvinok-market.com.ua"],
+    # Found by web discovery after the contract's own candidates failed DNS (CLAUDE.md allows HTTP
+    # for DISCOVERY of official handles). A candidate still has to answer AND name the chain.
+    "Delikat": ["delikat.site", "delikat.online"],
+    "Маркетопт": ["marketopt.com.ua", "marketopt.ua"],
+}
+
+# What the discovery established for a name that ends with no site. Written into the row so the
+# record carries the reason, not just the report: «no site verified» is one word for several very
+# different states, and one of these names is not a live chain at all.
+DISCOVERY_NOTES = {
+    "Барвінок": (
+        "the retail brand no longer exists: the chain was sold in December 2015 and bought by"
+        " ATB-Market in 2016, and every «Барвінок» store was rebranded to «АТБ». This is why r1's"
+        " name search returned an ОСББ «Барвінок» — there is no retail channel to find."
+    ),
+    "Толока": (
+        "web discovery finds no retail chain of this name; «толока» is the Ukrainian word for a"
+        " community work-day, which is what the searches return. SPEC v2 §3 pairs it with"
+        " «Маркетопт»; the pairing is not visible in any source found."
+    ),
+    "Гурман": (
+        "no Poltava-region chain with a site: the name belongs to a shop in Південне (Instagram"
+        " only) and to gurman-dnepr.com.ua in Dnipro. `gurman.ua` is a domain-for-sale page."
+    ),
+    "Маркетопт": (
+        "a real Poltava chain with NO website — its official presence is Instagram @marketopt and"
+        " Facebook @marketopt.official. `marketopt.ua` does not resolve. Absence of a site is not"
+        " absence of the chain, and this row cannot be answered by reading a footer."
+    ),
 }
 
 # Footer and social blocks live on the home page on most of these sites; contacts pages carry
@@ -358,6 +387,13 @@ def run_probe() -> int:
     for name, guesses in PROBE_GUESSES.items():
         row = by_name.get(name) or blank_row(name)
         by_name[name] = row
+        if row.get("handles") or row.get("site_status") in ("ok", "no-link"):
+            # This row already has a reading — from curl, from the bundle, or from the browser.
+            # The probe's job is to FIND a site for a name that has none; letting its else-branch
+            # run here rewrites `@rrozetka` (read in Chrome) as «no site verified», which is a
+            # downgrade dressed as a measurement.
+            print(f"{name:20} already read ({row.get('site_status')}) — probe skipped")
+            continue
         tried = []
         for domain in guesses:
             code, body = fetch(f"https://{domain}/")
@@ -379,6 +415,8 @@ def run_probe() -> int:
             time.sleep(1.0)
         else:
             row["site_status"] = "no-site-verified"
+        if row["site_status"] == "no-site-verified" and name in DISCOVERY_NOTES:
+            row["no_site_reason"] = DISCOVERY_NOTES[name]
         row["probed"] = tried
     state["rows"] = [by_name[r["name"]] for r in state["rows"]]
     save(state)

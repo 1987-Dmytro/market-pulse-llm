@@ -672,8 +672,8 @@
     {
       "name": "Thrash!",
       "site": "thrash.ua",
-      "site_status": "shell",
-      "method": "curl",
+      "site_status": "no-link",
+      "method": "browser",
       "handles": [],
       "pages": [
         {
@@ -693,6 +693,13 @@
           "http": 200,
           "bytes": 20422,
           "links": []
+        },
+        {
+          "url": "https://thrash.ua/",
+          "http": 200,
+          "rendered": true,
+          "links": [],
+          "note": "curl saw one 20422-byte shell for every path; rendered it is 85449 chars and its social block is Facebook + Instagram only — no Telegram anywhere. r1's t.me/+HR0vG1EaFXw4NzA6 is NOT linked from the chain's own site"
         }
       ],
       "in_spec_a": true,
@@ -1492,34 +1499,50 @@
     },
     {
       "name": "Delikat",
-      "site": "delikat.ua",
-      "site_status": "dns",
+      "site": "delikat.site",
+      "site_status": "ok",
       "method": "curl",
-      "handles": [],
+      "handles": [
+        "@bloom_cherkasy"
+      ],
+      "kinds": {
+        "@bloom_cherkasy": "channel"
+      },
+      "resolvable": [
+        "@bloom_cherkasy"
+      ],
       "pages": [
         {
-          "url": "https://delikat.ua/",
-          "http": 0,
-          "bytes": 0,
+          "url": "https://delikat.site/",
+          "http": 200,
+          "bytes": 56484,
+          "links": [
+            "@bloom_cherkasy"
+          ]
+        },
+        {
+          "url": "https://delikat.site/contacts",
+          "http": 404,
+          "bytes": 17637,
           "links": []
         },
         {
-          "url": "https://delikat.ua/contacts",
-          "http": 0,
-          "bytes": 0,
-          "links": []
-        },
-        {
-          "url": "https://delikat.ua/about",
-          "http": 0,
-          "bytes": 0,
+          "url": "https://delikat.site/about",
+          "http": 404,
+          "bytes": 17628,
           "links": []
         }
       ],
       "in_spec_a": true,
       "is_aggregator": false,
-      "kinds": {},
-      "resolvable": []
+      "probed": [
+        {
+          "domain": "delikat.site",
+          "http": 200,
+          "bytes": 56484,
+          "names_the_chain": true
+        }
+      ]
     },
     {
       "name": "Сім23",
@@ -1906,9 +1929,11 @@
     {
       "name": "Zakaz.ua",
       "site": "zakaz.ua",
-      "site_status": "blocked",
-      "method": "curl",
-      "handles": [],
+      "site_status": "ok",
+      "method": "browser",
+      "handles": [
+        "@help_zakaz_ua_bot"
+      ],
       "pages": [
         {
           "url": "https://zakaz.ua/",
@@ -1927,11 +1952,22 @@
           "http": 403,
           "bytes": 5733,
           "links": []
+        },
+        {
+          "url": "https://zakaz.ua/uk/",
+          "http": 200,
+          "rendered": true,
+          "links": [
+            "@help_zakaz_ua_bot"
+          ],
+          "note": "curl 403 (Cloudflare); the interstitial resolved on its own after ~9 s and the page is 906649 chars. Support bot only — r1's @zakazzua is not linked from the site"
         }
       ],
       "in_spec_a": true,
       "is_aggregator": false,
-      "kinds": {},
+      "kinds": {
+        "@help_zakaz_ua_bot": "bot"
+      },
       "resolvable": [],
       "bundle": {
         "status": "blocked",
@@ -1969,14 +2005,6 @@
       ],
       "in_spec_a": true,
       "is_aggregator": false,
-      "probed": [
-        {
-          "domain": "rozetka.com.ua",
-          "http": 403,
-          "bytes": 5746,
-          "names_the_chain": false
-        }
-      ],
       "measured": [
         {
           "handle": "@rrozetka",
@@ -2060,34 +2088,30 @@
     },
     {
       "name": "Маркетопт",
-      "site": "marketopt.ua",
-      "site_status": "dns",
-      "method": "curl",
+      "site": null,
+      "site_status": "no-site-verified",
+      "method": null,
       "handles": [],
-      "pages": [
-        {
-          "url": "https://marketopt.ua/",
-          "http": 0,
-          "bytes": 0,
-          "links": []
-        },
-        {
-          "url": "https://marketopt.ua/contacts",
-          "http": 0,
-          "bytes": 0,
-          "links": []
-        },
-        {
-          "url": "https://marketopt.ua/about",
-          "http": 0,
-          "bytes": 0,
-          "links": []
-        }
-      ],
+      "kinds": {},
+      "resolvable": [],
+      "pages": [],
       "in_spec_a": true,
       "is_aggregator": false,
-      "kinds": {},
-      "resolvable": []
+      "no_site_reason": "a real Poltava chain with NO website — its official presence is Instagram @marketopt and Facebook @marketopt.official. `marketopt.ua` does not resolve. Absence of a site is not absence of the chain, and this row cannot be answered by reading a footer.",
+      "probed": [
+        {
+          "domain": "marketopt.com.ua",
+          "http": 0,
+          "bytes": 0,
+          "names_the_chain": false
+        },
+        {
+          "domain": "marketopt.ua",
+          "http": 0,
+          "bytes": 0,
+          "names_the_chain": false
+        }
+      ]
     },
     {
       "name": "Толока",
@@ -2100,6 +2124,7 @@
       "pages": [],
       "in_spec_a": true,
       "is_aggregator": false,
+      "no_site_reason": "web discovery finds no retail chain of this name; «толока» is the Ukrainian word for a community work-day, which is what the searches return. SPEC v2 §3 pairs it with «Маркетопт»; the pairing is not visible in any source found.",
       "probed": [
         {
           "domain": "toloka.ua",
@@ -2126,6 +2151,7 @@
       "pages": [],
       "in_spec_a": true,
       "is_aggregator": false,
+      "no_site_reason": "no Poltava-region chain with a site: the name belongs to a shop in Південне (Instagram only) and to gurman-dnepr.com.ua in Dnipro. `gurman.ua` is a domain-for-sale page.",
       "probed": [
         {
           "domain": "gurman.ua",
@@ -2438,6 +2464,7 @@
       "pages": [],
       "in_spec_a": true,
       "is_aggregator": false,
+      "no_site_reason": "the retail brand no longer exists: the chain was sold in December 2015 and bought by ATB-Market in 2016, and every «Барвінок» store was rebranded to «АТБ». This is why r1's name search returned an ОСББ «Барвінок» — there is no retail channel to find.",
       "probed": [
         {
           "domain": "barvinok.ua",
@@ -2678,7 +2705,7 @@
       "Епіцентр [not in SPEC §3 A]": "epicentrk.ua"
     },
     "bundle_pass_at": "2026-08-30T06:50:26+00:00",
-    "browser_pass_at": "2026-08-30T06:50:20+00:00"
+    "browser_pass_at": "2026-08-30T08:23:18+00:00"
   },
   "step_2": {
     "at": "2026-08-30T06:56:24+00:00",

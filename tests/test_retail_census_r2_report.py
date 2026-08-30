@@ -1,12 +1,12 @@
 """Every count the r2 report states, re-derived from the record it was built from.
 
-The report's first paragraph is the deliverable: the operator decides on those numbers. Two of
-them were wrong when first written — «exactly one row has open comments and dairy» (three do) and
-a no-channel breakdown that summed to 28 of 23 rows. A number in prose is not the enumeration
-([[count_in_prose_is_not_the_enumeration]]), so the enumeration checks the prose here.
+The report's first paragraph is the deliverable: the operator decides on those numbers. Three of
+them were wrong when first written — «exactly one row has open comments and dairy» (three do), a
+no-channel breakdown that summed to 28 of 23 rows, and a bot list that counted a florist's channel
+as a bot. A number in prose is not the enumeration ([[count_in_prose_is_not_the_enumeration]]), so
+the enumeration checks the prose here.
 """
 
-import re
 import sys
 from pathlib import Path
 
@@ -29,11 +29,18 @@ def counts() -> dict:
         "open_with_dairy": len([r for r in open_comments if (r.get("dairy_share") or 0) > 0]),
         "no_channel": len(no_channel),
         "bot_only": len(
-            [r for r in no_channel if r.get("site_status") == "ok" and r.get("handles")]
+            [
+                r
+                for r in no_channel
+                if r.get("site_status") == "ok"
+                and any(r.get("kinds", {}).get(h) == "bot" for h in r.get("handles", []))
+            ]
         ),
         "read_no_link": len([r for r in no_channel if r.get("site_status") == "no-link"]),
-        "never_read": len([r for r in no_channel if r.get("site_status") in ("blocked", "shell")]),
-        "dns": len([r for r in no_channel if r.get("site_status") == "dns"]),
+        "other_brand": len([r for r in no_channel if r.get("not_the_chains_channel")]),
+        "never_read": len(
+            [r for r in no_channel if r.get("site_status") in ("blocked", "shell", "dns")]
+        ),
         "no_site": len([r for r in no_channel if r.get("site_status") == "no-site-verified"]),
         "screened": len([r for r in no_channel if r["name"] in AGGREGATORS]),
     }
@@ -42,10 +49,27 @@ def counts() -> dict:
 def test_the_no_channel_reasons_partition_the_no_channel_rows():
     c = counts()
     assert c["with_channel"] + c["no_channel"] == c["rows"]
-    parts = c["bot_only"] + c["read_no_link"] + c["never_read"] + c["dns"] + c["no_site"]
-    assert parts + c["screened"] == c["no_channel"], (
+    parts = (
+        c["bot_only"]
+        + c["read_no_link"]
+        + c["other_brand"]
+        + c["never_read"]
+        + c["no_site"]
+        + c["screened"]
+    )
+    assert parts == c["no_channel"], (
         "the report's breakdown must account for every channel-less row exactly once"
     )
+
+
+def test_every_row_was_read():
+    """«Дочитай все»: no row may end on a fetch that never produced a page.
+
+    `blocked` (Cloudflare), `shell` (a client-rendered stub) and `dns` are all «we never saw the
+    page» — a state that must not survive into the deliverable as if it were «the chain has no
+    channel». Zero of them is the claim the report makes; this is where it is checked.
+    """
+    assert counts()["never_read"] == 0, "a row is still unread"
 
 
 def test_the_report_states_the_counts_the_record_supports():
@@ -54,13 +78,10 @@ def test_the_report_states_the_counts_the_record_supports():
     for phrase in (
         f"{c['with_channel']} of {c['rows']} rows have a channel",
         f"{c['open']} of those have comments",
-        f"{c['open_with_dairy']} of those {c['open']} also carry dairy",
         f"**{c['no_channel']} rows have no channel**",
-        f"{c['read_no_link']} site READ",
-        f"{c['bot_only']} bot-only",
-        f"{c['never_read']} sites never read",
-        f"{c['dns']} domains that do not resolve",
-        f"{c['no_site']} names with no verifiable site",
+        f"{c['bot_only']} link a bot and nothing else",
+        f"{c['read_no_link']} were read and carry no `t.me`",
+        f"{c['no_site']} have no verifiable site",
         f"{c['screened']} aggregators screened out",
     ):
         assert phrase in text, f"the report does not state: {phrase!r}"
@@ -73,7 +94,7 @@ def test_the_headline_row_is_the_one_the_record_ranks_first():
     assert varus["comments_enabled"] and varus["dairy_share"] > 0
     metro = table["METRO"]
     assert metro["comments_enabled"] and metro["dairy_share"] > 0
-    # The claim is not «only Varus has both» — it is «only Varus has both WITH comment traffic».
+    # METRO's channel resolved to «HoReCaНець» — its B2B arm. The claim is not «only Varus has
+    # both», it is «only Varus has both on a channel aimed at shoppers».
+    assert "HoReCa" in (metro.get("channel_note") or ""), "the B2B note must stay on METRO's row"
     assert varus["comments_per_day"] > metro["comments_per_day"] * 100
-    for number in (varus["comments_per_day"], metro["comments_per_day"]):
-        assert re.search(rf"{number}", REPORT.read_text(encoding="utf-8")), number

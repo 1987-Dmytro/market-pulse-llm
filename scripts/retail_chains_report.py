@@ -28,6 +28,31 @@ TABLE = REPO_ROOT / "results" / "retail_chains_table.md"
 
 UA_BAR = 0.5  # r1's bar for «Ukrainian», reused — not a new threshold
 
+# What a handle turned out to BE, once resolved or read in context. A `t.me` link in a chain's
+# own footer proves the chain published it; it does not prove the channel is the chain's retail
+# voice. Three of these would otherwise be read as «the chain's channel» in a table that decides
+# where the customer's voice gets collected.
+CHANNEL_NOTES = {
+    "@HRCNc": (
+        "resolves to «HoReCaНець» — METRO's HoReCa (hotel/restaurant/café) B2B channel, not its"
+        " retail one. Its dairy share is a wholesale audience's, not a shopper's."
+    ),
+    "@bloom_cherkasy": (
+        "the Делікат group's FLORIST brand Bloom, not the grocery chain: delikat.site is «сім'я"
+        " магазинів» and the grocery brand's own links there are Facebook and Instagram, neither"
+        " of them Telegram. Not counted as Delikat's channel."
+    ),
+    "@rrozetka": (
+        "the marketplace as a whole; the SPEC §3 name is its grocery vertical, which has no"
+        " channel of its own — dairy share 0.000 is the marketplace's mix, not a grocer's."
+    ),
+    "@fozzyshopua": "«FOZZY Cash&Сarry» — the wholesale cash-and-carry format, not a retail store.",
+}
+
+# Handles a chain publishes that are NOT that chain's channel. Kept as an explicit list rather
+# than a heuristic: each one is a judgement about a brand, and a reader must see whose.
+NOT_THE_CHAINS_CHANNEL = {"Delikat": {"@bloom_cherkasy"}}
+
 AGGREGATORS = ["MSUa", "Копійочка", "Знижком", "Хочу дешевше", "Акції та знижки", "Skidka"]
 
 
@@ -97,7 +122,12 @@ def build() -> list[dict]:
             "method": row.get("method"),
             "handles": row.get("handles", []),
             "kinds": row.get("kinds", {}),
+            "no_site_reason": row.get("no_site_reason"),
         }
+        disowned = NOT_THE_CHAINS_CHANNEL.get(name, set())
+        if disowned:
+            entry["not_the_chains_channel"] = sorted(disowned)
+            entry["notes"] = [CHANNEL_NOTES[h] for h in sorted(disowned) if h in CHANNEL_NOTES]
         if measured:
             m = measured[-1]
             stats = m.get("stats") or {}
@@ -118,6 +148,7 @@ def build() -> list[dict]:
                 "measured_by": m.get("measured_by"),
                 "window": m.get("window"),
                 "note": m.get("why_unmeasured") or m.get("error"),
+                "channel_note": CHANNEL_NOTES.get(m.get("handle")),
             } | screen(from_own_site=True, stats=stats)
         elif name in AGGREGATORS:
             pick = pick_aggregator(r1.get(name, []))
@@ -248,28 +279,47 @@ def render(table: list[dict]) -> str:
             " for this domain in this session",
             "shell": "site never read — one client-rendered shell for every path, and its own JS"
             " bundle carries no t.me either",
-            "no-link": "site READ, twice (HTML and its JS bundle), and carries no t.me link",
+            "no-link": (
+                "site READ in a browser and carrying no t.me link"
+                if row.get("method") == "browser"
+                else "site READ, twice (HTML and its JS bundle), and carries no t.me link"
+            ),
             "no-link-in-bundle": "site READ, twice (HTML and its JS bundle), no t.me link",
             "dns": "the contract's candidate domain does not resolve",
             "no-site-verified": "no domain found that both answers and names the chain",
         }.get(row.get("site_status"), row.get("site_status") or "—")
+        # A row whose discovery established WHY there is no site says that instead: «no domain
+        # found» covers a chain with only an Instagram and a brand that stopped existing in 2016.
+        if row.get("no_site_reason"):
+            why = row["no_site_reason"]
         if row.get("site_status") == "ok" and row.get("handles"):
-            why = (
-                "site read, and it links only a Telegram bot ("
-                + ", ".join(row["handles"])
-                + ") — no channel to collect"
-            )
+            disowned = NOT_THE_CHAINS_CHANNEL.get(row["name"], set())
+            if disowned:
+                why = "site read; its only Telegram is " + "; ".join(
+                    CHANNEL_NOTES[h] for h in sorted(disowned) if h in CHANNEL_NOTES
+                )
+            else:
+                why = (
+                    "site read, and it links only a Telegram bot ("
+                    + ", ".join(row["handles"])
+                    + ") — no channel to collect"
+                )
         if row["name"] in AGGREGATORS:
             why = row.get("why") or why
         out.append(f"- **{row['name']}** — {why}")
-    bots = [r for r in rows if r.get("handles") and not r.get("handle")]
+    # Only handles the classifier calls bots: `@bloom_cherkasy` is a CHANNEL that belongs to
+    # another brand of Delikat's group, and listing it here would answer «Delikat links a bot».
+    bots = [
+        (row, [h for h in row.get("handles", []) if row.get("kinds", {}).get(h) == "bot"])
+        for row in rows
+        if not row.get("handle")
+    ]
+    bots = [(row, found) for row, found in bots if found]
     if bots:
         out += [
             "",
-            "Chains whose site links a Telegram BOT but no channel: "
-            + ", ".join(
-                f"{r['name']} ({', '.join(r['handles'])})" for r in bots if r.get("handles")
-            ),
+            "Chains whose site links a Telegram BOT and no channel: "
+            + ", ".join(f"{row['name']} ({', '.join(found)})" for row, found in bots),
         ]
     return "\n".join(out) + "\n"
 

@@ -27,18 +27,18 @@ comments under posts, its whole traffic is the conversation.
 | 14 | АТБ | atbmarket.com | ok | browser | — | — | — | — | — | — | — | — | — | — | — | — |
 | 15 | Novus | novus.ua | ok | browser | — | — | — | — | — | — | — | — | — | — | — | — |
 | 16 | Auchan | auchan.ua | ok | curl | — | — | — | — | — | — | — | — | — | — | — | — |
-| 17 | Thrash! | thrash.ua | shell | curl | — | — | — | — | — | — | — | — | — | — | — | — |
+| 17 | Thrash! | thrash.ua | no-link | browser | — | — | — | — | — | — | — | — | — | — | — | — |
 | 18 | Велмарт | velmart.ua | ok | curl | — | — | — | — | — | — | — | — | — | — | — | — |
 | 19 | Близенько | blyzenko.ua | no-link | curl | — | — | — | — | — | — | — | — | — | — | — | — |
 | 20 | Наш Край | nashkraj.ua | no-link | curl | — | — | — | — | — | — | — | — | — | — | — | — |
 | 21 | Рукавичка | rukavychka.ua | ok | curl | — | — | — | — | — | — | — | — | — | — | — | — |
 | 22 | Коло | kolo.ua | no-link | curl | — | — | — | — | — | — | — | — | — | — | — | — |
-| 23 | Delikat | delikat.ua | dns | curl | — | — | — | — | — | — | — | — | — | — | — | — |
+| 23 | Delikat | delikat.site | ok | curl | — | — | — | — | — | — | — | — | — | — | — | — |
 | 24 | Копійка | kopiyka.ua | ok | curl | — | — | — | — | — | — | — | — | — | — | — | — |
 | 25 | Ультрамаркет | ultramarket.ua | no-link | curl | — | — | — | — | — | — | — | — | — | — | — | — |
 | 26 | MegaMarket | megamarket.ua | no-link | curl | — | — | — | — | — | — | — | — | — | — | — | — |
-| 27 | Zakaz.ua | zakaz.ua | blocked | curl | — | — | — | — | — | — | — | — | — | — | — | — |
-| 28 | Маркетопт | marketopt.ua | dns | curl | — | — | — | — | — | — | — | — | — | — | — | — |
+| 27 | Zakaz.ua | zakaz.ua | ok | browser | — | — | — | — | — | — | — | — | — | — | — | — |
+| 28 | Маркетопт | — | no-site-verified | — | — | — | — | — | — | — | — | — | — | — | — | — |
 | 29 | Толока | — | no-site-verified | — | — | — | — | — | — | — | — | — | — | — | — | — |
 | 30 | Гурман | — | no-site-verified | — | — | — | — | — | — | — | — | — | — | — | — | — |
 | 31 | Файно маркет | fayno.market | no-link | curl | — | — | — | — | — | — | — | — | — | — | — | — |
@@ -53,25 +53,25 @@ comments under posts, its whole traffic is the conversation.
 - **АТБ** — site read, and it links only a Telegram bot (@atb_market_bot) — no channel to collect
 - **Novus** — site read, and it links only a Telegram bot (@novus_ai_assistant_bot) — no channel to collect
 - **Auchan** — site read, and it links only a Telegram bot (@Auchan_Info_bot) — no channel to collect
-- **Thrash!** — site never read — one client-rendered shell for every path, and its own JS bundle carries no t.me either
+- **Thrash!** — site READ in a browser and carrying no t.me link
 - **Велмарт** — site read, and it links only a Telegram bot (@VelmartUaBot, @Velmart_FeedBack_bot) — no channel to collect
 - **Близенько** — site READ, twice (HTML and its JS bundle), and carries no t.me link
 - **Наш Край** — site READ, twice (HTML and its JS bundle), and carries no t.me link
 - **Рукавичка** — site read, and it links only a Telegram bot (@rukavychka_chat_bot) — no channel to collect
 - **Коло** — site READ, twice (HTML and its JS bundle), and carries no t.me link
-- **Delikat** — the contract's candidate domain does not resolve
+- **Delikat** — site read; its only Telegram is the Делікат group's FLORIST brand Bloom, not the grocery chain: delikat.site is «сім'я магазинів» and the grocery brand's own links there are Facebook and Instagram, neither of them Telegram. Not counted as Delikat's channel.
 - **Копійка** — site read, and it links only a Telegram bot (@kopiyka_ua_bot) — no channel to collect
 - **Ультрамаркет** — site READ, twice (HTML and its JS bundle), and carries no t.me link
 - **MegaMarket** — site READ, twice (HTML and its JS bundle), and carries no t.me link
-- **Zakaz.ua** — site never read — Cloudflare 403 to curl, and Chrome has no permission for this domain in this session
-- **Маркетопт** — the contract's candidate domain does not resolve
-- **Толока** — no domain found that both answers and names the chain
-- **Гурман** — no domain found that both answers and names the chain
+- **Zakaz.ua** — site read, and it links only a Telegram bot (@help_zakaz_ua_bot) — no channel to collect
+- **Маркетопт** — a real Poltava chain with NO website — its official presence is Instagram @marketopt and Facebook @marketopt.official. `marketopt.ua` does not resolve. Absence of a site is not absence of the chain, and this row cannot be answered by reading a footer.
+- **Толока** — web discovery finds no retail chain of this name; «толока» is the Ukrainian word for a community work-day, which is what the searches return. SPEC v2 §3 pairs it with «Маркетопт»; the pairing is not visible in any source found.
+- **Гурман** — no Poltava-region chain with a site: the name belongs to a shop in Південне (Instagram only) and to gurman-dnepr.com.ua in Dnipro. `gurman.ua` is a domain-for-sale page.
 - **Файно маркет** — site READ, twice (HTML and its JS bundle), and carries no t.me link
 - **Грош** — site READ, twice (HTML and its JS bundle), and carries no t.me link
-- **Барвінок** — no domain found that both answers and names the chain
+- **Барвінок** — the retail brand no longer exists: the chain was sold in December 2015 and bought by ATB-Market in 2016, and every «Барвінок» store was rebranded to «АТБ». This is why r1's name search returned an ОСББ «Барвінок» — there is no retail channel to find.
 - **MSUa** — every r1 row for «MSUa» is below ua 0.5 or already rejected
 - **Skidka** — every r1 row for «Skidka» is below ua 0.5 or already rejected
 - **Епіцентр [not in SPEC §3 A]** — site READ, twice (HTML and its JS bundle), and carries no t.me link
 
-Chains whose site links a Telegram BOT but no channel: АТБ (@atb_market_bot), Novus (@novus_ai_assistant_bot), Auchan (@Auchan_Info_bot), Велмарт (@VelmartUaBot, @Velmart_FeedBack_bot), Рукавичка (@rukavychka_chat_bot), Копійка (@kopiyka_ua_bot)
+Chains whose site links a Telegram BOT and no channel: АТБ (@atb_market_bot), Novus (@novus_ai_assistant_bot), Auchan (@Auchan_Info_bot), Велмарт (@VelmartUaBot, @Velmart_FeedBack_bot), Рукавичка (@rukavychka_chat_bot), Копійка (@kopiyka_ua_bot), Zakaz.ua (@help_zakaz_ua_bot)

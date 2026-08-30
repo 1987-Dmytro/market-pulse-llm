@@ -8096,7 +8096,7 @@ harness-plumbing.md` — an executor file — was updated in the same commit.
 The contract asks for a table of ≤40 rows inside a report `/report` caps at 30 lines. Resolved the
 way `docs/PROCESS.md` «Reports» directs rather than by breaking either: the full 36 rows are
 `results/retail_chains_table.md`, the report carries the 8 rows that answer the question and lands
-at 29 lines. Dv879 hit the same collision one contract earlier and had to overrun.
+at 29 lines (re-checked after the «дочитай все» pass rewrote three of its paragraphs). Dv879 hit the same collision one contract earlier and had to overrun.
 
 **Dv888 `[cause: verify-gap]` — three readings were written down before they were true, and the
 run caught all three.** (1) `t.me/+380675178085` on `tavriav.ua` was classified an invite: it is a
@@ -8106,3 +8106,38 @@ parking page as «Гурман's site carries no Telegram link», so `--probe` n
 the chain. (3) `ChatInvitePeek` carries `.chat`, not `.title`, so Таврія В's own channel came back
 with a null title until the third invite branch existed. Each is tested both ways in
 `tests/test_retail_sites.py` and `tests/test_retail_chains_report.py`.
+
+**Dv889 `[cause: verify-gap]` — the probe downgraded a row that was already read.** `--probe`
+iterates every name in `PROBE_GUESSES`, and its else-branch wrote `no-site-verified` unconditionally.
+Re-running it to reach the names whose contract domain was dead therefore overwrote
+`Rozetka продукти` — read in Chrome, handles `@rrozetka` and `@Rozetka_helpBot` still in the row —
+with «no site verified», a downgrade wearing the shape of a measurement. The row was restored from
+the browser pass that produced it and the probe now SKIPS any row already carrying a reading
+(`handles`, or a status of `ok`/`no-link`), printing that it did. The defect was invisible in the
+run's own output: the probe prints only what it tried, and a name it silently clobbered prints
+nothing at all.
+
+**Dv890 `[cause: spec-gap]` — a `t.me` link in a chain's footer is not the chain's channel, and
+two of them are not what the row's name says.** Found by reading the resolved titles instead of
+trusting the handle: METRO's `@HRCNc` is **«HoReCaНець»**, its HoReCa (hotel/restaurant/café) B2B
+channel — so its dairy .231 under open comments is a wholesale audience's, and the report's headline
+was rewritten around it; `@fozzyshopua` is «FOZZY Cash&Сarry», the wholesale format; `@rrozetka` is
+the marketplace, not the grocery vertical the SPEC name means. On `delikat.site` the only `t.me`
+belongs to **Bloom, the group's florist brand** («свідчені флористи… квіткове замовлення»), while the
+grocery brand's own links there are Facebook and Instagram — so Delikat has no Telegram channel, and
+a naive footer read would have put a flower shop in a dairy census. `CHANNEL_NOTES` and
+`NOT_THE_CHAINS_CHANNEL` carry each judgement by name in `scripts/retail_chains_report.py`, and the
+bot list now filters on the classifier instead of on «has handles, has no channel», which had been
+reporting the florist's CHANNEL as Delikat's bot.
+
+**Dv891 `[cause: contract-gap]` — «дочитай все» closed the four rows the first pass left unread, and
+one of them changed a status rather than a number.** The operator's follow-up authorised finishing
+the reading. `thrash.ua` renders to 85 449 chars in a browser with a Facebook + Instagram social
+block and NO Telegram — it moves from `shell` (never read) to a genuine `no-link`, and r1's
+`t.me/+HR0vG1EaFXw4NzA6` is not linked from the chain's own site. `zakaz.ua`'s Cloudflare
+interstitial resolves on its own after ~9 s to a 906 649-char page whose only `t.me` is
+`@help_zakaz_ua_bot` — again, r1's `@zakazzua` is not on the site. `delikat.ua` and `marketopt.ua`
+are dead domains, and web discovery (HTTP, which CLAUDE.md allows for discovery) found
+`delikat.site` for the first and established that Маркетопт HAS no website for the second. After
+this pass `blocked`, `shell` and `dns` are all **zero**: every one of the 36 rows has a reading,
+which is the claim `tests/test_retail_census_r2_report.py::test_every_row_was_read` now guards.
