@@ -23,6 +23,15 @@ old price is right as a number on **33 of 80 pairs** (`results/sku_bar_verdicts_
 `positions` — and **does not print it** until the team lead rules. This is the difference between
 storing and printing, not a scope cut.
 
+## 1a. What needs an answer, and what can start without one
+
+| | |
+|---|---|
+| **Answer FIRST — the phase does not fit its money (SP-1)** | The live guard reads **$2.4394** remaining, not $3.17; the phase's own estimate table is $3.20, and the volume eats $0.2333/day. Choose: **(a)** open cycle-3 and name the sum · **(b)** narrow C2 and say which chains are dropped · **(c)** pay to build a positions **pod** runner (2.383× cheaper per 1 000 rows). |
+| **Answer before S7 (SP-0 q3)** | Which population S2 is graded on — **678 / 229 / 449**. Two thirds of the 678 are selected by a regex matching dates. |
+| **Answer at review, cheap** | SP-0 q1–q2 (the S1 price bar's denominator; whether the screen prints `price old`) · SP-5 (my proposed five-table schema) · and **two mechanism changes I made myself**: S1a widens the handle regex to a union, §5.2b makes «paused» a `collect: false` flag instead of a removed row. |
+| **«Go» needs no answer at all** | **S0 · S1a · S1b · S2 · S3 · S6 · S8** — the whole $0 scaffold: the debt fix, the loader, the revision, collection, the census, the five tables, the instrument, hooks and graders. |
+
 ## 2. Checks
 
 Graders first, mechanics after. A check I cannot run today is marked **[BLOCKED]** with its blocker.
@@ -34,7 +43,7 @@ Graders first, mechanics after. A check I cannot run today is marked **[BLOCKED]
 | K1 | `make preflight ARGS='config/registry.yaml'` | run BEFORE and AFTER S1. `config/registry.yaml` is pinned by **21 sealed records**, live sha `d4e3b2373c43…`. After the edit every record pinning the old sha is claimed through `tests/moved_pins.py` (derived from live shas, both directions) — **never re-pinned**. |
 | K2 | `PYTHONPATH=src python3.11 -m market_pulse.registry config/registry.yaml` | r2 loads; source count and the A1/A2/PAUSED split are what §3 of the phase spec names. |
 | K3 | `python3.11 scripts/promo_census_c2.py` → `results/promo_census_c2.json` | $0. Per channel over the 4-week window: posts, leaflet **pages**, text-price posts, `media_share`, and a `selection.ids_sha256` pin. Pre-registers the paid population **by row count**, never as a date range evaluated at run time (SPEC 3.18 (4)). |
-| K4 | `python3.11 scripts/promo_projection_c2.py` → `results/promo_projection_c2.json` | $0. Pages × the **measured** rate × $/s against the guard's freshly re-read remainder. This is a STOP, not a pass/fail — see SP-1. |
+| K4 | `python3.11 scripts/promo_projection_c2.py` → `results/promo_projection_c2.json` | $0. Emits a **range, not a number**: K3's page count × each of the three candidate rates (1.729 warm-up marginal · a fitted middle · 10.408 realised) × $/s, against the guard's freshly re-read remainder. It cannot emit a single figure — `results/measurements.jsonl` has **no vision s/page row**, and the projection precedent hard-exits on a missing named rate (`scripts/project_think_zero_shot.py:107`: «the smoke writes it — project nothing until it has»). The range IS the table SP-1 asks the operator to choose against; the single number arrives only after S4's smoke seeds the row. This is a STOP, not a pass/fail. |
 | K5 | `python3.11 scripts/draw_positions_50.py` twice | `results/positions_draw_50.json` — 50 positions, seed 42, from ≥3 chains' flyers/posts of the backfilled 4 weeks; two runs produce an identical sha. Handed to the team lead. |
 | K6 | `python3.11 scripts/grade_positions.py` → `results/grade_positions_50.json` | completeness ≥ 0.90, price accuracy ≥ 0.95. **[BLOCKED]** on `docs/labels-positions-50.jsonl` (team lead's, owed after K5) and on SP-0's answer, which fixes the bar's denominator. |
 | K7 | `python3.11 scripts/draw_promo_threads.py` twice | `results/promo_threads_draw.json` — dev-40 + holdout-40, **disjoint and frozen at the draw**, seed 42, stratified by channel over the 678 price threads; two runs identical. Handed to the team lead. |
@@ -169,8 +178,16 @@ sentence — «ревизия — отдельный шаг после реше�
 group «АТБ / ЗНИЖКИ»** is `id: 1925810730` with `"username": null`
 (`results/retail_census.json`). Both verified against the live regex, not assumed. The enabling
 fact: **`registry.py` is pinned by nothing** — zero occurrences across `results/*.json` — so
-extending it is cheap and moves no sealed record. S1a widens the row shape rather than the regex,
-so a malformed *username* still fails loudly.
+extending it is cheap and moves no sealed record.
+
+**But a sibling field would break two live tests, so S1a widens the accepted entry instead.**
+`tests/test_registry.py:80` asserts `all(s.telegram_channels for s in registry.sources)` and the
+loader itself raises `ValueError("no telegram_channels")` on an empty list
+(`test_source_without_channels_rejected`). A row carrying only a `chat_id` with
+`telegram_channels: []` fails both. So `_HANDLE` becomes a **union** — `@username` ∪ `+inviteHash`
+∪ a numeric chat id — and every existing assertion stays true: each source still has ≥ 1 entry, and
+`test_malformed_channel_handle_rejected`'s `'chan_without_at'` still matches nothing and still
+raises «malformed handle». The regex is widened where the world is wider, not loosened.
 
 **5.2b «Paused» is a collection flag, not a removed row — verified by driving the build.**
 `scripts/build_aggregates.py:99 segment_for()` raises `SystemExit` for any channel that carries
