@@ -49,3 +49,33 @@ def test_the_registration_pins_the_worker_run_5c2_asserts():
     assert prereg["expected_worker"] == pinned
     assert pinned["serving_config"] == "POSITIONS"
     assert pinned["adapter_sha256"] is None, "POSITIONS is the base with the adapter OFF"
+
+
+def test_the_projection_uses_the_measured_rate_and_bounds_the_marginal():
+    """K4 stops being a band the moment the ledger has the row — and says what the row contains.
+
+    Two directions that matter more than the pass. (1) The measured corner must be IN the table:
+    a projection that wrote the row and then projected off the interpolation would answer SP-1
+    with a number nothing measured. (2) The marginal bound must be strictly inside the ledger's
+    boot-inclusive rate — if it were not, the bound would be claiming the cold start cost nothing,
+    and the two blocks would be the same number wearing two names.
+    """
+    import promo_projection_c2 as k4
+
+    row = k4.measured_rate()
+    assert row and row["name"] == k4.VISION_RATE_NAME and row["n"] == smoke.MAX_PAGES
+
+    record = json.loads((k4.REPO_ROOT / "results" / "promo_projection_c2.json").read_text("utf-8"))
+    names = [corner["name"] for corner in record["table"]]
+    assert "measured_smoke" in names, "the measured rate has to reach the table"
+    verdict = record["verdict"]
+    assert verdict["the_one_number_usd"] is not None
+
+    bound = verdict["marginal_bound"]
+    assert bound["seconds_per_page_lower"] < bound["seconds_per_page_upper"] < row["value"], (
+        "the boot-amortised marginal must be cheaper than the boot-inclusive measurement"
+    )
+    assert bound["one_boot_seconds"] > 0
+    # And the floor's two ends bracket: a bound whose ends crossed would be arithmetic, not a bound.
+    lo, hi = bound["usd_at_pages_floor"]
+    assert 0 < lo < hi < verdict["the_one_number_usd"]

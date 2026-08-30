@@ -62,6 +62,75 @@ def read(path: Path) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+SMOKE = REPO_ROOT / "results" / "smoke_vision_c2.json"
+
+
+def marginal_bound(usd_per_second: float, pages_floor: int, pages_ceiling: int) -> dict | None:
+    """The per-page cost with the cold start paid ONCE, bounded from the smoke's own fields.
+
+    The ledger's `vision_seconds_per_page` is boot-inclusive: the smoke made two calls — the
+    `info` call, which carries the cold start, and the 30 pages — and `worker_seconds` covers
+    both. Over 30 pages one boot is most of the bill; over a thousand it is a rounding error, and
+    a paid pass pays it ONCE. Projecting 1 022 pages at a rate with 34 boots baked into it would
+    over-price the leg by roughly 2.5x and answer SP-1 with the wrong sign.
+
+    So the marginal is BOUNDED rather than invented ([[bound_instead_of_recompute]]), both ends
+    from fields the smoke record already carries:
+
+    * upper — the positions call's own wall clock (`wall_seconds_client`, which includes whatever
+      queue that call waited), divided by the pages. It cannot have cost more worker time than it
+      took wall time.
+    * lower — total `worker_seconds` minus the info call's wall (`wall_seconds` minus
+      `wall_seconds_client`), i.e. everything the boot could not have been.
+
+    Neither end is a reading of the marginal itself; the pair is a proof of where it lies.
+    """
+    if not SMOKE.exists():
+        return None
+    smoke = read(SMOKE)
+    timing, pages = smoke["timing"], smoke["pages"]
+    info_wall = round(timing["wall_seconds"] - timing["wall_seconds_client"], 3)
+    upper = round(timing["wall_seconds_client"] / pages, 3)
+    lower = round((timing["worker_seconds"] - info_wall) / pages, 3)
+    one_boot_usd = round(info_wall * usd_per_second, 4)
+    return {
+        "seconds_per_page_lower": lower,
+        "seconds_per_page_upper": upper,
+        "one_boot_seconds": info_wall,
+        "one_boot_usd": one_boot_usd,
+        "derived_from": "results/smoke_vision_c2.json :: timing"
+        " (worker_seconds, wall_seconds, wall_seconds_client) — no number typed",
+        "usd_at_pages_floor": [
+            round(pages_floor * lower * usd_per_second + one_boot_usd, 4),
+            round(pages_floor * upper * usd_per_second + one_boot_usd, 4),
+        ],
+        "usd_at_pages_ceiling": [
+            round(pages_ceiling * lower * usd_per_second + one_boot_usd, 4),
+            round(pages_ceiling * upper * usd_per_second + one_boot_usd, 4),
+        ],
+        "why_this_and_not_the_ledger_row": "the ledger row is the measurement and stays what it"
+        " is; this is what that measurement implies for a population that pays one boot, and the"
+        " two answer different questions.",
+    }
+
+
+def measured_rate() -> dict | None:
+    """The smoke's row, or None while the ledger has not got one.
+
+    The LAST row wins: a rate is a property of the pod it was measured on, so a second
+    measurement supersedes rather than averages with the first ([[a_rate_is_a_property_of_the_pod]]).
+    """
+    if not LEDGER.exists():
+        return None
+    found = None
+    for line in LEDGER.read_text(encoding="utf-8").splitlines():
+        if line.strip():
+            row = json.loads(line)
+            if row.get("name") == VISION_RATE_NAME:
+                found = row
+    return found
+
+
 def ledger_names() -> list[str]:
     """Every rate the measurement ledger holds, by name — read, so the absence is a reading."""
     if not LEDGER.exists():
@@ -147,8 +216,25 @@ def build(census_path: Path = CENSUS) -> dict:
     texts = census["selection"]["post_text"]["posts"]
     left = remainder()
 
+    smoke = measured_rate()
+    all_corners = corners(run)
+    if smoke:
+        all_corners.append(
+            {
+                "name": "measured_smoke",
+                "seconds": float(smoke["value"]),
+                "measured": True,
+                "field": f"results/measurements.jsonl :: {VISION_RATE_NAME}",
+                "sample": f"n={smoke['n']} pages, {smoke['instrument']}, {smoke['measured_on']}."
+                " BOOT-INCLUSIVE: the smoke's two calls are the info call (which carries the cold"
+                " start) and the 30 pages, and `worker_seconds` covers both — so over a population"
+                " large enough to amortise one boot this rate is an UPPER bound, not a centre"
+                " ([[projected_rate_versus_measured_rate]] is the same trap from the other side).",
+            }
+        )
+
     table = []
-    for corner in corners(run):
+    for corner in all_corners:
         row = dict(corner)
         for end in ("floor", "ceiling"):
             pages = leaflet[f"pages_{end}"]
@@ -170,6 +256,11 @@ def build(census_path: Path = CENSUS) -> dict:
             "rates": "results/run_5c2_positions.json",
         },
         "why_a_range_and_not_a_number": {
+            "state": "MEASURED — the smoke wrote the row and the table carries the measured corner;"
+            " what remains a range is the PAGE COUNT, not the rate"
+            if smoke
+            else "the rate is missing and the band is built from the two that were measured",
+            "measured_rate_row": smoke,
             "missing_rate": VISION_RATE_NAME,
             "ledger": "results/measurements.jsonl",
             "ledger_rows": len(ledger_names()),
@@ -193,6 +284,29 @@ def build(census_path: Path = CENSUS) -> dict:
         "remainder": left,
         "table": table,
         "verdict": {
+            "the_one_number_usd": next(
+                (row["usd_floor"] for row in table if row["name"] == "measured_smoke"), None
+            ),
+            "the_one_number_means": "the C2 vision leg at the MEASURED rate over the page FLOOR."
+            " The floor and not the ceiling because the floor is what the corpus proves — 63 posts"
+            " have a manifest page count and every other media post is worth at least one page;"
+            " the ceiling is a bound built from the largest album measured, not a reading."
+            if smoke
+            else None,
+            "at_the_ceiling_usd": next(
+                (row["usd_ceiling"] for row in table if row["name"] == "measured_smoke"), None
+            ),
+            "the_one_number_caveat": "boot-inclusive. `marginal_bound` below is the same"
+            " measurement with the cold start paid once, which is what a 1 022-page pass pays,"
+            " and it is the block SP-1 should be decided on.",
+            "marginal_bound": marginal_bound(
+                usd_per_second, leaflet["pages_floor"], leaflet["pages_ceiling"]
+            ),
+            "remainder_usd": left["usd"],
+            "cap_rule": "docs/PROCESS.md — cap = 2x the registry estimate, one paid run per prompt,"
+            " and «a cap is not raised to finish a run». The smoke ran under its own $0.35 cap;"
+            " the C2 pass needs a cap of its own, registered before it, and the projection above"
+            " is what that cap is set from.",
             "cheapest_corner_usd": min(row["usd_floor"] for row in table),
             "dearest_corner_usd": max(row["usd_ceiling"] for row in table),
             "fits_anywhere": any(row["fits_at_floor"] for row in table),

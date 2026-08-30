@@ -22,10 +22,10 @@
     }
   },
   "remainder": {
-    "line": "REMAINING         $2.3908",
+    "line": "REMAINING         $2.3299",
     "read_from": "scripts/runpod_guard.py",
-    "spent_line": "CYCLE 2 SPENT     $17.6092 of $20.00",
-    "usd": 2.3908
+    "spent_line": "CYCLE 2 SPENT     $17.6701 of $20.00",
+    "usd": 2.3299
   },
   "table": [
     {
@@ -66,14 +66,49 @@
       "seconds": 10.408,
       "usd_ceiling": 30.8127,
       "usd_floor": 3.2623
+    },
+    {
+      "field": "results/measurements.jsonl :: vision_seconds_per_page",
+      "fits_at_ceiling": false,
+      "fits_at_floor": false,
+      "measured": true,
+      "name": "measured_smoke",
+      "pages_ceiling": 9653,
+      "pages_floor": 1022,
+      "sample": "n=30 pages, positions_post_gm4, one page per forward, batch 1, thinking OFF, serverless endpoint s3o601108zg3ef, ADA_24, EU-RO-1, volume mp-srv2. BOOT-INCLUSIVE: the smoke's two calls are the info call (which carries the cold start) and the 30 pages, and `worker_seconds` covers both — so over a population large enough to amortise one boot this rate is an UPPER bound, not a centre ([[projected_rate_versus_measured_rate]] is the same trap from the other side).",
+      "seconds": 7.872,
+      "usd_ceiling": 23.3049,
+      "usd_floor": 2.4674
     }
   ],
   "verdict": {
+    "at_the_ceiling_usd": 23.3049,
+    "cap_rule": "docs/PROCESS.md — cap = 2x the registry estimate, one paid run per prompt, and «a cap is not raised to finish a run». The smoke ran under its own $0.35 cap; the C2 pass needs a cap of its own, registered before it, and the projection above is what that cap is set from.",
     "cheapest_corner_usd": 0.5419,
     "dearest_corner_usd": 30.8127,
     "decision": "SP-1 — the operator's, on this table: (a) open cycle-3 and name the sum, (b) narrow C2 and say which chains are dropped, (c) pay to build a positions POD runner (2.383× cheaper per 1 000 rows, results/srv2d_cost.json).",
     "fits_anywhere": true,
-    "fits_everywhere": false
+    "fits_everywhere": false,
+    "marginal_bound": {
+      "derived_from": "results/smoke_vision_c2.json :: timing (worker_seconds, wall_seconds, wall_seconds_client) — no number typed",
+      "one_boot_seconds": 157.449,
+      "one_boot_usd": 0.0483,
+      "seconds_per_page_lower": 2.623,
+      "seconds_per_page_upper": 3.369,
+      "usd_at_pages_ceiling": [
+        7.8136,
+        10.0222
+      ],
+      "usd_at_pages_floor": [
+        0.8704,
+        1.1043
+      ],
+      "why_this_and_not_the_ledger_row": "the ledger row is the measurement and stays what it is; this is what that measurement implies for a population that pays one boot, and the two answer different questions."
+    },
+    "remainder_usd": 2.3299,
+    "the_one_number_caveat": "boot-inclusive. `marginal_bound` below is the same measurement with the cold start paid once, which is what a 1 022-page pass pays, and it is the block SP-1 should be decided on.",
+    "the_one_number_means": "the C2 vision leg at the MEASURED rate over the page FLOOR. The floor and not the ceiling because the floor is what the corpus proves — 63 posts have a manifest page count and every other media post is worth at least one page; the ceiling is a bound built from the largest album measured, not a reading.",
+    "the_one_number_usd": 2.4674
   },
   "why_a_range_and_not_a_number": {
     "ledger": "results/measurements.jsonl",
@@ -87,9 +122,21 @@
       "think_pass1_thought_tokens",
       "think_pass2_seconds_per_thread",
       "think_pass2_thought_tokens",
-      "think_peak_vram_gib"
+      "think_peak_vram_gib",
+      "vision_seconds_per_page"
     ],
-    "ledger_rows": 10,
+    "ledger_rows": 11,
+    "measured_rate_row": {
+      "contract": "promo-pulse-1-s2s3",
+      "instrument": "positions_post_gm4, one page per forward, batch 1, thinking OFF",
+      "max": 7.872,
+      "measured_on": "serverless endpoint s3o601108zg3ef, ADA_24, EU-RO-1, volume mp-srv2",
+      "n": 30,
+      "name": "vision_seconds_per_page",
+      "source": "results/smoke_vision_c2.json",
+      "unit": "seconds",
+      "value": 7.872
+    },
     "missing_rate": "vision_seconds_per_page",
     "pages_are_bounded_too": {
       "images_measured": 1242,
@@ -102,6 +149,7 @@
       "note": "the ceiling is the largest album these manifests contain, measured — not the platform's documented limit, which this repo has no file for",
       "posts_measured": 367
     },
-    "precedent": "scripts/project_think_zero_shot.py:107 hard-exits on a missing named rate. That is right for a projection whose job is a number and wrong for one whose job is to show the band BEFORE anything is bought, so the absence is declared here and the band is built from the two rates that were measured."
+    "precedent": "scripts/project_think_zero_shot.py:107 hard-exits on a missing named rate. That is right for a projection whose job is a number and wrong for one whose job is to show the band BEFORE anything is bought, so the absence is declared here and the band is built from the two rates that were measured.",
+    "state": "MEASURED — the smoke wrote the row and the table carries the measured corner; what remains a range is the PAGE COUNT, not the rate"
   }
 }
