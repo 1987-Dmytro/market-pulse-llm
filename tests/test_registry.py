@@ -11,6 +11,7 @@ from market_pulse.registry import (
     load_registry_as_pinned,
     load_registry_text,
     registry_before_r2,
+    registry_revision_reaching,
     registry_before_the_latin_aliases,
 )
 
@@ -522,3 +523,35 @@ def test_the_baby_food_line_is_a_row_of_its_own_and_its_name_nests_in_its_parent
     parent = brands["yagotynske"].display_names
     child = brands["yahotynske-dlia-ditei"].display_names
     assert any(p in c for p in parent for c in child), "the nesting this test exists for is gone"
+
+
+def test_a_corrupted_r1_line_makes_the_chain_refuse_rather_than_reach(tmp_path):
+    """The refusing direction of the revision chain — the review's condition before the first paid
+    step (`docs/reviews/2026-08-30-plan-promo-pulse-1.md`, «Dv2 accepted in principle»).
+
+    The chain is what twenty-four committed records go through instead of being re-pinned, so the
+    question it has to answer is not «can it reconstruct r1» — the tests above already ask that —
+    but «does it REFUSE when the file has moved in a way nobody wrote down». A line r1 owned,
+    edited without an `# (r2)` marker, is exactly that: the undo cannot drop it, the reconstruction
+    hashes to something else, and `load_registry_as_pinned` must raise rather than hand back a
+    registry that quietly satisfies a pin it never reached
+    ([[a_guard_conservative_enough_to_refuse_everything]] is the other failure, which the tests
+    above rule out by reaching all three revisions on the real file).
+    """
+    text = REGISTRY.read_text(encoding="utf-8")
+    corrupted = tmp_path / "registry.yaml"
+    # An r1 line — `- id: silpo` is the first source in the file and predates r2 — changed with no
+    # marker. Everything r2 added is untouched, so this is a corruption of r1 and nothing else.
+    assert text.count("  - id: silpo\n") == 1
+    corrupted.write_text(text.replace("  - id: silpo\n", "  - id: silpo_moved\n"), encoding="utf-8")
+
+    assert registry_revision_reaching(R1_REGISTRY_SHA, corrupted) is None
+    with pytest.raises(ValueError, match="no revision this checkout can reconstruct"):
+        load_registry_as_pinned(R1_REGISTRY_SHA, corrupted)
+    with pytest.raises(ValueError, match="no revision this checkout can reconstruct"):
+        load_registry_as_pinned(PRE_13B_REGISTRY_SHA, corrupted)
+    # And the control: the SAME file, uncorrupted, is reached — so the refusal is the corruption's
+    # and not the fixture's.
+    intact = tmp_path / "intact.yaml"
+    intact.write_text(text, encoding="utf-8")
+    assert registry_revision_reaching(R1_REGISTRY_SHA, intact)[0].startswith("r1")
