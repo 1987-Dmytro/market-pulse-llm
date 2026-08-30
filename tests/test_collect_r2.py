@@ -161,13 +161,16 @@ def test_a_channel_that_writes_into_a_pinned_raw_v1_file_is_refused_before_the_c
 ):
     """SP-4's negative control: four A1 channels map onto the six pinned store files.
 
-    The REAL `STORE_ROOT` is used, because the guard is keyed on the path a write would land on
-    rather than on a channel name — pointed at a scratch root it is right to stay quiet, and a test
-    that patched the root away would pass over a guard that does nothing.
+    The guard is keyed on the path a write would land on rather than on a channel name, so the
+    root it is driven with IS the test. SP-4 ruling (a) moved `STORE_ROOT` to the live root, where
+    this guard is right to stay quiet — so the archive root is set back here explicitly, which is
+    the configuration the guard exists for and the one a later retarget would restore. A test that
+    patched the root away instead would pass over a guard that does nothing.
 
     Nothing is written: the refusal lands before `build_client`, which is replaced here by something
     that raises, so a guard that fired too late would surface as that error instead of this one.
     """
+    monkeypatch.setattr(collect, "STORE_ROOT", collect.ARCHIVE_ROOT)
 
     def never(*a, **k):
         raise AssertionError("the client was built before the guard refused")
@@ -192,12 +195,15 @@ def test_an_unpinned_channel_is_not_refused_by_the_same_guard():
     """
     from market_pulse.raw_store import RawStore
 
-    store = RawStore(collect.STORE_ROOT)
-    collect.refuse_pinned([(source("@znishkom", "official_retail"), "@znishkom")], store)
+    varus = [(source("@VARUS_channel", "official_retail"), "@VARUS_channel")]
+    archive = RawStore(collect.ARCHIVE_ROOT)
+    collect.refuse_pinned([(source("@znishkom", "official_retail"), "@znishkom")], archive)
     with pytest.raises(SystemExit, match="VARUS_channel"):
-        collect.refuse_pinned(
-            [(source("@VARUS_channel", "official_retail"), "@VARUS_channel")], store
-        )
+        collect.refuse_pinned(varus, archive)
+    # And the third direction, which is what SP-4 ruling (a) bought: under the LIVE root the same
+    # pinned channel is collected, because the write no longer lands on the pinned file.
+    collect.refuse_pinned(varus, RawStore(collect.STORE_ROOT))
+    assert collect.STORE_ROOT == collect.LIVE_ROOT
 
 
 def test_the_guard_reads_the_pinned_set_from_the_collector_that_owns_it():

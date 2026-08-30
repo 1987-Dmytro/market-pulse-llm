@@ -42,9 +42,13 @@ sys.path.insert(0, str(REPO_ROOT / "src"))
 from registry_revision_proposal import bucket  # noqa: E402
 from retail_census import PRICE_BRANCHES  # noqa: E402
 
+from market_pulse.raw_store import live_store  # noqa: E402
 from market_pulse.registry import load_registry  # noqa: E402
 
-POSTS = REPO_ROOT / "data" / "raw" / "posts"
+STORE = live_store()
+"""v1 ∪ r2, r2 winning (plan §5.14). The census prices the corpus AFTER S2's top-up, so reading
+`data/raw/` alone would price the pre-top-up store and pre-register a population that no longer
+exists — the same failure §5.1 fixes for the anchor, one root down."""
 REGISTRY = REPO_ROOT / "config" / "registry.yaml"
 MANIFESTS = ("post_media_5c1.json", "post_media_45g2.json", "post_media_visc.json")
 OUT = REPO_ROOT / "results" / "promo_census_c2.json"
@@ -103,7 +107,7 @@ def anchor_of(collected: list[str]) -> date:
     days = [
         (post.get("date") or "")[:10]
         for handle in collected
-        for post in rows(POSTS / f"{handle.lstrip('@')}.jsonl")
+        for post in STORE.rows("post", handle)
         if post.get("date")
     ]
     if not days:
@@ -117,7 +121,7 @@ def anchor_of(collected: list[str]) -> date:
 def channel_row(handle: str, source, since: date, anchor: date, pages: dict, ceiling: int) -> dict:
     in_window = [
         post
-        for post in rows(POSTS / f"{handle.lstrip('@')}.jsonl")
+        for post in STORE.rows("post", handle)
         if post.get("date") and since <= date.fromisoformat(post["date"][:10]) < anchor
     ]
     media = [post for post in in_window if post.get("has_media")]

@@ -29,6 +29,27 @@ from dotenv import load_dotenv
 REPO_ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_ROOT = REPO_ROOT / "data" / "raw"
 
+ARCHIVE_ROOT = DEFAULT_ROOT
+"""Raw v1 — an ARCHIVE, read-only forever (SP-4 ruling (a), review 2026-08-30).
+
+`results/raw_v1_baseline.sha256` pins six of its files and `data/` is gitignored, so an append
+here is invisible to `git status` in both directions and cannot be undone. The baseline is the
+only durable proof these files were never written, which is why the refusal lives in
+:meth:`RawStore.append` — the one chokepoint every writer goes through — and not in a caller's
+channel list ([[a_moved_guard_that_left_its_copy]])."""
+
+LIVE_ROOT = REPO_ROOT / "data" / "raw_r2"
+"""The ONE live root: S2's top-up for every collected channel, and later every tick (S12)."""
+
+
+def live_store() -> "RawStore":
+    """The corpus as the loop reads it: v1 ∪ r2, deduplicated on (channel, msg_id), r2 winning.
+
+    Opt-in, never the default — `scripts/draw_promo_threads.py` draws over the FROZEN v1
+    population and a union there would move 678/488 silently (plan §5.14).
+    """
+    return RawStore(LIVE_ROOT, archives=(ARCHIVE_ROOT,))
+
 
 def load_salt(env_file: str | Path | None = None) -> str:
     """Read RAW_STORE_SALT, or explain how to create it once and never rotate it."""
@@ -165,18 +186,31 @@ class StoreIndex:
 class RawStore:
     """Append-only JSONL store, deduplicating on (channel, msg_id) per record type."""
 
-    def __init__(self, root: str | Path = DEFAULT_ROOT):
+    def __init__(self, root: str | Path = DEFAULT_ROOT, archives: tuple | list = ()):
         self.root = Path(root)
-        self._index: dict[Path, StoreIndex] = {}
+        self.archives = tuple(Path(one) for one in archives)
+        """Read-only roots searched BEFORE `root`, oldest first. `root` is read last and wins."""
+        self._index: dict[tuple[str, str], StoreIndex] = {}
 
     def path(self, record_type: str, channel: str) -> Path:
+        """Where a record of this (type, channel) is WRITTEN — always under the live root."""
         return self.root / f"{record_type}s" / f"{channel.lstrip('@')}.jsonl"
 
+    def paths(self, record_type: str, channel: str) -> list[Path]:
+        """Every root this store READS, archives first and the live root last."""
+        return [
+            root / f"{record_type}s" / f"{channel.lstrip('@')}.jsonl"
+            for root in (*self.archives, self.root)
+        ]
+
     def index(self, record_type: str, channel: str) -> StoreIndex:
-        path = self.path(record_type, channel)
-        if path not in self._index:
-            self._index[path] = self._read_index(path)
-        return self._index[path]
+        key = (record_type, channel.lstrip("@"))
+        if key not in self._index:
+            index = StoreIndex()
+            for path in self.paths(record_type, channel):
+                self._read_into(index, path)
+            self._index[key] = index
+        return self._index[key]
 
     @staticmethod
     def _absorb(index: StoreIndex, record: dict) -> None:
@@ -193,7 +227,11 @@ class RawStore:
 
     @classmethod
     def _read_index(cls, path: Path) -> StoreIndex:
-        index = StoreIndex()
+        return cls._read_into(StoreIndex(), path)
+
+    @classmethod
+    def _read_into(cls, index: StoreIndex, path: Path) -> StoreIndex:
+        """Absorb one file into an index that may already hold an older root's rows."""
         if not path.exists():
             return index
         for line in path.read_text(encoding="utf-8").splitlines():
@@ -219,21 +257,38 @@ class RawStore:
         kill mid-write leaves a partial last line, and refusing the file would turn "interrupt and
         rerun" into "start over".
         """
-        path = self.path(record_type, channel)
-        if not path.exists():
-            return []
-        out = []
-        for line in path.read_text(encoding="utf-8").splitlines():
-            if not line.strip():
+        out: dict = {}
+        for path in self.paths(record_type, channel):
+            if not path.exists():
                 continue
-            try:
-                out.append(json.loads(line))
-            except json.JSONDecodeError:
-                continue
-        return out
+            for line in path.read_text(encoding="utf-8").splitlines():
+                if not line.strip():
+                    continue
+                try:
+                    record = json.loads(line)
+                except json.JSONDecodeError:
+                    continue
+                # Last root wins: the live root is read last, so an r2 row REPLACES the archive's
+                # row of the same key in place, and a row only r2 has lands after the archive's.
+                out[dedup_key(record)] = record
+        return list(out.values())
 
     def append(self, records: list[dict]) -> int:
-        """Write the records not already stored. Returns how many were new."""
+        """Write the records not already stored. Returns how many were new.
+
+        Refuses outright when this store is rooted at :data:`ARCHIVE_ROOT`. The ruling is «v1 is
+        read-only forever» and the append is irreversible, so the refusal is here rather than in
+        each caller's channel list — a guard in the collector passes trivially the moment the
+        collector is retargeted, and guards nothing.
+        """
+        if records and self.root.resolve() == ARCHIVE_ROOT.resolve():
+            raise SystemExit(
+                f"refusing to write into the raw v1 archive at {ARCHIVE_ROOT}: SP-4 ruling (a)"
+                " (review 2026-08-30) makes it read-only forever, and"
+                " `results/raw_v1_baseline.sha256` is the only durable proof of that —"
+                f" `data/` is gitignored and the append cannot be undone.\nCollect into"
+                f" {LIVE_ROOT} instead (`market_pulse.raw_store.live_store()` reads v1 \u222a r2)."
+            )
         written = 0
         for path, batch in self._by_file(records).items():
             path.parent.mkdir(parents=True, exist_ok=True)

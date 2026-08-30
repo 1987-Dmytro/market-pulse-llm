@@ -49,6 +49,8 @@ from telethon import functions  # noqa: E402
 from telethon.errors import FloodWaitError  # noqa: E402
 
 from market_pulse.raw_store import (  # noqa: E402
+    ARCHIVE_ROOT,
+    LIVE_ROOT,
     RawStore,
     collapse_albums,
     comment_record,
@@ -62,7 +64,10 @@ from market_pulse.telegram_client import build_client  # noqa: E402
 REGISTRY = REPO_ROOT / "config" / "registry.yaml"
 RECORD = REPO_ROOT / "results" / "collect_r2.json"
 JOIN_LOG = REPO_ROOT / "results" / "joins_r2.jsonl"
-STORE_ROOT = REPO_ROOT / "data" / "raw"
+STORE_ROOT = LIVE_ROOT
+"""SP-4 ruling (a) (review 2026-08-30): the top-up lands in the ONE live root for EVERY collected
+channel — the four pinned incumbents and the sixteen free ones alike, so no later reader has to
+know which of the two roots a channel's rows came from. `data/raw/` is an archive from here on."""
 
 WINDOW_DAYS = 28
 """`scripts/collect_5c1.py::WINDOW_DAYS` and the census's — both instruments measure 28 days, and a
@@ -109,6 +114,12 @@ def refuse_pinned(channels, store) -> None:
     `protected()` is IMPORTED from the guard that already owns the pinned set. A second list here
     would be free to drift, and this is the copy that holds the writer
     ([[a_moved_guard_that_left_its_copy]]).
+
+    Under SP-4 ruling (a) this check now PASSES rather than fires: `STORE_ROOT` is the live root,
+    so no channel's write path is in `protected()`. It is kept, not deleted — it refuses BEFORE
+    the Telegram session is opened, and it is what would fire again if the root were ever pointed
+    back at the archive. The refusal that actually holds the writer today is
+    `RawStore.append`'s (plan §5.14).
     """
     guarded = protected()
     hit = sorted(
@@ -147,10 +158,20 @@ def log_join(row: dict) -> None:
         out.write(json.dumps(row, ensure_ascii=False) + "\n")
 
 
-def channel_row(store, source, handle: str) -> dict:
+def channel_row(store, source, handle: str, added=None) -> dict:
+    """One channel's line. `store` is the union; `added` is the LIVE root alone.
+
+    Two stores, on purpose: «what the corpus holds» and «what this step added» are different
+    questions and one number cannot answer both. The union is what the census prices; the live
+    root alone is what S2 is accountable for.
+    """
     posts = store.index("post", handle)
     comments = store.index("comment", handle)
+    fresh_posts = added.index("post", handle) if added is not None else None
+    fresh_comments = added.index("comment", handle) if added is not None else None
     return {
+        "posts_added_r2": fresh_posts.count if fresh_posts is not None else None,
+        "comments_added_r2": fresh_comments.count if fresh_comments is not None else None,
         "channel": handle,
         "source_id": source.id,
         "source_type": source.source_type,
@@ -257,19 +278,26 @@ def write_record(rows: list[dict], since: datetime, extra: dict) -> dict:
 
 
 def render(rows: list[dict]) -> str:
-    head = f"{'channel':<24}{'posts':>7}{'first':>13}{'last':>13}{'comments':>10}{'threads':>9}"
+    head = (
+        f"{'channel':<24}{'posts':>7}{'+r2':>6}{'first':>13}{'last':>13}"
+        f"{'comments':>10}{'+r2':>6}{'threads':>9}"
+    )
     lines = [head, "-" * len(head)]
     for row in rows:
         lines.append(
-            f"{row['channel']:<24}{row['posts_stored']:>7}"
+            f"{row['channel']:<24}{row['posts_stored']:>7}{str(row['posts_added_r2']):>6}"
             f"{str(row['posts_first'])[:10]:>13}{str(row['posts_last'])[:10]:>13}"
-            f"{row['comments_stored']:>10}{row['threads_with_comments']:>9}"
+            f"{row['comments_stored']:>10}{str(row['comments_added_r2']):>6}"
+            f"{row['threads_with_comments']:>9}"
         )
     return "\n".join(lines)
 
 
 async def run(args, registry) -> dict:
-    store = RawStore(STORE_ROOT)
+    # `STORE_ROOT`, not `live_store()`: the root is this module's, so a test can point it at a
+    # scratch directory and still exercise the real union.
+    store = RawStore(STORE_ROOT, archives=(ARCHIVE_ROOT,))
+    added = RawStore(STORE_ROOT)
     channels = a1_sources(registry)
     if args.only:
         wanted = {one.lstrip("@").lower() for one in args.only}
@@ -283,7 +311,7 @@ async def run(args, registry) -> dict:
     extra: dict = {}
 
     if args.plan:
-        rows = [channel_row(store, source, handle) for source, handle in channels]
+        rows = [channel_row(store, source, handle, added) for source, handle in channels]
         print(f"window since {since.isoformat(timespec='seconds')} ({WINDOW_DAYS} days)")
         print(render(rows))
         empty = [row["channel"] for row in rows if row["posts_stored"] == 0]
@@ -371,7 +399,7 @@ async def run(args, registry) -> dict:
     finally:
         await client.disconnect()
 
-    rows = [channel_row(store, source, handle) for source, handle in channels]
+    rows = [channel_row(store, source, handle, added) for source, handle in channels]
     print(render(rows))
     phases = [name for name in ("join", "posts", "comments") if getattr(args, name)]
     return write_record(rows, since, {"phase": "+".join(phases), **extra})

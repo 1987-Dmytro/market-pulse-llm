@@ -6,6 +6,8 @@ from pathlib import Path
 
 import pytest
 from market_pulse.raw_store import (
+    ARCHIVE_ROOT,
+    LIVE_ROOT,
     RawStore,
     collapse_albums,
     comment_record,
@@ -281,3 +283,99 @@ def test_a_rerun_of_a_fanned_out_page_writes_none_of_its_rows_twice(tmp_path):
 
     assert RawStore(tmp_path).append(rows) == 0
     assert len(RawStore(tmp_path).rows("position_row", "@VARUS_channel")) == 3
+
+
+# --- SP-4 ruling (a): the archive, the live root and the union (plan §5.14) -------------------
+
+
+def a_post(msg_id: int, text: str) -> dict:
+    return post_record(FakeMessage(msg_id, text=text), SOURCE, "@VARUS_channel", provenance())
+
+
+def test_the_archive_root_refuses_a_write_and_the_live_root_takes_one():
+    """The guard, both directions, on the REAL roots — a refusal proves nothing about a tmp path.
+
+    v1 is read-only forever (SP-4 ruling (a), review 2026-08-30) and the append is irreversible:
+    `data/` is gitignored, so `git status` is silent in both directions and
+    `results/raw_v1_baseline.sha256` is the only durable proof. The refusing direction is asserted
+    on `data/raw` itself, and the accepting direction on `data/raw_r2` itself — a guard self-test
+    that only ever refuses cannot tell «blocked» from «broken»
+    ([[guard_selftest_negative_control]]).
+    """
+    archive = RawStore(ARCHIVE_ROOT)
+    for kind, record in (
+        ("posts", a_post(1, "into data/raw/posts")),
+        (
+            "comments",
+            comment_record(
+                FakeMessage(2, text="into data/raw/comments"),
+                SOURCE,
+                "@VARUS_channel",
+                1,
+                SALT,
+                provenance(),
+            ),
+        ),
+    ):
+        with pytest.raises(SystemExit) as refusal:
+            archive.append([record])
+        assert "read-only forever" in str(refusal.value)
+        assert "raw_v1_baseline.sha256" in str(refusal.value)
+        assert not (ARCHIVE_ROOT / kind / "_guard_selftest.jsonl").exists()
+
+    live = LIVE_ROOT / "posts" / "_guard_selftest.jsonl"
+    written = a_post(1, "into the live root") | {"channel": "_guard_selftest"}
+    try:
+        assert RawStore(LIVE_ROOT).append([written]) == 1
+        assert live.exists() and "into the live root" in live.read_text(encoding="utf-8")
+    finally:
+        live.unlink(missing_ok=True)
+
+
+def test_the_baseline_still_verifies_after_the_refusal():
+    """The refusal above is only worth something if the six pinned files are still their bytes."""
+    import subprocess
+
+    baseline = Path(__file__).resolve().parents[1] / "results" / "raw_v1_baseline.sha256"
+    done = subprocess.run(
+        ["shasum", "-c", str(baseline)],
+        cwd=baseline.parents[1],
+        capture_output=True,
+        text=True,
+    )
+    assert done.returncode == 0, done.stdout + done.stderr
+    assert done.stdout.count(": OK") == 6, done.stdout
+
+
+def test_the_union_reads_both_roots_and_the_live_row_wins(tmp_path):
+    """v1 ∪ r2, deduplicated on (channel, msg_id), r2 winning — the ruling's read rule.
+
+    Both directions of the dedup matter: a row only the archive has is still read (the top-up is a
+    TOP-UP, not a re-collection), and a row both roots hold is the live root's — otherwise an
+    edited or re-fetched post would be answered by the frozen copy forever.
+    """
+    archive, live = tmp_path / "raw", tmp_path / "raw_r2"
+    RawStore(archive).append([a_post(1, "archive"), a_post(2, "archive only")])
+    RawStore(live).append([a_post(1, "live"), a_post(3, "live only")])
+
+    union = RawStore(live, archives=(archive,))
+    rows = union.rows("post", "@VARUS_channel")
+    assert [row["msg_id"] for row in rows] == [1, 2, 3]
+    assert {row["msg_id"]: row["text"] for row in rows}[1] == "live"
+    assert union.index("post", "@VARUS_channel").count == 3
+    # And the union's dedup is what makes the top-up idempotent: a row the ARCHIVE holds is not
+    # re-written into the live root.
+    assert union.append([a_post(2, "archive only")]) == 0
+    assert not (live / "posts" / "VARUS_channel.jsonl").read_text(encoding="utf-8").count(
+        "archive only"
+    )
+
+
+def test_the_write_path_is_the_live_root_even_when_the_archive_holds_the_channel(tmp_path):
+    """`path()` is the WRITE path and stays under `root`; `paths()` is what the reader walks."""
+    store = RawStore(tmp_path / "raw_r2", archives=(tmp_path / "raw",))
+    assert store.path("post", "@VARUS_channel").parent.parent == tmp_path / "raw_r2"
+    assert [p.parent.parent for p in store.paths("post", "@VARUS_channel")] == [
+        tmp_path / "raw",
+        tmp_path / "raw_r2",
+    ]

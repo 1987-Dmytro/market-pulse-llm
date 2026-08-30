@@ -57,6 +57,7 @@ POSTS = REPO_ROOT / "data" / "raw" / "posts"
 COMMENTS = REPO_ROOT / "data" / "raw" / "comments"
 REGISTRY = REPO_ROOT / "config" / "registry.yaml"
 OUT = REPO_ROOT / "results" / "promo_threads_draw.json"
+BASELINE = REPO_ROOT / "results" / "raw_v1_baseline.sha256"
 
 SEED = 42
 PER_STRATUM = {"dev": 20, "holdout": 20}
@@ -151,6 +152,10 @@ def draw(pool: list[dict], stratum: str) -> dict:
     }
 
 
+def _sha256(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
 def ids_sha256(rows_: list[dict]) -> str:
     """The population pinned BY ROW COUNT and by its ids, never by a date range read at run time."""
     blob = "\n".join(f"{r['store_file']}\x1f{r['thread_root']}" for r in rows_)
@@ -201,6 +206,17 @@ def build() -> dict:
         "population": {
             "threads": len(population),
             "ids_sha256": ids_sha256(population),
+            "root": "data/raw — the FROZEN v1 archive, read v1-only on purpose",
+            "why_not_the_union": "SP-4 ruling (a) makes `data/raw_r2/` the live root and every"
+            " other reader takes v1 \u222a r2. This one does not: the holdout is frozen at the"
+            " draw and its population has to be frozen too, so a top-up landing between two runs"
+            " cannot move 678/488 under it (plan \u00a75.14).",
+            "provenance": {
+                "raw_v1_baseline.sha256": _sha256(BASELINE),
+                "verify": "shasum -c results/raw_v1_baseline.sha256 \u2014 six files, all OK",
+                "means": "the six pinned store files were the bytes this draw read; the baseline"
+                " is the only durable proof, because `data/` is gitignored",
+            },
             "by_stratum": {
                 stratum: len([r for r in population if r["stratum"] == stratum])
                 for stratum in ("currency", "decimal_only")
