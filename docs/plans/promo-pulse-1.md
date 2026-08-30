@@ -1,0 +1,207 @@
+# PLAN — `promo-pulse-1` (C2–C5), executor's plan for `docs/PHASE-promo-pulse-1.md`
+
+Written under `/plan-phase`. Nothing is implemented until the operator relays the team lead's «go».
+Every number below names the file it came from; none is typed.
+
+## 1. Question and the artifact that answers it
+
+> «Что и почём промоутируют сети по молочке и мороженому, и как покупатели на это реагируют —
+> неделя за неделей?» (`docs/PHASE-promo-pulse-1.md` §1)
+
+The artifact: ONE promo screen built by `make tick` + `make promo-screen` from result files only —
+per week × chain: promo positions (brand · product · volume · promo price · depth), price trend per
+SKU, and the reaction feed (signal · quote · `msg_id` · thread) — plus the tables behind it in
+`data/derived/pulse.db`.
+
+**One column of §1's artifact is contested and I do not decide it — see SP-0.** §1 names `price old`
+as a screen column. `docs/SPEC.md` amendment 3.21 (4) says «the extracted old price is never
+printed», 3.18 (1) says it «never reaches a surface that prints it as a price», and 3.22 (1) keeps
+arithmetic depth out of any row that shows its own promo price, because `promo ÷ (1 − depth)`
+reconstructs the old price. Those rulings rest on a measurement SPEC v2 does not move: the extracted
+old price is right as a number on **33 of 80 pairs** (`results/sku_bar_verdicts_skub2.json`, bar 2 =
+0.4125 against 0.80). So the plan **stores** `price_old` — the column already exists in
+`positions` — and **does not print it** until the team lead rules. This is the difference between
+storing and printing, not a scope cut.
+
+## 2. Checks
+
+Graders first, mechanics after. A check I cannot run today is marked **[BLOCKED]** with its blocker.
+
+| # | command | pass condition |
+|---|---|---|
+| K0 | `make check` | ruff + pytest green. **One pre-existing red, not mine**, measured now: `tests/test_repair_phase4_ledger.py::test_the_silence_check_fires_on_the_LINE_ledger_too` (`1 failed, 11 passed` under `-k repair_phase4_ledger`) — the silence-check reads the LIVE `results/spend_cycle2.json`, which grew under it. `docs/STATUS.md` assigns it as the $0 debt of the next contract's step 0, so **S0 fixes it**, by asserting what the check was really protecting rather than by deleting the assertion. |
+| K1 | `make preflight ARGS='config/registry.yaml'` | run BEFORE and AFTER S1. `config/registry.yaml` is pinned by **21 sealed records**, live sha `d4e3b2373c43…`. After the edit every record pinning the old sha is claimed through `tests/moved_pins.py` (derived from live shas, both directions) — **never re-pinned**. |
+| K2 | `PYTHONPATH=src python3.11 -m market_pulse.registry config/registry.yaml` | r2 loads; source count and the A1/A2/PAUSED split are what §3 of the phase spec names. |
+| K3 | `python3.11 scripts/promo_census_c2.py` → `results/promo_census_c2.json` | $0. Per channel over the 4-week window: posts, leaflet **pages**, text-price posts, `media_share`, and a `selection.ids_sha256` pin. Pre-registers the paid population **by row count**, never as a date range evaluated at run time (SPEC 3.18 (4)). |
+| K4 | `python3.11 scripts/promo_projection_c2.py` → `results/promo_projection_c2.json` | $0. Pages × the **measured** rate × $/s against the guard's freshly re-read remainder. This is a STOP, not a pass/fail — see SP-1. |
+| K5 | `python3.11 scripts/draw_positions_50.py` twice | `results/positions_draw_50.json` — 50 positions, seed 42, from ≥3 chains' flyers/posts of the backfilled 4 weeks; two runs produce an identical sha. Handed to the team lead. |
+| K6 | `python3.11 scripts/grade_positions.py` → `results/grade_positions_50.json` | completeness ≥ 0.90, price accuracy ≥ 0.95. **[BLOCKED]** on `docs/labels-positions-50.jsonl` (team lead's, owed after K5) and on SP-0's answer, which fixes the bar's denominator. |
+| K7 | `python3.11 scripts/draw_promo_threads.py` twice | `results/promo_threads_draw.json` — dev-40 + holdout-40, **disjoint and frozen at the draw**, seed 42, stratified by channel over the 678 price threads; two runs identical. Handed to the team lead. |
+| K8 | `python3.11 scripts/grade_promo_signals.py` → `results/grade_promo_dev40.json` | subject agreement ≥ 0.80 · signal-type agreement ≥ 0.75 on dev-40. **[BLOCKED]** on `docs/labels-promo-dev.jsonl` (team lead's, owed after K7). |
+| K9 | `pytest tests/test_trends_sql.py -q` | S3 recomputed from `positions` twice → identical; a week with no data renders **absent**, never `0`. Asserted in both directions. |
+| K10 | `make tick && make tick` | second run writes **zero** new rows. Asserted per table by count before/after, not by a global total — an aggregate counter cannot see a per-row change. |
+| K11 | `pytest tests/test_promo_hooks.py -q` | between calls: `msg_id` exists · quote is a substring of the source text · brand ∈ registry or the store's unresolved state (§5.9) · schema valid. A hook failure is a **counted row**, not an exception — asserted with a negative control (a row that must fail and be counted). |
+| K12 | `make promo-screen` on a **clean clone** after `make tick` | the screen renders from result files only and **fails loudly** on any missing source. Negative control: remove one source, assert a non-zero exit and a named error. |
+| K13 | `python3.11 scripts/draw_truth_20.py` → 20 rows, seed 42 | flyer/post · extracted position · comment · signal · quote, rendered for the operator. The gate is his words, not a number. |
+
+End-to-end (closes the phase) = K12 then K13, in that order.
+
+## 3. Steps
+
+Each ends in a commit **by path** and the checks named. No `git add -A`; no repo-wide `make fmt`.
+
+| # | what | files | check |
+|---|---|---|---|
+| S0 | Commit the team lead's uncommitted files by path (`docs/STATUS.md`, `docs/PHASE-promo-pulse-1.md`); clear the `test_repair_phase4_ledger` debt STATUS assigns to step 0 of the next contract. | commit by path only; `tests/` | K0 |
+| S1 | **Registry revision r2.** 16 A1 rows · 5 A2 · PAUSED 39 leave collection · B deferred. Preflight, edit, then claim the moved pins. **7 of the 16 A1 handles are not in the registry today** — `@ATB_FANatik` (+ its discussion group), `@blyzenkoua`, `@fozzyshopua`, `@sim23_simi`, `@rrozetka`, `@kop1chat`, `@znishkom`, `@xochydeshevshe`; `@atb_market_official` leaves collection (ruling (ц): no promo, no comments). | `config/registry.yaml`, `tests/moved_pins.py`, `tests/` | K1, K2, K0 |
+| S2 | **$0 collection.** The population §1 measures does not exist on disk: the newest post across every A1 channel is **2026-08-08** and 6 of the 16 have no store file at all. Collect the missing channels, top up the others to the window, and collect the `@ATB_FANatik` discussion group (its traffic is measured at entry — r1's 0.25 c/day read post replies, not the group feed). Every NEW channel enters through the adaptation protocol: profile → sealed hundred → gate **before** aggregates. Telegram only. | `scripts/`, `data/raw/`, `results/` | K0 |
+| S3 | **$0 census + projection** of the paid legs (K3, K4), then **STOP** — SP-1. | `scripts/promo_census_c2.py`, `scripts/promo_projection_c2.py`, `results/` | K3, K4, K0 |
+| S4 | **C2 backfill (PAID).** Positions for the 16 channels over the 4 weeks, via the existing 5c2 instrument — vision for image flyers, text for the rest. **`positions.py` is not touched** (§5.12): the scale is in which carriers get fed, not in the parser. Smoke first; rungs per `docs/PROCESS.md`. | `scripts/`, `results/`, `data/derived/` | K0 |
+| S5 | **S1 draw** (K5) → hand `results/positions_draw_50.json` to the team lead for `docs/labels-positions-50.jsonl`. | `scripts/draw_positions_50.py`, `results/` | K5, K0 |
+| S6 | **The five new tables** — `attribution / signal / evidence / digest / rollup`, uuid5 ids over normalised keys (§5.7). `aggregates.py` extended; `positions` untouched. | `src/market_pulse/aggregates.py`, `tests/` | K0 |
+| S7 | **C3 step 0.** Enumerate the 678 price threads (the yield file carries **counts only, no ids** — see §5.5) and draw dev-40 + holdout-40 (K7) → hand to the team lead. | `scripts/draw_promo_threads.py`, `results/` | K7, K0 |
+| S8 | **Instrument + hooks + graders**, all $0: a NEW prompt module (`prompts.py` is pinned), the four hooks, `grade_positions.py`, `grade_promo_signals.py`. Graders are written and unit-tested against synthetic gold before any real gold exists. | new module in `src/market_pulse/`, `scripts/grade_*.py`, `tests/` | K11, K0 |
+| S9 | **C3 dev loop (PAID).** 3–5 iterations × dev-40. Thinking OFF, batch 1. Plateau → SP-3. | `scripts/`, `results/` | K8, K0 |
+| S10 | **The ONE holdout shot (PAID)** — pre-registered first (SP-2), then spent once. | `scripts/write_promo_prereg.py`, `results/` | K8, K0 |
+| S11 | **S3 trends, SQL only, no LLM.** Price per SKU per week per chain; depth per chain and brand. | `src/market_pulse/aggregates.py`, `tests/test_trends_sql.py` | K9, K0 |
+| S12 | **S4 the loop.** `make tick`, `data/schedule.json` (READ only), `loop.py` cursors, the cooled-thread digest and the late-comment delta. | `Makefile`, `src/market_pulse/loop.py`, `tests/` | K10, K0 |
+| S13 | **C5 the screen.** `make promo-screen`, one promo view, result files only, loud failure on a missing source. | `dashboard/`, `scripts/build_dashboard.py`, `Makefile` | K12, K0 |
+| S14 | **End-to-end + the product-truth gate**: clean clone, `make tick && make promo-screen`, then the 20 rows for the operator. | `scripts/draw_truth_20.py`, `results/` | K12, K13, K0 |
+
+## 4. Stop-points — asked BEFORE, never reported after
+
+**SP-0 — before S1, and it blocks nothing on the $0 path.** Two questions for the team lead:
+1. Does S1's `price accuracy ≥ 0.95` denominate over the **promo price only** (the green leg, 80/80
+   in `results/sku_b_pair_verdicts_skub2.json`) or over the **price pair**? At the pair the bar is
+   unreachable by measurement — 0.4125 — and the gold file that fixes the denominator is the team
+   lead's to write.
+2. Does the §1 screen **print** `price old`, against 3.21 (4) / 3.22 (1)? I store it either way.
+
+These block only K6 (the graded S1 reading) and one screen column. S0–S5 and S7–S8 do not wait.
+
+**SP-1 — before S4, the first paid step.** I re-read the guard, run the census and the projection,
+and bring the operator a table. Rung 0 is that the guard's own remainder is **stale**:
+`results/spend_cycle2.json` last session (2026-08-27T09:43Z) reads `remaining_usd` **$3.1686**, and
+the `mp-srv2` volume has billed for three days since at ≈$0.24/day. The projection is computed at
+the **measured** rate, not the smoke's — see §5.4. If the projection exceeds the remainder I **ask**;
+I do not trim scope silently (phase spec §6.1). Rungs 0–3 and the cap-2× rule per `docs/PROCESS.md`.
+
+**SP-2 — before S10.** The ONE holdout attempt: pre-registered (readings + the two bars + the kill
+rule) in a committed record before the pod exists, and the operator is told it is being spent.
+
+**SP-3 — inside S9.** Two iterations without gain = plateau: I STOP with the error table. The team
+lead reworks the codebook/prompt; the executor does not.
+
+**SP-4 — anywhere.** Anything that would edit a sealed record, a frozen set, or a team-lead file.
+
+**SP-5 — the schema, resolved by this plan's review, not by a separate ask.**
+`claude/review-2026-08-27-new-rag-transfer.md` §2 is **not in this repo and not in its git history**;
+SPEC v2 §4 carries the pointer, not the schema. I propose the five tables in §5.7 so the team lead
+can diff mine against theirs in one read. If theirs differs, theirs wins and S6 is rewritten.
+
+## 5. Assumptions and scope choices
+
+**5.1 Window.** 4 weeks = **28 days**; the anchor is the corpus's own **last day + 1**, the
+ratified precedent of `5c2-stop-ruling-and-cap-33` (a) — a later anchor buys days that are empty by
+construction and measures the collection schedule instead of the content. The window is pinned by
+`ids_sha256`, not by a row count.
+
+**5.2 Registry r2 is an edit, not a new file.** `config/registry.yaml` lives under the executor's
+`config/`; SPEC v2 §3's «правка ревизией, не редактированием» is answered by the r1 proposal's own
+sentence — «ревизия — отдельный шаг после решения». It has moved before (two records still pin
+`c82d0cff1ee7…`). The 21 pins are handled by preflight + `tests/moved_pins.py`; nothing is re-pinned.
+
+**5.3 The 6 uncollected channels.** `@blyzenkoua`, `@fozzyshopua`, `@sim23_simi`, `@rrozetka`,
+`@kop1chat`, `@xochydeshevshe` have no store file. `@kop1chat` and the registry's `@kopiyochka1` are
+**different handles**; I collect the one the phase spec names and report the pair rather than merge
+them on a guess.
+
+**5.4 The rate — 10.408 s/row, not 1.7.** `docs/STATUS.md` quotes «1.7 с/стр.» That number is
+`results/run_5c2_positions.json :: go_no_go.page_marginal_seconds = 1.729`, a two-call warm-up
+**marginal**. The realised rate in the same file is `timing.seconds_per_row = 10.408` over 205 rows
+(2 133.705 worker seconds), and `5c2-closed-…` names 10.408 as «the number the next registration
+starts from». At `rate_usd_per_second = 0.00030669` that is **$0.003192/row**, so the phase spec's
+«≈$0.4» buys ≈**125 rows** — while ATB alone was 159 pages in three weeks. The projection of K4
+settles it; I do not carry either number into the plan as a conclusion.
+
+**5.5 The 678 threads must be enumerated, not read off.**
+`results/promo_comment_yield.json` carries per-channel **counts** and no thread ids
+(`total.price_threads = 678`, `total.under_price = 4 718` of `16 324`). S7 re-derives the ids with
+the **same** predicate its producer used — `retail_census.PRICE_BRANCHES` joined on `parent_msg_id`
+(`scripts/promo_comment_yield.py`) — so the draw and the census measure the same instrument.
+That producer's own caveat travels with the draw: the `decimal` branch also fires on **dates**, and
+msuaaaa's price posts are 1 316 `decimal` against 302 `грн`, so the per-branch counts are carried
+per stratum and a thread selected only by `decimal` is flagged.
+
+**5.6 Text-less comments.** SPEC 3.19: they leave the inference queue from the next paid cycle —
+a **queue** rule, never a deletion — and «the volume of wordless reactions is itself a signal», so
+the wordless class is printed as its own named class beside every distribution over comments. The
+S2 draw is taken **after** the queue rule, and the draw record states the count it removed.
+
+**5.7 The five tables (proposal — SP-5).** ids are `uuid5(NAMESPACE, key)` with
+`NAMESPACE = uuid5(NAMESPACE_URL, "market-pulse-llm/promo-pulse-1")`, keys normalised (NFC, lower,
+whitespace-collapsed) and joined by `\x1f`:
+`attribution(window_id, attribution_id ← channel|msg_id|subject_row_id, subject, role, source ∈ explicit|reply_context|post_context)`;
+`signal(window_id, signal_id ← channel|thread_root|type, type ∈ жалоба|похвала|спрос|привычка|цена)`;
+`evidence(window_id, evidence_id ← signal_id|msg_id|quote, msg_id, quote)`;
+`digest(window_id, digest_id ← channel|thread_root, children_ids, cooled_at)`;
+`rollup(window_id, rollup_id ← week|chain|brand|metric, value)`.
+Existing ids are **not** migrated: `positions.row_id` is already deterministic (`channel:msg_id:ordinal`).
+
+**5.8 Idempotence has one known hole and S12 closes it.** `evidence.KINDS` is
+`("comment", "leaflet_page", "position_row", "post_text")` — there is no member for «read and
+yielded nothing», so an interrupted **post_text** pass re-buys the row (2 re-asked against the
+leaflet leg's 0, `5c2-stop-ruling-and-cap-33` (e)). The derived `markers` table already records the
+empties (127 of 159 leaflet pages, 22 of 44 post texts yielded 0 positions) but the raw evidence
+ledger the paid pass reads does not. S12 adds the fourth kind; K10 is the check that it worked.
+
+**5.9 `unknown-brand` is the store's existing state, not a new literal.** The phase spec's hook
+reads «brand ∈ registry or `unknown-brand`». That literal is **nowhere in the codebase**, and the
+store already has the state: `positions.brand_id IS NULL` with the surface form kept in `brand_raw`
+(65 of the 145 rows today, e.g. `Дольче`). The hook asserts that pair; it does not invent a third
+value. If the team lead wants the literal on the wire, say so at review and I will add it as a
+rendering of the same state, never as a second way to mean it.
+
+**5.10 Thresholds I introduce.** seed **42** everywhere · cooled = **24 h** without a new comment ·
+schedule min interval **1 h**, default **6 h** (READ from `data/schedule.json`, which does not exist
+yet and S12 creates) · dev-40 / holdout-40 disjoint and frozen at the draw · plateau = **2**
+iterations without gain · cap **$2.5** on the C3 dev loop, per phase spec §6.
+
+**5.11 Serving — «thinking OFF, batch 1» is already structural and costs no work.**
+`local_llm.py` carries `CHAT_TEMPLATE = {..., "enable_thinking": False}` as the default of every
+client, and `PositionsClient.render` / `CaptionClient.render` hardcode it with no kwarg at all.
+Batch 1 is likewise structural: the positions, caption and reader legs each loop one item per
+forward. So the constraint needs **no flag and no change** — I assert it in a test rather than
+implement it. New prompt text still goes in a **new module** (`prompts.py` is pinned), and
+`scripts/preflight_serving_guards.py` renders the real chat template offline ($0) before any pod.
+`scorer.py` stays the single judge and is not forked.
+
+**5.12 `positions.py` is pinned and I do not plan to touch it.** Its live sha
+`0b058e800244…` is identical to its pin in four sealed records (`prereg_5c2_run`,
+`sku_pilot_prereg_b2`, `validate_5c2_pack`, `window_summary_5c2`). The frozen `Position` dataclass
+already carries all 16 fields S1 needs, `depth()` already returns `None` rather than reconstructing
+from the printed % (3.17 (3)), and `depth_disagrees_with_printed()` already flags at
+`PRINTED_TOLERANCE_PP = 1.0`. C2 is a **population** change — which carriers are fed to the existing
+instrument — so it lives in the callers. If S4 finds a parser change is truly unavoidable I stop and
+say so (SP-4) rather than move a pinned file inside a paid step.
+
+**5.13 The tick's spine already exists.** `loop.py` carries four watermarks — `posts`, `inference`,
+`leaflet`, `post_text` — and the three passes `inference_pass` / `page_pass` / `post_pass`, each
+recording durably **before** advancing its watermark, with `send` as the only seam. S12 is wiring a
+`make tick` over those, plus the cooled-thread digest and the fourth evidence kind of §5.8 — not new
+machinery. That is why K10 is a cheap check and not a rewrite.
+
+## 6. Out of scope
+
+From the phase spec §5, unchanged: brand trends/alerts · Poltava collection · training/LoRA ·
+thinking anywhere · vLLM/merge · the schedule **UI** (the loop only READS `data/schedule.json`) ·
+dashboard redesign beyond the one promo screen · scanning the 81 unscanned census candidates.
+
+Added by me: no migration of `positions.row_id` to uuid5 (5.7) · no re-scoring of anything bought
+under an earlier cap · no edit to `docs/SPEC.md`, any sealed record or any frozen set · no second
+positions instrument (the two-stage OCR read and the `brands_visible` channel stay named candidates,
+unbuilt, per SPEC 3.18 (2)) · no reopening of bar 2.
+
+---
+
+**Handed to the operator for the team lead's review. Nothing is implemented until «go».**
