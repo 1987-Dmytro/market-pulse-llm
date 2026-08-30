@@ -472,6 +472,8 @@ Seven test modules construct `RawStore` (`test_raw_store`, `test_loop`, `test_co
 `test_collect_r2`, `test_comments_v2`, `test_backfill`, `test_run_5c2`); all use temporary roots,
 which is why a guard on the archive root leaves them green.
 
+**One seam S12 will hit.** `loop.ingest` IS `RawStore.append`, and it has no production caller today — grepped: only `tests/test_loop.py` calls it, which is why `run_loop.py`'s row above says «writes only `data/derived/`». When S12 wires `make tick`, the store it hands `ingest` must be the live root: handed `RawStore(STORE_ROOT)` as `run_loop.py:609` builds it today, the guard refuses and the tick is dead on line one.
+
 **What this does not change.** The window (§5.1) is still anchored on the topped-up corpus's last
 day + 1, and the census still states the anchor and `ids_sha256`; the anchor is now read across the
 union rather than off `data/raw/` alone. `positions.py` and every sealed record stay untouched.
