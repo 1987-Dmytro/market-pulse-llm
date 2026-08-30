@@ -12,8 +12,30 @@ from pathlib import Path
 
 import yaml
 
-# Telegram public username: 5-32 chars, starts with a letter, letters/digits/underscore.
-_HANDLE = re.compile(r"^@[A-Za-z][A-Za-z0-9_]{4,31}$")
+_USERNAME = r"@[A-Za-z][A-Za-z0-9_]{4,31}"
+"""Telegram public username: 5-32 chars, starts with a letter, letters/digits/underscore."""
+
+_INVITE = r"\+[A-Za-z0-9_-]{16,}"
+"""A private channel's join hash, as `t.me/+<hash>` writes it — base64url, 16 chars and up."""
+
+_CHAT_ID = r"-?\d{6,}"
+"""A bare chat id, for an entity that has no username at all. Both the raw form and the
+`-100`-prefixed form are accepted; which one resolves is the client's business, not the
+registry's."""
+
+_HANDLE = re.compile(rf"^(?:{_USERNAME}|{_INVITE}|{_CHAT_ID})$")
+"""What may stand in `telegram_channels`: a union of the three things Telegram addresses an entity
+by, and not a loosened username.
+
+Revision r2's A1 list carries two entries that are not public usernames and cannot be written down
+under the username rule alone. Маркетопт's private channel is an invite hash —
+`+Ejz6ubzm21IyMTQy`, `results/retail_chains.json` records its kind as `invite` — and
+@ATB_FANatik's discussion group «АТБ / ЗНИЖКИ» has `username: null` and only an id, 1925810730
+(`results/retail_census.json`). A sibling field would have been the other way to say this, and it
+is the wrong way: `telegram_channels` may not be empty (`_sources` raises, and
+`test_shipped_registry_loads` asserts every source has one), so a row addressed only by an id would
+have had to carry an empty list and would have failed both. Widening the accepted entry keeps every
+existing assertion true, and `chan_without_at` still matches none of the three."""
 
 SOURCE_TYPES = ("official_retail", "aggregator", "community", "government")
 """``government`` was added at the 5c1 registry write (team-lead ruling 2026-08-07): the launch
@@ -59,6 +81,13 @@ class Source:
     # ("what is discussed"): whose audience this source speaks to. 5c2 keys aggregates on it, so
     # a report can say "mothers think X, the regions think Y" with the sources behind it.
     audience: str | None = None
+    # Revision r2 (operator ruling 2026-08-30, SPEC v2 §3): a source leaves COLLECTION without
+    # leaving the registry — «выводится из сбора… данные и замороженные тесты остаются». The
+    # alternative, deleting the paused rows, breaks the build at $0: `build_aggregates.segment_for`
+    # raises `SystemExit` for any channel that carries evidence rows and has no registry entry, and
+    # 21 of the 28 channels on disk are in that position. So the row stays and says it is not
+    # collected; the collector reads this flag and every historical reader keeps resolving the row.
+    collect: bool = True
 
 
 @dataclass(frozen=True)
@@ -202,6 +231,11 @@ def _sources(path: str | Path, entries) -> tuple[Source, ...]:
             # Strict where it is load-bearing: `watch: "no"` is truthy, and a watch channel read
             # as a launch channel is a group join the operator forbade.
             raise ValueError(f"{path}: source {sid!r} has a non-boolean watch {watch!r}")
+        collect = entry.get("collect", True)
+        if not isinstance(collect, bool):
+            # Strict for the reason `watch` is: `collect: "no"` is truthy, and a paused source
+            # read as collectable is exactly the collection the ruling stopped.
+            raise ValueError(f"{path}: source {sid!r} has a non-boolean collect {collect!r}")
         audience = entry.get("audience")
         if audience is not None and audience not in AUDIENCES:
             # A closed list: a typo'd segment would silently make its own bucket in every
@@ -220,6 +254,7 @@ def _sources(path: str | Path, entries) -> tuple[Source, ...]:
                 bool(entry.get("comments_enabled")),
                 watch,
                 audience,
+                collect,
             )
         )
     return tuple(sources)
@@ -256,7 +291,11 @@ if __name__ == "__main__":
     for source in registry.sources:
         state = "verified" if source.verified else "UNVERIFIED"
         comments = "comments" if source.comments_enabled else "posts-only"
+        collect = "collect" if source.collect else "NOT-COLLECTED"
         channels = " ".join(source.telegram_channels)
-        print(f"{source.id}\t{source.source_type}\t{state}\t{comments}\t{channels}")
+        print(f"{source.id}\t{source.source_type}\t{state}\t{comments}\t{collect}\t{channels}")
+    collected = [source for source in registry.sources if source.collect]
+    print(f"sources: {len(registry.sources)} — collected {len(collected)}, "
+          f"not collected {len(registry.sources) - len(collected)}")
     print(f"tracked groups: {', '.join(registry.taxonomy.tracked_groups)}")
     print(f"watchlist: {len(registry.watchlist)} brands")

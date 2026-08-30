@@ -159,6 +159,75 @@ def test_source_without_channels_rejected(tmp_path):
         load_registry(path)
 
 
+def test_an_invite_hash_and_a_bare_chat_id_are_accepted_handles(tmp_path):
+    """Revision r2's two A1 entries that are not public usernames, and cannot be written otherwise.
+
+    Маркетопт's private channel is an invite hash (`results/retail_chains.json` records its kind as
+    `invite`) and @ATB_FANatik's discussion group «АТБ / ЗНИЖКИ» has `username: null` and only an id
+    (`results/retail_census.json`). The group is a second channel on the FANatik row rather than a
+    row of its own — it is the same source, read through two feeds.
+    """
+    body = (
+        "sources:\n"
+        "  - id: marketopt_private\n    name: Маркетопт\n    source_type: official_retail\n"
+        "    telegram_channels: ['+Ejz6ubzm21IyMTQy']\n"
+        "  - id: atb_fanatik\n    name: ФАНАТИК АТБ\n    source_type: aggregator\n"
+        "    telegram_channels: ['@ATB_FANatik', '1925810730']\n" + TAXONOMY
+    )
+    registry = load_registry(write(tmp_path, body))
+    assert [source.telegram_channels for source in registry.sources] == [
+        ("+Ejz6ubzm21IyMTQy",),
+        ("@ATB_FANatik", "1925810730"),
+    ]
+
+
+@pytest.mark.parametrize(
+    "handle",
+    [
+        "chan_without_at",  # the one the username rule already refused
+        "@four",  # 4 characters after the @ — a username is 5 and up
+        "+Ejz6ubzm21IyMT",  # 15 — an invite hash is 16 and up
+        "19258",  # 5 digits — a chat id is 6 and up
+        "@ATB FANatik",  # a space is in none of the three
+        "+Ejz6ubzm21IyMTQy@x",  # an invite with something appended
+    ],
+)
+def test_the_widened_handle_still_refuses_what_is_none_of_the_three(tmp_path, handle):
+    """The half a widened regex can lose. Each row sits one character outside its own branch, so a
+    branch that had been written open-ended would fail here rather than in a silent empty
+    collection ([[guard_selftest_negative_control]])."""
+    body = SOURCES.replace(
+        "    telegram_channels: ['@chan_one']\n",
+        f"    telegram_channels: [{handle!r}]\n",
+    )
+    with pytest.raises(ValueError, match="malformed handle"):
+        load_registry(write(tmp_path, body + TAXONOMY))
+
+
+def test_collect_defaults_to_true_and_must_be_a_boolean(tmp_path):
+    """`collect` is how r2 takes a source out of COLLECTION without taking it out of the registry.
+
+    The default has to be "collect": a row written before the flag existed — every row in the file
+    today — means collect, and a source that silently read as paused would stop being read with
+    nothing saying so. Strict on the type for `watch`'s reason: `collect: "no"` is truthy.
+    """
+    registry = load_registry(write(tmp_path, SOURCES + TAXONOMY))
+    assert registry.sources[0].collect is True
+
+    paused = SOURCES.replace(
+        "    telegram_channels: ['@chan_one']\n",
+        "    telegram_channels: ['@chan_one']\n    collect: false\n",
+    )
+    assert load_registry(write(tmp_path, paused + TAXONOMY)).sources[0].collect is False
+
+    lying = SOURCES.replace(
+        "    telegram_channels: ['@chan_one']\n",
+        "    telegram_channels: ['@chan_one']\n    collect: 'no'\n",
+    )
+    with pytest.raises(ValueError, match="non-boolean collect"):
+        load_registry(write(tmp_path, lying + TAXONOMY))
+
+
 def test_malformed_channel_handle_rejected(tmp_path):
     path = write(
         tmp_path,
