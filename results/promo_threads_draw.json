@@ -1,0 +1,1226 @@
+{
+  "contract": "docs/PHASE-promo-pulse-1.md S2 · docs/plans/promo-pulse-1.md S7 (K7)",
+  "could_not_reach": {
+    "channels_outside_the_two_that_carry_the_population": "the draw is stratified by BRANCH, not by channel: 98% of the population is @msuaaaa and @VARUS_channel, and channel quotas would have put zero threads in seven channels across both draws. Channel is a recorded field on every drawn thread instead.",
+    "threads_with_nothing_but_wordless_comments": 190
+  },
+  "draw": {
+    "currency": {
+      "dev": [
+        {
+          "branches": [
+            "грн"
+          ],
+          "channel": "@VARUS_channel",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 3,
+          "n_wordless": 0,
+          "post_date": "2025-06-26",
+          "store_file": "VARUS_channel",
+          "stratum": "currency",
+          "thread_root": "2537"
+        },
+        {
+          "branches": [
+            "грн"
+          ],
+          "channel": "@VARUS_channel",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 1,
+          "n_wordless": 0,
+          "post_date": "2025-11-14",
+          "store_file": "VARUS_channel",
+          "stratum": "currency",
+          "thread_root": "5589"
+        },
+        {
+          "branches": [
+            "грн"
+          ],
+          "channel": "@VARUS_channel",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 21,
+          "n_wordless": 1,
+          "post_date": "2025-12-09",
+          "store_file": "VARUS_channel",
+          "stratum": "currency",
+          "thread_root": "6009"
+        },
+        {
+          "branches": [
+            "decimal",
+            "грн"
+          ],
+          "channel": "@VARUS_channel",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 6,
+          "n_wordless": 1,
+          "post_date": "2026-06-24",
+          "store_file": "VARUS_channel",
+          "stratum": "currency",
+          "thread_root": "9999"
+        },
+        {
+          "branches": [
+            "грн"
+          ],
+          "channel": "@msuaaaa",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 1,
+          "n_wordless": 0,
+          "post_date": "2026-06-03",
+          "store_file": "msuaaaa",
+          "stratum": "currency",
+          "thread_root": "10121"
+        },
+        {
+          "branches": [
+            "грн"
+          ],
+          "channel": "@msuaaaa",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 6,
+          "n_wordless": 1,
+          "post_date": "2026-06-08",
+          "store_file": "msuaaaa",
+          "stratum": "currency",
+          "thread_root": "10169"
+        },
+        {
+          "branches": [
+            "decimal",
+            "грн"
+          ],
+          "channel": "@msuaaaa",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 7,
+          "n_wordless": 1,
+          "post_date": "2026-06-12",
+          "store_file": "msuaaaa",
+          "stratum": "currency",
+          "thread_root": "10219"
+        },
+        {
+          "branches": [
+            "decimal",
+            "грн"
+          ],
+          "channel": "@msuaaaa",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 2,
+          "n_wordless": 0,
+          "post_date": "2026-07-15",
+          "store_file": "msuaaaa",
+          "stratum": "currency",
+          "thread_root": "10617"
+        },
+        {
+          "branches": [
+            "decimal",
+            "грн"
+          ],
+          "channel": "@msuaaaa",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 1,
+          "n_wordless": 0,
+          "post_date": "2025-03-20",
+          "store_file": "msuaaaa",
+          "stratum": "currency",
+          "thread_root": "3454"
+        },
+        {
+          "branches": [
+            "decimal",
+            "грн"
+          ],
+          "channel": "@msuaaaa",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 9,
+          "n_wordless": 8,
+          "post_date": "2025-06-30",
+          "store_file": "msuaaaa",
+          "stratum": "currency",
+          "thread_root": "5513"
+        },
+        {
+          "branches": [
+            "decimal",
+            "грн"
+          ],
+          "channel": "@msuaaaa",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 1,
+          "n_wordless": 0,
+          "post_date": "2025-11-09",
+          "store_file": "msuaaaa",
+          "stratum": "currency",
+          "thread_root": "7693"
+        },
+        {
+          "branches": [
+            "грн"
+          ],
+          "channel": "@msuaaaa",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 1,
+          "n_wordless": 0,
+          "post_date": "2025-11-19",
+          "store_file": "msuaaaa",
+          "stratum": "currency",
+          "thread_root": "7847"
+        },
+        {
+          "branches": [
+            "грн"
+          ],
+          "channel": "@msuaaaa",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 4,
+          "n_wordless": 2,
+          "post_date": "2025-11-22",
+          "store_file": "msuaaaa",
+          "stratum": "currency",
+          "thread_root": "7900"
+        },
+        {
+          "branches": [
+            "грн"
+          ],
+          "channel": "@msuaaaa",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 7,
+          "n_wordless": 1,
+          "post_date": "2025-12-08",
+          "store_file": "msuaaaa",
+          "stratum": "currency",
+          "thread_root": "8096"
+        },
+        {
+          "branches": [
+            "decimal",
+            "грн"
+          ],
+          "channel": "@msuaaaa",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 12,
+          "n_wordless": 11,
+          "post_date": "2026-01-26",
+          "store_file": "msuaaaa",
+          "stratum": "currency",
+          "thread_root": "8717"
+        },
+        {
+          "branches": [
+            "грн"
+          ],
+          "channel": "@msuaaaa",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 3,
+          "n_wordless": 2,
+          "post_date": "2026-02-09",
+          "store_file": "msuaaaa",
+          "stratum": "currency",
+          "thread_root": "8907"
+        },
+        {
+          "branches": [
+            "decimal",
+            "грн"
+          ],
+          "channel": "@msuaaaa",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 1,
+          "n_wordless": 0,
+          "post_date": "2026-02-14",
+          "store_file": "msuaaaa",
+          "stratum": "currency",
+          "thread_root": "9013"
+        },
+        {
+          "branches": [
+            "decimal",
+            "грн"
+          ],
+          "channel": "@msuaaaa",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 11,
+          "n_wordless": 10,
+          "post_date": "2026-02-16",
+          "store_file": "msuaaaa",
+          "stratum": "currency",
+          "thread_root": "9014"
+        },
+        {
+          "branches": [
+            "грн"
+          ],
+          "channel": "@msuaaaa",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 1,
+          "n_wordless": 0,
+          "post_date": "2026-02-25",
+          "store_file": "msuaaaa",
+          "stratum": "currency",
+          "thread_root": "9139"
+        },
+        {
+          "branches": [
+            "грн"
+          ],
+          "channel": "@msuaaaa",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 1,
+          "n_wordless": 0,
+          "post_date": "2026-05-17",
+          "store_file": "msuaaaa",
+          "stratum": "currency",
+          "thread_root": "9952"
+        }
+      ],
+      "dev_ranks": [
+        11,
+        25,
+        33,
+        62,
+        72,
+        75,
+        76,
+        81,
+        87,
+        91,
+        113,
+        116,
+        118,
+        127,
+        146,
+        154,
+        159,
+        160,
+        161,
+        179
+      ],
+      "eligible": 182,
+      "holdout": [
+        {
+          "branches": [
+            "грн"
+          ],
+          "channel": "@VARUS_channel",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 2,
+          "n_wordless": 0,
+          "post_date": "2025-06-05",
+          "store_file": "VARUS_channel",
+          "stratum": "currency",
+          "thread_root": "2085"
+        },
+        {
+          "branches": [
+            "decimal",
+            "грн"
+          ],
+          "channel": "@VARUS_channel",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 3,
+          "n_wordless": 0,
+          "post_date": "2025-08-07",
+          "store_file": "VARUS_channel",
+          "stratum": "currency",
+          "thread_root": "3436"
+        },
+        {
+          "branches": [
+            "decimal",
+            "грн"
+          ],
+          "channel": "@VARUS_channel",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 10,
+          "n_wordless": 0,
+          "post_date": "2025-09-19",
+          "store_file": "VARUS_channel",
+          "stratum": "currency",
+          "thread_root": "4422"
+        },
+        {
+          "branches": [
+            "decimal",
+            "грн"
+          ],
+          "channel": "@VARUS_channel",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 20,
+          "n_wordless": 3,
+          "post_date": "2026-03-02",
+          "store_file": "VARUS_channel",
+          "stratum": "currency",
+          "thread_root": "7440"
+        },
+        {
+          "branches": [
+            "грн"
+          ],
+          "channel": "@VARUS_channel",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 1,
+          "n_wordless": 0,
+          "post_date": "2026-03-05",
+          "store_file": "VARUS_channel",
+          "stratum": "currency",
+          "thread_root": "7569"
+        },
+        {
+          "branches": [
+            "грн"
+          ],
+          "channel": "@VARUS_channel",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 5,
+          "n_wordless": 0,
+          "post_date": "2026-03-21",
+          "store_file": "VARUS_channel",
+          "stratum": "currency",
+          "thread_root": "7850"
+        },
+        {
+          "branches": [
+            "грн"
+          ],
+          "channel": "@VARUS_channel",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 2,
+          "n_wordless": 0,
+          "post_date": "2026-03-30",
+          "store_file": "VARUS_channel",
+          "stratum": "currency",
+          "thread_root": "8084"
+        },
+        {
+          "branches": [
+            "decimal",
+            "грн"
+          ],
+          "channel": "@VARUS_channel",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 39,
+          "n_wordless": 0,
+          "post_date": "2026-04-23",
+          "store_file": "VARUS_channel",
+          "stratum": "currency",
+          "thread_root": "8647"
+        },
+        {
+          "branches": [
+            "грн"
+          ],
+          "channel": "@VARUS_channel",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 11,
+          "n_wordless": 0,
+          "post_date": "2026-05-02",
+          "store_file": "VARUS_channel",
+          "stratum": "currency",
+          "thread_root": "8823"
+        },
+        {
+          "branches": [
+            "грн"
+          ],
+          "channel": "@VARUS_channel",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 11,
+          "n_wordless": 0,
+          "post_date": "2026-05-22",
+          "store_file": "VARUS_channel",
+          "stratum": "currency",
+          "thread_root": "9277"
+        },
+        {
+          "branches": [
+            "decimal",
+            "грн"
+          ],
+          "channel": "@VARUS_channel",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 1,
+          "n_wordless": 0,
+          "post_date": "2026-06-17",
+          "store_file": "VARUS_channel",
+          "stratum": "currency",
+          "thread_root": "9850"
+        },
+        {
+          "branches": [
+            "грн"
+          ],
+          "channel": "@matusi_ukr",
+          "from_a_channel_r2_stopped_collecting": true,
+          "n_comments": 24,
+          "n_wordless": 1,
+          "post_date": "2026-07-23",
+          "store_file": "matusi_ukr",
+          "stratum": "currency",
+          "thread_root": "22155"
+        },
+        {
+          "branches": [
+            "decimal",
+            "грн"
+          ],
+          "channel": "@msuaaaa",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 2,
+          "n_wordless": 0,
+          "post_date": "2026-07-17",
+          "store_file": "msuaaaa",
+          "stratum": "currency",
+          "thread_root": "10635"
+        },
+        {
+          "branches": [
+            "грн"
+          ],
+          "channel": "@msuaaaa",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 1,
+          "n_wordless": 0,
+          "post_date": "2025-10-16",
+          "store_file": "msuaaaa",
+          "stratum": "currency",
+          "thread_root": "7348"
+        },
+        {
+          "branches": [
+            "грн"
+          ],
+          "channel": "@msuaaaa",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 5,
+          "n_wordless": 0,
+          "post_date": "2025-11-13",
+          "store_file": "msuaaaa",
+          "stratum": "currency",
+          "thread_root": "7792"
+        },
+        {
+          "branches": [
+            "грн"
+          ],
+          "channel": "@msuaaaa",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 1,
+          "n_wordless": 0,
+          "post_date": "2025-12-15",
+          "store_file": "msuaaaa",
+          "stratum": "currency",
+          "thread_root": "8215"
+        },
+        {
+          "branches": [
+            "грн"
+          ],
+          "channel": "@msuaaaa",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 2,
+          "n_wordless": 0,
+          "post_date": "2026-02-25",
+          "store_file": "msuaaaa",
+          "stratum": "currency",
+          "thread_root": "9140"
+        },
+        {
+          "branches": [
+            "decimal",
+            "грн"
+          ],
+          "channel": "@msuaaaa",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 12,
+          "n_wordless": 10,
+          "post_date": "2026-03-02",
+          "store_file": "msuaaaa",
+          "stratum": "currency",
+          "thread_root": "9164"
+        },
+        {
+          "branches": [
+            "грн"
+          ],
+          "channel": "@msuaaaa",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 1,
+          "n_wordless": 0,
+          "post_date": "2026-03-04",
+          "store_file": "msuaaaa",
+          "stratum": "currency",
+          "thread_root": "9196"
+        },
+        {
+          "branches": [
+            "decimal",
+            "грн"
+          ],
+          "channel": "@msuaaaa",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 11,
+          "n_wordless": 10,
+          "post_date": "2026-04-06",
+          "store_file": "msuaaaa",
+          "stratum": "currency",
+          "thread_root": "9545"
+        }
+      ],
+      "holdout_ranks": [
+        9,
+        16,
+        22,
+        38,
+        40,
+        42,
+        43,
+        48,
+        50,
+        56,
+        60,
+        66,
+        82,
+        103,
+        114,
+        128,
+        162,
+        163,
+        164,
+        169
+      ]
+    },
+    "decimal_only": {
+      "dev": [
+        {
+          "branches": [
+            "decimal"
+          ],
+          "channel": "@VARUS_channel",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 6,
+          "n_wordless": 0,
+          "post_date": "2026-07-03",
+          "store_file": "VARUS_channel",
+          "stratum": "decimal_only",
+          "thread_root": "10187"
+        },
+        {
+          "branches": [
+            "decimal"
+          ],
+          "channel": "@VARUS_channel",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 3,
+          "n_wordless": 0,
+          "post_date": "2025-04-24",
+          "store_file": "VARUS_channel",
+          "stratum": "decimal_only",
+          "thread_root": "1901"
+        },
+        {
+          "branches": [
+            "decimal"
+          ],
+          "channel": "@VARUS_channel",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 6,
+          "n_wordless": 0,
+          "post_date": "2025-07-29",
+          "store_file": "VARUS_channel",
+          "stratum": "decimal_only",
+          "thread_root": "3163"
+        },
+        {
+          "branches": [
+            "decimal"
+          ],
+          "channel": "@VARUS_channel",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 2,
+          "n_wordless": 0,
+          "post_date": "2025-08-15",
+          "store_file": "VARUS_channel",
+          "stratum": "decimal_only",
+          "thread_root": "3621"
+        },
+        {
+          "branches": [
+            "decimal"
+          ],
+          "channel": "@VARUS_channel",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 2,
+          "n_wordless": 0,
+          "post_date": "2025-09-11",
+          "store_file": "VARUS_channel",
+          "stratum": "decimal_only",
+          "thread_root": "4202"
+        },
+        {
+          "branches": [
+            "decimal"
+          ],
+          "channel": "@VARUS_channel",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 3,
+          "n_wordless": 0,
+          "post_date": "2025-10-07",
+          "store_file": "VARUS_channel",
+          "stratum": "decimal_only",
+          "thread_root": "4871"
+        },
+        {
+          "branches": [
+            "decimal"
+          ],
+          "channel": "@VARUS_channel",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 14,
+          "n_wordless": 1,
+          "post_date": "2025-10-24",
+          "store_file": "VARUS_channel",
+          "stratum": "decimal_only",
+          "thread_root": "5186"
+        },
+        {
+          "branches": [
+            "decimal"
+          ],
+          "channel": "@VARUS_channel",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 18,
+          "n_wordless": 0,
+          "post_date": "2025-12-21",
+          "store_file": "VARUS_channel",
+          "stratum": "decimal_only",
+          "thread_root": "6216"
+        },
+        {
+          "branches": [
+            "decimal"
+          ],
+          "channel": "@VARUS_channel",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 2,
+          "n_wordless": 0,
+          "post_date": "2026-01-03",
+          "store_file": "VARUS_channel",
+          "stratum": "decimal_only",
+          "thread_root": "6278"
+        },
+        {
+          "branches": [
+            "decimal"
+          ],
+          "channel": "@VARUS_channel",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 2,
+          "n_wordless": 0,
+          "post_date": "2026-04-06",
+          "store_file": "VARUS_channel",
+          "stratum": "decimal_only",
+          "thread_root": "8308"
+        },
+        {
+          "branches": [
+            "decimal"
+          ],
+          "channel": "@VARUS_channel",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 2,
+          "n_wordless": 0,
+          "post_date": "2026-05-12",
+          "store_file": "VARUS_channel",
+          "stratum": "decimal_only",
+          "thread_root": "9006"
+        },
+        {
+          "branches": [
+            "decimal"
+          ],
+          "channel": "@VARUS_channel",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 6,
+          "n_wordless": 0,
+          "post_date": "2026-05-14",
+          "store_file": "VARUS_channel",
+          "stratum": "decimal_only",
+          "thread_root": "9046"
+        },
+        {
+          "branches": [
+            "decimal"
+          ],
+          "channel": "@VARUS_channel",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 2,
+          "n_wordless": 0,
+          "post_date": "2026-06-18",
+          "store_file": "VARUS_channel",
+          "stratum": "decimal_only",
+          "thread_root": "9853"
+        },
+        {
+          "branches": [
+            "decimal"
+          ],
+          "channel": "@msuaaaa",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 2,
+          "n_wordless": 0,
+          "post_date": "2025-02-17",
+          "store_file": "msuaaaa",
+          "stratum": "decimal_only",
+          "thread_root": "2684"
+        },
+        {
+          "branches": [
+            "decimal"
+          ],
+          "channel": "@msuaaaa",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 3,
+          "n_wordless": 0,
+          "post_date": "2025-03-04",
+          "store_file": "msuaaaa",
+          "stratum": "decimal_only",
+          "thread_root": "3034"
+        },
+        {
+          "branches": [
+            "decimal"
+          ],
+          "channel": "@msuaaaa",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 1,
+          "n_wordless": 0,
+          "post_date": "2025-04-11",
+          "store_file": "msuaaaa",
+          "stratum": "decimal_only",
+          "thread_root": "3915"
+        },
+        {
+          "branches": [
+            "decimal"
+          ],
+          "channel": "@msuaaaa",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 2,
+          "n_wordless": 0,
+          "post_date": "2025-04-28",
+          "store_file": "msuaaaa",
+          "stratum": "decimal_only",
+          "thread_root": "4173"
+        },
+        {
+          "branches": [
+            "decimal"
+          ],
+          "channel": "@msuaaaa",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 1,
+          "n_wordless": 0,
+          "post_date": "2025-08-27",
+          "store_file": "msuaaaa",
+          "stratum": "decimal_only",
+          "thread_root": "6523"
+        },
+        {
+          "branches": [
+            "decimal"
+          ],
+          "channel": "@msuaaaa",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 2,
+          "n_wordless": 1,
+          "post_date": "2025-10-07",
+          "store_file": "msuaaaa",
+          "stratum": "decimal_only",
+          "thread_root": "7187"
+        },
+        {
+          "branches": [
+            "decimal"
+          ],
+          "channel": "@msuaaaa",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 30,
+          "n_wordless": 28,
+          "post_date": "2026-02-03",
+          "store_file": "msuaaaa",
+          "stratum": "decimal_only",
+          "thread_root": "8788"
+        }
+      ],
+      "dev_ranks": [
+        3,
+        12,
+        33,
+        37,
+        44,
+        53,
+        56,
+        76,
+        79,
+        124,
+        131,
+        133,
+        152,
+        181,
+        186,
+        202,
+        205,
+        238,
+        246,
+        271
+      ],
+      "eligible": 306,
+      "holdout": [
+        {
+          "branches": [
+            "decimal"
+          ],
+          "channel": "@VARUS_channel",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 6,
+          "n_wordless": 1,
+          "post_date": "2026-07-24",
+          "store_file": "VARUS_channel",
+          "stratum": "decimal_only",
+          "thread_root": "10603"
+        },
+        {
+          "branches": [
+            "decimal"
+          ],
+          "channel": "@VARUS_channel",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 1,
+          "n_wordless": 0,
+          "post_date": "2025-06-19",
+          "store_file": "VARUS_channel",
+          "stratum": "decimal_only",
+          "thread_root": "2353"
+        },
+        {
+          "branches": [
+            "decimal"
+          ],
+          "channel": "@VARUS_channel",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 2,
+          "n_wordless": 0,
+          "post_date": "2025-07-24",
+          "store_file": "VARUS_channel",
+          "stratum": "decimal_only",
+          "thread_root": "3054"
+        },
+        {
+          "branches": [
+            "decimal"
+          ],
+          "channel": "@VARUS_channel",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 10,
+          "n_wordless": 0,
+          "post_date": "2025-08-03",
+          "store_file": "VARUS_channel",
+          "stratum": "decimal_only",
+          "thread_root": "3289"
+        },
+        {
+          "branches": [
+            "decimal"
+          ],
+          "channel": "@VARUS_channel",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 3,
+          "n_wordless": 0,
+          "post_date": "2026-04-15",
+          "store_file": "VARUS_channel",
+          "stratum": "decimal_only",
+          "thread_root": "8430"
+        },
+        {
+          "branches": [
+            "decimal"
+          ],
+          "channel": "@VARUS_channel",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 1,
+          "n_wordless": 0,
+          "post_date": "2026-05-12",
+          "store_file": "VARUS_channel",
+          "stratum": "decimal_only",
+          "thread_root": "9034"
+        },
+        {
+          "branches": [
+            "decimal"
+          ],
+          "channel": "@VARUS_channel",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 1,
+          "n_wordless": 0,
+          "post_date": "2026-06-03",
+          "store_file": "VARUS_channel",
+          "stratum": "decimal_only",
+          "thread_root": "9461"
+        },
+        {
+          "branches": [
+            "decimal"
+          ],
+          "channel": "@VARUS_channel",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 8,
+          "n_wordless": 0,
+          "post_date": "2026-06-13",
+          "store_file": "VARUS_channel",
+          "stratum": "decimal_only",
+          "thread_root": "9802"
+        },
+        {
+          "branches": [
+            "decimal"
+          ],
+          "channel": "@matusi_ukr",
+          "from_a_channel_r2_stopped_collecting": true,
+          "n_comments": 2,
+          "n_wordless": 0,
+          "post_date": "2026-08-04",
+          "store_file": "matusi_ukr",
+          "stratum": "decimal_only",
+          "thread_root": "22304"
+        },
+        {
+          "branches": [
+            "decimal"
+          ],
+          "channel": "@msuaaaa",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 1,
+          "n_wordless": 0,
+          "post_date": "2025-05-13",
+          "store_file": "msuaaaa",
+          "stratum": "decimal_only",
+          "thread_root": "4490"
+        },
+        {
+          "branches": [
+            "decimal"
+          ],
+          "channel": "@msuaaaa",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 20,
+          "n_wordless": 18,
+          "post_date": "2025-06-05",
+          "store_file": "msuaaaa",
+          "stratum": "decimal_only",
+          "thread_root": "5015"
+        },
+        {
+          "branches": [
+            "decimal"
+          ],
+          "channel": "@msuaaaa",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 2,
+          "n_wordless": 0,
+          "post_date": "2025-06-10",
+          "store_file": "msuaaaa",
+          "stratum": "decimal_only",
+          "thread_root": "5113"
+        },
+        {
+          "branches": [
+            "decimal"
+          ],
+          "channel": "@msuaaaa",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 1,
+          "n_wordless": 0,
+          "post_date": "2025-06-17",
+          "store_file": "msuaaaa",
+          "stratum": "decimal_only",
+          "thread_root": "5255"
+        },
+        {
+          "branches": [
+            "decimal"
+          ],
+          "channel": "@msuaaaa",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 1,
+          "n_wordless": 0,
+          "post_date": "2025-07-09",
+          "store_file": "msuaaaa",
+          "stratum": "decimal_only",
+          "thread_root": "5704"
+        },
+        {
+          "branches": [
+            "decimal"
+          ],
+          "channel": "@msuaaaa",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 1,
+          "n_wordless": 0,
+          "post_date": "2025-11-18",
+          "store_file": "msuaaaa",
+          "stratum": "decimal_only",
+          "thread_root": "7825"
+        },
+        {
+          "branches": [
+            "decimal"
+          ],
+          "channel": "@msuaaaa",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 4,
+          "n_wordless": 2,
+          "post_date": "2025-12-31",
+          "store_file": "msuaaaa",
+          "stratum": "decimal_only",
+          "thread_root": "8412"
+        },
+        {
+          "branches": [
+            "decimal"
+          ],
+          "channel": "@msuaaaa",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 1,
+          "n_wordless": 0,
+          "post_date": "2026-02-03",
+          "store_file": "msuaaaa",
+          "stratum": "decimal_only",
+          "thread_root": "8768"
+        },
+        {
+          "branches": [
+            "decimal"
+          ],
+          "channel": "@msuaaaa",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 21,
+          "n_wordless": 19,
+          "post_date": "2026-03-03",
+          "store_file": "msuaaaa",
+          "stratum": "decimal_only",
+          "thread_root": "9190"
+        },
+        {
+          "branches": [
+            "decimal"
+          ],
+          "channel": "@msuaaaa",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 29,
+          "n_wordless": 28,
+          "post_date": "2026-03-31",
+          "store_file": "msuaaaa",
+          "stratum": "decimal_only",
+          "thread_root": "9483"
+        },
+        {
+          "branches": [
+            "decimal"
+          ],
+          "channel": "@msuaaaa",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 17,
+          "n_wordless": 16,
+          "post_date": "2026-04-09",
+          "store_file": "msuaaaa",
+          "stratum": "decimal_only",
+          "thread_root": "9577"
+        }
+      ],
+      "holdout_ranks": [
+        8,
+        19,
+        31,
+        34,
+        126,
+        132,
+        143,
+        150,
+        159,
+        210,
+        217,
+        219,
+        222,
+        229,
+        258,
+        267,
+        270,
+        285,
+        291,
+        292
+      ]
+    }
+  },
+  "population": {
+    "by_channel": {
+      "@HealthPsycholog": 3,
+      "@VARUS_channel": 218,
+      "@kkondr_fit": 1,
+      "@kopiyochka1": 1,
+      "@mandziak": 2,
+      "@matusi_ukr": 4,
+      "@msuaaaa": 447,
+      "@sashafitnesslife": 1,
+      "@ya_Nenka": 1
+    },
+    "by_stratum": {
+      "currency": 229,
+      "decimal_only": 449
+    },
+    "from_channels_r2_stopped_collecting": 12,
+    "ids_sha256": "16de3355a4e06e00f7b01730c6ad761c57014e1e3a7d827d4530752e9ba4a28e",
+    "provenance": {
+      "means": "the six pinned store files were the bytes this draw read; the baseline is the only durable proof, because `data/` is gitignored",
+      "raw_v1_baseline.sha256": "ed28be9a0774eaf61d0b5a72b879fc1550e95c9baf1c85fe56d926f2e7c393bf",
+      "verify": "shasum -c results/raw_v1_baseline.sha256 — six files, all OK"
+    },
+    "root": "data/raw — the FROZEN v1 archive, read v1-only on purpose",
+    "threads": 678,
+    "why_not_the_union": "SP-4 ruling (a) makes `data/raw_r2/` the live root and every other reader takes v1 ∪ r2. This one does not: the holdout is frozen at the draw and its population has to be frozen too, so a top-up landing between two runs cannot move 678/488 under it (plan §5.14)."
+  },
+  "predicate": {
+    "branches": {
+      "decimal": "\\d+[,.]\\d\\d",
+      "grn": "\\bgrn\\b",
+      "грн": "грн",
+      "₴": "₴"
+    },
+    "join": "comment.parent_msg_id == post.msg_id, both as strings",
+    "name": "retail_census.PRICE_BRANCHES",
+    "same_instrument_as": "scripts/promo_comment_yield.py"
+  },
+  "queue_rule": {
+    "comments": 4718,
+    "eligible_ids_sha256": "a6a54dae42a06a5d77a70a0568898e40b2033e42ac3af7df40aa4589eafeb6bd",
+    "eligible_threads": 488,
+    "spec": "SPEC 3.19 — a text-less comment leaves the INFERENCE QUEUE from the next paid cycle. A queue rule, never a deletion: «the volume of wordless reactions is itself a signal», so the count is printed beside every distribution over comments.",
+    "threads_with_nothing_but_wordless_comments": 190,
+    "wordless_comments": 2808
+  },
+  "quotas": {
+    "dev": 20,
+    "holdout": 20
+  },
+  "ruling": "operator 2026-08-30: «Все 678, дро 20/20 по типу» — docs/reviews/2026-08-30-plan-promo-pulse-1.md, SP-0 q3",
+  "seed": 42,
+  "seeded_per_stratum": "random.Random(f'42:<stratum>') — .claude/rules/registrations-and-draws.md",
+  "strata": {
+    "currency": "the post's text matches any of грн, ₴, grn",
+    "decimal_only": "it matches the `decimal` branch and none of the currency ones",
+    "why": "two thirds of the population match on `decimal` alone, which also fires on a DATE. The ruling keeps the whole population and makes the split a stratum, so per-stratum agreement is a reading beside the bars instead of a cut nobody can see."
+  }
+}
