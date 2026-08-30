@@ -47,11 +47,41 @@ CHANNEL_NOTES = {
         " channel of its own — dairy share 0.000 is the marketplace's mix, not a grocer's."
     ),
     "@fozzyshopua": "«FOZZY Cash&Сarry» — the wholesale cash-and-carry format, not a retail store.",
+    "@atb_market_official": (
+        "«АТБ-МАРКЕТ (офіційна сторінка)», 41 858 subs — ATB's real official channel, found via"
+        " atbmarket.com → its official Instagram. It is CORPORATE: price share 0.000 and comments"
+        " closed. ATB's promo with comments lives in unofficial deal channels (working_set A3)."
+    ),
+    "+Ejz6ubzm21IyMTQy": (
+        "«Маркетопт 🔆 Офіційна сторінка», 42 378 members — the chain's main channel, found via its"
+        " official Instagram because it has no website. A private invite: CheckChatInvite returns"
+        " the title and the count and NO history, so collecting it needs a join — the operator's"
+        " call, and out of this census's read-only scope."
+    ),
+    "@epicentrk_sale": (
+        "«ЕПІЦЕНТР», 52 081 subs, price .657 — but NOT linked from Епіцентр's own properties:"
+        " epicentrk.ua carries no t.me and the official Instagram @epicentr_ua (191K) carries none"
+        " either. It is a SEED handle from the research note, so its identity is the census's"
+        " assumption, not the chain's word."
+    ),
 }
 
 # Handles a chain publishes that are NOT that chain's channel. Kept as an explicit list rather
 # than a heuristic: each one is a judgement about a brand, and a reader must see whose.
 NOT_THE_CHAINS_CHANNEL = {"Delikat": {"@bloom_cherkasy"}}
+
+# The reverse case: a chain's OWN channel that its own site does not link, so the site-reading
+# instrument cannot reach it. r1's name search did, and the channel's own preview confirms whose
+# it is. Without this the table says «Близенько has no channel» while the working set's A3 says it
+# does — the two instruments are complementary, and the deliverable has to say so in one voice.
+CHAIN_OWN_FROM_R1 = {
+    "Близенько": (
+        "@blyzenkoua",
+        "the chain's own channel, «БЛИЗЕНЬКО🌿», preview description «Мережа магазинів Близенько»."
+        " blyzenko.ua links no t.me at all, so step 1 could not see it; r1's name search did."
+        " Measured on r1's 2026-08-27 clock, not re-measured.",
+    ),
+}
 
 AGGREGATORS = ["MSUa", "Копійочка", "Знижком", "Хочу дешевше", "Акції та знижки", "Skidka"]
 
@@ -128,6 +158,21 @@ def build() -> list[dict]:
         if disowned:
             entry["not_the_chains_channel"] = sorted(disowned)
             entry["notes"] = [CHANNEL_NOTES[h] for h in sorted(disowned) if h in CHANNEL_NOTES]
+        own_from_r1 = CHAIN_OWN_FROM_R1.get(name)
+        if not measured and own_from_r1:
+            handle, why = own_from_r1
+            hit = [c for c in r1.get(name, []) if c["handle"] == handle]
+            if hit:
+                measured = [
+                    {
+                        **hit[0],
+                        "handle": handle,
+                        "measured_by": "api (r1, 2026-08-27)",
+                        "provenance": why,
+                    }
+                ]
+                entry["handles"] = sorted({*entry.get("handles", []), handle})
+                entry["kinds"] = {**entry.get("kinds", {}), handle: "channel"}
         if measured:
             m = measured[-1]
             stats = m.get("stats") or {}
@@ -148,7 +193,7 @@ def build() -> list[dict]:
                 "measured_by": m.get("measured_by"),
                 "window": m.get("window"),
                 "note": m.get("why_unmeasured") or m.get("error"),
-                "channel_note": CHANNEL_NOTES.get(m.get("handle")),
+                "channel_note": CHANNEL_NOTES.get(m.get("handle")) or m.get("provenance"),
             } | screen(from_own_site=True, stats=stats)
         elif name in AGGREGATORS:
             pick = pick_aggregator(r1.get(name, []))

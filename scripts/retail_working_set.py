@@ -56,7 +56,12 @@ POLTAVA_TOWNS = [
     "Машівка",
 ]
 
-UA_BAR = 0.5
+# The operator lifted the Ukrainian-language bar on 2026-08-30: «Убрать планку, оставить
+# колонкой». Language is now a COLUMN the operator filters by eye, not a filter that silently
+# removes rows — Полтавщина speaks суржик and ru-ua mix, and the 4.5h2 adapter is trained on both.
+# The bar's old value is kept only to render «what it used to exclude».
+UA_BAR_LIFTED = True
+FORMER_UA_BAR = 0.5
 
 
 def towns_of(row: dict) -> list[str]:
@@ -76,8 +81,12 @@ def poltava_rows() -> list[dict]:
         for row in r1["rows"]
         if row.get("verdict") == "enter"
         and any(f.startswith("poltava_chats") for f in row.get("found_by", []))
-        and (row.get("stats") or {}).get("language_mix", {}).get("ua", 0) >= UA_BAR
     ]
+
+
+def cell(text: str) -> str:
+    """A channel title can contain `|` («ФАНАТИК АТБ | АКЦІЇ») and that ends the markdown column."""
+    return text.replace("|", "\\|")
 
 
 def num(value, digits: int = 3) -> str:
@@ -106,13 +115,86 @@ def why_empty(town: str, all_rows: list[dict]) -> str:
         return f"{len(found)} candidate(s) found and NEVER measured — the FloodWait stopped the pass; still buyable"
     enter = [r for r in checked if r.get("verdict") == "enter"]
     if enter:
-        best = max(enter, key=lambda r: (r.get("stats") or {}).get("language_mix", {}).get("ua", 0))
-        share = (best.get("stats") or {}).get("language_mix", {}).get("ua", 0)
+        return f"{len(enter)} measured `enter` — should not be empty; check the renderer"
+    # Resolved, readable, and nobody writes in it. That is not «not found» and not «not measured»:
+    # the chat EXISTS and is open, and its 28-day window holds zero messages. No budget buys that.
+    silent = [
+        r
+        for r in checked
+        if r.get("resolved")
+        and r.get("messages_open")
+        # A broadcast's reason says «no posts», a group's says «no messages» — the same silence,
+        # two words. Matching one of them files the other under a meaningless catch-all.
+        and any(
+            "no posts in the sampled window" in x or "no messages in the sampled window" in x
+            for x in r.get("reasons", [])
+        )
+    ]
+    if silent:
         return (
-            f"measured, and {best['handle']} IS collectable (`enter`) — it is held out by the"
-            f" Ukrainian bar alone, ua {share:.2f} < {UA_BAR}. Lowering that bar is the operator's"
+            f"{len(silent)} of {len(checked)} measured chat(s) resolve and are OPEN, and carry"
+            " ZERO messages in the 28-day window — the chat exists and is silent, which no budget"
+            f" changes: {', '.join(r['handle'] for r in silent)}"
         )
     return f"{len(checked)} measured, none `enter`"
+
+
+# Chain-specific promo channels r1's name search measured and the site-reading instrument could
+# never see, because the chain does not link them. Each identity was confirmed by hand against the
+# channel's own public preview (`t.me/s/<handle>`, free HTTP) — a handle whose identity is a guess
+# does not belong in a working set, which is exactly what r1 was refused for (Dv871).
+#
+# This section exists because the operator's priority is «комментарии к промо», and the census
+# shows those do NOT live on the chains' official channels: ATB's own channel carries no promo at
+# all, while four unofficial ATB deal channels carry nothing else.
+CHAIN_PROMO = {
+    "@blyzenkoua": (
+        "Близенько",
+        "own",
+        "preview says «Мережа магазинів Близенько» — the CHAIN's own channel; blyzenko.ua simply does not link it, which is why the site instrument missed it",
+    ),
+    "@ATB_FANatik": (
+        "АТБ",
+        "unofficial",
+        "«ФАНАТИК АТБ | АКЦІЇ» — a fan/deals channel, not ATB's. ATB's own @atb_market_official carries no promo and no comments",
+    ),
+    "@discountAtb": ("АТБ", "unofficial", "«Знижки АТБ» — a deals channel"),
+    "@ATBATBATBAT": ("АТБ", "unofficial", "«НАШЕ АТБ / АКЦІЇ / НОВИНКИ»"),
+    "@atbmarketznuzhku": (
+        "АТБ",
+        "unofficial",
+        "«АТБ знижки Україна | Економія», description «Актуальні акції та знижки»",
+    ),
+    "@rozlyvne": (
+        "Маркетопт",
+        "own",
+        "preview says «Офіційний канал Маркетопт Розливне Пиво» — official, but the draft-beer line",
+    ),
+    "@zakazzua": (
+        "Zakaz.ua",
+        "unofficial",
+        "«Доставка з супермаркетів/Знижки» — not linked from zakaz.ua",
+    ),
+    "@RUKAVICHKAkr": (
+        "Рукавичка",
+        "unconfirmed",
+        "«РУКАВИЧКА-КР» — reads like a local branch; no description, identity NOT confirmed",
+    ),
+    "@kopiyka_tm": (
+        "Копійка",
+        "unconfirmed",
+        "titled «Копійка» with no description; dairy 0.500 is the highest in the census and rests on an unconfirmed identity — do not collect before confirming",
+    ),
+}
+# Measured under a chain's name and NOT that chain: kept visible so the exclusion is a decision on
+# the record rather than a silent filter.
+REJECTED_AS_NOT_THE_CHAIN = {
+    "@chortkiv2": "«Наш край - Чортківщина», description «канал Чортківщини» — regional news, not the Наш Край chain",
+    "@ON_LINE_MO": "«Маркетопт ON_LINE» — its own description says «Ця група тільки для робітників мережі МаркетОпт»: a STAFF group, not a promo feed, despite a 0.460 price share",
+    "@ispkopiyka": "«Копійка» the internet provider (Dv871's original example)",
+    "@K_G_B_fin": "«Копійка гривню береже» — a personal-finance channel",
+    "@depositorfrank": "«Канал про гроші» — finance, matched on the word «Грош»",
+}
 
 
 def render() -> str:
@@ -146,7 +228,7 @@ def render() -> str:
         out.append(
             f"| {r['name']} | {r['handle']} | {num(r.get('subscribers'))} | {num(r.get('n_posts'))} "
             f"| **{num(r.get('price_share'))}** | {num(r.get('dairy_share'))} "
-            f"| {num(r.get('posts_per_day'))} | {r.get('channel_note') or '—'} |"
+            f"| {num(r.get('posts_per_day'))} | {cell(r.get('channel_note') or '—')} |"
         )
     out += [
         "",
@@ -205,14 +287,56 @@ def render() -> str:
             else ""
         ),
         "",
+        "## A3 — the chains' promo that their own sites never link",
+        "",
+        "r1's name search measured these and the site instrument cannot see them: a chain does not",
+        "link a fan channel, and Близенько does not link its own. Identity confirmed by hand from",
+        "each channel's public preview; `own` means the chain's, `unofficial` a third party's, and",
+        "`unconfirmed` must NOT be collected before someone confirms it.",
+        "",
+        "| chain | channel | kind | subs | price | comments | com/day | dairy | ua | identity |",
+        "|---|---|---|--:|--:|---|--:|--:|--:|---|",
+    ]
+    r1_rows = {r["handle"]: r for r in json.loads(R1.read_text(encoding="utf-8"))["rows"]}
+    promo = []
+    for handle, (chain, kind, why) in CHAIN_PROMO.items():
+        row = r1_rows.get(handle)
+        if not row or not row.get("checked"):
+            continue
+        promo.append((handle, chain, kind, why, row))
+    promo.sort(key=lambda x: -((x[4].get("stats") or {}).get("price_share") or 0))
+    for handle, chain, kind, why, row in promo:
+        s = row.get("stats") or {}
+        out.append(
+            f"| {chain} | {handle} | {kind} | {row.get('subscribers') or '—'} "
+            f"| **{num(s.get('price_share'))}** | {'open' if row.get('comments_enabled') else 'closed'} "
+            f"| {num(s.get('comments_per_day'))} | {num(s.get('dairy_share'))} "
+            f"| {(s.get('language_mix') or {}).get('ua', 0):.2f} | {cell(why)} |"
+        )
+    open_promo = [p for p in promo if p[4].get("comments_enabled")]
+    out += [
+        "",
+        f"**{len(open_promo)} of these {len(promo)} have comments OPEN** — "
+        + ", ".join(f"{h} ({c})" for h, c, _k, _w, _r in open_promo)
+        + ". This is where a comment under a promo post actually exists for АТБ, whose own"
+        " channel has neither promo nor comments.",
+        "",
+        "Measured under a chain's name and NOT that chain — excluded on the record, not silently:",
+        "",
+    ]
+    out += [f"- `{h}` — {cell(why)}" for h, why in REJECTED_AS_NOT_THE_CHAIN.items()]
+    out += [
+        "",
         "## B — Poltava oblast: the chats, by district centre",
         "",
-        f"{len(chats)} chats, `enter`, `ua >= {UA_BAR}`, across "
+        f"{len(chats)} chats with verdict `enter`, across "
         f"{len({t for c in chats for t in towns_of(c)})} of {len(POLTAVA_TOWNS)} district centres"
-        " SPEC v2 §3 authorises. These are r1's readings, not re-measured in r2. A chat surfaced by"
-        " two centres' queries is listed under both and counted once.",
+        " SPEC v2 §3 authorises. The Ukrainian-language bar is LIFTED (operator, 2026-08-30) —"
+        f" language is the `ua` column below, not a filter; at the former `ua >= {FORMER_UA_BAR}`"
+        " this table held 47 chats and 18 centres. A chat surfaced by two centres' queries is"
+        " listed under both and counted once.",
         "",
-        "| district centre | chats | handles (subs · msgs/day · dairy) |",
+        "| district centre | chats | handles (subs · msgs/day · dairy · ua) |",
         "|---|--:|---|",
     ]
     by_town: dict[str, list[dict]] = {}
@@ -230,7 +354,8 @@ def render() -> str:
         cells = " · ".join(
             f"{c['handle']} ({c.get('subscribers') or '—'} · "
             f"{num((c.get('stats') or {}).get('messages_per_day'), 1)} · "
-            f"{num((c.get('stats') or {}).get('dairy_share'))})"
+            f"{num((c.get('stats') or {}).get('dairy_share'))} · "
+            f"ua {(c.get('stats') or {}).get('language_mix', {}).get('ua', 0):.2f})"
             for c in rows
         )
         out.append(f"| {town} | {len(rows)} | {cells} |")

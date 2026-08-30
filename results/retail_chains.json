@@ -4,9 +4,10 @@
       "name": "АТБ",
       "site": "atbmarket.com",
       "site_status": "ok",
-      "method": "browser",
+      "method": "browser (official social property)",
       "handles": [
-        "@atb_market_bot"
+        "@atb_market_bot",
+        "@atb_market_official"
       ],
       "pages": [
         {
@@ -40,14 +41,87 @@
       "in_spec_a": true,
       "is_aggregator": false,
       "kinds": {
-        "@atb_market_bot": "bot"
+        "@atb_market_bot": "bot",
+        "@atb_market_official": "channel"
       },
-      "resolvable": [],
+      "resolvable": [
+        "@atb_market_official"
+      ],
       "bundle": {
         "status": "blocked",
         "n_scripts": 0,
         "assets": []
-      }
+      },
+      "handle_provenance": {
+        "@atb_market_official": "atbmarket.com links instagram.com/atb.market.official («Офіційна сторінка АТБ-маркет», 202K); that page links t.me/atb_market_official, whose preview reads «АТБ-МАРКЕТ (офіційна сторінка)», 41.9K. Two hops, both official properties."
+      },
+      "measured": [
+        {
+          "handle": "@atb_market_official",
+          "search": {
+            "title": "АТБ",
+            "subscribers": null
+          },
+          "checked": true,
+          "checked_at": "2026-08-30T09:37:25+00:00",
+          "measured_by": "api (r3)",
+          "window": "2026-08-02..2026-08-30",
+          "resolved": true,
+          "title": "АТБ-МАРКЕТ (офіційна сторінка)",
+          "subscribers": 41858,
+          "telegram_verified": true,
+          "broadcast": true,
+          "megagroup": false,
+          "is_group": false,
+          "messages_open": true,
+          "messages_open_error": null,
+          "comments_enabled": false,
+          "discussion_group": null,
+          "stats": {
+            "window_days": 28,
+            "window_truncated": false,
+            "n_messages_raw": 209,
+            "n_posts": 31,
+            "posts_per_day": 1.107,
+            "messages_per_day": null,
+            "last_post": "2026-08-26T14:04:43+00:00",
+            "n_texts": 3,
+            "comments_per_day": 0.0,
+            "n_posts_with_comments": 0,
+            "price_share": 0.0,
+            "price_share_contract_regex": 0.0,
+            "price_branch_hits": {
+              "грн": 0,
+              "₴": 0,
+              "grn": 0,
+              "decimal": 0
+            },
+            "media_share": 1.0,
+            "leaflet_or_price_share": 1.0,
+            "dairy_share": 0.0,
+            "dairy_posts_per_day": 0.0,
+            "language_mix": {
+              "ua": 1.0
+            },
+            "traffic": {
+              "n_posts": 31,
+              "first_post": "2026-08-05T09:38:49+00:00",
+              "last_post": "2026-08-26T14:04:43+00:00",
+              "window_days": 21.2,
+              "posts_per_day": 1.46,
+              "share_with_comments": 0.0,
+              "median_comments": 0
+            }
+          },
+          "verdict": "posts-only",
+          "reasons": [
+            "comments disabled (no linked discussion group)"
+          ],
+          "capability_verdict": "posts-only",
+          "error": null,
+          "authorised_by": "operator, 2026-08-30: «flood wait окончен продолжи сканирование каналов»"
+        }
+      ]
     },
     {
       "name": "Сільпо",
@@ -2089,11 +2163,17 @@
     {
       "name": "Маркетопт",
       "site": null,
-      "site_status": "no-site-verified",
-      "method": null,
-      "handles": [],
-      "kinds": {},
-      "resolvable": [],
+      "site_status": "no site — official Instagram carries the Telegram",
+      "method": "browser (official social property)",
+      "handles": [
+        "+Ejz6ubzm21IyMTQy"
+      ],
+      "kinds": {
+        "+Ejz6ubzm21IyMTQy": "invite"
+      },
+      "resolvable": [
+        "+Ejz6ubzm21IyMTQy"
+      ],
       "pages": [],
       "in_spec_a": true,
       "is_aggregator": false,
@@ -2110,6 +2190,22 @@
           "http": 0,
           "bytes": 0,
           "names_the_chain": false
+        }
+      ],
+      "handle_provenance": {
+        "+Ejz6ubzm21IyMTQy": "the chain has no website; its official Instagram @marketopt («Офіційна сторінка», 76K) links this invite. Instagram IS Маркетопт's official property here."
+      },
+      "measured": [
+        {
+          "invite_result": "ChatInvite",
+          "handle": "+Ejz6ubzm21IyMTQy",
+          "title": "Маркетопт 🔆 Офіційна сторінка",
+          "subscribers": 42378,
+          "megagroup": false,
+          "history_readable": false,
+          "why_unmeasured": "CheckChatInvite returns a title and a member count and no messages; measuring posts/day, price share or comments/day would require joining, and this census is read-only (r1's rule, unchanged)",
+          "measured_by": "api (r3)",
+          "authorised_by": "operator, 2026-08-30: «flood wait окончен продолжи сканирование каналов»"
         }
       ]
     },
@@ -2555,9 +2651,11 @@
     {
       "name": "Епіцентр [not in SPEC §3 A]",
       "site": "epicentrk.ua",
-      "site_status": "no-link",
-      "method": "curl",
-      "handles": [],
+      "site_status": "ok (site links no t.me; handle is a seed, not the chain's own link)",
+      "method": "seed handle + browser check of the chain's properties",
+      "handles": [
+        "@epicentrk_sale"
+      ],
       "pages": [
         {
           "url": "https://epicentrk.ua/",
@@ -2580,8 +2678,12 @@
       ],
       "in_spec_a": false,
       "is_aggregator": false,
-      "kinds": {},
-      "resolvable": [],
+      "kinds": {
+        "@epicentrk_sale": "channel"
+      },
+      "resolvable": [
+        "@epicentrk_sale"
+      ],
       "bundle": {
         "status": "no-link-in-bundle",
         "n_scripts": 17,
@@ -2689,7 +2791,77 @@
             "links": []
           }
         ]
-      }
+      },
+      "handle_provenance": {
+        "@epicentrk_sale": "NOT from Епіцентр's own properties — epicentrk.ua links no t.me and the official Instagram @epicentr_ua (191K) links none either. It is a SEED handle from the research note (discover_channels.SEED_HANDLES); preview title «ЕПІЦЕНТР», 52.1K. Identity unconfirmed by the chain, so it is a candidate, not an official channel."
+      },
+      "measured": [
+        {
+          "handle": "@epicentrk_sale",
+          "search": {
+            "title": "Епіцентр [not in SPEC §3 A]",
+            "subscribers": null
+          },
+          "checked": true,
+          "checked_at": "2026-08-30T09:37:33+00:00",
+          "measured_by": "api (r3)",
+          "window": "2026-08-02..2026-08-30",
+          "resolved": true,
+          "title": "ЕПІЦЕНТР",
+          "subscribers": 52081,
+          "telegram_verified": true,
+          "broadcast": true,
+          "megagroup": false,
+          "is_group": false,
+          "messages_open": true,
+          "messages_open_error": null,
+          "comments_enabled": false,
+          "discussion_group": null,
+          "stats": {
+            "window_days": 28,
+            "window_truncated": false,
+            "n_messages_raw": 139,
+            "n_posts": 137,
+            "posts_per_day": 4.893,
+            "messages_per_day": null,
+            "last_post": "2026-08-30T07:10:04+00:00",
+            "n_texts": 133,
+            "comments_per_day": 0.0,
+            "n_posts_with_comments": 0,
+            "price_share": 0.657,
+            "price_share_contract_regex": 0.613,
+            "price_branch_hits": {
+              "грн": 32,
+              "₴": 57,
+              "grn": 0,
+              "decimal": 73
+            },
+            "media_share": 0.971,
+            "leaflet_or_price_share": 0.971,
+            "dairy_share": 0.051,
+            "dairy_posts_per_day": 0.25,
+            "language_mix": {
+              "ua": 1.0
+            },
+            "traffic": {
+              "n_posts": 137,
+              "first_post": "2026-08-02T11:01:55+00:00",
+              "last_post": "2026-08-30T07:10:04+00:00",
+              "window_days": 27.8,
+              "posts_per_day": 4.92,
+              "share_with_comments": 0.0,
+              "median_comments": 0
+            }
+          },
+          "verdict": "posts-only",
+          "reasons": [
+            "comments disabled (no linked discussion group)"
+          ],
+          "capability_verdict": "posts-only",
+          "error": null,
+          "authorised_by": "operator, 2026-08-30: «flood wait окончен продолжи сканирование каналов»"
+        }
+      ]
     }
   ],
   "step_1": {
@@ -2759,5 +2931,39 @@
       }
     ],
     "requests_all_passes": 40
+  },
+  "step_3": {
+    "passes": [
+      {
+        "at": "2026-08-30T09:38:01+00:00",
+        "retail_measured": 3,
+        "poltava_measured": 7,
+        "requests": 41,
+        "by_type": {
+          "ResolveUsernameRequest": 9,
+          "GetFullChannelRequest": 9,
+          "GetHistoryRequest": 22,
+          "CheckChatInviteRequest": 1
+        },
+        "pause_measured_min": 3.05,
+        "gaps": [
+          5.3,
+          3.05,
+          4.87,
+          3.3,
+          4.57,
+          3.33,
+          3.32,
+          3.35,
+          3.38
+        ],
+        "suggest_would_have_fired_for": [],
+        "flood_wait_seconds": null
+      }
+    ],
+    "authorised_by": "operator, 2026-08-30: «flood wait окончен продолжи сканирование каналов»",
+    "budget": 80,
+    "budget_note": "a SEPARATE ceiling from the contract's ≤40, which step 2 spent in full; this pass does not raise that cap, it records a new authorisation beside it",
+    "requests_all_passes": 41
   }
 }

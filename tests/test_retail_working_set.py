@@ -9,22 +9,42 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
 
-from retail_working_set import POLTAVA_TOWNS, R1, UA_BAR, towns_of, why_empty  # noqa: E402
+from retail_working_set import (  # noqa: E402
+    FORMER_UA_BAR,
+    POLTAVA_TOWNS,
+    R1,
+    poltava_rows,
+    towns_of,
+    why_empty,
+)
 
 
-def test_the_three_causes_of_an_empty_district_centre_stay_apart():
-    """«Not covered» is three states, and only one of them is a finding about Ukraine.
+def test_the_causes_of_an_empty_district_centre_stay_apart():
+    """«Not covered» is several states, and only some of them money can fix.
 
-    Чутове found nothing at any bar — no money changes that. Машівка's candidates were found and
-    never measured, so the FloodWait is what stands between them and a reading — that is buyable.
-    Котельва was measured and HAS a collectable chat, held out by the Ukrainian bar alone: a
-    filter the operator can lower, not a gap at all. One word for all three prices them the same.
+    After the r3 scan: Чутове found nothing at any bar — no budget changes that. Диканька and
+    Козельщина were measured and their chats resolve, are OPEN, and hold ZERO messages in the
+    window — they exist and are silent, which is a third thing again. One word for all of them
+    would price a dead chat and an unbought one the same.
     """
     rows = json.loads(R1.read_text(encoding="utf-8"))["rows"]
     assert "nothing found at any bar" in why_empty("Чутове", rows)
-    assert "NEVER measured" in why_empty("Машівка", rows)
-    kotelva = why_empty("Котельва", rows)
-    assert "collectable" in kotelva and f"< {UA_BAR}" in kotelva
+    for town in ("Диканька", "Козельщина"):
+        assert "ZERO messages" in why_empty(town, rows), town
+
+
+def test_the_lifted_language_bar_admits_the_chats_it_used_to_hide():
+    """The operator lifted `ua >= 0.5` on 2026-08-30; language is a column now, not a filter.
+
+    Котельва's only chat is `ua 0.38` — under the old bar the centre read as «not covered», which
+    is a filter's decision wearing the shape of a coverage gap.
+    """
+    chats = poltava_rows()
+    kotelva = [c for c in chats if "Котельва" in " ".join(c.get("found_by", []))]
+    assert kotelva, "Котельва's chat must be in the working set now"
+    share = (kotelva[0].get("stats") or {}).get("language_mix", {}).get("ua", 0)
+    assert share < FORMER_UA_BAR, "this is the chat the old bar excluded"
+    assert all(c.get("verdict") == "enter" for c in chats)
 
 
 def test_a_town_with_chats_is_not_reported_as_empty():

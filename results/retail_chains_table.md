@@ -19,43 +19,41 @@ comments under posts, its whole traffic is the conversation.
 | 6 | Копійочка | — | aggregator — answered from r1's Telegram measurement | — | @kop1chat | 4872 | 22.071 | 618 | 0.104 | yes | 22.071* | 0.011 | ua 0.86 other 0.13 | enter | keep | api (r1, 2026-08-27) |
 | 7 | METRO | metro.ua | ok | browser | @HRCNc | 3359 | 0.929 | 26 | 0.000 | yes | 0.071 | 0.231 | ua 1.00 | enter | keep | api (r2) |
 | 8 | ЕКО маркет | eko.com.ua | ok | curl | @ekomarket_shop | 1341 | 0.607 | 17 | 0.882 | no | 0.000 | 0.412 | ua 1.00 | posts-only | keep | api (r2) |
-| 9 | Фора | fora.ua | ok | curl+bundle | @foraINFO | 7506 | 0.357 | 10 | 0.600 | no | 0.000 | 0.200 | ua 1.00 | posts-only | keep | api (r2) |
-| 10 | Сільпо | silpo.ua | ok | browser | @silposilpo | 19714 | 1.179 | 33 | 0.212 | no | 0.000 | 0.152 | ua 1.00 | posts-only | keep | api (r2) |
-| 11 | Fozzy | fozzyshop.ua | ok | curl | @fozzyshopua | 518 | 0.393 | 11 | 0.182 | no | 0.000 | 0.091 | ua 1.00 | posts-only | keep | api (r2) |
-| 12 | Акції та знижки | — | aggregator — answered from r1's Telegram measurement | — | @brovarysale | 3914 | 3.036 | 85 | 0.035 | no | 3.036* | 0.000 | ua 0.86 other 0.10 | enter | keep | api (r1, 2026-08-27) |
-| 13 | Таврія В | tavriav.ua | ok | curl | +Gpo70IWKXOE1NzZi | — | — | — | — | — | — | — | — | ChatInvitePeek | keep | api (r2) |
-| 14 | АТБ | atbmarket.com | ok | browser | — | — | — | — | — | — | — | — | — | — | — | — |
-| 15 | Novus | novus.ua | ok | browser | — | — | — | — | — | — | — | — | — | — | — | — |
-| 16 | Auchan | auchan.ua | ok | curl | — | — | — | — | — | — | — | — | — | — | — | — |
-| 17 | Thrash! | thrash.ua | no-link | browser | — | — | — | — | — | — | — | — | — | — | — | — |
-| 18 | Велмарт | velmart.ua | ok | curl | — | — | — | — | — | — | — | — | — | — | — | — |
-| 19 | Близенько | blyzenko.ua | no-link | curl | — | — | — | — | — | — | — | — | — | — | — | — |
-| 20 | Наш Край | nashkraj.ua | no-link | curl | — | — | — | — | — | — | — | — | — | — | — | — |
-| 21 | Рукавичка | rukavychka.ua | ok | curl | — | — | — | — | — | — | — | — | — | — | — | — |
-| 22 | Коло | kolo.ua | no-link | curl | — | — | — | — | — | — | — | — | — | — | — | — |
-| 23 | Delikat | delikat.site | ok | curl | — | — | — | — | — | — | — | — | — | — | — | — |
-| 24 | Копійка | kopiyka.ua | ok | curl | — | — | — | — | — | — | — | — | — | — | — | — |
-| 25 | Ультрамаркет | ultramarket.ua | no-link | curl | — | — | — | — | — | — | — | — | — | — | — | — |
-| 26 | MegaMarket | megamarket.ua | no-link | curl | — | — | — | — | — | — | — | — | — | — | — | — |
-| 27 | Zakaz.ua | zakaz.ua | ok | browser | — | — | — | — | — | — | — | — | — | — | — | — |
-| 28 | Маркетопт | — | no-site-verified | — | — | — | — | — | — | — | — | — | — | — | — | — |
-| 29 | Толока | — | no-site-verified | — | — | — | — | — | — | — | — | — | — | — | — | — |
-| 30 | Гурман | — | no-site-verified | — | — | — | — | — | — | — | — | — | — | — | — | — |
-| 31 | Файно маркет | fayno.market | no-link | curl | — | — | — | — | — | — | — | — | — | — | — | — |
-| 32 | Грош | grosh.ua | no-link | curl | — | — | — | — | — | — | — | — | — | — | — | — |
-| 33 | Барвінок | — | no-site-verified | — | — | — | — | — | — | — | — | — | — | — | — | — |
-| 34 | MSUa | — | aggregator — answered from r1's Telegram measurement | — | — | — | — | — | — | — | — | — | — | no Ukrainian channel found | reject · not the Ukrainian market | api (r1, 2026-08-27) |
-| 35 | Skidka | — | aggregator — answered from r1's Telegram measurement | — | — | — | — | — | — | — | — | — | — | no Ukrainian channel found | reject · not the Ukrainian market | api (r1, 2026-08-27) |
-| 36 | Епіцентр [not in SPEC §3 A] | epicentrk.ua | no-link | curl | — | — | — | — | — | — | — | — | — | — | — | — |
+| 9 | Епіцентр [not in SPEC §3 A] | epicentrk.ua | ok (site links no t.me; handle is a seed, not the chain's own link) | seed handle + browser check of the chain's properties | @epicentrk_sale | 52081 | 4.893 | 137 | 0.657 | no | 0.000 | 0.051 | ua 1.00 | posts-only | keep | api (r3) |
+| 10 | Фора | fora.ua | ok | curl+bundle | @foraINFO | 7506 | 0.357 | 10 | 0.600 | no | 0.000 | 0.200 | ua 1.00 | posts-only | keep | api (r2) |
+| 11 | Близенько | blyzenko.ua | no-link | curl | @blyzenkoua | 4985 | 2.036 | 57 | 0.351 | no | 0.000 | 0.018 | ua 1.00 | posts-only | keep | api (r1, 2026-08-27) |
+| 12 | Сільпо | silpo.ua | ok | browser | @silposilpo | 19714 | 1.179 | 33 | 0.212 | no | 0.000 | 0.152 | ua 1.00 | posts-only | keep | api (r2) |
+| 13 | Fozzy | fozzyshop.ua | ok | curl | @fozzyshopua | 518 | 0.393 | 11 | 0.182 | no | 0.000 | 0.091 | ua 1.00 | posts-only | keep | api (r2) |
+| 14 | Акції та знижки | — | aggregator — answered from r1's Telegram measurement | — | @brovarysale | 3914 | 3.036 | 85 | 0.035 | no | 3.036* | 0.000 | ua 0.86 other 0.10 | enter | keep | api (r1, 2026-08-27) |
+| 15 | АТБ | atbmarket.com | ok | browser (official social property) | @atb_market_official | 41858 | 1.107 | 31 | 0.000 | no | 0.000 | 0.000 | ua 1.00 | posts-only | keep | api (r3) |
+| 16 | Таврія В | tavriav.ua | ok | curl | +Gpo70IWKXOE1NzZi | — | — | — | — | — | — | — | — | ChatInvitePeek | keep | api (r2) |
+| 17 | Маркетопт | — | no site — official Instagram carries the Telegram | browser (official social property) | +Ejz6ubzm21IyMTQy | 42378 | — | — | — | — | — | — | — | ChatInvite | keep | api (r3) |
+| 18 | Novus | novus.ua | ok | browser | — | — | — | — | — | — | — | — | — | — | — | — |
+| 19 | Auchan | auchan.ua | ok | curl | — | — | — | — | — | — | — | — | — | — | — | — |
+| 20 | Thrash! | thrash.ua | no-link | browser | — | — | — | — | — | — | — | — | — | — | — | — |
+| 21 | Велмарт | velmart.ua | ok | curl | — | — | — | — | — | — | — | — | — | — | — | — |
+| 22 | Наш Край | nashkraj.ua | no-link | curl | — | — | — | — | — | — | — | — | — | — | — | — |
+| 23 | Рукавичка | rukavychka.ua | ok | curl | — | — | — | — | — | — | — | — | — | — | — | — |
+| 24 | Коло | kolo.ua | no-link | curl | — | — | — | — | — | — | — | — | — | — | — | — |
+| 25 | Delikat | delikat.site | ok | curl | — | — | — | — | — | — | — | — | — | — | — | — |
+| 26 | Копійка | kopiyka.ua | ok | curl | — | — | — | — | — | — | — | — | — | — | — | — |
+| 27 | Ультрамаркет | ultramarket.ua | no-link | curl | — | — | — | — | — | — | — | — | — | — | — | — |
+| 28 | MegaMarket | megamarket.ua | no-link | curl | — | — | — | — | — | — | — | — | — | — | — | — |
+| 29 | Zakaz.ua | zakaz.ua | ok | browser | — | — | — | — | — | — | — | — | — | — | — | — |
+| 30 | Толока | — | no-site-verified | — | — | — | — | — | — | — | — | — | — | — | — | — |
+| 31 | Гурман | — | no-site-verified | — | — | — | — | — | — | — | — | — | — | — | — | — |
+| 32 | Файно маркет | fayno.market | no-link | curl | — | — | — | — | — | — | — | — | — | — | — | — |
+| 33 | Грош | grosh.ua | no-link | curl | — | — | — | — | — | — | — | — | — | — | — | — |
+| 34 | Барвінок | — | no-site-verified | — | — | — | — | — | — | — | — | — | — | — | — | — |
+| 35 | MSUa | — | aggregator — answered from r1's Telegram measurement | — | — | — | — | — | — | — | — | — | — | no Ukrainian channel found | reject · not the Ukrainian market | api (r1, 2026-08-27) |
+| 36 | Skidka | — | aggregator — answered from r1's Telegram measurement | — | — | — | — | — | — | — | — | — | — | no Ukrainian channel found | reject · not the Ukrainian market | api (r1, 2026-08-27) |
 
 ## Why a row has no channel
 
-- **АТБ** — site read, and it links only a Telegram bot (@atb_market_bot) — no channel to collect
 - **Novus** — site read, and it links only a Telegram bot (@novus_ai_assistant_bot) — no channel to collect
 - **Auchan** — site read, and it links only a Telegram bot (@Auchan_Info_bot) — no channel to collect
 - **Thrash!** — site READ in a browser and carrying no t.me link
 - **Велмарт** — site read, and it links only a Telegram bot (@VelmartUaBot, @Velmart_FeedBack_bot) — no channel to collect
-- **Близенько** — site READ, twice (HTML and its JS bundle), and carries no t.me link
 - **Наш Край** — site READ, twice (HTML and its JS bundle), and carries no t.me link
 - **Рукавичка** — site read, and it links only a Telegram bot (@rukavychka_chat_bot) — no channel to collect
 - **Коло** — site READ, twice (HTML and its JS bundle), and carries no t.me link
@@ -64,7 +62,6 @@ comments under posts, its whole traffic is the conversation.
 - **Ультрамаркет** — site READ, twice (HTML and its JS bundle), and carries no t.me link
 - **MegaMarket** — site READ, twice (HTML and its JS bundle), and carries no t.me link
 - **Zakaz.ua** — site read, and it links only a Telegram bot (@help_zakaz_ua_bot) — no channel to collect
-- **Маркетопт** — a real Poltava chain with NO website — its official presence is Instagram @marketopt and Facebook @marketopt.official. `marketopt.ua` does not resolve. Absence of a site is not absence of the chain, and this row cannot be answered by reading a footer.
 - **Толока** — web discovery finds no retail chain of this name; «толока» is the Ukrainian word for a community work-day, which is what the searches return. SPEC v2 §3 pairs it with «Маркетопт»; the pairing is not visible in any source found.
 - **Гурман** — no Poltava-region chain with a site: the name belongs to a shop in Південне (Instagram only) and to gurman-dnepr.com.ua in Dnipro. `gurman.ua` is a domain-for-sale page.
 - **Файно маркет** — site READ, twice (HTML and its JS bundle), and carries no t.me link
@@ -72,6 +69,5 @@ comments under posts, its whole traffic is the conversation.
 - **Барвінок** — the retail brand no longer exists: the chain was sold in December 2015 and bought by ATB-Market in 2016, and every «Барвінок» store was rebranded to «АТБ». This is why r1's name search returned an ОСББ «Барвінок» — there is no retail channel to find.
 - **MSUa** — every r1 row for «MSUa» is below ua 0.5 or already rejected
 - **Skidka** — every r1 row for «Skidka» is below ua 0.5 or already rejected
-- **Епіцентр [not in SPEC §3 A]** — site READ, twice (HTML and its JS bundle), and carries no t.me link
 
-Chains whose site links a Telegram BOT and no channel: АТБ (@atb_market_bot), Novus (@novus_ai_assistant_bot), Auchan (@Auchan_Info_bot), Велмарт (@VelmartUaBot, @Velmart_FeedBack_bot), Рукавичка (@rukavychka_chat_bot), Копійка (@kopiyka_ua_bot), Zakaz.ua (@help_zakaz_ua_bot)
+Chains whose site links a Telegram BOT and no channel: Novus (@novus_ai_assistant_bot), Auchan (@Auchan_Info_bot), Велмарт (@VelmartUaBot, @Velmart_FeedBack_bot), Рукавичка (@rukavychka_chat_bot), Копійка (@kopiyka_ua_bot), Zakaz.ua (@help_zakaz_ua_bot)

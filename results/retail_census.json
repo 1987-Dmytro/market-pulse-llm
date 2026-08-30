@@ -21829,7 +21829,64 @@
         "scam": false,
         "fake": false
       },
-      "checked": false
+      "checked": true,
+      "checked_at": "2026-08-30T09:37:36+00:00",
+      "measured_by": "api",
+      "window": "2026-08-02..2026-08-30",
+      "resolved": true,
+      "title": "ОРЖИЦЯ chat",
+      "subscribers": 94,
+      "telegram_verified": false,
+      "broadcast": false,
+      "megagroup": true,
+      "is_group": true,
+      "messages_open": true,
+      "messages_open_error": null,
+      "comments_enabled": false,
+      "discussion_group": null,
+      "stats": {
+        "window_days": 28,
+        "window_truncated": false,
+        "n_messages_raw": 23,
+        "n_posts": 11,
+        "posts_per_day": 0.393,
+        "messages_per_day": 0.393,
+        "last_post": "2026-08-23T12:55:29+00:00",
+        "n_texts": 9,
+        "comments_per_day": null,
+        "n_posts_with_comments": null,
+        "price_share": 0.182,
+        "price_share_contract_regex": 0.182,
+        "price_branch_hits": {
+          "грн": 2,
+          "₴": 0,
+          "grn": 0,
+          "decimal": 2
+        },
+        "media_share": 0.455,
+        "leaflet_or_price_share": 0.455,
+        "dairy_share": 0.0,
+        "dairy_posts_per_day": 0.0,
+        "language_mix": {
+          "ru": 0.44,
+          "ua": 0.56
+        },
+        "traffic": {
+          "n_posts": 11,
+          "first_post": "2026-08-03T06:13:20+00:00",
+          "last_post": "2026-08-23T12:55:29+00:00",
+          "window_days": 20.3,
+          "posts_per_day": 0.54,
+          "share_with_comments": 0.0,
+          "median_comments": 0
+        }
+      },
+      "verdict": "enter",
+      "reasons": [
+        "no blue check — confirm this is the official channel"
+      ],
+      "capability_verdict": "posts-only",
+      "error": null
     },
     {
       "handle": "@SmorodinkaAlex",
@@ -21893,7 +21950,65 @@
         "scam": false,
         "fake": false
       },
-      "checked": false
+      "checked": true,
+      "checked_at": "2026-08-30T09:37:41+00:00",
+      "measured_by": "api",
+      "window": "2026-08-02..2026-08-30",
+      "resolved": true,
+      "title": "ОТГ Машівка | Куплю | Продам | Обміняю Chat",
+      "subscribers": 82,
+      "telegram_verified": false,
+      "broadcast": false,
+      "megagroup": true,
+      "is_group": true,
+      "messages_open": true,
+      "messages_open_error": null,
+      "comments_enabled": false,
+      "discussion_group": null,
+      "stats": {
+        "window_days": 28,
+        "window_truncated": false,
+        "n_messages_raw": 111,
+        "n_posts": 81,
+        "posts_per_day": 2.893,
+        "messages_per_day": 2.893,
+        "last_post": "2026-08-30T07:54:54+00:00",
+        "n_texts": 71,
+        "comments_per_day": null,
+        "n_posts_with_comments": null,
+        "price_share": 0.272,
+        "price_share_contract_regex": 0.074,
+        "price_branch_hits": {
+          "грн": 22,
+          "₴": 0,
+          "grn": 0,
+          "decimal": 6
+        },
+        "media_share": 0.494,
+        "leaflet_or_price_share": 0.543,
+        "dairy_share": 0.049,
+        "dairy_posts_per_day": 0.143,
+        "language_mix": {
+          "en": 0.34,
+          "other": 0.14,
+          "ua": 0.52
+        },
+        "traffic": {
+          "n_posts": 81,
+          "first_post": "2026-08-03T09:00:12+00:00",
+          "last_post": "2026-08-30T07:54:54+00:00",
+          "window_days": 27.0,
+          "posts_per_day": 3.01,
+          "share_with_comments": 0.0,
+          "median_comments": 0
+        }
+      },
+      "verdict": "enter",
+      "reasons": [
+        "no blue check — confirm this is the official channel"
+      ],
+      "capability_verdict": "posts-only",
+      "error": null
     },
     {
       "handle": "@avon_catalog_new",
@@ -22039,7 +22154,61 @@
         "scam": false,
         "fake": false
       },
-      "checked": false
+      "checked": true,
+      "checked_at": "2026-08-30T09:37:44+00:00",
+      "measured_by": "api",
+      "window": "2026-08-02..2026-08-30",
+      "resolved": true,
+      "title": "Барахолка Машівка Полтавська область🇺🇦",
+      "subscribers": 70,
+      "telegram_verified": false,
+      "broadcast": false,
+      "megagroup": true,
+      "is_group": true,
+      "messages_open": true,
+      "messages_open_error": null,
+      "comments_enabled": false,
+      "discussion_group": null,
+      "stats": {
+        "window_days": 28,
+        "window_truncated": false,
+        "n_messages_raw": 0,
+        "n_posts": 0,
+        "posts_per_day": 0.0,
+        "messages_per_day": 0.0,
+        "last_post": null,
+        "n_texts": 0,
+        "comments_per_day": null,
+        "n_posts_with_comments": null,
+        "price_share": null,
+        "price_share_contract_regex": null,
+        "price_branch_hits": {
+          "грн": 0,
+          "₴": 0,
+          "grn": 0,
+          "decimal": 0
+        },
+        "media_share": null,
+        "leaflet_or_price_share": null,
+        "dairy_share": null,
+        "dairy_posts_per_day": 0.0,
+        "language_mix": {},
+        "traffic": {
+          "n_posts": 0,
+          "first_post": null,
+          "last_post": null,
+          "window_days": 0.0,
+          "posts_per_day": 0.0,
+          "share_with_comments": 0.0,
+          "median_comments": 0
+        }
+      },
+      "verdict": "reject",
+      "reasons": [
+        "no messages in the sampled window"
+      ],
+      "capability_verdict": "posts-only",
+      "error": null
     },
     {
       "handle": "@bud_toloka_rivne",
@@ -22071,7 +22240,63 @@
         "scam": false,
         "fake": false
       },
-      "checked": false
+      "checked": true,
+      "checked_at": "2026-08-30T09:37:47+00:00",
+      "measured_by": "api",
+      "window": "2026-08-02..2026-08-30",
+      "resolved": true,
+      "title": "БАРАХОЛКА | КОЗЕЛЬЩИНА (Дошка оголошень)",
+      "subscribers": 67,
+      "telegram_verified": false,
+      "broadcast": true,
+      "megagroup": false,
+      "is_group": false,
+      "messages_open": true,
+      "messages_open_error": null,
+      "comments_enabled": false,
+      "discussion_group": null,
+      "stats": {
+        "window_days": 28,
+        "window_truncated": false,
+        "n_messages_raw": 0,
+        "n_posts": 0,
+        "posts_per_day": 0.0,
+        "messages_per_day": null,
+        "last_post": null,
+        "n_texts": 0,
+        "comments_per_day": 0.0,
+        "n_posts_with_comments": 0,
+        "price_share": null,
+        "price_share_contract_regex": null,
+        "price_branch_hits": {
+          "грн": 0,
+          "₴": 0,
+          "grn": 0,
+          "decimal": 0
+        },
+        "media_share": null,
+        "leaflet_or_price_share": null,
+        "dairy_share": null,
+        "dairy_posts_per_day": 0.0,
+        "language_mix": {},
+        "traffic": {
+          "n_posts": 0,
+          "first_post": null,
+          "last_post": null,
+          "window_days": 0.0,
+          "posts_per_day": 0.0,
+          "share_with_comments": 0.0,
+          "median_comments": 0
+        }
+      },
+      "verdict": "reject",
+      "reasons": [
+        "no blue check — confirm this is the official channel",
+        "no posts in the sampled window",
+        "comments disabled (no linked discussion group)"
+      ],
+      "capability_verdict": "posts-only",
+      "error": null
     },
     {
       "handle": "@ppbaraholka",
@@ -22678,7 +22903,61 @@
         "scam": false,
         "fake": false
       },
-      "checked": false
+      "checked": true,
+      "checked_at": "2026-08-30T09:37:51+00:00",
+      "measured_by": "api",
+      "window": "2026-08-02..2026-08-30",
+      "resolved": true,
+      "title": "Барахолка Оржиця Полтавська область🇺🇦",
+      "subscribers": 38,
+      "telegram_verified": false,
+      "broadcast": false,
+      "megagroup": true,
+      "is_group": true,
+      "messages_open": true,
+      "messages_open_error": null,
+      "comments_enabled": false,
+      "discussion_group": null,
+      "stats": {
+        "window_days": 28,
+        "window_truncated": false,
+        "n_messages_raw": 0,
+        "n_posts": 0,
+        "posts_per_day": 0.0,
+        "messages_per_day": 0.0,
+        "last_post": null,
+        "n_texts": 0,
+        "comments_per_day": null,
+        "n_posts_with_comments": null,
+        "price_share": null,
+        "price_share_contract_regex": null,
+        "price_branch_hits": {
+          "грн": 0,
+          "₴": 0,
+          "grn": 0,
+          "decimal": 0
+        },
+        "media_share": null,
+        "leaflet_or_price_share": null,
+        "dairy_share": null,
+        "dairy_posts_per_day": 0.0,
+        "language_mix": {},
+        "traffic": {
+          "n_posts": 0,
+          "first_post": null,
+          "last_post": null,
+          "window_days": 0.0,
+          "posts_per_day": 0.0,
+          "share_with_comments": 0.0,
+          "median_comments": 0
+        }
+      },
+      "verdict": "reject",
+      "reasons": [
+        "no messages in the sampled window"
+      ],
+      "capability_verdict": "posts-only",
+      "error": null
     },
     {
       "handle": "@novinigadiach",
@@ -22957,7 +23236,61 @@
         "scam": false,
         "fake": false
       },
-      "checked": false
+      "checked": true,
+      "checked_at": "2026-08-30T09:37:54+00:00",
+      "measured_by": "api",
+      "window": "2026-08-02..2026-08-30",
+      "resolved": true,
+      "title": "Машівка Chat",
+      "subscribers": 28,
+      "telegram_verified": false,
+      "broadcast": false,
+      "megagroup": true,
+      "is_group": true,
+      "messages_open": true,
+      "messages_open_error": null,
+      "comments_enabled": false,
+      "discussion_group": null,
+      "stats": {
+        "window_days": 28,
+        "window_truncated": false,
+        "n_messages_raw": 1,
+        "n_posts": 0,
+        "posts_per_day": 0.0,
+        "messages_per_day": 0.0,
+        "last_post": null,
+        "n_texts": 0,
+        "comments_per_day": null,
+        "n_posts_with_comments": null,
+        "price_share": null,
+        "price_share_contract_regex": null,
+        "price_branch_hits": {
+          "грн": 0,
+          "₴": 0,
+          "grn": 0,
+          "decimal": 0
+        },
+        "media_share": null,
+        "leaflet_or_price_share": null,
+        "dairy_share": null,
+        "dairy_posts_per_day": 0.0,
+        "language_mix": {},
+        "traffic": {
+          "n_posts": 0,
+          "first_post": null,
+          "last_post": null,
+          "window_days": 0.0,
+          "posts_per_day": 0.0,
+          "share_with_comments": 0.0,
+          "median_comments": 0
+        }
+      },
+      "verdict": "reject",
+      "reasons": [
+        "no messages in the sampled window"
+      ],
+      "capability_verdict": "posts-only",
+      "error": null
     },
     {
       "handle": "@barvinok_nr",
@@ -23821,7 +24154,61 @@
         "scam": false,
         "fake": false
       },
-      "checked": false
+      "checked": true,
+      "checked_at": "2026-08-30T09:37:58+00:00",
+      "measured_by": "api",
+      "window": "2026-08-02..2026-08-30",
+      "resolved": true,
+      "title": "Диканька",
+      "subscribers": 8,
+      "telegram_verified": false,
+      "broadcast": false,
+      "megagroup": true,
+      "is_group": true,
+      "messages_open": true,
+      "messages_open_error": null,
+      "comments_enabled": false,
+      "discussion_group": null,
+      "stats": {
+        "window_days": 28,
+        "window_truncated": false,
+        "n_messages_raw": 2,
+        "n_posts": 0,
+        "posts_per_day": 0.0,
+        "messages_per_day": 0.0,
+        "last_post": null,
+        "n_texts": 0,
+        "comments_per_day": null,
+        "n_posts_with_comments": null,
+        "price_share": null,
+        "price_share_contract_regex": null,
+        "price_branch_hits": {
+          "грн": 0,
+          "₴": 0,
+          "grn": 0,
+          "decimal": 0
+        },
+        "media_share": null,
+        "leaflet_or_price_share": null,
+        "dairy_share": null,
+        "dairy_posts_per_day": 0.0,
+        "language_mix": {},
+        "traffic": {
+          "n_posts": 0,
+          "first_post": null,
+          "last_post": null,
+          "window_days": 0.0,
+          "posts_per_day": 0.0,
+          "share_with_comments": 0.0,
+          "median_comments": 0
+        }
+      },
+      "verdict": "reject",
+      "reasons": [
+        "no messages in the sampled window"
+      ],
+      "capability_verdict": "posts-only",
+      "error": null
     },
     {
       "handle": "@Eko_market_ersag",

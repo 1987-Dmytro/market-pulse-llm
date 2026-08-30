@@ -8141,3 +8141,30 @@ are dead domains, and web discovery (HTTP, which CLAUDE.md allows for discovery)
 `delikat.site` for the first and established that Маркетопт HAS no website for the second. After
 this pass `blocked`, `shell` and `dns` are all **zero**: every one of the 36 rows has a reading,
 which is the claim `tests/test_retail_census_r2_report.py::test_every_row_was_read` now guards.
+
+**Dv892 `[cause: spec-gap]` — the two instruments are complementary, and treating r2's as the
+replacement hid a chain's own channel.** r2 was accepted as the fix for r1's name search, so the
+working set was built from the site-read record alone. The census already held `@blyzenkoua`
+(«БЛИЗЕНЬКО🌿», preview description «Мережа магазинів Близенько») — the CHAIN's own channel, which
+`blyzenko.ua` does not link, so no amount of site reading reaches it. Four ATB deal channels,
+`@rozlyvne` (Маркетопт's official beer line) and `@zakazzua` sat unused in the same file. Site
+reading answers «whose channel is this», name search answers «what exists»; neither answers both.
+`CHAIN_OWN_FROM_R1` and the working set's section A3 carry the union with the provenance of each
+handle, and every identity was confirmed against the channel's own `t.me/s/` preview at $0.
+
+**Dv893 `[cause: model]` — a channel's title said promo and its description said staff-only.**
+`@ON_LINE_MO` «Маркетопт ON_LINE 🔆» carries a 0.460 price share over 618 posts and reads exactly
+like a chain's online promo feed; its own public description is «Ця група тільки для робітників
+мережі МаркетОпт. Пошук замін та спілкування на близькі до роботи теми» — a STAFF group, where the
+«prices» are employees talking. It was one step from the working set. The free `t.me/s/` preview is
+what caught it, and it now sits in `REJECTED_AS_NOT_THE_CHAIN` with the reason quoted.
+
+**Dv894 `[cause: contract-gap]` — the operator's authorisation is a NEW budget line, not a bigger
+number in the old one.** `docs/PROMPT-retail-census-r2.md` caps step 2 at ≤40 requests and step 2
+spent 40/40, so `retail_resolve_r2.would_exceed` refuses — correctly. Raising `MAX_REQUESTS` would
+have made the contract's cap retroactively false and voided the test that guards it. Instead
+`scripts/retail_scan_r3.py` carries its OWN ceiling (80), its own ledger under `step_3`, and the
+operator's words verbatim in `AUTHORISED_BY`. Spent: 41 of 80, min gap 3.05 s, no FloodWait.
+Also resolved here by the operator's ruling: **Dv880** (Епіцентр was flagged as outside SPEC §3 A;
+the operator asked for it by name, so it is in scope) and **the `ua >= 0.5` bar is LIFTED** —
+language is a column, which takes category B from 47 chats / 18 centres to 61 / 21.
