@@ -1,0 +1,336 @@
+{
+  "at": "2026-08-30T11:29:59+00:00",
+  "authorised_by": "operator, 2026-08-30: «Ты искал региональные каналы с украинским написанием Підслухано Чутово?» — widening CHAT_TERMS to the discussion genre",
+  "terms": [
+    "підслухано",
+    "типове"
+  ],
+  "why": "CHAT_TERMS selects classifieds; this genre selects discussion",
+  "budget": 60,
+  "requests": 48,
+  "queries_run": [
+    {
+      "query": "підслухано Полтава",
+      "hits": 2
+    },
+    {
+      "query": "підслухано Кременчук",
+      "hits": 2
+    },
+    {
+      "query": "підслухано Лубни",
+      "hits": 2
+    },
+    {
+      "query": "підслухано Миргород",
+      "hits": 0
+    },
+    {
+      "query": "підслухано Гадяч",
+      "hits": 0
+    },
+    {
+      "query": "підслухано Горішні Плавні",
+      "hits": 0
+    },
+    {
+      "query": "підслухано Пирятин",
+      "hits": 0
+    },
+    {
+      "query": "підслухано Хорол",
+      "hits": 1
+    },
+    {
+      "query": "підслухано Зіньків",
+      "hits": 0
+    },
+    {
+      "query": "підслухано Карлівка",
+      "hits": 0
+    },
+    {
+      "query": "підслухано Кобеляки",
+      "hits": 1
+    },
+    {
+      "query": "підслухано Решетилівка",
+      "hits": 0
+    },
+    {
+      "query": "підслухано Глобине",
+      "hits": 0
+    },
+    {
+      "query": "підслухано Лохвиця",
+      "hits": 2
+    },
+    {
+      "query": "підслухано Гребінка",
+      "hits": 0
+    },
+    {
+      "query": "підслухано Шишаки",
+      "hits": 0
+    },
+    {
+      "query": "підслухано Диканька",
+      "hits": 0
+    },
+    {
+      "query": "підслухано Котельва",
+      "hits": 0
+    },
+    {
+      "query": "підслухано Нові Санжари",
+      "hits": 0
+    },
+    {
+      "query": "підслухано Оржиця",
+      "hits": 0
+    },
+    {
+      "query": "підслухано Чутове",
+      "hits": 0
+    },
+    {
+      "query": "підслухано Семенівка",
+      "hits": 0
+    },
+    {
+      "query": "підслухано Козельщина",
+      "hits": 0
+    },
+    {
+      "query": "підслухано Машівка",
+      "hits": 0
+    },
+    {
+      "query": "типове Полтава",
+      "hits": 0
+    },
+    {
+      "query": "типове Кременчук",
+      "hits": 0
+    },
+    {
+      "query": "типове Лубни",
+      "hits": 0
+    },
+    {
+      "query": "типове Миргород",
+      "hits": 0
+    },
+    {
+      "query": "типове Гадяч",
+      "hits": 0
+    },
+    {
+      "query": "типове Горішні Плавні",
+      "hits": 0
+    },
+    {
+      "query": "типове Пирятин",
+      "hits": 0
+    },
+    {
+      "query": "типове Хорол",
+      "hits": 0
+    },
+    {
+      "query": "типове Зіньків",
+      "hits": 0
+    },
+    {
+      "query": "типове Карлівка",
+      "hits": 0
+    },
+    {
+      "query": "типове Кобеляки",
+      "hits": 0
+    },
+    {
+      "query": "типове Решетилівка",
+      "hits": 0
+    },
+    {
+      "query": "типове Глобине",
+      "hits": 0
+    },
+    {
+      "query": "типове Лохвиця",
+      "hits": 0
+    },
+    {
+      "query": "типове Гребінка",
+      "hits": 0
+    },
+    {
+      "query": "типове Шишаки",
+      "hits": 0
+    },
+    {
+      "query": "типове Диканька",
+      "hits": 0
+    },
+    {
+      "query": "типове Котельва",
+      "hits": 0
+    },
+    {
+      "query": "типове Нові Санжари",
+      "hits": 0
+    },
+    {
+      "query": "типове Оржиця",
+      "hits": 0
+    },
+    {
+      "query": "типове Чутове",
+      "hits": 0
+    },
+    {
+      "query": "типове Семенівка",
+      "hits": 0
+    },
+    {
+      "query": "типове Козельщина",
+      "hits": 0
+    },
+    {
+      "query": "типове Машівка",
+      "hits": 0
+    }
+  ],
+  "flood_wait_seconds": null,
+  "found_total": 10,
+  "found_new": 9,
+  "rows": [
+    {
+      "handle": "@svitlo5s",
+      "found_by": [
+        "poltava_discussion:підслухано Кременчук"
+      ],
+      "already_in_census": false,
+      "search": {
+        "title": "Підслухано Кременчук.",
+        "subscribers": 1865,
+        "telegram_verified": false,
+        "broadcast": true,
+        "megagroup": false
+      }
+    },
+    {
+      "handle": "@cosplaypoltava",
+      "found_by": [
+        "poltava_discussion:підслухано Полтава"
+      ],
+      "already_in_census": false,
+      "search": {
+        "title": "•Підслухано Косплей Полтава•🐚",
+        "subscribers": 359,
+        "telegram_verified": false,
+        "broadcast": true,
+        "megagroup": false
+      }
+    },
+    {
+      "handle": "@pidsluhanolubnyofficial",
+      "found_by": [
+        "poltava_discussion:підслухано Лубни"
+      ],
+      "already_in_census": false,
+      "search": {
+        "title": "Підслухано Лубни official",
+        "subscribers": 177,
+        "telegram_verified": false,
+        "broadcast": true,
+        "megagroup": false
+      }
+    },
+    {
+      "handle": "@KPKr_cos",
+      "found_by": [
+        "poltava_discussion:підслухано Кременчук"
+      ],
+      "already_in_census": false,
+      "search": {
+        "title": "Підслухано Косплей Кременчук",
+        "subscribers": 76,
+        "telegram_verified": false,
+        "broadcast": true,
+        "megagroup": false
+      }
+    },
+    {
+      "handle": "@itstep0",
+      "found_by": [
+        "poltava_discussion:підслухано Полтава"
+      ],
+      "already_in_census": false,
+      "search": {
+        "title": "It Step Poltava | Підслухано",
+        "subscribers": 43,
+        "telegram_verified": false,
+        "broadcast": true,
+        "megagroup": false
+      }
+    },
+    {
+      "handle": "@lokhvytsya",
+      "found_by": [
+        "poltava_discussion:підслухано Лохвиця"
+      ],
+      "already_in_census": false,
+      "search": {
+        "title": "Підслухано Лохвиця",
+        "subscribers": 6,
+        "telegram_verified": false,
+        "broadcast": true,
+        "megagroup": false
+      }
+    },
+    {
+      "handle": "@podslusheno_Khorol",
+      "found_by": [
+        "poltava_discussion:підслухано Хорол"
+      ],
+      "already_in_census": false,
+      "search": {
+        "title": "Підслухано Хорол",
+        "subscribers": 1,
+        "telegram_verified": false,
+        "broadcast": false,
+        "megagroup": true
+      }
+    },
+    {
+      "handle": "@pidcluxanokobeliaki",
+      "found_by": [
+        "poltava_discussion:підслухано Кобеляки"
+      ],
+      "already_in_census": false,
+      "search": {
+        "title": "Підслухано Кобеляки",
+        "subscribers": 0,
+        "telegram_verified": false,
+        "broadcast": true,
+        "megagroup": false
+      }
+    },
+    {
+      "handle": "@Pidslyxanoloh",
+      "found_by": [
+        "poltava_discussion:підслухано Лохвиця"
+      ],
+      "already_in_census": false,
+      "search": {
+        "title": "Підслухано лохвиця",
+        "subscribers": 0,
+        "telegram_verified": false,
+        "broadcast": true,
+        "megagroup": false
+      }
+    }
+  ]
+}

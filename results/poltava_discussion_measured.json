@@ -1,0 +1,150 @@
+{
+  "at": "2026-08-30T11:32:00+00:00",
+  "requests": 8,
+  "rows": [
+    {
+      "handle": "@svitlo5s",
+      "search": {
+        "title": "Підслухано Кременчук.",
+        "subscribers": null
+      },
+      "checked": true,
+      "checked_at": "2026-08-30T11:31:53+00:00",
+      "measured_by": "api",
+      "window": "2026-08-02..2026-08-30",
+      "resolved": true,
+      "title": "Підслухано Кременчук.",
+      "subscribers": 1865,
+      "telegram_verified": false,
+      "broadcast": true,
+      "megagroup": false,
+      "is_group": false,
+      "messages_open": true,
+      "messages_open_error": null,
+      "comments_enabled": true,
+      "discussion_group": {
+        "present": true,
+        "read": true,
+        "id": 3875755282,
+        "title": "Чат Підслухано Кременчук.",
+        "username": null,
+        "megagroup": true,
+        "min": false,
+        "join_request": false,
+        "join_to_send": false,
+        "restricted": false,
+        "already_member": false,
+        "participants_count": null,
+        "open": true,
+        "closed_because": []
+      },
+      "stats": {
+        "window_days": 28,
+        "window_truncated": false,
+        "n_messages_raw": 40,
+        "n_posts": 36,
+        "posts_per_day": 1.286,
+        "messages_per_day": null,
+        "last_post": "2026-08-28T17:59:22+00:00",
+        "n_texts": 36,
+        "comments_per_day": 0.107,
+        "n_posts_with_comments": 2,
+        "price_share": 0.056,
+        "price_share_contract_regex": 0.056,
+        "price_branch_hits": {
+          "грн": 1,
+          "₴": 0,
+          "grn": 0,
+          "decimal": 2
+        },
+        "media_share": 0.389,
+        "leaflet_or_price_share": 0.417,
+        "dairy_share": 0.0,
+        "dairy_posts_per_day": 0.0,
+        "language_mix": {
+          "other": 0.06,
+          "ua": 0.94
+        },
+        "traffic": {
+          "n_posts": 36,
+          "first_post": "2026-08-03T11:39:42+00:00",
+          "last_post": "2026-08-28T17:59:22+00:00",
+          "window_days": 25.3,
+          "posts_per_day": 1.42,
+          "share_with_comments": 0.06,
+          "median_comments": 0.0
+        }
+      },
+      "verdict": "enter",
+      "reasons": [
+        "no blue check — confirm this is the official channel"
+      ],
+      "capability_verdict": "usable",
+      "error": null
+    },
+    {
+      "handle": "@pidsluhanolubnyofficial",
+      "search": {
+        "title": "Підслухано Лубни",
+        "subscribers": null
+      },
+      "checked": true,
+      "checked_at": "2026-08-30T11:31:57+00:00",
+      "measured_by": "api",
+      "window": "2026-08-02..2026-08-30",
+      "resolved": true,
+      "title": "Підслухано Лубни official",
+      "subscribers": 177,
+      "telegram_verified": false,
+      "broadcast": true,
+      "megagroup": false,
+      "is_group": false,
+      "messages_open": true,
+      "messages_open_error": null,
+      "comments_enabled": false,
+      "discussion_group": null,
+      "stats": {
+        "window_days": 28,
+        "window_truncated": false,
+        "n_messages_raw": 0,
+        "n_posts": 0,
+        "posts_per_day": 0.0,
+        "messages_per_day": null,
+        "last_post": null,
+        "n_texts": 0,
+        "comments_per_day": 0.0,
+        "n_posts_with_comments": 0,
+        "price_share": null,
+        "price_share_contract_regex": null,
+        "price_branch_hits": {
+          "грн": 0,
+          "₴": 0,
+          "grn": 0,
+          "decimal": 0
+        },
+        "media_share": null,
+        "leaflet_or_price_share": null,
+        "dairy_share": null,
+        "dairy_posts_per_day": 0.0,
+        "language_mix": {},
+        "traffic": {
+          "n_posts": 0,
+          "first_post": null,
+          "last_post": null,
+          "window_days": 0.0,
+          "posts_per_day": 0.0,
+          "share_with_comments": 0.0,
+          "median_comments": 0
+        }
+      },
+      "verdict": "reject",
+      "reasons": [
+        "no blue check — confirm this is the official channel",
+        "no posts in the sampled window",
+        "comments disabled (no linked discussion group)"
+      ],
+      "capability_verdict": "posts-only",
+      "error": null
+    }
+  ]
+}

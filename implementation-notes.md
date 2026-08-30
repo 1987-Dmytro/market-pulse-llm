@@ -8220,3 +8220,31 @@ reproduces SPEC v2 §0's own ≈40/0 independently. In the Poltava chats, 0 of 4
 project **2.6 dairy-category messages a day (~78/month)** for the whole oblast before any brand
 filter. This is a ceiling that should be computed before, not after, buying wider coverage
 ([[compute_the_ceiling_first]]).
+
+**Dv900 `[cause: spec-gap]` — the authorised query terms selected one genre, and the null finding
+described that genre rather than Poltava.** The operator asked: «Ты искал региональные каналы с
+украинским написанием Підслухано Чутово?» No — `discover_channels.CHAT_TERMS` is
+('чат', 'спільнота', 'оголошення', 'барахолка') and «підслухано» appears nowhere in this repo. All
+four terms select CLASSIFIEDS and notice boards, which is exactly the corpus the brand probe read
+4 507 messages of and found zero dairy-brand mentions in — so «the chats carry no brand voice» was
+at risk of being a fact about the QUERY, not about the oblast. This is Dv871 one level up: there the
+instrument was wrong for the question, here the query defined the population that defined the
+answer. Closed by sweeping the discussion genre across all 24 centres, 48 queries, 48 requests:
+**«типове» returns 0 hits in every one of the 24**, and «підслухано» returns 9 new handles of which
+one is a real town channel — `@svitlo5s` «Підслухано Кременчук.», 1 865 subs. Measured: comments
+OPEN but **0.107 a day (~3 a month)** and **dairy 0.000**; `@pidsluhanolubnyofficial` posts nothing
+at all. **Чутове returns 0 under this genre too**, so its emptiness survives a second formulation.
+The gap was real, the sweep was right, and the conclusion did not move.
+
+**Dv901 `[cause: tooling]` — geolocation discovery exists, is safe to query, and is empty.**
+The operator asked whether searching by geoposition would find these channels more easily.
+`contacts.getLocated` is the mechanism. Two independent reasons it does not serve this purpose,
+both checked rather than recalled:
+(1) It answers `Updates` with **0 chats and 0 users** for Полтава (49.5883, 34.5514) and Кременчук
+(49.0632, 33.4225) — the oblast's two largest cities. The index behind People Nearby is empty.
+(2) Structurally it returns GEOCHATS — supergroups whose admin explicitly attached a location. A
+chat merely NAMED «Полтава чат» is an ordinary supergroup and could never appear there even if the
+index were live, so the method's population is not the population this phase needs.
+Safety, from the documented contract and not from memory: `self_expires` is the field that publishes
+the account's own location, and the docs state «if the flag isn't set, no changes will be applied».
+The calls omitted it, so nothing about this account was published to People Nearby.
