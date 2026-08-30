@@ -53,8 +53,9 @@ Each ends in a commit **by path** and the checks named. No `git add -A`; no repo
 | # | what | files | check |
 |---|---|---|---|
 | S0 | Commit the team lead's uncommitted files by path (`docs/STATUS.md`, `docs/PHASE-promo-pulse-1.md`); clear the `test_repair_phase4_ledger` debt STATUS assigns to step 0 of the next contract. | commit by path only; `tests/` | K0 |
-| S1 | **Registry revision r2.** 16 A1 rows · 5 A2 · PAUSED 39 leave collection · B deferred. Preflight, edit, then claim the moved pins. **7 of the 16 A1 handles are not in the registry today** — `@ATB_FANatik` (+ its discussion group), `@blyzenkoua`, `@fozzyshopua`, `@sim23_simi`, `@rrozetka`, `@kop1chat`, `@znishkom`, `@xochydeshevshe`; `@atb_market_official` leaves collection (ruling (ц): no promo, no comments). | `config/registry.yaml`, `tests/moved_pins.py`, `tests/` | K1, K2, K0 |
-| S2 | **$0 collection.** The population §1 measures does not exist on disk: the newest post across every A1 channel is **2026-08-08** and 6 of the 16 have no store file at all. Collect the missing channels, top up the others to the window, and collect the `@ATB_FANatik` discussion group (its traffic is measured at entry — r1's 0.25 c/day read post replies, not the group feed). Every NEW channel enters through the adaptation protocol: profile → sealed hundred → gate **before** aggregates. Telegram only. | `scripts/`, `data/raw/`, `results/` | K0 |
+| S1a | **Loader extension first** (§5.2a): two of the 16 A1 rows **cannot be expressed** under today's `_HANDLE` regex. `src/market_pulse/registry.py` is pinned by nothing, so this is a cheap, legal prerequisite — a `chat_id` / `invite` field beside `telegram_channels`, with the regex left intact for real usernames. | `src/market_pulse/registry.py`, `tests/test_registry.py` | K2, K0 |
+| S1b | **Registry revision r2.** 16 A1 rows · 5 A2 · PAUSED 39 leave collection · B deferred. Preflight, edit, then claim the moved pins. Of the **17** A1 entries §3 names (16 rows + ATB_FANatik's discussion group), **7 are in the registry and 10 are not** — derived, not counted by hand: `@ATB_FANatik`, its discussion group, Маркетопт private, `@blyzenkoua`, `@fozzyshopua`, `@sim23_simi`, `@rrozetka`, `@kop1chat`, `@znishkom`, `@xochydeshevshe`; `@atb_market_official` **leaves by the file's own convention** — a commented `# <id> removed <date>: <reason>` line, never a deletion (`scripts/apply_gate_rulings_5c1.py :: remove_sources`), per ruling (ц): no promo, no comments. Every new row needs an `audience` from the closed list of 8 — `test_every_shipped_source_carries_an_audience` forbids a null. | `config/registry.yaml`, `tests/moved_pins.py`, `tests/` | K1, K2, K0 |
+| S2 | **$0 collection.** The population §1 measures does not exist on disk: the newest post across every A1 channel is **2026-08-08** (today is 2026-08-30, so ≥22 days of the 4-week window are uncollected for *every* channel), and **8 of the 17 entries have no store file at all** — the 6 missing handles plus Маркетопт private and the discussion group. Collect them, top up the rest to the window, and collect the `@ATB_FANatik` discussion group (its traffic is measured at entry — r1's 0.25 c/day read post replies, not the group feed). Every NEW channel enters through the adaptation protocol: profile → sealed hundred → gate **before** aggregates. Telegram only. | `scripts/`, `data/raw/`, `results/` | K0 |
 | S3 | **$0 census + projection** of the paid legs (K3, K4), then **STOP** — SP-1. | `scripts/promo_census_c2.py`, `scripts/promo_projection_c2.py`, `results/` | K3, K4, K0 |
 | S4 | **C2 backfill (PAID).** Positions for the 16 channels over the 4 weeks, via the existing 5c2 instrument — vision for image flyers, text for the rest. **`positions.py` is not touched** (§5.12): the scale is in which carriers get fed, not in the parser. Smoke first; rungs per `docs/PROCESS.md`. | `scripts/`, `results/`, `data/derived/` | K0 |
 | S5 | **S1 draw** (K5) → hand `results/positions_draw_50.json` to the team lead for `docs/labels-positions-50.jsonl`. | `scripts/draw_positions_50.py`, `results/` | K5, K0 |
@@ -111,10 +112,22 @@ construction and measures the collection schedule instead of the content. The wi
 sentence — «ревизия — отдельный шаг после решения». It has moved before (two records still pin
 `c82d0cff1ee7…`). The 21 pins are handled by preflight + `tests/moved_pins.py`; nothing is re-pinned.
 
-**5.3 The 6 uncollected channels.** `@blyzenkoua`, `@fozzyshopua`, `@sim23_simi`, `@rrozetka`,
-`@kop1chat`, `@xochydeshevshe` have no store file. `@kop1chat` and the registry's `@kopiyochka1` are
-**different handles**; I collect the one the phase spec names and report the pair rather than merge
-them on a guess.
+**5.2a Two A1 rows have no expressible handle, and the loader must grow first.**
+`src/market_pulse/registry.py:15` is
+`_HANDLE = re.compile(r"^@[A-Za-z][A-Za-z0-9_]{4,31}$")`, enforced in `_sources` with a hard
+`ValueError`. Two of the 16 A1 rows are not public usernames and fail it:
+**Маркетопт private** is the invite hash `+Ejz6ubzm21IyMTQy`, and **@ATB_FANatik's discussion
+group «АТБ / ЗНИЖКИ»** is `id: 1925810730` with `"username": null`
+(`results/retail_census.json`). Both verified against the live regex, not assumed. The enabling
+fact: **`registry.py` is pinned by nothing** — zero occurrences across `results/*.json` — so
+extending it is cheap and moves no sealed record. S1a widens the row shape rather than the regex,
+so a malformed *username* still fails loudly.
+
+**5.3 The 8 uncollected entries.** Six named handles have no store file — `@blyzenkoua`,
+`@fozzyshopua`, `@sim23_simi`, `@rrozetka`, `@kop1chat`, `@xochydeshevshe` — and so do the two of
+§5.2a. `@kop1chat` and the registry's `@kopiyochka1` are **different handles**; I collect the one
+the phase spec names and report the pair rather than merge them on a guess. `@znishkom` is the
+opposite case: 193 posts in the store and no registry row.
 
 **5.4 The rate — 10.408 s/row, not 1.7.** `docs/STATUS.md` quotes «1.7 с/стр.» That number is
 `results/run_5c2_positions.json :: go_no_go.page_marginal_seconds = 1.729`, a two-call warm-up
