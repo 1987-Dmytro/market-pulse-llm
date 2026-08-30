@@ -276,31 +276,74 @@ def test_the_silence_check_fires_when_a_phase_entry_goes_missing():
     ]
 
 
+LINE_SESSIONS_WITH_NO_STEP_LEDGER = {
+    # Two cycle-2 entries whose balance no `results/spend_*.json` step ledger carries, so
+    # `silent_paid_runs` cannot name them from either direction — it walks the step ledgers, and
+    # for these there is nothing to walk. Enumerated per balance and asserted in BOTH directions
+    # below, so a THIRD such entry fails this test instead of quietly widening the excuse.
+    12.0176685803: "lora-c-run r3 (2026-08-26, pod otq63mmt7s2uf1, rung KILL) — a PAID step whose"
+    " only ledger is the line ledger: no `results/spend_lora_c_r3.json` was ever written. Named"
+    " here rather than repaired: writing that ledger now would be a record reconstructed from the"
+    " line instead of read from the run.",
+    5.6783611613: "2026-08-27 C1 retail-census step 0 — a guard reading taken when the"
+    " `mp-lora-c` volume was deleted. No pod, no step, no step ledger, and never will be: the"
+    " class :func:`silent_paid_runs` already documents as outside its one direction.",
+}
+"""Line-ledger entries that no step ledger witnesses, keyed on the balance both files carry.
+
+This is what the check below was really protecting, and what it had assumed instead. It was written
+when every line entry happened to have a step ledger behind it, so it asserted over the LINE's rows;
+`results/spend_cycle2.json` is a live file and it grew two rows that never can
+([[a_sealed_reports_checker_reads_a_live_file]]). The claim is narrowed to the step-ledger runs the
+function actually reads, and the two exceptions are written down rather than tolerated by a filter.
+"""
+
+
 def test_the_silence_check_fires_on_the_LINE_ledger_too(tmp_path, monkeypatch):
     """The other half's negative control, and the half that has no history behind it yet.
 
     Dropping a row from the phase ledger proves the check reads THAT file. It says nothing about the
     branch added when the line took over — so the line's sessions are emptied here and every paid
-    step that ran after the close has to be named. A guard extended to a second source without a
-    control over that source is a guard tested on the half it already had.
+    step whose ONLY witness was the line has to be named. A guard extended to a second source
+    without a control over that source is a guard tested on the half it already had.
+
+    Asserted over the STEP-LEDGER runs, not over the line's own rows: `silent_paid_runs` walks
+    `results/spend_*.json` and reports the runs it finds there, so a line entry with no step ledger
+    behind it is outside its reach by construction and is not evidence that the line branch is
+    dead. Both directions — every such run must be named, and nothing else may be — plus the two
+    known line entries with no step ledger, enumerated in
+    :data:`LINE_SESSIONS_WITH_NO_STEP_LEDGER` and asserted to be exactly those two.
     """
     empty = tmp_path / "spend_cycle2.json"
     empty.write_text(json.dumps({"sessions": []}), encoding="utf-8")
     monkeypatch.setattr(sys.modules[__name__], "LINE_LEDGER", empty)
 
     sessions = json.loads(repair.LEDGER.read_text(encoding="utf-8"))["sessions"]
-    witnessed_by_the_line = [
-        one
-        for one in json.loads(
-            (REPO_ROOT / "results" / "spend_cycle2.json").read_text(encoding="utf-8")
-        )["sessions"]
-        if one["balance"] not in {session["balance"] for session in sessions}
-    ]
-    assert witnessed_by_the_line, "there is at least one paid step under the line to lose"
+    phase_balances = {session["balance"] for session in sessions}
+    line = json.loads(
+        (REPO_ROOT / "results" / "spend_cycle2.json").read_text(encoding="utf-8")
+    )["sessions"]
+    only_the_line = {one["balance"] for one in line} - phase_balances
+    assert only_the_line, "there is at least one paid step under the line to lose"
+
+    # The step-ledger runs whose only witness is the line — derived from the files, never listed.
+    witnessed_only_by_the_line = {
+        (f"results/{path.name}", run["at"], run["balance"])
+        for path in sorted((REPO_ROOT / "results").glob("spend_*.json"))
+        if path.name != repair.LEDGER.name
+        for key in ("runs", "gpu_sessions")
+        for run in json.loads(path.read_text(encoding="utf-8")).get(key) or []
+        if "balance" in run and run["balance"] in only_the_line
+    }
+    assert witnessed_only_by_the_line, "the line branch witnesses no step-ledger run — vacuous"
+
     silent = silent_paid_runs(sessions)
     assert silent, "with the line's ledger emptied, its steps must be named"
-    for one in witnessed_by_the_line:
-        assert any(row[2] == one["balance"] for row in silent), one
+    assert set(silent) == witnessed_only_by_the_line
+
+    # And the other direction on the excuse: exactly the two known line entries have no step ledger.
+    covered = {balance for _, _, balance in witnessed_only_by_the_line}
+    assert only_the_line - covered == set(LINE_SESSIONS_WITH_NO_STEP_LEDGER)
 
 
 def test_an_entry_that_is_not_after_the_last_one_refuses_and_writes_nothing(ledger):
