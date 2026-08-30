@@ -77,11 +77,21 @@ Each ends in a commit **by path** and the checks named. No `git add -A`; no repo
    unreachable by measurement — 0.4125 — and the gold file that fixes the denominator is the team
    lead's to write.
 2. Does the §1 screen **print** `price old`, against 3.21 (4) / 3.22 (1)? I store it either way.
+3. **Which population is S2 graded on** — 678, 229 or 449 (§5.5a)? Two thirds of the 678 are
+   selected by a regex matching **dates**, not prices, and the operator's ruling says «только треды
+   под ЦЕНОВЫМИ промо». This is the one SP-0 answer that gates a $0 step: S7's draw waits for it.
 
-These block only K6 (the graded S1 reading) and one screen column. S0–S5 and S7–S8 do not wait.
+Questions 1–2 block only K6 (the graded S1 reading) and one screen column; question 3 blocks S7.
+S0–S6 and S8 do not wait for any of them.
 
-**SP-1 — before S4, the first paid step.** I re-read the guard, run the census and the projection,
-and bring the operator a table. Rung 0 is that the guard's own remainder is **stale**:
+**SP-1 — before S4, the first paid step.** The guard is `scripts/runpod_guard.py`
+(`CYCLE2_CAP_USD = 20.00`; `spend()` is the pessimistic max of the balance delta and the billing
+walk; `enforce()` prints refusals and returns 1, and «a cap is not raised to finish a run»). The
+step gets its own ledger — `runpod_guard.py --step promo-pulse-1 --step-cap <usd>` — and both caps
+bind, neither spending the other's room. (`would_exceed` in `scripts/retail_resolve_r2.py` counts
+MTProto requests, not dollars; it is not this phase's guard.) I re-read the guard, run the census
+and the projection, and bring the operator a table. Rung 0 is that the guard's own remainder is
+**stale**:
 `results/spend_cycle2.json` last session (2026-08-27T09:43Z) reads `remaining_usd` **$3.1686**, and
 the `mp-srv2` volume has billed for three days since at ≈$0.24/day. The projection is computed at
 the **measured** rate, not the smoke's — see §5.4. If the projection exceeds the remainder I **ask**;
@@ -141,10 +151,29 @@ settles it; I do not carry either number into the plan as a conclusion.
 `results/promo_comment_yield.json` carries per-channel **counts** and no thread ids
 (`total.price_threads = 678`, `total.under_price = 4 718` of `16 324`). S7 re-derives the ids with
 the **same** predicate its producer used — `retail_census.PRICE_BRANCHES` joined on `parent_msg_id`
-(`scripts/promo_comment_yield.py`) — so the draw and the census measure the same instrument.
-That producer's own caveat travels with the draw: the `decimal` branch also fires on **dates**, and
-msuaaaa's price posts are 1 316 `decimal` against 302 `грн`, so the per-branch counts are carried
-per stratum and a thread selected only by `decimal` is flagged.
+(`scripts/promo_comment_yield.py`) — so the draw and the census measure the same instrument. I
+re-ran that logic over `data/raw/` and reproduced **678 / 4 718 exactly**, so the draw is buildable
+at $0 today with no new input.
+
+**5.5a Two thirds of the 678 are selected by a regex firing on DATES — SP-0 question 3.**
+`PRICE_BRANCHES` has four branches; `decimal` is `\d+[,.]\d\d`. Splitting the 678 by branch
+(measured, reproduced twice): **229** threads carry a real currency marker (`грн` / `₴` / `grn`) and
+**449 (66%) match on `decimal` alone.** Ten of those 449 read under seed 42 are **10 of 10 dates**,
+not prices — «Пропозиції діють з 14.08 по 20.08», «з 18.03.26 по 24.03.2026», «Лише по 08.07.26».
+The producer's own docstring already warned it: «a yield carried entirely by `decimal` is a yield to
+distrust». These are still *promo* posts («Знижки в АТБ», «До -67% у Сільпо») — they simply carry no
+price in the text, because the price is in the image. The operator's ruling was «только треды под
+ЦЕНОВЫМИ промо», so which population S2 is graded on is his, not mine:
+**678** (any branch) · **229** (currency marker) · **449** (`decimal`-only). I draw nothing until it
+is answered — a dev-40 from the 678 would put ~2/3 of its threads under posts with no price in them
+and the bars would measure the wrong thing.
+
+**5.5b The draw has two strata, not «stratified by channel».** 665 of the 678 (98.1%) are
+`@msuaaaa` (447) and `@VARUS_channel` (218). Proportional quotas for dev-40 give msuaaaa 27 / VARUS
+13 / **zero from the other seven channels**, and dev-40 + holdout-40 = 80 still reaches no third
+stratum. Six of those seven tail channels are in the **PAUSED 39** that §3 removes from collection,
+which is a second reason the honest population may be 665. The draw record states its quotas and
+what it could not reach rather than implying coverage it does not have.
 
 **5.6 Text-less comments.** SPEC 3.19: they leave the inference queue from the next paid cycle —
 a **queue** rule, never a deletion — and «the volume of wordless reactions is itself a signal», so
