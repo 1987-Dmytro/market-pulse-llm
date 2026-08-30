@@ -45,3 +45,20 @@ def test_the_budget_ceiling_bound_and_was_not_exceeded():
     step2 = json.loads(RECORD.read_text(encoding="utf-8"))["step_2"]
     assert step2["requests_all_passes"] == sum(p["requests"] for p in step2["passes"])
     assert step2["requests_all_passes"] <= step2["budget"]
+
+
+def test_the_ceiling_refuses_a_further_candidate_now_that_the_budget_is_spent():
+    """A guard nobody has seen refuse is not a guard (team-lead skill v2.1 §4).
+
+    The ledger says 40 of 40 are spent, so the real predicate must refuse the next candidate — and
+    it must refuse it in a FRESH process, whose own counter starts at zero. That is the case the
+    per-invocation form of this check got wrong: the budget is account-wide, the counter is not.
+    """
+    from retail_resolve_r2 import COST_PER_CANDIDATE, MAX_REQUESTS, would_exceed
+
+    spent = sum(
+        p["requests"] for p in json.loads(RECORD.read_text(encoding="utf-8"))["step_2"]["passes"]
+    )
+    assert would_exceed(spent, 0), "a new pass would spend the whole budget again"
+    assert not would_exceed(0, MAX_REQUESTS - COST_PER_CANDIDATE)
+    assert would_exceed(0, MAX_REQUESTS - COST_PER_CANDIDATE + 1)

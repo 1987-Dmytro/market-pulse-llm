@@ -38,7 +38,6 @@ from telethon import functions  # noqa: E402
 from telethon.errors import FloodWaitError  # noqa: E402
 
 RECORD = REPO_ROOT / "results" / "retail_chains.json"
-R1_RECORD = REPO_ROOT / "results" / "retail_census.json"
 
 PAUSE_SECONDS = 3.0
 assert PAUSE_SECONDS >= 3.0, "the contract's floor is 3 s between requests"
@@ -49,6 +48,17 @@ MAX_REQUESTS = 40
 COST_PER_CANDIDATE = 4
 
 UTC = timezone.utc
+
+
+def would_exceed(spent_before: int, spent_now: int) -> bool:
+    """Would admitting one more candidate carry the run past the contract's ceiling?
+
+    `spent_before` comes from the record's pass ledger, not from this process: the FloodWait the
+    budget exists to avoid is account-wide, so a fresh invocation whose counter starts at 0 would
+    otherwise spend the whole 40 again. A candidate costs up to COST_PER_CANDIDATE, so the check
+    is against what the NEXT one can spend, not what the previous ones did.
+    """
+    return spent_before + spent_now + COST_PER_CANDIDATE > MAX_REQUESTS
 
 
 @contextmanager
@@ -147,20 +157,6 @@ async def measure_invite(client, token: str) -> dict:
     return record
 
 
-def aggregator_rows() -> dict:
-    """The six aggregators, from r1's measurement — the contract says so. Window is r1's."""
-    r1 = json.loads(R1_RECORD.read_text(encoding="utf-8"))
-    by_name: dict[str, list[dict]] = {}
-    for row in r1["rows"]:
-        if not row.get("checked"):
-            continue
-        for found in row.get("found_by", []):
-            if not found.startswith("retail_chains:"):
-                continue
-            by_name.setdefault(found.split(":", 1)[1], []).append(row)
-    return by_name
-
-
 async def run(limit: int | None, resume: bool) -> int:
     refuse_inside_flood_wait()
     state = json.loads(RECORD.read_text(encoding="utf-8"))
@@ -171,6 +167,13 @@ async def run(limit: int | None, resume: bool) -> int:
     print(
         f"{len(pending)} handles from step 1; budget {MAX_REQUESTS} requests, {PAUSE_SECONDS}s apart"
     )
+
+    # The FloodWait this budget exists to avoid is account-wide, and so is the ledger: a fresh
+    # invocation starts its own counter at 0, so a ceiling checked against it alone lets every new
+    # pass spend the whole 40 again. Seed from what the record says was already spent.
+    spent_before = sum(p["requests"] for p in state.get("step_2", {}).get("passes", []))
+    if spent_before:
+        print(f"{spent_before} requests already spent by earlier passes (record)")
 
     compiled = census.compile_categories(census.load_lexicon())
     now = datetime.now(UTC)
@@ -187,10 +190,11 @@ async def run(limit: int | None, resume: bool) -> int:
                 # two histories). Checking the spent count alone would let the LAST candidate
                 # carry the total past 40 — the ceiling has to be checked against what the next
                 # candidate can still spend, not against what the previous ones did.
-                if calls["n"] + COST_PER_CANDIDATE > MAX_REQUESTS:
+                if would_exceed(spent_before, calls["n"]):
                     print(
-                        f"budget: {calls['n']} spent, next needs {COST_PER_CANDIDATE} of "
-                        f"{MAX_REQUESTS} — stopping with {len(pending) - n + 1} unmeasured"
+                        f"budget: {spent_before + calls['n']} spent, next needs "
+                        f"{COST_PER_CANDIDATE} of {MAX_REQUESTS} — stopping with "
+                        f"{len(pending) - n + 1} unmeasured"
                     )
                     break
                 if last is not None:
