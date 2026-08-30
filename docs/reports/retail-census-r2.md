@@ -1,6 +1,6 @@
 # retail-census-r2 (C1) — official chain channels, read off the chains' own sites, $0
 
-**Which Ukrainian retail chains and promo aggregators have an official Telegram channel we can collect, and where are comments open? — every one of the 36 rows was read; 13 of 36 rows have a channel and 7 of those have comments open. Three of the 7 also carry dairy, but METRO's `@HRCNc` resolves to «HoReCaНець», its B2B HoReCa channel, and Копійочка's .011 is an aggregator on r1's older clock — so the one consumer-facing chain channel with dairy AND live comments is Varus** (16.643 comments/day against METRO's 0.071). Full 36 rows `results/retail_chains_table.md` · record `results/retail_chains.json` · category B, r1's 47 Poltava chats, NOT re-measured, `results/poltava_chats_b.md`.
+**Which Ukrainian retail chains and promo aggregators have an official Telegram channel we can collect, and where are comments open? — every one of the 36 rows was read; 13 of 36 rows have a channel and 7 of those have comments open. Three of the 7 also carry dairy, but METRO's `@HRCNc` resolves to «HoReCaНець», its B2B HoReCa channel, and Копійочка's .011 is an aggregator on r1's older clock — so the one consumer-facing chain channel with dairy AND live comments is Varus** (16.643 comments/day against METRO's 0.071). Full 36 rows `results/retail_chains_table.md` · record `results/retail_chains.json` · category B, r1's 47 Poltava chats, NOT re-measured, `results/poltava_chats_b.md` · the working set split by purpose, and the Poltava chats by district centre, `results/working_set.md`.
 
 | chain | channel | subs | n | price | comments | com/day | dairy | lang |
 |---|---|--:|--:|--:|---|--:|--:|---|
@@ -24,6 +24,6 @@ Aggregators, on r1's 27.08 clock, marked as such in the table: @znishkom price .
 ```
 $ make check
 FAILED tests/test_repair_phase4_ledger.py::test_the_silence_check_fires_on_the_LINE_ledger_too
-1 failed, 4122 passed, 2 skipped in 670.56s (0:11:10)
+1 failed, 4126 passed, 2 skipped in 670.30s (0:11:10)
 ```
-The one red is the r3 ledger debt, not caused here. `make check` had **2** reds at session start (`25b9931`: 2 failed, 4101 passed); step 0 closed the other (`test_think_zero_shot`) and the pass count went 4102 → 4122 — this contract's 20 tests across four new files.
+The one red is the r3 ledger debt, not caused here. `make check` had **2** reds at session start (`25b9931`: 2 failed, 4101 passed); step 0 closed the other (`test_think_zero_shot`) and the pass count went 4102 → 4126 — this contract's 24 tests across five new files.
