@@ -10,6 +10,7 @@ from market_pulse.registry import (
     load_registry,
     load_registry_as_pinned,
     load_registry_text,
+    registry_before_r2,
     registry_before_the_latin_aliases,
 )
 
@@ -31,7 +32,18 @@ is literal in `market_pulse.registry` so a third link cannot land here unseen.""
 
 PRE_13B_REGISTRY_SHA = "920c7f203b9f0e38fd8df9e893d9b15705a6b19b297bd9d14b14258ae38ac3be"
 """The bytes the sku pre-registrations v1–v4, the leaflet gold and the pre-filter census all pin —
-today's file with the (13)(b) aliases undone, and the stamp still in it."""
+today's file with r2 and then the (13)(b) aliases undone, and the stamp still in it. Eight records
+carry this sha."""
+
+R1_REGISTRY_SHA = "d4e3b2373c4378f3acc51079dc1d0560c28d58c46b71335b2bb352cae39be3ba"
+"""The registry as it stood before revision r2 — the third link, added 2026-08-30.
+
+Seven records pin these bytes: `census_5c2`, `census_c3a_posts`, `dashboard_data_w1`,
+`gate_census_w1`, `gate_census_w1_reader`, `prereg_5c2_run` and `sku_pilot_prereg_b2`. They were
+the LIVE sha until r2 added eight A1 sources and paused 39 rows, and they are not re-pinned: the
+undo is written down in `market_pulse.registry.registry_before_r2` and nailed to this constant
+below. Without that, `load_registry_as_pinned` would refuse for all seven and the four producers
+that recompute a sealed bar through it would stop."""
 
 STAMP_OPENS = "  # SIGNED 2026-08-10"
 STAMP_CLOSES = "sitting-2026-08-10-composition-signed.md"
@@ -307,14 +319,19 @@ def test_the_signature_stamp_moved_the_file_and_not_one_row_of_it():
     assert sha256(registry_as_the_signed_screen_read_it()).hexdigest() == SIGNED_SCREEN_REGISTRY_SHA
     assert sha256(REGISTRY.read_bytes()).hexdigest() != SIGNED_SCREEN_REGISTRY_SHA
 
-    live = load_registry(REGISTRY)
     text = REGISTRY.read_text(encoding="utf-8")
     assert text.count("SIGNED 2026-08-10") == 1
     for claim in ("66 sources", "launch 59 + watch 7", "changes no", "5c3 NAMED revision"):
         assert claim in text, claim
-    # the numbers the stamp claims, read off the file it stamps
-    watch = [s for s in live.sources if s.watch]
-    assert (len(live.sources), len(live.sources) - len(watch), len(watch)) == (66, 59, 7)
+    # The numbers the stamp claims, read off the composition it stamps — which is the SIGNED one,
+    # not today's. Revision r2 added eight A1 sources on 2026-08-30, and counting `live` here would
+    # have made the stamp look wrong about a composition it never described. The stamp's own
+    # numbers are never touched; the reconstruction is what is counted
+    # ([[the_field_true_under_the_old_constant]]).
+    signed = load_registry_text(registry_as_the_signed_screen_read_it().decode("utf-8"), REGISTRY)
+    watch = [s for s in signed.sources if s.watch]
+    assert (len(signed.sources), len(signed.sources) - len(watch), len(watch)) == (66, 59, 7)
+    assert len(load_registry(REGISTRY).sources) > 66, "r2 is why this is counted on the signed link"
 
 
 def test_the_latin_aliases_moved_three_display_name_lists_and_nothing_else():
@@ -324,14 +341,17 @@ def test_the_latin_aliases_moved_three_display_name_lists_and_nothing_else():
     before = load_registry_text(
         registry_before_the_latin_aliases(REGISTRY).decode("utf-8"), REGISTRY
     )
-    live = load_registry(REGISTRY)
-    assert [vars(source) for source in before.sources] == [vars(s) for s in live.sources]
-    assert before.taxonomy.tracked_groups == live.taxonomy.tracked_groups
-    assert [b.brand_id for b in before.watchlist] == [b.brand_id for b in live.watchlist]
-    assert [b.own for b in before.watchlist] == [b.own for b in live.watchlist]
+    # Against r1 and not against today's file: the amendment's claim is about ONE revision, and
+    # r2 moved ten source rows for reasons that have nothing to do with aliases. Diffing pre-(13)(b)
+    # against live would fold two revisions into one and this test would be asserting r2.
+    after = load_registry_text(registry_before_r2(REGISTRY).decode("utf-8"), REGISTRY)
+    assert [vars(source) for source in before.sources] == [vars(s) for s in after.sources]
+    assert before.taxonomy.tracked_groups == after.taxonomy.tracked_groups
+    assert [b.brand_id for b in before.watchlist] == [b.brand_id for b in after.watchlist]
+    assert [b.own for b in before.watchlist] == [b.own for b in after.watchlist]
     moved = {
         was.brand_id: (was.display_names, now.display_names)
-        for was, now in zip(before.watchlist, live.watchlist, strict=True)
+        for was, now in zip(before.watchlist, after.watchlist, strict=True)
         if was.display_names != now.display_names
     }
     assert moved == {
@@ -362,10 +382,83 @@ def test_the_reconstruction_refuses_a_registry_the_amendment_never_touched(tmp_p
         registry_before_the_latin_aliases(path)
 
 
+def test_r2_undoes_to_the_bytes_the_r1_records_pin():
+    """The link that makes revision r2 legal at all, nailed to a sha rather than described.
+
+    Seven sealed records pin `d4e3b237…`. r2 moved the live file off it, and re-pinning them would
+    be a pin that follows the file. So the undo is checked here: strip the bracketed block r2
+    appended and every line r2 marked, and what is left has to be exactly the bytes those seven
+    read. If it is not, `load_registry_as_pinned` refuses for all seven and this test says so first.
+    """
+    assert sha256(registry_before_r2(REGISTRY)).hexdigest() == R1_REGISTRY_SHA
+    assert sha256(REGISTRY.read_bytes()).hexdigest() != R1_REGISTRY_SHA, "r2 is in the live file"
+    # and the whole chain still reaches the two older links THROUGH it
+    assert sha256(registry_before_the_latin_aliases(REGISTRY)).hexdigest() == PRE_13B_REGISTRY_SHA
+    assert sha256(registry_as_the_signed_screen_read_it()).hexdigest() == SIGNED_SCREEN_REGISTRY_SHA
+
+
+def test_the_r2_undo_refuses_a_half_marked_or_unmarked_registry(tmp_path):
+    """The negative control on the new link. A reconstruction that found nothing to undo would
+    return today's bytes and satisfy a pin it never reached — so both halves must be present, and
+    a file missing either is a refusal ([[guard_selftest_negative_control]])."""
+    text = REGISTRY.read_text(encoding="utf-8")
+
+    no_close = write(tmp_path, text.replace("  # --- r2 END", "  # r2 end, mis-spelled"))
+    with pytest.raises(ValueError, match="found 1 open and 0 close markers"):
+        registry_before_r2(no_close)
+
+    unmarked = write(tmp_path, text.replace("  # (r2)", ""))
+    with pytest.raises(ValueError, match="this is not the r2 registry"):
+        registry_before_r2(unmarked)
+
+
+def test_the_paused_rows_are_loaded_and_are_not_collected():
+    """r2's whole mechanism, both directions (review 30.08): the 39 rows that leave collection stay
+    IN the registry and say they are not collected.
+
+    Deleting them was the other way to write the ruling and it breaks the build at $0 —
+    `scripts/build_aggregates.py::segment_for` raises `SystemExit` for any channel that carries
+    evidence rows and has no registry entry. So the row is loaded (direction one) and `collect` is
+    False (direction two), and every A1 row is still collected.
+    """
+    sources = load_registry(REGISTRY).sources
+    paused = [s for s in sources if not s.collect]
+    assert len(paused) == 39
+    assert all(s.audience is not None for s in paused), "a paused row still attributes its history"
+    text = REGISTRY.read_text(encoding="utf-8")
+    assert text.count('paused_at: "2026-08-30"') == 39
+    assert text.count('paused_by: "ruling (ц) 30.08"') == 39
+    a1 = {"atb", "atb_fanatik", "atb_aktsiyi", "varus", "ekomarket_shop", "epicentrk_sale",
+          "forainfo", "marketopt_private", "blyzenko", "silpo", "fozzy", "sim23", "rozetka",
+          "msuaaaa", "kopiyochka1", "znishkom", "xochydeshevshe"}
+    by_id = {s.id: s for s in sources}
+    assert a1 <= set(by_id), sorted(a1 - set(by_id))
+    assert [i for i in sorted(a1) if not by_id[i].collect] == []
+
+
+def test_the_seventeen_A1_rows_of_the_phase_spec_are_expressible_and_present():
+    """`docs/PHASE-promo-pulse-1.md` §3's A1 list, entry by entry, against the file.
+
+    17 rows and 18 entries: @ATB_FANatik's discussion group is a SECOND CHANNEL on the FANatik row,
+    and @kop1chat is a second channel on the Копійочка row that was already here. Two of the 18 are
+    not usernames at all, which is why `_HANDLE` is a union — and this is the test that would have
+    caught «the row cannot be written down» before the collector found it empty.
+    """
+    channels = {c for s in load_registry(REGISTRY).sources for c in s.telegram_channels}
+    for entry in (
+        "@atb_market_official", "@ATB_FANatik", "1925810730", "@atb_aktsiyi", "@VARUS_channel",
+        "@ekomarket_shop", "@epicentrk_sale", "@forainfo", "+Ejz6ubzm21IyMTQy", "@blyzenkoua",
+        "@silposilpo", "@fozzyshopua", "@sim23_simi", "@rrozetka", "@msuaaaa", "@kop1chat",
+        "@znishkom", "@xochydeshevshe",
+    ):
+        assert entry in channels, entry
+
+
 def test_a_pin_neither_branch_reaches_refuses():
     """`load_registry_as_pinned` is what every recomputation of a sealed bar goes through, so its
     failure mode has to be a refusal and not a quiet fall-back to today's alias table."""
     assert load_registry_as_pinned(PRE_13B_REGISTRY_SHA, REGISTRY).watchlist
+    assert load_registry_as_pinned(R1_REGISTRY_SHA, REGISTRY).watchlist
     live_sha = sha256(REGISTRY.read_bytes()).hexdigest()
     assert load_registry_as_pinned(live_sha, REGISTRY).watchlist
     with pytest.raises(ValueError, match="the registry has moved in a way nothing here"):

@@ -24,6 +24,8 @@ sys.path.insert(0, str(REPO_ROOT / "src"))
 
 import write_prereg_5c2 as writer  # noqa: E402
 
+from moved_pins import registry_pin_revision  # noqa: E402
+
 from market_pulse import evidence  # noqa: E402
 
 RECORD = json.loads((REPO_ROOT / "results" / "prereg_5c2_run.json").read_text(encoding="utf-8"))
@@ -257,7 +259,17 @@ def test_the_sealed_pin_still_derives_through_the_ten_block_keep():
 
 
 def test_every_pinned_input_still_hashes_to_what_it_says():
+    """Every input as it sits — except the registry, which is reached through its revisions.
+
+    Revision r2 (2026-08-30) moved `config/registry.yaml` and this registration is not re-pinned by
+    it: the run was priced over the 66 rows r1 carried. `moved_pins.registry_pin_revision` names
+    which revision answers, so a pin that had silently become today's bytes would fail here.
+    """
     for path, digest in RECORD["pinned_inputs"].items():
+        if path == "config/registry.yaml":
+            assert registry_pin_revision(digest) == "r1, through the r2 undo"
+            assert writer.pinned_sha256(REPO_ROOT / path) != digest, "r2 is in the live file"
+            continue
         assert writer.pinned_sha256(REPO_ROOT / path) == digest, path
     assert set(RECORD["pinned_inputs"]) == {
         "docs/SPEC.md",

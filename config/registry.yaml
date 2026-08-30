@@ -84,6 +84,7 @@ sources:
     source_type: community
     telegram_channels:
       - "@kopiyochka1"
+      - "@kop1chat"  # (r2)
     verified: true
     comments_enabled: true
     audience: supermarket_deals
@@ -95,6 +96,9 @@ sources:
     verified: true
     comments_enabled: true
     audience: cooking_recipes
+    collect: false  # (r2)
+    paused_at: "2026-08-30"  # (r2)
+    paused_by: "ruling (ц) 30.08"  # (r2)
   - id: maudau
     name: "MAUDAU: канал цікавих штук"
     source_type: community
@@ -103,6 +107,9 @@ sources:
     verified: true
     comments_enabled: false
     audience: supermarket_deals
+    collect: false  # (r2)
+    paused_at: "2026-08-30"  # (r2)
+    paused_by: "ruling (ц) 30.08"  # (r2)
   # uasaler removed 2026-08-07: EXCLUDED ENTIRELY (ruling 08.08, canon 'Рулинги, волна 2'): the 07.08 demotion left the channel in posts-only because the operator's word that day had named the CHAT («Чат Аліекспрес ( AliExpert )»), which was left. This ruling names the CHANNEL. Its 30 posts in the window carry zero food terms on the same theme screen that excluded the five above — AliExpress promo codes, not the tracked category
   - id: retsepty
     name: "Кулінарні рецепти"
@@ -112,6 +119,9 @@ sources:
     verified: true
     comments_enabled: true
     audience: cooking_recipes
+    collect: false  # (r2)
+    paused_at: "2026-08-30"  # (r2)
+    paused_by: "ruling (ц) 30.08"  # (r2)
   # katyal55 removed 2026-08-07: EXCLUDED on the language census (wave 3): ru 1.00 over 36 decidable posts, ua 0. A MEMBER — its discussion group is left, and the membership flag is re-read afterwards
   - id: smirnov108
     name: "Smirnovy.com – здоров'я та розвиток"
@@ -121,6 +131,9 @@ sources:
     verified: true
     comments_enabled: true
     audience: health_fitness
+    collect: false  # (r2)
+    paused_at: "2026-08-30"  # (r2)
+    paused_by: "ruling (ц) 30.08"  # (r2)
   - id: tarilka_malyuka
     name: "Тарілка Малюка • Прикорм"
     source_type: community
@@ -129,6 +142,9 @@ sources:
     verified: true
     comments_enabled: true
     audience: baby_food
+    collect: false  # (r2)
+    paused_at: "2026-08-30"  # (r2)
+    paused_by: "ruling (ц) 30.08"  # (r2)
   - id: kkondr_fit
     name: "Kkondratyuchka тренування"
     source_type: community
@@ -137,6 +153,9 @@ sources:
     verified: true
     comments_enabled: true
     audience: health_fitness
+    collect: false  # (r2)
+    paused_at: "2026-08-30"  # (r2)
+    paused_by: "ruling (ц) 30.08"  # (r2)
   - id: polyakova_fitness
     name: "Тренування з Олею Поляковою та Сергієм Шеремета"
     source_type: community
@@ -145,6 +164,9 @@ sources:
     verified: true
     comments_enabled: true
     audience: health_fitness
+    collect: false  # (r2)
+    paused_at: "2026-08-30"  # (r2)
+    paused_by: "ruling (ц) 30.08"  # (r2)
   # znishkom removed 2026-08-07: EXCLUDED on the theme screen: 191 posts in the window and not one food term — it is Steam game discounts (STAR WARS Jedi, NieR:Automata, Disco Elysium). The same class as @Steam_free_1 and @Steam_Sale_Ua, excluded 06.08, and the biggest poster in the whole composition after the recipe feeds
   # kuksa2022 removed 2026-08-07: EXCLUDED on RU title (wave 3): census TOO_FEW_DECIDABLE, 2 decidable posts. A MEMBER — its discussion group is left, and the membership flag is re-read afterwards
   - id: healthpsycholog
@@ -155,6 +177,9 @@ sources:
     verified: true
     comments_enabled: true
     audience: health_fitness
+    collect: false  # (r2)
+    paused_at: "2026-08-30"  # (r2)
+    paused_by: "ruling (ц) 30.08"  # (r2)
   # atb_fanatik removed 2026-08-07: EXCLUDED as text-free: 18 posts of «АНОНС АКЦІЙ АТБ … Частина N», products in the images, 2 of 7 sampled posts carrying comments
   # offspringrus removed 2026-08-07: EXCLUDED on the theme screen: 16 posts, zero food terms — a RUSSIAN baby-goods shop (Moscow exhibitions, offspring24.ru), so off-category and off-market
   - id: sashafitnesslife
@@ -165,6 +190,9 @@ sources:
     verified: true
     comments_enabled: true
     audience: health_fitness
+    collect: false  # (r2)
+    paused_at: "2026-08-30"  # (r2)
+    paused_by: "ruling (ц) 30.08"  # (r2)
   # pro_detyintumama removed 2026-08-07: EXCLUDED on RU title (wave 3): the census could not rule — 3 decidable posts in the window — and the operator ruled by title now rather than wait for a wider one
   - id: chifit_family
     name: "Оля CHIFIT| тренування і харчування🔥"
@@ -174,6 +202,9 @@ sources:
     verified: true
     comments_enabled: true
     audience: health_fitness
+    collect: false  # (r2)
+    paused_at: "2026-08-30"  # (r2)
+    paused_by: "ruling (ц) 30.08"  # (r2)
   - id: ya_nenka
     name: "Катерина Ненька — грудне вигодовування та дитяче харчування | сон"
     source_type: community
@@ -182,6 +213,9 @@ sources:
     verified: true
     comments_enabled: true
     audience: baby_food
+    collect: false  # (r2)
+    paused_at: "2026-08-30"  # (r2)
+    paused_by: "ruling (ц) 30.08"  # (r2)
   # baby_broccoli_club removed 2026-08-07: EXCLUDED on RU title (wave 3): census TOO_FEW_DECIDABLE, 1 decidable post
   - id: useful_healthy_fitness_menu
     name: "Здорове харчування| Софія Ігорівна"
@@ -191,6 +225,9 @@ sources:
     verified: true
     comments_enabled: true
     audience: health_fitness
+    collect: false  # (r2)
+    paused_at: "2026-08-30"  # (r2)
+    paused_by: "ruling (ц) 30.08"  # (r2)
   - id: olgaa_trainer
     name: "Оля | розумний фітнес 💪"
     source_type: community
@@ -199,6 +236,9 @@ sources:
     verified: true
     comments_enabled: true
     audience: health_fitness
+    collect: false  # (r2)
+    paused_at: "2026-08-30"  # (r2)
+    paused_by: "ruling (ц) 30.08"  # (r2)
   - id: denisovapro
     name: "Нутриціологія | Молодість | ЖИТТЯ"
     source_type: community
@@ -207,6 +247,9 @@ sources:
     verified: true
     comments_enabled: true
     audience: health_fitness
+    collect: false  # (r2)
+    paused_at: "2026-08-30"  # (r2)
+    paused_by: "ruling (ц) 30.08"  # (r2)
   - id: eftforhealth
     name: "Я ЗДОРОВА"
     source_type: community
@@ -215,6 +258,9 @@ sources:
     verified: true
     comments_enabled: true
     audience: health_fitness
+    collect: false  # (r2)
+    paused_at: "2026-08-30"  # (r2)
+    paused_by: "ruling (ц) 30.08"  # (r2)
   # rezeptmoi removed 2026-08-07: EXCLUDED on RU title (wave 3): census TOO_FEW_DECIDABLE, 2 decidable posts
   - id: recepti
     name: "Кулінарні рецепти"
@@ -224,6 +270,9 @@ sources:
     verified: true
     comments_enabled: false
     audience: cooking_recipes
+    collect: false  # (r2)
+    paused_at: "2026-08-30"  # (r2)
+    paused_by: "ruling (ц) 30.08"  # (r2)
   - id: mameni_recepti
     name: "Мамині Рецепти"
     source_type: community
@@ -232,6 +281,9 @@ sources:
     verified: true
     comments_enabled: false
     audience: cooking_recipes
+    collect: false  # (r2)
+    paused_at: "2026-08-30"  # (r2)
+    paused_by: "ruling (ц) 30.08"  # (r2)
   # retsepty4 removed 2026-08-07: EXCLUDED on the language census (wave 3): ru 1.00 over 115 decidable posts, ua 0
   - id: epicentrk_sale
     name: "ЕПІЦЕНТР"
@@ -249,6 +301,9 @@ sources:
     verified: true
     comments_enabled: false
     audience: cooking_recipes
+    collect: false  # (r2)
+    paused_at: "2026-08-30"  # (r2)
+    paused_by: "ruling (ц) 30.08"  # (r2)
   # intensiv_mamiev removed 2026-08-07: EXCLUDED on RU title (wave 3): census TOO_FEW_DECIDABLE, 1 decidable post
   # retsepty5 removed 2026-08-07: EXCLUDED on the language census (wave 3): ru 1.00 over 139 decidable posts in the window, ua 0. It also fails the market-origin ruling on its own recorded evidence — one of its posts recruits couriers for «доставка заказов Яндекс Еды и Яндекс Лавки», «доход до 8 500 ₽» — so it is out on two rulings, not one
   - id: blwbabies
@@ -259,6 +314,9 @@ sources:
     verified: true
     comments_enabled: false
     audience: baby_food
+    collect: false  # (r2)
+    paused_at: "2026-08-30"  # (r2)
+    paused_by: "ruling (ц) 30.08"  # (r2)
   - id: vylkachannel
     name: "the VYLKA (рецепти)"
     source_type: community
@@ -267,6 +325,9 @@ sources:
     verified: true
     comments_enabled: false
     audience: cooking_recipes
+    collect: false  # (r2)
+    paused_at: "2026-08-30"  # (r2)
+    paused_by: "ruling (ц) 30.08"  # (r2)
   # whitecode_zny removed 2026-08-07: EXCLUDED on the theme screen: 25 posts, zero food terms — footwear resale («стара ціна 3099 ♡ НОВА 1499 ♡ розмір 37 ♡ дефект на фото»)
   - id: gaid_skobioale
     name: "Відгуки гайд схуднення"
@@ -276,6 +337,9 @@ sources:
     verified: true
     comments_enabled: false
     audience: health_fitness
+    collect: false  # (r2)
+    paused_at: "2026-08-30"  # (r2)
+    paused_by: "ruling (ц) 30.08"  # (r2)
   - id: dpssgovua
     name: "Держпродспоживслужба"
     source_type: government
@@ -284,6 +348,9 @@ sources:
     verified: true
     comments_enabled: false
     audience: food_quality
+    collect: false  # (r2)
+    paused_at: "2026-08-30"  # (r2)
+    paused_by: "ruling (ц) 30.08"  # (r2)
   - id: wellosophy_lesya
     name: "ПХ та схуднення 🍀"
     source_type: community
@@ -292,6 +359,9 @@ sources:
     verified: true
     comments_enabled: false
     audience: health_fitness
+    collect: false  # (r2)
+    paused_at: "2026-08-30"  # (r2)
+    paused_by: "ruling (ц) 30.08"  # (r2)
   - id: atb_aktsiyi
     name: "АТБ Акції"
     source_type: aggregator
@@ -308,6 +378,9 @@ sources:
     verified: true
     comments_enabled: false
     audience: health_fitness
+    collect: false  # (r2)
+    paused_at: "2026-08-30"  # (r2)
+    paused_by: "ruling (ц) 30.08"  # (r2)
   - id: korolevakuchni
     name: "Королева Кухні 👑 (Кулінарія та рецепти)"
     source_type: community
@@ -316,6 +389,9 @@ sources:
     verified: true
     comments_enabled: false
     audience: cooking_recipes
+    collect: false  # (r2)
+    paused_at: "2026-08-30"  # (r2)
+    paused_by: "ruling (ц) 30.08"  # (r2)
   - id: itsmamix
     name: "Mamix🥼"
     source_type: community
@@ -325,6 +401,9 @@ sources:
     comments_enabled: true
     watch: true
     audience: mothers_kids
+    collect: false  # (r2)
+    paused_at: "2026-08-30"  # (r2)
+    paused_by: "ruling (ц) 30.08"  # (r2)
   # regina_tatlybaeva removed 2026-08-07: EXCLUDED on RU title (wave 3, watch): silent in the window, so the census has no posts to read — 0 collected, gate posts_per_week 0.0
   # netainaya_vecherya removed 2026-08-07: EXCLUDED on RU title (wave 3, watch): silent in the window, 0 posts
   # retsepty10 removed 2026-08-07: EXCLUDED on RU title (wave 3, watch): silent in the window, 0 posts
@@ -337,6 +416,9 @@ sources:
     comments_enabled: true
     watch: true
     audience: health_fitness
+    collect: false  # (r2)
+    paused_at: "2026-08-30"  # (r2)
+    paused_by: "ruling (ц) 30.08"  # (r2)
   # prostetsofa removed 2026-08-07: EXCLUDED on RU title (wave 3, watch): silent in the window, 0 posts. Its earlier KEPT ruling — approval-only group, revisited when it wakes up — is superseded here
   # viktoria_sshh removed 2026-08-07: EXCLUDED on RU title (wave 3, watch): silent in the window, 0 posts
   - id: hydnem_prosto
@@ -348,6 +430,9 @@ sources:
     comments_enabled: true
     watch: true
     audience: health_fitness
+    collect: false  # (r2)
+    paused_at: "2026-08-30"  # (r2)
+    paused_by: "ruling (ц) 30.08"  # (r2)
   - id: dimakaminskyifit
     name: "Дмитро Камінський | Фітнес та Саморозвиток"
     source_type: community
@@ -357,6 +442,9 @@ sources:
     comments_enabled: true
     watch: true
     audience: health_fitness
+    collect: false  # (r2)
+    paused_at: "2026-08-30"  # (r2)
+    paused_by: "ruling (ц) 30.08"  # (r2)
   - id: dutyache_menu
     name: "Дитяче меню"
     source_type: community
@@ -366,6 +454,9 @@ sources:
     comments_enabled: true
     watch: true
     audience: baby_food
+    collect: false  # (r2)
+    paused_at: "2026-08-30"  # (r2)
+    paused_by: "ruling (ц) 30.08"  # (r2)
   # polinalykovagv removed 2026-08-07: EXCLUDED on RU title (wave 3 top-up, watch): «ГВ/прикорм/сон с Полиной Лыковой» — silent in the window, 0 posts
   - id: evgenija_dutjache_menu
     name: "Євгенія_Дитяче меню"
@@ -376,6 +467,9 @@ sources:
     comments_enabled: true
     watch: true
     audience: baby_food
+    collect: false  # (r2)
+    paused_at: "2026-08-30"  # (r2)
+    paused_by: "ruling (ц) 30.08"  # (r2)
   # chekh_yevheniia1982 removed 2026-08-07: EXCLUDED on RU title (wave 3 top-up, watch): «Рецептишки Евгении Чех» — silent in the window, 0 posts, so the census has nothing to read either
   - id: marketopt_promo
     name: "Маркетопт (Толока) м.Кременчук"
@@ -510,6 +604,9 @@ sources:
     verified: true
     comments_enabled: false
     audience: baby_food
+    collect: false  # (r2)
+    paused_at: "2026-08-30"  # (r2)
+    paused_by: "ruling (ц) 30.08"  # (r2)
   - id: mamaiagolodniy
     name: "Мама, я Голодний😋"
     source_type: community
@@ -518,6 +615,9 @@ sources:
     verified: true
     comments_enabled: false
     audience: baby_food
+    collect: false  # (r2)
+    paused_at: "2026-08-30"  # (r2)
+    paused_by: "ruling (ц) 30.08"  # (r2)
   - id: educationwithloven
     name: "ВИХОВАННЯ З ЛЮБОВ'Ю💕"
     source_type: community
@@ -526,6 +626,9 @@ sources:
     verified: true
     comments_enabled: false
     audience: mothers_kids
+    collect: false  # (r2)
+    paused_at: "2026-08-30"  # (r2)
+    paused_by: "ruling (ц) 30.08"  # (r2)
   - id: pavlushaiyava
     name: "✨Павлуша і Ява 🇺🇦"
     source_type: community
@@ -534,6 +637,9 @@ sources:
     verified: true
     comments_enabled: false
     audience: baby_food
+    collect: false  # (r2)
+    paused_at: "2026-08-30"  # (r2)
+    paused_by: "ruling (ц) 30.08"  # (r2)
   - id: lab_of_childhood
     name: "ЛАБОРАТОРІЯ ДИТИНСТВА"
     source_type: community
@@ -543,6 +649,9 @@ sources:
     comments_enabled: false
     watch: true
     audience: mothers_kids
+    collect: false  # (r2)
+    paused_at: "2026-08-30"  # (r2)
+    paused_by: "ruling (ц) 30.08"  # (r2)
   - id: mandziak
     name: "Мандзяк Віктор"
     source_type: community
@@ -551,6 +660,9 @@ sources:
     verified: true
     comments_enabled: true
     audience: health_fitness
+    collect: false  # (r2)
+    paused_at: "2026-08-30"  # (r2)
+    paused_by: "ruling (ц) 30.08"  # (r2)
   - id: karlivkalive
     name: "Оголошення. Karlivka Live🇺🇦"
     source_type: community
@@ -600,6 +712,9 @@ sources:
     verified: true
     comments_enabled: true
     audience: mothers_kids
+    collect: false  # (r2)
+    paused_at: "2026-08-30"  # (r2)
+    paused_by: "ruling (ц) 30.08"  # (r2)
   - id: mamo_nepsichuy
     name: "Мамо, не псіхуй!👌"
     source_type: community
@@ -608,6 +723,97 @@ sources:
     verified: true
     comments_enabled: true
     audience: mothers_kids
+    collect: false  # (r2)
+    paused_at: "2026-08-30"  # (r2)
+    paused_by: "ruling (ц) 30.08"  # (r2)
+  # --- r2 BEGIN — registry revision r2, operator ruling 2026-08-30, docs/PHASE-promo-pulse-1.md §3
+  #
+  # A1 «prices»: the chains and promo aggregators stage 1 reads promo positions from. Every row
+  # below is a §3 entry that had no registry row of its own. Nothing here is typed:
+  #   source_type  <- results/retail_chains.json `is_aggregator` — false means the chain's own
+  #                   channel (official_retail), true means a third-party deals feed (aggregator).
+  #                   Both land in bucket A of scripts/registry_revision_proposal.py::bucket.
+  #   audience     <- follows source_type, as every A row already in this file does:
+  #                   official_retail -> retail_official, aggregator -> supermarket_deals.
+  #   name         <- results/retail_census.json `title` where the census resolved the handle,
+  #                   results/retail_chains.json `name` where it did not.
+  #   comments_enabled <- the census's reading. FALSE here means "no reading yet", not "measured
+  #                   zero" — @fozzyshopua, @rrozetka and Маркетопт private have no census row.
+  #   verified: false on all eight — none has been through the adaptation protocol (§3: profile ->
+  #                   sealed hundred -> gate BEFORE aggregates), and a row may not claim a gate it
+  #                   has not had.
+  #
+  # Two entries are not public usernames and are why market_pulse.registry._HANDLE became a union:
+  # Маркетопт's private channel is an invite hash, and @ATB_FANatik's discussion group «АТБ /
+  # ЗНИЖКИ» has `username: null` and only an id. The group is a SECOND CHANNEL on the FANatik row,
+  # not a row of its own — §3's «@ATB_FANatik (+ its discussion group)» is one source read through
+  # two feeds, which is what makes §3's 17 rows and 18 entries add up.
+  - id: atb_fanatik
+    name: "ФАНАТИК АТБ | АКЦІЇ"
+    source_type: aggregator
+    telegram_channels:
+      - "@ATB_FANatik"
+      - "1925810730"
+    verified: false
+    comments_enabled: true
+    audience: supermarket_deals
+  - id: marketopt_private
+    name: "Маркетопт (private)"
+    source_type: official_retail
+    telegram_channels:
+      - "+Ejz6ubzm21IyMTQy"
+    verified: false
+    comments_enabled: false
+    audience: retail_official
+  - id: blyzenko
+    name: "БЛИЗЕНЬКО🌿"
+    source_type: official_retail
+    telegram_channels:
+      - "@blyzenkoua"
+    verified: false
+    comments_enabled: false
+    audience: retail_official
+  - id: fozzy
+    name: "Fozzy"
+    source_type: official_retail
+    telegram_channels:
+      - "@fozzyshopua"
+    verified: false
+    comments_enabled: false
+    audience: retail_official
+  - id: sim23
+    name: "Сім23 та Сімі💜"
+    source_type: official_retail
+    telegram_channels:
+      - "@sim23_simi"
+    verified: false
+    comments_enabled: true
+    audience: retail_official
+  - id: rozetka
+    name: "Rozetka продукти"
+    source_type: official_retail
+    telegram_channels:
+      - "@rrozetka"
+    verified: false
+    comments_enabled: false
+    audience: retail_official
+  - id: znishkom
+    name: "ЗнижКом | Ігрові Знижки 🇺🇦"
+    source_type: aggregator
+    telegram_channels:
+      - "@znishkom"
+    verified: false
+    comments_enabled: true
+    audience: supermarket_deals
+  - id: xochydeshevshe
+    name: "Хочу дешевше"
+    source_type: aggregator
+    telegram_channels:
+      - "@xochydeshevshe"
+    verified: false
+    comments_enabled: true
+    audience: supermarket_deals
+  # --- r2 END
 
 taxonomy:
   # Keys are kebab-case and stable (they end up in result files); values are the

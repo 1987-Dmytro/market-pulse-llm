@@ -55,10 +55,11 @@ import write_sku_prereg as law  # noqa: E402
 from market_pulse import loop, parents, positions, serving  # noqa: E402
 from market_pulse.brands import watchlist_aliases  # noqa: E402
 from market_pulse.raw_store import RawStore  # noqa: E402
-from market_pulse.registry import load_registry  # noqa: E402
+from market_pulse.registry import load_registry, registry_revision_reaching  # noqa: E402
 
 PHASE = "5c2run"
 SPEC = REPO_ROOT / "docs" / "SPEC.md"
+REGISTRY = REPO_ROOT / "config" / "registry.yaml"
 PREREG = REPO_ROOT / "results" / "prereg_5c2_run.json"
 LEDGER = REPO_ROOT / "results" / "spend_5c2run.json"
 PHASE_LEDGER = witness.LEDGER
@@ -125,6 +126,14 @@ def pinned_today(path: Path, prereg: dict) -> tuple[str, str]:
     strip the pin was taken with. Third instance of the same decoupling (cap-in-force, the
     derived-root snapshot, and now the ten-keep strip), and the label is not shared with the other
     eight inputs: calling a stripped hash "byte-identical" would put a false word in the run record.
+
+    `config/registry.yaml` is the FOURTH, and the same sentence applies one law later: a raw
+    identity check on it had a shelf life of exactly one revision. Revision r2 (2026-08-30) appended
+    eight A1 sources and took 39 rows out of collection, and this registration's numbers were priced
+    over none of them — a byte test would stop a COMPLETE and sealed run's record from re-verifying
+    over rows the registration never read. So the registry is reached through its REVISIONS
+    (`market_pulse.registry.registry_revision_reaching`) and the label names the one that answered;
+    a pin no revision reaches still returns today's bytes and `preflight` still STOPS on it.
     """
     if path == SPEC:
         keep = tuple(prereg["strip"]["keep"])
@@ -132,6 +141,11 @@ def pinned_today(path: Path, prereg: dict) -> tuple[str, str]:
             hashlib.sha256(law.registered_law(path, keep=keep)).hexdigest(),
             f"derives through the {len(keep)}-block keep",
         )
+    if path == REGISTRY and path.exists():
+        want = prereg["pinned_inputs"].get("config/registry.yaml")
+        reached = registry_revision_reaching(want, path) if want else None
+        if reached is not None:
+            return want, reached[0]
     return (sha256_of(path) if path.exists() else "<absent>"), "byte-identical"
 
 

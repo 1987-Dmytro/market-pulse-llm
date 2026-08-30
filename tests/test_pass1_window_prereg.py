@@ -24,6 +24,7 @@ sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
 import build_pass1_window_pack as pack_producer  # noqa: E402
 import write_pass1_window_prereg as producer  # noqa: E402
+from test_prompts import with_r2_put_back  # noqa: E402
 
 RECORD = json.loads((REPO_ROOT / producer.OUT_NAME).read_text("utf-8"))
 R2 = json.loads((REPO_ROOT / producer.R2_NAME).read_text("utf-8"))
@@ -52,12 +53,17 @@ def rows_by_name() -> dict[str, dict]:
 
 
 def test_the_shipped_registration_is_what_the_producer_writes_today(tmp_path, monkeypatch):
-    """Under the pins this record was SEALED with — the two ruling (ф) moved are put back first."""
+    """Under the pins this record was SEALED with — the ruling (ф) movers and r2's are put back.
+
+    r2 moved `scripts/window_summary_5c2.py`, which this record BORROWS: `registry_through_the_seal`
+    had to reach the registry through its revisions instead of by byte equality, or ten producers
+    would have stopped at $0 over a revision that moved no row this registration read.
+    """
     sealed_pins(monkeypatch)
     assert producer.main(["--outdir", str(tmp_path)]) == 0
-    assert (tmp_path / producer.OUT_NAME).read_text("utf-8") == (
+    assert with_r2_put_back((tmp_path / producer.OUT_NAME).read_bytes()) == (
         REPO_ROOT / producer.OUT_NAME
-    ).read_text("utf-8")
+    ).read_bytes()
 
 
 def test_the_record_is_committed_and_equal_to_what_is_committed():

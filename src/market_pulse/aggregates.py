@@ -27,6 +27,8 @@ database alone. It exists so the convergence gate can compare 902 numbers instea
 
 import json
 import sqlite3
+import unicodedata
+import uuid
 import statistics
 
 SCHEMA = """
@@ -159,7 +161,126 @@ CREATE TABLE position_warnings (
     row_id    TEXT NOT NULL,
     warning   TEXT NOT NULL
 );
+
+-- The promo-pulse tables (phase `promo-pulse-1`, schema ruled in
+-- docs/reviews/2026-08-30-plan-promo-pulse-1.md SP-5). Six of them, and the one thing that makes
+-- them different from every table above: `window_id` is in NO identity here. Week is derived from
+-- the thread root's post date at query time. A thread that cools across a tick boundary would
+-- otherwise get a second identity on the second tick and `make tick` would stop being idempotent —
+-- which is K10, and the reason the ruling is written into the keys rather than into a comment
+-- somewhere else. `rollup` is the exception the ruling keeps: a rollup IS a per-week fact, so week
+-- is part of its key.
+
+CREATE TABLE attribution (
+    attribution_id TEXT PRIMARY KEY,   -- uuid5 over channel|msg_id|subject_id
+    channel        TEXT NOT NULL,
+    msg_id         INTEGER NOT NULL,
+    subject_id     TEXT NOT NULL,
+    subject_type   TEXT NOT NULL,      -- chain | brand | sku | post
+    subject        TEXT NOT NULL,      -- the surface form, as the comment wrote it
+    role           TEXT,
+    source         TEXT NOT NULL,      -- explicit | reply_context | post_context
+    confidence     REAL
+);
+
+CREATE TABLE signal (
+    signal_id         TEXT PRIMARY KEY,  -- uuid5 over channel|thread_root|type|subject_id
+    channel           TEXT NOT NULL,
+    thread_root       INTEGER NOT NULL,
+    type              TEXT NOT NULL,     -- жалоба | похвала | спрос | привычка | цена
+    subject_id        TEXT NOT NULL,
+    confidence        REAL,
+    extractor_version TEXT NOT NULL      -- sha256 of the RENDERED prompt, not of the module
+);
+
+CREATE TABLE evidence (
+    evidence_id TEXT PRIMARY KEY,        -- uuid5 over signal_id|msg_id|quote
+    signal_id   TEXT NOT NULL,
+    msg_id      INTEGER NOT NULL,
+    quote       TEXT NOT NULL,
+    span        TEXT                     -- optional: the substring hook is the check
+);
+
+CREATE TABLE digest (
+    digest_id             TEXT PRIMARY KEY,  -- uuid5 over channel|thread_root
+    channel               TEXT NOT NULL,
+    thread_root           INTEGER NOT NULL,
+    version               INTEGER NOT NULL,
+    text                  TEXT NOT NULL,
+    children_ids          TEXT NOT NULL,
+    supporting_signal_ids TEXT NOT NULL,
+    covers_up_to_msg_id   INTEGER NOT NULL,
+    cooled_at             TEXT NOT NULL
+);
+
+CREATE TABLE unsure (
+    unsure_id  TEXT PRIMARY KEY,         -- uuid5 over channel|msg_id|reason
+    channel    TEXT NOT NULL,
+    msg_id     INTEGER NOT NULL,
+    candidates TEXT NOT NULL,
+    reason     TEXT NOT NULL
+);
+
+CREATE TABLE rollup (
+    rollup_id TEXT PRIMARY KEY,          -- uuid5 over week|chain|brand|metric
+    week      TEXT NOT NULL,
+    chain     TEXT NOT NULL,
+    brand     TEXT,
+    metric    TEXT NOT NULL,
+    value     REAL
+);
 """
+
+PROMO_TABLES = ("attribution", "signal", "evidence", "digest", "unsure", "rollup")
+"""The six the tick writes, in the order a reader meets them. K10 counts every one of them before
+and after the second `make tick`: `unsure` is written by the same pass as the rest, and an
+idempotence check that skipped it would leave the abstention path unmeasured."""
+
+NAMESPACE = uuid.uuid5(uuid.NAMESPACE_URL, "market-pulse-llm/promo-pulse-1")
+"""One namespace for every id in the six tables above, derived rather than pasted so that a second
+copy of it cannot drift. Deterministic ids are what make `make tick` idempotent — SPEC v2's S4 asks
+for «uuid5 over normalised keys», and the normalisation is :func:`promo_key`."""
+
+SUBJECT_TYPES = ("chain", "brand", "sku", "post")
+"""What a comment can be ABOUT. Closed, for `AUDIENCES`' reason: a typo'd subject_type would make
+its own bucket in every rollup keyed on it and read as a real kind nobody chose."""
+
+SIGNAL_TYPES = ("жалоба", "похвала", "спрос", "привычка", "цена")
+"""The five of `docs/PHASE-promo-pulse-1.md` §2 S2, in the codebook's own words. A sixth class is
+an `unsure` row, never a new member added here by an extractor."""
+
+ATTRIBUTION_SOURCES = ("explicit", "reply_context", "post_context")
+"""How the subject was established: the comment named it, the comment it replies to named it, or
+only the post did. The three are a quality axis for the S2 bar, so they are a closed list."""
+
+
+def promo_key(*parts) -> str:
+    """The normalised key an id is taken over: NFC, lower, whitespace-collapsed, joined by \x1f.
+
+    `\x1f` is the unit separator and cannot appear in a handle, a brand surface form or a msg_id, so
+    two different tuples cannot collapse onto one key by concatenation — which a `|` join can do the
+    moment a subject name contains a pipe.
+    """
+    return "\x1f".join(
+        " ".join(unicodedata.normalize("NFC", str(part)).lower().split()) for part in parts
+    )
+
+
+def promo_id(*parts) -> str:
+    """uuid5 over :func:`promo_key` — the id of a row in one of the six promo tables."""
+    return str(uuid.uuid5(NAMESPACE, promo_key(*parts)))
+
+
+def subject_id(subject_type: str, name: str) -> str:
+    """uuid5 over (subject_type, normalised name) — SP-5 amendment (2).
+
+    A pure function and not a `subject` table: `attribution` already carries `subject_type` and the
+    surface form as columns, so a table would hold nothing a join does not already have. It earns
+    its own row the day a subject needs attributes of its own, and not before.
+    """
+    if subject_type not in SUBJECT_TYPES:
+        raise ValueError(f"unknown subject_type {subject_type!r}, expected one of {SUBJECT_TYPES}")
+    return promo_id(subject_type, name)
 
 PRESENCE = ("brand", "line", "category", "size", "attribute")
 PROMO_FIELDS = ("price_promo", "price_old", "discount_pct_printed", "discount_footnote")

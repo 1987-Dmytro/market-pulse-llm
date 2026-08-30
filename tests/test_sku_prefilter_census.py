@@ -15,8 +15,10 @@ import pytest
 REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "scripts"))
 sys.path.insert(0, str(REPO_ROOT / "src"))
+sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 import sku_prefilter_census as census  # noqa: E402
+from moved_pins import handles_before_r2  # noqa: E402
 
 from market_pulse import positions, yield_screen  # noqa: E402
 from market_pulse.brands import watchlist_aliases  # noqa: E402
@@ -113,7 +115,7 @@ def test_the_shipped_record_covers_the_signed_composition(shipped):
     is a reconstruction rather than the live file: three Latin aliases landed after this census was
     sealed. The composition itself did not move, which is why the handle set is still compared
     against today's registry — an alias amendment may not add or drop a channel."""
-    live = {handle for source in REGISTRY.sources for handle in source.telegram_channels}
+    live = handles_before_r2()
     assert {row["handle"] for row in shipped["channels"]} == live
     assert shipped["summary"]["channels"] == len(live) == 66
     pinned = shipped["sources_read"]["registry"]["sha256"]
@@ -195,9 +197,10 @@ def test_the_files_outside_the_signed_composition_are_named_and_not_dropped(ship
     @dikankaa, @tretyakovaele, @znishkom and the rest of the 5c1 exclusions. A frame that silently
     skipped them would look identical to one that never had them."""
     outside = shipped["sources_read"]["outside_the_registry"]
-    live = {
-        handle.lstrip("@") for source in REGISTRY.sources for handle in source.telegram_channels
-    }
+    # The composition the frame was selected under. r2 brought @znishkom INTO the registry on
+    # 2026-08-30, and a check against today's file would read a sealed frame's honest exclusion as
+    # a channel it wrongly skipped ([[the_field_true_under_the_old_constant]]).
+    live = {handle.lstrip("@") for handle in handles_before_r2()}
     for path in outside:
         assert Path(path).stem not in live
     assert "data/raw/posts/dikankaa.jsonl" in outside

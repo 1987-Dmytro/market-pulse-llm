@@ -64,8 +64,14 @@ def test_the_shipped_registration_rebuilds_EXCEPT_where_it_pins_the_gate_r2_amen
     # ruling (ф) added two more movers: `prompts.py` (the parser reads past a closed thought) and
     # `pass1_fewshot_pod_runner.py` (the `--serving` switch). The claim stays derived and
     # two-directional — it is the SET of paths carrying a live sha, computed, never typed.
+    # Revision r2 (2026-08-30) added a third mover that is NOT this contract's: every record
+    # that borrowed `scripts/window_summary_5c2.py` pins it, and `registry_through_the_seal`
+    # had to learn that a registry revision exists. It is allowed inside
+    # `assert_only_the_prompts_pin_moved`, conditionally, and named here so the enumeration
+    # stays a list somebody reads rather than a number that grew.
     moved = moved_pins.assert_only_the_prompts_pin_moved(shipped, rebuilt, GATE, TRANSPORT)
     assert moved == {
+        "producer.borrowed.scripts/window_summary_5c2.py",
         "instruments.gate.sha256",
         "instruments.parser.sha256",
         "instruments.transport.sha256",

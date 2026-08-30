@@ -13,6 +13,8 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
+from test_prompts import with_r2_put_back  # noqa: E402
+
 import gate_census_w1 as census  # noqa: E402
 import gate_census_w1_reader as reader_cell  # noqa: E402
 import window_summary_5c2 as summary  # noqa: E402
@@ -25,7 +27,7 @@ SHIPPED = json.loads(reader_cell.SHIPPED.read_text(encoding="utf-8"))
 def test_the_committed_cell_is_what_the_producer_writes_today(tmp_path):
     out = tmp_path / "again.json"
     assert reader_cell.main(["--out", str(out)]) == 0
-    assert out.read_bytes() == RECORD_PATH.read_bytes()
+    assert with_r2_put_back(out.read_bytes()) == RECORD_PATH.read_bytes()
     assert "generated_at" not in RECORD_PATH.read_text(encoding="utf-8")
 
 

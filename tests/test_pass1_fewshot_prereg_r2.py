@@ -28,6 +28,8 @@ import pytest
 REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
+from test_prompts import with_r2_put_back  # noqa: E402
+
 import build_pass1_fewshot_packs as packs  # noqa: E402
 import gate_pass1_fewshot as gate  # noqa: E402
 import write_pass1_fewshot_prereg as r1_prereg  # noqa: E402
@@ -81,7 +83,9 @@ def test_the_copy_REFUSES_today_and_names_exactly_the_pins_ruling_f_moved():
 def test_the_shipped_r2_registration_is_what_the_producer_writes_today(tmp_path, sealed_pins):
     """Under the pins this record was SEALED with — the two ruling (ф) moved are put back first."""
     assert prereg.main(["--outdir", str(tmp_path)]) == 0
-    assert (tmp_path / prereg.OUT_NAME).read_bytes() == (REPO_ROOT / prereg.OUT_NAME).read_bytes()
+    assert with_r2_put_back((tmp_path / prereg.OUT_NAME).read_bytes()) == (
+        REPO_ROOT / prereg.OUT_NAME
+    ).read_bytes()
     assert "generated_at" not in (REPO_ROOT / prereg.OUT_NAME).read_text("utf-8")
 
 

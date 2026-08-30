@@ -16,6 +16,7 @@ import build_aggregates as builder  # noqa: E402
 import window_summary_5c2 as summary  # noqa: E402
 
 from market_pulse import aggregates  # noqa: E402
+from market_pulse.registry import load_registry  # noqa: E402
 
 ANCHOR = json.loads(builder.ANCHOR.read_text(encoding="utf-8"))
 
@@ -167,7 +168,7 @@ def test_the_two_samples_are_different_distributions(conn):
 
 def test_the_segment_join_refuses_a_channel_the_registry_does_not_carry(conn):
     """SPEC 3.20 (1)'s loud failure, on the one join that could silently produce a null column."""
-    segments = builder.segments_of(summary.load_registry(builder.REGISTRY))
+    segments = builder.segments_of(load_registry(builder.REGISTRY))
 
     assert (
         builder.segment_for(segments, {"@matusi_ukr"})["@matusi_ukr"]["segment"] == "mothers_kids"

@@ -42,6 +42,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import window_summary_5c2 as summary  # noqa: E402
 
 from market_pulse import brands, loop  # noqa: E402
+from market_pulse.registry import load_registry_as_pinned  # noqa: E402
 
 EXPORT = REPO_ROOT / "results" / "dashboard_data_w1.json"
 STRINGS = REPO_ROOT / "config" / "ui_strings.yaml"
@@ -270,11 +271,37 @@ def through_the_provenance(record: dict, kind: str, name: str, path: Path) -> No
         )
 
 
+def registry_through_the_provenance(record: dict, path: Path) -> None:
+    """`config/registry.yaml` as THIS EXPORT pins it — through its revisions, not by byte equality.
+
+    Every other input is reached by comparing shas, and that is right for a file nobody may revise.
+    The registry is revised: r2 (2026-08-30) appended eight A1 sources and took 39 rows out of
+    collection, and a byte test would have made this page refuse to build over a revision that
+    moved no row this export counted. `market_pulse.registry.load_registry_as_pinned` walks the
+    revisions back to the bytes the pin names, so a registry that legitimately moved is READ AT THE
+    PIN and one that moved in a way nobody wrote down is still a refusal, with the same sentence.
+    """
+    pinned = dig(record, "provenance.inputs").get("config/registry.yaml")
+    if pinned is None:
+        raise SystemExit(
+            "config/registry.yaml is not in the export's provenance.inputs — the dashboard may only"
+            " draw rows from the evidence the figures were built from"
+        )
+    try:
+        load_registry_as_pinned(pinned, path)
+    except ValueError as unreachable:
+        raise SystemExit(
+            f"config/registry.yaml hashes to {summary.sha256_of(path)[:16]}… and the export pins"
+            f" {pinned[:16]}…, and no revision this checkout can reconstruct reaches it — the rows"
+            " this page would show are not the rows its numbers were computed over. Stop and report."
+        ) from unreachable
+
+
 def read_evidence(record: dict, derived: Path) -> dict:
     """Comments and position rows, through the one reader, from the export's own evidence files."""
     prereg = json.loads(summary.read_text_or_refuse(PREREG))
-    for name, path in (("config/registry.yaml", REGISTRY), ("results/prereg_5c2_run.json", PREREG)):
-        through_the_provenance(record, "inputs", name, path)
+    through_the_provenance(record, "inputs", "results/prereg_5c2_run.json", PREREG)
+    registry_through_the_provenance(record, REGISTRY)
     registry = summary.registry_through_the_seal(prereg, REGISTRY)
     aliases = brands.watchlist_aliases(registry.watchlist)
 

@@ -28,7 +28,69 @@ sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
 import write_pass1_prereg_b as prereg_b  # noqa: E402
 
+from market_pulse.registry import (  # noqa: E402
+    load_registry_as_pinned,
+    load_registry_text,
+    registry_before_r2,
+    registry_revision_reaching,
+)
+
 PROMPTS = REPO_ROOT / "src" / "market_pulse" / "prompts.py"
+REGISTRY = REPO_ROOT / "config" / "registry.yaml"
+
+MOVED_BY_R2 = (REPO_ROOT / "scripts" / "window_summary_5c2.py",)
+"""The producer registry revision r2 moved, allowed CONDITIONALLY in every rebuild below.
+
+`registry_through_the_seal` tested the registry by byte equality against the seal, which was right
+only while the file never changed again — and TEN producers reach the registry through that one
+function, so r2 would have stopped all ten at $0. It reaches the pin through
+`load_registry_as_pinned` now, and the module's bytes moved with the change.
+
+Allowed here rather than passed as `also` by twenty callers, because it is not a fact about any one
+of their contracts: every record that BORROWED this producer pins it, and none of them was edited.
+Conditional in the same way `carried` is — the allowance appears only where the pin actually moved,
+so a record that stops borrowing it fails instead of carrying a dead excuse
+([[an_exclusion_rule_built_from_failures]])."""
+
+
+def registry_pin_revision(digest: str) -> str:
+    """Which revision of `config/registry.yaml` a record's pin names, or an assertion failure.
+
+    Revision r2 (operator ruling 2026-08-30) appended eight A1 sources and took 39 rows out of
+    collection, so the file's bytes moved and fifteen sealed records go on pinning the older ones.
+    They are not re-pinned — a pin re-pinned follows the file instead of holding it — so a pin is
+    checked by asking WHICH revision reaches it. The name is returned so a caller can say it out
+    loud in the record it is checking. A pin no revision reaches fails here, which is the whole
+    point: it means the registry moved in a way nobody wrote down.
+    """
+    reached = registry_revision_reaching(digest, REGISTRY)
+    assert reached is not None, (
+        f"config/registry.yaml pins {digest[:16]}… and no revision this checkout can reconstruct"
+        " reaches it"
+    )
+    return reached[0]
+
+
+def registry_as_pinned(digest: str):
+    """The `Registry` a record read, through the same walk its pin is checked with."""
+    return load_registry_as_pinned(digest, REGISTRY)
+
+
+def composition_before_r2():
+    """The registry as every revision before r2 carries it — r2 is the only one that moved a ROW.
+
+    The signature stamp added a comment block and (13)(b) moved three `display_names` lists; neither
+    added or dropped a source. So a sealed record's claim about WHICH CHANNELS it covered is a claim
+    about these 66 rows, whichever of the three older shas it happens to pin, and comparing it
+    against today's 74 would be asserting r2 rather than the record.
+    """
+    return load_registry_text(registry_before_r2(REGISTRY).decode("utf-8"), REGISTRY)
+
+
+def handles_before_r2() -> set[str]:
+    return {
+        handle for source in composition_before_r2().sources for handle in source.telegram_channels
+    }
 
 
 def live_sha(path: Path = PROMPTS) -> str:
@@ -85,6 +147,22 @@ def servable_file(path: Path) -> Path:
     return _SERVABLE[path]
 
 
+def r2_paths_in(shipped: dict, rebuilt: dict) -> set[str]:
+    """The paths of THIS record that pin a file revision r2 moved — where the pin really moved.
+
+    Derived from the rebuild and not named by the caller: how many of them a record borrows is a
+    fact about that record, and a typed set goes stale the day the registry is restored
+    ([[provenance_cannot_name_itself]]). A caller that has to name the whole moved set unions this
+    with its own.
+    """
+    out: set[str] = set()
+    for path in MOVED_BY_R2:
+        here = paths_holding(rebuilt, live_sha(path))
+        if here and any(one not in paths_holding(shipped, live_sha(path)) for one in here):
+            out |= here
+    return out
+
+
 def assert_only_the_prompts_pin_moved(
     shipped: dict, rebuilt: dict, *also: Path, carried: dict[Path, tuple[str, ...]] | None = None
 ) -> set[str]:
@@ -103,7 +181,7 @@ def assert_only_the_prompts_pin_moved(
     actually moved, so when the config is restored these names stop being excused
     ([[one_constant_answering_two_questions]]).
     """
-    expected: set[str] = set()
+    expected: set[str] = r2_paths_in(shipped, rebuilt)
     for path, names in (carried or {}).items():
         here = paths_holding(rebuilt, live_sha(path))
         assert here, f"no path in the rebuild carries {path.name}'s live sha — check is vacuous"

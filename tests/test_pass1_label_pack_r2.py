@@ -18,6 +18,7 @@ import pytest
 REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
+
 import build_pass1_label_pack_r2 as pack  # noqa: E402
 import moved_pins  # noqa: E402
 
@@ -54,19 +55,29 @@ def test_the_pack_rebuilds_byte_identical_from_its_recorded_seed(tmp_path):
 
 
 def test_the_shipped_pack_is_what_the_producer_builds_today(tmp_path):
-    """The rebuild is byte-identical EXCEPT where it pins `src/market_pulse/prompts.py`.
+    """The rebuild is byte-identical EXCEPT where it pins a module that moved since.
 
-    `docs/PROMPT-pass1-fewshot.md` D0.2 registered `pass1_comment_gm4_v2` in that module and ruled
+    `docs/PROMPT-pass1-fewshot.md` D0.2 registered `pass1_comment_gm4_v2` in `prompts.py` and ruled
     old records' pins of it «moved since», not re-pinned. The registered TEXT this record was
     measured under has NOT moved, which is the property that keeps the evidence comparable, and it
     is asserted beside the diff ([[tests/moved_pins.py]]).
+
+    Revision r2 added the second one: this pack BORROWED `scripts/window_summary_5c2.py`, which had
+    to learn that the registry has revisions. That half of the expectation is derived from the
+    rebuild rather than typed, so it empties itself when the registry is restored.
     """
     assert pack.main(["--outdir", str(tmp_path)]) == 0
-    assert (tmp_path / pack.RENDER_NAME).read_bytes() == (REPO_ROOT / pack.RENDER_NAME).read_bytes()
+    # The render carries no producer sha — every pin lives in the pack JSON below — so it compares
+    # byte for byte with no allowance at all.
+    assert (tmp_path / pack.RENDER_NAME).read_bytes() == (
+        REPO_ROOT / pack.RENDER_NAME
+    ).read_bytes()
     shipped = json.loads((REPO_ROOT / pack.PACK_NAME).read_text("utf-8"))
     rebuilt = json.loads((tmp_path / pack.PACK_NAME).read_text("utf-8"))
     moved = moved_pins.assert_only_the_prompts_pin_moved(shipped, rebuilt)
-    assert moved == {"producer.borrowed.src/market_pulse/prompts.py"}
+    assert moved == {"producer.borrowed.src/market_pulse/prompts.py"} | moved_pins.r2_paths_in(
+        shipped, rebuilt
+    )
 
 
 def test_the_census_run_writes_nothing(tmp_path, capsys):

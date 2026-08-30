@@ -122,17 +122,17 @@ def test_the_day_2_record_covers_the_live_registry_and_the_two_flags_are_war_rep
     so a later "the screen flagged two regionals" cannot be read as "two RF channels entered".
     """
     sys.path.insert(0, str(REPO_ROOT / "src"))
-    from market_pulse.registry import load_registry
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+    from moved_pins import handles_before_r2
 
     record = json.loads((REPO_ROOT / "results" / "market_screen_5c1_day2.json").read_text("utf-8"))
-    live = {
-        handle
-        for s in load_registry(REPO_ROOT / "config" / "registry.yaml").sources
-        for handle in s.telegram_channels
-    }
-    # A dated pass over the 67 of 08.08. @dikankaa left that evening on the census ruling, so the
-    # record is one row wider than the live registry and the extra row is named rather than
-    # allowed to be any drift at all.
+    # A dated pass over the 67 of 08.08, compared against the composition of that day and not
+    # against today's: revision r2 (2026-08-30) added eight A1 sources this screen never saw, and
+    # asserting against the live file would make a record that is still exactly right look wrong.
+    # r2 is the only revision that moved a ROW, so the pre-r2 bytes ARE the 08.08 composition.
+    live = handles_before_r2()
+    # @dikankaa left that evening on the census ruling, so the record is one row wider than that
+    # composition and the extra row is named rather than allowed to be any drift at all.
     measured = {row["handle"] for row in record["sources"]}
     assert live <= measured
     assert measured - live == {"@dikankaa"}, sorted(measured - live)

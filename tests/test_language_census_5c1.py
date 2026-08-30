@@ -13,10 +13,11 @@ import pytest
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "scripts"))
+sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 import language_census_5c1 as census  # noqa: E402
 
-from market_pulse.registry import load_registry  # noqa: E402
+from moved_pins import handles_before_r2  # noqa: E402
 
 
 def counts(ua=0, ru=0, en=0, other=0):
@@ -165,15 +166,14 @@ def test_the_day_2_census_covers_the_live_registry_under_the_same_bars():
     record = json.loads(
         (REPO_ROOT / "results" / "language_census_5c1_day2.json").read_text(encoding="utf-8")
     )
-    live = {
-        handle
-        for source in load_registry(REPO_ROOT / "config" / "registry.yaml").sources
-        for handle in source.telegram_channels
-    }
+    # The composition of 08.08, not today's: revision r2 (2026-08-30) added eight A1 sources this
+    # census never read, and r2 is the only revision that moved a ROW, so the pre-r2 bytes ARE that
+    # composition ([[the_field_true_under_the_old_constant]]).
+    live = handles_before_r2()
     # The record is a dated pass over the 67 that stood on 08.08; @dikankaa left on the acceptance
     # ruling that same evening, on this very census. So the covering direction is the one that
-    # matters — every live source has a language verdict — and the difference is named, not
-    # tolerated as a set that drifted.
+    # matters — every source of that composition has a language verdict — and the difference is
+    # named, not tolerated as a set that drifted.
     measured = {row["handle"] for row in record["sources"]}
     assert live <= measured
     assert measured - live == {"@dikankaa"}, sorted(measured - live)

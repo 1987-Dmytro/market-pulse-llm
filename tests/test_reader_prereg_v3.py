@@ -15,6 +15,8 @@ import pytest
 REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
+from test_prompts import with_r2_put_back  # noqa: E402
+
 import gate_census_w1_reader as reader_cell  # noqa: E402
 import probe_b_population as subset  # noqa: E402
 import window_summary_5c2 as summary  # noqa: E402
@@ -68,7 +70,7 @@ def test_the_committed_registration_is_what_the_producer_writes_today(tmp_path):
         f',\n      "{prompts.READER_TASK_V5}": "{prompts.prompt_sha256(prompts.READER_TASK_V5)}"'
     ).encode()
     assert rebuilt.count(later) == 1, "the fourth text is not where the repair expects it"
-    assert rebuilt.replace(later, b"") == RECORD_PATH.read_bytes()
+    assert with_r2_put_back(rebuilt.replace(later, b"")) == RECORD_PATH.read_bytes()
     assert "generated_at" not in RECORD_PATH.read_text(encoding="utf-8")
 
 

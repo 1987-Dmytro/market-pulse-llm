@@ -22,6 +22,11 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "scripts"))
 sys.path.insert(0, str(REPO_ROOT / "src"))
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+
+import write_pass1_prereg_b as prereg_b  # noqa: E402
+from moved_pins import paths_holding, registry_pin_revision  # noqa: E402
+
 from market_pulse.registry import registry_before_the_latin_aliases  # noqa: E402
 
 
@@ -467,7 +472,21 @@ def test_the_shipped_registration_is_the_one_this_script_writes(record):
     assert shipped.pop("git")["commit"]
     assert shipped.pop("generated_at")
     fresh = {key: value for key, value in record.items() if key not in ("git", "generated_at")}
-    assert shipped == fresh
+
+    # Since revision r2 (2026-08-30) one more field legitimately moves, and exactly one: this
+    # registration pins `config/registry.yaml` LIVE on purpose — (13)(b) is part of instrument v2 —
+    # so a rebuild today carries r2's sha where the shipped record carries r1's. The allowance is
+    # DERIVED from which paths hold the live sha, not listed, so a record that moved anywhere else
+    # still fails ([[an_enumerated_diff_is_asserted_in_both_directions]]).
+    live = hashlib.sha256(writer.REGISTRY.read_bytes()).hexdigest()
+    moved = paths_holding(fresh, live)
+    assert moved, "no path in the rebuild carries the live registry sha — the check is vacuous"
+    assert set(prereg_b.moved_paths(shipped, fresh, opaque=())) == moved
+    for path in moved:
+        assert paths_holding(shipped, live) == set(), path
+    assert registry_pin_revision(shipped["pinned_inputs"]["config/registry.yaml"]) == (
+        "r1, through the r2 undo"
+    )
 
 
 def test_the_written_registration_is_never_rewritten(tmp_path):

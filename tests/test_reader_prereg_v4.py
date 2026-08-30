@@ -14,6 +14,8 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
+from test_prompts import with_r2_put_back  # noqa: E402
+
 import score_reader_probe_b as scoring  # noqa: E402
 import window_summary_5c2 as summary  # noqa: E402
 import write_reader_prereg_v3 as v3  # noqa: E402
@@ -41,7 +43,7 @@ def test_the_committed_registration_is_what_the_producer_writes_today(tmp_path):
     # `producer.borrowed` is hashed LIVE, and `src/market_pulse/prompts.py` moved when the v5 text
     # was registered. The record is NOT re-pinned — it froze when the pod existed — so the one byte
     # range allowed to differ is put back to what the sealing commit carries, and the swap must fire
-    assert put_the_sealed_shas_back(out.read_bytes()) == RECORD_PATH.read_bytes()
+    assert with_r2_put_back(put_the_sealed_shas_back(out.read_bytes())) == RECORD_PATH.read_bytes()
     assert "generated_at" not in RECORD_PATH.read_text(encoding="utf-8")
 
 

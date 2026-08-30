@@ -1045,7 +1045,50 @@ cannot pass quietly.
 MOVED_BY_PASS1 = ("src/market_pulse/prompts.py", "scripts/write_reader_prereg_v5b.py")
 """prompts.py, and the v5b producer whose guard had to learn that prompts.py may move."""
 
+SEALED_AT_R2 = "58ff037"
+"""The last tree whose `config/registry.yaml` and `scripts/window_summary_5c2.py` are the ones
+`results/dashboard_data_w1.json` pins — the commit before registry revision r2.
+
+r2 (operator ruling 2026-08-30) appended eight A1 sources and took 39 rows out of collection, so the
+registry's bytes moved. `window_summary_5c2.registry_through_the_seal` moved WITH it and for it: the
+function tested byte equality against the seal, which said the right thing only while the registry
+never changed again, and would have made `build_aggregates`, this export and the whole $0 dashboard
+build exit over a revision that moved no row they counted. It reaches the pin through
+`load_registry_as_pinned` now, so a revision is READ AT THE SEAL and an unwritten change is still a
+refusal.
+
+Neither file is re-pinned. The sealed bytes stay recoverable:
+
+    git show 58ff037:config/registry.yaml
+    git show 58ff037:scripts/window_summary_5c2.py
+
+Fourth sealing moment in this family, same manoeuvre as `SEALED_AT` and `SEALED_AT_PASS1`.
+"""
+
+MOVED_BY_R2 = ("config/registry.yaml", "scripts/window_summary_5c2.py")
+"""The revision and the producer that had to learn the revision exists."""
+
+MOVED_BY_THE_PROMO_TABLES = ("src/market_pulse/aggregates.py",)
+"""S6 of `docs/plans/promo-pulse-1.md` added the six promo tables to `aggregates.SCHEMA`.
+
+A DIFFERENT change from r2 that seals at the same commit, because `58ff037` is also the last tree
+carrying the module `results/dashboard_data_w1.json` was produced under. Its own group rather than a
+third name in :data:`MOVED_BY_R2`, whose docstring would stop being true.
+
+The export is the only record in the repo that pins this module, and it pins it once. None of the
+six tables feeds a number it carries — `positions` and the comment tables are untouched — which is
+why the rebuild differs from the committed record in four provenance shas and in nothing else.
+
+    git show 58ff037:src/market_pulse/aggregates.py
+"""
+
+
 WITNESS_AT = {
+    SEALED_AT_R2: {
+        "config/registry.yaml": "# --- r2 BEGIN",
+        "scripts/window_summary_5c2.py": "load_registry_as_pinned",
+        "src/market_pulse/aggregates.py": "PROMO_TABLES",
+    },
     SEALED_AT: WITNESS,
     SEALED_AT_PASS1: {
         "src/market_pulse/prompts.py": "pass1_comment_gm4_v1",
@@ -1096,17 +1139,69 @@ def put_the_sealed_shas_back(
     return produced
 
 
+def with_r2_put_back(produced: bytes, at_least: int = 1) -> bytes:
+    """Swap the two files revision r2 moved back to the bytes the sealed records read.
+
+    `config/registry.yaml` moved because the operator's 30.08 ruling added eight A1 sources and
+    paused 39, and `scripts/window_summary_5c2.py` moved with it: `registry_through_the_seal` tested
+    the registry by BYTE EQUALITY against the seal, which said the right thing only while the file
+    never changed again — and TEN producers reach the registry through that one function, so a
+    revision would have stopped all ten at $0. It reaches the pin through `load_registry_as_pinned`
+    now. Neither file is re-pinned; both are recoverable at :data:`SEALED_AT_R2`.
+
+    Unlike :func:`put_the_sealed_shas_back` the count is not asserted per path. These two are
+    BORROWED: a record pins `window_summary_5c2.py` zero, one or two times depending on what it
+    borrowed, and a shared count would be a claim about a different record. What IS asserted is that
+    the call fired at least `at_least` times overall — a swap that matched nothing would leave a
+    byte comparison passing for a producer that had quietly gone back to the sealed bytes
+    ([[guard_selftest_negative_control]]).
+    """
+    fired = 0
+    for path in MOVED_BY_R2:
+        live, sealed = live_sha256(path), sealed_sha256(path, SEALED_AT_R2)
+        assert live != sealed, path
+        token = WITNESS_AT[SEALED_AT_R2][path]
+        assert token not in sealed_blob(path, SEALED_AT_R2).decode("utf-8"), path
+        assert token in (REPO_ROOT / path).read_text(encoding="utf-8"), path
+        produced, count = re.subn(live.encode(), sealed.encode(), produced)
+        fired += count
+    assert fired >= at_least, f"r2's swap fired {fired} times, expected at least {at_least}"
+    return produced
+
+
 def live_sha256(path: str) -> str:
     return hashlib.sha256((REPO_ROOT / path).read_bytes()).hexdigest()
 
 
 def assert_pinned(name: str, digest: str) -> None:
-    """A pinned file is its live sha — or, on the moved tuple, the sha :data:`SEALED_AT` has."""
+    """A pinned file is its live sha — or, on a moved tuple, the sha ITS OWN sealing commit has.
+
+    Keyed per sealing moment and not by one shared list: `scripts/window_summary_5c2.py` moved at
+    r2 and `src/market_pulse/prompts.py` moved at the v5 reader, and a shared commit would assert
+    one file's sha at a tree that never carried it. `src/market_pulse/aggregates.py` shares r2's
+    commit and not its reason, so it is its own group at the same sealing moment.
+    """
     live = live_sha256(name)
-    if name in MOVED_BY_THE_V5_READER + MOVED_BY_THE_THINKING_READER:
+    if name in MOVED_BY_R2 + MOVED_BY_THE_PROMO_TABLES:
+        assert live != digest and sealed_sha256(name, SEALED_AT_R2) == digest, name
+    elif name in MOVED_BY_THE_V5_READER + MOVED_BY_THE_THINKING_READER:
         assert live != digest and sealed_sha256(name) == digest, name
     else:
         assert live == digest, name
+
+
+def test_r2_moved_the_registry_and_the_producer_that_reads_it_through_the_seal():
+    """The fourth sealing moment's own premise, asserted rather than assumed: both files really
+    moved, both witnesses are absent from `58ff037` and present on disk, and the recovered registry
+    sha is the one seven records pin."""
+    for path in MOVED_BY_R2:
+        assert live_sha256(path) != sealed_sha256(path, SEALED_AT_R2), path
+        token = WITNESS_AT[SEALED_AT_R2][path]
+        assert token not in sealed_blob(path, SEALED_AT_R2).decode("utf-8"), path
+        assert token in (REPO_ROOT / path).read_text(encoding="utf-8"), path
+    assert sealed_sha256("config/registry.yaml", SEALED_AT_R2) == (
+        "d4e3b2373c4378f3acc51079dc1d0560c28d58c46b71335b2bb352cae39be3ba"
+    )
 
 
 def test_the_v5_text_is_what_moved_the_module_and_the_recovery_names_it():

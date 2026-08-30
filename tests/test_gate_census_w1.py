@@ -12,6 +12,13 @@ sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
 import gate_census_w1 as census  # noqa: E402
 import window_summary_5c2 as summary  # noqa: E402
+from moved_pins import registry_pin_revision  # noqa: E402
+from test_prompts import (  # noqa: E402
+    MOVED_BY_R2,
+    SEALED_AT_R2,
+    put_the_sealed_shas_back,
+    sealed_sha256,
+)
 
 RECORD_PATH = REPO_ROOT / "results" / "gate_census_w1.json"
 RECORD = json.loads(RECORD_PATH.read_text(encoding="utf-8"))
@@ -19,10 +26,19 @@ CELLS = ("narrow|silencers_off", "narrow|silencers_on", "wide|silencers_off", "w
 
 
 def test_the_committed_census_is_what_the_producer_writes_today(tmp_path):
-    """Byte-identical: no clock, no git block, sorted keys — so every number below re-derives."""
+    """Byte-identical: no clock, no git block, sorted keys — so every number below re-derives.
+
+    Two byte ranges are put back to the tree the record was sealed against, and each swap must FIRE:
+    revision r2 moved `config/registry.yaml`, and `scripts/window_summary_5c2.py` moved with it
+    because `registry_through_the_seal` had to learn that a revision exists. Neither is re-pinned;
+    `test_prompts.SEALED_AT_R2` is the commit both are recoverable from.
+    """
     out = tmp_path / "again.json"
     assert census.main(["--out", str(out)]) == 0
-    assert out.read_bytes() == RECORD_PATH.read_bytes()
+    produced = put_the_sealed_shas_back(
+        out.read_bytes(), times=1, moved=MOVED_BY_R2, at=SEALED_AT_R2
+    )
+    assert produced == RECORD_PATH.read_bytes()
 
 
 def test_it_writes_no_pre_registration():
@@ -188,11 +204,23 @@ def test_the_posts_are_pinned_by_what_was_read_and_not_by_a_live_store():
 
 
 def test_the_record_names_every_byte_it_read():
+    """Every byte as it sits — except `config/registry.yaml`, reached through its revisions.
+
+    r2 (2026-08-30) moved the registry over a gate that was already measured; the record keeps the
+    sha it read and the revision that reaches it is named rather than the file being re-pinned.
+    """
     for name, digest in RECORD["sources"].items():
         assert summary.sha256_of(REPO_ROOT / name) == digest, name
     for name, digest in RECORD["inputs"].items():
+        if name == "config/registry.yaml":
+            assert registry_pin_revision(digest) == "r1, through the r2 undo"
+            continue
         assert summary.sha256_of(REPO_ROOT / name) == digest, name
     for name, digest in RECORD["producer"]["borrowed"].items():
+        if name in MOVED_BY_R2:
+            assert sealed_sha256(name, SEALED_AT_R2) == digest, name
+            assert summary.sha256_of(REPO_ROOT / name) != digest, name
+            continue
         assert summary.sha256_of(REPO_ROOT / name) == digest, name
     assert RECORD["producer"]["sha256"] == summary.sha256_of(
         REPO_ROOT / RECORD["producer"]["script"]

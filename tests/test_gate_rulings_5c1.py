@@ -13,8 +13,12 @@ import pytest
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "scripts"))
+sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 import apply_gate_rulings_5c1 as apply  # noqa: E402
+
+from moved_pins import composition_before_r2  # noqa: E402
+from market_pulse.registry import registry_before_r2  # noqa: E402
 
 from market_pulse.registry import AUDIENCES, load_registry  # noqa: E402
 
@@ -420,11 +424,18 @@ def test_a_channel_the_table_does_not_name_gets_no_audience_guessed_for_it():
 def test_the_shipped_registry_carries_the_canons_audience_for_every_source():
     """Read by HANDLE: the four originals predate `source_entry` and their ids do not follow
     from their handles (@VARUS_channel is `varus`), so an id-keyed check would miss them."""
-    sources = load_registry(REPO_ROOT / "config" / "registry.yaml").sources
+    # The composition the canon's table was written for. Revision r2 (2026-08-30) added eight A1
+    # sources and `docs/CHANNELS-launch.md` names none of them — «the table is the law, no
+    # self-derived assignments» cuts both ways, so an r2 row is not silently graded against a table
+    # that never claimed it. What r2's rows carry is asserted in `tests/test_registry.py`.
+    sources = composition_before_r2().sources
     assert len(sources) == 66
     for src in sources:
         for handle in src.telegram_channels:
             assert src.audience == apply.AUDIENCE[handle], handle
+    live = load_registry(REPO_ROOT / "config" / "registry.yaml").sources
+    assert len(live) == 74, "r2 is why this is counted on the pre-r2 composition"
+    assert all(src.audience in AUDIENCES for src in live), "and every r2 row still has one"
 
 
 def test_a_field_the_block_does_not_have_yet_is_inserted_inside_it(tmp_path):
@@ -432,7 +443,10 @@ def test_a_field_the_block_does_not_have_yet_is_inserted_inside_it(tmp_path):
     comments that follow a source into the preceding block, so appending at the block's end would
     put the new field after a `# … removed …` comment — outside the entry it belongs to. The
     shipped file has that shape right after `maudau`."""
-    original = (REPO_ROOT / "config" / "registry.yaml").read_text(encoding="utf-8")
+    # The r1 bytes, not today's: the fixture is "this file before it had an `audience` field", and
+    # revision r2's own three fields would otherwise sit in the block being tested and move the
+    # insertion point this test exists to pin.
+    original = registry_before_r2(REPO_ROOT / "config" / "registry.yaml").decode("utf-8")
     stripped = "\n".join(
         line for line in original.splitlines() if not line.startswith("    audience:")
     )
@@ -721,9 +735,13 @@ def test_the_shipped_registry_is_re_derivable_from_the_gate_record():
     in silence, so every entered channel is re-derived here and compared field by field.
     """
     record = json.loads((REPO_ROOT / "results" / "entry_gate_5c1.json").read_text(encoding="utf-8"))
+    # Against the pre-r2 composition: this gate wrote 62 entries and EXCLUDED others, and revision
+    # r2 later brought one of the excluded back — @znishkom entered A1 on the operator's 30.08 list.
+    # Checking «an excluded channel is in the registry» against today's file would read that ruling
+    # as this gate's own record having drifted ([[the_field_true_under_the_old_constant]]).
     shipped = {
         handle: src
-        for src in load_registry(REPO_ROOT / "config" / "registry.yaml").sources
+        for src in composition_before_r2().sources
         for handle in src.telegram_channels
     }
     checked = 0

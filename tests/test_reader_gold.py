@@ -18,6 +18,13 @@ import pytest
 REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
+from test_prompts import (  # noqa: E402
+    MOVED_BY_R2,
+    SEALED_AT_R2,
+    with_r2_put_back,
+)
+from test_prompts import sealed_sha256 as prompts_sealed_sha256  # noqa: E402
+
 import reader_population as population  # noqa: E402
 import window_summary_5c2 as summary  # noqa: E402
 import write_reader_gold as gold  # noqa: E402
@@ -104,9 +111,18 @@ def put_the_sealed_shas_back(produced: bytes) -> bytes:
 
 
 def assert_pinned(name: str, digest: str) -> None:
-    """A pinned file is its live sha — or, on the MOVED list, the sha :data:`SEALING_COMMIT` has."""
+    """A pinned file is its live sha — or, on a moved list, the sha ITS OWN sealing commit has.
+
+    Two sealing moments now, and each file is held at the one it was frozen under: this record's
+    own (:data:`SEALING_COMMIT`, probe-a's last tree) and registry revision r2's
+    (`test_prompts.SEALED_AT_R2`), which moved `scripts/window_summary_5c2.py` because
+    `registry_through_the_seal` had to reach the registry through its revisions instead of by byte
+    equality. A shared commit would assert one file's sha at a tree that never carried it.
+    """
     live = summary.sha256_of(REPO_ROOT / name)
-    if name in MOVED:
+    if name in MOVED_BY_R2:
+        assert live != digest and prompts_sealed_sha256(name, SEALED_AT_R2) == digest, name
+    elif name in MOVED:
         assert live != digest and sealed_sha256(name) == digest, name
     else:
         assert live == digest, name
@@ -127,7 +143,7 @@ def test_the_committed_gold_is_what_the_producer_writes_today(tmp_path):
     """
     out = tmp_path / "again.json"
     assert gold.main(["--out", str(out)]) == 0
-    assert put_the_sealed_shas_back(out.read_bytes()) == RECORD_PATH.read_bytes()
+    assert with_r2_put_back(put_the_sealed_shas_back(out.read_bytes())) == RECORD_PATH.read_bytes()
 
 
 def test_the_gold_names_only_msg_ids_the_reference_names(store):

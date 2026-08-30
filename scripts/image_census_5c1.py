@@ -42,7 +42,7 @@ import yield_screen_5c1 as screen  # noqa: E402
 from build_audit_pack import git_state  # noqa: E402
 
 from market_pulse import parents  # noqa: E402
-from market_pulse.registry import load_registry  # noqa: E402
+from market_pulse.registry import load_registry_text, registry_before_r2  # noqa: E402
 
 CAPTIONS = REPO_ROOT / "data" / "annotation" / "post_captions.jsonl"
 """The 4.5g2 captions, read-only. Without them `image_caption` and `poll_text` could not occur in
@@ -181,7 +181,16 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
     refuse_to_overwrite(args.out)
 
-    registry = load_registry(screen.REGISTRY)
+    # The composition the SIGNED screen covers, not today's. `reconcile` below defers to
+    # `results/yield_screen_5c1.json` — the record the operator signed against, which refuses to be
+    # re-run — so a channel that entered the registry after it was signed is not drift, it is a
+    # channel that screen never saw. Revision r2 (2026-08-30) added eight, and walking the live file
+    # would make this census refuse over rows the screen was never asked about
+    # ([[the_field_true_under_the_old_constant]]). r2 is the only revision that moved a ROW, so the
+    # pre-r2 bytes ARE the signed composition.
+    registry = load_registry_text(
+        registry_before_r2(screen.REGISTRY).decode("utf-8"), screen.REGISTRY
+    )
     index = parents.load(screen.POSTS)
     caps = parents.load_captions(args.captions)
     shared, collected = screen.collect_window(), screen.collected_handles()

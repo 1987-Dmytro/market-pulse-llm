@@ -231,17 +231,29 @@ def moved_paths(older: dict, newer: dict, opaque: tuple[str, ...] = OPAQUE) -> l
     return sorted(found)
 
 
-def module_pin_paths(record: dict) -> set[str]:
-    """Every path of `record` that carries `src/market_pulse/prompts.py`'s LIVE sha.
+FORGIVEN_MODULES = (
+    "src/market_pulse/prompts.py",
+    "scripts/window_summary_5c2.py",
+)
+"""The two modules whose LIVE sha this producer's self-check may forgive, and why each is here.
 
-    The one class of move this producer's self-check may forgive, and it is derived rather than
-    listed: `docs/PROMPT-pass1-fewshot.md` D0.2 registered a second pass-1 TEXT in that module and
-    ruled old records' pins of it «moved since», never re-pinned. A module sha moves whenever any
-    sibling text is added; the registered `prompt_sha256` map is what says whether the INSTRUMENT
-    moved, and the caller checks that separately and refuses on it
-    ([[the_identity_field_stops_covering_the_change]]).
-    """
-    live = summary.sha256_of(REPO_ROOT / "src" / "market_pulse" / "prompts.py")
+`prompts.py` — `docs/PROMPT-pass1-fewshot.md` D0.2 registered a second pass-1 TEXT in it and ruled
+old records' pins «moved since», never re-pinned.
+
+`window_summary_5c2.py` — registry revision r2 (2026-08-30). `registry_through_the_seal` tested the
+registry by BYTE EQUALITY against the seal, which was right only while the file never changed again;
+TEN producers reach the registry through that one function, so a revision would have stopped all ten
+at $0. It reaches the pin through `load_registry_as_pinned` now, and the module moved with it. This
+record BORROWS the module and does not read the registry differently because of it.
+
+A module sha moves whenever any sibling text is added; the registered `prompt_sha256` map is what
+says whether the INSTRUMENT moved, and the caller checks that separately and refuses on it
+([[the_identity_field_stops_covering_the_change]])."""
+
+
+def module_pin_paths(record: dict) -> set[str]:
+    """Every path of `record` carrying the LIVE sha of one of :data:`FORGIVEN_MODULES`."""
+    live = {summary.sha256_of(REPO_ROOT / name) for name in FORGIVEN_MODULES}
 
     def walk(node, prefix: list[str]):
         if isinstance(node, dict):
@@ -250,7 +262,7 @@ def module_pin_paths(record: dict) -> set[str]:
         elif isinstance(node, list):
             for index, value in enumerate(node):
                 yield from walk(value, [*prefix, str(index)])
-        elif node == live:
+        elif node in live:
             yield ".".join(prefix)
 
     return set(walk(record, []))

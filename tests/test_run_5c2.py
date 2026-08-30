@@ -215,20 +215,26 @@ def test_a_moved_pinned_input_is_a_stop_and_not_a_re_derivation():
 
 
 def test_every_pinned_input_still_reads_as_the_seal_pinned_it():
-    """Eight files hashed as they sit, and `docs/SPEC.md` through the strip the record names.
+    """Seven files hashed as they sit, `docs/SPEC.md` through the strip, the registry through r2.
 
     The old assertion — every input "byte-identical" — was true until the law grew and had no way
     to stay true: amendment 3.19 landed 2026-08-14 over a run that was already complete and sealed,
-    and clause (3) says out loud that nothing this run bought is re-scored under it. The label is
-    asserted per input rather than as one set, because a stripped hash reported as "byte-identical"
-    would be a false word in the run record and a set comparison cannot see which file it came from.
+    and clause (3) says out loud that nothing this run bought is re-scored under it. The registry is
+    the second file to leave that word behind, and for the same reason one revision later: r2
+    appended eight A1 sources and paused 39 rows on 2026-08-30, over a run that bought none of them.
+
+    The label is asserted per input rather than as one set, because a hash reached through an undo
+    reported as "byte-identical" would be a false word in the run record, and a set comparison
+    cannot see which file it came from.
     """
     labels = driver.preflight(PREREG)
 
     assert labels["docs/SPEC.md"] == "derives through the 10-block keep"
+    assert labels["config/registry.yaml"] == "r1, through the r2 undo"
     assert set(labels) == set(PREREG["pinned_inputs"]) and len(labels) == 9
     assert {path: label for path, label in labels.items() if label != "byte-identical"} == {
-        "docs/SPEC.md": "derives through the 10-block keep"
+        "docs/SPEC.md": "derives through the 10-block keep",
+        "config/registry.yaml": "r1, through the r2 undo",
     }
 
 

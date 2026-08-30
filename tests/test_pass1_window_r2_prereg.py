@@ -18,6 +18,7 @@ sys.path.insert(0, str(REPO_ROOT / "src"))
 sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
 import write_pass1_window_prereg_r2 as producer  # noqa: E402
+from test_prompts import with_r2_put_back  # noqa: E402
 
 RECORD = json.loads((REPO_ROOT / "results" / "prereg_pass1_window_r2.json").read_text("utf-8"))
 R1 = json.loads((REPO_ROOT / "results" / "prereg_pass1_window.json").read_text("utf-8"))
@@ -55,12 +56,16 @@ def numeric_paths(node, prefix="", out=None):
 
 
 def test_the_record_is_what_the_producer_writes_today(tmp_path, monkeypatch):
-    """Under the pins this record was SEALED with — the two ruling (ф) moved are put back first."""
+    """Under the pins this record was SEALED with — the ruling (ф) movers and r2's are put back.
+
+    r2 moved `scripts/window_summary_5c2.py`, which this record BORROWS (§ the same reason ten
+    producers share: `registry_through_the_seal` reaches the registry through its revisions now).
+    """
     sealed_pins(monkeypatch)
     assert producer.main(["--out", str(tmp_path / "again.json")]) == 0
-    assert (tmp_path / "again.json").read_text("utf-8") == (
+    assert with_r2_put_back((tmp_path / "again.json").read_bytes()) == (
         REPO_ROOT / "results" / "prereg_pass1_window_r2.json"
-    ).read_text("utf-8")
+    ).read_bytes()
 
 
 def test_H6_re_derives_every_number_the_contract_prints():

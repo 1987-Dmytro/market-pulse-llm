@@ -151,6 +151,44 @@ looking at one brand, and the enumeration is also what makes the next amendment 
 unseen — it will have to be added here or the reconstruction below stops re-deriving."""
 
 
+R2_MARK = "# (r2)"
+"""The trailing marker on every line revision r2 added INSIDE a row r1 already had."""
+
+R2_OPENS = "  # --- r2 BEGIN"
+R2_CLOSES = "  # --- r2 END"
+"""The brackets around the one block of rows r2 APPENDED."""
+
+
+def registry_before_r2(path: str | Path) -> bytes:
+    """``config/registry.yaml`` as revision r1 — the bytes the records pinning `d4e3b237…` read.
+
+    Revision r2 (operator ruling 2026-08-30, `docs/PHASE-promo-pulse-1.md` §3) does exactly two
+    things to this file: it appends eight A1 sources inside ONE bracketed block, and it puts
+    ``collect: false`` with its two provenance keys on the 39 rows that leave collection. Neither
+    moves a row r1 had. Both are written so that undoing them is a line filter — which is the
+    whole reason the r1 pins keep holding instead of being re-pinned to follow the file. Same
+    shape and the same reason as :func:`registry_before_the_latin_aliases`, one revision later.
+
+    Strict in both directions: the block must be exactly one open/close pair, and at least one
+    marked line must exist. A reconstruction that silently found nothing to undo would return
+    today's bytes and quietly satisfy a pin it never reached.
+    """
+    lines = Path(path).read_text(encoding="utf-8").splitlines(keepends=True)
+    opens = [i for i, line in enumerate(lines) if line.startswith(R2_OPENS)]
+    closes = [i for i, line in enumerate(lines) if line.startswith(R2_CLOSES)]
+    if len(opens) != 1 or len(closes) != 1 or closes[0] < opens[0]:
+        raise ValueError(
+            f"{path}: the r2 additions are one `{R2_OPENS}` … `{R2_CLOSES}` pair, written once —"
+            f" found {len(opens)} open and {len(closes)} close markers"
+        )
+    block = range(opens[0], closes[0] + 1)
+    marked = [i for i, line in enumerate(lines) if line.rstrip("\n").endswith(R2_MARK)]
+    if not marked:
+        raise ValueError(f"{path}: no line carries `{R2_MARK}` — this is not the r2 registry")
+    dropped = set(block) | set(marked)
+    return "".join(line for i, line in enumerate(lines) if i not in dropped).encode("utf-8")
+
+
 def registry_before_the_latin_aliases(path: str | Path) -> bytes:
     """``config/registry.yaml`` as it stood before SPEC 3.17 (13)(b) — the bytes v1–v4 pin.
 
@@ -160,17 +198,23 @@ def registry_before_the_latin_aliases(path: str | Path) -> bytes:
     here instead: undo the enumerated ``display_names`` lists and drop the comment lines the
     amendment added, and what is left is what those records read.
 
+    The chain grew a link on 2026-08-30. This function's contract is "the bytes v1–v4 pin", and
+    those bytes are now two revisions back, so it walks r2 off first through
+    :func:`registry_before_r2` and undoes the aliases on r1's bytes. The (13)(b) check is made on
+    the file as it is, before either undo, so a registry the amendment never touched still refuses
+    with the sentence it always did rather than with r2's.
+
     One implementation, called by the producers that recompute a sealed bar and by the tests that
     re-verify the pins. A second copy of this would drift from the one the records are checked with.
     """
     text = Path(path).read_text(encoding="utf-8")
+    if not any(line.lstrip().startswith(RATIFIED_COMMENT) for line in text.splitlines()):
+        raise ValueError(f"{path}: no `{RATIFIED_COMMENT}` line — this is not the amended registry")
     kept = [
         line
-        for line in text.splitlines(keepends=True)
+        for line in registry_before_r2(path).decode("utf-8").splitlines(keepends=True)
         if not line.lstrip().startswith(RATIFIED_COMMENT)
     ]
-    if len(kept) == len(text.splitlines()):
-        raise ValueError(f"{path}: no `{RATIFIED_COMMENT}` line — this is not the amended registry")
     before = "".join(kept)
     for now, then in LATIN_ALIASES_13B:
         if before.count(now) != 1:
@@ -179,24 +223,55 @@ def registry_before_the_latin_aliases(path: str | Path) -> bytes:
     return before.encode("utf-8")
 
 
+def registry_revisions(path: str | Path) -> list[tuple[str, bytes]]:
+    """Every revision of `config/registry.yaml` this checkout can produce, newest first.
+
+    Named, because a record that reads the registry has to be able to say WHICH revision it read —
+    "byte-identical" is a lie about a file reached through two undos. One list, so a fourth
+    revision is added in one place and every consumer gains it at once.
+    """
+    return [
+        ("r2, byte-identical", Path(path).read_bytes()),
+        ("r1, through the r2 undo", registry_before_r2(path)),
+        (
+            "pre-(13)(b), through the r2 undo and the alias undo",
+            registry_before_the_latin_aliases(path),
+        ),
+    ]
+
+
+def registry_revision_reaching(pin: str, path: str | Path) -> tuple[str, bytes] | None:
+    """(revision name, its bytes) for the revision whose sha256 is `pin` — or ``None``.
+
+    The one question every consumer of a pinned registry actually asks. `None` is a refusal at the
+    caller's own severity: a producer raises `SystemExit`, a loader raises `ValueError`, and a test
+    asserts — and none of them has to re-implement the walk to do it.
+    """
+    for name, blob in registry_revisions(path):
+        if hashlib.sha256(blob).hexdigest() == pin:
+            return name, blob
+    return None
+
+
 def load_registry_as_pinned(pin: str, path: str | Path) -> Registry:
     """The registry a record pins: today's file when it still hashes to it, else the reconstruction.
 
     A record scored under one alias table must keep being recomputed under that table — SPEC 3.17
     (13)(b) is an instrument change, and re-deriving an old bar through it would re-score a sealed
-    measurement rather than reproduce it. A pin neither branch reaches is a refusal: it means the
+    measurement rather than reproduce it. A pin no revision reaches is a refusal: it means the
     registry has moved in some way nobody wrote down.
+
+    Three revisions today, one per change this file has had since a record last pinned it: r2
+    (today's bytes), r1 (:func:`registry_before_r2`) and pre-(13)(b). Seven records pin r1 and eight
+    pin pre-(13)(b), which is why both have to be reachable and not merely described.
     """
-    live = Path(path).read_bytes()
-    if hashlib.sha256(live).hexdigest() == pin:
-        return load_registry_text(live.decode("utf-8"), path)
-    before = registry_before_the_latin_aliases(path)
-    if hashlib.sha256(before).hexdigest() == pin:
-        return load_registry_text(before.decode("utf-8"), path)
-    raise ValueError(
-        f"{path} pins {pin[:16]}… and neither the live file nor the pre-(13)(b) reconstruction"
-        " hashes to it — the registry has moved in a way nothing here can reconstruct"
-    )
+    reached = registry_revision_reaching(pin, path)
+    if reached is None:
+        raise ValueError(
+            f"{path} pins {pin[:16]}… and no revision this checkout can reconstruct hashes to it —"
+            " the registry has moved in a way nothing here can reconstruct"
+        )
+    return load_registry_text(reached[1].decode("utf-8"), path)
 
 
 def _sources(path: str | Path, entries) -> tuple[Source, ...]:

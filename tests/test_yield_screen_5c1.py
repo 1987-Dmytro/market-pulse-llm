@@ -279,8 +279,14 @@ def test_the_shipped_record_covers_the_whole_registry_and_cites_what_it_read():
 
     from test_registry import registry_as_the_signed_screen_read_it
 
+    from moved_pins import handles_before_r2
+
     record = json.loads((REPO_ROOT / "results" / "yield_screen_5c1.json").read_text("utf-8"))
-    live = {handle for source in REGISTRY.sources for handle in source.telegram_channels}
+    # The composition the signed screen covered — the pre-r2 bytes. The stamp added a comment block
+    # and (13)(b) moved three display_names lists; neither added or dropped a source, so all three
+    # older revisions carry the same 66 rows. Revision r2 (2026-08-30) is the first that moved a
+    # ROW, and comparing against today's 74 would assert r2 rather than this record.
+    live = handles_before_r2()
     assert {row["handle"] for row in record["sources"]} == live
     assert record["summary"]["n"] == len(live) == 66
     assert (

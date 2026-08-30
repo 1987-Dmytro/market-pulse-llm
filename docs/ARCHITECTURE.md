@@ -29,7 +29,7 @@ the session starts is the point of drawing this.
 
 ```mermaid
 flowchart TD
-    TG["Telegram channels<br/>config/registry.yaml · 66 sources · leaflet population @atb_market_official"]
+    TG["Telegram channels<br/>config/registry.yaml · 74 sources (r2) · leaflet population @atb_market_official"]
     COL["collector · $0<br/>telegram_client.build_client + scripts/fetch_atb_media_5c1.py<br/>jpg on disk, sha256 in the manifest"]
     PAGE["one PAGE = one call<br/>prompts.positions_messages_page_gm4 · refuses any image count but 1<br/>images ride as base64 inside the job"]
     CEIL["RunPod /run ceiling 10 MB<br/>enforced on the caption leg only — MAX_PAYLOAD_MB = 8.0"]
@@ -65,7 +65,7 @@ flowchart TD
 
 | # | node | verdict | what the repo actually holds |
 |---|---|---|---|
-| 1 | Telegram channels | CONFIRMED | `config/registry.yaml` loads 66 sources; `@atb_market_official` is one of them |
+| 1 | Telegram channels | CONFIRMED | `config/registry.yaml` loads 74 sources; `@atb_market_official` is one of them |
 | 2 | `telegram_client` collector, jpg + sha on disk, $0 | CONFIRMED | `telegram_client.build_client` refuses to name a person; `scripts/fetch_atb_media_5c1.py` fetches the ATB media and the shas live in the sent-set manifest the leaflet gold pins |
 | 3 | one page = one call, base64, ≤ 10 MB | **DEVIATION** | one-image-per-call IS enforced — `prompts.positions_messages_page_gm4` raises for any count but 1, and `tests/test_prompts.py::test_a_page_request_carries_exactly_one_image` drives it with 0, 2 and 6. The **10 MB ceiling is not checked on this leg**: the only numeric guard in the repo is `scripts/caption_gm4_5c1.py::MAX_PAYLOAD_MB = 8.0`. On the positions path the limit is prose in a docstring |
 | 4 | RunPod serverless, GM4 NF4, adapter OFF, `positions_post_gm4` | **DEVIATION** | every named part exists and none is wired to positions. `serve_handler.assert_no_adapter` and `serve_handler.settings` refuse a trained-weights environment, but only on the CAPTION path; the worker answers exactly three ops — `info`, `batch`, `caption` — so today's endpoint would refuse a `positions_post_gm4` job outright, and `results/sku_pilot_prereg.json` pins the two prompt shas while registering no serving config at all |

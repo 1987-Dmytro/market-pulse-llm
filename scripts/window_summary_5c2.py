@@ -43,7 +43,7 @@ sys.path.insert(0, str(REPO_ROOT / "src"))
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from market_pulse import brands, langid, loop, prompts  # noqa: E402
-from market_pulse.registry import load_registry  # noqa: E402
+from market_pulse.registry import load_registry_as_pinned  # noqa: E402
 
 DERIVED = REPO_ROOT / "data" / "derived"
 PREREG = REPO_ROOT / "results" / "prereg_5c2_run.json"
@@ -362,22 +362,34 @@ def by_channel(rows: list[dict], block) -> dict:
 
 
 def registry_through_the_seal(prereg: dict, path: Path):
-    """The watchlist, read only after the registration's own pin agrees with the bytes on disk.
+    """The watchlist AS THE REGISTRATION PINS IT — today's bytes when they still hash to the pin,
+    else the revision that does.
 
     `config/registry.yaml` is not `data/derived/` and is read anyway, for one head this record has
     to carry. It is legal because the sealed registration pins its sha256 — so the file is reached
-    THROUGH the seal, and a registry that moved since the run is a refusal here rather than a
-    brand column measured against a different watchlist than the one the run was priced on.
+    THROUGH the seal, and a registry nothing can reconstruct to that pin is a refusal here rather
+    than a brand column measured against a different watchlist than the one the run was priced on.
+
+    Until 2026-08-30 this was a byte-equality test on the live file, which said the right thing only
+    while the registry never moved again. Revision r2 moved it — eight A1 sources appended, 39 rows
+    out of collection — and the equality test would have made this summary, `build_aggregates` and
+    the whole $0 dashboard build exit at step two of the phase, over a revision that touched no
+    watchlist row. `market_pulse.registry.load_registry_as_pinned` is the repo's own answer to
+    exactly this question and is what runs now: it walks the revisions back and hands over the
+    bytes the seal names, so a registry that legitimately moved is READ AT THE SEAL and a registry
+    that moved in a way nobody wrote down is still a refusal, with the same sentence
+    ([[the_field_true_under_the_old_constant]]).
     """
     pinned = prereg["pinned_inputs"][PINNED_REGISTRY]
-    found = sha256_of(path)
-    if found != pinned:
+    try:
+        return load_registry_as_pinned(pinned, path)
+    except ValueError as unreachable:
         raise SystemExit(
-            f"{rel(path)} hashes to {found[:16]}… and the sealed registration pins {pinned[:16]}…"
-            " — the watchlist this summary would attribute brands with is not the one the run was"
+            f"{rel(path)} hashes to {sha256_of(path)[:16]}… and the sealed registration pins"
+            f" {pinned[:16]}…, and no revision this checkout can reconstruct reaches it — the"
+            " watchlist this summary would attribute brands with is not the one the run was"
             " registered against. Stop and report."
-        )
-    return load_registry(path)
+        ) from unreachable
 
 
 def summarise(derived: Path, prereg_path: Path, registry_path: Path) -> dict:

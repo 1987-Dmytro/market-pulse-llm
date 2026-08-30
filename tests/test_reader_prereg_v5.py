@@ -22,8 +22,11 @@ import window_summary_5c2 as summary  # noqa: E402
 import write_reader_prereg_v5 as prereg  # noqa: E402
 from test_prompts import (  # noqa: E402
     MOVED_BY_PASS1,
+    MOVED_BY_R2,
     SEALED_AT_PASS1,
+    SEALED_AT_R2,
     put_the_sealed_shas_back,
+    with_r2_put_back,
     sealed_sha256,
 )
 
@@ -50,12 +53,17 @@ def test_the_committed_registration_is_what_the_producer_writes_today(tmp_path):
     # moved a second time when `docs/PROMPT-pass1-probe.md` D1 registered the pass-1 text. The record
     # is NOT re-pinned — it froze when the pod existed — so the two byte ranges allowed to differ are
     # put back to what the sealing commit carries, and the swap must fire exactly twice
+    # A third range arrived with registry revision r2 (2026-08-30): this record BORROWS
+    # `scripts/window_summary_5c2.py`, which moved because `registry_through_the_seal` had to reach
+    # the registry through its revisions instead of by byte equality — ten producers go through it.
     assert (
-        put_the_sealed_shas_back(
-            out.read_bytes(),
-            times=2,
-            moved=("src/market_pulse/prompts.py",),
-            at=SEALED_AT_PASS1,
+        with_r2_put_back(
+            put_the_sealed_shas_back(
+                out.read_bytes(),
+                times=2,
+                moved=("src/market_pulse/prompts.py",),
+                at=SEALED_AT_PASS1,
+            )
         )
         == RECORD_PATH.read_bytes()
     )
@@ -501,6 +509,11 @@ def test_what_freezes_when_the_pod_exists():
     for name, digest in RECORD["producer"]["borrowed"].items():
         if name in MOVED_BY_PASS1:
             assert sealed_sha256(name, SEALED_AT_PASS1) == digest, name
+            assert summary.sha256_of(REPO_ROOT / name) != digest, name
+        elif name in MOVED_BY_R2:
+            # r2's sealing moment, and a different commit: a shared one would assert this file's
+            # sha at a tree that never carried it.
+            assert sealed_sha256(name, SEALED_AT_R2) == digest, name
             assert summary.sha256_of(REPO_ROOT / name) != digest, name
         else:
             assert summary.sha256_of(REPO_ROOT / name) == digest, name

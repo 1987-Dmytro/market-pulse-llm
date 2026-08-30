@@ -459,17 +459,28 @@ def bars(older: dict) -> dict:
 
 
 MOVED_MODULE = "src/market_pulse/prompts.py"
+R2_MODULE = "scripts/window_summary_5c2.py"
 MOVED_RANGES = (
-    ("instruments", "parser", "sha256"),
-    ("producer", "borrowed", MOVED_MODULE),
+    (("instruments", "parser", "sha256"), MOVED_MODULE),
+    (("producer", "borrowed", MOVED_MODULE), MOVED_MODULE),
+    (("producer", "borrowed", R2_MODULE), R2_MODULE),
 )
-"""The only two byte ranges of the frozen v5 record that a later contract may legitimately move.
+"""The only byte ranges of the frozen v5 record that a later contract may legitimately move, each
+with the module whose live sha is allowed to appear there.
 
-`docs/PROMPT-pass1-probe.md` D1 registers `pass1_comment_gm4_v1` INSIDE `prompts.py`, so the module's
-sha moves for a reason that has nothing to do with the reader — and these are the two cells that
-carry it. Enumerated as paths rather than swapped as a string: a THIRD occurrence appearing one day
-is a fact about the record and must refuse, never be repaired silently
-([[a_law_that_grows_loudly]]).
+`docs/PROMPT-pass1-probe.md` D1 registers `pass1_comment_gm4_v1` INSIDE `prompts.py`, so that
+module's sha moves for a reason that has nothing to do with the reader — the first two cells carry
+it. The third arrived with registry revision r2 (2026-08-30): `registry_through_the_seal` tested the
+registry by BYTE EQUALITY against the seal, which was right only while the file never changed again,
+and TEN producers reach the registry through that one function — so a revision would have stopped
+all ten at $0. It reaches the pin through `load_registry_as_pinned` now, and `window_summary_5c2.py`
+moved with the change. This record BORROWS that module; it does not read the registry differently
+because of it.
+
+Enumerated as (path, module) pairs rather than swapped as a string: a fourth occurrence appearing
+one day is a fact about the record and must refuse, never be repaired silently
+([[a_law_that_grows_loudly]]). Pairing the path WITH its module is what keeps the check honest —
+a shared `live` would let either module's sha satisfy either cell.
 
 What this narrowing costs is stated in :func:`the_readers_law_is_unmoved`, which closes it."""
 
@@ -511,7 +522,7 @@ def the_readers_law_is_unmoved(frozen: dict) -> list[str]:
 
 
 def with_the_moved_module_put_back(rebuilt: dict, frozen: dict) -> dict:
-    """`rebuilt` with the two :data:`MOVED_RANGES` restored to what the frozen record pins.
+    """`rebuilt` with the :data:`MOVED_RANGES` restored to what the frozen record pins.
 
     Pure, and driven in `tests/test_reader_prereg_v5b.py` on hand-made pairs: one that differs ONLY
     in those two cells (which must come back equal) and one that also moves the v5 text's own sha
@@ -521,9 +532,9 @@ def with_the_moved_module_put_back(rebuilt: dict, frozen: dict) -> dict:
     A range whose rebuilt value is NOT today's live module sha is left alone, so this cannot quietly
     paper over a difference that has some other cause.
     """
-    live = summary.sha256_of(REPO_ROOT / MOVED_MODULE)
     patched = json.loads(json.dumps(rebuilt))
-    for path in MOVED_RANGES:
+    for path, module in MOVED_RANGES:
+        live = summary.sha256_of(REPO_ROOT / module)
         *branch, leaf = path
         here, there = patched, frozen
         for key in branch:

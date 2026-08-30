@@ -19,7 +19,11 @@ import reader_population as population  # noqa: E402
 import window_summary_5c2 as summary  # noqa: E402
 import write_reader_gold as gold  # noqa: E402
 import write_reader_gold_r2 as r2  # noqa: E402
-from test_prompts import assert_pinned, put_the_sealed_shas_back  # noqa: E402
+from test_prompts import (  # noqa: E402
+    assert_pinned,
+    put_the_sealed_shas_back,
+    with_r2_put_back,
+)
 
 RECORD_PATH = REPO_ROOT / "results" / "reader_gold_w1_r2.json"
 RECORD = json.loads(RECORD_PATH.read_text(encoding="utf-8"))
@@ -59,7 +63,9 @@ def test_the_committed_r2_is_what_the_producer_writes_today(tmp_path):
     # text was registered. This gold is one of the artefacts a spent registration froze, so it is
     # NOT re-pinned: the one byte range allowed to differ is put back to the sealing commit's, and
     # the swap must fire — once, since this record names the module in `producer.borrowed` alone
-    assert put_the_sealed_shas_back(out.read_bytes(), times=1) == RECORD_PATH.read_bytes()
+    assert with_r2_put_back(
+        put_the_sealed_shas_back(out.read_bytes(), times=1)
+    ) == RECORD_PATH.read_bytes()
     assert "generated_at" not in RECORD_PATH.read_text(encoding="utf-8")
 
 

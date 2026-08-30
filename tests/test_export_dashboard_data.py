@@ -5,6 +5,7 @@ be built on. Every check that could be made against a freshly built record is ma
 COMMITTED bytes too, because what ships is what a screen renders.
 """
 
+import hashlib
 import json
 import subprocess
 import sys
@@ -17,12 +18,36 @@ sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
 import build_aggregates as builder  # noqa: E402
 import export_dashboard_data as exporter  # noqa: E402
-from test_prompts import assert_pinned, put_the_sealed_shas_back  # noqa: E402
+from test_prompts import (  # noqa: E402
+    MOVED_BY_R2,
+    MOVED_BY_THE_PROMO_TABLES,
+    SEALED_AT_R2,
+    assert_pinned,
+    put_the_sealed_shas_back,
+    sealed_sha256,
+)
 
 from market_pulse import aggregates  # noqa: E402
+from market_pulse.registry import load_registry, registry_before_r2  # noqa: E402
 
 RECORD = json.loads(exporter.OUT.read_text(encoding="utf-8"))
 ANCHOR = json.loads(builder.ANCHOR.read_text(encoding="utf-8"))
+
+REGISTRY = REPO_ROOT / "config" / "registry.yaml"
+
+
+def r1_registry_sha() -> str:
+    """`config/registry.yaml` as revision r1 — the bytes this export was built over.
+
+    Revision r2 (2026-08-30) appended eight A1 sources and took 39 rows out of collection. This
+    record is window 1's, computed under r1, and `build_aggregates` reads the registry THROUGH the
+    5c2 seal, so its NUMBERS are still r1's — the one thing that moves in a rebuild is the live sha
+    the provenance block stamps. Recomputed from the file by the undo the sealed pins are reached
+    through, and checked against `git show 58ff037:` — two independent routes to one sha, so a
+    broken undo cannot agree with itself."""
+    recomputed = hashlib.sha256(registry_before_r2(REGISTRY)).hexdigest()
+    assert recomputed == sealed_sha256("config/registry.yaml", SEALED_AT_R2)
+    return recomputed
 
 
 @pytest.fixture(scope="module")
@@ -95,7 +120,17 @@ def test_two_exports_are_byte_identical_and_the_committed_one_is_that_record(tmp
     # reader text was registered. The shipped export is the file a screen renders and is NOT
     # re-pinned by a reader contract: the one byte range allowed to differ is put back to the
     # sealing commit's, and the swap must fire
-    assert put_the_sealed_shas_back(first.read_bytes(), times=1) == exporter.OUT.read_bytes()
+    # Three moved groups, each put back at ITS OWN sealing moment: the v5 reader moved
+    # `prompts.py`, r2 moved the registry and the producer that reads it through the seal, and S6
+    # moved `aggregates.py` by adding the six promo tables. The last two seal at one commit for two
+    # unrelated reasons, so they are two calls and not one list. Every swap must fire, or a record
+    # that had quietly gone back to the sealed bytes would pass this comparison.
+    produced = put_the_sealed_shas_back(first.read_bytes(), times=1)
+    produced = put_the_sealed_shas_back(produced, times=1, moved=MOVED_BY_R2, at=SEALED_AT_R2)
+    produced = put_the_sealed_shas_back(
+        produced, times=1, moved=MOVED_BY_THE_PROMO_TABLES, at=SEALED_AT_R2
+    )
+    assert produced == exporter.OUT.read_bytes()
     assert b'"at"' not in first.read_bytes(), "no clock in the body"
     diff = subprocess.run(
         ["diff", str(first), str(second)], capture_output=True, text=True, cwd=REPO_ROOT
@@ -151,7 +186,7 @@ def test_the_segment_cut_carries_every_audience_the_registry_holds():
     hold ONLY the channels that produced a row, or `coverage.channels.with_a_row` would read 66/66
     and the metric would be destroyed by its own denominator.
     """
-    registry = builder.summary.load_registry(builder.REGISTRY)
+    registry = load_registry(builder.REGISTRY)
     audiences = {source.audience for source in registry.sources if source.audience}
     cut = RECORD["cuts"]["comment_by_segment"]
 
@@ -181,7 +216,7 @@ def test_the_promo_surface_carries_every_chain_the_amendment_names():
     spec = (REPO_ROOT / "docs" / "SPEC.md").read_text(encoding="utf-8")
     block = spec.split("<!-- amendment-3.20 begin")[1].split("<!-- amendment-3.20 end")[0]
     chains = RECORD["metrics"]["promo_pressure"]["by_chain"]
-    registry = builder.summary.load_registry(builder.REGISTRY)
+    registry = load_registry(builder.REGISTRY)
     ids = {source.id for source in registry.sources}
 
     assert "@marketopt_promo" in block
@@ -293,6 +328,12 @@ def test_the_provenance_block_pins_its_inputs_and_its_producers():
     for name, digest in provenance["producers"].items():
         assert_pinned(name, digest)
     for name, digest in provenance["inputs"].items():
+        if name == "config/registry.yaml":
+            # Pinned at r1, not at today's bytes: revision r2 moved the file and a sealed export is
+            # never re-pinned by a later revision. The undo is what makes the pin reachable.
+            assert builder.summary.sha256_of(REPO_ROOT / name) != digest, name
+            assert r1_registry_sha() == digest, name
+            continue
         assert builder.summary.sha256_of(REPO_ROOT / name) == digest, name
     for name, digest in provenance["evidence"].items():
         assert builder.summary.sha256_of(REPO_ROOT / name) == digest, name
