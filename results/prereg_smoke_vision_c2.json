@@ -1,0 +1,81 @@
+{
+  "authority": "docs/reviews/2026-08-30-plan-promo-pulse-1.md, «Money — operator's word (30.08): Да, смок авторизован» — one smoke, ≤30 pages, cap $0.35, four rungs",
+  "expected_worker": {
+    "adapter_sha256": null,
+    "max_new_tokens": 1200,
+    "merge_state": "base-no-adapter",
+    "positions_prompt_sha256": {
+      "positions_post_gm4": "ca6303c157d46e707aaf3fc52c7a05ed1450e24c26db0e7c93eefba4f6968754",
+      "positions_text_gm4": "7250b87aa1c2de407e06ab9eed565dd4d88025add7be0d2d2a87607c0d872860"
+    },
+    "revision_requested": "842da3794eaa0b77d5f08bae87a17459d91ff475",
+    "serving_config": "POSITIONS"
+  },
+  "expected_worker_from": "results/sku_pilot_serving_v2.json — the same pin run_5c2 asserts",
+  "kill_rules": [
+    "info disagrees with expected_worker → tear down, send NO pages, record the difference",
+    "two boots without a served info → KILL, do not try a third",
+    "the projection at the MEASURED rate exceeds the cap → KILL (PROCESS rung 2: over by ≤20% → ASK and hold ≤10 min; over by more → KILL)",
+    "the guard refuses at any point → that is the answer, not an obstacle"
+  ],
+  "phase": "promo-pulse-1-s2s3 — the C2 vision smoke",
+  "population": {
+    "excluded": "post_media_5c1.json — 5c2's bought 159 pages; a rate measured on the exam is not a rate sample for the population",
+    "ids_sha256": "6c8b87dd51c46ea71aea3d24b8d7aca1696e87b88203bf8d158fbcd1c8f04066",
+    "manifests": [
+      "post_media_45g2.json",
+      "post_media_visc.json"
+    ],
+    "pages": 30,
+    "rows": [
+      "post_media_45g2.json:@VARUS_channel:2334",
+      "post_media_45g2.json:@VARUS_channel:3828",
+      "post_media_45g2.json:@VARUS_channel:3936",
+      "post_media_45g2.json:@VARUS_channel:3943",
+      "post_media_45g2.json:@VARUS_channel:4133",
+      "post_media_45g2.json:@VARUS_channel:6732",
+      "post_media_45g2.json:@VARUS_channel:7128",
+      "post_media_45g2.json:@VARUS_channel:7150",
+      "post_media_45g2.json:@VARUS_channel:7289",
+      "post_media_45g2.json:@VARUS_channel:7618",
+      "post_media_45g2.json:@msuaaaa:10099",
+      "post_media_45g2.json:@msuaaaa:5120",
+      "post_media_45g2.json:@msuaaaa:7436",
+      "post_media_45g2.json:@msuaaaa:7868",
+      "post_media_visc.json:@VARUS_channel:10149",
+      "post_media_visc.json:@VARUS_channel:10156",
+      "post_media_visc.json:@VARUS_channel:10160",
+      "post_media_visc.json:@VARUS_channel:10166",
+      "post_media_visc.json:@VARUS_channel:10185",
+      "post_media_visc.json:@VARUS_channel:10265",
+      "post_media_visc.json:@VARUS_channel:10404",
+      "post_media_visc.json:@VARUS_channel:10410",
+      "post_media_visc.json:@atb_aktsiyi:3012",
+      "post_media_visc.json:@atb_aktsiyi:3019",
+      "post_media_visc.json:@atb_aktsiyi:3108",
+      "post_media_visc.json:@atb_aktsiyi:3197",
+      "post_media_visc.json:@atb_aktsiyi:3204",
+      "post_media_visc.json:@atb_aktsiyi:3205",
+      "post_media_visc.json:@educationwithloven:104364",
+      "post_media_visc.json:@marketopt_promo:2903"
+    ],
+    "seed": 42
+  },
+  "recovery_clause": "one re-create of the SAME endpoint within the same cap if the first boot dies without serving info; nothing else",
+  "rung_0": {
+    "billable_seconds": 796.322,
+    "boot_seconds_each": 212.041,
+    "boot_source": "results/srv2c_bootlog.json :: the_execution_time_gap.unwrapped.execution_ms",
+    "boots_priced": 2,
+    "cap_usd": 0.35,
+    "fits": true,
+    "idle_tail_seconds": 60.0,
+    "pages": 30,
+    "prior_seconds_per_page": 10.408,
+    "prior_source": "results/run_5c2_positions.json :: timing.seconds_per_row",
+    "projected_usd": 0.2442,
+    "rate_usd_per_second": 0.00030669
+  },
+  "teardown": "runpodctl serverless delete <endpoint> && runpodctl template delete <template>, proven by `runpodctl serverless list` → [] with the network volume mp-srv2 and template unfcr3ja0t still listed as the positive control",
+  "the_one_question": "what is vision_seconds_per_page, measured, on the transport the paid pass would use"
+}
