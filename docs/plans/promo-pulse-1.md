@@ -68,7 +68,7 @@ Each ends in a commit **by path** and the checks named. No `git add -A`; no repo
 | S0 | Commit the team lead's uncommitted files by path (`docs/STATUS.md`, `docs/PHASE-promo-pulse-1.md`); clear the `test_repair_phase4_ledger` debt STATUS assigns to step 0 of the next contract. | commit by path only; `tests/` | K0 |
 | S1a | **Loader extension first** (§5.2a): two of the 17 A1 rows **cannot be expressed** under today's `_HANDLE` regex. `src/market_pulse/registry.py` is pinned by nothing, so this is a cheap, legal prerequisite — a `chat_id` / `invite` field beside `telegram_channels`, with the regex left intact for real usernames. | `src/market_pulse/registry.py`, `tests/test_registry.py` | K2, K0 |
 | S1b | **Registry revision r2.** 17 A1 rows · 5 A2 · PAUSED 39 leave collection · B deferred. Preflight, edit, then claim the moved pins. Of the **18** A1 entries §3 names (17 rows + ATB_FANatik's discussion group), **8 are in the registry and 10 are not** — recounted from `config/registry.yaml` against §3's list, printed in §5.3a rather than asserted as a total: the 10 absent are `@ATB_FANatik`, its discussion group, Маркетопт private, `@blyzenkoua`, `@fozzyshopua`, `@sim23_simi`, `@rrozetka`, `@kop1chat`, `@znishkom`, `@xochydeshevshe`. **`@atb_market_official` stays in collection** (review 30.08: it is the leaflet carrier — 159 pages, 106/145 positions — and dropping it would cut the one proven S1 source); only the PAUSED 39 leave **collection**, and their registry rows **stay** — §5.2b: removing them makes the aggregates build refuse at $0. Every new row needs an `audience` from the closed list of 8 — `test_every_shipped_source_carries_an_audience` forbids a null. | `config/registry.yaml`, `tests/moved_pins.py`, `tests/` | K1, K2, K0 |
-| S2 | **$0 collection.** The population §1 measures does not exist on disk: the newest post across every A1 channel is **2026-08-08** (today is 2026-08-30, so ≥22 days of the 4-week window are uncollected for *every* channel), and **8 of the 18 entries have no store file at all** — the 6 missing handles plus Маркетопт private and the discussion group. Collect them, top up the rest to the window, and collect the `@ATB_FANatik` discussion group (its traffic is measured at entry — r1's 0.25 c/day read post replies, not the group feed). Every NEW channel enters through the adaptation protocol: profile → sealed hundred → gate **before** aggregates. Telegram only. | `scripts/`, `data/raw/`, `results/` | K0 |
+| S2 | **$0 collection, into the live root `data/raw_r2/` (§5.14).** The population §1 measures does not exist on disk: the newest post across every A1 channel is **2026-08-08** (today is 2026-08-30, so ≥22 days of the 4-week window are uncollected for *every* channel), and **8 of the 18 entries have no store file at all** — the 6 missing handles plus Маркетопт private and the discussion group. Collect them, top up the rest to the window, and collect the `@ATB_FANatik` discussion group (its traffic is measured at entry — r1's 0.25 c/day read post replies, not the group feed). Every NEW channel enters through the adaptation protocol: profile → sealed hundred → gate **before** aggregates. Telegram only. | `scripts/`, `src/market_pulse/raw_store.py`, `data/raw_r2/`, `results/` | K0 |
 | S3 | **$0 census + projection** of the paid legs (K3, K4) over the window S2's top-up fixes (§5.1), then **STOP** — SP-1, decided on this table. The two paths go to the operator the moment they exist; S6/S7/S8 continue meanwhile, since none of them is paid. | `scripts/promo_census_c2.py`, `scripts/promo_projection_c2.py`, `results/` | K3, K4, K0 |
 | S4 | **C2 backfill (PAID).** Positions for the 17 channels over the 4 weeks, via the existing 5c2 instrument — vision for image flyers, text for the rest. **`positions.py` is not touched** (§5.12): the scale is in which carriers get fed, not in the parser. Smoke first; rungs per `docs/PROCESS.md`. | `scripts/`, `results/`, `data/derived/` | K0 |
 | S5 | **S1 draw** (K5) → hand `results/positions_draw_50.json` to the team lead for `docs/labels-positions-50.jsonl`. | `scripts/draw_positions_50.py`, `results/` | K5, K0 |
@@ -427,6 +427,54 @@ and a pod registered for six legs has already bought legs that §6.3's plateau r
 recording durably **before** advancing its watermark, with `send` as the only seam. S12 is wiring a
 `make tick` over those, plus the cooled-thread digest and the fourth evidence kind of §5.8 — not new
 machinery. That is why K10 is a cheap check and not a rewrite.
+
+**5.14 The live raw root and the `RawStore` union — SP-4, ruling (a) (review 2026-08-30,
+«Acceptance of the scaffold slice»).** S2 stopped because four A1 channels write into the four
+pinned files of `results/raw_v1_baseline.sha256`. The ruling widens option (a) from the top-up to
+the whole loop, and this section is what S2, S12 and every reader of the store build to.
+
+**The three rules.** (1) `data/raw/` is an **archive**: read-only forever, and the baseline stays
+the proof — `data/` is gitignored, so `shasum -c results/raw_v1_baseline.sha256` is the only
+durable evidence in either direction. (2) ONE live root, **`data/raw_r2/`**, receives S2's top-up
+for **all** collected channels — the pinned four and the free sixteen alike, so no reader has to
+know which of the two a channel's rows came from. (3) A reader that wants the corpus reads
+**v1 ∪ r2, deduplicated on (channel, msg_id), r2 winning** — `RawStore(LIVE_ROOT,
+archives=(ARCHIVE_ROOT,))`; the union is **opt-in and never the default**, because one consumer
+must NOT have it (the draw, below).
+
+**The guard is in `RawStore.append`, not in the collector.** `scripts/collect_r2.py::refuse_pinned`
+guards a channel list; the moment `STORE_ROOT` points at the live root it passes trivially and
+guards nothing. The refusal therefore moves to the one chokepoint every writer goes through — an
+`append` whose root is the archive raises — and `refuse_pinned` stays as the second, earlier
+refusal ([[a_moved_guard_that_left_its_copy]]: the copy that holds the writer is the one that
+matters). Tested in both directions: a write into `data/raw/posts` and into `data/raw/comments`
+refused, a write into the live root accepted, and `shasum -c` re-run after the test.
+
+**The consumers, counted.** `graphify query "what reads RawStore"` returns a depth-2 subgraph of
+285 nodes — a neighbourhood, not a consumer list — so it is the *starting* set and the count below
+is the reconciled one: every construction of `RawStore(...)` and every direct read of the raw tree
+in `src/` and `scripts/`. Nine consumers, and the column that matters is **which root**, not the
+filename ([[a_consumer_list_is_not_a_meaning_list]]):
+
+| consumer | reads | writes | under the ruling |
+|---|---|---|---|
+| `scripts/collect_r2.py:272` | v1 ∪ r2 | **r2** | S2's collector — retargeted; the index must see v1 or the top-up re-fetches threads v1 already holds |
+| `scripts/promo_census_c2.py:50` (`POSTS`, direct read) | v1 ∪ r2 | — | K3 prices the **topped-up** corpus, so it must see r2 |
+| `scripts/draw_promo_threads.py:56-57` (direct read) | **v1 only** | — | K7's population is the FROZEN 678 (ruling: «the frozen holdout comes from the frozen store»). A union here silently moves 678/488 — it is the one consumer the default must keep |
+| `scripts/run_loop.py:609` | v1 ∪ r2 (S12) | — | reads the store, writes only `data/derived/`; the union lands with S12, not here |
+| `scripts/run_5c2.py:713` | v1 ∪ r2 (S4) | — | same shape; the paid pass reads what S2 collected |
+| `src/market_pulse/loop.py` | its caller's | its caller's derived root | takes stores as arguments; `ingest` is `RawStore.append`, so the guard covers it for free |
+| `scripts/collect_5c1.py:120,446` | v1 | *(was v1)* | the r1 collector, **superseded**: the guard now refuses its writes. Left in place, not deleted — it is how the archive was built and its tests pin that behaviour on temporary roots |
+| `scripts/backfill.py:221` | v1 | *(was v1)* | same: an r1 writer the guard now refuses |
+| `scripts/fetch_comments_v2.py:212` | v1 (read) + `data/raw_fresh_45g5/` (write) | that third root | the precedent the ruling cites. **Named debt:** its two comment files are a third root the ruling's «v1 ∪ r2» does not mention; nothing in this phase reads them and I do not fold them in on my own word |
+
+Seven test modules construct `RawStore` (`test_raw_store`, `test_loop`, `test_collect_5c1`,
+`test_collect_r2`, `test_comments_v2`, `test_backfill`, `test_run_5c2`); all use temporary roots,
+which is why a guard on the archive root leaves them green.
+
+**What this does not change.** The window (§5.1) is still anchored on the topped-up corpus's last
+day + 1, and the census still states the anchor and `ids_sha256`; the anchor is now read across the
+union rather than off `data/raw/` alone. `positions.py` and every sealed record stay untouched.
 
 ## 6. Out of scope
 
