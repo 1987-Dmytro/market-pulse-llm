@@ -413,25 +413,39 @@ def test_the_r2_undo_refuses_a_half_marked_or_unmarked_registry(tmp_path):
 
 
 def test_the_paused_rows_are_loaded_and_are_not_collected():
-    """r2's whole mechanism, both directions (review 30.08): the 39 rows that leave collection stay
+    """r2's whole mechanism, both directions (review 30.08): the rows that leave collection stay
     IN the registry and say they are not collected.
 
     Deleting them was the other way to write the ruling and it breaks the build at $0 —
     `scripts/build_aggregates.py::segment_for` raises `SystemExit` for any channel that carries
     evidence rows and has no registry entry. So the row is loaded (direction one) and `collect` is
-    False (direction two), and every A1 row is still collected.
+    False (direction two), and every A1 row that survived the corrections is still collected.
+
+    **57, not the 39 this test first held.** The scaffold review («Acceptance of the scaffold
+    slice», 30.08) made three corrections to r2, and two of them move this count: the 17 Poltava
+    rows are «deferred to phase B» — the phase spec §3 says «nothing collected» and r2 had left
+    them collecting — and `@znishkom` is off-category (Steam discounts; the census title-matched
+    the chain name). Each correction carries its OWN `paused_by`, so the three populations are
+    counted separately here rather than summed into one number that could not say which ruling
+    paused a row.
     """
     sources = load_registry(REGISTRY).sources
     paused = [s for s in sources if not s.collect]
-    assert len(paused) == 39
+    assert len(paused) == 57
     assert all(s.audience is not None for s in paused), "a paused row still attributes its history"
     text = REGISTRY.read_text(encoding="utf-8")
-    assert text.count('paused_at: "2026-08-30"') == 39
+    assert text.count('paused_at: "2026-08-30"') == 57
     assert text.count('paused_by: "ruling (ц) 30.08"') == 39
+    assert text.count('paused_by: "deferred to phase B (ruling (ц) 30.08)"') == 17
+    assert [s.id for s in paused if s.audience == "regional"] != [], "phase B is the 17 regional"
+    assert len([s for s in paused if s.audience == "regional"]) == 17
+    assert text.count("off-category, census title-match false positive") == 1
+    by_id = {s.id: s for s in sources}
+    assert not by_id["znishkom"].collect, "review 30.08: @znishkom is off-category"
+    assert by_id["marketopt_promo"].collect, "review 30.08: the public Маркетопт row STAYS"
     a1 = {"atb", "atb_fanatik", "atb_aktsiyi", "varus", "ekomarket_shop", "epicentrk_sale",
           "forainfo", "marketopt_private", "blyzenko", "silpo", "fozzy", "sim23", "rozetka",
-          "msuaaaa", "kopiyochka1", "znishkom", "xochydeshevshe"}
-    by_id = {s.id: s for s in sources}
+          "msuaaaa", "kopiyochka1", "xochydeshevshe"}
     assert a1 <= set(by_id), sorted(a1 - set(by_id))
     assert [i for i in sorted(a1) if not by_id[i].collect] == []
 

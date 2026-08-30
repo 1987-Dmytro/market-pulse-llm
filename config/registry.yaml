@@ -491,6 +491,9 @@ sources:
     verified: true
     comments_enabled: false
     audience: regional
+    collect: false  # (r2)
+    paused_at: "2026-08-30"  # (r2)
+    paused_by: "deferred to phase B (ruling (ц) 30.08)"  # (r2)
   - id: poltava_informue
     name: "Полтава Інформує"
     source_type: community
@@ -499,6 +502,9 @@ sources:
     verified: true
     comments_enabled: false
     audience: regional
+    collect: false  # (r2)
+    paused_at: "2026-08-30"  # (r2)
+    paused_by: "deferred to phase B (ruling (ц) 30.08)"  # (r2)
   - id: suspilnepoltava
     name: "Суспільне Полтава"
     source_type: community
@@ -507,6 +513,9 @@ sources:
     verified: true
     comments_enabled: false
     audience: regional
+    collect: false  # (r2)
+    paused_at: "2026-08-30"  # (r2)
+    paused_by: "deferred to phase B (ruling (ц) 30.08)"  # (r2)
   - id: telegraf_kremenchuk
     name: "Кременчуцький Телеграф"
     source_type: community
@@ -515,6 +524,9 @@ sources:
     verified: true
     comments_enabled: false
     audience: regional
+    collect: false  # (r2)
+    paused_at: "2026-08-30"  # (r2)
+    paused_by: "deferred to phase B (ruling (ц) 30.08)"  # (r2)
   - id: gorishnie_plavni1
     name: "Горішні Плавні 🇺🇦"
     source_type: community
@@ -523,6 +535,9 @@ sources:
     verified: true
     comments_enabled: false
     audience: regional
+    collect: false  # (r2)
+    paused_at: "2026-08-30"  # (r2)
+    paused_by: "deferred to phase B (ruling (ц) 30.08)"  # (r2)
   - id: myrhorodtown
     name: "Mirgorodtown"
     source_type: community
@@ -531,6 +546,9 @@ sources:
     verified: true
     comments_enabled: false
     audience: regional
+    collect: false  # (r2)
+    paused_at: "2026-08-30"  # (r2)
+    paused_by: "deferred to phase B (ruling (ц) 30.08)"  # (r2)
   - id: hadiach_telegram
     name: "Гадяч"
     source_type: community
@@ -539,6 +557,9 @@ sources:
     verified: true
     comments_enabled: false
     audience: regional
+    collect: false  # (r2)
+    paused_at: "2026-08-30"  # (r2)
+    paused_by: "deferred to phase B (ruling (ц) 30.08)"  # (r2)
   - id: globine1
     name: "Х Глобине"
     source_type: community
@@ -547,6 +568,9 @@ sources:
     verified: true
     comments_enabled: false
     audience: regional
+    collect: false  # (r2)
+    paused_at: "2026-08-30"  # (r2)
+    paused_by: "deferred to phase B (ruling (ц) 30.08)"  # (r2)
   - id: piryatingromada
     name: "Пирятинська громада"
     source_type: community
@@ -555,6 +579,9 @@ sources:
     verified: true
     comments_enabled: false
     audience: regional
+    collect: false  # (r2)
+    paused_at: "2026-08-30"  # (r2)
+    paused_by: "deferred to phase B (ruling (ц) 30.08)"  # (r2)
   - id: piroperative
     name: "🔻Пирятин Оперативний"
     source_type: community
@@ -563,6 +590,9 @@ sources:
     verified: true
     comments_enabled: false
     audience: regional
+    collect: false  # (r2)
+    paused_at: "2026-08-30"  # (r2)
+    paused_by: "deferred to phase B (ruling (ц) 30.08)"  # (r2)
   # dikankaa removed 2026-08-08: EXCLUDED on the language census (day-2 acceptance): ru 1.00 on 20 decidable posts + RF oblasts in the channel's own description; UA-only policy (2026-07 census discipline). The operator's words, and the half of them this repo holds an artifact for: results/language_census_5c1_day2.json reads ua 0 / ru 20 of 30 posts in the window, and the RF geography is in the window too — «ОТДАЕМ ЩЕНКА В ДОБРЫЕ РУКИ … По Волгоградской области ( Энгельс, Саратов тоже можем )», 2026-08-01. The channel's own description is not in any artifact here: the gate stores title, not bio
   - id: zinkivnews
     name: "Зіньків Новини"
@@ -572,6 +602,9 @@ sources:
     verified: true
     comments_enabled: false
     audience: regional
+    collect: false  # (r2)
+    paused_at: "2026-08-30"  # (r2)
+    paused_by: "deferred to phase B (ruling (ц) 30.08)"  # (r2)
   - id: lhvc_info
     name: "Лохвиця.info"
     source_type: community
@@ -580,6 +613,9 @@ sources:
     verified: true
     comments_enabled: false
     audience: regional
+    collect: false  # (r2)
+    paused_at: "2026-08-30"  # (r2)
+    paused_by: "deferred to phase B (ruling (ц) 30.08)"  # (r2)
   - id: forainfo
     name: "Фора"
     source_type: official_retail
@@ -671,6 +707,9 @@ sources:
     verified: true
     comments_enabled: false
     audience: regional
+    collect: false  # (r2)
+    paused_at: "2026-08-30"  # (r2)
+    paused_by: "deferred to phase B (ruling (ц) 30.08)"  # (r2)
 
   - id: poltava_pvp
     name: "PVP.POLTAVA"
@@ -680,6 +719,9 @@ sources:
     verified: true
     comments_enabled: false
     audience: regional
+    collect: false  # (r2)
+    paused_at: "2026-08-30"  # (r2)
+    paused_by: "deferred to phase B (ruling (ц) 30.08)"  # (r2)
   - id: poltava20
     name: "Полтава ІНФО | Новини Світло"
     source_type: community
@@ -688,6 +730,9 @@ sources:
     verified: true
     comments_enabled: false
     audience: regional
+    collect: false  # (r2)
+    paused_at: "2026-08-30"  # (r2)
+    paused_by: "deferred to phase B (ruling (ц) 30.08)"  # (r2)
   - id: h_kremenchug
     name: "Х Кременчук"
     source_type: community
@@ -696,6 +741,9 @@ sources:
     verified: true
     comments_enabled: false
     audience: regional
+    collect: false  # (r2)
+    paused_at: "2026-08-30"  # (r2)
+    paused_by: "deferred to phase B (ruling (ц) 30.08)"  # (r2)
   - id: kremen_news
     name: "КРЕМІНЬ | НОВИНИ | КРЕМЕНЧУК"
     source_type: community
@@ -704,6 +752,9 @@ sources:
     verified: true
     comments_enabled: false
     audience: regional
+    collect: false  # (r2)
+    paused_at: "2026-08-30"  # (r2)
+    paused_by: "deferred to phase B (ruling (ц) 30.08)"  # (r2)
   - id: matusi_ukr
     name: "Матусі України"
     source_type: community
@@ -805,6 +856,9 @@ sources:
     verified: false
     comments_enabled: true
     audience: supermarket_deals
+    collect: false  # (r2)
+    paused_at: "2026-08-30"  # (r2)
+    paused_by: "review 30.08 — off-category, census title-match false positive"  # (r2)
   - id: xochydeshevshe
     name: "Хочу дешевше"
     source_type: aggregator
