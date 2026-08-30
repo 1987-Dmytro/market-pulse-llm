@@ -43,6 +43,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "src"))
 sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
+from collect_5c1 import protected  # noqa: E402
 from registry_revision_proposal import bucket  # noqa: E402
 from telethon import functions  # noqa: E402
 from telethon.errors import FloodWaitError  # noqa: E402
@@ -90,6 +91,43 @@ def a1_sources(registry) -> list[tuple]:
         if source.collect and bucket(source) == "A"
         for handle in source.telegram_channels
     ]
+
+
+def refuse_pinned(channels, store) -> None:
+    """The raw v1 files are PINNED, and this script would have appended to four of them.
+
+    `results/raw_v1_baseline.sha256` pins six store files and all six verify today. Four A1
+    channels map onto them — `@atb_market_official`, `@silposilpo`, `@VARUS_channel`, `@msuaaaa` —
+    and they are exactly the incumbents S2 was told to top up, which is why `collect_5c1` refuses
+    them at channel level and why this sibling exists at all. The refusal did not come with it.
+
+    An append here is worse than an ordinary mistake: `data/` is gitignored, so `git status` is
+    silent in both directions and there is no history to restore the file from. The write is
+    irreversible and the pin is the only durable evidence the store was never written
+    ([[baseline_before_the_run_not_after]]).
+
+    `protected()` is IMPORTED from the guard that already owns the pinned set. A second list here
+    would be free to drift, and this is the copy that holds the writer
+    ([[a_moved_guard_that_left_its_copy]]).
+    """
+    guarded = protected()
+    hit = sorted(
+        {
+            handle
+            for _, handle in channels
+            for kind in ("post", "comment")
+            if store.path(kind, handle).resolve() in guarded
+        }
+    )
+    if hit:
+        raise SystemExit(
+            "refusing to collect: these channels write into pinned raw v1 files —\n  "
+            + "\n  ".join(hit)
+            + "\n`results/raw_v1_baseline.sha256` pins them and `data/` is gitignored, so the"
+            " append cannot be undone.\nThis is SP-4 (docs/plans/promo-pulse-1.md §4): the operator"
+            " decides whether the top-up goes to a\nsecond store root, or whether these four stay"
+            " at the bytes the baseline holds."
+        )
 
 
 def join_state() -> dict:
@@ -238,6 +276,10 @@ async def run(args, registry) -> dict:
         channels = [pair for pair in channels if pair[1].lstrip("@").lower() in wanted]
     prior = json.loads(RECORD.read_text(encoding="utf-8")) if RECORD.exists() else None
     since = since_of(prior)
+    if not args.plan:
+        # Before the client, not after: a refusal that has already opened a session has already
+        # done the one thing this phase promised not to do.
+        refuse_pinned(channels, store)
     extra: dict = {}
 
     if args.plan:
@@ -251,7 +293,6 @@ async def run(args, registry) -> dict:
     salt = load_salt()
     client = build_client()
     await client.start()
-    provenance = make_provenance(None, "collect_r2")
     try:
         if args.join:
             state, joined = join_state(), []
@@ -296,6 +337,10 @@ async def run(args, registry) -> dict:
             for source, handle in channels:
                 try:
                     entity = await client.get_entity(handle)
+                    # Per source, not once for the run: `source_type` and `comments_enabled` are
+                    # the SOURCE's, so one provenance hoisted out of this loop would stamp every
+                    # channel with whichever came first.
+                    provenance = make_provenance(source, "collect_r2")
                     got = await walk_window(client, entity, source, handle, since, store, provenance)
                     print(f"  {handle}: +{got['posts_stored']} posts", flush=True)
                 except FloodWaitError as exc:
@@ -315,6 +360,7 @@ async def run(args, registry) -> dict:
                     continue
                 try:
                     entity = await client.get_entity(handle)
+                    provenance = make_provenance(source, "collect_r2")
                     got = await fetch_threads(
                         client, entity, source, handle, store, salt, provenance
                     )
