@@ -33,9 +33,9 @@
     {
       "audience": "retail_official",
       "channel": "@VARUS_channel",
-      "comments_added_r2": 0,
+      "comments_added_r2": 452,
       "comments_enabled": true,
-      "comments_stored": 6410,
+      "comments_stored": 6862,
       "damaged_lines": 0,
       "posts_added_r2": 133,
       "posts_first": "2024-07-01T08:00:06+00:00",
@@ -43,14 +43,14 @@
       "posts_stored": 2385,
       "source_id": "varus",
       "source_type": "official_retail",
-      "threads_with_comments": 835
+      "threads_with_comments": 899
     },
     {
       "audience": "supermarket_deals",
       "channel": "@msuaaaa",
-      "comments_added_r2": 0,
+      "comments_added_r2": 260,
       "comments_enabled": true,
-      "comments_stored": 4928,
+      "comments_stored": 5188,
       "damaged_lines": 0,
       "posts_added_r2": 63,
       "posts_first": "2024-09-11T10:38:06+00:00",
@@ -58,14 +58,14 @@
       "posts_stored": 1967,
       "source_id": "msuaaaa",
       "source_type": "aggregator",
-      "threads_with_comments": 703
+      "threads_with_comments": 737
     },
     {
       "audience": "supermarket_deals",
       "channel": "@kopiyochka1",
-      "comments_added_r2": 0,
+      "comments_added_r2": 93,
       "comments_enabled": true,
-      "comments_stored": 223,
+      "comments_stored": 316,
       "damaged_lines": 0,
       "posts_added_r2": 39,
       "posts_first": "2026-07-11T08:05:27+00:00",
@@ -73,14 +73,14 @@
       "posts_stored": 91,
       "source_id": "kopiyochka1",
       "source_type": "community",
-      "threads_with_comments": 37
+      "threads_with_comments": 60
     },
     {
       "audience": "supermarket_deals",
       "channel": "@kop1chat",
-      "comments_added_r2": 0,
+      "comments_added_r2": 350,
       "comments_enabled": true,
-      "comments_stored": 0,
+      "comments_stored": 350,
       "damaged_lines": 0,
       "posts_added_r2": 576,
       "posts_first": "2026-08-02T14:17:16+00:00",
@@ -88,7 +88,7 @@
       "posts_stored": 576,
       "source_id": "kopiyochka1",
       "source_type": "community",
-      "threads_with_comments": 0
+      "threads_with_comments": 150
     },
     {
       "audience": "retail_official",
@@ -168,9 +168,9 @@
     {
       "audience": "supermarket_deals",
       "channel": "@ATB_FANatik",
-      "comments_added_r2": 0,
+      "comments_added_r2": 18,
       "comments_enabled": true,
-      "comments_stored": 0,
+      "comments_stored": 18,
       "damaged_lines": 0,
       "posts_added_r2": 12,
       "posts_first": "2026-07-14T14:45:55+00:00",
@@ -178,7 +178,7 @@
       "posts_stored": 30,
       "source_id": "atb_fanatik",
       "source_type": "aggregator",
-      "threads_with_comments": 0
+      "threads_with_comments": 6
     },
     {
       "audience": "supermarket_deals",
@@ -243,9 +243,9 @@
     {
       "audience": "retail_official",
       "channel": "@sim23_simi",
-      "comments_added_r2": 0,
+      "comments_added_r2": 17,
       "comments_enabled": true,
-      "comments_stored": 0,
+      "comments_stored": 17,
       "damaged_lines": 0,
       "posts_added_r2": 18,
       "posts_first": "2026-08-03T06:28:29+00:00",
@@ -253,7 +253,7 @@
       "posts_stored": 18,
       "source_id": "sim23",
       "source_type": "official_retail",
-      "threads_with_comments": 0
+      "threads_with_comments": 7
     },
     {
       "audience": "retail_official",
@@ -287,7 +287,56 @@
     }
   ],
   "contract": "docs/plans/promo-pulse-1.md S2 — registry r2, A1 collection ($0)",
-  "phase": "posts",
+  "joins": [
+    {
+      "at": "2026-08-30T18:16:14+00:00",
+      "channel": "@msuaaaa",
+      "group_id": 2305377799,
+      "group_title": "MarketSaleUa | Акції та знижки супермаркетів Chat",
+      "outcome": "joined"
+    },
+    {
+      "at": "2026-08-30T18:31:14+00:00",
+      "channel": "@kopiyochka1",
+      "group_id": 1649559179,
+      "group_title": "Копійочка Chat! 🧡",
+      "outcome": "joined"
+    },
+    {
+      "at": "2026-08-30T18:46:14+00:00",
+      "channel": "@kop1chat",
+      "group_id": 1334432754,
+      "group_title": "Копійочка 🫶🏻",
+      "outcome": "joined"
+    },
+    {
+      "at": "2026-08-30T19:01:15+00:00",
+      "channel": "@ATB_FANatik",
+      "group_id": 1925810730,
+      "group_title": "АТБ / ЗНИЖКИ",
+      "outcome": "joined"
+    },
+    {
+      "at": "2026-08-30T19:16:16+00:00",
+      "channel": "1925810730",
+      "outcome": "ValueError: Cannot find any entity corresponding to \"1925810730\""
+    },
+    {
+      "at": "2026-08-30T19:31:16+00:00",
+      "channel": "@sim23_simi",
+      "group_id": 2712138875,
+      "group_title": "Сім23 та Сімі💜 Chat",
+      "outcome": "joined"
+    },
+    {
+      "at": "2026-08-30T19:46:16+00:00",
+      "channel": "@xochydeshevshe",
+      "group_id": 2124227766,
+      "group_title": "чат Хочу дешевше",
+      "outcome": "joined"
+    }
+  ],
+  "phase": "comments",
   "since": "2026-08-02T14:07:39.042521+00:00",
   "window_days": 28
 }
