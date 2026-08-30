@@ -1,0 +1,122 @@
+"""K8's grader on SYNTHETIC gold — the two agreements, and the split the stratification bought.
+
+The bars are «subject agreement ≥ 0.80» and «signal-type agreement ≥ 0.75», and neither phrase has
+a single meaning. What each one counts is pinned here, because a bar over an undefined metric is
+not a bar ([[a_published_ratio_is_not_the_gates]]).
+"""
+
+import importlib.util
+import json
+import sys
+from pathlib import Path
+
+REPO_ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(REPO_ROOT / "scripts"))
+sys.path.insert(0, str(REPO_ROOT / "src"))
+
+spec = importlib.util.spec_from_file_location(
+    "grade_promo_signals", REPO_ROOT / "scripts" / "grade_promo_signals.py"
+)
+grader = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(grader)
+
+CH = "@VARUS_channel"
+
+
+def gold(msg_id="101", subject="Яготинське", types=("цена",), root="4519", channel=CH):
+    return {
+        "channel": channel,
+        "thread_root": root,
+        "msg_id": msg_id,
+        "subject_type": "brand",
+        "subject": subject,
+        "signal_types": list(types),
+    }
+
+
+def test_a_perfect_read_scores_one_on_both():
+    got = grader.grade([gold()], [gold()], {})
+    assert got["bars"]["subject_agreement"]["value"] == 1.0
+    assert got["bars"]["signal_type_agreement"]["value"] == 1.0
+    assert all(block["held"] for block in got["bars"].values())
+
+
+def test_silence_on_a_gold_comment_is_a_disagreement_and_not_a_smaller_denominator():
+    """The way a grader flatters an instrument: drop the rows it said nothing about and the rate
+    rises over a population nobody chose ([[the_fix_widened_the_denominator]])."""
+    got = grader.grade([gold("101"), gold("102")], [gold("101")], {})
+    assert got["bars"]["subject_agreement"]["value"] == 0.5
+    assert got["whole_40"]["subject_comments"] == 2
+
+
+def test_the_subject_is_compared_after_normalisation_and_on_BOTH_halves():
+    assert grader.grade([gold()], [gold(subject="  яготинське ")], {})["bars"]["subject_agreement"]["value"] == 1.0
+    wrong_type = {**gold(), "subject_type": "chain"}
+    assert grader.grade([gold()], [wrong_type], {})["bars"]["subject_agreement"]["value"] == 0.0
+
+
+def test_signal_types_are_a_SET_per_thread_and_over_labelling_costs_as_much_as_missing():
+    """Jaccard. A thread the model over-labels is not free, and a thread both sides leave empty is
+    1.0 rather than a division by zero."""
+    one_of_two = grader.grade(
+        [gold(types=("цена", "жалоба"))], [gold(types=("цена",))], {}
+    )
+    assert one_of_two["bars"]["signal_type_agreement"]["value"] == 0.5
+    over = grader.grade([gold(types=("цена",))], [gold(types=("цена", "похвала"))], {})
+    assert over["bars"]["signal_type_agreement"]["value"] == 0.5
+    empty = grader.grade([gold(types=())], [gold(types=())], {})
+    assert empty["bars"]["signal_type_agreement"]["value"] == 1.0
+
+
+def test_the_two_strata_are_reported_beside_the_bars_and_never_instead_of_them():
+    """What stratifying the draw bought: if the `decimal`-only half grades worse, the number says
+    so. The BAR stays on the whole 40 — that is what the bar is on."""
+    strata = {(CH, "4519"): "currency", (CH, "7001"): "decimal_only"}
+    good, bad = gold(root="4519"), gold(root="7001")
+    got = grader.grade([good, bad], [good, {**bad, "subject": "Молокія"}], strata)
+    assert got["bars"]["subject_agreement"]["value"] == 0.5, "the bar is on the whole set"
+    assert got["by_stratum"]["currency"]["subject_agreement"] == 1.0
+    assert got["by_stratum"]["decimal_only"]["subject_agreement"] == 0.0
+
+
+def test_an_unsure_row_is_counted_and_stays_in_the_denominator():
+    """An abstention is an answer. A grader that dropped `unsure` rows would report the instrument's
+    willingness, not its accuracy ([[an_abstention_is_an_answer]])."""
+    got = grader.grade([gold()], [{**gold(subject=""), "unsure": "no subject in the row"}], {})
+    assert got["bars"]["subject_agreement"]["value"] == 0.0
+    assert got["readings"]["unsure_rows"] == 1
+
+
+def test_the_bars_are_the_phase_specs_and_the_definitions_are_written_into_the_record(tmp_path):
+    assert grader.BARS == {"subject_agreement": 0.80, "signal_type_agreement": 0.75}
+    g, p, out = tmp_path / "g.jsonl", tmp_path / "p.jsonl", tmp_path / "o.json"
+    g.write_text(json.dumps(gold(), ensure_ascii=False) + "\n", encoding="utf-8")
+    p.write_text(json.dumps(gold(), ensure_ascii=False) + "\n", encoding="utf-8")
+    assert grader.main(
+        ["--gold", str(g), "--predicted", str(p), "--out", str(out), "--draw", str(tmp_path / "no")]
+    ) == 0
+    record = json.loads(out.read_text(encoding="utf-8"))
+    assert "per COMMENT" in record["definitions"]["subject_agreement"]
+    assert "Jaccard" in record["definitions"]["signal_type_agreement"]
+    assert record["by_stratum"]["note"], "a missing draw record is said, not silently unsplit"
+
+
+def test_the_strata_come_from_the_draw_record_and_name_the_dev_arm(tmp_path):
+    """The split is read off `results/promo_threads_draw.json` — the dev arm, which is what K8
+    scores. A grader that read the holdout's rows here would be scoring the one shot."""
+    draw = tmp_path / "draw.json"
+    draw.write_text(
+        json.dumps(
+            {
+                "draw": {
+                    "currency": {"dev": [{"channel": CH, "thread_root": "4519"}], "holdout": [
+                        {"channel": CH, "thread_root": "9999"}
+                    ]},
+                }
+            }
+        ),
+        encoding="utf-8",
+    )
+    strata = grader.strata_of(draw)
+    assert strata == {(CH, "4519"): "currency"}
+    assert (CH, "9999") not in strata
