@@ -8045,3 +8045,64 @@ re-derivation of this contract's own work, run before hand-over.
 **Dv879 `[cause: process]` — the report is over the ≤30 prose lines `/report` sets.** The artifact
 asked for each guard's refusal AND acceptance plus evidence for five checks; the two ceilings do not
 both fit. Prose cut to the shortest that still shows every reading.
+
+**Dv880 `[cause: contract-gap]` — the contract's 25 candidate domains carry one that names no
+chain.** SPEC v2 §3 category A is 35 names, and `scripts/discover_channels.py :: RETAIL_CHAINS` is
+the tuple r1 searched with. `epicentrk.ua` is in the r2 contract's domain list and matches none of
+them (Епіцентр is not a SPEC §3 name). It is carried as a 36th row labelled `[not in SPEC §3 A]`
+rather than dropped or counted inside the 35, so «35 names» stays a checkable number. Eleven names
+have no domain in the contract: six aggregators (answered from r1, as the contract says) and five
+chains, which `--probe` looked for.
+
+**Dv881 `[cause: contract-gap]` — «one history request each» costs two, and a candidate costs
+four to nine.** Measured, not estimated: the client is wrapped, and `retail_census.check_one` spends
+`ResolveUsername` + `GetFullChannel` + `sample_traffic` + `census_sample` — two GetHistory per
+candidate, and nine requests for `@VARUS_channel`. Re-implementing the columns to spend one would
+have dropped r1's грн-vs-`grn` price branches and its `media_share` saturation finding, and the two
+censuses would stop comparing; r1's code was kept and the divergence reported. 40 of 40 requests
+spent over three passes (4 smoke + 35 + 1).
+
+**Dv882 `[cause: tooling]` — the module's pacing constant is below the contract's floor.**
+`entry_check.PAUSE_SECONDS` is 2.0 s and every sibling script sleeps on it; the contract says ≥3 s.
+Inheriting it would have run the floor at two thirds while every line of code still read like
+compliance. `scripts/retail_resolve_r2.py` carries its own 3.0, asserts it at import, and records
+the MEASURED minimum gap (3.0 s) rather than the intended one
+([[a_threshold_that_lives_in_prose]]).
+
+**Dv883 `[cause: tooling]` — `entry.check_channel` answers a failed resolve with a name search.**
+On an unresolvable handle it calls `suggest()`, a `contacts.SearchRequest`: an extra request against
+the budget AND the exact instrument this contract exists to replace (Dv871). Disabled for the r2
+pass through a contextmanager, with the count of rows where it would have fired written into the
+record — 0 — because `"suggestions": []` must not be readable as «asked, and found nothing».
+
+**Dv884 `[cause: verify-gap]` — the budget guard reserves a floor, not a ceiling.**
+`COST_PER_CANDIDATE = 4` is what the smoke measured; `@VARUS_channel` then cost 9. With more
+handles pending, a candidate admitted at 36 spent could have carried the run past 40. It did not
+here (40/40), and the guard is a floor-based reserve until a ceiling is measured.
+
+**Dv885 `[cause: env]` — two rows have no reading at all, and that is not «no channel».**
+`zakaz.ua` answers curl with a Cloudflare 403 and Chrome refuses the domain (per-site permission,
+not granted in this session); `thrash.ua` serves one client-rendered shell to every path and its own
+JS bundle carries no `t.me` either. Both sit with the channel-less rows in the table and say
+`site never read` instead of `no link`: collapsing the two would state a fact about a chain that is
+really a fact about the fetch ([[empty_field_hides_several_states]]).
+
+**Dv886 `[cause: process]` — `docs/PROCESS.md:35` still names the guard this contract deleted.**
+Step 0 replaced `scripts/hooks/refuse-sweeping-commands.sh` with `refuse_sweeping_commands.py`;
+PROCESS.md is a team-lead file, so the stale line is reported, not edited. `.claude/rules/
+harness-plumbing.md` — an executor file — was updated in the same commit.
+
+**Dv887 `[cause: contract-gap]` — a ≤40-row table and a ≤30-line report do not both fit.**
+The contract asks for a table of ≤40 rows inside a report `/report` caps at 30 lines. Resolved the
+way `docs/PROCESS.md` «Reports» directs rather than by breaking either: the full 36 rows are
+`results/retail_chains_table.md`, the report carries the 8 rows that answer the question and lands
+at 29 lines. Dv879 hit the same collision one contract earlier and had to overrun.
+
+**Dv888 `[cause: verify-gap]` — three readings were written down before they were true, and the
+run caught all three.** (1) `t.me/+380675178085` on `tavriav.ua` was classified an invite: it is a
+support phone, has no username to resolve, and was inside the resolve budget. (2) `gurman.ua`
+answers HTTP 200 with «Это доменное имя продается» — the probe had recorded a domain squatter's
+parking page as «Гурман's site carries no Telegram link», so `--probe` now requires the page to name
+the chain. (3) `ChatInvitePeek` carries `.chat`, not `.title`, so Таврія В's own channel came back
+with a null title until the third invite branch existed. Each is tested both ways in
+`tests/test_retail_sites.py` and `tests/test_retail_chains_report.py`.

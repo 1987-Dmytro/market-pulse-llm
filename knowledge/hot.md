@@ -2,61 +2,65 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-27 16:09:40 (every SessionStart)
+**Auto-refreshed:** 2026-08-30 08:19:23 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
-e11c9a9 docs(retail-census): make check 2/4099, the registry block located, the vault caught up
-9fa2ff4 feat(retail-census): the census — 410 found, 200 measured, FloodWait at 191 with everything kept
-3c7904f feat(retail-census): the report renderer, the dead-channel rule, and an offline re-grade
-acb70dd feat(retail-census): per-theme bars, one sort per instrument, and the deviations
-0318243 feat(retail-census): the two themes, and a census that spends one history request a candidate
+80e32b9 docs(report): harness-v2.1 -- the deny refusal isolated to the glob, one hyphen apart
+a7fe8bb docs(report): harness-v2.1 final -- the verifier read twice, and the deviations join the ledger
+25b9931 fix(harness-v2.1): five prompts back out of the archive, and hot.md stops claiming a fix that did not happen
+a607909 docs(report): harness-v2.1 -- every guard seen refusing and accepting, 12.6K -> 9.3K boot tax
+abe56bb chore(harness-v2.1): 28 spent contracts move to docs/archive/prompts/, 87 stay and say why
 ```
 
 ## 📋 Recent decisions
 
-- `lora-c-the-line-trains-at-90-seconds-a-step.md` — The line trains at 89.961 s/step — and the gate that would have hidden it
 - `INDEX.md` — Decision records
-- `lora-c-the-volume-moves-to-ca-mtl-3.md` — The training line's volume moves to CA-MTL-3 — and the cheaper cards arrived 107 minutes late
+- `harness-guard-v2-behaviour-not-spelling.md` — The PreToolUse guard judges behaviour, not spelling
+- `lora-c-the-line-trains-at-90-seconds-a-step.md` — The line trains at 89.961 s/step — and the gate that would have hidden it
 
 ## 📅 Recent daily logs
 
+- `2026-08-30.md`
 - `2026-08-27.md`
 - `2026-08-26.md`
-- `2026-08-25.md`
 
 <!-- AUTO-GEN END (everything below preserved across refreshes) -->
 # Hot Cache — curated
 
-**Last update:** 2026-08-27 — этап 1 = `docs/SPEC-v2-promo-pulse.md`. Карта и деньги —
+**Last update:** 2026-08-30 (r2 исполнен) — этап 1 = `docs/SPEC-v2-promo-pulse.md`. Карта и деньги —
 `docs/STATUS.md`; цикл фазы — `docs/PROCESS.md` v2.1: `/plan-phase` → «go» → `/report`. Блок
 курируется руками, **≤40 строк**: у археологии есть дом — отчёты, ADR, логи дня.
 
 ## 🔥 What's Hot
-**⛔ АККАУНТ TELEGRAM ЗАПЕРТ ДО 2026-08-28 10:21 UTC.** FloodWait 85 352 с записан в
-`results/joins_5c1.jsonl` строкой `(census)`; лимит на `ResolveUsernameRequest` — начале КАЖДОГО
-входа и выборки комментов, — и повтор внутри окна его удлиняет. `retail_census.py` и
-`collect_5c1.py` отказываются стартовать сами ([[rate_limit_on_the_shared_first_step]]).
+**✅ `retail-census-r2` ИСПОЛНЕН, ждёт приёмки ($0).** `docs/reports/retail-census-r2.md` · запись
+`results/retail_chains.json` · таблица 36 строк `results/retail_chains_table.md` · категория B
+(47 чатов, НЕ переизмерялись) `results/poltava_chats_b.md`. Отклонения **Dv880–Dv888**. Ответ: канал
+у **13 из 36**, комменты открыты у **7**; молочка + открытые комменты + живой трафик — **только
+Varus** `@VARUS_channel` (16.643 ком./день, цена .246, молочка .194). **Шесть сетей вешают БОТА и
+никакого канала** (АТБ, Novus, Auchan, Велмарт, Рукавичка, Копійка).
 
-**🧾 C1 ИСПОЛНЕН, ТАБЛИЦА НЕПОЛНАЯ — 200 из 315.** `docs/reports/retail-census.md` (410 найдено · 200 измерено · `enter` 114) и `docs/reports/registry-revision-proposal.md` (A 10 · B 17 · PAUSED 39)
-**ждут слова оператора**; `config/registry.yaml` не тронут, находки — в самих отчётах.
+**⚠️ ОДНОГО ИНСТРУМЕНТА НЕ ХВАТИЛО, И ЭТО ИЗМЕРЕНО:** curl нашёл **1 из 6** хэндлов, уже известных
+r1. Отсюда три инструмента и колонка `method` — `curl` · `curl+bundle` (футер клиентского рендера
+лежит в его же JS: так нашёлся `@foraINFO`) · `browser` (мимо Cloudflare 403). «Страницу не
+прочитали» ≠ «ссылки нет». Урок → [[a_new_instrument_needs_the_old_ones_answers]].
 
 ## ⏭️ Next
-1. **СЛОВО ОПЕРАТОРА ПО ДВУМ ОТЧЁТАМ C1** — ревизия registry делается отдельным шагом.
-2. **Досчёт ценза ($0, ПОСЛЕ стены)** — `retail_census.py --min-subscribers 50 --min-subscribers-chats 0`, накопительно; раньше времени НЕ запускать.
-3. **C2 `positions-scale` (≤$1)** — ждёт (1); полнота таблицы для решения не гейт.
-4. **`phase7-a1` ($0)** — `docs/PROMPT-phase7-a1.md`, неисполнен (том удалён шагом 0 C1).
-5. **`money-anchors` ($0)**; и дыра гарда (`harness-v2.1` Dv875): голый `ruff format`, `git add -u`, `git stage -A` хук НЕ ловит.
+1. **Приёмка r2 тимлидом** — и выбор оператором сетей под C2 из таблицы.
+2. **C2 `positions-scale` (≤$1)** · **`phase7-a1` ($0)** · **`money-anchors` ($0)**.
 
 ## 🚧 Blockers
-**⛔ `make check` — ДВА красных, оба не исполнительские:** `2 failed, 4101 passed, 2 skipped`
-(27.08, `abe56bb`). (1) `test_repair_phase4_ledger` — старый долг r3. (2) `test_think_zero_shot::…rebuilds…` — цитаты (ф) тимлид ВЕРНУЛ и они проходят, но тот же `370f016` вымыл из STATUS свидетеля `MOVED_BY_D2_STEP_0` `D1 (инструмент, $0)`. Ярус тимлида, разбор — `docs/reports/harness-v2.1.md` Dv872.
+**⛔ 2 строки не прочитаны вообще:** `zakaz.ua` (Cloudflare 403 + домен не разрешён Chrome) и
+`thrash.ua` (JS-оболочка, бандл пуст). Это НЕ «канала нет». Разрешение домена — ручной шаг оператора.
 
-**⛔ `MEMORY.md` УПЁРСЯ В ОБА ПОТОЛКА ЗАГРУЗЧИКА** (200 строк → отрез по 25 000 UTF-16 units):
-индекс длиннее окна, часть указателей не доезжает, файлы уроков целы. Рычаг один — убрать строки,
-это **отдельное решение оператора**. Мерить `context-census.py::loaded_memory`, не `head -c`.
+**⛔ БЮДЖЕТ ШАГА 2 ВЫБРАН: 40/40** запросов MTProto (клиент обёрнут, счёт настоящий). Кандидат стоит
+**4–9**, не один: resolve + GetFullChannel + ДВА GetHistory (Dv881). Новый резолв — уже за контрактом.
+
+**⛔ `MEMORY.md` УПЁРСЯ В ОБА ПОТОЛКА ЗАГРУЗЧИКА** (первые 200 строк → отрез по 25 000 UTF-16
+units): 208 строк, доезжает **186**. Новый указатель вставлен В ГОЛОВУ Feedback, иначе не грузился
+бы. Рычаг — убрать строки, **решение оператора**; мерить `context-census.py::loaded_memory`.
 
 ## 🔫 Footguns этого файла
 **⛔ ЭТОТ ФАЙЛ ГРЕПАЕТСЯ КАК ВХОД — ДВА ЛИТЕРАЛА.** `scripts/volume_calc_5c1.py :: quoted()` берёт
