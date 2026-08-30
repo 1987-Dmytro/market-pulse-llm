@@ -249,6 +249,9 @@ async def run(limit: int | None, resume: bool) -> int:
         "history_requests_per_candidate": 2,
         "budget_unit": "measured MTProto requests (client.__call__ wrapped), not candidates",
         "pause_seconds_intended": PAUSE_SECONDS,
+        # Per pass, not one field: a later single-handle pass has no gap to measure and would
+        # overwrite the number the multi-handle pass proved. The rows' own `checked_at` stamps are
+        # the independent record — `tests/test_retail_resolve_pacing.py` derives the floor from them.
         "pause_seconds_measured_min": min(gaps) if gaps else None,
         "pause_source": "this script — entry_check.PAUSE_SECONDS is 2.0 and would break the floor",
         "suggest_disabled": True,
@@ -262,6 +265,8 @@ async def run(limit: int | None, resume: bool) -> int:
             "handles_measured": done,
             "requests": calls["n"],
             "by_type": calls["kinds"],
+            "pause_measured_min": min(gaps) if gaps else None,
+            "gaps": gaps,
         }
     )
     state["step_2"]["passes"] = passes
