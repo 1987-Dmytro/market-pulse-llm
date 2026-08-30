@@ -1,0 +1,2079 @@
+{
+  "rows": [
+    {
+      "name": "АТБ",
+      "site": "atbmarket.com",
+      "site_status": "ok",
+      "method": "browser",
+      "handles": [
+        "@atb_market_bot"
+      ],
+      "pages": [
+        {
+          "url": "https://atbmarket.com/",
+          "http": 403,
+          "bytes": 5702,
+          "links": []
+        },
+        {
+          "url": "https://atbmarket.com/contacts",
+          "http": 403,
+          "bytes": 5747,
+          "links": []
+        },
+        {
+          "url": "https://atbmarket.com/about",
+          "http": 403,
+          "bytes": 5738,
+          "links": []
+        },
+        {
+          "url": "https://www.atbmarket.com/",
+          "http": 200,
+          "rendered": true,
+          "links": [
+            "@atb_market_bot"
+          ],
+          "note": "curl 403 (Cloudflare); rendered in the operator's Chrome, 489263 chars"
+        }
+      ],
+      "in_spec_a": true,
+      "is_aggregator": false,
+      "kinds": {
+        "@atb_market_bot": "bot"
+      },
+      "resolvable": [],
+      "bundle": {
+        "status": "blocked",
+        "n_scripts": 0,
+        "assets": []
+      }
+    },
+    {
+      "name": "Сільпо",
+      "site": "silpo.ua",
+      "site_status": "ok",
+      "method": "browser",
+      "handles": [
+        "@silposilpo",
+        "@silpo_guestsupport_bot"
+      ],
+      "pages": [
+        {
+          "url": "https://silpo.ua/",
+          "http": 403,
+          "bytes": 5697,
+          "links": []
+        },
+        {
+          "url": "https://silpo.ua/contacts",
+          "http": 403,
+          "bytes": 5721,
+          "links": []
+        },
+        {
+          "url": "https://silpo.ua/about",
+          "http": 403,
+          "bytes": 5712,
+          "links": []
+        },
+        {
+          "url": "https://silpo.ua/",
+          "http": 200,
+          "rendered": true,
+          "links": [
+            "@silposilpo",
+            "@silpo_guestsupport_bot"
+          ],
+          "note": "curl 403 (Cloudflare); rendered in the operator's Chrome"
+        }
+      ],
+      "in_spec_a": true,
+      "is_aggregator": false,
+      "kinds": {
+        "@silposilpo": "channel",
+        "@silpo_guestsupport_bot": "bot"
+      },
+      "resolvable": [
+        "@silposilpo"
+      ],
+      "bundle": {
+        "status": "blocked",
+        "n_scripts": 0,
+        "assets": []
+      }
+    },
+    {
+      "name": "Novus",
+      "site": "novus.ua",
+      "site_status": "ok",
+      "method": "browser",
+      "handles": [
+        "@novus_ai_assistant_bot"
+      ],
+      "pages": [
+        {
+          "url": "https://novus.ua/",
+          "http": 200,
+          "bytes": 725581,
+          "links": [
+            "@novus_ai_assistant_bot"
+          ]
+        },
+        {
+          "url": "https://novus.ua/contacts",
+          "http": 404,
+          "bytes": 57174,
+          "links": []
+        },
+        {
+          "url": "https://novus.ua/about",
+          "http": 404,
+          "bytes": 57168,
+          "links": []
+        },
+        {
+          "url": "https://novus.ua/",
+          "http": 200,
+          "rendered": true,
+          "links": [
+            "@novus_ai_assistant_bot"
+          ],
+          "note": "rendered reading agrees with curl: the site links a bot, not @NovusNews"
+        }
+      ],
+      "in_spec_a": true,
+      "is_aggregator": false,
+      "kinds": {
+        "@novus_ai_assistant_bot": "bot"
+      },
+      "resolvable": []
+    },
+    {
+      "name": "METRO",
+      "site": "metro.ua",
+      "site_status": "ok",
+      "method": "browser",
+      "handles": [
+        "@HRCNc"
+      ],
+      "pages": [
+        {
+          "url": "https://metro.ua/",
+          "http": 403,
+          "bytes": 3808,
+          "links": []
+        },
+        {
+          "url": "https://metro.ua/contacts",
+          "http": 403,
+          "bytes": 3808,
+          "links": []
+        },
+        {
+          "url": "https://metro.ua/about",
+          "http": 403,
+          "bytes": 3808,
+          "links": []
+        },
+        {
+          "url": "https://www.metro.ua/",
+          "http": 200,
+          "rendered": true,
+          "links": [
+            "@HRCNc"
+          ],
+          "note": "curl 403 (Cloudflare); rendered — the footer href is literally https://t.me/HRCNc"
+        }
+      ],
+      "in_spec_a": true,
+      "is_aggregator": false,
+      "kinds": {
+        "@HRCNc": "channel"
+      },
+      "resolvable": [
+        "@HRCNc"
+      ],
+      "bundle": {
+        "status": "blocked",
+        "n_scripts": 0,
+        "assets": []
+      }
+    },
+    {
+      "name": "Auchan",
+      "site": "auchan.ua",
+      "site_status": "ok",
+      "method": "curl",
+      "handles": [
+        "@Auchan_Info_bot"
+      ],
+      "pages": [
+        {
+          "url": "https://auchan.ua/",
+          "http": 200,
+          "bytes": 644861,
+          "links": [
+            "@Auchan_Info_bot"
+          ]
+        },
+        {
+          "url": "https://auchan.ua/contacts",
+          "http": 404,
+          "bytes": 484166,
+          "links": []
+        },
+        {
+          "url": "https://auchan.ua/about",
+          "http": 404,
+          "bytes": 484157,
+          "links": []
+        }
+      ],
+      "in_spec_a": true,
+      "is_aggregator": false,
+      "kinds": {
+        "@Auchan_Info_bot": "bot"
+      },
+      "resolvable": []
+    },
+    {
+      "name": "Фора",
+      "site": "fora.ua",
+      "site_status": "ok",
+      "method": "curl+bundle",
+      "handles": [
+        "@foraINFO",
+        "@fora_care_bot"
+      ],
+      "pages": [
+        {
+          "url": "https://fora.ua/",
+          "http": 200,
+          "bytes": 6593,
+          "links": []
+        },
+        {
+          "url": "https://fora.ua/contacts",
+          "http": 200,
+          "bytes": 6593,
+          "links": []
+        },
+        {
+          "url": "https://fora.ua/about",
+          "http": 200,
+          "bytes": 6593,
+          "links": []
+        }
+      ],
+      "in_spec_a": true,
+      "is_aggregator": false,
+      "kinds": {
+        "@foraINFO": "channel",
+        "@fora_care_bot": "bot"
+      },
+      "resolvable": [
+        "@foraINFO"
+      ],
+      "bundle": {
+        "status": "ok",
+        "n_scripts": 7,
+        "assets": [
+          {
+            "url": "https://connect.facebook.net/en_US/sdk.js",
+            "http": 200,
+            "bytes": 12461,
+            "links": []
+          },
+          {
+            "url": "https://fora.ua/manifest.json?version=2.39.123",
+            "http": 200,
+            "bytes": 296,
+            "links": []
+          },
+          {
+            "url": "https://fora.ua/js/react.cf80604b.js",
+            "http": 200,
+            "bytes": 67253,
+            "links": []
+          },
+          {
+            "url": "https://fora.ua/js/7474.7b9aa690.js",
+            "http": 200,
+            "bytes": 725366,
+            "links": []
+          },
+          {
+            "url": "https://fora.ua/js/main.b4126356.js",
+            "http": 200,
+            "bytes": 899001,
+            "links": [
+              "@foraINFO",
+              "@fora_care_bot"
+            ]
+          },
+          {
+            "url": "https://fora.ua/js/scriptFromBodyFora.js",
+            "http": 200,
+            "bytes": 5588,
+            "links": []
+          },
+          {
+            "url": "https://fora.ua/js/text-fora.js?version=2.39.123",
+            "http": 200,
+            "bytes": 145918,
+            "links": []
+          }
+        ]
+      }
+    },
+    {
+      "name": "Varus",
+      "site": "varus.ua",
+      "site_status": "ok",
+      "method": "curl",
+      "handles": [
+        "@VARUS_channel",
+        "@varusua_bot"
+      ],
+      "pages": [
+        {
+          "url": "https://varus.ua/",
+          "http": 200,
+          "bytes": 931778,
+          "links": [
+            "@VARUS_channel",
+            "@varusua_bot"
+          ]
+        },
+        {
+          "url": "https://varus.ua/contacts",
+          "http": 200,
+          "bytes": 925444,
+          "links": [
+            "@VARUS_channel",
+            "@varusua_bot"
+          ]
+        },
+        {
+          "url": "https://varus.ua/about",
+          "http": 404,
+          "bytes": 882570,
+          "links": []
+        }
+      ],
+      "in_spec_a": true,
+      "is_aggregator": false,
+      "kinds": {
+        "@VARUS_channel": "channel",
+        "@varusua_bot": "bot"
+      },
+      "resolvable": [
+        "@VARUS_channel"
+      ]
+    },
+    {
+      "name": "Thrash!",
+      "site": "thrash.ua",
+      "site_status": "shell",
+      "method": "curl",
+      "handles": [],
+      "pages": [
+        {
+          "url": "https://thrash.ua/",
+          "http": 200,
+          "bytes": 20422,
+          "links": []
+        },
+        {
+          "url": "https://thrash.ua/contacts",
+          "http": 200,
+          "bytes": 20422,
+          "links": []
+        },
+        {
+          "url": "https://thrash.ua/about",
+          "http": 200,
+          "bytes": 20422,
+          "links": []
+        }
+      ],
+      "in_spec_a": true,
+      "is_aggregator": false,
+      "kinds": {},
+      "resolvable": [],
+      "bundle": {
+        "status": "no-link-in-bundle",
+        "n_scripts": 6,
+        "assets": [
+          {
+            "url": "https://thrash.ua/manifest.json?version=1.56.2",
+            "http": 200,
+            "bytes": 286,
+            "links": []
+          },
+          {
+            "url": "https://thrash.ua/assets/public_js/template-text.js?version=1.56.2",
+            "http": 200,
+            "bytes": 3586,
+            "links": []
+          },
+          {
+            "url": "https://thrash.ua/assets/js/runtime~app.66a4f23f.js",
+            "http": 200,
+            "bytes": 6545,
+            "links": []
+          },
+          {
+            "url": "https://thrash.ua/assets/js/vendors.7232d2e0.js",
+            "http": 200,
+            "bytes": 877530,
+            "links": []
+          },
+          {
+            "url": "https://thrash.ua/assets/js/app.7ba92fe4.js",
+            "http": 200,
+            "bytes": 243975,
+            "links": []
+          },
+          {
+            "url": "https://thrash.ua/assets/public_js/initial-script.js",
+            "http": 200,
+            "bytes": 2481,
+            "links": []
+          }
+        ]
+      }
+    },
+    {
+      "name": "Fozzy",
+      "site": "fozzyshop.ua",
+      "site_status": "ok",
+      "method": "curl",
+      "handles": [
+        "@fozzyshopua"
+      ],
+      "pages": [
+        {
+          "url": "https://fozzyshop.ua/",
+          "http": 200,
+          "bytes": 762282,
+          "links": [
+            "@fozzyshopua"
+          ]
+        },
+        {
+          "url": "https://fozzyshop.ua/contacts",
+          "http": 404,
+          "bytes": 569399,
+          "links": []
+        },
+        {
+          "url": "https://fozzyshop.ua/about",
+          "http": 404,
+          "bytes": 569387,
+          "links": []
+        }
+      ],
+      "in_spec_a": true,
+      "is_aggregator": false,
+      "kinds": {
+        "@fozzyshopua": "channel"
+      },
+      "resolvable": [
+        "@fozzyshopua"
+      ]
+    },
+    {
+      "name": "ЕКО маркет",
+      "site": "eko.com.ua",
+      "site_status": "ok",
+      "method": "curl",
+      "handles": [
+        "@ekomarket_shop"
+      ],
+      "pages": [
+        {
+          "url": "https://eko.com.ua/",
+          "http": 200,
+          "bytes": 98096,
+          "links": [
+            "@ekomarket_shop"
+          ]
+        },
+        {
+          "url": "https://eko.com.ua/contacts",
+          "http": 200,
+          "bytes": 82170,
+          "links": [
+            "@ekomarket_shop"
+          ]
+        },
+        {
+          "url": "https://eko.com.ua/about",
+          "http": 404,
+          "bytes": 66975,
+          "links": []
+        }
+      ],
+      "in_spec_a": true,
+      "is_aggregator": false,
+      "kinds": {
+        "@ekomarket_shop": "channel"
+      },
+      "resolvable": [
+        "@ekomarket_shop"
+      ]
+    },
+    {
+      "name": "Велмарт",
+      "site": "velmart.ua",
+      "site_status": "ok",
+      "method": "curl",
+      "handles": [
+        "@VelmartUaBot",
+        "@Velmart_FeedBack_bot"
+      ],
+      "pages": [
+        {
+          "url": "https://velmart.ua/",
+          "http": 200,
+          "bytes": 250003,
+          "links": [
+            "@VelmartUaBot",
+            "@Velmart_FeedBack_bot"
+          ]
+        },
+        {
+          "url": "https://velmart.ua/contacts",
+          "http": 200,
+          "bytes": 161645,
+          "links": [
+            "@Velmart_FeedBack_bot",
+            "@VelmartUaBot"
+          ]
+        },
+        {
+          "url": "https://velmart.ua/about",
+          "http": 200,
+          "bytes": 165316,
+          "links": [
+            "@Velmart_FeedBack_bot",
+            "@VelmartUaBot"
+          ]
+        }
+      ],
+      "in_spec_a": true,
+      "is_aggregator": false,
+      "kinds": {
+        "@VelmartUaBot": "bot",
+        "@Velmart_FeedBack_bot": "bot"
+      },
+      "resolvable": []
+    },
+    {
+      "name": "Близенько",
+      "site": "blyzenko.ua",
+      "site_status": "no-link",
+      "method": "curl",
+      "handles": [],
+      "pages": [
+        {
+          "url": "https://blyzenko.ua/",
+          "http": 200,
+          "bytes": 40302,
+          "links": []
+        },
+        {
+          "url": "https://blyzenko.ua/contacts",
+          "http": 200,
+          "bytes": 41660,
+          "links": []
+        },
+        {
+          "url": "https://blyzenko.ua/about",
+          "http": 404,
+          "bytes": 38822,
+          "links": []
+        }
+      ],
+      "in_spec_a": true,
+      "is_aggregator": false,
+      "kinds": {},
+      "resolvable": [],
+      "bundle": {
+        "status": "no-link-in-bundle",
+        "n_scripts": 16,
+        "assets": [
+          {
+            "url": "https://cdn.jsdelivr.net/npm/vue@3",
+            "http": 200,
+            "bytes": 222198,
+            "links": []
+          },
+          {
+            "url": "https://blyzenko.ua/wp-content/themes/blyzenko-vue/vue-app/dist/manifest.json",
+            "http": 200,
+            "bytes": 547,
+            "links": []
+          },
+          {
+            "url": "https://blyzenko.ua/wp-includes/js/jquery/jquery.min.js",
+            "http": 200,
+            "bytes": 87553,
+            "links": []
+          },
+          {
+            "url": "https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.7.6/lottie.min.js",
+            "http": 200,
+            "bytes": 262068,
+            "links": []
+          },
+          {
+            "url": "https://blyzenko.ua/wp-includes/js/jquery/jquery.min.js?ver=3.7.1",
+            "http": 200,
+            "bytes": 87553,
+            "links": []
+          },
+          {
+            "url": "https://blyzenko.ua/wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1",
+            "http": 200,
+            "bytes": 13577,
+            "links": []
+          },
+          {
+            "url": "https://blyzenko.ua/wp-includes/js/dist/hooks.min.js?ver=4d63a3d491d11ffd8ac6",
+            "http": 200,
+            "bytes": 4776,
+            "links": []
+          },
+          {
+            "url": "https://blyzenko.ua/wp-includes/js/dist/i18n.min.js?ver=5e580eb46a90c2b997e6",
+            "http": 200,
+            "bytes": 9141,
+            "links": []
+          },
+          {
+            "url": "https://blyzenko.ua/wp-content/plugins/contact-form-7/includes/swv/js/index.js?ver=6.1.7",
+            "http": 200,
+            "bytes": 12512,
+            "links": []
+          },
+          {
+            "url": "https://blyzenko.ua/wp-content/plugins/contact-form-7/includes/js/index.js?ver=6.1.7",
+            "http": 200,
+            "bytes": 13452,
+            "links": []
+          },
+          {
+            "url": "https://blyzenko.ua/wp-content/plugins/essential-addons-for-elementor-lite/assets/front-end/js/view/general.min.js?ver=6.5.9",
+            "http": 200,
+            "bytes": 11619,
+            "links": []
+          },
+          {
+            "url": "https://blyzenko.ua/wp-content/themes/blyzenko-vue/vue-app/dist/js/vendors.js",
+            "http": 200,
+            "bytes": 792047,
+            "links": []
+          },
+          {
+            "url": "https://blyzenko.ua/wp-content/themes/blyzenko-vue/vue-app/dist/js/app.js",
+            "http": 200,
+            "bytes": 226990,
+            "links": []
+          },
+          {
+            "url": "https://blyzenko.ua/wp-content/themes/blyzenko-vue/vue-app/dist/service-worker.js",
+            "http": 200,
+            "bytes": 1312,
+            "links": []
+          },
+          {
+            "url": "https://webtracking-v01.bpmonline.com/JS/track-cookies.js",
+            "http": 200,
+            "bytes": 4038,
+            "links": []
+          },
+          {
+            "url": "https://webtracking-v01.bpmonline.com/JS/create-object.js",
+            "http": 200,
+            "bytes": 4342,
+            "links": []
+          }
+        ]
+      }
+    },
+    {
+      "name": "Наш Край",
+      "site": "nashkraj.ua",
+      "site_status": "no-link",
+      "method": "curl",
+      "handles": [],
+      "pages": [
+        {
+          "url": "https://nashkraj.ua/",
+          "http": 200,
+          "bytes": 86047,
+          "links": []
+        },
+        {
+          "url": "https://nashkraj.ua/contacts",
+          "http": 404,
+          "bytes": 60267,
+          "links": []
+        },
+        {
+          "url": "https://nashkraj.ua/about",
+          "http": 404,
+          "bytes": 60267,
+          "links": []
+        }
+      ],
+      "in_spec_a": true,
+      "is_aggregator": false,
+      "kinds": {},
+      "resolvable": [],
+      "bundle": {
+        "status": "no-link-in-bundle",
+        "n_scripts": 39,
+        "assets": [
+          {
+            "url": "https://nashkraj.ua/wp-includes/js/jquery/jquery.min.js",
+            "http": 200,
+            "bytes": 87553,
+            "links": []
+          },
+          {
+            "url": "https://nashkraj.ua/wp-includes/js/jquery/jquery-migrate.min.js",
+            "http": 200,
+            "bytes": 13577,
+            "links": []
+          },
+          {
+            "url": "https://nashkraj.ua/bitrix/plugins/photo-gallery/booster/assets/js/circle-progress.js",
+            "http": 200,
+            "bytes": 15370,
+            "links": []
+          },
+          {
+            "url": "https://nashkraj.ua/bitrix/plugins/photo-gallery/booster/assets/js/global.js",
+            "http": 200,
+            "bytes": 9527,
+            "links": []
+          },
+          {
+            "url": "https://nashkraj.ua/bitrix/plugins/photo-gallery/js/jquery.sumoselect.min.js",
+            "http": 200,
+            "bytes": 22221,
+            "links": []
+          },
+          {
+            "url": "https://nashkraj.ua/bitrix/plugins/photo-gallery/js/tocca.min.js",
+            "http": 200,
+            "bytes": 4135,
+            "links": []
+          },
+          {
+            "url": "https://nashkraj.ua/bitrix/plugins/photo-gallery/js/jquery.mCustomScrollbar.concat.min.js",
+            "http": 200,
+            "bytes": 45479,
+            "links": []
+          },
+          {
+            "url": "https://nashkraj.ua/bitrix/plugins/photo-gallery/js/jquery.fullscreen.min.js",
+            "http": 200,
+            "bytes": 6339,
+            "links": []
+          },
+          {
+            "url": "https://nashkraj.ua/bitrix/plugins/photo-gallery/js/scripts.min.js",
+            "http": 200,
+            "bytes": 192638,
+            "links": []
+          },
+          {
+            "url": "https://nashkraj.ua/bitrix/themes/wp-nk/js/jquery-3.1.0.min.js",
+            "http": 200,
+            "bytes": 86351,
+            "links": []
+          },
+          {
+            "url": "https://nashkraj.ua/bitrix/themes/wp-nk/js/bootstrap.js",
+            "http": 200,
+            "bytes": 68890,
+            "links": []
+          },
+          {
+            "url": "https://nashkraj.ua/bitrix/themes/wp-nk/js/jqBootstrapValidation.js",
+            "http": 200,
+            "bytes": 36177,
+            "links": []
+          },
+          {
+            "url": "https://nashkraj.ua/bitrix/themes/wp-nk/js/jquery.sliderPro.min.js",
+            "http": 200,
+            "bytes": 92780,
+            "links": []
+          },
+          {
+            "url": "https://nashkraj.ua/bitrix/themes/wp-nk/js/modernizr.custom.29473.js",
+            "http": 200,
+            "bytes": 6503,
+            "links": []
+          },
+          {
+            "url": "https://nashkraj.ua/bitrix/themes/wp-nk/js/isotope.pkgd.js",
+            "http": 200,
+            "bytes": 91398,
+            "links": []
+          },
+          {
+            "url": "https://nashkraj.ua/bitrix/themes/wp-nk/js/isotope.js",
+            "http": 200,
+            "bytes": 17537,
+            "links": []
+          },
+          {
+            "url": "https://nashkraj.ua/bitrix/themes/wp-nk/js/jquery.filterizr.min.js",
+            "http": 200,
+            "bytes": 22239,
+            "links": []
+          },
+          {
+            "url": "https://nashkraj.ua/bitrix/themes/wp-nk/js/all.js",
+            "http": 200,
+            "bytes": 2869,
+            "links": []
+          },
+          {
+            "url": "https://nashkraj.ua/bitrix/plugins/elementor/assets/lib/font-awesome/js/v4-shims.min.js",
+            "http": 200,
+            "bytes": 15073,
+            "links": []
+          },
+          {
+            "url": "https://nashkraj.ua/sw.js",
+            "http": 200,
+            "bytes": 61,
+            "links": []
+          }
+        ]
+      }
+    },
+    {
+      "name": "Рукавичка",
+      "site": "rukavychka.ua",
+      "site_status": "ok",
+      "method": "curl",
+      "handles": [
+        "@rukavychka_chat_bot"
+      ],
+      "pages": [
+        {
+          "url": "https://rukavychka.ua/",
+          "http": 200,
+          "bytes": 58595,
+          "links": [
+            "@rukavychka_chat_bot"
+          ]
+        },
+        {
+          "url": "https://rukavychka.ua/contacts",
+          "http": 200,
+          "bytes": 32146,
+          "links": [
+            "@rukavychka_chat_bot"
+          ]
+        },
+        {
+          "url": "https://rukavychka.ua/about",
+          "http": 200,
+          "bytes": 39570,
+          "links": [
+            "@rukavychka_chat_bot"
+          ]
+        }
+      ],
+      "in_spec_a": true,
+      "is_aggregator": false,
+      "kinds": {
+        "@rukavychka_chat_bot": "bot"
+      },
+      "resolvable": []
+    },
+    {
+      "name": "Коло",
+      "site": "kolo.ua",
+      "site_status": "no-link",
+      "method": "curl",
+      "handles": [],
+      "pages": [
+        {
+          "url": "https://kolo.ua/",
+          "http": 200,
+          "bytes": 502210,
+          "links": []
+        },
+        {
+          "url": "https://kolo.ua/contacts",
+          "http": 404,
+          "bytes": 356759,
+          "links": []
+        },
+        {
+          "url": "https://kolo.ua/about",
+          "http": 404,
+          "bytes": 356741,
+          "links": []
+        }
+      ],
+      "in_spec_a": true,
+      "is_aggregator": false,
+      "kinds": {},
+      "resolvable": [],
+      "bundle": {
+        "status": "no-link-in-bundle",
+        "n_scripts": 34,
+        "assets": [
+          {
+            "url": "https://kolo.ua/_next/static/chunks/webpack-79eeaea1b2b77f12.js",
+            "http": 200,
+            "bytes": 7986,
+            "links": []
+          },
+          {
+            "url": "https://kolo.ua/_next/static/chunks/4bd1b696-ddfce1a3489ce91c.js",
+            "http": 200,
+            "bytes": 168419,
+            "links": []
+          },
+          {
+            "url": "https://kolo.ua/_next/static/chunks/1684-a87c1fde1c8caf10.js",
+            "http": 200,
+            "bytes": 466049,
+            "links": []
+          },
+          {
+            "url": "https://kolo.ua/_next/static/chunks/main-app-926cfa58c618854e.js",
+            "http": 200,
+            "bytes": 534,
+            "links": []
+          },
+          {
+            "url": "https://kolo.ua/_next/static/chunks/4199-0434b19a2591d55b.js",
+            "http": 200,
+            "bytes": 15909,
+            "links": []
+          },
+          {
+            "url": "https://kolo.ua/_next/static/chunks/8682-974cfff531714a98.js",
+            "http": 200,
+            "bytes": 10136,
+            "links": []
+          },
+          {
+            "url": "https://kolo.ua/_next/static/chunks/app/global-error-595861d8a1a228f4.js",
+            "http": 200,
+            "bytes": 981,
+            "links": []
+          },
+          {
+            "url": "https://kolo.ua/_next/static/chunks/6935-3b74e299243cb2f2.js",
+            "http": 200,
+            "bytes": 42838,
+            "links": []
+          },
+          {
+            "url": "https://kolo.ua/_next/static/chunks/351-0888ba80d5fa3c7e.js",
+            "http": 200,
+            "bytes": 150695,
+            "links": []
+          },
+          {
+            "url": "https://kolo.ua/_next/static/chunks/5515-25b886815d3a7b47.js",
+            "http": 200,
+            "bytes": 391262,
+            "links": []
+          },
+          {
+            "url": "https://kolo.ua/_next/static/chunks/3009-c91aeb7b0af8df61.js",
+            "http": 200,
+            "bytes": 317530,
+            "links": []
+          },
+          {
+            "url": "https://kolo.ua/_next/static/chunks/1039-4702c2492cf280c3.js",
+            "http": 200,
+            "bytes": 17026,
+            "links": []
+          },
+          {
+            "url": "https://kolo.ua/_next/static/chunks/8836-00eb613881ff10f5.js",
+            "http": 200,
+            "bytes": 35388,
+            "links": []
+          },
+          {
+            "url": "https://kolo.ua/_next/static/chunks/6603-1e7ee89164cefada.js",
+            "http": 200,
+            "bytes": 9935,
+            "links": []
+          },
+          {
+            "url": "https://kolo.ua/_next/static/chunks/977-aa6fb12b95556d7d.js",
+            "http": 200,
+            "bytes": 103134,
+            "links": []
+          },
+          {
+            "url": "https://kolo.ua/_next/static/chunks/361-8991e2a18a9a2dd9.js",
+            "http": 200,
+            "bytes": 41706,
+            "links": []
+          },
+          {
+            "url": "https://kolo.ua/_next/static/chunks/app/%5B%5B...slug%5D%5D/template-b5ec30c69476341d.js",
+            "http": 200,
+            "bytes": 21957,
+            "links": []
+          },
+          {
+            "url": "https://kolo.ua/_next/static/chunks/3161-caa8c4f4b5718bbf.js",
+            "http": 200,
+            "bytes": 55261,
+            "links": []
+          },
+          {
+            "url": "https://kolo.ua/_next/static/chunks/4143-6d546a94ae1e72a2.js",
+            "http": 200,
+            "bytes": 67196,
+            "links": []
+          },
+          {
+            "url": "https://kolo.ua/_next/static/chunks/5096-2931abdc764c22db.js",
+            "http": 200,
+            "bytes": 69467,
+            "links": []
+          }
+        ]
+      }
+    },
+    {
+      "name": "Delikat",
+      "site": "delikat.ua",
+      "site_status": "dns",
+      "method": "curl",
+      "handles": [],
+      "pages": [
+        {
+          "url": "https://delikat.ua/",
+          "http": 0,
+          "bytes": 0,
+          "links": []
+        },
+        {
+          "url": "https://delikat.ua/contacts",
+          "http": 0,
+          "bytes": 0,
+          "links": []
+        },
+        {
+          "url": "https://delikat.ua/about",
+          "http": 0,
+          "bytes": 0,
+          "links": []
+        }
+      ],
+      "in_spec_a": true,
+      "is_aggregator": false,
+      "kinds": {},
+      "resolvable": []
+    },
+    {
+      "name": "Сім23",
+      "site": "sim23.ua",
+      "site_status": "ok",
+      "method": "curl",
+      "handles": [
+        "@sim23_simi",
+        "@sim23_chatbot"
+      ],
+      "pages": [
+        {
+          "url": "https://sim23.ua/",
+          "http": 200,
+          "bytes": 178423,
+          "links": [
+            "@sim23_simi"
+          ]
+        },
+        {
+          "url": "https://sim23.ua/contacts",
+          "http": 200,
+          "bytes": 68688,
+          "links": [
+            "@sim23_simi",
+            "@sim23_chatbot"
+          ]
+        },
+        {
+          "url": "https://sim23.ua/about",
+          "http": 200,
+          "bytes": 78580,
+          "links": [
+            "@sim23_simi"
+          ]
+        }
+      ],
+      "in_spec_a": true,
+      "is_aggregator": false,
+      "kinds": {
+        "@sim23_simi": "channel",
+        "@sim23_chatbot": "bot"
+      },
+      "resolvable": [
+        "@sim23_simi"
+      ]
+    },
+    {
+      "name": "Копійка",
+      "site": "kopiyka.ua",
+      "site_status": "ok",
+      "method": "curl",
+      "handles": [
+        "@kopiyka_ua_bot"
+      ],
+      "pages": [
+        {
+          "url": "https://kopiyka.ua/",
+          "http": 200,
+          "bytes": 488882,
+          "links": [
+            "@kopiyka_ua_bot"
+          ]
+        },
+        {
+          "url": "https://kopiyka.ua/contacts",
+          "http": 200,
+          "bytes": 32346,
+          "links": []
+        },
+        {
+          "url": "https://kopiyka.ua/about",
+          "http": 200,
+          "bytes": 32331,
+          "links": []
+        }
+      ],
+      "in_spec_a": true,
+      "is_aggregator": false,
+      "kinds": {
+        "@kopiyka_ua_bot": "bot"
+      },
+      "resolvable": []
+    },
+    {
+      "name": "Таврія В",
+      "site": "tavriav.ua",
+      "site_status": "ok",
+      "method": "curl",
+      "handles": [
+        "+380675178085",
+        "+Gpo70IWKXOE1NzZi"
+      ],
+      "pages": [
+        {
+          "url": "https://tavriav.ua/",
+          "http": 200,
+          "bytes": 1774351,
+          "links": [
+            "+380675178085",
+            "+Gpo70IWKXOE1NzZi"
+          ]
+        },
+        {
+          "url": "https://tavriav.ua/contacts",
+          "http": 200,
+          "bytes": 634090,
+          "links": [
+            "+380675178085",
+            "+Gpo70IWKXOE1NzZi"
+          ]
+        },
+        {
+          "url": "https://tavriav.ua/about",
+          "http": 200,
+          "bytes": 634075,
+          "links": [
+            "+380675178085",
+            "+Gpo70IWKXOE1NzZi"
+          ]
+        }
+      ],
+      "in_spec_a": true,
+      "is_aggregator": false,
+      "kinds": {
+        "+380675178085": "contact",
+        "+Gpo70IWKXOE1NzZi": "invite"
+      },
+      "resolvable": [
+        "+Gpo70IWKXOE1NzZi"
+      ]
+    },
+    {
+      "name": "Ультрамаркет",
+      "site": "ultramarket.ua",
+      "site_status": "no-link",
+      "method": "curl",
+      "handles": [],
+      "pages": [
+        {
+          "url": "https://ultramarket.ua/",
+          "http": 200,
+          "bytes": 146062,
+          "links": []
+        },
+        {
+          "url": "https://ultramarket.ua/contacts",
+          "http": 404,
+          "bytes": 115686,
+          "links": []
+        },
+        {
+          "url": "https://ultramarket.ua/about",
+          "http": 404,
+          "bytes": 115687,
+          "links": []
+        }
+      ],
+      "in_spec_a": true,
+      "is_aggregator": false,
+      "kinds": {},
+      "resolvable": [],
+      "bundle": {
+        "status": "no-link-in-bundle",
+        "n_scripts": 14,
+        "assets": [
+          {
+            "url": "https://ultramarket.ua/wp-includes/js/jquery/jquery.min.js?ver=3.6.4",
+            "http": 200,
+            "bytes": 89815,
+            "links": []
+          },
+          {
+            "url": "https://ultramarket.ua/wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.0",
+            "http": 200,
+            "bytes": 13424,
+            "links": []
+          },
+          {
+            "url": "https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js",
+            "http": 200,
+            "bytes": 95786,
+            "links": []
+          },
+          {
+            "url": "https://code.jquery.com/jquery-3.1.1.min.js",
+            "http": 200,
+            "bytes": 86709,
+            "links": []
+          },
+          {
+            "url": "https://ultramarket.ua/wp-content/js/swiper.min.js",
+            "http": 200,
+            "bytes": 139048,
+            "links": []
+          },
+          {
+            "url": "https://ultramarket.ua/wp-content/themes/pro/cornerstone/assets/js/site/cs-classic.9c28946.js",
+            "http": 200,
+            "bytes": 147657,
+            "links": []
+          },
+          {
+            "url": "https://ultramarket.ua/wp-content/plugins/contact-form-7/includes/swv/js/index.js?ver=5.7.6",
+            "http": 200,
+            "bytes": 10241,
+            "links": []
+          },
+          {
+            "url": "https://ultramarket.ua/wp-content/plugins/contact-form-7/includes/js/index.js?ver=5.7.6",
+            "http": 200,
+            "bytes": 12943,
+            "links": []
+          },
+          {
+            "url": "https://ultramarket.ua/wp-content/plugins/drag-and-drop-multiple-file-upload-contact-form-7/assets/js/codedropz-uploader-min.js?ver=1.3.6.9",
+            "http": 200,
+            "bytes": 6691,
+            "links": []
+          },
+          {
+            "url": "https://ultramarket.ua/wp-content/plugins/drag-and-drop-multiple-file-upload-contact-form-7/assets/js/dnd-upload-cf7.js?ver=1.3.6.9",
+            "http": 200,
+            "bytes": 2417,
+            "links": []
+          },
+          {
+            "url": "https://ultramarket.ua/wp-content/themes/pro/framework/dist/js/site/x.js?ver=6.2.2",
+            "http": 200,
+            "bytes": 13593,
+            "links": []
+          },
+          {
+            "url": "https://ultramarket.ua/wp-includes/js/comment-reply.min.js?ver=6.2.11",
+            "http": 200,
+            "bytes": 2981,
+            "links": []
+          },
+          {
+            "url": "https://ultramarket.ua/wp-content/plugins/cf7-conditional-fields/js/scripts.js?ver=2.3.8",
+            "http": 200,
+            "bytes": 139580,
+            "links": []
+          },
+          {
+            "url": "https://static.cloudflareinsights.com/beacon.min.js/v3d52b47920f24c319d37e2661827c42b1787588026925",
+            "http": 200,
+            "bytes": 28467,
+            "links": []
+          }
+        ]
+      }
+    },
+    {
+      "name": "MegaMarket",
+      "site": "megamarket.ua",
+      "site_status": "no-link",
+      "method": "curl",
+      "handles": [],
+      "pages": [
+        {
+          "url": "https://megamarket.ua/",
+          "http": 200,
+          "bytes": 206675,
+          "links": []
+        },
+        {
+          "url": "https://megamarket.ua/contacts",
+          "http": 404,
+          "bytes": 181793,
+          "links": []
+        },
+        {
+          "url": "https://megamarket.ua/about",
+          "http": 404,
+          "bytes": 181794,
+          "links": []
+        }
+      ],
+      "in_spec_a": true,
+      "is_aggregator": false,
+      "kinds": {},
+      "resolvable": [],
+      "bundle": {
+        "status": "no-link-in-bundle",
+        "n_scripts": 0,
+        "assets": []
+      }
+    },
+    {
+      "name": "Zakaz.ua",
+      "site": "zakaz.ua",
+      "site_status": "blocked",
+      "method": "curl",
+      "handles": [],
+      "pages": [
+        {
+          "url": "https://zakaz.ua/",
+          "http": 403,
+          "bytes": 5697,
+          "links": []
+        },
+        {
+          "url": "https://zakaz.ua/contacts",
+          "http": 403,
+          "bytes": 5742,
+          "links": []
+        },
+        {
+          "url": "https://zakaz.ua/about",
+          "http": 403,
+          "bytes": 5733,
+          "links": []
+        }
+      ],
+      "in_spec_a": true,
+      "is_aggregator": false,
+      "kinds": {},
+      "resolvable": [],
+      "bundle": {
+        "status": "blocked",
+        "n_scripts": 0,
+        "assets": []
+      }
+    },
+    {
+      "name": "Rozetka продукти",
+      "site": "rozetka.com.ua",
+      "site_status": "ok",
+      "method": "browser",
+      "handles": [
+        "@rrozetka",
+        "@Rozetka_helpBot"
+      ],
+      "kinds": {
+        "@rrozetka": "channel",
+        "@Rozetka_helpBot": "bot"
+      },
+      "resolvable": [
+        "@rrozetka"
+      ],
+      "pages": [
+        {
+          "url": "https://rozetka.com.ua/",
+          "http": 200,
+          "rendered": true,
+          "links": [
+            "@rrozetka",
+            "@Rozetka_helpBot"
+          ],
+          "note": "curl 403 (Cloudflare); rendered in the operator's Chrome. The site is Rozetka as a whole — the SPEC name is its grocery vertical, and the channel is the marketplace's, not a grocery-only one"
+        }
+      ],
+      "in_spec_a": true,
+      "is_aggregator": false,
+      "probed": [
+        {
+          "domain": "rozetka.com.ua",
+          "http": 403,
+          "bytes": 5746,
+          "names_the_chain": false
+        }
+      ]
+    },
+    {
+      "name": "Маркетопт",
+      "site": "marketopt.ua",
+      "site_status": "dns",
+      "method": "curl",
+      "handles": [],
+      "pages": [
+        {
+          "url": "https://marketopt.ua/",
+          "http": 0,
+          "bytes": 0,
+          "links": []
+        },
+        {
+          "url": "https://marketopt.ua/contacts",
+          "http": 0,
+          "bytes": 0,
+          "links": []
+        },
+        {
+          "url": "https://marketopt.ua/about",
+          "http": 0,
+          "bytes": 0,
+          "links": []
+        }
+      ],
+      "in_spec_a": true,
+      "is_aggregator": false,
+      "kinds": {},
+      "resolvable": []
+    },
+    {
+      "name": "Толока",
+      "site": null,
+      "site_status": "no-site-verified",
+      "method": null,
+      "handles": [],
+      "kinds": {},
+      "resolvable": [],
+      "pages": [],
+      "in_spec_a": true,
+      "is_aggregator": false,
+      "probed": [
+        {
+          "domain": "toloka.ua",
+          "http": 0,
+          "bytes": 0,
+          "names_the_chain": false
+        },
+        {
+          "domain": "toloka.com.ua",
+          "http": 0,
+          "bytes": 0,
+          "names_the_chain": false
+        }
+      ]
+    },
+    {
+      "name": "Гурман",
+      "site": null,
+      "site_status": "no-site-verified",
+      "method": null,
+      "handles": [],
+      "kinds": {},
+      "resolvable": [],
+      "pages": [],
+      "in_spec_a": true,
+      "is_aggregator": false,
+      "probed": [
+        {
+          "domain": "gurman.ua",
+          "http": 200,
+          "bytes": 990,
+          "names_the_chain": false
+        },
+        {
+          "domain": "gurman.poltava.ua",
+          "http": 0,
+          "bytes": 0,
+          "names_the_chain": false
+        }
+      ]
+    },
+    {
+      "name": "Файно маркет",
+      "site": "fayno.market",
+      "site_status": "no-link",
+      "method": "curl",
+      "handles": [],
+      "kinds": {},
+      "resolvable": [],
+      "pages": [
+        {
+          "url": "https://fayno.market/",
+          "http": 200,
+          "bytes": 458380,
+          "links": []
+        },
+        {
+          "url": "https://fayno.market/contacts",
+          "http": 200,
+          "bytes": 430135,
+          "links": []
+        },
+        {
+          "url": "https://fayno.market/about",
+          "http": 404,
+          "bytes": 3291,
+          "links": []
+        }
+      ],
+      "in_spec_a": true,
+      "is_aggregator": false,
+      "probed": [
+        {
+          "domain": "fayno-market.ua",
+          "http": 0,
+          "bytes": 0,
+          "names_the_chain": false
+        },
+        {
+          "domain": "faynomarket.ua",
+          "http": 0,
+          "bytes": 0,
+          "names_the_chain": false
+        },
+        {
+          "domain": "fayno.market",
+          "http": 200,
+          "bytes": 458380,
+          "names_the_chain": true
+        }
+      ],
+      "bundle": {
+        "status": "no-link-in-bundle",
+        "n_scripts": 12,
+        "assets": [
+          {
+            "url": "https://fayno.market/build/assets/app-RC4HsIPz.js",
+            "http": 200,
+            "bytes": 339407,
+            "links": []
+          },
+          {
+            "url": "https://fayno.market/build/assets/navigation-BVhxRme1.js",
+            "http": 200,
+            "bytes": 73433,
+            "links": []
+          },
+          {
+            "url": "https://fayno.market/build/assets/pagination-TLLDYC2r.js",
+            "http": 200,
+            "bytes": 8861,
+            "links": []
+          },
+          {
+            "url": "https://fayno.market/build/assets/gsap-B5mLO9nh.js",
+            "http": 200,
+            "bytes": 118693,
+            "links": []
+          },
+          {
+            "url": "https://fayno.market/build/assets/index-a2QFU1rE.js",
+            "http": 200,
+            "bytes": 2670,
+            "links": []
+          },
+          {
+            "url": "https://fayno.market/build/assets/dotlottie-CeU2g23w.js",
+            "http": 200,
+            "bytes": 323998,
+            "links": []
+          },
+          {
+            "url": "https://fayno.market/build/assets/discount-products-slider-DJ2iL7LA.js",
+            "http": 200,
+            "bytes": 305,
+            "links": []
+          },
+          {
+            "url": "https://fayno.market/build/assets/banners-BKjjOqgc.js",
+            "http": 200,
+            "bytes": 4366,
+            "links": []
+          },
+          {
+            "url": "https://fayno.market/build/assets/news-slider-DGc2fS3C.js",
+            "http": 200,
+            "bytes": 254,
+            "links": []
+          },
+          {
+            "url": "https://fayno.market/build/assets/charity-events-slider-DlbA8qvM.js",
+            "http": 200,
+            "bytes": 1340,
+            "links": []
+          },
+          {
+            "url": "https://fayno.market/build/assets/choose-favorite-store-map-CNdt9nqZ.js",
+            "http": 200,
+            "bytes": 1879,
+            "links": []
+          },
+          {
+            "url": "https://fayno.market/build/assets/custom-renderer-BtwA-XAN.js",
+            "http": 200,
+            "bytes": 27353,
+            "links": []
+          }
+        ]
+      }
+    },
+    {
+      "name": "Грош",
+      "site": "grosh.ua",
+      "site_status": "no-link",
+      "method": "curl",
+      "handles": [],
+      "pages": [
+        {
+          "url": "https://grosh.ua/",
+          "http": 200,
+          "bytes": 922190,
+          "links": []
+        },
+        {
+          "url": "https://grosh.ua/contacts",
+          "http": 404,
+          "bytes": 165884,
+          "links": []
+        },
+        {
+          "url": "https://grosh.ua/about",
+          "http": 200,
+          "bytes": 374995,
+          "links": []
+        }
+      ],
+      "in_spec_a": true,
+      "is_aggregator": false,
+      "kinds": {},
+      "resolvable": [],
+      "bundle": {
+        "status": "no-link-in-bundle",
+        "n_scripts": 27,
+        "assets": [
+          {
+            "url": "https://grosh.ua/wp-includes/js/jquery/jquery.min.js?ver=3.7.1",
+            "http": 200,
+            "bytes": 87553,
+            "links": []
+          },
+          {
+            "url": "https://grosh.ua/wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1",
+            "http": 200,
+            "bytes": 13577,
+            "links": []
+          },
+          {
+            "url": "https://grosh.ua/wp-content/themes/astra/assets/js/minified/frontend.min.js?ver=4.11.8",
+            "http": 200,
+            "bytes": 25550,
+            "links": []
+          },
+          {
+            "url": "https://grosh.ua/wp-content/plugins/dynamic-content-for-elementor/assets/node/leaflet/leaflet.js?ver=3.3.9",
+            "http": 200,
+            "bytes": 147552,
+            "links": []
+          },
+          {
+            "url": "https://grosh.ua/wp-content/plugins/dynamic-content-for-elementor/assets/node/leaflet.markercluster/leaflet.markercluster.js?ver=3.3.9",
+            "http": 200,
+            "bytes": 34136,
+            "links": []
+          },
+          {
+            "url": "https://grosh.ua/wp-content/plugins/dynamic-content-for-elementor/assets/js/fix-background-loop.min.js?ver=3.3.9",
+            "http": 200,
+            "bytes": 3491,
+            "links": []
+          },
+          {
+            "url": "https://grosh.ua/wp-content/plugins/dynamic-content-for-elementor/assets/js/settings.min.js?ver=3.3.9",
+            "http": 200,
+            "bytes": 3315,
+            "links": []
+          },
+          {
+            "url": "https://grosh.ua/wp-content/plugins/dynamic-content-for-elementor/assets/js/dynamic-osm-map.min.js?ver=3.3.9",
+            "http": 200,
+            "bytes": 7856,
+            "links": []
+          },
+          {
+            "url": "https://grosh.ua/wp-content/plugins/3d-flipbook-dflip-lite/assets/js/dflip.min.js?ver=2.3.75",
+            "http": 200,
+            "bytes": 237337,
+            "links": []
+          },
+          {
+            "url": "https://grosh.ua/wp-content/plugins/elementor-pro/assets/lib/smartmenus/jquery.smartmenus.min.js?ver=1.2.1",
+            "http": 200,
+            "bytes": 24109,
+            "links": []
+          },
+          {
+            "url": "https://grosh.ua/wp-content/plugins/elementor-pro/assets/lib/sticky/jquery.sticky.min.js?ver=3.30.0",
+            "http": 200,
+            "bytes": 3721,
+            "links": []
+          },
+          {
+            "url": "https://grosh.ua/wp-content/plugins/essential-addons-for-elementor-lite/assets/front-end/js/view/general.min.js?ver=6.2.2",
+            "http": 200,
+            "bytes": 11619,
+            "links": []
+          },
+          {
+            "url": "https://grosh.ua/wp-content/uploads/essential-addons-elementor/eael-383.js?ver=1746202680",
+            "http": 200,
+            "bytes": 6540,
+            "links": []
+          },
+          {
+            "url": "https://grosh.ua/wp-content/plugins/elementor/assets/js/webpack.runtime.min.js?ver=3.30.4",
+            "http": 200,
+            "bytes": 5700,
+            "links": []
+          },
+          {
+            "url": "https://grosh.ua/wp-content/plugins/elementor/assets/js/frontend-modules.min.js?ver=3.30.4",
+            "http": 200,
+            "bytes": 48392,
+            "links": []
+          },
+          {
+            "url": "https://grosh.ua/wp-includes/js/jquery/ui/core.min.js?ver=1.14.2",
+            "http": 200,
+            "bytes": 18674,
+            "links": []
+          },
+          {
+            "url": "https://grosh.ua/wp-content/plugins/elementor/assets/js/frontend.min.js?ver=3.30.4",
+            "http": 200,
+            "bytes": 32876,
+            "links": []
+          },
+          {
+            "url": "https://grosh.ua/wp-content/plugins/unlimited-elements-for-elementor-premium/assets_libraries/owl-carousel-new/owl.carousel.min.js?ver=1.5.143",
+            "http": 200,
+            "bytes": 51403,
+            "links": []
+          },
+          {
+            "url": "https://grosh.ua/wp-content/plugins/unlimited-elements-for-elementor-premium/assets_libraries/lity/lity.min.js?ver=1.5.143",
+            "http": 200,
+            "bytes": 6641,
+            "links": []
+          },
+          {
+            "url": "https://grosh.ua/wp-content/uploads/essential-addons-elementor/eael-1231.js?ver=1746202680",
+            "http": 200,
+            "bytes": 6540,
+            "links": []
+          }
+        ]
+      }
+    },
+    {
+      "name": "Барвінок",
+      "site": null,
+      "site_status": "no-site-verified",
+      "method": null,
+      "handles": [],
+      "kinds": {},
+      "resolvable": [],
+      "pages": [],
+      "in_spec_a": true,
+      "is_aggregator": false,
+      "probed": [
+        {
+          "domain": "barvinok.ua",
+          "http": 0,
+          "bytes": 0,
+          "names_the_chain": false
+        },
+        {
+          "domain": "barvinok-market.com.ua",
+          "http": 0,
+          "bytes": 0,
+          "names_the_chain": false
+        }
+      ]
+    },
+    {
+      "name": "MSUa",
+      "site": null,
+      "site_status": "aggregator — answered from r1's Telegram measurement",
+      "method": null,
+      "handles": [],
+      "pages": [],
+      "in_spec_a": true,
+      "is_aggregator": true,
+      "kinds": {},
+      "resolvable": []
+    },
+    {
+      "name": "Копійочка",
+      "site": null,
+      "site_status": "aggregator — answered from r1's Telegram measurement",
+      "method": null,
+      "handles": [],
+      "pages": [],
+      "in_spec_a": true,
+      "is_aggregator": true,
+      "kinds": {},
+      "resolvable": []
+    },
+    {
+      "name": "Знижком",
+      "site": null,
+      "site_status": "aggregator — answered from r1's Telegram measurement",
+      "method": null,
+      "handles": [],
+      "pages": [],
+      "in_spec_a": true,
+      "is_aggregator": true,
+      "kinds": {},
+      "resolvable": []
+    },
+    {
+      "name": "Хочу дешевше",
+      "site": null,
+      "site_status": "aggregator — answered from r1's Telegram measurement",
+      "method": null,
+      "handles": [],
+      "pages": [],
+      "in_spec_a": true,
+      "is_aggregator": true,
+      "kinds": {},
+      "resolvable": []
+    },
+    {
+      "name": "Акції та знижки",
+      "site": null,
+      "site_status": "aggregator — answered from r1's Telegram measurement",
+      "method": null,
+      "handles": [],
+      "pages": [],
+      "in_spec_a": true,
+      "is_aggregator": true,
+      "kinds": {},
+      "resolvable": []
+    },
+    {
+      "name": "Skidka",
+      "site": null,
+      "site_status": "aggregator — answered from r1's Telegram measurement",
+      "method": null,
+      "handles": [],
+      "pages": [],
+      "in_spec_a": true,
+      "is_aggregator": true,
+      "kinds": {},
+      "resolvable": []
+    },
+    {
+      "name": "Епіцентр [not in SPEC §3 A]",
+      "site": "epicentrk.ua",
+      "site_status": "no-link",
+      "method": "curl",
+      "handles": [],
+      "pages": [
+        {
+          "url": "https://epicentrk.ua/",
+          "http": 200,
+          "bytes": 309717,
+          "links": []
+        },
+        {
+          "url": "https://epicentrk.ua/contacts",
+          "http": 200,
+          "bytes": 171773,
+          "links": []
+        },
+        {
+          "url": "https://epicentrk.ua/about",
+          "http": 200,
+          "bytes": 254061,
+          "links": []
+        }
+      ],
+      "in_spec_a": false,
+      "is_aggregator": false,
+      "kinds": {},
+      "resolvable": [],
+      "bundle": {
+        "status": "no-link-in-bundle",
+        "n_scripts": 17,
+        "assets": [
+          {
+            "url": "https://epicentrk.ua/_manifest/manifest.json",
+            "http": 200,
+            "bytes": 1277,
+            "links": []
+          },
+          {
+            "url": "https://epicentrk.ua/_nuxt/112c54e2c34d.js",
+            "http": 200,
+            "bytes": 49284,
+            "links": []
+          },
+          {
+            "url": "https://epicentrk.ua/_nuxt/d7140d8d6009.js",
+            "http": 200,
+            "bytes": 405089,
+            "links": []
+          },
+          {
+            "url": "https://epicentrk.ua/_nuxt/fbde431ab772.js",
+            "http": 200,
+            "bytes": 485850,
+            "links": []
+          },
+          {
+            "url": "https://epicentrk.ua/_nuxt/21dc3a0fa270.js",
+            "http": 200,
+            "bytes": 1599040,
+            "links": []
+          },
+          {
+            "url": "https://epicentrk.ua/_nuxt/797cdc669248.js",
+            "http": 200,
+            "bytes": 2174,
+            "links": []
+          },
+          {
+            "url": "https://epicentrk.ua/_nuxt/a035c59c6246.js",
+            "http": 200,
+            "bytes": 502788,
+            "links": []
+          },
+          {
+            "url": "https://epicentrk.ua/_nuxt/916c68c67aa1.js",
+            "http": 200,
+            "bytes": 36922,
+            "links": []
+          },
+          {
+            "url": "https://epicentrk.ua/_nuxt/0fdf4fb4ddcf.js",
+            "http": 200,
+            "bytes": 582196,
+            "links": []
+          },
+          {
+            "url": "https://epicentrk.ua/_nuxt/c519c6e9804d.js",
+            "http": 200,
+            "bytes": 21292,
+            "links": []
+          },
+          {
+            "url": "https://epicentrk.ua/_nuxt/5cc2281d7b39.js",
+            "http": 200,
+            "bytes": 16210,
+            "links": []
+          },
+          {
+            "url": "https://epicentrk.ua/_nuxt/f482a4cab404.js",
+            "http": 200,
+            "bytes": 5204,
+            "links": []
+          },
+          {
+            "url": "https://epicentrk.ua/_nuxt/91f968b81fa4.js",
+            "http": 200,
+            "bytes": 1875,
+            "links": []
+          },
+          {
+            "url": "https://epicentrk.ua/_nuxt/6cb6f29f1e90.js",
+            "http": 200,
+            "bytes": 1316,
+            "links": []
+          },
+          {
+            "url": "https://epicentrk.ua/_nuxt/bb7f7873d13b.js",
+            "http": 200,
+            "bytes": 6361,
+            "links": []
+          },
+          {
+            "url": "https://epicentrk.ua/_nuxt/50345f952b30.js",
+            "http": 200,
+            "bytes": 2285,
+            "links": []
+          },
+          {
+            "url": "https://static.cloudflareinsights.com/beacon.min.js/v3d52b47920f24c319d37e2661827c42b1787588026925",
+            "http": 200,
+            "bytes": 28467,
+            "links": []
+          }
+        ]
+      }
+    }
+  ],
+  "step_1": {
+    "at": "2026-08-30T06:42:57+00:00",
+    "paths": [
+      "/",
+      "/contacts",
+      "/about"
+    ],
+    "names_source": "scripts/discover_channels.py :: RETAIL_CHAINS (SPEC v2 §3 category A)",
+    "n_names": 35,
+    "extra_domains": {
+      "Епіцентр [not in SPEC §3 A]": "epicentrk.ua"
+    },
+    "bundle_pass_at": "2026-08-30T06:50:26+00:00",
+    "browser_pass_at": "2026-08-30T06:50:20+00:00"
+  },
+  "step_2": {}
+}
