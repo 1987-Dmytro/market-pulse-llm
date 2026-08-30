@@ -1,0 +1,107 @@
+{
+  "contract": "docs/plans/promo-pulse-1.md S3 / K4 — the C2 projection ($0). A STOP, not a pass/fail: the operator decides cycle-3 / narrowing / a pod runner on this table.",
+  "population": {
+    "leaflet_posts": 968,
+    "note": "the text leg is not priced here: `text_marginal_seconds` is a warm-up marginal like the page one, and the vision leg is what the money question is about.",
+    "pages_ceiling": 9653,
+    "pages_floor": 1022,
+    "pages_known_from_a_manifest": 63,
+    "text_price_posts": 405
+  },
+  "rate_usd_per_second": 0.00030669,
+  "reads": {
+    "census": "results/promo_census_c2.json",
+    "census_ids_sha256": "a56dc6dace1bfb44d5d227726f75c9cbdfa80611bb4b24c107ce4f4745532715",
+    "rates": "results/run_5c2_positions.json",
+    "window": {
+      "anchor": "2026-08-31",
+      "anchor_rule": "the corpus's own last day + 1, read after S2's top-up — 5c2-stop-ruling-and-cap-33 (a), plan §5.1 as corrected by the 30.08 review",
+      "days": 28,
+      "rule": "since <= date < anchor, half-open",
+      "since": "2026-08-03"
+    }
+  },
+  "remainder": {
+    "line": "REMAINING         $2.3908",
+    "read_from": "scripts/runpod_guard.py",
+    "spent_line": "CYCLE 2 SPENT     $17.6092 of $20.00",
+    "usd": 2.3908
+  },
+  "table": [
+    {
+      "field": "results/run_5c2_positions.json :: go_no_go.page_marginal_seconds",
+      "fits_at_ceiling": false,
+      "fits_at_floor": true,
+      "measured": true,
+      "name": "warm_up_marginal",
+      "pages_ceiling": 9653,
+      "pages_floor": 1022,
+      "sample": "two warm-up calls, n=1 pair — Dv310 has this shape under-pricing a leg 2.4× across two boots, because the warm-up page was empty. A FLOOR, never an estimate.",
+      "seconds": 1.729,
+      "usd_ceiling": 5.1187,
+      "usd_floor": 0.5419
+    },
+    {
+      "field": "derived here",
+      "fits_at_ceiling": false,
+      "fits_at_floor": true,
+      "measured": false,
+      "name": "fitted_middle",
+      "pages_ceiling": 9653,
+      "pages_floor": 1022,
+      "sample": "INTERPOLATION, not a measurement: the geometric mean of the two corners, which are 6.02× apart. Geometric and not arithmetic because an arithmetic mean of a rate spanning that much sits against the slow end. The row that would replace it is `vision_seconds_per_page`, which S4's smoke writes.",
+      "seconds": 4.2421,
+      "usd_ceiling": 12.5586,
+      "usd_floor": 1.3296
+    },
+    {
+      "field": "results/run_5c2_positions.json :: timing.seconds_per_row",
+      "fits_at_ceiling": false,
+      "fits_at_floor": false,
+      "measured": true,
+      "name": "realised_5c2",
+      "pages_ceiling": 9653,
+      "pages_floor": 1022,
+      "sample": "n=205 rows over 2133.705 worker seconds — the number 5c2's closing ruling says the next registration starts from.",
+      "seconds": 10.408,
+      "usd_ceiling": 30.8127,
+      "usd_floor": 3.2623
+    }
+  ],
+  "verdict": {
+    "cheapest_corner_usd": 0.5419,
+    "dearest_corner_usd": 30.8127,
+    "decision": "SP-1 — the operator's, on this table: (a) open cycle-3 and name the sum, (b) narrow C2 and say which chains are dropped, (c) pay to build a positions POD runner (2.383× cheaper per 1 000 rows, results/srv2d_cost.json).",
+    "fits_anywhere": true,
+    "fits_everywhere": false
+  },
+  "why_a_range_and_not_a_number": {
+    "ledger": "results/measurements.jsonl",
+    "ledger_names": [
+      "pass1_v1_seconds_per_call",
+      "pass1_v2_seconds_per_call",
+      "pass1_window_v2_seconds_per_call",
+      "pass2_r2_seconds_per_thread",
+      "think_model_load_seconds",
+      "think_pass1_seconds_per_call",
+      "think_pass1_thought_tokens",
+      "think_pass2_seconds_per_thread",
+      "think_pass2_thought_tokens",
+      "think_peak_vram_gib"
+    ],
+    "ledger_rows": 10,
+    "missing_rate": "vision_seconds_per_page",
+    "pages_are_bounded_too": {
+      "images_measured": 1242,
+      "largest_album": 10,
+      "manifests": [
+        "post_media_5c1.json",
+        "post_media_45g2.json",
+        "post_media_visc.json"
+      ],
+      "note": "the ceiling is the largest album these manifests contain, measured — not the platform's documented limit, which this repo has no file for",
+      "posts_measured": 367
+    },
+    "precedent": "scripts/project_think_zero_shot.py:107 hard-exits on a missing named rate. That is right for a projection whose job is a number and wrong for one whose job is to show the band BEFORE anything is bought, so the absence is declared here and the band is built from the two rates that were measured."
+  }
+}
