@@ -2206,6 +2206,58 @@
           "why_unmeasured": "CheckChatInvite returns a title and a member count and no messages; measuring posts/day, price share or comments/day would require joining, and this census is read-only (r1's rule, unchanged)",
           "measured_by": "api (r3)",
           "authorised_by": "operator, 2026-08-30: «flood wait окончен продолжи сканирование каналов»"
+        },
+        {
+          "handle": "+Ejz6ubzm21IyMTQy",
+          "resolved": true,
+          "title": "Маркетопт 🔆 Офіційна сторінка",
+          "subscribers": 42378,
+          "megagroup": false,
+          "comments_enabled": false,
+          "discussion_group": {
+            "present": false,
+            "id": null
+          },
+          "stats": {
+            "window_days": 28,
+            "window_truncated": false,
+            "n_messages_raw": 33,
+            "n_posts": 29,
+            "posts_per_day": 1.036,
+            "messages_per_day": null,
+            "last_post": "2026-08-29T10:41:15+00:00",
+            "n_texts": 28,
+            "comments_per_day": 0.0,
+            "n_posts_with_comments": 0,
+            "price_share": 0.276,
+            "price_share_contract_regex": 0.276,
+            "price_branch_hits": {
+              "грн": 0,
+              "₴": 0,
+              "grn": 0,
+              "decimal": 8
+            },
+            "media_share": 1.0,
+            "leaflet_or_price_share": 1.0,
+            "dairy_share": 0.241,
+            "dairy_posts_per_day": 0.25,
+            "language_mix": {
+              "ua": 1.0
+            },
+            "traffic": {
+              "n_posts": 29,
+              "first_post": "2026-08-04T08:36:56+00:00",
+              "last_post": "2026-08-29T10:41:15+00:00",
+              "window_days": 25.1,
+              "posts_per_day": 1.16,
+              "share_with_comments": 0.0,
+              "median_comments": 0
+            }
+          },
+          "measured_by": "api (r4, after joining)",
+          "authorised_by": "operator, 2026-08-30: «Вступай в канал маркет опт»",
+          "read_only": false,
+          "window": "2026-08-02..2026-08-30"
         }
       ]
     },

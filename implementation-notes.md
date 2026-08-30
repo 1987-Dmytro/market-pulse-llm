@@ -8168,3 +8168,34 @@ operator's words verbatim in `AUTHORISED_BY`. Spent: 41 of 80, min gap 3.05 s, n
 Also resolved here by the operator's ruling: **Dv880** (Епіцентр was flagged as outside SPEC §3 A;
 the operator asked for it by name, so it is in scope) and **the `ua >= 0.5` bar is LIFTED** —
 language is a column, which takes category B from 47 chats / 18 centres to 61 / 21.
+
+**Dv895 `[cause: verify-gap]` — the script raised after sending the request and before logging it.**
+`ImportChatInviteRequest` on Маркетопт's invite threw `InviteRequestSentError`, which is not an
+error condition at all: it means the request WAS sent and is pending an admin. The except-clauses
+covered `FloodWaitError` only, so the exception escaped, the process died, and
+`results/joins_5c1.jsonl` — the file whose whole job is answering «what has this account done» —
+said this account had never asked. The row was written by hand afterwards, marked as such, and the
+script now catches `InviteRequestSentError` explicitly and logs `join_requested`. The general
+defect: a side effect that has already happened must be logged in the SAME breath it happens, not
+after the call that reports it succeeds ([[a_guard_that_runs_after_the_write]] pointing the other
+way — here the write landed and the record did not).
+
+**Dv896 `[cause: model]` — «request sent» and «member» were two readings ten seconds apart.**
+The join returned `InviteRequestSentError` (pending approval, no membership, no history); the very
+next `CheckChatInviteRequest` returned `ChatInviteAlready`, and `request_needed` reads `False`. The
+membership was granted between the two reads — whether auto-approved or accepted by a person is
+not observable from this side, and the report says so rather than picking one. The remedy in the
+code is to read `request_needed` BEFORE sending and refuse without `--force`, so «we are in» and
+«we are in a queue, and the chain can see who asked» stop being the same command.
+
+**Dv897 `[cause: contract-gap]` — the census stopped being read-only, and one row is now measured
+from inside.** r1 and r2 both state «no joins» as a property of the instrument. On the operator's
+word («Вступай в канал маркет опт») the account joined Маркетопт's private channel, so this row —
+and only this row — carries `read_only: false` and `measured_by: "api (r4, after joining)"`. It is
+logged in `results/joins_5c1.jsonl` beside the project's 29 earlier joins and is REVERSIBLE:
+`scripts/join_invite.py --leave` sends `LeaveChannelRequest` and logs the reverse row.
+What the join bought, and what it did not: 42 378 subscribers, 29 posts in 28 days, price share
+0.276, **dairy 0.241** — the second-highest of any chain — `ua 1.00`, and comments CLOSED. And a
+caveat the numbers cannot state themselves: `media_share` is **1.000** and the price branches show
+`decimal: 8` with `грн: 0` and `₴: 0`, so the prices are inside the flyer IMAGES. The 0.276 is what
+the text carries; this row is the 5c2 vision instrument's job, not the text matcher's.

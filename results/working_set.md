@@ -17,6 +17,7 @@ Comments are not required here. `n` is the posts the share was computed over.
 | Фора | @foraINFO | 7506 | 10 | **0.600** | 0.200 | 0.357 | — |
 | Rozetka продукти | @rrozetka | 369535 | 167 | **0.521** | 0.000 | 5.964 | the marketplace as a whole; the SPEC §3 name is its grocery vertical, which has no channel of its own — dairy share 0.000 is the marketplace's mix, not a grocer's. |
 | Близенько | @blyzenkoua | 4985 | 57 | **0.351** | 0.018 | 2.036 | the chain's own channel, «БЛИЗЕНЬКО🌿», preview description «Мережа магазинів Близенько». blyzenko.ua links no t.me at all, so step 1 could not see it; r1's name search did. Measured on r1's 2026-08-27 clock, not re-measured. |
+| Маркетопт | +Ejz6ubzm21IyMTQy | 42378 | 29 | **0.276** | 0.241 | 1.036 | «Маркетопт 🔆 Офіційна сторінка», 42 378 members — the chain's main channel, found via its official Instagram because it has no website. JOINED on the operator's word 2026-08-30 (logged in results/joins_5c1.jsonl, reversible), which is what made its history readable: this is the census's only row measured from inside. media_share 1.000 over 29 posts and no `грн`/`₴` hit at all — the prices are IN the flyer images, so the 0.276 text share understates it and the 5c2 vision instrument is what reads this row properly. |
 | Varus | @VARUS_channel | 121086 | 134 | **0.246** | 0.194 | 4.786 | — |
 | Сільпо | @silposilpo | 19714 | 33 | **0.212** | 0.152 | 1.179 | — |
 | Fozzy | @fozzyshopua | 518 | 11 | **0.182** | 0.091 | 0.393 | «FOZZY Cash&Сarry» — the wholesale cash-and-carry format, not a retail store. |

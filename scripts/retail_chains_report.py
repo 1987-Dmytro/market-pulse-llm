@@ -54,9 +54,11 @@ CHANNEL_NOTES = {
     ),
     "+Ejz6ubzm21IyMTQy": (
         "«Маркетопт 🔆 Офіційна сторінка», 42 378 members — the chain's main channel, found via its"
-        " official Instagram because it has no website. A private invite: CheckChatInvite returns"
-        " the title and the count and NO history, so collecting it needs a join — the operator's"
-        " call, and out of this census's read-only scope."
+        " official Instagram because it has no website. JOINED on the operator's word 2026-08-30"
+        " (logged in results/joins_5c1.jsonl, reversible), which is what made its history readable:"
+        " this is the census's only row measured from inside. media_share 1.000 over 29 posts and"
+        " no `грн`/`₴` hit at all — the prices are IN the flyer images, so the 0.276 text share"
+        " understates it and the 5c2 vision instrument is what reads this row properly."
     ),
     "@epicentrk_sale": (
         "«ЕПІЦЕНТР», 52 081 subs, price .657 — but NOT linked from Епіцентр's own properties:"

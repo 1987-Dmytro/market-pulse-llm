@@ -22,12 +22,12 @@ comments under posts, its whole traffic is the conversation.
 | 9 | Епіцентр [not in SPEC §3 A] | epicentrk.ua | ok (site links no t.me; handle is a seed, not the chain's own link) | seed handle + browser check of the chain's properties | @epicentrk_sale | 52081 | 4.893 | 137 | 0.657 | no | 0.000 | 0.051 | ua 1.00 | posts-only | keep | api (r3) |
 | 10 | Фора | fora.ua | ok | curl+bundle | @foraINFO | 7506 | 0.357 | 10 | 0.600 | no | 0.000 | 0.200 | ua 1.00 | posts-only | keep | api (r2) |
 | 11 | Близенько | blyzenko.ua | no-link | curl | @blyzenkoua | 4985 | 2.036 | 57 | 0.351 | no | 0.000 | 0.018 | ua 1.00 | posts-only | keep | api (r1, 2026-08-27) |
-| 12 | Сільпо | silpo.ua | ok | browser | @silposilpo | 19714 | 1.179 | 33 | 0.212 | no | 0.000 | 0.152 | ua 1.00 | posts-only | keep | api (r2) |
-| 13 | Fozzy | fozzyshop.ua | ok | curl | @fozzyshopua | 518 | 0.393 | 11 | 0.182 | no | 0.000 | 0.091 | ua 1.00 | posts-only | keep | api (r2) |
-| 14 | Акції та знижки | — | aggregator — answered from r1's Telegram measurement | — | @brovarysale | 3914 | 3.036 | 85 | 0.035 | no | 3.036* | 0.000 | ua 0.86 other 0.10 | enter | keep | api (r1, 2026-08-27) |
-| 15 | АТБ | atbmarket.com | ok | browser (official social property) | @atb_market_official | 41858 | 1.107 | 31 | 0.000 | no | 0.000 | 0.000 | ua 1.00 | posts-only | keep | api (r3) |
-| 16 | Таврія В | tavriav.ua | ok | curl | +Gpo70IWKXOE1NzZi | — | — | — | — | — | — | — | — | ChatInvitePeek | keep | api (r2) |
-| 17 | Маркетопт | — | no site — official Instagram carries the Telegram | browser (official social property) | +Ejz6ubzm21IyMTQy | 42378 | — | — | — | — | — | — | — | ChatInvite | keep | api (r3) |
+| 12 | Маркетопт | — | no site — official Instagram carries the Telegram | browser (official social property) | +Ejz6ubzm21IyMTQy | 42378 | 1.036 | 29 | 0.276 | no | 0.000 | 0.241 | ua 1.00 | — | keep | api (r4, after joining) |
+| 13 | Сільпо | silpo.ua | ok | browser | @silposilpo | 19714 | 1.179 | 33 | 0.212 | no | 0.000 | 0.152 | ua 1.00 | posts-only | keep | api (r2) |
+| 14 | Fozzy | fozzyshop.ua | ok | curl | @fozzyshopua | 518 | 0.393 | 11 | 0.182 | no | 0.000 | 0.091 | ua 1.00 | posts-only | keep | api (r2) |
+| 15 | Акції та знижки | — | aggregator — answered from r1's Telegram measurement | — | @brovarysale | 3914 | 3.036 | 85 | 0.035 | no | 3.036* | 0.000 | ua 0.86 other 0.10 | enter | keep | api (r1, 2026-08-27) |
+| 16 | АТБ | atbmarket.com | ok | browser (official social property) | @atb_market_official | 41858 | 1.107 | 31 | 0.000 | no | 0.000 | 0.000 | ua 1.00 | posts-only | keep | api (r3) |
+| 17 | Таврія В | tavriav.ua | ok | curl | +Gpo70IWKXOE1NzZi | — | — | — | — | — | — | — | — | ChatInvitePeek | keep | api (r2) |
 | 18 | Novus | novus.ua | ok | browser | — | — | — | — | — | — | — | — | — | — | — | — |
 | 19 | Auchan | auchan.ua | ok | curl | — | — | — | — | — | — | — | — | — | — | — | — |
 | 20 | Thrash! | thrash.ua | no-link | browser | — | — | — | — | — | — | — | — | — | — | — | — |
