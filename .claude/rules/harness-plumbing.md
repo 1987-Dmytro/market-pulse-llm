@@ -16,4 +16,8 @@ verbatim: still true, and needed only by a session that opens the files below.
   `scripts/stale-check.sh` and `scripts/context-census.py`; Stop runs
   `scripts/brain-session-end.py`, which regenerates `knowledge/index.md` and the daily-log stub.
   Generated regions belong to those scripts — do not hand-edit them.
+- `PreToolUse(Bash)`: `scripts/hooks/refuse_sweeping_commands.py` refuses sweeping `git add` /
+  `make fmt` / `ruff format` by behaviour, not spelling; both directions in `tests/test_hooks.py`.
 - `/save` (checkpoint) and `/close` (end of day) in `.claude/commands/` are operator-invoked only.
+- `/plan-phase <name>` (writes the plan, then STOPS for review) and `/report <name>` are the
+  executor's two phase-cycle commands in `.claude/commands/` — `docs/PROCESS.md` «Cadence per phase».

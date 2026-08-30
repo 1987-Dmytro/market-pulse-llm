@@ -10,7 +10,8 @@
       "Edit(/docs/PROMPT-*.md)",
       "Edit(/docs/PLAN-*.md)",
       "Edit(/docs/reviews/**)",
-      "Edit(/docs/labels-*.jsonl)"
+      "Edit(/docs/labels-*.jsonl)",
+      "Edit(/docs/archive/**)"
     ]
   },
   "hooks": {
@@ -39,7 +40,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash ${CLAUDE_PROJECT_DIR}/scripts/hooks/refuse-sweeping-commands.sh",
+            "command": "python3 ${CLAUDE_PROJECT_DIR}/scripts/hooks/refuse_sweeping_commands.py",
             "timeout": 3000
           },
           {
