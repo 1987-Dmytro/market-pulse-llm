@@ -32,7 +32,10 @@ Dv12 K4 range → one number, the rate row that justified the range now exists `
 Dv13 `promo_pagecount_c2.py` and its photo-only rule joined the plan by revision, not a new contract
 file `[cause: process]`; Dv14 S11 landed in a new module, no pin moved `[cause: process]`.
 
-**`make check`:** 6 failed / 4 219 passed at `c09a7c8` — every red mine, all six the
-same defect (cycle 3's ledger read off a constant the suite's cycle-2 isolation could not patch),
-fixed at `0a8d02a` with no test touched; the six plus the four other affected files are green there
-(108 passed). The full-suite reading predates that fix and the docs commits after it.
+**`make check` at `d305953`: 4 230 passed · 2 skipped · exit 0** — predicted before the reading
+(4 225 after the six reds, + 5 new tests) and it landed on the prediction. Every red this session
+was mine: opening cycle 3 let `main()` read `CYCLE3_LEDGER` past the autouse redirect Dv424 added
+for cycle 2, so a `--close --note` test appended a session to the LIVE line at a fixture's balance.
+Restored, then closed as a class — explicit cycle-3 redirect, a session-scoped tripwire over all
+three ledgers in `tests/conftest.py`, and `tests/test_ledger_tripwire.py` re-deriving its watch list
+from the guard's own constants. `git status --porcelain results/` clean after the full run.
