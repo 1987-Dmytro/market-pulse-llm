@@ -20,8 +20,11 @@ spec.loader.exec_module(guard)
 REAL_CYCLE2_LEDGER = SCRIPT.parents[1] / "results" / "spend_cycle2.json"
 
 
+REAL_CYCLE3_LEDGER = SCRIPT.parents[1] / "results" / "spend_cycle3.json"
+
+
 @pytest.fixture(autouse=True)
-def never_the_real_cycle2_ledger(tmp_path, monkeypatch):
+def never_the_real_ledgers(tmp_path, monkeypatch):
     """No test in this module may write `results/spend_cycle2.json`. Measured, not precautionary.
 
     The cycle-2 anchor is a ONE-SHOT: `read_cycle2` creates it on the first reading after a closed
@@ -38,6 +41,11 @@ def never_the_real_cycle2_ledger(tmp_path, monkeypatch):
     makes the real one unreachable in between.
     """
     monkeypatch.setattr(guard, "CYCLE2_LEDGER", tmp_path / "not-the-real-cycle2-ledger.json")
+    # Cycle 3 is redirected EXPLICITLY and not left to `cycle3_path()` following cycle 2. The
+    # following is what makes production correct; naming the successor here is what keeps this
+    # fixture true if anyone ever reads the constant directly again — which is precisely how the
+    # cycle-3 leak happened, one line after Dv424 fixed the same thing for cycle 2.
+    monkeypatch.setattr(guard, "CYCLE3_LEDGER", tmp_path / "not-the-real-cycle3-ledger.json")
 
 
 def test_the_suite_cannot_reach_the_production_cycle2_anchor():
@@ -51,6 +59,19 @@ def test_the_suite_cannot_reach_the_production_cycle2_anchor():
     """
     assert guard.CYCLE2_LEDGER != REAL_CYCLE2_LEDGER
     assert not guard.CYCLE2_LEDGER.exists(), "and it starts unanchored, so a write here is visible"
+
+
+def test_the_suite_cannot_reach_the_production_cycle3_anchor():
+    """The same control one line later, and the reason it is written separately rather than folded
+    into the assertion above: the cycle-2 redirect existed and was correct when cycle 3 opened, and
+    it did not cover it. `results/spend_cycle3.json` IS anchored now, so «the file does not exist»
+    would pass over a live money record ([[guard_selftest_negative_control]])."""
+    assert REAL_CYCLE3_LEDGER.exists(), "the real line is anchored — this control is not vacuous"
+    assert guard.CYCLE3_LEDGER != REAL_CYCLE3_LEDGER
+    assert guard.cycle3_path() != REAL_CYCLE3_LEDGER, (
+        "the path main() actually writes through, not only the constant: a redirect that the"
+        " derivation walked around is the hole this closes"
+    )
 
 
 @pytest.fixture
