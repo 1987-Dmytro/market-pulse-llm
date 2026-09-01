@@ -109,20 +109,39 @@ def collectable(registry, gate: dict) -> list[tuple]:
     stores are pinned — and the guard is then re-stated against the pin file, because a list
     derived correctly and a list that cannot touch the protected files are two different claims.
     """
+    rows = entered_rows(registry, gate)
+    store, guarded = RawStore(STORE_ROOT), protected()
+    # The pin guard runs over EVERY entered row, before the pause filter and not after it: it is a
+    # claim about what this script can reach, and a claim narrowed by a flag somebody can flip is
+    # a weaker claim than the one that was here.
+    for _, handle in rows:
+        for record_type in ("post", "comment"):
+            if store.path(record_type, handle).resolve() in guarded:
+                raise SystemExit(f"{handle} maps onto a pinned raw v1 file — refusing to collect")
+    # Revision r2 (operator ruling 2026-08-30): 39 sources leave COLLECTION without leaving the
+    # registry. The flag was written and nothing here read it — found by `/code-review` on the s2s3
+    # diff — so a paused channel was still collected from, and the only thing between it and its
+    # store was `RawStore.append`'s pin guard, which covers six files and not the other thirty-three
+    # ([[a_named_defect_is_not_a_fixed_defect]]).
+    return [pair for pair in rows if pair[0].collect]
+
+
+def entered_rows(registry, gate: dict) -> list[tuple]:
+    """Every verified registry row the 5c1 rulings entered — BEFORE r2's pause filter.
+
+    Split out of :func:`collectable` so `collect: false` narrows collection and nothing else. The
+    flag is named for what the ruling said — «выводится из сбора» — and joining a discussion group
+    is membership, not collection: the eighteen groups this account is already in stay in
+    :func:`joinable`'s cross-check whether or not their channel is still being read.
+    """
     entered = {handle for handles in gate["rulings"]["composition"].values() for handle in handles}
-    rows = [
+    return [
         (source, handle)
         for source in registry.sources
         if source.verified
         for handle in source.telegram_channels
         if handle in entered
     ]
-    store, guarded = RawStore(STORE_ROOT), protected()
-    for _, handle in rows:
-        for record_type in ("post", "comment"):
-            if store.path(record_type, handle).resolve() in guarded:
-                raise SystemExit(f"{handle} maps onto a pinned raw v1 file — refusing to collect")
-    return rows
 
 
 def joinable(registry, gate: dict) -> list[tuple]:
@@ -137,7 +156,9 @@ def joinable(registry, gate: dict) -> list[tuple]:
     # HISTORY and is not rewritten (rewriting it would un-say what was authorised on 07.08), so
     # the live set is derived by subtracting what the same record now excludes.
     authorised -= set(gate["rulings"]["composition"].get("excluded", []))
-    fresh = collectable(registry, gate)
+    # `entered_rows`, not `collectable`: r2's pause is about COLLECTION, and subtracting it
+    # here would un-say eighteen joins this account already made.
+    fresh = entered_rows(registry, gate)
     # The four original channels are already joined and out of the gate's scope, so the registry
     # side is read over the newly entered channels only.
     from_registry = {

@@ -433,3 +433,31 @@ def test_leaving_a_group_is_refused_inside_the_flood_wait_window(monkeypatch, tm
         encoding="utf-8",
     )
     assert collect.refuse_inside_flood_wait(NOW) is None
+
+
+# --- `collect: false` (revision r2) ---------------------------------------------------------------
+
+
+def test_a_paused_source_is_not_collected_even_though_the_rulings_entered_it():
+    """r2 takes 39 sources out of COLLECTION without taking them out of the registry, and this
+    reader is what makes that mean something here. `collectable` filtered on `verified` and on the
+    gate's composition only, so a row the operator paused was still collected from — the flag was
+    written and nothing read it. Found by `/code-review` on the s2s3 diff; until this line the only
+    thing standing between a paused channel and its store was `RawStore.append`'s pin guard, which
+    covers six files and not the other thirty-three."""
+    registry = registry_of(
+        source("@live"), Source("paused", "@paused", "community", ("@paused",), True, collect=False)
+    )
+    gate = gate_of({"posts": ["@live", "@paused"]}, [])
+    assert [handle for _, handle in collect.collectable(registry, gate)] == ["@live"]
+
+
+def test_the_same_source_collecting_is_collected():
+    """The other direction, and the one that makes the test above mean something: a guard that
+    refused everything would pass the assertion above and stop the phase
+    ([[guard_selftest_negative_control]]). The two rows differ in `collect` and in nothing else."""
+    registry = registry_of(
+        Source("both", "@both", "community", ("@both",), True, collect=True),
+    )
+    gate = gate_of({"posts": ["@both"]}, [])
+    assert [handle for _, handle in collect.collectable(registry, gate)] == ["@both"]
