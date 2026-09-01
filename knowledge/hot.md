@@ -2,69 +2,63 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-30 08:19:23 (every SessionStart)
+**Auto-refreshed:** 2026-09-01 07:32:29 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
-80e32b9 docs(report): harness-v2.1 -- the deny refusal isolated to the glob, one hyphen apart
-a7fe8bb docs(report): harness-v2.1 final -- the verifier read twice, and the deviations join the ledger
-25b9931 fix(harness-v2.1): five prompts back out of the archive, and hot.md stops claiming a fix that did not happen
-a607909 docs(report): harness-v2.1 -- every guard seen refusing and accepting, 12.6K -> 9.3K boot tax
-abe56bb chore(harness-v2.1): 28 spent contracts move to docs/archive/prompts/, 87 stay and say why
+8ae33e4 docs(report): keep the addendum inside PROCESS's 30-line rule
+6c31492 feat(collect): S2's join and comment phases finished — +1 190 comments into the live root
+ee23a13 docs(report): the smoke ran — the STOP is lifted and the rate is measured
+3f137b9 feat(smoke,projection): the smoke landed — 7.872 s/page measured, and K4 states one number
+1a8b1d4 feat(smoke): the C2 vision smoke, pre-registered before the first billable action
 ```
 
 ## 📋 Recent decisions
 
 - `INDEX.md` — Decision records
-- `harness-guard-v2-behaviour-not-spelling.md` — The PreToolUse guard judges behaviour, not spelling
-- `lora-c-the-line-trains-at-90-seconds-a-step.md` — The line trains at 89.961 s/step — and the gate that would have hidden it
+- `one-live-raw-root-and-an-opt-in-union.md` — One live raw root, and a union that is opt-in
+- `poltava-chats-carry-category-voice-not-brand-voice.md` — The Poltava chats carry category voice, not brand voice
 
 ## 📅 Recent daily logs
 
+- `2026-09-01.md`
 - `2026-08-30.md`
 - `2026-08-27.md`
-- `2026-08-26.md`
 
 <!-- AUTO-GEN END (everything below preserved across refreshes) -->
 # Hot Cache — curated
-
-**Last update:** 2026-08-30 (r2+r3+пробы) — этап 1 = `docs/SPEC-v2-promo-pulse.md`; карта `docs/STATUS.md`;
-цикл `docs/PROCESS.md` v2.1. Блок курируется руками, **≤40 строк**: археология — в отчётах и логах.
+**Last update:** 2026-09-01 (закрытие смены 30.08). Этап 1 `SPEC-v2-promo-pulse.md`, карта `STATUS.md`, цикл `PROCESS.md` v2.1. Руками, ≤40 строк; археология — в логах дня.
 
 ## 🔥 What's Hot
-**✅ `retail-census` r2+r3+пробы ИСПОЛНЕНЫ, ждут приёмки ($0).** `docs/reports/retail-census-r2.md`
-перестроен по двум блокам оператора; **Dv880–Dv901**. Артефакты: `results/working_set.md` ·
-`retail_chains_table.md` · `promo_comment_yield.json` · `poltava_brand_probe.json`.
+**✅ СЛАЙС `promo-pulse-1-s2s3` ПРИНЯТ GREEN** — `docs/reports/promo-pulse-1-s2s3.md` @ `ee23a13`
++ аддендум `8ae33e4`. **make check 4 205 · 2 skipped.** SP-4 закрыт рулингом (a): v1 — архив
+навсегда, `data/raw_r2/` — единственный живой корень, union **опционален**, дро читает ТОЛЬКО v1
+→ [[one-live-raw-root-and-an-opt-in-union]]. Реестр: **74 источника, collected 17 / not 57**;
+стор: **+1 340 постов, +1 190 комментов**, свежесть до 30.08; `shasum -c raw_v1_baseline` 6/6 OK.
 
-**⚠️ БЛОК 1 — «КОММЕНТЫ» = ТОЛЬКО ПОД ЦЕНОВЫМ ПРОМО** (рулинг 30.08). По сырому стору: **16 324
-коммента · 4 718 под ценой в 678 тредах · 71% — шум**; живут в `msuaaaa` (3 407) и `@VARUS_channel`
-(1 210). **Varus — единственная СЕТЬ с молочкой под живыми комментами.** `@ATB_FANatik` — 0.25/день,
-сноска. Свой канал АТБ (41 858) КОРПОРАТИВНЫЙ: промо 0.000.
-
-**⛔ БЛОК 2 — ПРЕМИСА НЕ ПОДТВЕРДИЛАСЬ, ПРОВЕРЕНО ТРИЖДЫ.** 4 507 сообщений из 4 самых живых чатов —
-**НОЛЬ реальных упоминаний брендов**, все 4 срабатывания ложные («третій **президент** України»,
-трижды «**Ферма** клубники» из вакансий, Dv898). 61 чат = **≈78 молочных сообщений/мес** на область,
-и это КАТЕГОРИЯ. По 16 324 комментам watchlist 228, из них **198 `varus-pl` в своём же канале**,
-**Гармонія 0** (Dv899). **Жанр запроса определяет популяцию (Dv900):** `CHAT_TERMS` — только
-барахолки; свип по 24 центрам дал «типове» 0 везде и один городской `@svitlo5s` (1 865) с
-**0.107 комм./день и молочкой 0.000**; Чутове 0 и здесь. **Геопоиск мёртв (Dv901):**
-`contacts.getLocated` — 0 чатов по двум крупнейшим городам, и он ищет только ГЕОЧАТЫ.
+**Числа, которые НЕ выводить заново.** Vision **7.872 с/стр. (n=30, БУТ ВНУТРИ)**; маргинал с
+бутом, оплаченным один раз, — **2.623…3.369**, бут **157.449 с = $0.0483**. 5c2 = 10.408; «1.7» —
+прогрев. Перепись (ПОСЛЕ докачки): окно **03–31.08**, `ids_sha256 a56dc6dace1bfb44`, **968 постов
+→ 1 022…9 653 страниц**, 405 текстово-ценовых. Дро **`6f9fa245b9d70254`**, 678 → 488 (182/306),
+20+20/20+20, seed 42 — не двигалось после докачки: это и есть контроль на утечку union.
 
 ## ⏭️ Next
-1. **РУЛИНГ ТИМЛИДА:** покупать ли оставшийся **81** полтавский кандидат при выходе 78 категорийных
-   сообщений/мес и нуле брендовых. Не проверено: говорят ли о молочке БЕЗ имени бренда (это ловит
-   лексикон, watchlist — нет). 2. **C2 `positions-scale`** — цены в листовках, работа vision 5c2.
+1. **`docs/PROMPT-c2-pagecount.md` ($0)** — численность страниц: ЕДИНСТВЕННОЕ, на чём стоит SP-1.
+   Его п.2 — `collect_5c1 :: collectable` не читает `source.collect` (находка `/code-review`;
+   спасает только гард `RawStore.append`).
+2. **Разметка dev-40 разблокирована** (по 10 тредов); 50 позиций — после S4. Слово оператора по
+   SP-1 — **ОДИН раз**, на числе из п.1: цикл-3 / сузить / под-раннер.
 
 ## 🚧 Blockers
-**⛔ БЮДЖЕТЫ РАЗДЕЛЬНЫ.** Контрактные ≤40 шага 2 ВЫБРАНЫ, `would_exceed` отказывает. r3 41/80,
-проба брендов 52/60, свип жанра 48/60. Новая цель = новая строка (Dv894).
-
-**⛔ ЦЕНЗ НЕ READ-ONLY НА ОДНУ СТРОКУ.** Вступили в канал Маркетопта (42 378, `joins_5c1.jsonl`,
-обратимо `--leave`): `media_share` 1.000, ноль `грн` — **цены в листовках**, vision 5c2 (Dv897).
-
-**⛔ ЧАТ МОЖЕТ МОЛЧАТЬ:** Диканька и Козельщина открыты, НОЛЬ сообщений за 28 дней. **`MEMORY.md`**: 208 строк, доезжает 186.
+**⛔ SP-1 — ПРО СТРАНИЦЫ, НЕ ПРО СТАВКУ.** Остаток **$2.3202**, том ест $0.2333/день; у пола
+страниц C2 = **$0.87…$1.10 (влезает)**, у потолка **$7.81…$10.02 (нет)**.
+**⛔ ЭНДПОИНТ 5c2 И ШАБЛОН УДАЛЕНЫ 08.08**, выжил только том `mp-srv2`: следующий платный vision
+начинается со СБОРКИ, рунг 0 считать С бутом. Драйвер — `scripts/smoke_vision_c2.py`.
+**⛔ ЧИСЛОВОЙ ID И ИНВАЙТ-ХЭШ НЕАДРЕСУЕМЫ.** `1925810730` достижим ТОЛЬКО через `@ATB_FANatik`
+(`linked_chat_id`), `+Ejz6ubzm21IyMTQy` то же — убрать или пометить, **слово тимлида**.
+**⚠️ MEMORY.md на потолке:** 200 строк / 24 952 из 25 000 — мерить `context-census.py::loaded_memory`.
 
 ## 🔫 Footguns этого файла
 **⛔ ЭТОТ ФАЙЛ ГРЕПАЕТСЯ КАК ВХОД — ДВА ЛИТЕРАЛА.** `scripts/volume_calc_5c1.py :: quoted()` берёт

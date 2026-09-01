@@ -494,3 +494,47 @@ unbuilt, per SPEC 3.18 (2)) · no reopening of bar 2.
 **Reviewed and ACCEPTED — `docs/reviews/2026-08-30-plan-promo-pulse-1.md`, 30.08. This revision
 carries the five corrections that review asked for and nothing else of my own. GO on the $0
 slice: S0 · S1a · S1b · S2 · S3 · S6 · S7 · S8. Every paid step still waits at S3's STOP.**
+
+---
+
+## 7. Revision 2026-09-01 — what this session introduced, and what in §2/§3 moved
+
+PROCESS §Cadence 1 (as amended 01.09): information found AT a stop joins THIS plan by revision,
+never a new contract file. `docs/PROMPT-c2-pagecount.md` was therefore never written; its work is
+below. Every threshold, filter and sample introduced this session is listed here — one that reached
+only the report would be a scope change.
+
+**K4 moved from a range to ONE number** — the plan's §2 says «Emits a range, not a number… It
+cannot emit a single figure», and the reason it gave was the missing `vision_seconds_per_page` row.
+The smoke wrote that row on 30.08 and the pagecount below removed the other half of the width, so
+the clause that justified the range is spent. `verdict.c2_priced_usd` is the number;
+`the_one_number_usd` keeps its old boot-inclusive meaning beside it, unchanged, because
+`tests/test_smoke_vision_c2.py` asserts the ordering between the two blocks.
+
+**New instrument — `scripts/promo_pagecount_c2.py` ($0, Telegram metadata only).** Not in §3.
+Population: the census's PINNED ids (`selection.ids_sha256`), never a window re-derived at run time
+(SPEC 3.18 (4)). Two filters and one fallback, all new and all listed here:
+- **a page is a PHOTO member** of the post's album. `has_media` is true of a video, a poll and a
+  document alike; the window holds 146 videos and 3 polls, and no documents at all.
+- **the fold key is `min(msg_id)`** of the album — what `RawStore.collapse_albums` kept.
+- **an unreachable pinned post is priced at the store's msg_id-gap bound, never at 0.** The bound
+  over-counts (240 of 258 exact against the manifests, 0 under), so the total stays an upper bound.
+  Nothing was unreachable in the shipped run; the path is tested, not exercised.
+
+**Guard — `CYCLE3_CAP_USD = 4.80`**, anchored at the balance the word was given on ($4.4800, i.e.
+BELOW the ceiling). Cycle 2 is SUPERSEDED, not closed: one line is enforced at a time, and its
+sealed record is neither edited nor re-scored. `--open-cycle3` anchors once.
+
+**S11 landed in `src/market_pulse/trends.py`, not in `aggregates.py`** as §3 says. No schema change
+and no pin moved. New keys: the **SKU is brand_raw+line+size_value+size_unit** (no price — a SKU
+identified by its own promo price has one row per promo and no trend); the **week is ISO `%G-W%V`**
+so the label sorts across a year boundary; a position whose post is not in the store is **dropped**,
+never bucketed under an invented week.
+
+**Proposed and NOT applied — the even cut (STOP).** C2's share as $4.80 − $2.50 − $0.30 = **$2.00**,
+and the fraction it implies, **1 889 of 3 008 pages (62.8 %)**, are arithmetic in
+`docs/plans/promo-pulse-1.STOP.md` and are NOT thresholds this plan adopts: they allocate against
+C3's cap rather than its cost, and which pages survive inside a chain is unsettled. Both are the
+team lead's.
+
+**Out of scope, unchanged:** §6.
