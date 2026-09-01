@@ -14,5 +14,13 @@ parameters that would be mine only by invention:
 2. **Which pages survive inside a chain** — newest-first, per-week even, or a seeded draw. The
    first answers «what is on promo now», the second «неделя за неделей», the phase's own question.
 
+**A defect I introduced and did not finish.** Anchoring cycle 3 reddened six isolated cycle-2 tests;
+pointing its path at `CYCLE2_LEDGER.with_name(...)` greens all six with no test touched, but a guard
+test that patches neither ledger then APPENDS a session («probe-b CLOSED…», balance $22.07) into the
+real `results/spend_cycle3.json`. Restored with `git checkout`; the anchor is intact and `sessions`
+is empty. The live line is safe to READ, and a `--note` run under a test harness is not. Cycle 2 had
+the same hole (`tests/test_runpod_guard.py:945` patches around it); cycle 3 needs the same guard or
+an isolation fixture, and that is the first thing the next session should close.
+
 **Tree:** clean, nothing bought, no rung fired. Commits `70593f4` `1da3d7e` `3a614f4` `430b16f`
 `d7af842` `c09a7c8`. Numbers and evidence: `docs/reports/promo-pulse-1.md`.
