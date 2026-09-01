@@ -1,0 +1,299 @@
+{
+  "channels": [
+    {
+      "channel": "@ATB_FANatik",
+      "kinds": {
+        "photo": 133
+      },
+      "pages": 133,
+      "pages_exact": 133,
+      "pages_store_upper_bound": 124,
+      "pages_unreachable_bound": 0,
+      "pinned_media_posts": 17,
+      "rows_exact": 17,
+      "rows_unreachable": 0,
+      "source_id": "atb_fanatik",
+      "unreachable_msg_ids": []
+    },
+    {
+      "channel": "@VARUS_channel",
+      "kinds": {
+        "photo": 515,
+        "poll": 3,
+        "video": 7
+      },
+      "pages": 515,
+      "pages_exact": 515,
+      "pages_store_upper_bound": 541,
+      "pages_unreachable_bound": 0,
+      "pinned_media_posts": 132,
+      "rows_exact": 132,
+      "rows_unreachable": 0,
+      "source_id": "varus",
+      "unreachable_msg_ids": []
+    },
+    {
+      "channel": "@atb_aktsiyi",
+      "kinds": {
+        "photo": 259,
+        "video": 13
+      },
+      "pages": 259,
+      "pages_exact": 259,
+      "pages_store_upper_bound": 274,
+      "pages_unreachable_bound": 0,
+      "pinned_media_posts": 55,
+      "rows_exact": 55,
+      "rows_unreachable": 0,
+      "source_id": "atb_aktsiyi",
+      "unreachable_msg_ids": []
+    },
+    {
+      "channel": "@atb_market_official",
+      "kinds": {
+        "photo": 209
+      },
+      "pages": 209,
+      "pages_exact": 209,
+      "pages_store_upper_bound": 236,
+      "pages_unreachable_bound": 0,
+      "pinned_media_posts": 31,
+      "rows_exact": 31,
+      "rows_unreachable": 0,
+      "source_id": "atb",
+      "unreachable_msg_ids": []
+    },
+    {
+      "channel": "@blyzenkoua",
+      "kinds": {
+        "photo": 328,
+        "video": 5
+      },
+      "pages": 328,
+      "pages_exact": 328,
+      "pages_store_upper_bound": 342,
+      "pages_unreachable_bound": 0,
+      "pinned_media_posts": 58,
+      "rows_exact": 58,
+      "rows_unreachable": 0,
+      "source_id": "blyzenko",
+      "unreachable_msg_ids": []
+    },
+    {
+      "channel": "@ekomarket_shop",
+      "kinds": {
+        "photo": 17
+      },
+      "pages": 17,
+      "pages_exact": 17,
+      "pages_store_upper_bound": 17,
+      "pages_unreachable_bound": 0,
+      "pinned_media_posts": 17,
+      "rows_exact": 17,
+      "rows_unreachable": 0,
+      "source_id": "ekomarket_shop",
+      "unreachable_msg_ids": []
+    },
+    {
+      "channel": "@epicentrk_sale",
+      "kinds": {
+        "photo": 78,
+        "video": 56
+      },
+      "pages": 78,
+      "pages_exact": 78,
+      "pages_store_upper_bound": 137,
+      "pages_unreachable_bound": 0,
+      "pinned_media_posts": 132,
+      "rows_exact": 132,
+      "rows_unreachable": 0,
+      "source_id": "epicentrk_sale",
+      "unreachable_msg_ids": []
+    },
+    {
+      "channel": "@forainfo",
+      "kinds": {
+        "photo": 11,
+        "video": 2
+      },
+      "pages": 11,
+      "pages_exact": 11,
+      "pages_store_upper_bound": 15,
+      "pages_unreachable_bound": 0,
+      "pinned_media_posts": 10,
+      "rows_exact": 10,
+      "rows_unreachable": 0,
+      "source_id": "forainfo",
+      "unreachable_msg_ids": []
+    },
+    {
+      "channel": "@fozzyshopua",
+      "kinds": {
+        "photo": 3,
+        "video": 6
+      },
+      "pages": 3,
+      "pages_exact": 3,
+      "pages_store_upper_bound": 15,
+      "pages_unreachable_bound": 0,
+      "pinned_media_posts": 9,
+      "rows_exact": 9,
+      "rows_unreachable": 0,
+      "source_id": "fozzy",
+      "unreachable_msg_ids": []
+    },
+    {
+      "channel": "@kop1chat",
+      "kinds": {
+        "other": 29,
+        "photo": 528
+      },
+      "pages": 528,
+      "pages_exact": 528,
+      "pages_store_upper_bound": 631,
+      "pages_unreachable_bound": 0,
+      "pinned_media_posts": 175,
+      "rows_exact": 175,
+      "rows_unreachable": 0,
+      "source_id": "kopiyochka1",
+      "unreachable_msg_ids": []
+    },
+    {
+      "channel": "@kopiyochka1",
+      "kinds": {
+        "photo": 396
+      },
+      "pages": 396,
+      "pages_exact": 396,
+      "pages_store_upper_bound": 406,
+      "pages_unreachable_bound": 0,
+      "pinned_media_posts": 46,
+      "rows_exact": 46,
+      "rows_unreachable": 0,
+      "source_id": "kopiyochka1",
+      "unreachable_msg_ids": []
+    },
+    {
+      "channel": "@marketopt_promo",
+      "kinds": {
+        "photo": 52
+      },
+      "pages": 52,
+      "pages_exact": 52,
+      "pages_store_upper_bound": 47,
+      "pages_unreachable_bound": 0,
+      "pinned_media_posts": 12,
+      "rows_exact": 12,
+      "rows_unreachable": 0,
+      "source_id": "marketopt_promo",
+      "unreachable_msg_ids": []
+    },
+    {
+      "channel": "@msuaaaa",
+      "kinds": {
+        "photo": 268
+      },
+      "pages": 268,
+      "pages_exact": 268,
+      "pages_store_upper_bound": 266,
+      "pages_unreachable_bound": 0,
+      "pinned_media_posts": 63,
+      "rows_exact": 63,
+      "rows_unreachable": 0,
+      "source_id": "msuaaaa",
+      "unreachable_msg_ids": []
+    },
+    {
+      "channel": "@rrozetka",
+      "kinds": {
+        "other": 9,
+        "photo": 113,
+        "video": 45
+      },
+      "pages": 113,
+      "pages_exact": 113,
+      "pages_store_upper_bound": 181,
+      "pages_unreachable_bound": 0,
+      "pinned_media_posts": 154,
+      "rows_exact": 154,
+      "rows_unreachable": 0,
+      "source_id": "rozetka",
+      "unreachable_msg_ids": []
+    },
+    {
+      "channel": "@silposilpo",
+      "kinds": {
+        "photo": 34,
+        "video": 12
+      },
+      "pages": 34,
+      "pages_exact": 34,
+      "pages_store_upper_bound": 61,
+      "pages_unreachable_bound": 0,
+      "pinned_media_posts": 33,
+      "rows_exact": 33,
+      "rows_unreachable": 0,
+      "source_id": "silpo",
+      "unreachable_msg_ids": []
+    },
+    {
+      "channel": "@sim23_simi",
+      "kinds": {
+        "photo": 57
+      },
+      "pages": 57,
+      "pages_exact": 57,
+      "pages_store_upper_bound": 61,
+      "pages_unreachable_bound": 0,
+      "pinned_media_posts": 16,
+      "rows_exact": 16,
+      "rows_unreachable": 0,
+      "source_id": "sim23",
+      "unreachable_msg_ids": []
+    },
+    {
+      "channel": "@xochydeshevshe",
+      "kinds": {
+        "other": 1,
+        "photo": 7
+      },
+      "pages": 7,
+      "pages_exact": 7,
+      "pages_store_upper_bound": 8,
+      "pages_unreachable_bound": 0,
+      "pinned_media_posts": 8,
+      "rows_exact": 8,
+      "rows_unreachable": 0,
+      "source_id": "xochydeshevshe",
+      "unreachable_msg_ids": []
+    }
+  ],
+  "contract": "docs/PHASE-promo-pulse-1.md §8 clause (a) — the exact page count ($0)",
+  "method": "Telegram metadata re-read of the census's pinned ids; a page is a photo member of the post's album; an unreachable pinned post is priced at the store's gap bound",
+  "selection": {
+    "ids_sha256": "a56dc6dace1bfb44d5d227726f75c9cbdfa80611bb4b24c107ce4f4745532715",
+    "posts": 968
+  },
+  "totals": {
+    "kinds": {
+      "other": 39,
+      "photo": 3008,
+      "poll": 3,
+      "video": 146
+    },
+    "pages": 3008,
+    "pages_exact": 3008,
+    "pages_store_upper_bound": 3362,
+    "pages_unreachable_bound": 0,
+    "pinned_media_posts": 968,
+    "rows_exact": 968,
+    "rows_unreachable": 0
+  },
+  "window": {
+    "anchor": "2026-08-31",
+    "anchor_rule": "the corpus's own last day + 1, read after S2's top-up — 5c2-stop-ruling-and-cap-33 (a), plan §5.1 as corrected by the 30.08 review",
+    "days": 28,
+    "rule": "since <= date < anchor, half-open",
+    "since": "2026-08-03"
+  }
+}

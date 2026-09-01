@@ -1,11 +1,14 @@
 {
-  "contract": "docs/plans/promo-pulse-1.md S3 / K4 — the C2 projection ($0). A STOP, not a pass/fail: the operator decides cycle-3 / narrowing / a pod runner on this table.",
+  "contract": "docs/PHASE-promo-pulse-1.md §8 clause (a) — the C2 projection ($0). SP-1 was ANSWERED 2026-09-01 («Цикл-3 = весь баланс, потолок $4.8»), so this is no longer a stop-point but the price of the leg, against the cycle-3 remainder read below.",
   "population": {
     "leaflet_posts": 968,
     "note": "the text leg is not priced here: `text_marginal_seconds` is a warm-up marginal like the page one, and the vision leg is what the money question is about.",
-    "pages_ceiling": 9653,
-    "pages_floor": 1022,
+    "pages_ceiling": 3008,
+    "pages_counted_by": "results/promo_pagecount_c2.json",
+    "pages_exact": 3008,
+    "pages_floor": 3008,
     "pages_known_from_a_manifest": 63,
+    "pages_state": "COUNTED — 968 of 968 pinned posts re-read off Telegram, 0 unreachable and priced at the store's gap bound. The census's own bound was 1022…9653; the store-only upper bound was 3362.",
     "text_price_posts": 405
   },
   "rate_usd_per_second": 0.00030669,
@@ -22,37 +25,37 @@
     }
   },
   "remainder": {
-    "line": "REMAINING         $2.3299",
+    "line": "REMAINING         $4.8000",
     "read_from": "scripts/runpod_guard.py",
-    "spent_line": "CYCLE 2 SPENT     $17.6701 of $20.00",
-    "usd": 2.3299
+    "spent_line": "",
+    "usd": 4.8
   },
   "table": [
     {
       "field": "results/run_5c2_positions.json :: go_no_go.page_marginal_seconds",
-      "fits_at_ceiling": false,
+      "fits_at_ceiling": true,
       "fits_at_floor": true,
       "measured": true,
       "name": "warm_up_marginal",
-      "pages_ceiling": 9653,
-      "pages_floor": 1022,
+      "pages_ceiling": 3008,
+      "pages_floor": 3008,
       "sample": "two warm-up calls, n=1 pair — Dv310 has this shape under-pricing a leg 2.4× across two boots, because the warm-up page was empty. A FLOOR, never an estimate.",
       "seconds": 1.729,
-      "usd_ceiling": 5.1187,
-      "usd_floor": 0.5419
+      "usd_ceiling": 1.595,
+      "usd_floor": 1.595
     },
     {
       "field": "derived here",
-      "fits_at_ceiling": false,
+      "fits_at_ceiling": true,
       "fits_at_floor": true,
       "measured": false,
       "name": "fitted_middle",
-      "pages_ceiling": 9653,
-      "pages_floor": 1022,
+      "pages_ceiling": 3008,
+      "pages_floor": 3008,
       "sample": "INTERPOLATION, not a measurement: the geometric mean of the two corners, which are 6.02× apart. Geometric and not arithmetic because an arithmetic mean of a rate spanning that much sits against the slow end. The row that would replace it is `vision_seconds_per_page`, which S4's smoke writes.",
       "seconds": 4.2421,
-      "usd_ceiling": 12.5586,
-      "usd_floor": 1.3296
+      "usd_ceiling": 3.9134,
+      "usd_floor": 3.9134
     },
     {
       "field": "results/run_5c2_positions.json :: timing.seconds_per_row",
@@ -60,12 +63,12 @@
       "fits_at_floor": false,
       "measured": true,
       "name": "realised_5c2",
-      "pages_ceiling": 9653,
-      "pages_floor": 1022,
+      "pages_ceiling": 3008,
+      "pages_floor": 3008,
       "sample": "n=205 rows over 2133.705 worker seconds — the number 5c2's closing ruling says the next registration starts from.",
       "seconds": 10.408,
-      "usd_ceiling": 30.8127,
-      "usd_floor": 3.2623
+      "usd_ceiling": 9.6016,
+      "usd_floor": 9.6016
     },
     {
       "field": "results/measurements.jsonl :: vision_seconds_per_page",
@@ -73,20 +76,23 @@
       "fits_at_floor": false,
       "measured": true,
       "name": "measured_smoke",
-      "pages_ceiling": 9653,
-      "pages_floor": 1022,
+      "pages_ceiling": 3008,
+      "pages_floor": 3008,
       "sample": "n=30 pages, positions_post_gm4, one page per forward, batch 1, thinking OFF, serverless endpoint s3o601108zg3ef, ADA_24, EU-RO-1, volume mp-srv2. BOOT-INCLUSIVE: the smoke's two calls are the info call (which carries the cold start) and the 30 pages, and `worker_seconds` covers both — so over a population large enough to amortise one boot this rate is an UPPER bound, not a centre ([[projected_rate_versus_measured_rate]] is the same trap from the other side).",
       "seconds": 7.872,
-      "usd_ceiling": 23.3049,
-      "usd_floor": 2.4674
+      "usd_ceiling": 7.2621,
+      "usd_floor": 7.2621
     }
   ],
   "verdict": {
-    "at_the_ceiling_usd": 23.3049,
+    "at_the_ceiling_usd": 7.2621,
+    "c2_priced_fits_remainder": true,
+    "c2_priced_means": "THE one number clause (a) asks for: the C2 vision leg at the MARGINAL rate. 3008 counted pages (results/promo_pagecount_c2.json) at the marginal's PESSIMISTIC end (3.369 s/page) plus ONE cold start ($0.0483), which is what a pass this size pays. The optimistic end is $2.4681; both are readings of the same smoke, and the dear one is what the leg is priced at, because the guard's own `spend()` is the pessimistic max and a ceiling blown after the money is spent cannot be un-spent.",
+    "c2_priced_usd": 3.1563,
     "cap_rule": "docs/PROCESS.md — cap = 2x the registry estimate, one paid run per prompt, and «a cap is not raised to finish a run». The smoke ran under its own $0.35 cap; the C2 pass needs a cap of its own, registered before it, and the projection above is what that cap is set from.",
-    "cheapest_corner_usd": 0.5419,
-    "dearest_corner_usd": 30.8127,
-    "decision": "SP-1 — the operator's, on this table: (a) open cycle-3 and name the sum, (b) narrow C2 and say which chains are dropped, (c) pay to build a positions POD runner (2.383× cheaper per 1 000 rows, results/srv2d_cost.json).",
+    "cheapest_corner_usd": 1.595,
+    "dearest_corner_usd": 9.6016,
+    "decision": "SP-1 is CLOSED (operator, 2026-09-01): cycle 3 is open at $4.80. What this table decides is no longer WHETHER but HOW MUCH of C2 fits beside C3's own caps ($2.50 dev loop + $0.30 holdout), which is the even-cut question of the same ruling.",
     "fits_anywhere": true,
     "fits_everywhere": false,
     "marginal_bound": {
@@ -96,19 +102,18 @@
       "seconds_per_page_lower": 2.623,
       "seconds_per_page_upper": 3.369,
       "usd_at_pages_ceiling": [
-        7.8136,
-        10.0222
+        2.4681,
+        3.1563
       ],
       "usd_at_pages_floor": [
-        0.8704,
-        1.1043
+        2.4681,
+        3.1563
       ],
       "why_this_and_not_the_ledger_row": "the ledger row is the measurement and stays what it is; this is what that measurement implies for a population that pays one boot, and the two answer different questions."
     },
-    "remainder_usd": 2.3299,
-    "the_one_number_caveat": "boot-inclusive. `marginal_bound` below is the same measurement with the cold start paid once, which is what a 1 022-page pass pays, and it is the block SP-1 should be decided on.",
-    "the_one_number_means": "the C2 vision leg at the MEASURED rate over the page FLOOR. The floor and not the ceiling because the floor is what the corpus proves — 63 posts have a manifest page count and every other media post is worth at least one page; the ceiling is a bound built from the largest album measured, not a reading.",
-    "the_one_number_usd": 2.4674
+    "remainder_usd": 4.8,
+    "the_one_number_means": "the same population at the BOOT-INCLUSIVE measured rate. It is not what C2 costs — over 30 pages one cold start is most of the bill and over 3 008 it is a rounding error — and it is kept because it is the only rate anything measured directly. `c2_priced_usd` above is the price; this is the ceiling that price has to sit under, and the gap between them IS the amortised boot.",
+    "the_one_number_usd": 7.2621
   },
   "why_a_range_and_not_a_number": {
     "ledger": "results/measurements.jsonl",

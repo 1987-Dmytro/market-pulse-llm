@@ -208,11 +208,37 @@ def corners(run: dict) -> list[dict]:
     ]
 
 
+PAGECOUNT = REPO_ROOT / "results" / "promo_pagecount_c2.json"
+
+
+def exact_pages() -> dict | None:
+    """The counted pages, once `promo_pagecount_c2.py` has read them off Telegram.
+
+    While the store was the only source the page count could only be BOUNDED, and this projection
+    was a range for that reason and no other. The pagecount record collapses the bound: every
+    pinned post reached, every album member counted, a page defined as a PHOTO member. So the two
+    ends of the population stop being two numbers and the projection can do what clause (a) asks —
+    price C2 as ONE number.
+    """
+    if not PAGECOUNT.exists():
+        return None
+    record = read(PAGECOUNT)
+    if record["totals"]["rows_unreachable"]:
+        # Not fatal, and not silent: an unreachable row is priced at the store's gap bound, so the
+        # total is still an upper bound on the truth. The reader is told which it is holding.
+        pass
+    return record
+
+
 def build(census_path: Path = CENSUS) -> dict:
     census = read(census_path)
     run = read(RUN_5C2)
     usd_per_second = run["rate_usd_per_second"]
-    leaflet = census["selection"]["leaflet_page"]
+    leaflet = dict(census["selection"]["leaflet_page"])
+    counted = exact_pages()
+    if counted:
+        pages = counted["totals"]["pages"]
+        leaflet["pages_floor"] = leaflet["pages_ceiling"] = pages
     texts = census["selection"]["post_text"]["posts"]
     left = remainder()
 
@@ -244,9 +270,14 @@ def build(census_path: Path = CENSUS) -> dict:
         row["fits_at_ceiling"] = row["usd_ceiling"] <= left["usd"]
         table.append(row)
 
+    bound = marginal_bound(usd_per_second, leaflet["pages_floor"], leaflet["pages_ceiling"])
+    # The ONE number clause (a) asks for: counted pages × the marginal's dear end + one boot.
+    c2_priced = bound["usd_at_pages_ceiling"][1] if bound and counted else None
+
     return {
-        "contract": "docs/plans/promo-pulse-1.md S3 / K4 — the C2 projection ($0). A STOP, not a"
-        " pass/fail: the operator decides cycle-3 / narrowing / a pod runner on this table.",
+        "contract": "docs/PHASE-promo-pulse-1.md §8 clause (a) — the C2 projection ($0). SP-1 was"
+        " ANSWERED 2026-09-01 («Цикл-3 = весь баланс, потолок $4.8»), so this is no longer a"
+        " stop-point but the price of the leg, against the cycle-3 remainder read below.",
         "reads": {
             "census": str(census_path.relative_to(REPO_ROOT))
             if census_path.is_relative_to(REPO_ROOT)
@@ -276,6 +307,19 @@ def build(census_path: Path = CENSUS) -> dict:
             "pages_floor": leaflet["pages_floor"],
             "pages_ceiling": leaflet["pages_ceiling"],
             "pages_known_from_a_manifest": leaflet["pages_known"],
+            "pages_exact": counted["totals"]["pages"] if counted else None,
+            "pages_counted_by": "results/promo_pagecount_c2.json" if counted else None,
+            "pages_state": (
+                f"COUNTED — {counted['totals']['rows_exact']} of"
+                f" {counted['totals']['pinned_media_posts']} pinned posts re-read off Telegram,"
+                f" {counted['totals']['rows_unreachable']} unreachable and priced at the store's"
+                f" gap bound. The census's own bound was"
+                f" {census['selection']['leaflet_page']['pages_floor']}…"
+                f"{census['selection']['leaflet_page']['pages_ceiling']}; the store-only upper"
+                f" bound was {counted['totals']['pages_store_upper_bound']}."
+                if counted
+                else "BOUNDED — no pagecount record; the two ends are the census's"
+            ),
             "text_price_posts": texts,
             "note": "the text leg is not priced here: `text_marginal_seconds` is a warm-up marginal"
             " like the page one, and the vision leg is what the money question is about.",
@@ -284,24 +328,32 @@ def build(census_path: Path = CENSUS) -> dict:
         "remainder": left,
         "table": table,
         "verdict": {
+            "c2_priced_usd": c2_priced,
+            "c2_priced_means": "THE one number clause (a) asks for: the C2 vision leg at the"
+            f" MARGINAL rate. {leaflet['pages_ceiling']} counted pages"
+            f" (results/promo_pagecount_c2.json) at the marginal's PESSIMISTIC end"
+            f" ({bound['seconds_per_page_upper']} s/page) plus ONE cold start"
+            f" (${bound['one_boot_usd']}), which is what a pass this size pays. The optimistic end"
+            f" is ${bound['usd_at_pages_floor'][0]}; both are readings of the same smoke, and the"
+            " dear one is what the leg is priced at, because the guard's own `spend()` is the"
+            " pessimistic max and a ceiling blown after the money is spent cannot be un-spent."
+            if bound and counted
+            else None,
+            "c2_priced_fits_remainder": (c2_priced <= left["usd"]) if c2_priced else None,
             "the_one_number_usd": next(
                 (row["usd_floor"] for row in table if row["name"] == "measured_smoke"), None
             ),
-            "the_one_number_means": "the C2 vision leg at the MEASURED rate over the page FLOOR."
-            " The floor and not the ceiling because the floor is what the corpus proves — 63 posts"
-            " have a manifest page count and every other media post is worth at least one page;"
-            " the ceiling is a bound built from the largest album measured, not a reading."
+            "the_one_number_means": "the same population at the BOOT-INCLUSIVE measured rate."
+            " It is not what C2 costs — over 30 pages one cold start is most of the bill and over"
+            " 3 008 it is a rounding error — and it is kept because it is the only rate anything"
+            " measured directly. `c2_priced_usd` above is the price; this is the ceiling that"
+            " price has to sit under, and the gap between them IS the amortised boot."
             if smoke
             else None,
             "at_the_ceiling_usd": next(
                 (row["usd_ceiling"] for row in table if row["name"] == "measured_smoke"), None
             ),
-            "the_one_number_caveat": "boot-inclusive. `marginal_bound` below is the same"
-            " measurement with the cold start paid once, which is what a 1 022-page pass pays,"
-            " and it is the block SP-1 should be decided on.",
-            "marginal_bound": marginal_bound(
-                usd_per_second, leaflet["pages_floor"], leaflet["pages_ceiling"]
-            ),
+            "marginal_bound": bound,
             "remainder_usd": left["usd"],
             "cap_rule": "docs/PROCESS.md — cap = 2x the registry estimate, one paid run per prompt,"
             " and «a cap is not raised to finish a run». The smoke ran under its own $0.35 cap;"
@@ -311,9 +363,10 @@ def build(census_path: Path = CENSUS) -> dict:
             "dearest_corner_usd": max(row["usd_ceiling"] for row in table),
             "fits_anywhere": any(row["fits_at_floor"] for row in table),
             "fits_everywhere": all(row["fits_at_ceiling"] for row in table),
-            "decision": "SP-1 — the operator's, on this table: (a) open cycle-3 and name the sum,"
-            " (b) narrow C2 and say which chains are dropped, (c) pay to build a positions POD"
-            " runner (2.383× cheaper per 1 000 rows, results/srv2d_cost.json).",
+            "decision": "SP-1 is CLOSED (operator, 2026-09-01): cycle 3 is open at $4.80. What"
+            " this table decides is no longer WHETHER but HOW MUCH of C2 fits beside C3's own"
+            " caps ($2.50 dev loop + $0.30 holdout), which is the even-cut question of the same"
+            " ruling.",
         },
     }
 
