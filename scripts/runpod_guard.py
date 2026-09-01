@@ -54,6 +54,7 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parents[1]
 LEDGER = REPO_ROOT / "results" / "spend_phase4.json"
 CYCLE2_LEDGER = REPO_ROOT / "results" / "spend_cycle2.json"
+CYCLE3_LEDGER = REPO_ROOT / "results" / "spend_cycle3.json"
 
 BILLING_KINDS = ("pods", "network-volume", "serverless")
 """Every kind `runpodctl billing` offers, in the order the walk asks for them."""
@@ -100,6 +101,16 @@ Records WRITTEN under an earlier cap are not re-scored by it either (3.18 (7)(b)
 projection's `fits: false` is a true sentence about $6.1690 remaining on 2026-08-13T07:59, and the
 tests that read it pin the cap that was IN FORCE at its write moment — `repair_phase4_ledger
 .CAP_IN_FORCE_USD` is the same pattern, one cap earlier."""
+
+CYCLE3_CAP_USD = 4.80
+"""Cycle 3, operator ruling 2026-09-01: «Цикл-3 = весь баланс, потолок $4.8».
+
+Anchored at whatever the balance reads when it is opened, not at cycle 2's anchor: the line is the
+REST of the money, and cycle 2's $17-and-change was already spent when the word was given. Cycle 2
+is superseded rather than closed — appending a closing entry to `results/spend_cycle2.json` would
+move a file 21 sealed records and the suite read, and the ruling says the sidecar edits nothing
+sealed. One line is live at a time; see `main`.
+"""
 
 CYCLE2_CAP_USD = 20.00
 """SPEC amendment 3.23 (1), operator ruling 2026-08-16: the cycle-2 budget line.
@@ -383,6 +394,33 @@ def read_ledger(balance_now: float) -> dict:
     }
 
 
+def read_cycle3(balance_now: float) -> dict:
+    """Cycle 3's ledger, anchored once at the balance the operator gave the word on.
+
+    Same one-shot as :func:`read_cycle2`, for the same reason: regenerate this file and the
+    counter silently restarts at today's balance, so the line would never reach its cap and the
+    $4.80 would stop meaning anything.
+    """
+    if CYCLE3_LEDGER.exists():
+        return json.loads(CYCLE3_LEDGER.read_text(encoding="utf-8"))
+    return {
+        "cycle3_cap_usd": CYCLE3_CAP_USD,
+        "runpod_balance_at_cycle3_start": balance_now,
+        "anchored_at": datetime.now(UTC).isoformat(timespec="seconds"),
+        "note": (
+            "RunPod account balance read when cycle 3 was opened — operator ruling 2026-09-01,"
+            " «Цикл-3 = весь баланс, потолок $4.8», relayed into"
+            " docs/reviews/2026-08-30-plan-promo-pulse-1.md. Cycle 2 is SUPERSEDED, not closed and"
+            " not re-scored: its ledger keeps the anchor and the sessions it always had. Spend on"
+            " this line = the pessimistic maximum of this anchor minus the balance now and the"
+            " billing walk since the timestamp above. Delete or regenerate this file and the"
+            " counter restarts at today's balance — the footgun results/spend_phase4.json and"
+            " results/spend_cycle2.json both carry."
+        ),
+        "sessions": [],
+    }
+
+
 def read_cycle2(balance_now: float) -> dict:
     """The cycle-2 line's ledger, anchored once — at whatever the balance reads.
 
@@ -579,6 +617,12 @@ def parse(argv: list[str] | None = None) -> argparse.Namespace:
     """
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--note", help="record this reading as a pod session in the ledger")
+    parser.add_argument(
+        "--open-cycle3",
+        action="store_true",
+        help="anchor cycle 3 at the balance now (operator ruling 2026-09-01); once its ledger"
+        " exists this flag is not needed again",
+    )
     parser.add_argument("--step", help="also enforce a step cap, anchored in its own ledger")
     parser.add_argument("--step-cap", type=float, help="the step's cap in USD")
     parser.add_argument("--step-ledger", type=Path, default=None)
@@ -663,24 +707,56 @@ def main(argv: list[str] | None = None) -> int:
         # no inter-ledger gap for the guard to report. 3.23 (3) still describes what that gap was —
         # it is closed by this reading, not by a branch.
         cycle = read_cycle2(balance_now)
-        anchor = float(cycle["runpod_balance_at_cycle2_start"])
-        spent, lines, how, said = enforce(
-            "CYCLE 2", CYCLE2_CAP_USD, anchor, cycle["anchored_at"], balance_now
-        )
-        refusals += said
-        live = {
-            "ledger": cycle,
-            "path": CYCLE2_LEDGER,
-            "cap": CYCLE2_CAP_USD,
-            "anchor": anchor,
-            "anchored_at": cycle["anchored_at"],
-            "spent": spent,
-            "lines": lines,
-            "how": how,
-        }
-        if not CYCLE2_LEDGER.exists():
-            write_ledger_at(CYCLE2_LEDGER, cycle)
-            print(f"anchored {CYCLE2_LEDGER.name} — commit it and never regenerate it")
+        if CYCLE3_LEDGER.exists() or args.open_cycle3:
+            # Cycle 3 supersedes, exactly as cycle 2 superseded phase 4: ONE line is enforced at a
+            # time, because two live caps on one balance would each count the other's spend as its
+            # own. Cycle 2's record is neither edited nor re-scored — it is printed at its last
+            # reading and stated as superseded, which is what «a sidecar, no sealed cycle-2 record
+            # edited» buys: the operator's $4.80 becomes reachable without a number moving in a
+            # file the suite pins.
+            print(
+                f"CYCLE 2 SUPERSEDED  by cycle 3 (operator, 2026-09-01) — its ledger is unchanged"
+                f" at ${cycle['runpod_balance_at_cycle2_start']:.4f} anchored"
+                f" {cycle['anchored_at']}"
+            )
+            cycle3 = read_cycle3(balance_now)
+            anchor = float(cycle3["runpod_balance_at_cycle3_start"])
+            spent, lines, how, said = enforce(
+                "CYCLE 3", CYCLE3_CAP_USD, anchor, cycle3["anchored_at"], balance_now
+            )
+            refusals += said
+            live = {
+                "ledger": cycle3,
+                "path": CYCLE3_LEDGER,
+                "cap": CYCLE3_CAP_USD,
+                "anchor": anchor,
+                "anchored_at": cycle3["anchored_at"],
+                "spent": spent,
+                "lines": lines,
+                "how": how,
+            }
+            if not CYCLE3_LEDGER.exists():
+                write_ledger_at(CYCLE3_LEDGER, cycle3)
+                print(f"anchored {CYCLE3_LEDGER.name} — commit it and never regenerate it")
+        else:
+            anchor = float(cycle["runpod_balance_at_cycle2_start"])
+            spent, lines, how, said = enforce(
+                "CYCLE 2", CYCLE2_CAP_USD, anchor, cycle["anchored_at"], balance_now
+            )
+            refusals += said
+            live = {
+                "ledger": cycle,
+                "path": CYCLE2_LEDGER,
+                "cap": CYCLE2_CAP_USD,
+                "anchor": anchor,
+                "anchored_at": cycle["anchored_at"],
+                "spent": spent,
+                "lines": lines,
+                "how": how,
+            }
+            if not CYCLE2_LEDGER.exists():
+                write_ledger_at(CYCLE2_LEDGER, cycle)
+                print(f"anchored {CYCLE2_LEDGER.name} — commit it and never regenerate it")
 
     # --- closing the live ledger ----------------------------------------------------------------
     if args.close and not args.step:

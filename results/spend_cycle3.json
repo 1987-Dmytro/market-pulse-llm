@@ -1,0 +1,7 @@
+{
+  "cycle3_cap_usd": 4.8,
+  "runpod_balance_at_cycle3_start": 4.4799665639,
+  "anchored_at": "2026-09-01T06:34:08+00:00",
+  "note": "RunPod account balance read when cycle 3 was opened — operator ruling 2026-09-01, «Цикл-3 = весь баланс, потолок $4.8», relayed into docs/reviews/2026-08-30-plan-promo-pulse-1.md. Cycle 2 is SUPERSEDED, not closed and not re-scored: its ledger keeps the anchor and the sessions it always had. Spend on this line = the pessimistic maximum of this anchor minus the balance now and the billing walk since the timestamp above. Delete or regenerate this file and the counter restarts at today's balance — the footgun results/spend_phase4.json and results/spend_cycle2.json both carry.",
+  "sessions": []
+}
