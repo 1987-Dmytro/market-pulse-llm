@@ -92,3 +92,101 @@ per channel (pages · texts · media_share), K4's range against the re-read rema
 `results/promo_threads_draw.json` (dev/holdout, strata) and of the registry r2. The team lead re-runs at
 acceptance: K0s at HEAD, K2, K7 twice (sha), K11's negative control; opens the census and projection files.
 Labelling: dev-40 threads (sessions of 10) start the day the draw lands; the 50 positions after S4.
+
+---
+
+## Acceptance of the scaffold slice (30.08, 18:40) — GREEN, with rulings for the next slice
+
+Report `docs/reports/promo-pulse-1-scaffold.md` @ `76014ba`. Opened: `config/registry.yaml` (74 rows,
+35 collected / 39 paused), `results/raw_v1_baseline.sha256` (six files, sealed 06.08, read by
+`tests/test_raw_store.py`), `scripts/collect_r2.py :: refuse_pinned`, the seven commits. The team
+lead's own `make check` at `76014ba`: see STATUS. S2 stopped at SP-4 BEFORE an irreversible append —
+that is the process working (Dv5 is a merit, not a debt).
+
+**SP-4 — ruling (a), widened to the loop:** v1 raw store is an ARCHIVE, read-only forever (the
+baseline stays the proof). ONE live root — `data/raw_r2/` (name: executor's) — receives S2's top-up
+for ALL channels and, later, every tick (S12). `RawStore` reads v1 ∪ r2, deduplicated on
+(channel, msg_id), r2 wins; consumers counted (`graphify query "what reads RawStore"`) and named in
+the plan revision; a guard refuses any write into v1 in both directions (test). Repo precedent:
+`fetch_comments_v2.py` («`data/raw/comments/` is never opened for writing»).
+
+**K7 — draw NOW** over the 678 price threads of the frozen v1 store (the frozen holdout comes from
+the frozen store — no better population exists); eligible after the wordless rule = 488 (182 / 306);
+strata 20/20 currency / decimal-only for dev and for holdout, disjoint, seed 42; the record pins
+`results/raw_v1_baseline.sha256` as the population's provenance. Dv7 closed by this ruling.
+
+**Registry r2 — three corrections (one commit):** `@znishkom` («ЗнижКом | Ігрові Знижки», Steam
+discounts, dairy 0.0, theme-screen exclusion 07.08; the census title-matched the chain name) →
+`collect: false`, `paused_by: "review 30.08 — off-category, census title-match false positive"`.
+`@marketopt_promo` (public) STAYS collected beside the private one — Dv3 closed, A = 18 rows +
+group. **B (Poltava, 17 rows) → `collect: false`, `paused_by: "deferred to phase B (ruling (ц) 30.08)"`**
+— phase spec §3 says «nothing collected»; r2 left them collecting.
+
+**Dv2 (revision chain) — accepted in principle**, the repo's own precedent (SPEC.md keep-strip);
+conditions before the first PAID step: `/code-review` (fresh subagent) on the S1b+S6 diff —
+correctness and stated-requirement gaps only, verdict quoted in the next report; a test in the
+refusing direction (a corrupted r1 line → the chain refuses); `make preflight` naming the reached
+revision for the two r2 paths instead of listing them as differing (a debt if not now).
+Dv1, Dv4, Dv6 — accepted as reported.
+
+**Money — operator's word (30.08): «Да, смок авторизован».** After S2 and K3: ONE smoke of the
+vision leg, ≤30 pages, estimate ≈$0.15, **cap $0.35**, four rungs per `docs/PROCESS.md`, teardown
+proven by listing; it writes `vision_seconds_per_page` into `results/measurements.jsonl` and K4
+then emits ONE number against the re-read remainder. The cycle-3 / narrowing / pod-runner word is
+the operator's on that table — the smoke is the only paid step authorised.
+
+**Next slice = `promo-pulse-1-s2s3`:** plan revision (S2 root + consumers, one commit) → registry
+corrections → K7 → S2 top-up into r2 → K3 census (anchor = top-up's last day + 1, `ids_sha256`) →
+smoke → K4 → `/report promo-pulse-1-s2s3` (the operator's question: «сколько страниц купит C2 и по
+какой измеренной ставке — и что готово к разметке»). Fresh session; DONE WHEN predicate below.
+
+---
+
+## Acceptance of slice s2s3 (30.08, ~21:00) — GREEN; SP-1 open on ONE number
+
+Report `docs/reports/promo-pulse-1-s2s3.md` @ `ee23a13` (12 commits). Team lead's own readings:
+`make check` at `ee23a13` = **4 205 passed · 2 skipped · exit 0**; `shasum -c raw_v1_baseline` = 6/6 OK;
+`runpodctl serverless list` = `[]`, `pod list -a` = `[]` (own listing); guard = REMAINING **$2.3202**;
+draw sha `6f9fa245b9d70254`, 20/20 + 20/20, disjoint (recomputed from the file). Opened: census
+(window 03–31.08, ids_sha256, 968 leaflet posts), projection (marginal bound derived, nothing typed),
+prereg_smoke (committed before create). Dv8–Dv11 accepted; the two moved tests verified not weakened
+by their commit messages' own claims and K0's count. The `/code-review` finding (`collect_5c1.py ::
+collectable` ignores `collect: false`) — fix ruled in, `docs/PROMPT-c2-pagecount.md` item 2.
+The measured rate closes the rate question: **7.872 s/page boot-inclusive (n=30), marginal
+2.623–3.369**. What remains for SP-1 is the PAGE COUNT (1 022…9 653; manifests know 63 posts) —
+contract `docs/PROMPT-c2-pagecount.md` ($0) resolves it from store/metadata; the operator's word
+(cycle-3 / narrow / pod runner) is asked ONCE, on that number. Labelling of dev-40 is unblocked.
+
+---
+
+## Ruling 01.09 — cycle-3 opened; ONE goal to the end of the phase; the relay protocol is fixed
+
+**Operator's word (01.09, quoted):** «Цикл-3 = весь баланс, потолок $4.8». Executor: open cycle-3 in
+the guard as a NEW anchor at the current balance with `CYCLE3_CAP_USD = 4.80` — a sidecar/new cycle,
+no sealed cycle-2 record edited; the four rungs and per-leg caps stay (C2 backfill ≤ 2× its
+projection from the pagecount table; C3 dev loop cap $2.5; holdout ≈$0.3); projection over the
+CEILING → STOP, and if the page count prices C2 over its share, cut pages EVENLY per chain and say
+so in the report — never silently. The money stop-point of the phase spec §6.1 is SATISFIED by this
+word; no further money stop unless a rung fires.
+
+**Process retro (operator's red gate, accepted):** three team-lead formulation errors caused the
+slice pile — (1) stop-points issued without their decision table, so each stop spawned a
+fact-finding contract; (2) handovers assumed session state, twice wrongly; (3) predicates were cut
+per slice instead of one per phase. Fixed in `docs/PROCESS.md` (§Cadence 1 and 3) and proposed into
+the skill as v2.3. From here: ONE `/goal` (phase spec §8, now covering pagecount → S4 → S5 → S9–S14 →
+gate), STOPs are pauses, and the operator's resume line is CONSTANT:
+
+> Fresh session: read docs/plans/promo-pulse-1.md, the newest section of
+> docs/reviews/2026-08-30-plan-promo-pulse-1.md and docs/plans/promo-pulse-1.STOP.md; apply the
+> ruling, delete the STOP file, re-enter the /goal from docs/PHASE-promo-pulse-1.md §8.
+
+Expected STOPs left in the phase (each a pause, not a question-in-chat): «waiting on the team
+lead's labels» (twice: dev-40, positions-50 — cleared the moment `docs/labels-*.jsonl` land),
+possibly «dev-loop plateau» (SP-3 — the team lead reworks the codebook), and pre-registration
+notice before the ONE holdout shot. Everything else runs inside the ceiling.
+
+**Correction 01.09 (operator's catch):** only the USER can invoke `/goal` — a prompt cannot
+«re-enter» it, and the evaluator reads only the transcript. The resume protocol is therefore ONE
+constant paste: the single-line predicate of phase spec §8 v2 (start ritual folded in, every check's
+output shown in-conversation), pasted fresh at start and after every STOP. The earlier two-line
+protocol is void.

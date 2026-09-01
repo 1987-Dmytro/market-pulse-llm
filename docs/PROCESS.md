@@ -15,6 +15,10 @@ mechanics. Operator-facing digest of the same rules: `docs/STATUS.md` («Пра�
   `docs/plans/**` (the executor's plan per phase), `docs/reports/**`, runbooks, `.claude/**` (harness), the
   rest of `docs/`. The team lead reads, never edits; harness changes are issued as a contract with the
   file contents drafted under `docs/reviews/<date>-harness-*/` and applied by the executor.
+- Team-lead files are suite INPUTS beyond the machine-read block: tests also grep WITNESS phrases out
+  of STATUS **prose** (`MOVED_BY_D2_STEP_0`; the 30.08 compaction erased «D1 (инструмент, $0)» and
+  reddened `test_think_zero_shot` — second occurrence of Dv866's class). After ANY compaction of a
+  team-lead file, the team lead runs `make check` BEFORE handing over — not at the next acceptance.
 - `docs/STATUS.md` is a machine-read INPUT: sealed producers grep rulings out of it verbatim
   (`scripts/write_lora_c_prereg.py :: quoted()`, `write_think_zero_shot_prereg.py`). Quoted rulings
   live in the MACHINE-READ BLOCK at its end and are never re-flowed; STATUS prose above the block
@@ -23,11 +27,29 @@ mechanics. Operator-facing digest of the same rules: `docs/STATUS.md` («Пра�
 
 ## Cadence per phase (skill v2.1 §3, §5)
 1. Team lead writes `docs/PHASE-<name>.md`: **question → artifact → checks → files/interfaces → out of
-   scope → stop-points → end-to-end check**; mechanics only as constraints. Phase boundaries are cut at
-   stop-points (operator decision, paid or irreversible step), never at file boundaries.
+   scope → stop-points → end-to-end check → §8 DONE WHEN covering the WHOLE phase**; mechanics only as
+   constraints. Phase boundaries are cut at stop-points (operator decision, paid or irreversible step),
+   never at file boundaries. **Every stop-point names its DECISION TABLE** — the columns the operator
+   reads to decide in ONE visit — and the $0 steps filling those columns are phase steps BEFORE the
+   stop (30.08: census→smoke→pagecount became three artifacts because the money stop never said «the
+   table = exact pages × measured rate × remainder»). Information found missing AT a stop joins the
+   SAME plan by revision — never a new contract file.
 2. Executor, fresh session, `/plan-phase <name>` → `docs/plans/<name>.md` → STOP. Team lead reviews the
    plan (checks named, stop-points respected, every threshold/floor/sample listed) → operator relays «go».
-3. Executor implements by the plan; `/report <name>` → `docs/reports/<name>.md` (answer in ten lines).
+3. Executor implements by the plan, launched as ONE GOAL LOOP PER PHASE (30.08; hardened 01.09
+   after the slice-pile retro and the /goal docs check). Only the USER can invoke `/goal`, and the
+   command itself starts the work — so the phase spec's §8 is a SINGLE-LINE predicate the operator
+   pastes into a FRESH session, the same paste at start and after every STOP. The predicate opens
+   with the START RITUAL (commit team-lead files by path; read the plan + the newest dated section
+   of the rulings file `docs/reviews/<date>-plan-<name>.md`; apply and delete `docs/plans/<name>.STOP.md`
+   if present). Every clause is a command and its expected output, or a file and its field — never
+   prose — and the predicate orders each check's output SHOWN in the conversation, because the
+   evaluator is a small model reading ONLY the transcript (it runs nothing); a passed-count floor,
+   no test deleted, «a test that must change to pass» is a STOP. A STOP (stop-point · question ·
+   tree state, ≤15 lines) is a PAUSE: the team lead APPENDS a dated ruling, the operator re-pastes
+   the SAME `/goal`. The predicate never changes mid-phase; the rulings file grows; handovers never
+   assume session survival. Slices and per-slice predicates are the failure mode this rule prevents.
+   `/report <name>` is a clause of the predicate. The evaluator's «met» is NOT acceptance (step 4).
 4. Team lead accepts by diff, artifact and check; STATUS refreshed; one retro line.
 One-sentence contracts (`docs/PROMPT-*.md`) remain for fixes and debts whose diff fits in a sentence.
 
@@ -70,6 +92,8 @@ One-sentence contracts (`docs/PROMPT-*.md`) remain for fixes and debts whose dif
 - `implementation-notes.md` keeps a Deviations section; every Dv ends with a cause tag from the
   closed enum `[cause: contract-gap | spec-gap | verify-gap | env | tooling | model | process]`,
   optional trailing `[[lesson-name]]`. Reports close with ≤5 lines of Process signals.
+- `docs/plans/<name>.STOP.md` is the executor's honest exit from a goal loop: the stop-point
+  reached, the question for the team lead, the tree's state (commits, uncommitted files); ≤15 lines.
 - Reports are files in `docs/reports/` (≤30 lines under v2), the chat carries only the path. Numbers
   name the file they come from. **A report opens with the operator's question the contract names and
   answers it in its first ten lines**; a table longer than 40 rows is a file the report links, and the
