@@ -394,6 +394,18 @@ def read_ledger(balance_now: float) -> dict:
     }
 
 
+def cycle3_path() -> Path:
+    """Cycle 3's ledger, BESIDE whatever `CYCLE2_LEDGER` currently points at.
+
+    Not the module constant read directly: cycle 2 and cycle 3 are one line's history, and the
+    suite isolates cycle 2 by patching `CYCLE2_LEDGER` into a tmp directory. A successor read off
+    a constant would keep pointing at the real `results/spend_cycle3.json`, so the moment cycle 3
+    was anchored in the repo every isolated cycle-2 test silently switched branches — six of them
+    did, and none of them mentions cycle 3. The path follows the ledger it succeeds.
+    """
+    return CYCLE2_LEDGER.with_name(CYCLE3_LEDGER.name)
+
+
 def read_cycle3(balance_now: float) -> dict:
     """Cycle 3's ledger, anchored once at the balance the operator gave the word on.
 
@@ -401,8 +413,9 @@ def read_cycle3(balance_now: float) -> dict:
     counter silently restarts at today's balance, so the line would never reach its cap and the
     $4.80 would stop meaning anything.
     """
-    if CYCLE3_LEDGER.exists():
-        return json.loads(CYCLE3_LEDGER.read_text(encoding="utf-8"))
+    path = cycle3_path()
+    if path.exists():
+        return json.loads(path.read_text(encoding="utf-8"))
     return {
         "cycle3_cap_usd": CYCLE3_CAP_USD,
         "runpod_balance_at_cycle3_start": balance_now,
@@ -707,7 +720,7 @@ def main(argv: list[str] | None = None) -> int:
         # no inter-ledger gap for the guard to report. 3.23 (3) still describes what that gap was —
         # it is closed by this reading, not by a branch.
         cycle = read_cycle2(balance_now)
-        if CYCLE3_LEDGER.exists() or args.open_cycle3:
+        if cycle3_path().exists() or args.open_cycle3:
             # Cycle 3 supersedes, exactly as cycle 2 superseded phase 4: ONE line is enforced at a
             # time, because two live caps on one balance would each count the other's spend as its
             # own. Cycle 2's record is neither edited nor re-scored — it is printed at its last
@@ -727,7 +740,7 @@ def main(argv: list[str] | None = None) -> int:
             refusals += said
             live = {
                 "ledger": cycle3,
-                "path": CYCLE3_LEDGER,
+                "path": cycle3_path(),
                 "cap": CYCLE3_CAP_USD,
                 "anchor": anchor,
                 "anchored_at": cycle3["anchored_at"],
@@ -735,9 +748,9 @@ def main(argv: list[str] | None = None) -> int:
                 "lines": lines,
                 "how": how,
             }
-            if not CYCLE3_LEDGER.exists():
-                write_ledger_at(CYCLE3_LEDGER, cycle3)
-                print(f"anchored {CYCLE3_LEDGER.name} — commit it and never regenerate it")
+            if not cycle3_path().exists():
+                write_ledger_at(cycle3_path(), cycle3)
+                print(f"anchored {cycle3_path().name} — commit it and never regenerate it")
         else:
             anchor = float(cycle["runpod_balance_at_cycle2_start"])
             spent, lines, how, said = enforce(
