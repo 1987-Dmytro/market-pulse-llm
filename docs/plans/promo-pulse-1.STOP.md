@@ -38,7 +38,13 @@ no longer a gate.
 (`draw_positions_50.py` reads the DB and refuses below 3 chains) · (g) `make tick`'s per-table counts · (h) the clean-clone screen.
 **Do not run `make tick` again before the ruling** — it would overwrite `results/promo_screen_data.json` with zeros off the empty DB.
 
-**A SECOND, separate ruling is needed for check (j).** `tests/test_repair_phase4_ledger.py:167` types
+**Check (j) is red in TWO places, and the bigger one is the fork above.** A targeted reading —
+`pytest tests/test_aggregates.py tests/test_repair_phase4_ledger.py tests/test_draw_positions_50.py
+tests/test_export_dashboard_data.py -q` → **8 failed, 26 passed, 10 errors**: the errors are session
+fixtures that BUILD the aggregates from the live derived store, so they refuse for the same SPEC
+3.20 (1) reason, and the failures follow the empty database. None of it is weakened here.
+
+**The second, separate ruling for check (j).** `tests/test_repair_phase4_ledger.py:167` types
 `LINE_LEDGER = results/spend_cycle2.json` as «the live ledger»; cycle 2 was superseded by cycle 3 on 01.09, so the first step
 ledger written under the new line (`results/spend_promo_pulse_1.json`, `d854a63`) reads as SILENT although its witness sits in
 `results/spend_cycle3.json` at the same timestamp and the same balance. Three tests red since `d854a63`, none of them from this
