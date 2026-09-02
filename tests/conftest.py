@@ -7,6 +7,7 @@ one-file run «the suite».
 """
 
 import hashlib
+import importlib.util
 import json
 import subprocess
 from datetime import UTC, datetime
@@ -44,10 +45,40 @@ def pytest_terminal_summary(terminalreporter):
     )
 
 
-LEDGERS = ("spend_phase4.json", "spend_cycle2.json", "spend_cycle3.json")
-"""The three money records `scripts/runpod_guard.py` can WRITE. Every one is a one-shot anchor plus
-an append-only session log, so a stray write is not a value a later run corrects — it is a number
-the line is measured against from then on."""
+def writable_ledgers() -> tuple[str, ...]:
+    """Every money record `scripts/runpod_guard.py` can WRITE — DERIVED from the guard's own
+    module, never restated here.
+
+    A literal tuple was the bug this whole tripwire exists to close, one level up: it named the
+    three lines that existed when it was written, so a FOURTH line would arrive unwatched exactly
+    as cycle 3 did — `/code-review` proved it by adding `CYCLE4_LEDGER` and a `main()` line that
+    writes it, and the suite stayed green ([[a_guards_list_is_closed_by_its_anchor]], the fourth
+    time in this repo's history). The derivation is the guard's own `Path` constants that point
+    into `results/`: a new line is a new constant, and a constant is what `main` writes through.
+
+    The step ledgers (`results/spend_<step>.json`, 22 on disk) are under the same one-shot law and
+    are picked up by the same rule the moment one exists, because they live in the same directory —
+    which is why the walk is over the DIRECTORY's files at teardown rather than over a name list.
+    """
+    script = REPO_ROOT / "scripts" / "runpod_guard.py"
+    spec = importlib.util.spec_from_file_location("runpod_guard_watchlist", script)
+    guard = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(guard)
+    return tuple(
+        sorted(
+            {
+                value.name
+                for value in vars(guard).values()
+                if isinstance(value, Path) and value.parent == REPO_ROOT / "results"
+            }
+        )
+    )
+
+
+LEDGERS = writable_ledgers()
+"""The money records the guard can write, as the guard itself names them. Every one is a one-shot
+anchor plus an append-only session log, so a stray write is not a value a later run corrects — it is
+a number the line is measured against from then on."""
 
 
 @pytest.fixture(autouse=True, scope="session")
@@ -66,14 +97,26 @@ def no_test_writes_a_real_ledger():
     read reopens the hole — because both of the previous two times, the protection existed and did
     not cover the new name ([[a_guards_list_is_closed_by_its_anchor]]).
     """
-    before = {name: digest(REPO_ROOT / "results" / name) for name in LEDGERS}
+    watched = sorted({*LEDGERS, *(path.name for path in spend_records())})
+    before = {name: digest(REPO_ROOT / "results" / name) for name in watched}
     yield
-    moved = [name for name in LEDGERS if digest(REPO_ROOT / "results" / name) != before[name]]
+    # re-globbed, so a ledger the suite CREATED is caught beside one it edited: `digest` answers
+    # None for a file that was absent, and None != a sha is the reading that fires
+    after = sorted({*watched, *(path.name for path in spend_records())})
+    moved = [name for name in after if digest(REPO_ROOT / "results" / name) != before.get(name)]
     assert not moved, (
         f"the suite wrote a real spend ledger: {moved}. A test drove the guard with a ledger path"
         " it did not redirect — patch it into tmp_path (see tests/test_runpod_guard.py"
         " :: never_the_real_ledgers) rather than relaxing this."
     )
+
+
+def spend_records() -> list[Path]:
+    """Every `results/spend_*.json` on disk — the three lines AND the 22 step ledgers.
+
+    Globbed rather than listed for :func:`writable_ledgers`' reason, and re-globbed at teardown so a
+    file the suite invented is a finding rather than a name nobody was watching for."""
+    return sorted((REPO_ROOT / "results").glob("spend_*.json"))
 
 
 def digest(path: Path) -> str | None:

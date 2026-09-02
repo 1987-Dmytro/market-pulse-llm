@@ -432,7 +432,8 @@ def read_cycle3(balance_now: float) -> dict:
         "anchored_at": datetime.now(UTC).isoformat(timespec="seconds"),
         "note": (
             "RunPod account balance read when cycle 3 was opened — operator ruling 2026-09-01,"
-            " «Цикл-3 = весь баланс, потолок $4.8», relayed into"
+            f" «Цикл-3 = весь баланс», ceiling ${CYCLE3_CAP_USD:.2f} (raised from $4.80 by the"
+            " operator's later word the same evening, on a +$10 top-up), relayed into"
             " docs/reviews/2026-08-30-plan-promo-pulse-1.md. Cycle 2 is SUPERSEDED, not closed and"
             " not re-scored: its ledger keeps the anchor and the sessions it always had. Spend on"
             " this line = the pessimistic maximum of this anchor minus the balance now and the"
@@ -696,6 +697,8 @@ def main(argv: list[str] | None = None) -> int:
 
     balance_now = balance()
     refusals: list[str] = []
+    closing: tuple | None = None
+    """The live line's closing entry, HELD until the verdict. See where it is set."""
 
     # --- the phase, or the line that replaced it -----------------------------------------------
     ledger = read_ledger(balance_now)
@@ -823,9 +826,15 @@ def main(argv: list[str] | None = None) -> int:
                     "spent_usd": round(settled, 4),
                     "remaining_usd": round(live["cap"] - settled, 4),
                 }
-                live["ledger"]["sessions"].append(entry)
-                write_ledger_at(live["path"], live["ledger"])
-                print(f"CLOSED {live['path'].name} at ${entry['spent_usd']:.4f} — entry APPENDED")
+                # HELD, not written: the refusals gathered above are checked at the bottom of
+                # `main`, and a close that ran here would settle a line the very same run refuses.
+                # `/code-review` on the cycle-3 diff reproduced it — `--close --note` on a balance
+                # ABOVE the anchor returned 1 and had already appended a closing entry, which «is
+                # never re-derived». The anchor write is gated on the verdict for this reason
+                # (`tests/test_runpod_guard.py`: «a refused start leaves no anchor behind… gated on
+                # the verdict rather than on the order of the code»); the close is a bigger write
+                # than the anchor and was gated on nothing at all.
+                closing = (live, entry)
 
     # --- a step's own cap, inside the line's ------------------------------------------------------
     step_ledger, step_path, step_spent, anchor_is_new = None, None, None, False
@@ -953,6 +962,12 @@ def main(argv: list[str] | None = None) -> int:
         for reason in refusals:
             print(f"\nREFUSED: {reason}", file=sys.stderr)
         return 1
+
+    if closing is not None:
+        live, entry = closing
+        live["ledger"]["sessions"].append(entry)
+        write_ledger_at(live["path"], live["ledger"])
+        print(f"CLOSED {live['path'].name} at ${entry['spent_usd']:.4f} — entry APPENDED")
 
     if args.step and anchor_is_new:
         write_ledger_at(step_path, step_ledger)
