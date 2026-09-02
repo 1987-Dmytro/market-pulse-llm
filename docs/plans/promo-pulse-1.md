@@ -583,3 +583,29 @@ and legs are imported; only the population and the step are this driver's. Choic
 - **Mid-run the cap is never raised**: the gates decide, and a stop records `outcome.unbought` for
   the next STOP's table (channel · pages left · $ at the measured marginal).
 - After S4 settles: the dev-loop cap = min($2.50, REMAINING − $0.30), floor $2.00 → below it, STOP.
+
+## 8c. Revision 2026-09-02, evening — ruling 02.09 (c) applied (Dv902, `[cause: ruling]`)
+
+- **The (10)(a) gate is PER LEG.** The text leg is projected from its own warm-up and its own rows
+  (`n_pages=0`) and bought as stage 0; it is never refused for the page leg. §2's check on the gate
+  is unchanged in kind — it still refuses before the first gold call — and narrower in scope.
+- **The page leg is gated PER CHANNEL, at the channel's own measured rate.** Each channel's first
+  pack is its measurement (`worker seconds ÷ pages written`, one row per channel in
+  `results/measurements.jsonl`); its remainder is projected at that rate against the room
+  (`cap − step spent − one wedged job − the idle tail`). Fits → the channel runs whole; does not →
+  the remainder is left unbought and named, and the next channel starts. The run ends when the room
+  is below one pack at the worst measured rate. The per-pack `cap_gate` is unchanged and still the
+  hard stop. **The whole-step page projection is retired for this step** — by the ruling, which also
+  authorises the one test that had asserted it to assert the new law in both directions instead.
+- **The order is §3's no longer**: «АТБ → дешёвые → малые», derived in the driver from
+  `promo_pagecount_c2.json` and the smoke's population file — the carrier, then the channels the
+  smoke measured (≥ 2 of its 30 pages), then the rest ascending by page count. Nothing typed.
+- **Nothing narrowed silently.** The population is still all 3 008 pages and 405 posts; what the cap
+  cannot reach is recorded per channel, not dropped from the registration.
+- **New, all $0, before the next STOP:** the per-channel measurement rows; the remainder table
+  (channel · pages left · measured s/page or «unmeasured» · $ at its rate); and a $0 ranking
+  instrument for the remainder — `scripts/rank_remainder_c2.py`, caption-lexicon for photo posts and
+  `tesseract -l ukr` for leaflet pages, its page-level recall MEASURED on 5c2's 159 ATB pages before
+  it is trusted. Then the STOP «unbought remainder», for one operator decision.
+- **Money unchanged**: cap $3.95 for the whole step, never raised mid-run; the dev loop still takes
+  `min($2.50, REMAINING − $0.30)` with a $2.00 floor and the holdout's $0.30 protected.

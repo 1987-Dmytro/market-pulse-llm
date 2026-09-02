@@ -8248,3 +8248,31 @@ index were live, so the method's population is not the population this phase nee
 Safety, from the documented contract and not from memory: `self_expires` is the field that publishes
 the account's own location, and the docs state «if the flag isn't set, no changes will be applied».
 The calls omitted it, so nothing about this account was published to People Nearby.
+
+**Dv902 `[cause: ruling]` — the (10)(a) gate went per LEG and per CHANNEL, and one rate stopped
+speaking for seventeen channels.** (The tag is ruling 02.09 (c)'s own word: `docs/PROCESS.md`'s
+enum is closed and does not carry `ruling`, and extending it is the team lead's, not this file's.)
+Run 1 refused the whole step at a 13.466 s page warm-up — including the $0.09 text leg, which the
+same ruling family had just moved to the front to protect it (Dv-less, `docs/plans/promo-pulse-1.md`
+§8b). The team lead's answer: the text leg is projected on its own (`n_pages=0` passed to
+`skub.go_no_go` BY THE LAW, not by an empty queue), and each channel is measured by its own first
+pack — `worker seconds ÷ pages written`, one row per channel in `results/measurements.jsonl` — with
+its remainder projected at THAT rate against the room, `cap − step spent − one wedged job − the idle
+tail`. The whole-step page projection is retired for this step. What the files say the rate is: the
+same instrument reads **2.623–3.369 s** on packed promo photos (`smoke_vision_c2.json`), **10.408 s**
+realised on ATB leaflet pages (`run_5c2_positions.json`) and **13.466 s** on one of them alone
+(`run_promo_c2.json :: runs[0]`) — so a projection at any single rate is wrong in both directions,
+and the direction it is wrong in decides whether $3.95 buys nothing or overspends.
+Two numbers stopped being typed with it: the step's prior spend is parsed from the guard's own
+printed line (an unreadable line REFUSES — a missing prior reads as $0.00 and hands the run a cap
+it does not have), and the stage order is derived from `promo_pagecount_c2.json` and the smoke's
+population file rather than kept as a 17-name tuple.
+
+**Dv903 `[cause: verify-gap]` — the ledger-witness check names a line that was superseded.**
+`tests/test_repair_phase4_ledger.py:167` types `LINE_LEDGER = results/spend_cycle2.json`, and cycle 2
+was superseded by cycle 3 on 01.09. The first paid step to write a row under the new line —
+`results/spend_promo_pulse_1.json` at `d854a63` — is therefore reported as SILENT although its
+witness is present, at the same timestamp and the same balance, in `results/spend_cycle3.json`. The
+money is right and the check's idea of «the live ledger» is stale; three tests are red from
+`d854a63` onward. Not fixed here: it is a test that must change to pass, which the phase predicate
+makes a STOP. The guard itself is unaffected — it reads the cycle-3 file directly and exits 0.
