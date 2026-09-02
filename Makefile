@@ -1,4 +1,4 @@
-.PHONY: check check-stamped fmt preflight baselines
+.PHONY: check check-stamped fmt preflight baselines tick promo-screen
 
 # The single verifier. Must be green after every commit (docs/SPEC.md §9).
 check:
@@ -29,3 +29,14 @@ preflight:
 # never a recollection (Dv553).
 baselines:
 	python3.11 scripts/baselines.py
+
+# The $0 loop (phase promo-pulse-1, S4). Promotes what the paid legs already wrote into the six
+# promo tables and exports the screen's fuel. Idempotent by construction — uuid5 ids and
+# INSERT OR IGNORE — so `make tick && make tick` writes zero new rows on an unchanged store.
+tick:
+	PYTHONPATH=src python3.11 scripts/tick.py
+
+# The C5 promo screen. Reads `results/promo_screen_data.json` and NOTHING else, and exits non-zero
+# with a named error when a source is missing — which is what makes it runnable on a clean clone.
+promo-screen:
+	PYTHONPATH=src python3.11 scripts/build_promo_screen.py

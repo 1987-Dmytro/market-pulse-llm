@@ -161,7 +161,9 @@ CREATE TABLE position_warnings (
     row_id    TEXT NOT NULL,
     warning   TEXT NOT NULL
 );
+"""
 
+PROMO_SCHEMA = """
 -- The promo-pulse tables (phase `promo-pulse-1`, schema ruled in
 -- docs/reviews/2026-08-30-plan-promo-pulse-1.md SP-5). Six of them, and the one thing that makes
 -- them different from every table above: `window_id` is in NO identity here. Week is derived from
@@ -230,6 +232,13 @@ CREATE TABLE rollup (
     value     REAL
 );
 """
+"""The six promo tables, apart from :data:`SCHEMA` for one reason: `data/derived/pulse.db`
+was built before they existed, and `connect()` runs plain `CREATE TABLE` — so a tick over the
+live database would die on the first table that is already there. :func:`ensure_promo_tables`
+creates these six IF NOT EXISTS; `SCHEMA` below still carries them, so a fresh database and a
+migrated one hold the same tables and no second copy of the DDL can drift from this one."""
+
+SCHEMA = SCHEMA + PROMO_SCHEMA
 
 PROMO_TABLES = ("attribution", "signal", "evidence", "digest", "unsure", "rollup")
 """The six the tick writes, in the order a reader meets them. K10 counts every one of them before
@@ -281,6 +290,96 @@ def subject_id(subject_type: str, name: str) -> str:
     if subject_type not in SUBJECT_TYPES:
         raise ValueError(f"unknown subject_type {subject_type!r}, expected one of {SUBJECT_TYPES}")
     return promo_id(subject_type, name)
+
+
+PROMO_KEYS = {
+    "attribution": ("channel", "msg_id", "subject_id"),
+    "signal": ("channel", "thread_root", "type", "subject_id"),
+    "evidence": ("signal_id", "msg_id", "quote"),
+    "digest": ("channel", "thread_root"),
+    "unsure": ("channel", "msg_id", "reason"),
+    "rollup": ("week", "chain", "brand", "metric"),
+}
+"""What each row's id is taken over — the SP-5 ruling's keys, in one dict a test can read.
+
+Written down once rather than at six call sites: the ruling IS the identity, and `make tick`'s
+idempotence is nothing but "the same evidence hashes to the same id". A key restated per writer
+is a key that can be restated wrong in one of them and stay green everywhere else.
+"""
+
+
+def ensure_promo_tables(conn) -> None:
+    """Create the six on a database that predates them. Idempotent, and it touches nothing else."""
+    conn.executescript(PROMO_SCHEMA.replace("CREATE TABLE ", "CREATE TABLE IF NOT EXISTS "))
+
+
+def add_promo(conn, table: str, rows: list[dict]) -> int:
+    """Rows into one of the six promo tables. Returns how many were NEW.
+
+    `INSERT OR IGNORE` on a uuid5 primary key is the whole of the tick's idempotence: a second run
+    over an unchanged store recomputes the same ids and SQLite drops every one of them, so the
+    return value is 0 and K10 holds. The count is what changed, not what was offered — an aggregate
+    that counted rows OFFERED would read "zero new" as "nothing arrived" and vice versa.
+
+    A key part that is NULL is normalised to the empty string, not to the text "None":
+    `rollup.brand` is nullable and `str(None).lower()` would give a brand named «none» its own id.
+    """
+    written = 0
+    for row in rows:
+        key = [row.get(part) for part in PROMO_KEYS[table]]
+        row = {f"{table}_id": promo_id(*["" if part is None else part for part in key]), **row}
+        columns = ", ".join(row)
+        cursor = conn.execute(
+            f"INSERT OR IGNORE INTO {table} ({columns}) VALUES ({', '.join('?' * len(row))})",
+            tuple(row.values()),
+        )
+        written += cursor.rowcount
+    return written
+
+
+def upsert_digest(conn, row: dict) -> str:
+    """The one promo row that is UPDATED in place — the late-comment delta of phase spec §2 S4.
+
+    A thread's digest keeps its identity (`channel|thread_root`) for life; what a late comment moves
+    is its CONTENT. So a digest whose children or coverage changed is rewritten with `version + 1`,
+    and one that did not change is left exactly as it is. Both halves matter for K10: an unconditional
+    rewrite would bump the version on every tick and «zero new rows» would be true while the table
+    churned; an unconditional ignore would mean a late comment never joins and the phase spec's
+    «late comments join via the thread digest» would be a sentence with no code under it.
+
+    Returns `inserted` | `updated` | `unchanged`, so the tick can count the three apart.
+    """
+    digest_id = promo_id(*(row[part] for part in PROMO_KEYS["digest"]))
+    conn.row_factory = sqlite3.Row
+    live = conn.execute("SELECT * FROM digest WHERE digest_id = ?", (digest_id,)).fetchone()
+    if live is None:
+        add_promo(conn, "digest", [{**row, "version": 1}])
+        return "inserted"
+    moved = [name for name in ("text", "children_ids", "supporting_signal_ids",
+                               "covers_up_to_msg_id") if live[name] != row[name]]
+    if not moved:
+        return "unchanged"
+    conn.execute(
+        "UPDATE digest SET version = ?, text = ?, children_ids = ?, supporting_signal_ids = ?,"
+        " covers_up_to_msg_id = ?, cooled_at = ? WHERE digest_id = ?",
+        (live["version"] + 1, row["text"], row["children_ids"], row["supporting_signal_ids"],
+         row["covers_up_to_msg_id"], row["cooled_at"], digest_id),
+    )
+    return "updated"
+
+
+def promo_counts(conn) -> dict[str, int]:
+    """Rows per promo table — K10's before/after reading.
+
+    Per table and never a total: an aggregate counter cannot see a per-row change, and a tick that
+    added one `signal` while dropping one `unsure` would show a flat total
+    ([[check_granularity_matches_the_claim]]).
+    """
+    return {
+        table: conn.execute(f"SELECT COUNT(*) FROM {table}").fetchone()[0]
+        for table in PROMO_TABLES
+    }
+
 
 PRESENCE = ("brand", "line", "category", "size", "attribute")
 PROMO_FIELDS = ("price_promo", "price_old", "discount_pct_printed", "discount_footnote")

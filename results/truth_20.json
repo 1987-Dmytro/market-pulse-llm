@@ -1,0 +1,229 @@
+{
+  "contract": "docs/PHASE-promo-pulse-1.md §2 — the product-truth gate. The gate is the operator's words; this record carries no score and no bar.",
+  "population": 145,
+  "read_from": "results/promo_screen_data.json",
+  "rows": [
+    {
+      "brand": "Рудь",
+      "carrier": "leaflet_page",
+      "post": "@atb_market_official/4342",
+      "printed_pct": 50.0,
+      "product": "Чорниця-ожина",
+      "promo_price": 75.9,
+      "reactions": [],
+      "row_id": "@atb_market_official:4342:1",
+      "volume": "500 г"
+    },
+    {
+      "brand": "Своя Лінія",
+      "carrier": "leaflet_page",
+      "post": "@atb_market_official/4343",
+      "printed_pct": 40.0,
+      "product": "Золотий Каштан пломбір у вершковій глазурі",
+      "promo_price": 17.9,
+      "reactions": [],
+      "row_id": "@atb_market_official:4343:0",
+      "volume": "70 г"
+    },
+    {
+      "brand": "Своя Лінія",
+      "carrier": "leaflet_page",
+      "post": "@atb_market_official/4343",
+      "printed_pct": 40.0,
+      "product": "Золотий Каштан шоколадний у вершковій глазурі",
+      "promo_price": 17.9,
+      "reactions": [],
+      "row_id": "@atb_market_official:4343:1",
+      "volume": "70 г"
+    },
+    {
+      "brand": "Яготинське",
+      "carrier": "leaflet_page",
+      "post": "@atb_market_official/4359",
+      "printed_pct": 32.0,
+      "product": "Молоко",
+      "promo_price": 38.9,
+      "reactions": [],
+      "row_id": "@atb_market_official:4359:4",
+      "volume": "870 г"
+    },
+    {
+      "brand": "Своя Лінія",
+      "carrier": "leaflet_page",
+      "post": "@atb_market_official/4359",
+      "printed_pct": 21.0,
+      "product": "Сир кисломолочний",
+      "promo_price": 57.5,
+      "reactions": [],
+      "row_id": "@atb_market_official:4359:5",
+      "volume": "350 г"
+    },
+    {
+      "brand": "Каштан",
+      "carrier": "leaflet_page",
+      "post": "@atb_market_official/4360",
+      "printed_pct": 45.0,
+      "product": "Солона карамель",
+      "promo_price": 23.5,
+      "reactions": [],
+      "row_id": "@atb_market_official:4360:1",
+      "volume": "75 г"
+    },
+    {
+      "brand": "Київський Пломбір",
+      "carrier": "leaflet_page",
+      "post": "@atb_market_official/4360",
+      "printed_pct": 46.0,
+      "product": "пломбір, у картонному стаканчику",
+      "promo_price": 42.9,
+      "reactions": [],
+      "row_id": "@atb_market_official:4360:3",
+      "volume": "140 г"
+    },
+    {
+      "brand": "Ласунка",
+      "carrier": "leaflet_page",
+      "post": "@atb_market_official/4382",
+      "printed_pct": 50.0,
+      "product": "Gran Pri COCOA",
+      "promo_price": 39.5,
+      "reactions": [],
+      "row_id": "@atb_market_official:4382:2",
+      "volume": "133 г"
+    },
+    {
+      "brand": "Ферма",
+      "carrier": "leaflet_page",
+      "post": "@atb_market_official/4404",
+      "printed_pct": 34.0,
+      "product": "Сирок глазурований Вишня-черешня",
+      "promo_price": 11.7,
+      "reactions": [],
+      "row_id": "@atb_market_official:4404:2",
+      "volume": "36 г"
+    },
+    {
+      "brand": "Premialle",
+      "carrier": "leaflet_page",
+      "post": "@atb_market_official/4404",
+      "printed_pct": 30.0,
+      "product": "Вершки ультрапастеризовані",
+      "promo_price": 119.9,
+      "reactions": [],
+      "row_id": "@atb_market_official:4404:7",
+      "volume": "500 г"
+    },
+    {
+      "brand": "Київський Пломбір",
+      "carrier": "leaflet_page",
+      "post": "@atb_market_official/4405",
+      "printed_pct": 48.0,
+      "product": "пломбір, без цукру",
+      "promo_price": 26.5,
+      "reactions": [],
+      "row_id": "@atb_market_official:4405:0",
+      "volume": "80 г"
+    },
+    {
+      "brand": "Київський Пломбір",
+      "carrier": "leaflet_page",
+      "post": "@atb_market_official/4405",
+      "printed_pct": 48.0,
+      "product": "пломбір, з варенням із лохини",
+      "promo_price": 41.5,
+      "reactions": [],
+      "row_id": "@atb_market_official:4405:1",
+      "volume": "140 г"
+    },
+    {
+      "brand": "Рудь",
+      "carrier": "leaflet_page",
+      "post": "@atb_market_official/4405",
+      "printed_pct": 45.0,
+      "product": "100% морозиво, біле/ шоколадне",
+      "promo_price": 16.3,
+      "reactions": [],
+      "row_id": "@atb_market_official:4405:3",
+      "volume": "70 г"
+    },
+    {
+      "brand": "Рудь",
+      "carrier": "leaflet_page",
+      "post": "@atb_market_official/4405",
+      "printed_pct": 45.0,
+      "product": "Imperium",
+      "promo_price": 33.9,
+      "reactions": [],
+      "row_id": "@atb_market_official:4405:6",
+      "volume": "100 г"
+    },
+    {
+      "brand": "Своя Лінія",
+      "carrier": "leaflet_page",
+      "post": "@atb_market_official/4428",
+      "printed_pct": 32.0,
+      "product": "Морозиво пломбір ВЕЛИКИЙ СТАКАН",
+      "promo_price": 25.5,
+      "reactions": [],
+      "row_id": "@atb_market_official:4428:0",
+      "volume": "85 г"
+    },
+    {
+      "brand": "Каштан",
+      "carrier": "leaflet_page",
+      "post": "@atb_market_official/4508",
+      "printed_pct": 45.0,
+      "product": "Солона карамель у кондитерській глазурі",
+      "promo_price": 22.9,
+      "reactions": [],
+      "row_id": "@atb_market_official:4508:5",
+      "volume": "75 г"
+    },
+    {
+      "brand": "Каштан",
+      "carrier": "leaflet_page",
+      "post": "@atb_market_official/4508",
+      "printed_pct": 45.0,
+      "product": "Полуничний у білій кондитерській глазурі",
+      "promo_price": 22.9,
+      "reactions": [],
+      "row_id": "@atb_market_official:4508:6",
+      "volume": "75 г"
+    },
+    {
+      "brand": "Простонаше",
+      "carrier": "post_text",
+      "post": "@marketopt_promo/2871",
+      "printed_pct": null,
+      "product": "sour-cream",
+      "promo_price": null,
+      "reactions": [],
+      "row_id": "@marketopt_promo:2871:0",
+      "volume": "300 г"
+    },
+    {
+      "brand": "Селянське",
+      "carrier": "post_text",
+      "post": "@telegraf_kremenchuk/71024",
+      "printed_pct": null,
+      "product": "milk",
+      "promo_price": 34.99,
+      "reactions": [],
+      "row_id": "@telegraf_kremenchuk:71024:0",
+      "volume": "950 г"
+    },
+    {
+      "brand": "extra!",
+      "carrier": "post_text",
+      "post": "@telegraf_kremenchuk/71243",
+      "printed_pct": 32.0,
+      "product": "Масло солодковершкове",
+      "promo_price": 67.99,
+      "reactions": [],
+      "row_id": "@telegraf_kremenchuk:71243:1",
+      "volume": "180 г"
+    }
+  ],
+  "rows_drawn": 20,
+  "seed": 42
+}

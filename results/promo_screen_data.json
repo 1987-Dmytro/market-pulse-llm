@@ -1,0 +1,4515 @@
+{
+  "contract": "docs/PHASE-promo-pulse-1.md §2 S4/C5 — `make tick` writes this, `make promo-screen` renders it and reads nothing else.",
+  "screen": {
+    "depth_by_chain_and_brand": [
+      {
+        "brand": "Limo",
+        "chain": "@atb_market_official",
+        "depth_mean": 0.46709971736004363,
+        "week": "2026-W27"
+      },
+      {
+        "brand": "Каштан",
+        "chain": "@atb_market_official",
+        "depth_mean": 0.4470588235294118,
+        "week": "2026-W27"
+      },
+      {
+        "brand": "Київський Пломбір",
+        "chain": "@atb_market_official",
+        "depth_mean": 0.4671316878273458,
+        "week": "2026-W27"
+      },
+      {
+        "brand": "Своя Лінія",
+        "chain": "@atb_market_official",
+        "depth_mean": 0.30598052851182206,
+        "week": "2026-W27"
+      },
+      {
+        "brand": "Laska",
+        "chain": "@atb_market_official",
+        "depth_mean": 0.5,
+        "week": "2026-W28"
+      },
+      {
+        "brand": "Magnat",
+        "chain": "@atb_market_official",
+        "depth_mean": 0.5482608695652174,
+        "week": "2026-W29"
+      },
+      {
+        "brand": "Лімо",
+        "chain": "@atb_market_official",
+        "depth_mean": 0.46385223171219797,
+        "week": "2026-W29"
+      },
+      {
+        "brand": "Рудь",
+        "chain": "@atb_market_official",
+        "depth_mean": 0.4661100637400125,
+        "week": "2026-W29"
+      },
+      {
+        "brand": "Три Ведмеді",
+        "chain": "@atb_market_official",
+        "depth_mean": 0.46444121915820036,
+        "week": "2026-W29"
+      },
+      {
+        "brand": "Каштан",
+        "chain": "@atb_market_official",
+        "depth_mean": 0.4534606205250597,
+        "week": "2026-W30"
+      },
+      {
+        "brand": "Ласунка",
+        "chain": "@atb_market_official",
+        "depth_mean": 0.46511627906976744,
+        "week": "2026-W30"
+      },
+      {
+        "brand": "Лімо",
+        "chain": "@atb_market_official",
+        "depth_mean": 0.46709971736004363,
+        "week": "2026-W30"
+      },
+      {
+        "brand": "Рудь",
+        "chain": "@atb_market_official",
+        "depth_mean": 0.4560276533388955,
+        "week": "2026-W30"
+      }
+    ],
+    "feed": [],
+    "positions": [
+      {
+        "brand": {
+          "display": "Alpro"
+        },
+        "carrier": "post_text",
+        "chain": {
+          "id": "forainfo",
+          "named_by_amendment_3_20": false
+        },
+        "depth": 0.45,
+        "evidence": {
+          "channel": "@forainfo",
+          "msg_id": 6045
+        },
+        "item": {
+          "category": "plant-based-analogs",
+          "line": "банановий або Barista кокосовий",
+          "size_unit": "мл",
+          "size_value": 1000.0
+        },
+        "printed_pct": 45.0,
+        "promo_price": 99.0,
+        "row_id": "@forainfo:6045:0",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "De Luxe Foods&Goods Selected"
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4476
+        },
+        "item": {
+          "attribute_pct": 35.1,
+          "category": "cheese",
+          "line": "сир плавлений з сиром «Моцарелла»",
+          "size_unit": "г",
+          "size_value": 130.0
+        },
+        "promo_price": 45.9,
+        "row_id": "@atb_market_official:4476:0",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "De Luxe Foods&Goods Selected"
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "depth": 0.32,
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4476
+        },
+        "item": {
+          "attribute_pct": 47.0,
+          "category": "cheese",
+          "line": "сир плавлений з сиром «Чеддер»",
+          "size_unit": "г",
+          "size_value": 130.0
+        },
+        "printed_pct": 32.0,
+        "promo_price": 45.9,
+        "row_id": "@atb_market_official:4476:1",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "De Luxe Foods&Goods Selected"
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4476
+        },
+        "item": {
+          "attribute_pct": 45.0,
+          "category": "cheese",
+          "line": "сир плавлений з сиром «Емменталь»",
+          "size_unit": "г",
+          "size_value": 130.0
+        },
+        "promo_price": 45.9,
+        "row_id": "@atb_market_official:4476:2",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "extra!"
+        },
+        "carrier": "post_text",
+        "chain": {
+          "id": "telegraf_kremenchuk",
+          "named_by_amendment_3_20": false
+        },
+        "depth": 0.32,
+        "evidence": {
+          "channel": "@telegraf_kremenchuk",
+          "msg_id": 71243
+        },
+        "item": {
+          "attribute_pct": 45.0,
+          "category": "cheese",
+          "line": "Сир м’який в асортименті",
+          "size_unit": "г",
+          "size_value": 180.0
+        },
+        "printed_pct": 32.0,
+        "promo_price": 49.99,
+        "row_id": "@telegraf_kremenchuk:71243:0",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "extra!"
+        },
+        "carrier": "post_text",
+        "chain": {
+          "id": "telegraf_kremenchuk",
+          "named_by_amendment_3_20": false
+        },
+        "depth": 0.32,
+        "evidence": {
+          "channel": "@telegraf_kremenchuk",
+          "msg_id": 71243
+        },
+        "item": {
+          "attribute_pct": 82.0,
+          "category": "butter",
+          "line": "Масло солодковершкове",
+          "size_unit": "г",
+          "size_value": 180.0
+        },
+        "printed_pct": 32.0,
+        "promo_price": 67.99,
+        "row_id": "@telegraf_kremenchuk:71243:1",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "KOMO"
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "depth": 0.35,
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4359
+        },
+        "item": {
+          "attribute_pct": 35.0,
+          "category": "cheese",
+          "line": "Бекон",
+          "size_unit": "г",
+          "size_value": 75.0
+        },
+        "printed_pct": 35.0,
+        "promo_price": 17.5,
+        "row_id": "@atb_market_official:4359:0",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "KOMO"
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "depth": 0.35,
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4359
+        },
+        "item": {
+          "attribute_pct": 35.0,
+          "category": "cheese",
+          "line": "Вершковий тенеро",
+          "size_unit": "г",
+          "size_value": 75.0
+        },
+        "printed_pct": 35.0,
+        "promo_price": 17.5,
+        "row_id": "@atb_market_official:4359:1",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Komo"
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "depth": 0.32,
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4385
+        },
+        "item": {
+          "attribute_pct": 50.0,
+          "category": "cheese",
+          "line": "Вершковий",
+          "size_unit": "г",
+          "size_value": 150.0
+        },
+        "printed_pct": 32.0,
+        "promo_price": 59.9,
+        "row_id": "@atb_market_official:4385:0",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Komo"
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "depth": 0.32,
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4385
+        },
+        "item": {
+          "attribute_pct": 50.0,
+          "category": "cheese",
+          "line": "Сметанковий",
+          "size_unit": "г",
+          "size_value": 150.0
+        },
+        "printed_pct": 32.0,
+        "promo_price": 59.9,
+        "row_id": "@atb_market_official:4385:1",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Komo"
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "depth": 0.33,
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4385
+        },
+        "item": {
+          "attribute_pct": 50.0,
+          "category": "cheese",
+          "line": "Чеддер",
+          "size_unit": "г",
+          "size_value": 150.0
+        },
+        "printed_pct": 33.0,
+        "promo_price": 59.9,
+        "row_id": "@atb_market_official:4385:2",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Komo"
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "depth": 0.33,
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4385
+        },
+        "item": {
+          "attribute_pct": 50.0,
+          "category": "cheese",
+          "line": "Горіховий",
+          "size_unit": "г",
+          "size_value": 150.0
+        },
+        "printed_pct": 33.0,
+        "promo_price": 68.9,
+        "row_id": "@atb_market_official:4385:3",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "La Belle Laitiere"
+        },
+        "carrier": "post_text",
+        "chain": {
+          "id": "telegraf_kremenchuk",
+          "named_by_amendment_3_20": false
+        },
+        "depth": 0.4,
+        "evidence": {
+          "channel": "@telegraf_kremenchuk",
+          "msg_id": 70827
+        },
+        "item": {
+          "attribute_pct": 50.0,
+          "category": "cheese",
+          "line": "Брі",
+          "size_unit": "г",
+          "size_value": 100.0
+        },
+        "printed_pct": 40.0,
+        "promo_price": 44.9,
+        "row_id": "@telegraf_kremenchuk:70827:0",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Laska"
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "depth": 0.5,
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4381
+        },
+        "item": {
+          "category": "ice-cream",
+          "line": "Maximuse",
+          "size_unit": "г",
+          "size_value": 300.0
+        },
+        "printed_pct": 50.0,
+        "promo_price": 74.5,
+        "row_id": "@atb_market_official:4381:0",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Laska"
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "depth": 0.5,
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4381
+        },
+        "item": {
+          "category": "ice-cream",
+          "line": "Maximuse",
+          "size_unit": "г",
+          "size_value": 500.0
+        },
+        "printed_pct": 50.0,
+        "promo_price": 99.5,
+        "row_id": "@atb_market_official:4381:1",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Laska"
+        },
+        "carrier": "post_text",
+        "chain": {
+          "id": "telegraf_kremenchuk",
+          "named_by_amendment_3_20": false
+        },
+        "depth": 0.47,
+        "evidence": {
+          "channel": "@telegraf_kremenchuk",
+          "msg_id": 71243
+        },
+        "item": {
+          "category": "ice-cream",
+          "line": "Морозиво в асортименті Лакомка",
+          "size_unit": "г",
+          "size_value": 100.0
+        },
+        "printed_pct": 47.0,
+        "promo_price": 26.99,
+        "row_id": "@telegraf_kremenchuk:71243:2",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Magnat"
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "depth": 0.55,
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4426
+        },
+        "item": {
+          "category": "ice-cream",
+          "line": "Лісовий горіх",
+          "size_unit": "г",
+          "size_value": 500.0
+        },
+        "printed_pct": 55.0,
+        "promo_price": 103.9,
+        "row_id": "@atb_market_official:4426:0",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Magnat"
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "depth": 0.55,
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4426
+        },
+        "item": {
+          "category": "ice-cream",
+          "line": "Малиновий чизкейк",
+          "size_unit": "г",
+          "size_value": 500.0
+        },
+        "printed_pct": 55.0,
+        "promo_price": 103.9,
+        "row_id": "@atb_market_official:4426:1",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Magnat"
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "depth": 0.55,
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4426
+        },
+        "item": {
+          "category": "ice-cream",
+          "line": "Манго-апельсин",
+          "size_unit": "г",
+          "size_value": 500.0
+        },
+        "printed_pct": 55.0,
+        "promo_price": 103.9,
+        "row_id": "@atb_market_official:4426:2",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Premialle"
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "depth": 0.41,
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4402
+        },
+        "item": {
+          "attribute_pct": 45.0,
+          "category": "cheese",
+          "line": "Фелата",
+          "size_unit": "г",
+          "size_value": 180.0
+        },
+        "printed_pct": 41.0,
+        "promo_price": 46.9,
+        "row_id": "@atb_market_official:4402:0",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Premialle"
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "depth": 0.3,
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4404
+        },
+        "item": {
+          "attribute_pct": 33.0,
+          "category": "dairy",
+          "line": "Вершки ультрапастеризовані",
+          "size_unit": "г",
+          "size_value": 500.0
+        },
+        "printed_pct": 30.0,
+        "promo_price": 119.9,
+        "row_id": "@atb_market_official:4404:7",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Premialle"
+        },
+        "carrier": "post_text",
+        "chain": {
+          "id": "forainfo",
+          "named_by_amendment_3_20": false
+        },
+        "depth": 0.5,
+        "evidence": {
+          "channel": "@forainfo",
+          "msg_id": 6036
+        },
+        "item": {
+          "category": "cheese",
+          "line": "Фелата"
+        },
+        "printed_pct": 50.0,
+        "promo_price": 35.9,
+        "row_id": "@forainfo:6036:0",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "President",
+          "id": "president",
+          "own": false
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "depth": 0.42,
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4384
+        },
+        "item": {
+          "attribute_pct": 38.0,
+          "category": "cheese",
+          "line": "Вершковий",
+          "size_unit": "г",
+          "size_value": 70.0
+        },
+        "printed_pct": 42.0,
+        "promo_price": 15.5,
+        "row_id": "@atb_market_official:4384:0",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "President",
+          "id": "president",
+          "own": false
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "depth": 0.42,
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4384
+        },
+        "item": {
+          "attribute_pct": 38.0,
+          "category": "cheese",
+          "line": "Гауда",
+          "size_unit": "г",
+          "size_value": 70.0
+        },
+        "printed_pct": 42.0,
+        "promo_price": 15.5,
+        "row_id": "@atb_market_official:4384:1",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Ryki"
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4358
+        },
+        "item": {
+          "attribute_pct": 45.0,
+          "category": "cheese",
+          "line": "RYCKI EDAM",
+          "size_unit": "г",
+          "size_value": 135.0
+        },
+        "promo_price": 58.5,
+        "row_id": "@atb_market_official:4358:0",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Ryki"
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4358
+        },
+        "item": {
+          "attribute_pct": 45.0,
+          "category": "cheese",
+          "line": "RYCKI IAASDAM",
+          "size_unit": "г",
+          "size_value": 135.0
+        },
+        "promo_price": 58.5,
+        "row_id": "@atb_market_official:4358:1",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Ryki"
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4358
+        },
+        "item": {
+          "attribute_pct": 45.0,
+          "category": "cheese",
+          "line": "CEZAR",
+          "size_unit": "г",
+          "size_value": 135.0
+        },
+        "promo_price": 58.5,
+        "row_id": "@atb_market_official:4358:2",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "SOT"
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "depth": 0.31,
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4440
+        },
+        "item": {
+          "attribute_pct": 45.0,
+          "category": "cheese",
+          "line": "Гауда",
+          "size_unit": "г",
+          "size_value": 150.0
+        },
+        "printed_pct": 31.0,
+        "promo_price": 64.5,
+        "row_id": "@atb_market_official:4440:0",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "SOT"
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "depth": 0.31,
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4440
+        },
+        "item": {
+          "attribute_pct": 45.0,
+          "category": "cheese",
+          "line": "Гауда без лактози",
+          "size_unit": "г",
+          "size_value": 150.0
+        },
+        "printed_pct": 31.0,
+        "promo_price": 64.5,
+        "row_id": "@atb_market_official:4440:1",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "SOT"
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "depth": 0.31,
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4440
+        },
+        "item": {
+          "attribute_pct": 45.0,
+          "category": "cheese",
+          "line": "Маасдам",
+          "size_unit": "г",
+          "size_value": 150.0
+        },
+        "printed_pct": 31.0,
+        "promo_price": 64.5,
+        "row_id": "@atb_market_official:4440:2",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Активіа"
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "depth": 0.33,
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4359
+        },
+        "item": {
+          "category": "yogurt",
+          "line": "Біфідойогурт",
+          "size_unit": "г",
+          "size_value": 260.0
+        },
+        "printed_pct": 33.0,
+        "promo_price": 24.7,
+        "row_id": "@atb_market_official:4359:2",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Активіа"
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "depth": 0.33,
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4359
+        },
+        "item": {
+          "category": "yogurt",
+          "line": "Біфідойогурт",
+          "size_unit": "г",
+          "size_value": 260.0
+        },
+        "printed_pct": 33.0,
+        "promo_price": 23.9,
+        "row_id": "@atb_market_official:4359:3",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Бурьонка"
+        },
+        "carrier": "post_text",
+        "chain": {
+          "id": "forainfo",
+          "named_by_amendment_3_20": false
+        },
+        "depth": 0.45,
+        "evidence": {
+          "channel": "@forainfo",
+          "msg_id": 6041
+        },
+        "item": {
+          "attribute_pct": 10.0,
+          "category": "dairy",
+          "size_unit": "г",
+          "size_value": 500.0
+        },
+        "printed_pct": 45.0,
+        "promo_price": 39.9,
+        "row_id": "@forainfo:6041:1",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Біло"
+        },
+        "carrier": "post_text",
+        "chain": {
+          "id": "forainfo",
+          "named_by_amendment_3_20": false
+        },
+        "depth": 0.44,
+        "evidence": {
+          "channel": "@forainfo",
+          "msg_id": 6045
+        },
+        "item": {
+          "attribute_pct": 82.0,
+          "category": "butter",
+          "line": "екстра",
+          "size_unit": "г",
+          "size_value": 180.0
+        },
+        "printed_pct": 44.0,
+        "promo_price": 65.9,
+        "row_id": "@forainfo:6045:1",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Галичина",
+          "id": "halychyna",
+          "own": false
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "depth": 0.32,
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4404
+        },
+        "item": {
+          "attribute_pct": 2.2,
+          "category": "yogurt",
+          "line": "Йогурт",
+          "size_unit": "г",
+          "size_value": 240.0
+        },
+        "printed_pct": 32.0,
+        "promo_price": 26.9,
+        "row_id": "@atb_market_official:4404:4",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Галичина",
+          "id": "halychyna",
+          "own": false
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "depth": 0.32,
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4404
+        },
+        "item": {
+          "attribute_pct": 1.6,
+          "category": "yogurt",
+          "line": "Йогурт",
+          "size_unit": "г",
+          "size_value": 280.0
+        },
+        "printed_pct": 32.0,
+        "promo_price": 26.5,
+        "row_id": "@atb_market_official:4404:5",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Галичина",
+          "id": "halychyna",
+          "own": false
+        },
+        "carrier": "post_text",
+        "chain": {
+          "id": "telegraf_kremenchuk",
+          "named_by_amendment_3_20": false
+        },
+        "depth": 0.4,
+        "evidence": {
+          "channel": "@telegraf_kremenchuk",
+          "msg_id": 70827
+        },
+        "item": {
+          "attribute_pct": 82.5,
+          "category": "butter",
+          "line": "Масло солодковершкове Екстра",
+          "size_unit": "г",
+          "size_value": 180.0
+        },
+        "printed_pct": 40.0,
+        "promo_price": 74.99,
+        "row_id": "@telegraf_kremenchuk:70827:2",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Дживальдіс"
+        },
+        "carrier": "post_text",
+        "chain": {
+          "id": "ekomarket_shop",
+          "named_by_amendment_3_20": false
+        },
+        "depth": 0.3,
+        "evidence": {
+          "channel": "@ekomarket_shop",
+          "msg_id": 1445
+        },
+        "item": {
+          "category": "cheese",
+          "line": "Сир мʼякий \"Моцарела\"/\"Сулгуні\"",
+          "size_unit": "г",
+          "size_value": 180.0
+        },
+        "printed_pct": 30.0,
+        "promo_price": 62.99,
+        "row_id": "@ekomarket_shop:1445:1",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Дольче"
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "depth": 0.35,
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4352
+        },
+        "item": {
+          "attribute_pct": 3.2,
+          "category": "yogurt",
+          "size_unit": "г",
+          "size_value": 115.0
+        },
+        "printed_pct": 35.0,
+        "promo_price": 12.9,
+        "row_id": "@atb_market_official:4352:0",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Дольче"
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "depth": 0.3,
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4352
+        },
+        "item": {
+          "attribute_pct": 3.2,
+          "category": "yogurt",
+          "size_unit": "г",
+          "size_value": 280.0
+        },
+        "printed_pct": 30.0,
+        "promo_price": 30.9,
+        "row_id": "@atb_market_official:4352:1",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Злагода",
+          "id": "zlahoda",
+          "own": false
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "depth": 0.3,
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4404
+        },
+        "item": {
+          "attribute_pct": 2.8,
+          "category": "yogurt",
+          "line": "Йогурт",
+          "size_unit": "г",
+          "size_value": 200.0
+        },
+        "printed_pct": 30.0,
+        "promo_price": 20.5,
+        "row_id": "@atb_market_official:4404:3",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Злагода",
+          "id": "zlahoda",
+          "own": false
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "depth": 0.3,
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4404
+        },
+        "item": {
+          "attribute_pct": 2.8,
+          "category": "yogurt",
+          "line": "Йогурт",
+          "size_unit": "г",
+          "size_value": 170.0
+        },
+        "printed_pct": 30.0,
+        "promo_price": 15.9,
+        "row_id": "@atb_market_official:4404:6",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Каштан"
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "depth": 0.45,
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4360
+        },
+        "item": {
+          "category": "ice-cream",
+          "line": "Солона карамель",
+          "size_unit": "г",
+          "size_value": 75.0
+        },
+        "printed_pct": 45.0,
+        "promo_price": 23.5,
+        "row_id": "@atb_market_official:4360:1",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Каштан"
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "depth": 0.45,
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4360
+        },
+        "item": {
+          "category": "ice-cream",
+          "line": "Полуничний",
+          "size_unit": "г",
+          "size_value": 75.0
+        },
+        "printed_pct": 45.0,
+        "promo_price": 23.5,
+        "row_id": "@atb_market_official:4360:2",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Каштан"
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "depth": 0.45,
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4508
+        },
+        "item": {
+          "category": "ice-cream",
+          "line": "Солона карамель у кондитерській глазурі",
+          "size_unit": "г",
+          "size_value": 75.0
+        },
+        "printed_pct": 45.0,
+        "promo_price": 22.9,
+        "row_id": "@atb_market_official:4508:5",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Каштан"
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "depth": 0.45,
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4508
+        },
+        "item": {
+          "category": "ice-cream",
+          "line": "Полуничний у білій кондитерській глазурі",
+          "size_unit": "г",
+          "size_value": 75.0
+        },
+        "printed_pct": 45.0,
+        "promo_price": 22.9,
+        "row_id": "@atb_market_official:4508:6",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Київський Пломбір"
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "depth": 0.46,
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4360
+        },
+        "item": {
+          "category": "ice-cream",
+          "line": "пломбір, у вафельному стаканчику",
+          "size_unit": "г",
+          "size_value": 80.0
+        },
+        "printed_pct": 46.0,
+        "promo_price": 21.9,
+        "row_id": "@atb_market_official:4360:0",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Київський Пломбір"
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "depth": 0.46,
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4360
+        },
+        "item": {
+          "category": "ice-cream",
+          "line": "пломбір, у картонному стаканчику",
+          "size_unit": "г",
+          "size_value": 140.0
+        },
+        "printed_pct": 46.0,
+        "promo_price": 42.9,
+        "row_id": "@atb_market_official:4360:3",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Київський Пломбір"
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "depth": 0.48,
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4405
+        },
+        "item": {
+          "category": "ice-cream",
+          "line": "пломбір, без цукру",
+          "size_unit": "г",
+          "size_value": 80.0
+        },
+        "printed_pct": 48.0,
+        "promo_price": 26.5,
+        "row_id": "@atb_market_official:4405:0",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Київський Пломбір"
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "depth": 0.48,
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4405
+        },
+        "item": {
+          "category": "ice-cream",
+          "line": "пломбір, з варенням із лохини",
+          "size_unit": "г",
+          "size_value": 140.0
+        },
+        "printed_pct": 48.0,
+        "promo_price": 41.5,
+        "row_id": "@atb_market_official:4405:1",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Київський Пломбір"
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "depth": 0.48,
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4405
+        },
+        "item": {
+          "category": "ice-cream",
+          "line": "з малиновим варенням/ з печивом з какао",
+          "size_unit": "г",
+          "size_value": 110.0
+        },
+        "printed_pct": 48.0,
+        "promo_price": 39.9,
+        "row_id": "@atb_market_official:4405:2",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Київський Пломбір"
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "depth": 0.55,
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4468
+        },
+        "item": {
+          "category": "ice-cream",
+          "line": "Класичний у вафельному стаканчику",
+          "size_unit": "г",
+          "size_value": 80.0
+        },
+        "printed_pct": 55.0,
+        "promo_price": 18.3,
+        "row_id": "@atb_market_official:4468:0",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Київський Пломбір"
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "depth": 0.55,
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4468
+        },
+        "item": {
+          "category": "ice-cream",
+          "line": "Класичний ескімо в глазурі",
+          "size_unit": "г",
+          "size_value": 80.0
+        },
+        "printed_pct": 55.0,
+        "promo_price": 26.5,
+        "row_id": "@atb_market_official:4468:1",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Київський Пломбір"
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "depth": 0.55,
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4468
+        },
+        "item": {
+          "category": "ice-cream",
+          "line": "Класичний у картонному стаканчику",
+          "size_unit": "г",
+          "size_value": 140.0
+        },
+        "printed_pct": 55.0,
+        "promo_price": 36.3,
+        "row_id": "@atb_market_official:4468:2",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Комо"
+        },
+        "carrier": "post_text",
+        "chain": {
+          "id": "ekomarket_shop",
+          "named_by_amendment_3_20": false
+        },
+        "depth": 0.45,
+        "evidence": {
+          "channel": "@ekomarket_shop",
+          "msg_id": 1458
+        },
+        "item": {
+          "category": "cheese",
+          "line": "Тенеро Мілк",
+          "size_unit": "г",
+          "size_value": 150.0
+        },
+        "printed_pct": 45.0,
+        "promo_price": 66.5,
+        "row_id": "@ekomarket_shop:1458:0",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Комо"
+        },
+        "carrier": "post_text",
+        "chain": {
+          "id": "marketopt_promo",
+          "named_by_amendment_3_20": false
+        },
+        "evidence": {
+          "channel": "@marketopt_promo",
+          "msg_id": 2884
+        },
+        "item": {
+          "category": "cheese",
+          "line": "Кантрі",
+          "size_unit": "г",
+          "size_value": 150.0
+        },
+        "row_id": "@marketopt_promo:2884:0",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Лактоня"
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "depth": 0.33,
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4507
+        },
+        "item": {
+          "attribute_pct": 1.5,
+          "category": "yogurt",
+          "line": "Йогурт",
+          "size_unit": "г",
+          "size_value": 290.0
+        },
+        "printed_pct": 33.0,
+        "promo_price": 22.7,
+        "row_id": "@atb_market_official:4507:6",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Лактоня"
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "depth": 0.33,
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4507
+        },
+        "item": {
+          "attribute_pct": 1.5,
+          "category": "yogurt",
+          "line": "Йогурт",
+          "size_unit": "г",
+          "size_value": 100.0
+        },
+        "printed_pct": 33.0,
+        "promo_price": 14.7,
+        "row_id": "@atb_market_official:4507:7",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Ласунка",
+          "id": "lasunka",
+          "own": false
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "depth": 0.5,
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4382
+        },
+        "item": {
+          "category": "ice-cream",
+          "line": "Стакан Великан Вишня Абрикос",
+          "size_unit": "г",
+          "size_value": 100.0
+        },
+        "printed_pct": 50.0,
+        "promo_price": 24.5,
+        "row_id": "@atb_market_official:4382:0",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Ласунка",
+          "id": "lasunka",
+          "own": false
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "depth": 0.5,
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4382
+        },
+        "item": {
+          "category": "ice-cream",
+          "line": "Стакан Великан З Какао",
+          "size_unit": "г",
+          "size_value": 100.0
+        },
+        "printed_pct": 50.0,
+        "promo_price": 24.5,
+        "row_id": "@atb_market_official:4382:1",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Ласунка",
+          "id": "lasunka",
+          "own": false
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "depth": 0.5,
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4382
+        },
+        "item": {
+          "category": "ice-cream",
+          "line": "Gran Pri COCOA",
+          "size_unit": "г",
+          "size_value": 133.0
+        },
+        "printed_pct": 50.0,
+        "promo_price": 39.5,
+        "row_id": "@atb_market_official:4382:2",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Ласунка",
+          "id": "lasunka",
+          "own": false
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "depth": 0.5,
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4382
+        },
+        "item": {
+          "category": "ice-cream",
+          "line": "Gran Pri RASPBERRY",
+          "size_unit": "г",
+          "size_value": 133.0
+        },
+        "printed_pct": 50.0,
+        "promo_price": 39.5,
+        "row_id": "@atb_market_official:4382:3",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Ласунка",
+          "id": "lasunka",
+          "own": false
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "depth": 0.46,
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4508
+        },
+        "item": {
+          "category": "ice-cream",
+          "line": "Стоп-наркотик крем-брюле з маком у глазурі, ескімо",
+          "size_unit": "г",
+          "size_value": 85.0
+        },
+        "printed_pct": 46.0,
+        "promo_price": 29.9,
+        "row_id": "@atb_market_official:4508:0",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Ласунка",
+          "id": "lasunka",
+          "own": false
+        },
+        "carrier": "post_text",
+        "chain": {
+          "id": "telegraf_kremenchuk",
+          "named_by_amendment_3_20": false
+        },
+        "evidence": {
+          "channel": "@telegraf_kremenchuk",
+          "msg_id": 71024
+        },
+        "item": {
+          "attribute_pct": 15.0,
+          "category": "ice-cream",
+          "line": "пломбір Стакан Великан",
+          "size_unit": "г",
+          "size_value": 95.0
+        },
+        "promo_price": 24.99,
+        "row_id": "@telegraf_kremenchuk:71024:2",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Лімо",
+          "id": "limo",
+          "own": false
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "depth": 0.46,
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4360
+        },
+        "item": {
+          "category": "ice-cream",
+          "line": "Пломбір 1965, йогуртове зі смаком черешні з кранчами",
+          "size_unit": "г",
+          "size_value": 80.0
+        },
+        "printed_pct": 46.0,
+        "promo_price": 24.9,
+        "row_id": "@atb_market_official:4360:4",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Лімо",
+          "id": "limo",
+          "own": false
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "depth": 0.46,
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4360
+        },
+        "item": {
+          "category": "ice-cream",
+          "line": "Пломбір 1965, ескімо в шоколадній глазурі",
+          "size_unit": "г",
+          "size_value": 90.0
+        },
+        "printed_pct": 46.0,
+        "promo_price": 29.9,
+        "row_id": "@atb_market_official:4360:5",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Лімо",
+          "id": "limo",
+          "own": false
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "depth": 0.46,
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4446
+        },
+        "item": {
+          "category": "ice-cream",
+          "line": "Сиркове 1965",
+          "size_unit": "г",
+          "size_value": 65.0
+        },
+        "printed_pct": 46.0,
+        "promo_price": 24.9,
+        "row_id": "@atb_market_official:4446:1",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Лімо",
+          "id": "limo",
+          "own": false
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "depth": 0.46,
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4446
+        },
+        "item": {
+          "category": "ice-cream",
+          "line": "Пломбір 1965",
+          "size_unit": "г",
+          "size_value": 500.0
+        },
+        "printed_pct": 46.0,
+        "promo_price": 105.9,
+        "row_id": "@atb_market_official:4446:2",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Лімо",
+          "id": "limo",
+          "own": false
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "depth": 0.46,
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4446
+        },
+        "item": {
+          "category": "ice-cream",
+          "line": "LIMO ICE CREAM",
+          "size_unit": "г",
+          "size_value": 700.0
+        },
+        "printed_pct": 46.0,
+        "promo_price": 114.9,
+        "row_id": "@atb_market_official:4446:3",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Лімо",
+          "id": "limo",
+          "own": false
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "depth": 0.46,
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4508
+        },
+        "item": {
+          "category": "ice-cream",
+          "line": "Пломбір 1965, ескімо в шоколадній глазурі",
+          "size_unit": "г",
+          "size_value": 80.0
+        },
+        "printed_pct": 46.0,
+        "promo_price": 24.9,
+        "row_id": "@atb_market_official:4508:3",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Лімо",
+          "id": "limo",
+          "own": false
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "depth": 0.46,
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4508
+        },
+        "item": {
+          "category": "ice-cream",
+          "line": "Пломбір 1965, ескімо в шоколадній глазурі",
+          "size_unit": "г",
+          "size_value": 90.0
+        },
+        "printed_pct": 46.0,
+        "promo_price": 29.9,
+        "row_id": "@atb_market_official:4508:4",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Лімо",
+          "id": "limo",
+          "own": false
+        },
+        "carrier": "post_text",
+        "chain": {
+          "id": "forainfo",
+          "named_by_amendment_3_20": false
+        },
+        "depth": 0.5,
+        "evidence": {
+          "channel": "@forainfo",
+          "msg_id": 6032
+        },
+        "item": {
+          "category": "ice-cream",
+          "line": "Velvet ванільне-солона карамель",
+          "size_unit": "г",
+          "size_value": 80.0
+        },
+        "printed_pct": 50.0,
+        "promo_price": 29.9,
+        "row_id": "@forainfo:6032:0",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Лімо",
+          "id": "limo",
+          "own": false
+        },
+        "carrier": "post_text",
+        "chain": {
+          "id": "forainfo",
+          "named_by_amendment_3_20": false
+        },
+        "depth": 0.5,
+        "evidence": {
+          "channel": "@forainfo",
+          "msg_id": 6032
+        },
+        "item": {
+          "category": "ice-cream",
+          "line": "Velvet сорбет манго-маракуйя",
+          "size_unit": "г",
+          "size_value": 80.0
+        },
+        "printed_pct": 50.0,
+        "promo_price": 29.9,
+        "row_id": "@forainfo:6032:1",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Молокія",
+          "id": "molokija",
+          "own": false
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "depth": 0.28,
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4403
+        },
+        "item": {
+          "attribute_pct": 73.0,
+          "category": "butter",
+          "line": "Селянське",
+          "size_unit": "г",
+          "size_value": 180.0
+        },
+        "printed_pct": 28.0,
+        "promo_price": 79.9,
+        "row_id": "@atb_market_official:4403:0",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Молокія",
+          "id": "molokija",
+          "own": false
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "depth": 0.36,
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4507
+        },
+        "item": {
+          "attribute_pct": 3.0,
+          "category": "yogurt",
+          "line": "Йогурт білий густий, 3%",
+          "size_unit": "г",
+          "size_value": 300.0
+        },
+        "printed_pct": 36.0,
+        "promo_price": 79.9,
+        "row_id": "@atb_market_official:4507:2",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Молокія",
+          "id": "molokija",
+          "own": false
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "depth": 0.38,
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4507
+        },
+        "item": {
+          "attribute_pct": 1.6,
+          "category": "yogurt",
+          "line": "Йогурт білий густий, 1,6%",
+          "size_unit": "г",
+          "size_value": 300.0
+        },
+        "printed_pct": 38.0,
+        "promo_price": 27.9,
+        "row_id": "@atb_market_official:4507:3",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Молокія",
+          "id": "molokija",
+          "own": false
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "depth": 0.38,
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4507
+        },
+        "item": {
+          "attribute_pct": 8.0,
+          "category": "yogurt",
+          "line": "Йогурт по-грецьки, 8%",
+          "size_unit": "г",
+          "size_value": 300.0
+        },
+        "printed_pct": 38.0,
+        "promo_price": 33.5,
+        "row_id": "@atb_market_official:4507:4",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Молокія",
+          "id": "molokija",
+          "own": false
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "depth": 0.38,
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4507
+        },
+        "item": {
+          "attribute_pct": 2.5,
+          "category": "yogurt",
+          "line": "Йогурт безлактозний, 2,5%",
+          "size_unit": "г",
+          "size_value": 300.0
+        },
+        "printed_pct": 38.0,
+        "promo_price": 28.7,
+        "row_id": "@atb_market_official:4507:5",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Молокія",
+          "id": "molokija",
+          "own": false
+        },
+        "carrier": "post_text",
+        "chain": {
+          "id": "msuaaaa",
+          "named_by_amendment_3_20": false
+        },
+        "evidence": {
+          "channel": "@msuaaaa",
+          "msg_id": 10656
+        },
+        "item": {
+          "category": "butter",
+          "line": "Масло"
+        },
+        "promo_price": 59.0,
+        "row_id": "@msuaaaa:10656:0",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Простонаше"
+        },
+        "carrier": "post_text",
+        "chain": {
+          "id": "ekomarket_shop",
+          "named_by_amendment_3_20": false
+        },
+        "depth": 0.34,
+        "evidence": {
+          "channel": "@ekomarket_shop",
+          "msg_id": 1448
+        },
+        "item": {
+          "attribute_pct": 20.0,
+          "category": "sour-cream",
+          "size_unit": "г",
+          "size_value": 300.0
+        },
+        "printed_pct": 34.0,
+        "promo_price": 48.9,
+        "row_id": "@ekomarket_shop:1448:3",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Простонаше"
+        },
+        "carrier": "post_text",
+        "chain": {
+          "id": "marketopt_promo",
+          "named_by_amendment_3_20": false
+        },
+        "evidence": {
+          "channel": "@marketopt_promo",
+          "msg_id": 2871
+        },
+        "item": {
+          "attribute_pct": 15.0,
+          "category": "sour-cream",
+          "size_unit": "г",
+          "size_value": 300.0
+        },
+        "row_id": "@marketopt_promo:2871:0",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "ПростоНаше"
+        },
+        "carrier": "post_text",
+        "chain": {
+          "id": "varus",
+          "named_by_amendment_3_20": true
+        },
+        "evidence": {
+          "channel": "@VARUS_channel",
+          "msg_id": 10456
+        },
+        "item": {
+          "attribute_pct": 20.0,
+          "category": "sour-cream"
+        },
+        "row_id": "@VARUS_channel:10456:0",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Розумний вибір"
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "depth": 0.3,
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4383
+        },
+        "item": {
+          "category": "ice-cream",
+          "line": "Морозиво «Каштан»",
+          "size_unit": "г",
+          "size_value": 75.0
+        },
+        "printed_pct": 30.0,
+        "promo_price": 13.9,
+        "row_id": "@atb_market_official:4383:0",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Розумний вибір"
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "depth": 0.25,
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4383
+        },
+        "item": {
+          "category": "ice-cream",
+          "line": "Морозиво з наповнювачем «Вишневий»",
+          "size_unit": "г",
+          "size_value": 1000.0
+        },
+        "printed_pct": 25.0,
+        "promo_price": 119.9,
+        "row_id": "@atb_market_official:4383:1",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Розумний вибір"
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "depth": 0.25,
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4383
+        },
+        "item": {
+          "category": "ice-cream",
+          "line": "Морозиво з наповнювачем «Варене згущене молоко»",
+          "size_unit": "г",
+          "size_value": 1000.0
+        },
+        "printed_pct": 25.0,
+        "promo_price": 119.9,
+        "row_id": "@atb_market_official:4383:2",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Розумний вибір"
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "depth": 0.25,
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4428
+        },
+        "item": {
+          "category": "ice-cream",
+          "line": "МОРОЗИВО з какао",
+          "size_unit": "г",
+          "size_value": 1000.0
+        },
+        "printed_pct": 25.0,
+        "promo_price": 117.9,
+        "row_id": "@atb_market_official:4428:2",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Розумний вибір"
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "depth": 0.25,
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4428
+        },
+        "item": {
+          "category": "ice-cream",
+          "line": "МОРОЗИВО з ароматом ванілі",
+          "size_unit": "г",
+          "size_value": 1000.0
+        },
+        "printed_pct": 25.0,
+        "promo_price": 117.9,
+        "row_id": "@atb_market_official:4428:3",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Рудь",
+          "id": "rud",
+          "own": false
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "depth": 0.5,
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4342
+        },
+        "item": {
+          "category": "ice-cream",
+          "line": "100% морозиво",
+          "size_unit": "г",
+          "size_value": 500.0
+        },
+        "printed_pct": 50.0,
+        "promo_price": 66.9,
+        "row_id": "@atb_market_official:4342:0",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Рудь",
+          "id": "rud",
+          "own": false
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "depth": 0.5,
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4342
+        },
+        "item": {
+          "category": "ice-cream",
+          "line": "Чорниця-ожина",
+          "size_unit": "г",
+          "size_value": 500.0
+        },
+        "printed_pct": 50.0,
+        "promo_price": 75.9,
+        "row_id": "@atb_market_official:4342:1",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Рудь",
+          "id": "rud",
+          "own": false
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "depth": 0.45,
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4405
+        },
+        "item": {
+          "category": "ice-cream",
+          "line": "100% морозиво, біле/ шоколадне",
+          "size_unit": "г",
+          "size_value": 70.0
+        },
+        "printed_pct": 45.0,
+        "promo_price": 16.3,
+        "row_id": "@atb_market_official:4405:3",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Рудь",
+          "id": "rud",
+          "own": false
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "depth": 0.45,
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4405
+        },
+        "item": {
+          "category": "ice-cream",
+          "line": "100% морозиво, біле/ шоколадне",
+          "size_unit": "г",
+          "size_value": 150.0
+        },
+        "printed_pct": 45.0,
+        "promo_price": 17.5,
+        "row_id": "@atb_market_official:4405:4",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Рудь",
+          "id": "rud",
+          "own": false
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "depth": 0.45,
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4405
+        },
+        "item": {
+          "category": "ice-cream",
+          "line": "100% морозиво, брикет",
+          "size_unit": "г",
+          "size_value": 90.0
+        },
+        "printed_pct": 45.0,
+        "promo_price": 18.9,
+        "row_id": "@atb_market_official:4405:5",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Рудь",
+          "id": "rud",
+          "own": false
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "depth": 0.45,
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4405
+        },
+        "item": {
+          "category": "ice-cream",
+          "line": "Imperium",
+          "size_unit": "г",
+          "size_value": 100.0
+        },
+        "printed_pct": 45.0,
+        "promo_price": 33.9,
+        "row_id": "@atb_market_official:4405:6",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Рудь",
+          "id": "rud",
+          "own": false
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "depth": 0.45,
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4405
+        },
+        "item": {
+          "category": "ice-cream",
+          "line": "ескімо",
+          "size_unit": "г",
+          "size_value": 85.0
+        },
+        "printed_pct": 45.0,
+        "promo_price": 22.3,
+        "row_id": "@atb_market_official:4405:7",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Рудь",
+          "id": "rud",
+          "own": false
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "depth": 0.46,
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4446
+        },
+        "item": {
+          "category": "ice-cream",
+          "line": "Соковита трилогія",
+          "pack_count": 6,
+          "size_unit": "г",
+          "size_value": 100.0
+        },
+        "printed_pct": 46.0,
+        "promo_price": 88.9,
+        "row_id": "@atb_market_official:4446:4",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Рудь",
+          "id": "rud",
+          "own": false
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "depth": 0.46,
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4446
+        },
+        "item": {
+          "category": "ice-cream",
+          "line": "Black-кава",
+          "size_unit": "г",
+          "size_value": 70.0
+        },
+        "printed_pct": 46.0,
+        "promo_price": 17.5,
+        "row_id": "@atb_market_official:4446:5",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Рудь",
+          "id": "rud",
+          "own": false
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "depth": 0.5,
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4467
+        },
+        "item": {
+          "category": "ice-cream",
+          "line": "100% морозиво",
+          "size_unit": "г",
+          "size_value": 500.0
+        },
+        "printed_pct": 50.0,
+        "promo_price": 68.9,
+        "row_id": "@atb_market_official:4467:0",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Рудь",
+          "id": "rud",
+          "own": false
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "depth": 0.5,
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4467
+        },
+        "item": {
+          "category": "ice-cream",
+          "line": "Чорниця-ожина",
+          "size_unit": "г",
+          "size_value": 500.0
+        },
+        "printed_pct": 50.0,
+        "promo_price": 75.9,
+        "row_id": "@atb_market_official:4467:1",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Рудь",
+          "id": "rud",
+          "own": false
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "depth": 0.4,
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4508
+        },
+        "item": {
+          "category": "ice-cream",
+          "line": "Donut зі смаком Ваніль-полуниця, ескімо",
+          "size_unit": "г",
+          "size_value": 70.0
+        },
+        "printed_pct": 40.0,
+        "promo_price": 21.9,
+        "row_id": "@atb_market_official:4508:1",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Рудь",
+          "id": "rud",
+          "own": false
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "depth": 0.4,
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4508
+        },
+        "item": {
+          "category": "ice-cream",
+          "line": "Donut зі смаком Банан-шоколад, ескімо",
+          "size_unit": "г",
+          "size_value": 70.0
+        },
+        "printed_pct": 40.0,
+        "promo_price": 21.9,
+        "row_id": "@atb_market_official:4508:2",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Рудь",
+          "id": "rud",
+          "own": false
+        },
+        "carrier": "post_text",
+        "chain": {
+          "id": "ekomarket_shop",
+          "named_by_amendment_3_20": false
+        },
+        "depth": 0.5,
+        "evidence": {
+          "channel": "@ekomarket_shop",
+          "msg_id": 1450
+        },
+        "item": {
+          "category": "ice-cream",
+          "line": "Ескімос Панкейк",
+          "size_unit": "г",
+          "size_value": 60.0
+        },
+        "printed_pct": 50.0,
+        "promo_price": 25.9,
+        "row_id": "@ekomarket_shop:1450:0",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Рудь",
+          "id": "rud",
+          "own": false
+        },
+        "carrier": "post_text",
+        "chain": {
+          "id": "ekomarket_shop",
+          "named_by_amendment_3_20": false
+        },
+        "depth": 0.5,
+        "evidence": {
+          "channel": "@ekomarket_shop",
+          "msg_id": 1458
+        },
+        "item": {
+          "category": "ice-cream",
+          "line": "100% ескімо",
+          "size_unit": "г",
+          "size_value": 70.0
+        },
+        "printed_pct": 50.0,
+        "promo_price": 26.5,
+        "row_id": "@ekomarket_shop:1458:1",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Рудь",
+          "id": "rud",
+          "own": false
+        },
+        "carrier": "post_text",
+        "chain": {
+          "id": "forainfo",
+          "named_by_amendment_3_20": false
+        },
+        "depth": 0.59,
+        "evidence": {
+          "channel": "@forainfo",
+          "msg_id": 6041
+        },
+        "item": {
+          "category": "ice-cream",
+          "line": "Селянське пломбір",
+          "size_unit": "г",
+          "size_value": 80.0
+        },
+        "printed_pct": 59.0,
+        "promo_price": 18.9,
+        "row_id": "@forainfo:6041:3",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Своя Лінія",
+          "id": "svoia-liniia",
+          "own": false
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "depth": 0.4,
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4343
+        },
+        "item": {
+          "category": "ice-cream",
+          "line": "Золотий Каштан пломбір у вершковій глазурі",
+          "size_unit": "г",
+          "size_value": 70.0
+        },
+        "printed_pct": 40.0,
+        "promo_price": 17.9,
+        "row_id": "@atb_market_official:4343:0",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Своя Лінія",
+          "id": "svoia-liniia",
+          "own": false
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "depth": 0.4,
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4343
+        },
+        "item": {
+          "category": "ice-cream",
+          "line": "Золотий Каштан шоколадний у вершковій глазурі",
+          "size_unit": "г",
+          "size_value": 70.0
+        },
+        "printed_pct": 40.0,
+        "promo_price": 17.9,
+        "row_id": "@atb_market_official:4343:1",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Своя Лінія",
+          "id": "svoia-liniia",
+          "own": false
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "depth": 0.3,
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4344
+        },
+        "item": {
+          "category": "ice-cream",
+          "line": "Факел з какао зі згущеним молоком",
+          "size_unit": "г",
+          "size_value": 90.0
+        },
+        "printed_pct": 30.0,
+        "promo_price": 27.9,
+        "row_id": "@atb_market_official:4344:0",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Своя Лінія",
+          "id": "svoia-liniia",
+          "own": false
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "depth": 0.3,
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4344
+        },
+        "item": {
+          "category": "ice-cream",
+          "line": "Факел Полуниця",
+          "size_unit": "г",
+          "size_value": 90.0
+        },
+        "printed_pct": 30.0,
+        "promo_price": 27.9,
+        "row_id": "@atb_market_official:4344:1",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Своя Лінія",
+          "id": "svoia-liniia",
+          "own": false
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4350
+        },
+        "item": {
+          "attribute_pct": 45.0,
+          "category": "cheese",
+          "line": "Сир м'який чеддеризований Моцарела",
+          "size_unit": "г",
+          "size_value": 180.0
+        },
+        "promo_price": 49.9,
+        "row_id": "@atb_market_official:4350:0",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Своя Лінія",
+          "id": "svoia-liniia",
+          "own": false
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "depth": 0.3,
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4350
+        },
+        "item": {
+          "attribute_pct": 45.0,
+          "category": "cheese",
+          "line": "Сир м'який чеддеризований Сулугуні",
+          "size_unit": "г",
+          "size_value": 180.0
+        },
+        "printed_pct": 30.0,
+        "promo_price": 49.9,
+        "row_id": "@atb_market_official:4350:1",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Своя Лінія",
+          "id": "svoia-liniia",
+          "own": false
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "depth": 0.21,
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4359
+        },
+        "item": {
+          "attribute_pct": 5.0,
+          "category": "curd",
+          "line": "Сир кисломолочний",
+          "size_unit": "г",
+          "size_value": 350.0
+        },
+        "printed_pct": 21.0,
+        "promo_price": 57.5,
+        "row_id": "@atb_market_official:4359:5",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Своя Лінія",
+          "id": "svoia-liniia",
+          "own": false
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "depth": 0.21,
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4359
+        },
+        "item": {
+          "attribute_pct": 9.0,
+          "category": "curd",
+          "line": "Сир кисломолочний",
+          "size_unit": "г",
+          "size_value": 350.0
+        },
+        "printed_pct": 21.0,
+        "promo_price": 63.9,
+        "row_id": "@atb_market_official:4359:6",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Своя Лінія",
+          "id": "svoia-liniia",
+          "own": false
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "depth": 0.32,
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4428
+        },
+        "item": {
+          "category": "ice-cream",
+          "line": "Морозиво пломбір ВЕЛИКИЙ СТАКАН",
+          "size_unit": "г",
+          "size_value": 85.0
+        },
+        "printed_pct": 32.0,
+        "promo_price": 25.5,
+        "row_id": "@atb_market_official:4428:0",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Своя Лінія",
+          "id": "svoia-liniia",
+          "own": false
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "depth": 0.32,
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4428
+        },
+        "item": {
+          "category": "ice-cream",
+          "line": "Морозиво ВЕЛИКИЙ СТАКАН Ківі та Манго",
+          "size_unit": "г",
+          "size_value": 100.0
+        },
+        "printed_pct": 32.0,
+        "promo_price": 25.5,
+        "row_id": "@atb_market_official:4428:1",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Своя Лінія",
+          "id": "svoia-liniia",
+          "own": false
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "depth": 0.43,
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4470
+        },
+        "item": {
+          "category": "ice-cream",
+          "line": "Золотий Каштан",
+          "size_unit": "г",
+          "size_value": 70.0
+        },
+        "printed_pct": 43.0,
+        "promo_price": 16.9,
+        "row_id": "@atb_market_official:4470:0",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Своя Лінія",
+          "id": "svoia-liniia",
+          "own": false
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "depth": 0.31,
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4471
+        },
+        "item": {
+          "category": "ice-cream",
+          "line": "Факел з какао зі згущеним молоком",
+          "size_unit": "г",
+          "size_value": 90.0
+        },
+        "printed_pct": 31.0,
+        "promo_price": 28.9,
+        "row_id": "@atb_market_official:4471:0",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Своя Лінія",
+          "id": "svoia-liniia",
+          "own": false
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "depth": 0.31,
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4471
+        },
+        "item": {
+          "category": "ice-cream",
+          "line": "Факел Полуниця",
+          "size_unit": "г",
+          "size_value": 90.0
+        },
+        "printed_pct": 31.0,
+        "promo_price": 28.9,
+        "row_id": "@atb_market_official:4471:1",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Селянське",
+          "id": "selianske",
+          "own": false
+        },
+        "carrier": "post_text",
+        "chain": {
+          "id": "ekomarket_shop",
+          "named_by_amendment_3_20": false
+        },
+        "depth": 0.34,
+        "evidence": {
+          "channel": "@ekomarket_shop",
+          "msg_id": 1445
+        },
+        "item": {
+          "category": "butter",
+          "line": "Масло солодковершкове селянське",
+          "size_unit": "г",
+          "size_value": 180.0
+        },
+        "printed_pct": 34.0,
+        "promo_price": 84.99,
+        "row_id": "@ekomarket_shop:1445:0",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Селянське",
+          "id": "selianske",
+          "own": false
+        },
+        "carrier": "post_text",
+        "chain": {
+          "id": "ekomarket_shop",
+          "named_by_amendment_3_20": false
+        },
+        "depth": 0.4,
+        "evidence": {
+          "channel": "@ekomarket_shop",
+          "msg_id": 1448
+        },
+        "item": {
+          "attribute_pct": 2.5,
+          "category": "milk",
+          "size_unit": "г",
+          "size_value": 900.0
+        },
+        "printed_pct": 40.0,
+        "promo_price": 38.99,
+        "row_id": "@ekomarket_shop:1448:0",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Селянське",
+          "id": "selianske",
+          "own": false
+        },
+        "carrier": "post_text",
+        "chain": {
+          "id": "ekomarket_shop",
+          "named_by_amendment_3_20": false
+        },
+        "depth": 0.34,
+        "evidence": {
+          "channel": "@ekomarket_shop",
+          "msg_id": 1448
+        },
+        "item": {
+          "attribute_pct": 72.5,
+          "category": "butter",
+          "size_unit": "г",
+          "size_value": 180.0
+        },
+        "printed_pct": 34.0,
+        "promo_price": 84.99,
+        "row_id": "@ekomarket_shop:1448:2",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Селянське",
+          "id": "selianske",
+          "own": false
+        },
+        "carrier": "post_text",
+        "chain": {
+          "id": "forainfo",
+          "named_by_amendment_3_20": false
+        },
+        "depth": 0.49,
+        "evidence": {
+          "channel": "@forainfo",
+          "msg_id": 6041
+        },
+        "item": {
+          "attribute_pct": 2.5,
+          "category": "milk",
+          "size_unit": "г",
+          "size_value": 900.0
+        },
+        "printed_pct": 49.0,
+        "promo_price": 29.9,
+        "row_id": "@forainfo:6041:0",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Селянське",
+          "id": "selianske",
+          "own": false
+        },
+        "carrier": "post_text",
+        "chain": {
+          "id": "forainfo",
+          "named_by_amendment_3_20": false
+        },
+        "depth": 0.46,
+        "evidence": {
+          "channel": "@forainfo",
+          "msg_id": 6041
+        },
+        "item": {
+          "attribute_pct": 82.0,
+          "category": "butter",
+          "line": "екстра",
+          "size_unit": "г",
+          "size_value": 180.0
+        },
+        "printed_pct": 46.0,
+        "promo_price": 72.9,
+        "row_id": "@forainfo:6041:2",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Селянське",
+          "id": "selianske",
+          "own": false
+        },
+        "carrier": "post_text",
+        "chain": {
+          "id": "telegraf_kremenchuk",
+          "named_by_amendment_3_20": false
+        },
+        "evidence": {
+          "channel": "@telegraf_kremenchuk",
+          "msg_id": 71024
+        },
+        "item": {
+          "attribute_pct": 2.5,
+          "category": "milk",
+          "size_unit": "г",
+          "size_value": 950.0
+        },
+        "promo_price": 34.99,
+        "row_id": "@telegraf_kremenchuk:71024:0",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Селянське",
+          "id": "selianske",
+          "own": false
+        },
+        "carrier": "post_text",
+        "chain": {
+          "id": "telegraf_kremenchuk",
+          "named_by_amendment_3_20": false
+        },
+        "evidence": {
+          "channel": "@telegraf_kremenchuk",
+          "msg_id": 71024
+        },
+        "item": {
+          "attribute_pct": 82.0,
+          "category": "butter",
+          "size_unit": "г",
+          "size_value": 180.0
+        },
+        "promo_price": 69.99,
+        "row_id": "@telegraf_kremenchuk:71024:1",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Селянське",
+          "id": "selianske",
+          "own": false
+        },
+        "carrier": "post_text",
+        "chain": {
+          "id": "varus",
+          "named_by_amendment_3_20": true
+        },
+        "evidence": {
+          "channel": "@VARUS_channel",
+          "msg_id": 10360
+        },
+        "item": {
+          "attribute_pct": 3.2,
+          "category": "milk",
+          "line": "Молоко Дитяче"
+        },
+        "row_id": "@VARUS_channel:10360:0",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Селянський"
+        },
+        "carrier": "post_text",
+        "chain": {
+          "id": "ekomarket_shop",
+          "named_by_amendment_3_20": false
+        },
+        "depth": 0.38,
+        "evidence": {
+          "channel": "@ekomarket_shop",
+          "msg_id": 1445
+        },
+        "item": {
+          "category": "kefir-ryazhanka",
+          "line": "Кефір",
+          "size_unit": "г",
+          "size_value": 850.0
+        },
+        "printed_pct": 38.0,
+        "promo_price": 39.99,
+        "row_id": "@ekomarket_shop:1445:2",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Селянський"
+        },
+        "carrier": "post_text",
+        "chain": {
+          "id": "ekomarket_shop",
+          "named_by_amendment_3_20": false
+        },
+        "depth": 0.38,
+        "evidence": {
+          "channel": "@ekomarket_shop",
+          "msg_id": 1448
+        },
+        "item": {
+          "attribute_pct": 2.5,
+          "category": "kefir-ryazhanka",
+          "size_unit": "г",
+          "size_value": 850.0
+        },
+        "printed_pct": 38.0,
+        "promo_price": 39.99,
+        "row_id": "@ekomarket_shop:1448:1",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Три Ведмеді",
+          "id": "try-vedmedi",
+          "own": false
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "depth": 0.5,
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4341
+        },
+        "item": {
+          "category": "ice-cream",
+          "line": "в асортименті, двошарове, вафельний ріжок",
+          "size_unit": "г",
+          "size_value": 150.0
+        },
+        "printed_pct": 50.0,
+        "promo_price": 37.9,
+        "row_id": "@atb_market_official:4341:0",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Три Ведмеді",
+          "id": "try-vedmedi",
+          "own": false
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "depth": 0.5,
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4341
+        },
+        "item": {
+          "category": "ice-cream",
+          "line": "Фісташка",
+          "size_unit": "г",
+          "size_value": 500.0
+        },
+        "printed_pct": 50.0,
+        "promo_price": 131.5,
+        "row_id": "@atb_market_official:4341:1",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Три Ведмеді",
+          "id": "try-vedmedi",
+          "own": false
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "depth": 0.45,
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4405
+        },
+        "item": {
+          "category": "ice-cream",
+          "line": "ескімо",
+          "size_unit": "г",
+          "size_value": 70.0
+        },
+        "printed_pct": 45.0,
+        "promo_price": 24.5,
+        "row_id": "@atb_market_official:4405:8",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Три Ведмеді",
+          "id": "try-vedmedi",
+          "own": false
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "depth": 0.46,
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4446
+        },
+        "item": {
+          "category": "ice-cream",
+          "line": "Monaco",
+          "size_unit": "г",
+          "size_value": 100.0
+        },
+        "printed_pct": 46.0,
+        "promo_price": 36.9,
+        "row_id": "@atb_market_official:4446:0",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Фанні"
+        },
+        "carrier": "post_text",
+        "chain": {
+          "id": "varus",
+          "named_by_amendment_3_20": true
+        },
+        "evidence": {
+          "channel": "@VARUS_channel",
+          "msg_id": 10628
+        },
+        "item": {
+          "attribute_pct": 15.0,
+          "category": "sour-cream"
+        },
+        "row_id": "@VARUS_channel:10628:0",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Ферма",
+          "id": "ferma",
+          "own": false
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "depth": 0.34,
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4404
+        },
+        "item": {
+          "attribute_pct": 23.0,
+          "category": "curd",
+          "line": "Сирок глазурований Ваніль",
+          "size_unit": "г",
+          "size_value": 36.0
+        },
+        "printed_pct": 34.0,
+        "promo_price": 11.7,
+        "row_id": "@atb_market_official:4404:0",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Ферма",
+          "id": "ferma",
+          "own": false
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "depth": 0.34,
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4404
+        },
+        "item": {
+          "attribute_pct": 23.0,
+          "category": "curd",
+          "line": "Сирок глазурований Згущене молоко",
+          "size_unit": "г",
+          "size_value": 36.0
+        },
+        "printed_pct": 34.0,
+        "promo_price": 11.7,
+        "row_id": "@atb_market_official:4404:1",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Ферма",
+          "id": "ferma",
+          "own": false
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "depth": 0.34,
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4404
+        },
+        "item": {
+          "attribute_pct": 23.0,
+          "category": "curd",
+          "line": "Сирок глазурований Вишня-черешня",
+          "size_unit": "г",
+          "size_value": 36.0
+        },
+        "printed_pct": 34.0,
+        "promo_price": 11.7,
+        "row_id": "@atb_market_official:4404:2",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Ферма",
+          "id": "ferma",
+          "own": false
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "depth": 0.41,
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4507
+        },
+        "item": {
+          "attribute_pct": 72.6,
+          "category": "butter",
+          "line": "Селянське",
+          "size_unit": "г",
+          "size_value": 180.0
+        },
+        "printed_pct": 41.0,
+        "promo_price": 73.9,
+        "row_id": "@atb_market_official:4507:0",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Ферма",
+          "id": "ferma",
+          "own": false
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "depth": 0.34,
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4507
+        },
+        "item": {
+          "attribute_pct": 2.5,
+          "category": "milk",
+          "size_unit": "г",
+          "size_value": 840.0
+        },
+        "printed_pct": 34.0,
+        "promo_price": 60.0,
+        "row_id": "@atb_market_official:4507:1",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Ферма",
+          "id": "ferma",
+          "own": false
+        },
+        "carrier": "post_text",
+        "chain": {
+          "id": "ekomarket_shop",
+          "named_by_amendment_3_20": false
+        },
+        "depth": 0.41,
+        "evidence": {
+          "channel": "@ekomarket_shop",
+          "msg_id": 1456
+        },
+        "item": {
+          "attribute_pct": 82.5,
+          "category": "butter",
+          "size_unit": "г",
+          "size_value": 180.0
+        },
+        "printed_pct": 41.0,
+        "promo_price": 99.99,
+        "row_id": "@ekomarket_shop:1456:0",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Ферма",
+          "id": "ferma",
+          "own": false
+        },
+        "carrier": "post_text",
+        "chain": {
+          "id": "marketopt_promo",
+          "named_by_amendment_3_20": false
+        },
+        "evidence": {
+          "channel": "@marketopt_promo",
+          "msg_id": 2897
+        },
+        "item": {
+          "attribute_pct": 10.0,
+          "category": "dairy",
+          "line": "Вершки",
+          "size_unit": "г",
+          "size_value": 505.0
+        },
+        "row_id": "@marketopt_promo:2897:0",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Ферма",
+          "id": "ferma",
+          "own": false
+        },
+        "carrier": "post_text",
+        "chain": {
+          "id": "marketopt_promo",
+          "named_by_amendment_3_20": false
+        },
+        "evidence": {
+          "channel": "@marketopt_promo",
+          "msg_id": 2910
+        },
+        "item": {
+          "category": "cheese",
+          "line": "Крем-сир",
+          "size_unit": "г",
+          "size_value": 170.0
+        },
+        "row_id": "@marketopt_promo:2910:0",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Ферма",
+          "id": "ferma",
+          "own": false
+        },
+        "carrier": "post_text",
+        "chain": {
+          "id": "silpo",
+          "named_by_amendment_3_20": true
+        },
+        "depth": 0.57,
+        "evidence": {
+          "channel": "@silposilpo",
+          "msg_id": 3805
+        },
+        "item": {
+          "attribute_pct": 82.0,
+          "category": "butter",
+          "line": "Екстра",
+          "size_unit": "г",
+          "size_value": 180.0
+        },
+        "printed_pct": 57.0,
+        "promo_price": 69.99,
+        "row_id": "@silposilpo:3805:0",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Ферма",
+          "id": "ferma",
+          "own": false
+        },
+        "carrier": "post_text",
+        "chain": {
+          "id": "telegraf_kremenchuk",
+          "named_by_amendment_3_20": false
+        },
+        "depth": 0.45,
+        "evidence": {
+          "channel": "@telegraf_kremenchuk",
+          "msg_id": 70827
+        },
+        "item": {
+          "attribute_pct": 5.0,
+          "category": "curd",
+          "line": "Сир кисломолочний",
+          "size_unit": "г",
+          "size_value": 350.0
+        },
+        "printed_pct": 45.0,
+        "promo_price": 54.99,
+        "row_id": "@telegraf_kremenchuk:70827:1",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Хрещатик"
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "depth": 0.5,
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4427
+        },
+        "item": {
+          "category": "ice-cream",
+          "line": "Пломбір",
+          "size_unit": "г",
+          "size_value": 70.0
+        },
+        "printed_pct": 50.0,
+        "promo_price": 17.9,
+        "row_id": "@atb_market_official:4427:0",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Хрещатик"
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "depth": 0.5,
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4427
+        },
+        "item": {
+          "category": "ice-cream",
+          "line": "Пломбір сендвіч",
+          "size_unit": "г",
+          "size_value": 75.0
+        },
+        "printed_pct": 50.0,
+        "promo_price": 22.3,
+        "row_id": "@atb_market_official:4427:1",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Яготинська"
+        },
+        "carrier": "post_text",
+        "chain": {
+          "id": "silpo",
+          "named_by_amendment_3_20": true
+        },
+        "depth": 0.4,
+        "evidence": {
+          "channel": "@silposilpo",
+          "msg_id": 3805
+        },
+        "item": {
+          "attribute_pct": 15.0,
+          "category": "sour-cream",
+          "size_unit": "г",
+          "size_value": 300.0
+        },
+        "printed_pct": 40.0,
+        "promo_price": 34.99,
+        "row_id": "@silposilpo:3805:1",
+        "tier": "position"
+      },
+      {
+        "brand": {
+          "display": "Яготинське",
+          "id": "yagotynske",
+          "own": false
+        },
+        "carrier": "leaflet_page",
+        "chain": {
+          "id": "atb",
+          "named_by_amendment_3_20": true
+        },
+        "depth": 0.32,
+        "evidence": {
+          "channel": "@atb_market_official",
+          "msg_id": 4359
+        },
+        "item": {
+          "attribute_pct": 2.6,
+          "category": "milk",
+          "line": "Молоко",
+          "size_unit": "г",
+          "size_value": 870.0
+        },
+        "printed_pct": 32.0,
+        "promo_price": 38.9,
+        "row_id": "@atb_market_official:4359:4",
+        "tier": "position"
+      }
+    ],
+    "rollup": [
+      {
+        "brand": "Limo",
+        "chain": "@atb_market_official",
+        "metric": "depth_mean",
+        "value": 0.46709971736004363,
+        "week": "2026-W27"
+      },
+      {
+        "brand": "Limo",
+        "chain": "@atb_market_official",
+        "metric": "priced_positions",
+        "value": 2.0,
+        "week": "2026-W27"
+      },
+      {
+        "brand": "Limo",
+        "chain": "@atb_market_official",
+        "metric": "sku_count",
+        "value": 2.0,
+        "week": "2026-W27"
+      },
+      {
+        "brand": "Каштан",
+        "chain": "@atb_market_official",
+        "metric": "depth_mean",
+        "value": 0.4470588235294118,
+        "week": "2026-W27"
+      },
+      {
+        "brand": "Каштан",
+        "chain": "@atb_market_official",
+        "metric": "priced_positions",
+        "value": 2.0,
+        "week": "2026-W27"
+      },
+      {
+        "brand": "Каштан",
+        "chain": "@atb_market_official",
+        "metric": "sku_count",
+        "value": 2.0,
+        "week": "2026-W27"
+      },
+      {
+        "brand": "Київський Пломбір",
+        "chain": "@atb_market_official",
+        "metric": "depth_mean",
+        "value": 0.4671316878273458,
+        "week": "2026-W27"
+      },
+      {
+        "brand": "Київський Пломбір",
+        "chain": "@atb_market_official",
+        "metric": "priced_positions",
+        "value": 2.0,
+        "week": "2026-W27"
+      },
+      {
+        "brand": "Київський Пломбір",
+        "chain": "@atb_market_official",
+        "metric": "sku_count",
+        "value": 2.0,
+        "week": "2026-W27"
+      },
+      {
+        "brand": "Своя Лінія",
+        "chain": "@atb_market_official",
+        "metric": "depth_mean",
+        "value": 0.30598052851182206,
+        "week": "2026-W27"
+      },
+      {
+        "brand": "Своя Лінія",
+        "chain": "@atb_market_official",
+        "metric": "priced_positions",
+        "value": 2.0,
+        "week": "2026-W27"
+      },
+      {
+        "brand": "Своя Лінія",
+        "chain": "@atb_market_official",
+        "metric": "sku_count",
+        "value": 2.0,
+        "week": "2026-W27"
+      },
+      {
+        "brand": "Laska",
+        "chain": "@atb_market_official",
+        "metric": "depth_mean",
+        "value": 0.5,
+        "week": "2026-W28"
+      },
+      {
+        "brand": "Laska",
+        "chain": "@atb_market_official",
+        "metric": "priced_positions",
+        "value": 2.0,
+        "week": "2026-W28"
+      },
+      {
+        "brand": "Laska",
+        "chain": "@atb_market_official",
+        "metric": "sku_count",
+        "value": 2.0,
+        "week": "2026-W28"
+      },
+      {
+        "brand": "Magnat",
+        "chain": "@atb_market_official",
+        "metric": "depth_mean",
+        "value": 0.5482608695652174,
+        "week": "2026-W29"
+      },
+      {
+        "brand": "Magnat",
+        "chain": "@atb_market_official",
+        "metric": "priced_positions",
+        "value": 3.0,
+        "week": "2026-W29"
+      },
+      {
+        "brand": "Magnat",
+        "chain": "@atb_market_official",
+        "metric": "sku_count",
+        "value": 3.0,
+        "week": "2026-W29"
+      },
+      {
+        "brand": "Лімо",
+        "chain": "@atb_market_official",
+        "metric": "depth_mean",
+        "value": 0.46385223171219797,
+        "week": "2026-W29"
+      },
+      {
+        "brand": "Лімо",
+        "chain": "@atb_market_official",
+        "metric": "priced_positions",
+        "value": 3.0,
+        "week": "2026-W29"
+      },
+      {
+        "brand": "Лімо",
+        "chain": "@atb_market_official",
+        "metric": "sku_count",
+        "value": 3.0,
+        "week": "2026-W29"
+      },
+      {
+        "brand": "Рудь",
+        "chain": "@atb_market_official",
+        "metric": "depth_mean",
+        "value": 0.4661100637400125,
+        "week": "2026-W29"
+      },
+      {
+        "brand": "Рудь",
+        "chain": "@atb_market_official",
+        "metric": "priced_positions",
+        "value": 2.0,
+        "week": "2026-W29"
+      },
+      {
+        "brand": "Рудь",
+        "chain": "@atb_market_official",
+        "metric": "sku_count",
+        "value": 2.0,
+        "week": "2026-W29"
+      },
+      {
+        "brand": "Три Ведмеді",
+        "chain": "@atb_market_official",
+        "metric": "depth_mean",
+        "value": 0.46444121915820036,
+        "week": "2026-W29"
+      },
+      {
+        "brand": "Три Ведмеді",
+        "chain": "@atb_market_official",
+        "metric": "priced_positions",
+        "value": 1.0,
+        "week": "2026-W29"
+      },
+      {
+        "brand": "Три Ведмеді",
+        "chain": "@atb_market_official",
+        "metric": "sku_count",
+        "value": 1.0,
+        "week": "2026-W29"
+      },
+      {
+        "brand": "Лімо",
+        "chain": "@forainfo",
+        "metric": "priced_positions",
+        "value": 2.0,
+        "week": "2026-W29"
+      },
+      {
+        "brand": "Лімо",
+        "chain": "@forainfo",
+        "metric": "sku_count",
+        "value": 2.0,
+        "week": "2026-W29"
+      },
+      {
+        "brand": "La Belle Laitiere",
+        "chain": "@telegraf_kremenchuk",
+        "metric": "priced_positions",
+        "value": 1.0,
+        "week": "2026-W29"
+      },
+      {
+        "brand": "La Belle Laitiere",
+        "chain": "@telegraf_kremenchuk",
+        "metric": "sku_count",
+        "value": 1.0,
+        "week": "2026-W29"
+      },
+      {
+        "brand": "Галичина",
+        "chain": "@telegraf_kremenchuk",
+        "metric": "priced_positions",
+        "value": 1.0,
+        "week": "2026-W29"
+      },
+      {
+        "brand": "Галичина",
+        "chain": "@telegraf_kremenchuk",
+        "metric": "sku_count",
+        "value": 1.0,
+        "week": "2026-W29"
+      },
+      {
+        "brand": "Ферма",
+        "chain": "@telegraf_kremenchuk",
+        "metric": "priced_positions",
+        "value": 1.0,
+        "week": "2026-W29"
+      },
+      {
+        "brand": "Ферма",
+        "chain": "@telegraf_kremenchuk",
+        "metric": "sku_count",
+        "value": 1.0,
+        "week": "2026-W29"
+      },
+      {
+        "brand": "Каштан",
+        "chain": "@atb_market_official",
+        "metric": "depth_mean",
+        "value": 0.4534606205250597,
+        "week": "2026-W30"
+      },
+      {
+        "brand": "Каштан",
+        "chain": "@atb_market_official",
+        "metric": "priced_positions",
+        "value": 2.0,
+        "week": "2026-W30"
+      },
+      {
+        "brand": "Каштан",
+        "chain": "@atb_market_official",
+        "metric": "sku_count",
+        "value": 2.0,
+        "week": "2026-W30"
+      },
+      {
+        "brand": "Ласунка",
+        "chain": "@atb_market_official",
+        "metric": "depth_mean",
+        "value": 0.46511627906976744,
+        "week": "2026-W30"
+      },
+      {
+        "brand": "Ласунка",
+        "chain": "@atb_market_official",
+        "metric": "priced_positions",
+        "value": 1.0,
+        "week": "2026-W30"
+      },
+      {
+        "brand": "Ласунка",
+        "chain": "@atb_market_official",
+        "metric": "sku_count",
+        "value": 1.0,
+        "week": "2026-W30"
+      },
+      {
+        "brand": "Лімо",
+        "chain": "@atb_market_official",
+        "metric": "depth_mean",
+        "value": 0.46709971736004363,
+        "week": "2026-W30"
+      },
+      {
+        "brand": "Лімо",
+        "chain": "@atb_market_official",
+        "metric": "priced_positions",
+        "value": 2.0,
+        "week": "2026-W30"
+      },
+      {
+        "brand": "Лімо",
+        "chain": "@atb_market_official",
+        "metric": "sku_count",
+        "value": 2.0,
+        "week": "2026-W30"
+      },
+      {
+        "brand": "Рудь",
+        "chain": "@atb_market_official",
+        "metric": "depth_mean",
+        "value": 0.4560276533388955,
+        "week": "2026-W30"
+      },
+      {
+        "brand": "Рудь",
+        "chain": "@atb_market_official",
+        "metric": "priced_positions",
+        "value": 4.0,
+        "week": "2026-W30"
+      },
+      {
+        "brand": "Рудь",
+        "chain": "@atb_market_official",
+        "metric": "sku_count",
+        "value": 4.0,
+        "week": "2026-W30"
+      },
+      {
+        "brand": "Дживальдіс",
+        "chain": "@ekomarket_shop",
+        "metric": "priced_positions",
+        "value": 1.0,
+        "week": "2026-W30"
+      },
+      {
+        "brand": "Дживальдіс",
+        "chain": "@ekomarket_shop",
+        "metric": "sku_count",
+        "value": 1.0,
+        "week": "2026-W30"
+      },
+      {
+        "brand": "Простонаше",
+        "chain": "@ekomarket_shop",
+        "metric": "priced_positions",
+        "value": 1.0,
+        "week": "2026-W30"
+      },
+      {
+        "brand": "Простонаше",
+        "chain": "@ekomarket_shop",
+        "metric": "sku_count",
+        "value": 1.0,
+        "week": "2026-W30"
+      },
+      {
+        "brand": "Селянське",
+        "chain": "@ekomarket_shop",
+        "metric": "priced_positions",
+        "value": 3.0,
+        "week": "2026-W30"
+      },
+      {
+        "brand": "Селянське",
+        "chain": "@ekomarket_shop",
+        "metric": "sku_count",
+        "value": 3.0,
+        "week": "2026-W30"
+      },
+      {
+        "brand": "Селянський",
+        "chain": "@ekomarket_shop",
+        "metric": "priced_positions",
+        "value": 2.0,
+        "week": "2026-W30"
+      },
+      {
+        "brand": "Селянський",
+        "chain": "@ekomarket_shop",
+        "metric": "sku_count",
+        "value": 2.0,
+        "week": "2026-W30"
+      },
+      {
+        "brand": "Premialle",
+        "chain": "@forainfo",
+        "metric": "priced_positions",
+        "value": 1.0,
+        "week": "2026-W30"
+      },
+      {
+        "brand": "Premialle",
+        "chain": "@forainfo",
+        "metric": "sku_count",
+        "value": 1.0,
+        "week": "2026-W30"
+      },
+      {
+        "brand": "Молокія",
+        "chain": "@msuaaaa",
+        "metric": "priced_positions",
+        "value": 1.0,
+        "week": "2026-W30"
+      },
+      {
+        "brand": "Молокія",
+        "chain": "@msuaaaa",
+        "metric": "sku_count",
+        "value": 1.0,
+        "week": "2026-W30"
+      },
+      {
+        "brand": "Ферма",
+        "chain": "@silposilpo",
+        "metric": "priced_positions",
+        "value": 1.0,
+        "week": "2026-W30"
+      },
+      {
+        "brand": "Ферма",
+        "chain": "@silposilpo",
+        "metric": "sku_count",
+        "value": 1.0,
+        "week": "2026-W30"
+      },
+      {
+        "brand": "Яготинська",
+        "chain": "@silposilpo",
+        "metric": "priced_positions",
+        "value": 1.0,
+        "week": "2026-W30"
+      },
+      {
+        "brand": "Яготинська",
+        "chain": "@silposilpo",
+        "metric": "sku_count",
+        "value": 1.0,
+        "week": "2026-W30"
+      },
+      {
+        "brand": "Ласунка",
+        "chain": "@telegraf_kremenchuk",
+        "metric": "priced_positions",
+        "value": 1.0,
+        "week": "2026-W30"
+      },
+      {
+        "brand": "Ласунка",
+        "chain": "@telegraf_kremenchuk",
+        "metric": "sku_count",
+        "value": 1.0,
+        "week": "2026-W30"
+      },
+      {
+        "brand": "Селянське",
+        "chain": "@telegraf_kremenchuk",
+        "metric": "priced_positions",
+        "value": 2.0,
+        "week": "2026-W30"
+      },
+      {
+        "brand": "Селянське",
+        "chain": "@telegraf_kremenchuk",
+        "metric": "sku_count",
+        "value": 2.0,
+        "week": "2026-W30"
+      },
+      {
+        "brand": "Rud",
+        "chain": "@ekomarket_shop",
+        "metric": "priced_positions",
+        "value": 1.0,
+        "week": "2026-W31"
+      },
+      {
+        "brand": "Rud",
+        "chain": "@ekomarket_shop",
+        "metric": "sku_count",
+        "value": 1.0,
+        "week": "2026-W31"
+      },
+      {
+        "brand": "Бурьонка",
+        "chain": "@forainfo",
+        "metric": "priced_positions",
+        "value": 1.0,
+        "week": "2026-W31"
+      },
+      {
+        "brand": "Бурьонка",
+        "chain": "@forainfo",
+        "metric": "sku_count",
+        "value": 1.0,
+        "week": "2026-W31"
+      },
+      {
+        "brand": "Рудь",
+        "chain": "@forainfo",
+        "metric": "priced_positions",
+        "value": 1.0,
+        "week": "2026-W31"
+      },
+      {
+        "brand": "Рудь",
+        "chain": "@forainfo",
+        "metric": "sku_count",
+        "value": 1.0,
+        "week": "2026-W31"
+      },
+      {
+        "brand": "Селянське",
+        "chain": "@forainfo",
+        "metric": "priced_positions",
+        "value": 2.0,
+        "week": "2026-W31"
+      },
+      {
+        "brand": "Селянське",
+        "chain": "@forainfo",
+        "metric": "sku_count",
+        "value": 2.0,
+        "week": "2026-W31"
+      },
+      {
+        "brand": "Laska",
+        "chain": "@telegraf_kremenchuk",
+        "metric": "priced_positions",
+        "value": 1.0,
+        "week": "2026-W31"
+      },
+      {
+        "brand": "Laska",
+        "chain": "@telegraf_kremenchuk",
+        "metric": "sku_count",
+        "value": 1.0,
+        "week": "2026-W31"
+      },
+      {
+        "brand": "extra!",
+        "chain": "@telegraf_kremenchuk",
+        "metric": "priced_positions",
+        "value": 2.0,
+        "week": "2026-W31"
+      },
+      {
+        "brand": "extra!",
+        "chain": "@telegraf_kremenchuk",
+        "metric": "sku_count",
+        "value": 2.0,
+        "week": "2026-W31"
+      },
+      {
+        "brand": "Комо",
+        "chain": "@ekomarket_shop",
+        "metric": "priced_positions",
+        "value": 1.0,
+        "week": "2026-W32"
+      },
+      {
+        "brand": "Комо",
+        "chain": "@ekomarket_shop",
+        "metric": "sku_count",
+        "value": 1.0,
+        "week": "2026-W32"
+      },
+      {
+        "brand": "Рудь",
+        "chain": "@ekomarket_shop",
+        "metric": "priced_positions",
+        "value": 1.0,
+        "week": "2026-W32"
+      },
+      {
+        "brand": "Рудь",
+        "chain": "@ekomarket_shop",
+        "metric": "sku_count",
+        "value": 1.0,
+        "week": "2026-W32"
+      },
+      {
+        "brand": "Ферма",
+        "chain": "@ekomarket_shop",
+        "metric": "priced_positions",
+        "value": 1.0,
+        "week": "2026-W32"
+      },
+      {
+        "brand": "Ферма",
+        "chain": "@ekomarket_shop",
+        "metric": "sku_count",
+        "value": 1.0,
+        "week": "2026-W32"
+      },
+      {
+        "brand": "Alpro",
+        "chain": "@forainfo",
+        "metric": "priced_positions",
+        "value": 1.0,
+        "week": "2026-W32"
+      },
+      {
+        "brand": "Alpro",
+        "chain": "@forainfo",
+        "metric": "sku_count",
+        "value": 1.0,
+        "week": "2026-W32"
+      },
+      {
+        "brand": "Біло",
+        "chain": "@forainfo",
+        "metric": "priced_positions",
+        "value": 1.0,
+        "week": "2026-W32"
+      },
+      {
+        "brand": "Біло",
+        "chain": "@forainfo",
+        "metric": "sku_count",
+        "value": 1.0,
+        "week": "2026-W32"
+      }
+    ],
+    "table_rows": {
+      "attribution": 0,
+      "digest": 0,
+      "evidence": 0,
+      "rollup": 89,
+      "signal": 0,
+      "unsure": 0
+    },
+    "weeks": [
+      "2026-W27",
+      "2026-W28",
+      "2026-W29",
+      "2026-W30",
+      "2026-W31",
+      "2026-W32"
+    ]
+  },
+  "window_id": "w1"
+}
