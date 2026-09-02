@@ -68,11 +68,24 @@ def expected(record: dict) -> dict[str, dict]:
     return {row["channel"]: row for row in record["channels"]}
 
 
+def intact(path: Path) -> bool:
+    """A JPEG ends with the EOI marker; a download killed mid-write does not.
+
+    Measured, not precautionary: the first run of this fetch was killed after ten channels and left
+    `kopiyochka1_22118.jpg` at exactly 262 144 bytes — a chunk boundary — and the resume would have
+    hashed it and handed vision a half picture. A false positive here costs one re-download.
+    """
+    return path.exists() and path.read_bytes().endswith(b"\xff\xd9")
+
+
 async def download(client, handle: str, message, directory: Path) -> dict:
-    """One photo on disk — fetched once, hashed every time."""
+    """One photo on disk — fetched once, hashed every time; a truncated one is fetched again."""
     from telethon.errors import FloodWaitError
 
     target = directory / f"{stem(handle, message.id)}.jpg"
+    if target.exists() and not intact(target):
+        print(f"  {target.name}: truncated on disk, fetching again", flush=True)
+        target.unlink()
     if not target.exists():
         for _attempt in range(FLOOD_RETRIES):
             try:
@@ -248,7 +261,9 @@ def main() -> int:
     print()
     print(render(by_channel))
     total = sum(row["images"] for row in by_channel)
-    print(f"\n{MANIFEST.relative_to(REPO_ROOT)} — {total} of {record['totals']['pages_exact']} pages")
+    print(
+        f"\n{MANIFEST.relative_to(REPO_ROOT)} — {total} of {record['totals']['pages_exact']} pages"
+    )
     return 0 if all(row["matches_pagecount"] for row in by_channel) else 2
 
 

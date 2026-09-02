@@ -73,6 +73,15 @@ def test_albums_group_members_under_the_min_id_the_store_keyed_them_by():
     assert [m.id for m in grouped[20]] == [20]
 
 
+def test_a_download_killed_mid_write_is_not_a_page(tmp_path):
+    whole, cut = tmp_path / "whole.jpg", tmp_path / "cut.jpg"
+    whole.write_bytes(b"\xff\xd8 pixels \xff\xd9")
+    cut.write_bytes(b"\xff\xd8 pixels")
+    assert fetch.intact(whole)
+    assert not fetch.intact(cut)
+    assert not fetch.intact(tmp_path / "absent.jpg")
+
+
 def test_the_driver_writes_to_the_derived_root_and_never_to_the_smoke_store():
     source = (REPO_ROOT / "scripts" / "run_promo_c2.py").read_text(encoding="utf-8")
     assert "SMOKE_DERIVED" not in source
