@@ -538,3 +538,36 @@ C3's cap rather than its cost, and which pages survive inside a chain is unsettl
 team lead's.
 
 **Out of scope, unchanged:** §6.
+
+## 8. Revision 2026-09-02 — S4's mechanics, and rung 0 on the whole step
+
+Introduced this session, all $0, so a reader finds every choice here and not only in the report.
+
+**New instrument — `scripts/fetch_promo_media_c2.py` ($0, Telegram only).** The three media
+manifests on disk cover 367 of the census's 968 pinned posts; the paid pass reads pages through
+`run_loop.pages_of(manifest, handle)`, so the census's population needs a manifest of its own —
+`results/post_media_promo_c2.json`, files under `data/annotation/promo_c2/posts_media/`. Same
+population rule as the pagecount (the pinned ids, a page is a PHOTO member, `min(msg_id)` is the
+fold key); the files per channel are checked against `promo_pagecount_c2.json :: pages_exact` and
+a mismatch is printed and exits 2. Resumable: a file on disk is hashed, not re-fetched.
+
+**New driver — `scripts/run_promo_c2.py`, not a fork of `run_5c2.py`:** its transport, money gates
+and legs are imported; only the population and the step are this driver's. Choices it makes:
+- **the text leg is pinned by id** (`census :: text_price_msg_ids`, read off the live store v1 ∪ r2),
+  never by re-running the census's regex or the loop's pre-filter;
+- **stage order = the phase spec §3's A1 list in its printed order**, channels the list does not
+  name after it, sorted (`@kopiyochka1`). A completed channel is a usable number;
+- **rung 0 prices the WHOLE step** — pages, posts, boots, idle tail — at three corners built from
+  the same records K4 used (`marginal_bound`, the registered text rate 2.8132 s, the smoke's two
+  boots) and **the dear corner decides**, for K4's own reason. The 5c2 realised rate is carried as
+  a reading beside the table, not a corner;
+- **in-run: a re-projection after every channel; over the cap → the run stops at that boundary**
+  and the unbought channels are recorded (PROCESS rung 2's ASK cannot be held mid-run: silence =
+  KILL). The per-pack `cap_gate` and the (10)(a) go/no-go are `run_5c2`'s, unchanged;
+- the record is `results/run_promo_c2.json :: runs[]` — one entry per `--run`; a second `--run`
+  continues under the same step (the derived store's markers subtract what was answered).
+
+**The finding this revision exists for:** the ruling's `--step-cap 3.20` was set from
+`c2_priced_usd` = $3.1563, which priced the vision leg alone; the whole step at the same corner is
+**$3.5241** (priced) / **$3.6059** (dear) — rung 0 fires by 10–13%; only the cheap corner
+($2.6041) fits. Not a threshold this plan adopts: the cap is the team lead's, the STOP asks.
