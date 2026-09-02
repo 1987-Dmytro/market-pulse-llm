@@ -2,64 +2,63 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-09-01 19:09:39 (every SessionStart)
+**Auto-refreshed:** 2026-09-02 10:32:46 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
-c754cf7 docs(report,stop): make check green at 4 230 — the ledger hole is closed, not named
-d305953 fix(tests): no test can write a real spend ledger — the hole cycle 3 reopened
-e7d0c24 docs(stop): name the ledger-write hole cycle 3 inherited from cycle 2
-20d263f docs(report,plan): promo-pulse-1 pauses on the even cut's two unset parameters
-0a8d02a fix(guard): cycle 3's ledger follows cycle 2's, so an isolated test stays isolated
+11bdbf6 docs(report): the anchor paragraph follows the STOP — one question, not a contradiction
+6209166 docs(stop): the anchor is one question, not a fork
+4137c63 docs(report,stop): the instrument is finished and the money line refuses
+97e84e6 fix(guard,tripwire): the two BLOCKING findings of the pre-paid-leg /code-review
+4950856 feat(draw): S1's 50 positions — seed 42, stratified by chain, two runs one sha
 ```
 
 ## 📋 Recent decisions
 
-- `the-goal-loop-never-engaged.md` — The `/goal` loop never engaged — §8's resume protocol rests on an unverified mechanism
 - `INDEX.md` — Decision records
-- `one-live-raw-root-and-an-opt-in-union.md` — One live raw root, and a union that is opt-in
+- `the-schedule-reports-it-does-not-gate-the-tick.md` — `data/schedule.json` reports whether a tick is due; it does not refuse one — because a gate there would make the idempotence check untestable
+- `the-goal-loop-never-engaged.md` — The `/goal` loop never engaged — §8's resume protocol rests on an unverified mechanism
 
 ## 📅 Recent daily logs
 
+- `2026-09-02.md`
 - `2026-09-01.md`
 - `2026-08-30.md`
-- `2026-08-27.md`
 
 <!-- AUTO-GEN END (everything below preserved across refreshes) -->
 # Hot Cache — curated
-**Last update:** 2026-09-01. Этап 1 `SPEC-v2-promo-pulse.md`, карта `STATUS.md`, цикл `PROCESS.md`
-v2.1. Руками, ≤40 строк; археология — в логах дня.
+**Last update:** 2026-09-02 (session 2). Этап 1 `SPEC-v2-promo-pulse.md`, карта `STATUS.md`, цикл
+`PROCESS.md` v2.1. Руками, ≤40 строк; археология — в логах дня.
 
 ## 🔥 What's Hot
-**⏸️ `promo-pulse-1` НА ПАУЗЕ — гард отказывает авторизованному прогону.** Потолок поднят до **$7.00**
-(`CYCLE3_CAP_USD`, `981202b`), но якорь цикла-3 остался $4.48 при балансе $14.26 → `enforce()` даёт
-**exit 1**, рунг 0 не пишет степ-леджер, S4 не стартует. Вопрос в `docs/plans/promo-pulse-1.STOP.md`:
-двинуть ТОЛЬКО `runpod_balance_at_cycle3_start` до $14.26, `anchored_at` не трогая? **make check
-4 266 · 2 skipped** @ `97e84e6`. Куплено НИЧЕГО, ни один рунг не сработал.
+**⏸️ `promo-pulse-1` ЖДЁТ ОДНОГО «ДА/НЕТ» ПО КЭПУ ШАГА.** Якорь сдвинут как велено (`bf1665d`): гард
+**exit 0**, anchor $14.48, `CYCLE 3 SPENT $0.2528 of $7.00`, `REMAINING $6.7472`. Но рунг 0 на ВЕСЬ шаг
+S4 (3 008 стр. + 405 текст-постов + буты + хвост), `results/prereg_promo_c2.json :: rung_0`: cheap $2.6041
+(влезает), priced $3.5241, **dear $3.6059 против кэпа 3.20 (+12.7 %)** — кэп выведен из `c2_priced_usd`
+$3.1563, цены ОДНОЙ (vision) ноги. `docs/plans/promo-pulse-1.STOP.md` — один вопрос: `--step-cap 3.95`
+(комната цикла после кэпов C3; dear + резерв cap-gate $0.2843 = $3.8902)?
 
-**НЕ выводить заново.** Vision **7.872 с/стр.** (n=30, бут внутри), маргинал **2.623…3.369**; страницы
-C2 **3 008** (968/968); **C2 = $3.1563**, при $7.00 влезает: 3.1563+2.50+0.30 = **$5.9563**. Дро
-позиций `a3f659f9a8d73f5e`, дро-20 `3d80c81a9c353130`, экран `28fffc93c723ab8d` — seed 42, дважды.
+**S4 ГОТОВ на $0:** 3 008 страниц на диске + `results/post_media_promo_c2.json` (`fetch_promo_media_c2.py`,
+сверка с pagecount по каналам); драйвер `scripts/run_promo_c2.py` (транспорт/гейты/ноги — импорт из
+`run_5c2`; текст-нога по id; порядок — список §3 спеки; репроекция после каждого канала; `--run` отказывает
+при `rung_0.fits: false`); 12 тестов на стабе; ранбук `knowledge/runbooks/promo_c2_paid_leg.md`.
 
-**Сделано 02.09, всё $0:** `make tick`+`make promo-screen`+`draw_truth_20`+`draw_positions_50`, шесть
-промо-таблиц, дайджест остывших тредов, дельта поздних комментов. **`/code-review` перед платной
-ногой: BLOCKING ×2, обе починены** (`97e84e6`) — отказанный `--close` больше не закрывает линию,
-список леджеров тривайра ВЫВОДИТСЯ из констант гарда.
+**НЕ выводить заново.** Vision маргинал **2.623…3.369 с/стр.**, текст 0.947 / 2.8132 с, буты 157.449 /
+212.041 с, $0.00030669/с. Дро позиций `a3f659f9a8d73f5e` (ДО-C2 — переснять после S4), дро-20
+`3d80c81a9c353130`, экран `28fffc93c723ab8d`. Куплено НИЧЕГО; эндпоинта нет, том `mp-srv2` жив.
 
 ## ⏭️ Next
-Свежая сессия → START RITUAL. Затем: 1) рулинг по якорю; 2) **S4 (платный C2)** → дро-50 ПЕРЕСНЯТЬ
-(нынешнее — до-C2 популяция, метить нельзя) → tick → screen; разметки тимлида ждём.
+START RITUAL → рулинг по кэпу → `STEP_CAP_USD` + `--register` → ранбук §1–§5 (гард `--step`, create,
+`--run`, teardown листингом, `--close` после оседания биллинга) → `make tick` → **дро-50 переснять** →
+`make promo-screen` → отчёт. Разметки тимлида (dev-40, positions-50) — батчами по 10.
 
 ## 🚧 Blockers
-**⛔ ЯКОРЬ ЦИКЛА-3 НИЖЕ БАЛАНСА** — единственный блокер платной ноги; ждём слова оператора.
-**⚠️ ДОЛГ K4:** `promo_projection_c2.py` пишет «$4.80» (`:366`), грепает `CYCLE 2 SPENT` (`:171`),
-игнорирует код возврата гарда (`:153`) — **не перезапускать K4**, пока не закрыто.
-**⛔ ЭНДПОИНТ 5c2 И ШАБЛОН УДАЛЕНЫ 08.08** (том `mp-srv2` жив, $0.2333/день): платный vision
-начинается со СБОРКИ, рунг 0 — С бутом (`scripts/smoke_vision_c2.py`). **⛔ `1925810730` и
-инвайт-хэш неадресуемы** — только через `@ATB_FANatik`. **⚠️ `/goal` НЕ ВКЛЮЧАЕТСЯ** →
-[[the-goal-loop-never-engaged]]. **⚠️ MEMORY.md на потолке** — только подселением к близнецу.
+**⛔ РУНГ 0 НА S4: dear $3.61 > кэп $3.20** — единственный блокер платной ноги. **⏳ Комната цикла — часы:**
+$0.2333/день; «да» завтра оставит C3 без ≈$0.23. **⚠️ K4 НЕ ПЕРЕЗАПУСКАТЬ** (`:366/:171/:153`).
+**⛔ `1925810730` и инвайт-хэш неадресуемы.** **⚠️ `/goal` НЕ ПРОВЕРЕН** → [[the-goal-loop-never-engaged]].
+MEMORY.md сжат до 81 строки (02.09), ничего не выкинуто.
 
 ## 🔫 Footguns этого файла
 **⛔ ЭТОТ ФАЙЛ ГРЕПАЕТСЯ КАК ВХОД — ДВА ЛИТЕРАЛА.** `scripts/volume_calc_5c1.py :: quoted()` берёт
