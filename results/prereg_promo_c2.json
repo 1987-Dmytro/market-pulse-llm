@@ -1,5 +1,5 @@
 {
-  "authority": "docs/reviews/2026-08-30-plan-promo-pulse-1.md «Ruling 02.09 (b)» — «STEP_CAP_USD = 3.95 … the guard's step anchor with --step promo-pulse-1 --step-cap 3.95 … The text leg runs FIRST … Mid-run: no cap raise, ever»; docs/plans/promo-pulse-1.md S4, SP-1b",
+  "authority": "docs/reviews/2026-08-30-plan-promo-pulse-1.md «Ruling 02.09 (b)» — «STEP_CAP_USD = 3.95 … the guard's step anchor with --step promo-pulse-1 --step-cap 3.95 … The text leg runs FIRST … Mid-run: no cap raise, ever» — and «Ruling 02.09 (c)»: «Per leg — yes … Per channel, measured by the channel's own first pack … The whole-step page projection is RETIRED for this step»; docs/plans/promo-pulse-1.md S4, SP-1b",
   "expected_worker": {
     "adapter_sha256": null,
     "max_new_tokens": 1200,
@@ -14,14 +14,16 @@
   "expected_worker_from": "results/sku_pilot_serving_v2.json — the pin run_5c2 and the smoke assert",
   "in_run_gates": {
     "cap_gate": "SPEC 3.17 (10)(c), per pack: refuse the next job when what is left of the cap cannot absorb one job at the 900 s execution timeout",
-    "go_no_go": "SPEC 3.17 (10)(a): after two warm-ups on REPRESENTATIVE inputs — the first queued C2 page and the first queued C2 post — the whole step is re-projected at the measured marginals and no gold call is made if it exceeds the step cap",
+    "go_no_go": "SPEC 3.17 (10)(a) PER LEG (ruling 02.09 (c) item 1): after two warm-ups on REPRESENTATIVE inputs — the first queued C2 page and the first queued C2 post — the TEXT leg alone is projected at its own measured marginal and no gold call is made if IT exceeds what is left of the step cap; the page leg is never priced as one step",
     "packs": "bytes first (8.0 MB, RunPod's /run refuses 10 MiB), then the count the pessimistic marginal allows inside the timeout",
-    "stage_projection": "after EVERY channel, positions_gm4_skub.projection at the measured marginal; projected over the cap → the run stops at that boundary and the unbought channels are recorded (PROCESS rung 2; silence = KILL)"
+    "per_channel": "ruling 02.09 (c) item 2: the channel's own first pack is its measurement (worker seconds ÷ pages written, one row per channel in results/measurements.jsonl); its remainder is projected at THAT rate against the room (cap − step spent − one wedged job − the idle tail) — fits → the channel runs whole, does not → the remainder is left unbought and the next channel starts; the run ends when the room is below one pack at the worst measured rate",
+    "stage_projection": "after EVERY channel, positions_gm4_skub.projection at the blended marginal — a READING for the record and the STOP's table, no longer a gate: ruling 02.09 (c) retires the whole-step page projection"
   },
   "kill_rules": [
     "the dear corner of rung 0 does not fit the step cap → nothing is created (STOP)",
     "the guard refuses --step promo-pulse-1 --step-cap 3.95 → that is the answer",
-    "mid-run the cap is never raised: the (10)(a) gate, the re-projection after every stage and the per-pack cap gate decide (ruling 02.09 (b) item 3)",
+    "mid-run the cap is never raised: the text leg's (10)(a) gate, the per-channel room and the per-pack cap gate decide (ruling 02.09 (b) item 3, (c) item 2)",
+    "a channel whose remainder does not fit the room is skipped WHOLE — never half a channel, and never a cap stretched to finish one (ruling 02.09 (c) item 2(b))",
     "info disagrees with expected_worker → tear down, send nothing, record the difference",
     "two boots without a served info → KILL, do not try a third",
     "the (10)(a) gate refuses → no gold call, tear down, record the measured marginals",
@@ -31,6 +33,7 @@
   "pinned_inputs": {
     "results/post_media_promo_c2.json": "8860afa81a4d50d8ed345feaef975643f74634c2ac6766f5cb79c9444b561810",
     "results/prereg_5c2_run.json": "d5d3afd5e6d7e966233a7e449546b2001f9c2a08646cab207e87531f5df4cbc8",
+    "results/prereg_smoke_vision_c2.json": "a07d7f483cece4e56e6ee88a39ee65816fd7152fd751014317649353f52705b3",
     "results/promo_census_c2.json": "193f8bf039bb819145ec8228d2eec4097f21ee3ffb0a5fa797738edeb238ccca",
     "results/promo_pagecount_c2.json": "8e25513c7e13fcd627a14804cd23255049e1a98af2365ce5c7ce49c2c616b031",
     "results/promo_projection_c2.json": "8af6f461907d2bca053ba41efe807c246e196ade1779cd2fbb495ed080dc1b66",
@@ -41,24 +44,24 @@
   "population": {
     "order": [
       "@atb_market_official",
-      "@ATB_FANatik",
-      "@atb_aktsiyi",
       "@VARUS_channel",
-      "@ekomarket_shop",
-      "@epicentrk_sale",
-      "@forainfo",
-      "@marketopt_promo",
-      "@blyzenkoua",
-      "@silposilpo",
-      "@fozzyshopua",
-      "@sim23_simi",
-      "@rrozetka",
+      "@atb_aktsiyi",
       "@msuaaaa",
-      "@kop1chat",
+      "@fozzyshopua",
       "@xochydeshevshe",
-      "@kopiyochka1"
+      "@forainfo",
+      "@ekomarket_shop",
+      "@silposilpo",
+      "@marketopt_promo",
+      "@sim23_simi",
+      "@epicentrk_sale",
+      "@rrozetka",
+      "@ATB_FANatik",
+      "@blyzenkoua",
+      "@kopiyochka1",
+      "@kop1chat"
     ],
-    "order_from": "docs/PHASE-promo-pulse-1.md §3, the operator's A1 list in its printed order; channels the list does not name follow it, sorted",
+    "order_from": "ruling 02.09 (c) §3, the operator's «АТБ → дешёвые → малые», DERIVED: the leaflet carrier, then the channels the smoke measured (>= 2 of its 30 pages, most-measured first, results/prereg_smoke_vision_c2.json), then the rest ascending by results/promo_pagecount_c2.json :: pages_exact",
     "pages": {
       "by_channel": {
         "@ATB_FANatik": 133,
@@ -106,7 +109,7 @@
       "source": "results/promo_census_c2.json :: channels[].text_price_msg_ids, read off the live store (v1 ∪ r2)",
       "total": 405
     },
-    "stage_0": "post_text — every channel's text posts BEFORE any page (ruling 02.09 (b))"
+    "stage_0": "post_text — every channel's text posts BEFORE any page (ruling 02.09 (b)), gated on its own (10)(a) projection (ruling 02.09 (c) item 1)"
   },
   "recovery_clause": "one re-create of the SAME endpoint within the same step cap if the first boot dies without serving info; an interrupted run is re-entered with a second --run under the same step — the derived store's markers subtract what was answered",
   "rung_0": {
