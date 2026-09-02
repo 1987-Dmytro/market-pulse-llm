@@ -1,0 +1,479 @@
+{
+  "by_chain": {
+    "atb": 37,
+    "ekomarket_shop": 4,
+    "forainfo": 3,
+    "marketopt_promo": 1,
+    "msuaaaa": 1,
+    "silpo": 1,
+    "telegraf_kremenchuk": 2,
+    "varus": 1
+  },
+  "chains": [
+    "atb",
+    "ekomarket_shop",
+    "forainfo",
+    "marketopt_promo",
+    "msuaaaa",
+    "silpo",
+    "telegraf_kremenchuk",
+    "varus"
+  ],
+  "contract": "docs/plans/promo-pulse-1.md K5 — the 50 positions the team lead labels into docs/labels-positions-50.jsonl. Rows carry the carrier and its link, never the extraction: the labeller must not see what he is grading.",
+  "population": 145,
+  "population_state": "PRE-C2 — these are 5c2's rows, not the backfilled four weeks K5 names. C2 is unbought (the cycle-3 guard refuses; see docs/plans/promo-pulse-1.STOP.md), so this file proves the DRAW's mechanics and is NOT yet the file to label. Re-draw after S4.",
+  "rows": [
+    {
+      "carrier": "post_text",
+      "chain": "varus",
+      "channel": "@VARUS_channel",
+      "link": "https://t.me/VARUS_channel/10628",
+      "msg_id": 10628,
+      "row_id": "@VARUS_channel:10628:0",
+      "week": "2026-W30"
+    },
+    {
+      "carrier": "leaflet_page",
+      "chain": "atb",
+      "channel": "@atb_market_official",
+      "link": "https://t.me/atb_market_official/4341",
+      "msg_id": 4341,
+      "row_id": "@atb_market_official:4341:0",
+      "week": null
+    },
+    {
+      "carrier": "leaflet_page",
+      "chain": "atb",
+      "channel": "@atb_market_official",
+      "link": "https://t.me/atb_market_official/4342",
+      "msg_id": 4342,
+      "row_id": "@atb_market_official:4342:1",
+      "week": null
+    },
+    {
+      "carrier": "leaflet_page",
+      "chain": "atb",
+      "channel": "@atb_market_official",
+      "link": "https://t.me/atb_market_official/4343",
+      "msg_id": 4343,
+      "row_id": "@atb_market_official:4343:0",
+      "week": null
+    },
+    {
+      "carrier": "leaflet_page",
+      "chain": "atb",
+      "channel": "@atb_market_official",
+      "link": "https://t.me/atb_market_official/4352",
+      "msg_id": 4352,
+      "row_id": "@atb_market_official:4352:1",
+      "week": null
+    },
+    {
+      "carrier": "leaflet_page",
+      "chain": "atb",
+      "channel": "@atb_market_official",
+      "link": "https://t.me/atb_market_official/4358",
+      "msg_id": 4358,
+      "row_id": "@atb_market_official:4358:1",
+      "week": null
+    },
+    {
+      "carrier": "leaflet_page",
+      "chain": "atb",
+      "channel": "@atb_market_official",
+      "link": "https://t.me/atb_market_official/4358",
+      "msg_id": 4358,
+      "row_id": "@atb_market_official:4358:2",
+      "week": null
+    },
+    {
+      "carrier": "leaflet_page",
+      "chain": "atb",
+      "channel": "@atb_market_official",
+      "link": "https://t.me/atb_market_official/4359",
+      "msg_id": 4359,
+      "row_id": "@atb_market_official:4359:2",
+      "week": null
+    },
+    {
+      "carrier": "leaflet_page",
+      "chain": "atb",
+      "channel": "@atb_market_official",
+      "link": "https://t.me/atb_market_official/4359",
+      "msg_id": 4359,
+      "row_id": "@atb_market_official:4359:5",
+      "week": null
+    },
+    {
+      "carrier": "leaflet_page",
+      "chain": "atb",
+      "channel": "@atb_market_official",
+      "link": "https://t.me/atb_market_official/4360",
+      "msg_id": 4360,
+      "row_id": "@atb_market_official:4360:3",
+      "week": "2026-W27"
+    },
+    {
+      "carrier": "leaflet_page",
+      "chain": "atb",
+      "channel": "@atb_market_official",
+      "link": "https://t.me/atb_market_official/4360",
+      "msg_id": 4360,
+      "row_id": "@atb_market_official:4360:5",
+      "week": "2026-W27"
+    },
+    {
+      "carrier": "leaflet_page",
+      "chain": "atb",
+      "channel": "@atb_market_official",
+      "link": "https://t.me/atb_market_official/4381",
+      "msg_id": 4381,
+      "row_id": "@atb_market_official:4381:0",
+      "week": "2026-W28"
+    },
+    {
+      "carrier": "leaflet_page",
+      "chain": "atb",
+      "channel": "@atb_market_official",
+      "link": "https://t.me/atb_market_official/4381",
+      "msg_id": 4381,
+      "row_id": "@atb_market_official:4381:1",
+      "week": "2026-W28"
+    },
+    {
+      "carrier": "leaflet_page",
+      "chain": "atb",
+      "channel": "@atb_market_official",
+      "link": "https://t.me/atb_market_official/4382",
+      "msg_id": 4382,
+      "row_id": "@atb_market_official:4382:1",
+      "week": null
+    },
+    {
+      "carrier": "leaflet_page",
+      "chain": "atb",
+      "channel": "@atb_market_official",
+      "link": "https://t.me/atb_market_official/4383",
+      "msg_id": 4383,
+      "row_id": "@atb_market_official:4383:1",
+      "week": null
+    },
+    {
+      "carrier": "leaflet_page",
+      "chain": "atb",
+      "channel": "@atb_market_official",
+      "link": "https://t.me/atb_market_official/4402",
+      "msg_id": 4402,
+      "row_id": "@atb_market_official:4402:0",
+      "week": null
+    },
+    {
+      "carrier": "leaflet_page",
+      "chain": "atb",
+      "channel": "@atb_market_official",
+      "link": "https://t.me/atb_market_official/4405",
+      "msg_id": 4405,
+      "row_id": "@atb_market_official:4405:0",
+      "week": null
+    },
+    {
+      "carrier": "leaflet_page",
+      "chain": "atb",
+      "channel": "@atb_market_official",
+      "link": "https://t.me/atb_market_official/4405",
+      "msg_id": 4405,
+      "row_id": "@atb_market_official:4405:1",
+      "week": null
+    },
+    {
+      "carrier": "leaflet_page",
+      "chain": "atb",
+      "channel": "@atb_market_official",
+      "link": "https://t.me/atb_market_official/4405",
+      "msg_id": 4405,
+      "row_id": "@atb_market_official:4405:4",
+      "week": null
+    },
+    {
+      "carrier": "leaflet_page",
+      "chain": "atb",
+      "channel": "@atb_market_official",
+      "link": "https://t.me/atb_market_official/4426",
+      "msg_id": 4426,
+      "row_id": "@atb_market_official:4426:2",
+      "week": "2026-W29"
+    },
+    {
+      "carrier": "leaflet_page",
+      "chain": "atb",
+      "channel": "@atb_market_official",
+      "link": "https://t.me/atb_market_official/4428",
+      "msg_id": 4428,
+      "row_id": "@atb_market_official:4428:2",
+      "week": null
+    },
+    {
+      "carrier": "leaflet_page",
+      "chain": "atb",
+      "channel": "@atb_market_official",
+      "link": "https://t.me/atb_market_official/4440",
+      "msg_id": 4440,
+      "row_id": "@atb_market_official:4440:0",
+      "week": null
+    },
+    {
+      "carrier": "leaflet_page",
+      "chain": "atb",
+      "channel": "@atb_market_official",
+      "link": "https://t.me/atb_market_official/4446",
+      "msg_id": 4446,
+      "row_id": "@atb_market_official:4446:0",
+      "week": "2026-W29"
+    },
+    {
+      "carrier": "leaflet_page",
+      "chain": "atb",
+      "channel": "@atb_market_official",
+      "link": "https://t.me/atb_market_official/4446",
+      "msg_id": 4446,
+      "row_id": "@atb_market_official:4446:1",
+      "week": "2026-W29"
+    },
+    {
+      "carrier": "leaflet_page",
+      "chain": "atb",
+      "channel": "@atb_market_official",
+      "link": "https://t.me/atb_market_official/4446",
+      "msg_id": 4446,
+      "row_id": "@atb_market_official:4446:3",
+      "week": "2026-W29"
+    },
+    {
+      "carrier": "leaflet_page",
+      "chain": "atb",
+      "channel": "@atb_market_official",
+      "link": "https://t.me/atb_market_official/4467",
+      "msg_id": 4467,
+      "row_id": "@atb_market_official:4467:1",
+      "week": "2026-W30"
+    },
+    {
+      "carrier": "leaflet_page",
+      "chain": "atb",
+      "channel": "@atb_market_official",
+      "link": "https://t.me/atb_market_official/4471",
+      "msg_id": 4471,
+      "row_id": "@atb_market_official:4471:0",
+      "week": null
+    },
+    {
+      "carrier": "leaflet_page",
+      "chain": "atb",
+      "channel": "@atb_market_official",
+      "link": "https://t.me/atb_market_official/4476",
+      "msg_id": 4476,
+      "row_id": "@atb_market_official:4476:0",
+      "week": null
+    },
+    {
+      "carrier": "leaflet_page",
+      "chain": "atb",
+      "channel": "@atb_market_official",
+      "link": "https://t.me/atb_market_official/4476",
+      "msg_id": 4476,
+      "row_id": "@atb_market_official:4476:2",
+      "week": null
+    },
+    {
+      "carrier": "leaflet_page",
+      "chain": "atb",
+      "channel": "@atb_market_official",
+      "link": "https://t.me/atb_market_official/4507",
+      "msg_id": 4507,
+      "row_id": "@atb_market_official:4507:0",
+      "week": null
+    },
+    {
+      "carrier": "leaflet_page",
+      "chain": "atb",
+      "channel": "@atb_market_official",
+      "link": "https://t.me/atb_market_official/4507",
+      "msg_id": 4507,
+      "row_id": "@atb_market_official:4507:1",
+      "week": null
+    },
+    {
+      "carrier": "leaflet_page",
+      "chain": "atb",
+      "channel": "@atb_market_official",
+      "link": "https://t.me/atb_market_official/4507",
+      "msg_id": 4507,
+      "row_id": "@atb_market_official:4507:2",
+      "week": null
+    },
+    {
+      "carrier": "leaflet_page",
+      "chain": "atb",
+      "channel": "@atb_market_official",
+      "link": "https://t.me/atb_market_official/4507",
+      "msg_id": 4507,
+      "row_id": "@atb_market_official:4507:3",
+      "week": null
+    },
+    {
+      "carrier": "leaflet_page",
+      "chain": "atb",
+      "channel": "@atb_market_official",
+      "link": "https://t.me/atb_market_official/4507",
+      "msg_id": 4507,
+      "row_id": "@atb_market_official:4507:6",
+      "week": null
+    },
+    {
+      "carrier": "leaflet_page",
+      "chain": "atb",
+      "channel": "@atb_market_official",
+      "link": "https://t.me/atb_market_official/4508",
+      "msg_id": 4508,
+      "row_id": "@atb_market_official:4508:0",
+      "week": "2026-W30"
+    },
+    {
+      "carrier": "leaflet_page",
+      "chain": "atb",
+      "channel": "@atb_market_official",
+      "link": "https://t.me/atb_market_official/4508",
+      "msg_id": 4508,
+      "row_id": "@atb_market_official:4508:2",
+      "week": "2026-W30"
+    },
+    {
+      "carrier": "leaflet_page",
+      "chain": "atb",
+      "channel": "@atb_market_official",
+      "link": "https://t.me/atb_market_official/4508",
+      "msg_id": 4508,
+      "row_id": "@atb_market_official:4508:3",
+      "week": "2026-W30"
+    },
+    {
+      "carrier": "leaflet_page",
+      "chain": "atb",
+      "channel": "@atb_market_official",
+      "link": "https://t.me/atb_market_official/4508",
+      "msg_id": 4508,
+      "row_id": "@atb_market_official:4508:4",
+      "week": "2026-W30"
+    },
+    {
+      "carrier": "post_text",
+      "chain": "ekomarket_shop",
+      "channel": "@ekomarket_shop",
+      "link": "https://t.me/ekomarket_shop/1445",
+      "msg_id": 1445,
+      "row_id": "@ekomarket_shop:1445:0",
+      "week": "2026-W30"
+    },
+    {
+      "carrier": "post_text",
+      "chain": "ekomarket_shop",
+      "channel": "@ekomarket_shop",
+      "link": "https://t.me/ekomarket_shop/1445",
+      "msg_id": 1445,
+      "row_id": "@ekomarket_shop:1445:1",
+      "week": "2026-W30"
+    },
+    {
+      "carrier": "post_text",
+      "chain": "ekomarket_shop",
+      "channel": "@ekomarket_shop",
+      "link": "https://t.me/ekomarket_shop/1448",
+      "msg_id": 1448,
+      "row_id": "@ekomarket_shop:1448:1",
+      "week": "2026-W30"
+    },
+    {
+      "carrier": "post_text",
+      "chain": "ekomarket_shop",
+      "channel": "@ekomarket_shop",
+      "link": "https://t.me/ekomarket_shop/1458",
+      "msg_id": 1458,
+      "row_id": "@ekomarket_shop:1458:1",
+      "week": "2026-W32"
+    },
+    {
+      "carrier": "post_text",
+      "chain": "forainfo",
+      "channel": "@forainfo",
+      "link": "https://t.me/forainfo/6032",
+      "msg_id": 6032,
+      "row_id": "@forainfo:6032:0",
+      "week": "2026-W29"
+    },
+    {
+      "carrier": "post_text",
+      "chain": "forainfo",
+      "channel": "@forainfo",
+      "link": "https://t.me/forainfo/6032",
+      "msg_id": 6032,
+      "row_id": "@forainfo:6032:1",
+      "week": "2026-W29"
+    },
+    {
+      "carrier": "post_text",
+      "chain": "forainfo",
+      "channel": "@forainfo",
+      "link": "https://t.me/forainfo/6041",
+      "msg_id": 6041,
+      "row_id": "@forainfo:6041:2",
+      "week": "2026-W31"
+    },
+    {
+      "carrier": "post_text",
+      "chain": "marketopt_promo",
+      "channel": "@marketopt_promo",
+      "link": "https://t.me/marketopt_promo/2871",
+      "msg_id": 2871,
+      "row_id": "@marketopt_promo:2871:0",
+      "week": "2026-W29"
+    },
+    {
+      "carrier": "post_text",
+      "chain": "msuaaaa",
+      "channel": "@msuaaaa",
+      "link": "https://t.me/msuaaaa/10656",
+      "msg_id": 10656,
+      "row_id": "@msuaaaa:10656:0",
+      "week": "2026-W30"
+    },
+    {
+      "carrier": "post_text",
+      "chain": "silpo",
+      "channel": "@silposilpo",
+      "link": "https://t.me/silposilpo/3805",
+      "msg_id": 3805,
+      "row_id": "@silposilpo:3805:0",
+      "week": "2026-W30"
+    },
+    {
+      "carrier": "post_text",
+      "chain": "telegraf_kremenchuk",
+      "channel": "@telegraf_kremenchuk",
+      "link": "https://t.me/telegraf_kremenchuk/70827",
+      "msg_id": 70827,
+      "row_id": "@telegraf_kremenchuk:70827:0",
+      "week": "2026-W29"
+    },
+    {
+      "carrier": "post_text",
+      "chain": "telegraf_kremenchuk",
+      "channel": "@telegraf_kremenchuk",
+      "link": "https://t.me/telegraf_kremenchuk/70827",
+      "msg_id": 70827,
+      "row_id": "@telegraf_kremenchuk:70827:1",
+      "week": "2026-W29"
+    }
+  ],
+  "rows_drawn": 50,
+  "seed": 42
+}
