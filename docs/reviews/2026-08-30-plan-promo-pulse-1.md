@@ -265,3 +265,45 @@ no tool call → one word, «go». PROCESS §Cadence 3 and skill v2.4 carry it.
 the proven count 4 266 (own run); the code block holds the BODY only. Expected STOPs unchanged: «waiting on labels»
 (dev-40, positions-50), plateau, holdout notice. Team lead's debts unchanged: `docs/labels-promo-dev.jsonl` (dev-40,
 batches of 10), `docs/labels-positions-50.jsonl` (after S4 — the draw on disk is PRE-C2 population, re-drawn after S4).
+
+---
+
+## Ruling 02.09 (b) — S4's step cap is $3.95, the whole step, text leg FIRST; the dev loop takes what remains
+
+**Acceptance of the second pause (`docs/reports/promo-pulse-1.md` @ `99e1a24`) — GREEN as a PAUSE.** Team lead's own
+readings: guard exit 0, `anchor $14.48`, `CYCLE 3 SPENT $0.2722 of $7.00`, `REMAINING $6.7278` (the drip keeps walking);
+`runpodctl serverless list` → `[]`, `pod list -a` → `[]`; `results/post_media_promo_c2.json :: totals` = 968 posts fetched,
+0 unreachable, 3 008 images = 3 008 expected, 17 of 17 channels matching the pagecount; 3 008 files on disk (573 MB,
+gitignored); `results/prereg_promo_c2.json :: rung_0` table read — cheap $2.6041 · priced $3.5241 · dear $3.6059 against 3.20,
+`fits` false; `make check` @ `99e1a24` = **4 278 passed · 2 skipped · exit 0** (own run, 11 min 30 s); porcelain on the
+contract paths empty. The rung fired for the team lead's reason: 3.20 was set from `verdict.c2_priced_usd`, which priced the
+vision leg alone — the text leg (405 posts) and the second boot were never in that number. The executor was right to stop
+before creating anything and right not to re-price at a kinder corner.
+
+**Operator's word (02.09, quoted): «$3.95 — весь шаг».** The ceiling ($7.00) and the reserve are untouched — this is the
+split inside the ceiling, and it is ruled as follows:
+
+1. **`STEP_CAP_USD = 3.95`** in `scripts/run_promo_c2.py` (one constant), a fresh `--register` (rung 0 must print `fits`
+   true at the dear corner: $3.6059 + the one-job reserve $0.2843 = $3.8902 ≤ 3.95), the guard's step anchor with
+   `--step promo-pulse-1 --step-cap 3.95`, then `knowledge/runbooks/promo_c2_paid_leg.md` top to bottom, TODAY — the
+   room is a clock ($0.2333/day) and every day of delay comes out of the dev loop below.
+2. **The text leg runs FIRST.** Today the driver buys pages by channel and the 405 text posts last; under a cap gate that
+   puts the cheapest, surest, cross-chain data (≈$0.35 at the registered 2.8132 s) behind the dearest. Reorder: (10)(a)
+   warm-ups → `post_leg` → the re-projection → the leaflet loop in the spec's channel order (unchanged). Check: `--dry-run`
+   prints `post_text` as stage 0; `results/run_promo_c2.json :: stages[0].after == "post_text"`; the stub-driven tests
+   still pass and ONE new test pins the order. No existing test is weakened; the channel-order test stays as it is.
+3. **Mid-run: no cap raise, ever.** The gates decide — the (10)(a) gate, the re-projection after every channel, the per-pack
+   cap gate. If the run stops on any of them, the unbought channels are recorded (`outcome.unbought`) and the next STOP
+   carries the table: channel · pages left · $ at the measured marginal. A realised rate like 5c2's 10.408 s/page is the
+   expected way this happens — it is a result, not a failure.
+4. **Which side gives: the dev loop, never the holdout.** After S4 settles, C3's dev-loop cap = min($2.50, REMAINING −
+   $0.30 for the holdout); its floor is **$2.00** — below that, STOP for the operator's word before the first dev run. The
+   holdout's $0.30 is protected and pre-registered as before.
+5. After the run: teardown proven by `runpodctl serverless list` → `[]` and `template` gone; the step's spend line
+   (`results/spend_promo_pulse_1.json`, settled by `--close`) named in the report; `results/positions_draw_50.json`
+   RE-DRAWN over the C2 population (seed 42, twice, one sha) — the pre-C2 draw is superseded, said so in the record.
+
+**Evaluator note (no predicate change):** both Stop-hook passes read the pause correctly («met AS A PAUSE») yet returned it
+as feedback; two cheap extra turns. The C6 redesign (`make done` printing STATE=COMPLETE|PAUSED|RUNNING) removes the
+ambiguity; §8 v3 stays byte-identical until then. Team lead's debts unchanged: dev-40 labels in batches of 10;
+positions-50 after the re-draw.
