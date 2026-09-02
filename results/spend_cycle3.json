@@ -3,5 +3,16 @@
   "runpod_balance_at_cycle3_start": 14.4799665639,
   "anchored_at": "2026-09-01T06:34:08+00:00",
   "note": "RunPod account balance read when cycle 3 was opened — operator ruling 2026-09-01, «Цикл-3 = весь баланс, потолок $4.8», relayed into docs/reviews/2026-08-30-plan-promo-pulse-1.md. Cycle 2 is SUPERSEDED, not closed and not re-scored: its ledger keeps the anchor and the sessions it always had. Spend on this line = the pessimistic maximum of this anchor minus the balance now and the billing walk since the timestamp above. Delete or regenerate this file and the counter restarts at today's balance — the footgun results/spend_phase4.json and results/spend_cycle2.json both carry. CAP RAISED 4.80 -> 7.00 (operator, 2026-09-01 evening: «Потолок $7.00, резерв не трогаем», after a +$10 top-up; ruling «01.09 (later)» in docs/reviews/2026-08-30-plan-promo-pulse-1.md). Nothing of cycle 3 had been bought when it was raised — $0.2139, all of it the network volume's drip — so this is the operator's line on new money, not a cap raised to finish a run. The anchor and anchored_at above are UNCHANGED by the raise, which is why the balance ($14.26) now sits ABOVE the anchor ($4.4800) and scripts/runpod_guard.py refuses on it: re-anchoring is an operator decision, not a script's. RE-ANCHORED 2026-09-02 on the operator's word «якорь + $10.00» (ruling 02.09): anchor = opening anchor + the stated $10.00 top-up; anchored_at unchanged, so the billing walk keeps the drip already spent",
-  "sessions": []
+  "sessions": [
+    {
+      "at": "2026-09-02T13:30:45+00:00",
+      "balance": 14.1283590146,
+      "spent_usd": 0.3516,
+      "remaining_usd": 6.6484,
+      "balance_delta_usd": 0.3516,
+      "billing_since_usd": 0.291667,
+      "billing_read": "read",
+      "note": "S4 C2 run 1: (10)(a) gate refused the whole step at a 13.466 s page warm-up — 0 pages, 0 posts bought; one boot + two warm-ups"
+    }
+  ]
 }
