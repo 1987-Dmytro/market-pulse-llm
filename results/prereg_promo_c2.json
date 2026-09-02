@@ -1,0 +1,202 @@
+{
+  "authority": "docs/reviews/2026-08-30-plan-promo-pulse-1.md «Ruling 02.09» — «Then rung 0 (--step promo-pulse-1 --step-cap 3.20) and S4 as the plan says»; docs/plans/promo-pulse-1.md S4, SP-1b",
+  "expected_worker": {
+    "adapter_sha256": null,
+    "max_new_tokens": 1200,
+    "merge_state": "base-no-adapter",
+    "positions_prompt_sha256": {
+      "positions_post_gm4": "ca6303c157d46e707aaf3fc52c7a05ed1450e24c26db0e7c93eefba4f6968754",
+      "positions_text_gm4": "7250b87aa1c2de407e06ab9eed565dd4d88025add7be0d2d2a87607c0d872860"
+    },
+    "revision_requested": "842da3794eaa0b77d5f08bae87a17459d91ff475",
+    "serving_config": "POSITIONS"
+  },
+  "expected_worker_from": "results/sku_pilot_serving_v2.json — the pin run_5c2 and the smoke assert",
+  "in_run_gates": {
+    "cap_gate": "SPEC 3.17 (10)(c), per pack: refuse the next job when what is left of the cap cannot absorb one job at the 900 s execution timeout",
+    "go_no_go": "SPEC 3.17 (10)(a): after two warm-ups on REPRESENTATIVE inputs — the first queued C2 page and the first queued C2 post — the whole step is re-projected at the measured marginals and no gold call is made if it exceeds the step cap",
+    "packs": "bytes first (8.0 MB, RunPod's /run refuses 10 MiB), then the count the pessimistic marginal allows inside the timeout",
+    "stage_projection": "after EVERY channel, positions_gm4_skub.projection at the measured marginal; projected over the cap → the run stops at that boundary and the unbought channels are recorded (PROCESS rung 2; silence = KILL)"
+  },
+  "kill_rules": [
+    "the dear corner of rung 0 does not fit the step cap → nothing is created (STOP)",
+    "the guard refuses --step promo-pulse-1 --step-cap 3.20 → that is the answer",
+    "info disagrees with expected_worker → tear down, send nothing, record the difference",
+    "two boots without a served info → KILL, do not try a third",
+    "the (10)(a) gate refuses → no gold call, tear down, record the measured marginals",
+    "a job ends TIMED_OUT → the run ends with its unbought remainder recorded"
+  ],
+  "phase": "promo-pulse-1 S4 — the C2 backfill (PAID): vision for the census's pages, text for its price posts",
+  "pinned_inputs": {
+    "results/post_media_promo_c2.json": "8860afa81a4d50d8ed345feaef975643f74634c2ac6766f5cb79c9444b561810",
+    "results/prereg_5c2_run.json": "d5d3afd5e6d7e966233a7e449546b2001f9c2a08646cab207e87531f5df4cbc8",
+    "results/promo_census_c2.json": "193f8bf039bb819145ec8228d2eec4097f21ee3ffb0a5fa797738edeb238ccca",
+    "results/promo_pagecount_c2.json": "8e25513c7e13fcd627a14804cd23255049e1a98af2365ce5c7ce49c2c616b031",
+    "results/promo_projection_c2.json": "8af6f461907d2bca053ba41efe807c246e196ade1779cd2fbb495ed080dc1b66",
+    "results/run_5c2_positions.json": "24decd5f231f74d56f260857869e4686e0678107cc8b3df8d020c128dcc855c8",
+    "results/sku_pilot_serving_v2.json": "75f5e0d5a369cf2d915bb2bed8a98caffd0f11a9ded800ab269fc29f111ccf10",
+    "results/smoke_vision_c2.json": "e6474f0dec2253de24b2bda1857ea9a6959efd109011024a39baf163ab91d8b4"
+  },
+  "population": {
+    "order": [
+      "@atb_market_official",
+      "@ATB_FANatik",
+      "@atb_aktsiyi",
+      "@VARUS_channel",
+      "@ekomarket_shop",
+      "@epicentrk_sale",
+      "@forainfo",
+      "@marketopt_promo",
+      "@blyzenkoua",
+      "@silposilpo",
+      "@fozzyshopua",
+      "@sim23_simi",
+      "@rrozetka",
+      "@msuaaaa",
+      "@kop1chat",
+      "@xochydeshevshe",
+      "@kopiyochka1"
+    ],
+    "order_from": "docs/PHASE-promo-pulse-1.md §3, the operator's A1 list in its printed order; channels the list does not name follow it, sorted",
+    "pages": {
+      "by_channel": {
+        "@ATB_FANatik": 133,
+        "@VARUS_channel": 515,
+        "@atb_aktsiyi": 259,
+        "@atb_market_official": 209,
+        "@blyzenkoua": 328,
+        "@ekomarket_shop": 17,
+        "@epicentrk_sale": 78,
+        "@forainfo": 11,
+        "@fozzyshopua": 3,
+        "@kop1chat": 528,
+        "@kopiyochka1": 396,
+        "@marketopt_promo": 52,
+        "@msuaaaa": 268,
+        "@rrozetka": 113,
+        "@silposilpo": 34,
+        "@sim23_simi": 57,
+        "@xochydeshevshe": 7
+      },
+      "ids_sha256": "b6bc2f67befc2dc8885e9d674ee4ec9f6ff867d0bb42b7b23b7959e86474b09e",
+      "source": "results/post_media_promo_c2.json through run_loop.pages_of — the census's pinned media posts, one file per photo member, counted against results/promo_pagecount_c2.json :: pages_exact per channel",
+      "total": 3008
+    },
+    "posts": {
+      "by_channel": {
+        "@ATB_FANatik": 17,
+        "@VARUS_channel": 33,
+        "@atb_aktsiyi": 1,
+        "@blyzenkoua": 21,
+        "@ekomarket_shop": 15,
+        "@epicentrk_sale": 89,
+        "@forainfo": 6,
+        "@fozzyshopua": 2,
+        "@kop1chat": 65,
+        "@kopiyochka1": 2,
+        "@marketopt_promo": 5,
+        "@msuaaaa": 41,
+        "@rrozetka": 88,
+        "@silposilpo": 7,
+        "@sim23_simi": 3,
+        "@xochydeshevshe": 10
+      },
+      "ids_sha256": "590f91e4b114c6d3a0d99bde7ced5f40673822f41fcfbd1030537d8ec682ce5f",
+      "source": "results/promo_census_c2.json :: channels[].text_price_msg_ids, read off the live store (v1 ∪ r2)",
+      "total": 405
+    }
+  },
+  "recovery_clause": "one re-create of the SAME endpoint within the same step cap if the first boot dies without serving info; an interrupted run is re-entered with a second --run under the same step — the derived store's markers subtract what was answered",
+  "rung_0": {
+    "cap_from": "docs/reviews/2026-08-30-plan-promo-pulse-1.md «Ruling 02.09»",
+    "cap_usd": 3.2,
+    "dear_usd": 3.6059,
+    "fits": false,
+    "fits_at_the_cheap_corner": true,
+    "fits_at_the_priced_corner": false,
+    "over_cap_by_at_the_dear_corner": 0.1268,
+    "pages": 3008,
+    "posts": 405,
+    "priced_usd": 3.5241,
+    "rates": {
+      "boot_derived": 157.449,
+      "boot_derived_from": "results/promo_projection_c2.json :: verdict.marginal_bound.one_boot_seconds",
+      "boot_measured": 212.041,
+      "boot_measured_from": "results/smoke_vision_c2.json :: rung_0.boot_seconds_each (srv-2c's slower boot)",
+      "idle_tail_seconds": 60.0,
+      "page_from": "results/promo_projection_c2.json :: verdict.marginal_bound (the smoke, n=30)",
+      "page_lower": 2.623,
+      "page_realised_5c2": 10.408,
+      "page_realised_from": "results/run_5c2_positions.json :: timing.seconds_per_row (boot-inclusive, n=205 rows, 159 of them ATB leaflet pages)",
+      "page_registered": 4.2794,
+      "page_registered_from": "results/prereg_5c2_run.json :: prices.leaflet_page.seconds_model (skub2's last in-run gate, 108 pages) — sizes the packs, never the price",
+      "page_upper": 3.369,
+      "rate_usd_per_second": 0.00030669,
+      "text_registered": 2.8132,
+      "text_registered_from": "results/prereg_5c2_run.json :: prices.post_text.seconds_model (skub2's text leg, n=30)",
+      "text_warmup": 0.947,
+      "text_warmup_from": "results/run_5c2_positions.json :: go_no_go.text_marginal_seconds (n=1)"
+    },
+    "realised_5c2": {
+      "billable_seconds": 32506.61,
+      "boot_seconds_each": 0.0,
+      "boots": 0,
+      "cap_usd": 3.2,
+      "fits": false,
+      "idle_tail_seconds": 60.0,
+      "name": "READING, not a corner — the vision leg at 5c2's realised boot-inclusive rate on ATB leaflet pages; the projection's table carries it as `realised_5c2`",
+      "over_cap_by": 2.1155,
+      "page_seconds": 10.408,
+      "text_seconds": 2.8132,
+      "usd": 9.9695
+    },
+    "rule": "docs/PROCESS.md «Money» rung (0): price at create ≤ the registered ceiling — the ceiling is the step cap, the price is the DEAR corner",
+    "table": [
+      {
+        "billable_seconds": 8490.968,
+        "boot_seconds_each": 157.449,
+        "boots": 1,
+        "cap_usd": 3.2,
+        "fits": true,
+        "idle_tail_seconds": 60.0,
+        "name": "cheap — the marginal's lower end, the text warm-up, one derived boot",
+        "over_cap_by": -0.1862,
+        "page_seconds": 2.623,
+        "text_seconds": 0.947,
+        "usd": 2.6041
+      },
+      {
+        "billable_seconds": 11490.747,
+        "boot_seconds_each": 157.449,
+        "boots": 1,
+        "cap_usd": 3.2,
+        "fits": false,
+        "idle_tail_seconds": 60.0,
+        "name": "priced — the projection's own corner (upper marginal + one derived boot) plus the text leg at its registered rate",
+        "over_cap_by": 0.1013,
+        "page_seconds": 3.369,
+        "text_seconds": 2.8132,
+        "usd": 3.5241
+      },
+      {
+        "billable_seconds": 11757.38,
+        "boot_seconds_each": 212.041,
+        "boots": 2,
+        "cap_usd": 3.2,
+        "fits": false,
+        "idle_tail_seconds": 60.0,
+        "name": "dear — the upper marginal, the registered text rate, two measured boots (the smoke's rung 0: something boots at creation and the first job may boot again)",
+        "over_cap_by": 0.1268,
+        "page_seconds": 3.369,
+        "text_seconds": 2.8132,
+        "usd": 3.6059
+      }
+    ]
+  },
+  "step": {
+    "cap_usd": 3.2,
+    "ledger": "results/spend_promo_pulse_1.json",
+    "name": "promo-pulse-1"
+  },
+  "teardown": "runpodctl serverless delete <endpoint> && runpodctl template delete <template>, proven by `runpodctl serverless list` → [] and `runpodctl template list --type user` → the endpoint's template gone, with `runpodctl network-volume list` → mp-srv2 (qw4nwleanc) still listed as the positive control"
+}
