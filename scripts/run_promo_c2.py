@@ -22,12 +22,14 @@ subtracts the page markers on disk) and a second `--run` continues under the sam
 BEFORE anything is created, and `--run` refuses to build a client when the dear corner does not fit
 the step cap; the guard's own step anchor is written by `scripts/runpod_guard.py`, not here.
 (1) liveness — the endpoint's execution timeout (900 s per job) and the client's `retries=0`.
-(2) the (10)(a) gate after two representative warm-ups (a real C2 page, a real C2 post); then the
-TEXT leg first — stage 0, the cheapest, surest, cross-chain data (ruling 02.09 (b)) — and a
-re-projection after it and after EVERY channel at the measured marginal; over the cap → the run
-stops at that boundary and the unbought channels are recorded (silence = KILL: nobody can be asked
-mid-run; the cap is never raised mid-run). (3) the per-pack `cap_gate`: no job may be capable of
-billing past the remaining cap.
+(2) the (10)(a) gate PER LEG and the room PER CHANNEL (ruling 02.09 (c)): the text leg is projected
+on its own after its warm-up and bought as stage 0 — it is never refused for the page leg — and
+each channel is then measured by its OWN first pack, its remainder projected at that rate against
+what is left of the cap; a remainder that does not fit is left unbought and the next channel starts;
+the run ends when the room is below one pack at the worst measured rate. The whole-step page
+projection is retired: one rate over 17 channels lies in both directions (a leaflet page reads
+10–13 s, a promo photo 2.6–3.4 s). (3) the per-pack `cap_gate`: no job may be capable of billing
+past the remaining cap. The cap is never raised mid-run (silence = KILL: nobody can be asked).
 
     python3.11 scripts/run_promo_c2.py --register                        # $0: the registration
     PYTHONPATH=src python3.11 scripts/run_promo_c2.py --dry-run          # $0: selections, hashes
@@ -37,9 +39,11 @@ billing past the remaining cap.
 from __future__ import annotations
 
 import argparse
+import collections
 import hashlib
 import json
 import os
+import re
 import subprocess
 import sys
 from datetime import UTC, datetime
@@ -49,6 +53,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "src"))
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
+import measurements  # noqa: E402
 import positions_gm4_skub as skub  # noqa: E402
 import run_5c2 as fivec2  # noqa: E402
 import run_loop  # noqa: E402
@@ -74,36 +79,34 @@ POSITIONS_PIN = REPO_ROOT / "results" / "sku_pilot_serving_v2.json"
 PREREG_5C2 = REPO_ROOT / "results" / "prereg_5c2_run.json"
 RUN_5C2 = REPO_ROOT / "results" / "run_5c2_positions.json"
 SMOKE = REPO_ROOT / "results" / "smoke_vision_c2.json"
+SMOKE_PREREG = REPO_ROOT / "results" / "prereg_smoke_vision_c2.json"
+MEASUREMENTS = REPO_ROOT / "results" / "measurements.jsonl"
 
 
 def pinned() -> tuple[Path, ...]:
     """The inputs the registration hashes — read at call time, so a test can point them elsewhere."""
-    return (CENSUS, PAGECOUNT, PROJECTION, MANIFEST, POSITIONS_PIN, PREREG_5C2, RUN_5C2, SMOKE)
+    return (
+        CENSUS,
+        PAGECOUNT,
+        PROJECTION,
+        MANIFEST,
+        POSITIONS_PIN,
+        PREREG_5C2,
+        RUN_5C2,
+        SMOKE,
+        SMOKE_PREREG,
+    )
 
 
-ORDER = (
-    "@atb_market_official",
-    "@ATB_FANatik",
-    "@atb_aktsiyi",
-    "@VARUS_channel",
-    "@ekomarket_shop",
-    "@epicentrk_sale",
-    "@forainfo",
-    "@marketopt_promo",
-    "@blyzenkoua",
-    "@silposilpo",
-    "@fozzyshopua",
-    "@sim23_simi",
-    "@rrozetka",
-    "@msuaaaa",
-    "@kop1chat",
-    "@znishkom",
-    "@xochydeshevshe",
-)
-"""Stages in VALUE order (PROCESS «Money»): the operator's confirmed A1 list of
-`docs/PHASE-promo-pulse-1.md` §3, in its printed order — a channel the census carries that the
-list does not (`@kopiyochka1`, an A2 voice) follows it, sorted. A completed channel is a usable
-number; the order is the spec's, not a ranking invented here."""
+LEAFLET_CARRIER = "@atb_market_official"
+"""Ruling 02.09 (c) §3, the operator's «АТБ → дешёвые → малые»: «`@atb_market_official` whole (the
+leaflet carrier, 209 pages)» opens the page stages. The one handle this file names; the rest of the
+order is derived below from the pagecount and the smoke's own population."""
+
+MEASURED_MIN_ROWS = 2
+"""How many smoke pages a channel needs before the smoke counts as having MEASURED it. One page is
+a row, not a rate ([[a_reproducible_probe_can_be_unrepresentative]]) — and it is the line that
+makes the derivation below reproduce the three channels ruling (c) §3 names."""
 
 ENDPOINT_ENV = "RUNPOD_PROMO_C2_ENDPOINT"
 API_KEY_ENV = "RUNPOD_API_KEY"
@@ -125,9 +128,41 @@ def load(path: Path) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+def smoke_rows_per_channel() -> dict[str, int]:
+    """How many pages of each channel the vision smoke actually bought — its population file."""
+    rows = load(SMOKE_PREREG)["population"]["rows"]
+    return collections.Counter(one.split(":")[1] for one in rows)
+
+
+def stage_order() -> list[str]:
+    """The page stages of ruling 02.09 (c) §3, DERIVED — «АТБ → дешёвые → малые».
+
+    The carrier first, then the channels the smoke measured (its own population file, most-measured
+    first), then everything else ascending by the exact page count. Nothing is a typed list: a
+    channel that leaves the census, or one whose pages grow, moves itself.
+    """
+    exact = {row["channel"]: row["pages_exact"] for row in load(PAGECOUNT)["channels"]}
+    smoke = smoke_rows_per_channel()
+    measured = sorted(
+        (
+            handle
+            for handle, rows in smoke.items()
+            if rows >= MEASURED_MIN_ROWS and handle in exact and handle != LEAFLET_CARRIER
+        ),
+        key=lambda handle: (-smoke[handle], handle),
+    )
+    head = [LEAFLET_CARRIER] if LEAFLET_CARRIER in exact else []
+    rest = sorted(
+        (handle for handle in exact if handle not in {*head, *measured}),
+        key=lambda handle: (exact[handle], handle),
+    )
+    return head + measured + rest
+
+
 def ordered(handles) -> list[str]:
     handles = set(handles)
-    return [one for one in ORDER if one in handles] + sorted(handles - set(ORDER))
+    order = stage_order()
+    return [one for one in order if one in handles] + sorted(handles - set(order))
 
 
 # --- the population, read off the records --------------------------------------------------------
@@ -358,7 +393,9 @@ def register() -> dict:
         " for its price posts",
         "authority": "docs/reviews/2026-08-30-plan-promo-pulse-1.md «Ruling 02.09 (b)» — «STEP_CAP_USD"
         " = 3.95 … the guard's step anchor with --step promo-pulse-1 --step-cap 3.95 … The text leg"
-        " runs FIRST … Mid-run: no cap raise, ever»; docs/plans/promo-pulse-1.md S4, SP-1b",
+        " runs FIRST … Mid-run: no cap raise, ever» — and «Ruling 02.09 (c)»: «Per leg — yes … Per"
+        " channel, measured by the channel's own first pack … The whole-step page projection is"
+        " RETIRED for this step»; docs/plans/promo-pulse-1.md S4, SP-1b",
         "step": {
             "name": STEP,
             "cap_usd": STEP_CAP_USD,
@@ -382,21 +419,31 @@ def register() -> dict:
                 " the live store (v1 ∪ r2)",
             },
             "order": ordered(set(page_queue) | set(post_queue)),
-            "order_from": "docs/PHASE-promo-pulse-1.md §3, the operator's A1 list in its printed"
-            " order; channels the list does not name follow it, sorted",
-            "stage_0": "post_text — every channel's text posts BEFORE any page (ruling 02.09 (b))",
+            "order_from": "ruling 02.09 (c) §3, the operator's «АТБ → дешёвые → малые», DERIVED:"
+            " the leaflet carrier, then the channels the smoke measured (>= 2 of its 30 pages,"
+            " most-measured first, results/prereg_smoke_vision_c2.json), then the rest ascending"
+            " by results/promo_pagecount_c2.json :: pages_exact",
+            "stage_0": "post_text — every channel's text posts BEFORE any page (ruling 02.09 (b)),"
+            " gated on its own (10)(a) projection (ruling 02.09 (c) item 1)",
         },
         "expected_worker": load(POSITIONS_PIN)["expected_worker"],
         "expected_worker_from": "results/sku_pilot_serving_v2.json — the pin run_5c2 and the smoke"
         " assert",
         "rung_0": rung_0(n_pages, n_posts),
         "in_run_gates": {
-            "go_no_go": "SPEC 3.17 (10)(a): after two warm-ups on REPRESENTATIVE inputs — the"
-            " first queued C2 page and the first queued C2 post — the whole step is re-projected"
-            " at the measured marginals and no gold call is made if it exceeds the step cap",
-            "stage_projection": "after EVERY channel, positions_gm4_skub.projection at the"
-            " measured marginal; projected over the cap → the run stops at that boundary and the"
-            " unbought channels are recorded (PROCESS rung 2; silence = KILL)",
+            "go_no_go": "SPEC 3.17 (10)(a) PER LEG (ruling 02.09 (c) item 1): after two warm-ups on"
+            " REPRESENTATIVE inputs — the first queued C2 page and the first queued C2 post — the"
+            " TEXT leg alone is projected at its own measured marginal and no gold call is made if"
+            " IT exceeds what is left of the step cap; the page leg is never priced as one step",
+            "per_channel": "ruling 02.09 (c) item 2: the channel's own first pack is its"
+            " measurement (worker seconds ÷ pages written, one row per channel in"
+            " results/measurements.jsonl); its remainder is projected at THAT rate against the"
+            " room (cap − step spent − one wedged job − the idle tail) — fits → the channel runs"
+            " whole, does not → the remainder is left unbought and the next channel starts; the"
+            " run ends when the room is below one pack at the worst measured rate",
+            "stage_projection": "after EVERY channel, positions_gm4_skub.projection at the blended"
+            " marginal — a READING for the record and the STOP's table, no longer a gate: ruling"
+            " 02.09 (c) retires the whole-step page projection",
             "cap_gate": "SPEC 3.17 (10)(c), per pack: refuse the next job when what is left of"
             f" the cap cannot absorb one job at the {skub.JOB_TIMEOUT_S:.0f} s execution timeout",
             "packs": f"bytes first ({skub.MAX_PAYLOAD_MB} MB, RunPod's /run refuses 10 MiB), then"
@@ -405,8 +452,10 @@ def register() -> dict:
         "kill_rules": [
             "the dear corner of rung 0 does not fit the step cap → nothing is created (STOP)",
             "the guard refuses --step promo-pulse-1 --step-cap 3.95 → that is the answer",
-            "mid-run the cap is never raised: the (10)(a) gate, the re-projection after every"
-            " stage and the per-pack cap gate decide (ruling 02.09 (b) item 3)",
+            "mid-run the cap is never raised: the text leg's (10)(a) gate, the per-channel room"
+            " and the per-pack cap gate decide (ruling 02.09 (b) item 3, (c) item 2)",
+            "a channel whose remainder does not fit the room is skipped WHOLE — never half a"
+            " channel, and never a cap stretched to finish one (ruling 02.09 (c) item 2(b))",
             "info disagrees with expected_worker → tear down, send nothing, record the difference",
             "two boots without a served info → KILL, do not try a third",
             "the (10)(a) gate refuses → no gold call, tear down, record the measured marginals",
@@ -444,9 +493,15 @@ def preflight(prereg: dict) -> dict:
 # --- the served half ------------------------------------------------------------------------------
 
 
-def guard_says_go() -> int:
-    """Rung 0 in the guard's own words: the step anchored (once) and both caps enforced."""
-    return subprocess.run(
+def guard_says_go() -> tuple[int, float]:
+    """Rung 0 in the guard's own words, and what the STEP has already spent.
+
+    Ruling 02.09 (c) prices every channel against «cap − step spent», so the run needs a number for
+    what earlier runs of this step took. It is the guard's, read off its own printed line and never
+    re-derived here: a run that cannot find that line refuses, because a missing prior reads as
+    zero and hands this run a cap it does not have.
+    """
+    done = subprocess.run(
         [
             sys.executable,
             str(REPO_ROOT / "scripts" / "runpod_guard.py"),
@@ -456,10 +511,36 @@ def guard_says_go() -> int:
             f"{STEP_CAP_USD:.2f}",
         ],
         check=False,
-    ).returncode
+        capture_output=True,
+        text=True,
+    )
+    print(done.stdout, end="", flush=True)
+    print(done.stderr, end="", file=sys.stderr, flush=True)
+    if done.returncode != 0:
+        return done.returncode, 0.0
+    spent = re.search(rf"{re.escape(STEP.upper())} (?:SPENT|CLOSED)\s+\$([0-9.]+) of", done.stdout)
+    if not spent:
+        raise SystemExit(
+            f"the guard printed no '{STEP.upper()} SPENT $… of' line — the step's prior spend is"
+            " unreadable and a missing prior reads as $0.00. Refuse rather than run on it."
+        )
+    return 0, float(spent.group(1))
+
+
+def room(*, cap_left: float, billed: float, rate: float, reserve: float) -> float:
+    """What may still be spent on ROWS — ruling 02.09 (c) item 2(b).
+
+    «cap − step spent − the one-job reserve − the idle tail», with the step's earlier runs already
+    out of `cap_left`. The reserve is `cap_gate`'s wedged job, so the room and the hard per-pack
+    gate cannot disagree about what one job can cost; the tail is charged once the last job ends
+    and is therefore owed before it is spent.
+    """
+    return cap_left - billed * rate - reserve - skub.IDLE_TAIL_SECONDS * rate
 
 
 def stage_projection(client, *, opened: float, done: int, total: int, rate: float, cap: float):
+    """A READING after every channel, no longer a gate (ruling 02.09 (c) retires the whole-step
+    page projection): one blended rate over 17 channels lies in both directions."""
     reading = skub.projection(
         opened_seconds=opened, billed=fivec2.billed_now(client), done=done, total=total, rate=rate
     )
@@ -513,22 +594,31 @@ def run_the_legs(
             client, lambda: client.positions(loop.POST_TASK, [payload])
         )
     opened = fivec2.billed_now(client)
+    # (10)(a) PER LEG — ruling 02.09 (c) item 1. The text leg is priced from its OWN warm-up and its
+    # own rows, and is never refused for the page leg: `n_pages=0` is the law here, not an empty
+    # queue. The pages are gated per channel below, each at the rate its own first pack measures.
     gate = skub.go_no_go(
         billed=opened,
         page_marginal=page_seconds,
         text_marginal=text_seconds,
-        n_pages=n_pages,
+        n_pages=0,
         n_rows=n_posts,
         rate=rate,
         budget=cap,
     )
+    gate["leg"] = (
+        "post_text — ruling 02.09 (c) item 1: this gate prices the TEXT leg alone (n_pages = 0 by"
+        " the law); the page legs gate per channel against the room, never as one step"
+    )
+    gate["page_warmup_seconds"] = round(page_seconds, 4)
     gate["over_cap_by"] = round(gate["projected_usd"] / cap - 1, 4)
     outcome["go_no_go"] = gate
     print(json.dumps(gate, indent=1), flush=True)
     if gate["refuse"]:
         note.append(
-            f"REFUSED at the (10)(a) gate — projected ${gate['projected_usd']:.4f} against the"
-            f" ${cap:.2f} step cap ({gate['over_cap_by']:+.1%}); no gold call was made"
+            f"REFUSED at the (10)(a) gate of the TEXT leg — projected ${gate['projected_usd']:.4f}"
+            f" against the ${cap:.4f} left of the step cap ({gate['over_cap_by']:+.1%}); no gold"
+            " call was made"
         )
         # Ruling 02.09 (b) item 3: a stop on ANY gate records what is left, for the STOP's table.
         outcome["unbought"] = unbought(prereg, queued_pages, queued_posts, derived, cursor)
@@ -539,21 +629,21 @@ def run_the_legs(
     text_registered = float(registered["post_text"]["seconds_model"]["value"])
     total = n_pages + n_posts
     done = 0
-    outcome["leaflet"], outcome["stages"] = [], []
+    reserve = fivec2.worst_case_job_usd(rate, drift)
+    size = fivec2.pack_size(page_seconds, page_registered)
+    outcome["leaflet"], outcome["stages"], outcome["measured"] = [], [], {}
+    outcome["room"] = {
+        "rule": "ruling 02.09 (c) item 2(b): cap − step spent − one wedged job − the idle tail",
+        "cap_left_usd": round(cap, 4),
+        "reserve_usd": reserve,
+        "idle_tail_usd": round(skub.IDLE_TAIL_SECONDS * rate, 4),
+        "pack_pages_by_count": size,
+        "pack_note": "the COUNT bound; bytes bind first (8 MB), so a real pack is smaller and the"
+        " pre-channel check below refuses early rather than late",
+    }
 
-    def halted(stage: str, before: int, reading: dict) -> bool:
-        """A pack the cap gate refused, or a projection over the cap: stop HERE, record the rest."""
-        if len(note) > before:
-            note.append(f"the run STOPPED at {stage}: the cap gate refused a pack")
-        elif reading["over_cap"]:
-            note.append(
-                f"the run STOPPED after {stage}: projected ${reading['projected_usd']:.4f} over"
-                f" the ${cap:.2f} step cap at the measured marginal (PROCESS rung 2, silence = KILL)"
-            )
-        else:
-            return False
-        outcome["unbought"] = unbought(prereg, queued_pages, queued_posts, derived, cursor)
-        return True
+    def left() -> float:
+        return room(cap_left=cap, billed=fivec2.billed_now(client), rate=rate, reserve=reserve)
 
     # Stage 0 — the TEXT leg first (ruling 02.09 (b)): the cheapest, surest, cross-chain data is
     # bought before the dearest, so a gate that stops the run stops it on pages, not on posts.
@@ -577,42 +667,182 @@ def run_the_legs(
     )
     done += sum(pack["posts_read"] for pack in outcome["post_text"])
     reading = stage_projection(client, opened=opened, done=done, total=total, rate=rate, cap=cap)
-    outcome["stages"].append({"after": "post_text"} | reading)
+    outcome["stages"].append({"after": "post_text"} | reading | {"room_usd": round(left(), 4)})
     print(f"  after post_text: {reading}", flush=True)
-    if halted("post_text", before, reading):
+    if len(note) > before:
+        note.append("the run STOPPED at post_text: the cap gate refused a pack")
+        outcome["unbought"] = unbought(prereg, queued_pages, queued_posts, derived, cursor)
         return
 
     for handle in prereg["population"]["order"]:
         rows = queued_pages.get(handle) or []
         if not rows:
             continue
-        before = len(note)
-        leg = fivec2.page_leg(
+        # (c) item 2(c): the run ends when the room is below one pack at the WORST rate measured so
+        # far — the page warm-up seeds it for the first channel and nothing after that.
+        worst = max([*outcome["measured"].values(), page_seconds])
+        before_room, one_pack = left(), size * worst * rate
+        if before_room < one_pack:
+            note.append(
+                f"the run ENDS before {handle}: ${before_room:.4f} of room is below one pack"
+                f" ({size} pages at the worst measured {worst:.3f} s/page = ${one_pack:.4f})"
+            )
+            break
+        entry = channel_leg(
             client,
-            fivec2.SliceTransport(fivec2.album_key),
             rows,
+            handle=handle,
+            size=size,
+            note=note,
             derived=derived,
             cursor=cursor,
             categories=categories,
             aliases=aliases,
             revision=revision,
             endpoint=endpoint,
-            marginal=page_seconds,
+            page_registered=page_registered,
+            cap=cap,
+            rate=rate,
+            drift=drift,
+            room_before=before_room,
+            room_after=left,
+        )
+        outcome["leaflet"].append(entry)
+        if entry["measured_seconds_per_page"] is not None:
+            outcome["measured"][handle] = entry["measured_seconds_per_page"]
+            measurements.append(
+                {
+                    "contract": "promo-pulse-1-s4",
+                    "name": f"page_seconds_{handle.lstrip('@')}",
+                    "value": entry["measured_seconds_per_page"],
+                    "max": entry["measured_seconds_per_page"],
+                    "unit": "seconds",
+                    "n": entry["measured_n"],
+                    "source": rel(RECORD),
+                    "instrument": "the channel's OWN first pack (ruling 02.09 (c) item 2(a)): one"
+                    " job, worker seconds ÷ pages written; value and max are one aggregate, as the"
+                    " smoke's vision_seconds_per_page row is",
+                    "measured_on": f"{handle}, {entry['measured_n']} pages, endpoint {endpoint},"
+                    " POSITIONS serving, thinking OFF",
+                },
+                ledger=MEASUREMENTS,
+            )
+        done += entry["pages_bought"]
+        reading = stage_projection(
+            client, opened=opened, done=done, total=total, rate=rate, cap=cap
+        )
+        outcome["stages"].append({"after": handle} | reading | {"room_usd": round(left(), 4)})
+        print(f"  after {handle}: {reading}", flush=True)
+        if entry["stopped"]:
+            note.append(f"the run STOPPED at {handle}: the cap gate refused a pack")
+            break
+    outcome["unbought"] = unbought(prereg, queued_pages, queued_posts, derived, cursor)
+
+
+def channel_leg(
+    client,
+    rows,
+    *,
+    handle,
+    size,
+    note,
+    derived,
+    cursor,
+    categories,
+    aliases,
+    revision,
+    endpoint,
+    page_registered,
+    cap,
+    rate,
+    drift,
+    room_before,
+    room_after,
+):
+    """ONE channel under ruling 02.09 (c) item 2: its first pack, its rate, then all or nothing.
+
+    The first pack is the channel's measurement (`worker seconds ÷ pages written`) and the rest of
+    the channel is projected at THAT rate against the room. It fits → the channel runs whole; it
+    does not → the remainder is left unbought and named, and the caller moves to the next channel.
+    `fivec2.page_leg` buys both halves, so the pack is cut here exactly once, by the transport's own
+    packer, and the two calls see one pack and the remainder of the same cut.
+    """
+    packs = fivec2.page_packs(rows, size)
+    first = [item["page"] for item in packs[0]]
+    rest = [item["page"] for pack in packs[1:] for item in pack]
+    del packs  # the rendered albums; `page_leg` renders the halves it is given
+    leg = dict(
+        channel=handle,
+        pages_queued=len(rows),
+        pages_bought=0,
+        pages_left=len(rows),
+        measured_seconds_per_page=None,
+        measured_n=len(first),
+        remainder_pages=len(rest),
+        remainder_usd_at_its_rate=None,
+        remainder_bought=False,
+        room_usd_before=round(room_before, 4),
+        packs=[],
+        stopped=False,
+    )
+
+    def buy(half: list[dict]) -> float:
+        before_note, before_seconds = len(note), skub.billed_seconds(client)
+        bought = fivec2.page_leg(
+            client,
+            fivec2.SliceTransport(fivec2.album_key),
+            half,
+            derived=derived,
+            cursor=cursor,
+            categories=categories,
+            aliases=aliases,
+            revision=revision,
+            endpoint=endpoint,
+            marginal=leg["measured_seconds_per_page"] or page_registered,
             registered_marginal=page_registered,
             cap=cap,
             rate=rate,
             drift=drift,
             note=note,
         )
-        outcome["leaflet"].append(leg)
-        done += sum(pack["pages_written"] for pack in leg["packs"])
-        reading = stage_projection(
-            client, opened=opened, done=done, total=total, rate=rate, cap=cap
+        leg["stopped"] = leg["stopped"] or len(note) > before_note
+        # Both halves come off ONE cut, so the packs are numbered across the channel and not per
+        # call — a record with two `pack: 0` rows would read as two cuts of the same pages.
+        first_index = len(leg["packs"])
+        leg["packs"].extend(
+            dict(pack, pack=first_index + index) for index, pack in enumerate(bought["packs"])
         )
-        outcome["stages"].append({"after": handle} | reading)
-        print(f"  after {handle}: {reading}", flush=True)
-        if halted(handle, before, reading):
-            return
+        leg["pages_bought"] = sum(pack["pages_written"] for pack in leg["packs"])
+        leg["pages_left"] = leg["pages_queued"] - leg["pages_bought"]
+        return skub.billed_seconds(client) - before_seconds
+
+    seconds = buy(first)
+    if not leg["pages_bought"]:
+        return leg
+    leg["measured_seconds_per_page"] = round(seconds / leg["pages_bought"], 4)
+    leg["measured_n"] = leg["pages_bought"]
+    print(
+        f"  {handle}: measured {leg['measured_seconds_per_page']:.3f} s/page on its first pack"
+        f" (n={leg['measured_n']})",
+        flush=True,
+    )
+    if not rest or leg["stopped"]:
+        leg["remainder_bought"] = not rest
+        return leg
+    need = len(rest) * leg["measured_seconds_per_page"] * rate
+    room_now = room_after()
+    leg["remainder_usd_at_its_rate"] = round(need, 4)
+    leg["room_usd_after_first_pack"] = round(room_now, 4)
+    if need > room_now:
+        note.append(
+            f"{handle}: {len(rest)} pages left UNBOUGHT — ${need:.4f} at the measured"
+            f" {leg['measured_seconds_per_page']:.3f} s/page against ${room_now:.4f} of room"
+            " (SPEC 3.17 (10)(b); ruling 02.09 (c) item 2(b): the channel is skipped whole)"
+        )
+        return leg
+    buy(rest)
+    leg["remainder_bought"] = not leg["stopped"]
+    return leg
 
 
 def unbought(prereg: dict, page_queue: dict, post_queue: dict, derived, cursor) -> dict:
@@ -700,7 +930,8 @@ def main(argv: list[str] | None = None) -> int:
     api_key = os.environ.get(API_KEY_ENV)
     if not endpoint or not api_key:
         raise SystemExit(f"--endpoint (or ${ENDPOINT_ENV}) and ${API_KEY_ENV} are both required")
-    if guard_says_go() != 0:
+    returncode, prior = guard_says_go()
+    if returncode != 0:
         raise SystemExit("the guard refuses — that is the answer, not an obstacle")
 
     page_queue, post_queue = pages(), posts()
@@ -712,6 +943,10 @@ def main(argv: list[str] | None = None) -> int:
     rate = float(prereg["rung_0"]["rates"]["rate_usd_per_second"])
     drift = float(load(PREREG_5C2)["drift"]["factor"])
     cap = float(prereg["step"]["cap_usd"])
+    # Ruling 02.09 (c): every gate below prices against «cap − step spent», so what run 1 took is
+    # out of the cap before the first job — not left for the ledger to discover afterwards.
+    cap_left = round(cap - prior, 4)
+    print(f"step cap ${cap:.2f} − ${prior:.4f} already spent = ${cap_left:.4f} for this run")
     client = fivec2.client_for(endpoint, api_key)
     derived = RawStore(run_loop.DERIVED_ROOT)
     cursor = loop.load_cursor(run_loop.CURSOR)
@@ -720,7 +955,7 @@ def main(argv: list[str] | None = None) -> int:
         "phase": prereg["phase"],
         "authority": rel(PREREG),
         "endpoint": endpoint,
-        "step": prereg["step"],
+        "step": prereg["step"] | {"spent_before_this_run_usd": prior, "cap_left_usd": cap_left},
     }
     try:
         run_the_legs(
@@ -734,7 +969,7 @@ def main(argv: list[str] | None = None) -> int:
             cursor=cursor,
             rate=rate,
             drift=drift,
-            cap=cap,
+            cap=cap_left,
         )
     except BaseException as err:  # noqa: BLE001 — the record outranks the reason (run_5c2's rule)
         outcome["died"] = f"{type(err).__name__}: {err}"

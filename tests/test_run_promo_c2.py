@@ -46,14 +46,41 @@ def test_the_step_cap_is_the_rulings_number():
     assert float(caps[-1]) == driver.STEP_CAP_USD
 
 
-def test_the_order_is_the_specs_list_then_the_rest_sorted():
-    assert len(set(driver.ORDER)) == len(driver.ORDER)
-    assert driver.ordered({"@kopiyochka1", "@kop1chat", "@atb_aktsiyi", "@zzz"}) == [
-        "@atb_aktsiyi",
-        "@kop1chat",
-        "@kopiyochka1",
-        "@zzz",
-    ]
+def test_the_order_is_ruling_02_09_cs_own_sequence_derived_from_the_files():
+    """«АТБ → дешёвые → малые» — the derivation is checked against the team lead's printed list.
+
+    The ruling names the head and the smoke-measured trio as handles and the tail as short names
+    with their page counts, so both halves are grepped: a channel that drifts into the wrong band —
+    or a fourteenth one appearing in the tail — fails here rather than in a paid run.
+    """
+    ruling = (REPO_ROOT / "docs" / "reviews" / "2026-08-30-plan-promo-pulse-1.md").read_text(
+        "utf-8"
+    )
+    section = ruling.split("## Ruling 02.09 (c)")[-1].split("3. **Order")[1]
+    head = re.findall(r"`(@\w+)`", section.split("→ every other channel")[0])
+    tail = re.findall(r"(\w+) (\d+)", section.split("ascending by page count (")[1].split(")")[0])
+    exact = {
+        row["channel"]: row["pages_exact"] for row in driver.load(driver.PAGECOUNT)["channels"]
+    }
+    order = driver.stage_order()
+    assert order[: len(head)] == head, "the leaflet carrier, then the smoke-measured channels"
+    assert len(order) == len(head) + len(tail) == len(exact)
+    for handle, (name, pages) in zip(order[len(head) :], tail):
+        assert exact[handle] == int(pages), f"{handle} is not where the ruling's count puts it"
+        assert name.lower() in handle.lower(), f"{handle} is not the ruling's {name}"
+
+
+def test_a_channel_the_smoke_barely_touched_is_not_a_measured_channel():
+    """The trio is derived by a THRESHOLD, and the threshold is what makes it three.
+
+    `@marketopt_promo` and `@educationwithloven` are one smoke page each; one page is a row, not a
+    rate, and the ruling puts marketopt in the tail by page count. The negative control is the
+    point: a rule that admitted every channel the smoke touched would name five.
+    """
+    smoke = driver.smoke_rows_per_channel()
+    assert smoke["@marketopt_promo"] < driver.MEASURED_MIN_ROWS <= smoke["@msuaaaa"]
+    order = driver.stage_order()
+    assert order.index("@marketopt_promo") > order.index("@msuaaaa")
 
 
 def test_the_selection_hashes_do_not_depend_on_dict_order():
@@ -149,27 +176,27 @@ class FakeStore:
         return [{"msg_id": 7, "text": "Молоко 1 л 45,90 грн"}, {"msg_id": 8, "text": "not pinned"}]
 
 
-@pytest.fixture
-def staged(tmp_path, monkeypatch):
-    """Two pages and one text post, every path the driver reads pointed into tmp_path."""
+def stage(tmp_path, monkeypatch, page_ids):
+    """The pages of one channel and one text post, every path the driver reads inside tmp_path."""
     media = tmp_path / "data" / "media"
     media.mkdir(parents=True)
-    for msg_id in (101, 102):
+    for msg_id in page_ids:
         (media / f"a_{msg_id}.jpg").write_bytes(b"\xff\xd8 not really a jpeg " + bytes([msg_id]))
     manifest = {
         "entries": {
-            f"{CHANNEL}:101": {
+            f"{CHANNEL}:{page_ids[0]}": {
                 "channel": CHANNEL,
-                "msg_id": 101,
+                "msg_id": page_ids[0],
                 "images": [
-                    {"msg_id": one, "file": f"data/media/a_{one}.jpg"} for one in (101, 102)
+                    {"msg_id": one, "file": f"data/media/a_{one}.jpg"} for one in page_ids
                 ],
             }
         }
     }
     (tmp_path / "manifest.json").write_text(json.dumps(manifest), encoding="utf-8")
     (tmp_path / "pagecount.json").write_text(
-        json.dumps({"channels": [{"channel": CHANNEL, "pages_exact": 2}]}), encoding="utf-8"
+        json.dumps({"channels": [{"channel": CHANNEL, "pages_exact": len(page_ids)}]}),
+        encoding="utf-8",
     )
     (tmp_path / "census.json").write_text(
         json.dumps({"channels": [{"channel": CHANNEL, "text_price_msg_ids": ["7"]}]}),
@@ -186,11 +213,24 @@ def staged(tmp_path, monkeypatch):
     monkeypatch.setattr(driver, "CENSUS", tmp_path / "census.json")
     monkeypatch.setattr(driver, "PREREG", tmp_path / "prereg.json")
     monkeypatch.setattr(driver, "RECORD", tmp_path / "record.json")
+    monkeypatch.setattr(driver, "MEASUREMENTS", tmp_path / "measurements.jsonl")
     monkeypatch.setattr(driver, "live_store", lambda: FakeStore())
-    monkeypatch.setattr(driver, "guard_says_go", lambda: 0)
+    monkeypatch.setattr(driver, "guard_says_go", lambda: (0, 0.0))
     monkeypatch.setattr(driver.fivec2, "client_for", lambda endpoint, key, dump=None: client)
     monkeypatch.setenv(driver.API_KEY_ENV, "stub")
     return client
+
+
+@pytest.fixture
+def staged(tmp_path, monkeypatch):
+    """Two pages and one text post."""
+    return stage(tmp_path, monkeypatch, (101, 102))
+
+
+@pytest.fixture
+def staged_40(tmp_path, monkeypatch):
+    """Forty pages: enough that a channel's REMAINDER can miss a room its first pack fits."""
+    return stage(tmp_path, monkeypatch, tuple(range(101, 141)))
 
 
 def test_the_registration_pins_the_worker_the_smoke_asserts_and_the_population(staged):
@@ -279,3 +319,74 @@ def test_a_refusing_gate_makes_no_gold_call_and_still_writes_the_record(staged, 
     }, "a stop on ANY gate records what is left (ruling 02.09 (b) item 3)"
     assert staged.rows == 2, "the two warm-ups and nothing else"
     assert not (run_loop.DERIVED_ROOT / "leaflet_pages").exists()
+
+
+def test_a_channel_that_fits_the_room_runs_whole_after_its_first_pack(staged, monkeypatch):
+    """Ruling 02.09 (c) item 2, the direction that BUYS: the first pack measures the channel, the
+    remainder is priced at that rate against the room, and it fits — so the channel runs whole and
+    the measurement lands as one row per channel in the ledger.
+
+    `pack_size` is pinned to one page so a two-page channel really has a first pack and a rest;
+    with the transport's own size the whole channel is a single pack and neither half is exercised.
+    """
+    monkeypatch.setattr(driver.fivec2, "pack_size", lambda *args: 1)
+    driver.register()
+    assert driver.main(["--run", "--endpoint", "e"]) == 0
+
+    run = json.loads(driver.RECORD.read_text(encoding="utf-8"))["runs"][0]
+    leg = run["leaflet"][0]
+    assert leg["measured_n"] == 1 and leg["measured_seconds_per_page"] == 2.0, "the FIRST pack"
+    assert leg["pages_bought"] == 2 and leg["pages_left"] == 0
+    assert leg["remainder_pages"] == 1 and leg["remainder_bought"]
+    assert leg["remainder_usd_at_its_rate"] < leg["room_usd_after_first_pack"]
+    assert [pack["pack"] for pack in leg["packs"]] == [0, 1], "two jobs, one cut"
+    assert run["unbought"]["pages_total"] == 0 and run["unbought"]["posts_total"] == 0
+
+    rows = [
+        json.loads(one)
+        for one in driver.MEASUREMENTS.read_text(encoding="utf-8").splitlines()
+        if one.strip()
+    ]
+    assert [(row["name"], row["value"], row["n"]) for row in rows] == [
+        ("page_seconds_atb_aktsiyi", 2.0, 1)
+    ]
+    assert rows[0]["source"] == driver.rel(driver.RECORD) and rows[0]["max"] == rows[0]["value"]
+
+
+def test_a_channel_whose_remainder_does_not_fit_the_room_is_skipped_whole(staged_40, monkeypatch):
+    """The direction that costs money — ruling 02.09 (c) item 2(b), and item 1 beside it.
+
+    The cap is computed from the stub's OWN clock (100 s of boot, 2 s a warm-up, 2 s a row) so it
+    leaves room for about five more pages and not for the other thirty-nine: the first pack is
+    bought and measured, the remainder is refused WHOLE, and the text leg — the cheapest, surest
+    data — is bought anyway, which is the whole point of gating the legs apart.
+    """
+    monkeypatch.setattr(driver.fivec2, "pack_size", lambda *args: 1)
+    driver.register()
+    prereg = json.loads(driver.PREREG.read_text(encoding="utf-8"))
+    rate = float(prereg["rung_0"]["rates"]["rate_usd_per_second"])
+    drift = float(driver.load(driver.PREREG_5C2)["drift"]["factor"])
+    billed = (100 + 2 + 2 + 2 + 2) * 1.1  # boot · two warm-ups · the text row · the first page
+    prereg["step"]["cap_usd"] = round(
+        billed * rate
+        + driver.fivec2.worst_case_job_usd(rate, drift)
+        + driver.skub.IDLE_TAIL_SECONDS * rate
+        + 5 * 2.0 * rate,
+        6,
+    )
+    driver.PREREG.write_text(json.dumps(prereg), encoding="utf-8")
+
+    assert driver.main(["--run", "--endpoint", "e"]) == 0
+    run = json.loads(driver.RECORD.read_text(encoding="utf-8"))["runs"][0]
+    assert not run["go_no_go"]["refuse"], "the text leg is never refused for the page rate"
+    assert run["go_no_go"]["gold_calls"] == 1, "its own rows only — n_pages is 0 by the law"
+    assert run["post_text"][0]["posts_read"] == 1
+
+    leg = run["leaflet"][0]
+    assert leg["pages_bought"] == 1 and leg["pages_left"] == 39
+    assert leg["measured_seconds_per_page"] == 2.0 and leg["measured_n"] == 1
+    assert not leg["remainder_bought"]
+    assert leg["remainder_usd_at_its_rate"] > leg["room_usd_after_first_pack"] > 0
+    assert run["unbought"]["pages"] == {CHANNEL: 39} and run["unbought"]["posts_total"] == 0
+    assert any("pages left UNBOUGHT" in one for one in run["notes"])
+    assert staged_40.rows == 4, "two warm-ups, one post, one page — and no thirty-ninth"
