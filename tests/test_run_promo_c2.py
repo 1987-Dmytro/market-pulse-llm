@@ -271,5 +271,11 @@ def test_a_refusing_gate_makes_no_gold_call_and_still_writes_the_record(staged, 
     run = json.loads(driver.RECORD.read_text(encoding="utf-8"))["runs"][0]
     assert run["go_no_go"]["refuse"]
     assert "leaflet" not in run and "post_text" not in run
+    assert run["unbought"] == {
+        "pages": {CHANNEL: 2},
+        "posts": {CHANNEL: 1},
+        "pages_total": 2,
+        "posts_total": 1,
+    }, "a stop on ANY gate records what is left (ruling 02.09 (b) item 3)"
     assert staged.rows == 2, "the two warm-ups and nothing else"
     assert not (run_loop.DERIVED_ROOT / "leaflet_pages").exists()

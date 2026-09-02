@@ -530,6 +530,8 @@ def run_the_legs(
             f"REFUSED at the (10)(a) gate — projected ${gate['projected_usd']:.4f} against the"
             f" ${cap:.2f} step cap ({gate['over_cap_by']:+.1%}); no gold call was made"
         )
+        # Ruling 02.09 (b) item 3: a stop on ANY gate records what is left, for the STOP's table.
+        outcome["unbought"] = unbought(prereg, queued_pages, queued_posts, derived, cursor)
         return
 
     registered = load(PREREG_5C2)["prices"]

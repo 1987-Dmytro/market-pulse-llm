@@ -1,0 +1,32 @@
+PHASE 4 CLOSED    $32.4708 of $33.00  (final reading 2026-08-16T11:09:48+00:00)
+  pods            $17.6921
+  network-volume  $3.2278   <- always on, beside the run and never inside it
+  serverless      $11.5509
+CYCLE 2 SUPERSEDED  by cycle 3 (operator, 2026-09-01) — its ledger is unchanged at $22.5098 anchored 2026-08-16T12:14:48+00:00
+anchor            $14.48 at 2026-09-01T06:34:08+00:00
+balance now       $14.19
+  balance delta   $0.2917
+  billing since   $0.2819 (read)
+    pods            $0.0000
+    network-volume  $0.2819   <- always on, beside the run and never inside it
+    serverless      $0.0000
+CYCLE 3 SPENT     $0.2917 of $7.00
+REMAINING         $6.7083
+PROMO-PULSE-1 SPENT      $0.0000 of $3.95  (anchor $14.19 from runpod_balance_at_promo-pulse-1_start)
+  balance delta   $0.0000
+  billing since   UNAVAILABLE (no billing rows yet) — the delta stands alone as a LOWER BOUND
+{
+ "when": "after the two non-gold warm-up calls of SPEC 3.17 (9), before the first gold call",
+ "billed_seconds": 188.918,
+ "page_marginal_seconds": 13.466,
+ "text_marginal_seconds": 0.794,
+ "gold_calls": 3393,
+ "gold_seconds": 40811.418,
+ "idle_tail_seconds": 60.0,
+ "projected_usd": 12.5928,
+ "budget_usd": 3.95,
+ "refuse": true,
+ "over_cap_by": 2.1881
+}
+
+wrote results/run_promo_c2.json (run 1)
