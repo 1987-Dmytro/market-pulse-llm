@@ -30,3 +30,324 @@ PROMO-PULSE-1 SPENT      $0.0000 of $3.95  (anchor $14.19 from runpod_balance_at
 }
 
 wrote results/run_promo_c2.json (run 1)
+=== RUN 2 — 2026-09-02T14:29:05Z — endpoint tq5qxmrczx3iap, ruling 02.09 (c) ===
+PHASE 4 CLOSED    $32.4708 of $33.00  (final reading 2026-08-16T11:09:48+00:00)
+  pods            $17.6921
+  network-volume  $3.2278   <- always on, beside the run and never inside it
+  serverless      $11.5509
+CYCLE 2 SUPERSEDED  by cycle 3 (operator, 2026-09-01) — its ledger is unchanged at $22.5098 anchored 2026-08-16T12:14:48+00:00
+anchor            $14.48 at 2026-09-01T06:34:08+00:00
+balance now       $14.12
+  balance delta   $0.3613
+  billing since   $0.3516 (read)
+    pods            $0.0502
+    network-volume  $0.3014   <- always on, beside the run and never inside it
+    serverless      $0.0000
+CYCLE 3 SPENT     $0.3613 of $7.00
+REMAINING         $6.6387
+PROMO-PULSE-1 SPENT      $0.0697 of $3.95  (anchor $14.19 from runpod_balance_at_promo-pulse-1_start)
+  balance delta   $0.0697
+  billing since   $0.0599 (read)
+    pods            $0.0502
+    network-volume  $0.0097   <- always on, beside the run and never inside it
+    serverless      $0.0000
+  step resources  $0.0502   (every kind except the always-on ones)
+step cap $3.95 − $0.0697 already spent = $3.8803 for this run
+{
+ "when": "after the two non-gold warm-up calls of SPEC 3.17 (9), before the first gold call",
+ "billed_seconds": 223.423,
+ "page_marginal_seconds": 11.726,
+ "text_marginal_seconds": 0.845,
+ "gold_calls": 385,
+ "gold_seconds": 325.325,
+ "idle_tail_seconds": 60.0,
+ "projected_usd": 0.1867,
+ "budget_usd": 3.8803,
+ "refuse": false,
+ "leg": "post_text \u2014 ruling 02.09 (c) item 1: this gate prices the TEXT leg alone (n_pages = 0 by the law); the page legs gate per channel against the room, never as one step",
+ "page_warmup_seconds": 11.726,
+ "over_cap_by": -0.9519
+}
+  post @VARUS_channel pack 00: {'asked': 33, 'posts_read': 33, 'positions_written': 5, 'unreadable': 2, 'empty': 26, 'watermark': 11300}
+  post @atb_aktsiyi pack 00: {'asked': 1, 'posts_read': 1, 'positions_written': 0, 'unreadable': 0, 'empty': 1, 'watermark': 3259}
+  post @msuaaaa pack 00: {'asked': 41, 'posts_read': 41, 'positions_written': 1, 'unreadable': 0, 'empty': 40, 'watermark': 11021}
+  post @fozzyshopua pack 00: {'asked': 2, 'posts_read': 2, 'positions_written': 0, 'unreadable': 0, 'empty': 2, 'watermark': 553}
+  post @xochydeshevshe pack 00: {'asked': 10, 'posts_read': 10, 'positions_written': 0, 'unreadable': 0, 'empty': 10, 'watermark': 2092}
+  post @forainfo pack 00: {'asked': 4, 'posts_read': 4, 'positions_written': 1, 'unreadable': 0, 'empty': 3, 'watermark': 6056}
+  post @ekomarket_shop pack 00: {'asked': 12, 'posts_read': 12, 'positions_written': 6, 'unreadable': 0, 'empty': 8, 'watermark': 1472}
+  post @silposilpo pack 00: {'asked': 7, 'posts_read': 7, 'positions_written': 1, 'unreadable': 0, 'empty': 6, 'watermark': 3867}
+  post @marketopt_promo pack 00: {'asked': 5, 'posts_read': 5, 'positions_written': 1, 'unreadable': 0, 'empty': 4, 'watermark': 2956}
+  post @sim23_simi pack 00: {'asked': 3, 'posts_read': 3, 'positions_written': 0, 'unreadable': 0, 'empty': 3, 'watermark': 1069}
+  post @epicentrk_sale pack 00: {'asked': 74, 'posts_read': 74, 'positions_written': 0, 'unreadable': 0, 'empty': 74, 'watermark': 6372}
+  post @rrozetka pack 00: {'asked': 88, 'posts_read': 88, 'positions_written': 0, 'unreadable': 0, 'empty': 88, 'watermark': 18270}
+  post @ATB_FANatik pack 00: {'asked': 17, 'posts_read': 17, 'positions_written': 0, 'unreadable': 0, 'empty': 17, 'watermark': 4648}
+  post @blyzenkoua pack 00: {'asked': 21, 'posts_read': 21, 'positions_written': 0, 'unreadable': 0, 'empty': 21, 'watermark': 8019}
+  post @kopiyochka1 pack 00: {'asked': 2, 'posts_read': 2, 'positions_written': 0, 'unreadable': 0, 'empty': 2, 'watermark': 22338}
+  post @kop1chat pack 00: {'asked': 65, 'posts_read': 65, 'positions_written': 0, 'unreadable': 0, 'empty': 65, 'watermark': 393535}
+  after post_text: {'calls_done': 385, 'calls_total': 3393, 'opened_seconds': 223.423, 'billed_seconds': 573.947, 'marginal_seconds_per_call': 0.9105, 'idle_tail_seconds': 60.0, 'spent_usd': 0.176, 'remaining_usd': 0.8399, 'projected_usd': 1.0343, 'cap_usd': 3.8803, 'over_cap': False}
+  leaflet: 19 pages in 1 packs
+  leaflet pack 00: {'asked': 19, 'pages_written': 19, 'positions_written': 18, 'unreadable': 0, 'watermark': 4619}
+  @atb_market_official: measured 5.233 s/page on its first pack (n=19)
+  leaflet: 190 pages in 13 packs
+  leaflet pack 00: {'asked': 15, 'pages_written': 15, 'positions_written': 11, 'unreadable': 0, 'watermark': 4634}
+  leaflet pack 01: {'asked': 14, 'pages_written': 14, 'positions_written': 21, 'unreadable': 0, 'watermark': 4648}
+  leaflet pack 02: {'asked': 14, 'pages_written': 14, 'positions_written': 9, 'unreadable': 0, 'watermark': 4662}
+  leaflet pack 03: {'asked': 14, 'pages_written': 14, 'positions_written': 7, 'unreadable': 0, 'watermark': 4676}
+  leaflet pack 04: {'asked': 19, 'pages_written': 19, 'positions_written': 0, 'unreadable': 0, 'watermark': 4695}
+  leaflet pack 05: {'asked': 13, 'pages_written': 13, 'positions_written': 0, 'unreadable': 0, 'watermark': 4708}
+  leaflet pack 06: {'asked': 14, 'pages_written': 14, 'positions_written': 6, 'unreadable': 0, 'watermark': 4722}
+  leaflet pack 07: {'asked': 14, 'pages_written': 14, 'positions_written': 15, 'unreadable': 0, 'watermark': 4736}
+  leaflet pack 08: {'asked': 12, 'pages_written': 12, 'positions_written': 4, 'unreadable': 0, 'watermark': 4748}
+  leaflet pack 09: {'asked': 14, 'pages_written': 14, 'positions_written': 11, 'unreadable': 0, 'watermark': 4762}
+  leaflet pack 10: {'asked': 17, 'pages_written': 17, 'positions_written': 22, 'unreadable': 0, 'watermark': 4779}
+  leaflet pack 11: {'asked': 16, 'pages_written': 16, 'positions_written': 3, 'unreadable': 0, 'watermark': 4795}
+  leaflet pack 12: {'asked': 14, 'pages_written': 14, 'positions_written': 2, 'unreadable': 0, 'watermark': 4809}
+  after @atb_market_official: {'calls_done': 594, 'calls_total': 3393, 'opened_seconds': 223.423, 'billed_seconds': 1436.251, 'marginal_seconds_per_call': 2.0418, 'idle_tail_seconds': 60.0, 'spent_usd': 0.4405, 'remaining_usd': 1.7527, 'projected_usd': 2.2116, 'cap_usd': 3.8803, 'over_cap': False}
+  leaflet: 36 pages in 1 packs
+  leaflet pack 00: {'asked': 36, 'pages_written': 36, 'positions_written': 15, 'unreadable': 3, 'watermark': 10807}
+  @VARUS_channel: measured 4.822 s/page on its first pack (n=36)
+  leaflet: 479 pages in 13 packs
+  leaflet pack 00: {'asked': 39, 'pages_written': 39, 'positions_written': 56, 'unreadable': 0, 'watermark': 10847}
+  leaflet pack 01: {'asked': 36, 'pages_written': 36, 'positions_written': 1, 'unreadable': 1, 'watermark': 10884}
+  leaflet pack 02: {'asked': 34, 'pages_written': 34, 'positions_written': 1, 'unreadable': 0, 'watermark': 10921}
+=== RUN 2b — 2026-09-02T15:03:59Z — resumed after the watcher's TaskStop killed run 2a's process ===
+PHASE 4 CLOSED    $32.4708 of $33.00  (final reading 2026-08-16T11:09:48+00:00)
+  pods            $17.6921
+  network-volume  $3.2278   <- always on, beside the run and never inside it
+  serverless      $11.5509
+CYCLE 2 SUPERSEDED  by cycle 3 (operator, 2026-09-01) — its ledger is unchanged at $22.5098 anchored 2026-08-16T12:14:48+00:00
+anchor            $14.48 at 2026-09-01T06:34:08+00:00
+balance now       $13.48
+  balance delta   $1.0047
+  billing since   $0.3613 (read)
+    pods            $0.0502
+    network-volume  $0.3111   <- always on, beside the run and never inside it
+    serverless      $0.0000
+CYCLE 3 SPENT     $1.0047 of $7.00
+REMAINING         $5.9953
+PROMO-PULSE-1 SPENT      $0.7130 of $3.95  (anchor $14.19 from runpod_balance_at_promo-pulse-1_start)
+  balance delta   $0.7130
+  billing since   $0.0697 (read)
+    pods            $0.0502
+    network-volume  $0.0194   <- always on, beside the run and never inside it
+    serverless      $0.0000
+  step resources  $0.0502   (every kind except the always-on ones)
+step cap $3.95 − $0.7130 already spent = $3.2370 for this run
+{
+ "when": "after the two non-gold warm-up calls of SPEC 3.17 (9), before the first gold call",
+ "billed_seconds": 64.959,
+ "page_marginal_seconds": 4.608,
+ "text_marginal_seconds": 0.0,
+ "gold_calls": 0,
+ "gold_seconds": 0.0,
+ "idle_tail_seconds": 60.0,
+ "projected_usd": 0.0383,
+ "budget_usd": 3.237,
+ "refuse": false,
+ "leg": "post_text \u2014 ruling 02.09 (c) item 1: this gate prices the TEXT leg alone (n_pages = 0 by the law); the page legs gate per channel against the room, never as one step",
+ "page_warmup_seconds": 4.608,
+ "over_cap_by": -0.9882
+}
+  after post_text: {'calls_done': 0, 'calls_total': 2654, 'opened_seconds': 64.959, 'billed_seconds': 64.959, 'marginal_seconds_per_call': 0.0, 'idle_tail_seconds': 60.0, 'spent_usd': 0.0199, 'remaining_usd': 0.0, 'projected_usd': 0.0383, 'cap_usd': 3.237, 'over_cap': False}
+  leaflet: 40 pages in 1 packs
+  leaflet pack 00: {'asked': 40, 'pages_written': 40, 'positions_written': 19, 'unreadable': 2, 'watermark': 10963}
+  @VARUS_channel: measured 3.982 s/page on its first pack (n=40)
+  leaflet: 330 pages in 9 packs
+  leaflet pack 00: {'asked': 40, 'pages_written': 40, 'positions_written': 30, 'unreadable': 0, 'watermark': 11004}
+  leaflet pack 01: {'asked': 37, 'pages_written': 37, 'positions_written': 7, 'unreadable': 0, 'watermark': 11044}
+  leaflet pack 02: {'asked': 37, 'pages_written': 37, 'positions_written': 24, 'unreadable': 2, 'watermark': 11084}
+  leaflet pack 03: {'asked': 38, 'pages_written': 38, 'positions_written': 59, 'unreadable': 0, 'watermark': 11123}
+  leaflet pack 04: {'asked': 40, 'pages_written': 40, 'positions_written': 0, 'unreadable': 0, 'watermark': 11163}
+  leaflet pack 05: {'asked': 36, 'pages_written': 36, 'positions_written': 11, 'unreadable': 0, 'watermark': 11201}
+  leaflet pack 06: {'asked': 41, 'pages_written': 41, 'positions_written': 52, 'unreadable': 1, 'watermark': 11249}
+  leaflet pack 07: {'asked': 36, 'pages_written': 36, 'positions_written': 1, 'unreadable': 1, 'watermark': 11285}
+  leaflet pack 08: {'asked': 25, 'pages_written': 25, 'positions_written': 8, 'unreadable': 1, 'watermark': 11311}
+  after @VARUS_channel: {'calls_done': 370, 'calls_total': 2654, 'opened_seconds': 64.959, 'billed_seconds': 1446.103, 'marginal_seconds_per_call': 3.7328, 'idle_tail_seconds': 60.0, 'spent_usd': 0.4435, 'remaining_usd': 2.6148, 'projected_usd': 3.0767, 'cap_usd': 3.237, 'over_cap': False}
+  leaflet: 34 pages in 1 packs
+  leaflet pack 00: {'asked': 34, 'pages_written': 34, 'positions_written': 36, 'unreadable': 0, 'watermark': 3233}
+  @atb_aktsiyi: measured 5.588 s/page on its first pack (n=34)
+  leaflet: 225 pages in 13 packs
+  leaflet pack 00: {'asked': 25, 'pages_written': 25, 'positions_written': 5, 'unreadable': 0, 'watermark': 3260}
+=== RUN 2c — 2026-09-02T15:34:04Z — detached (setsid) after two harness kills ===
+(eval):1: command not found: setsid
+PHASE 4 CLOSED    $32.4708 of $33.00  (final reading 2026-08-16T11:09:48+00:00)
+  pods            $17.6921
+  network-volume  $3.2278   <- always on, beside the run and never inside it
+  serverless      $11.5509
+CYCLE 2 SUPERSEDED  by cycle 3 (operator, 2026-09-01) — its ledger is unchanged at $22.5098 anchored 2026-08-16T12:14:48+00:00
+anchor            $14.48 at 2026-09-01T06:34:08+00:00
+balance now       $12.92
+  balance delta   $1.5575
+  billing since   $0.4447 (read)
+    pods            $0.0502
+    network-volume  $0.3111   <- always on, beside the run and never inside it
+    serverless      $0.0834
+CYCLE 3 SPENT     $1.5575 of $7.00
+REMAINING         $5.4425
+PROMO-PULSE-1 SPENT      $1.2659 of $3.95  (anchor $14.19 from runpod_balance_at_promo-pulse-1_start)
+  balance delta   $1.2659
+  billing since   $0.1530 (read)
+    pods            $0.0502
+    network-volume  $0.0194   <- always on, beside the run and never inside it
+    serverless      $0.0834
+  step resources  $0.1336   (every kind except the always-on ones)
+step cap $3.95 − $1.2659 already spent = $2.6841 for this run
+{
+ "when": "after the two non-gold warm-up calls of SPEC 3.17 (9), before the first gold call",
+ "billed_seconds": 26.87,
+ "page_marginal_seconds": 20.872,
+ "text_marginal_seconds": 0.0,
+ "gold_calls": 0,
+ "gold_seconds": 0.0,
+ "idle_tail_seconds": 60.0,
+ "projected_usd": 0.0266,
+ "budget_usd": 2.6841,
+ "refuse": false,
+ "leg": "post_text \u2014 ruling 02.09 (c) item 1: this gate prices the TEXT leg alone (n_pages = 0 by the law); the page legs gate per channel against the room, never as one step",
+ "page_warmup_seconds": 20.872,
+ "over_cap_by": -0.9901
+}
+  after post_text: {'calls_done': 0, 'calls_total': 2225, 'opened_seconds': 26.87, 'billed_seconds': 26.87, 'marginal_seconds_per_call': 0.0, 'idle_tail_seconds': 60.0, 'spent_usd': 0.0082, 'remaining_usd': 0.0, 'projected_usd': 0.0266, 'cap_usd': 2.6841, 'over_cap': False}
+  leaflet: 14 pages in 1 packs
+  leaflet pack 00: {'asked': 14, 'pages_written': 14, 'positions_written': 18, 'unreadable': 0, 'watermark': 3274}
+  @atb_aktsiyi: measured 7.131 s/page on its first pack (n=14)
+  leaflet: 186 pages in 11 packs
+  leaflet pack 00: {'asked': 14, 'pages_written': 14, 'positions_written': 9, 'unreadable': 0, 'watermark': 3288}
+  leaflet pack 01: {'asked': 16, 'pages_written': 16, 'positions_written': 3, 'unreadable': 0, 'watermark': 3307}
+  leaflet pack 02: {'asked': 19, 'pages_written': 19, 'positions_written': 2, 'unreadable': 1, 'watermark': 3326}
+  leaflet pack 03: {'asked': 17, 'pages_written': 17, 'positions_written': 4, 'unreadable': 0, 'watermark': 3343}
+  leaflet pack 04: {'asked': 14, 'pages_written': 14, 'positions_written': 8, 'unreadable': 0, 'watermark': 3357}
+  leaflet pack 05: {'asked': 14, 'pages_written': 14, 'positions_written': 13, 'unreadable': 0, 'watermark': 3371}
+  leaflet pack 06: {'asked': 15, 'pages_written': 15, 'positions_written': 4, 'unreadable': 0, 'watermark': 3387}
+  leaflet pack 07: {'asked': 22, 'pages_written': 22, 'positions_written': 14, 'unreadable': 1, 'watermark': 3410}
+  leaflet pack 08: {'asked': 32, 'pages_written': 32, 'positions_written': 34, 'unreadable': 2, 'watermark': 3442}
+  leaflet pack 09: {'asked': 19, 'pages_written': 19, 'positions_written': 4, 'unreadable': 0, 'watermark': 3461}
+  leaflet pack 10: {'asked': 4, 'pages_written': 4, 'positions_written': 0, 'unreadable': 0, 'watermark': 3466}
+  after @atb_aktsiyi: {'calls_done': 200, 'calls_total': 2225, 'opened_seconds': 26.87, 'billed_seconds': 852.594, 'marginal_seconds_per_call': 4.1286, 'idle_tail_seconds': 60.0, 'spent_usd': 0.2615, 'remaining_usd': 2.5641, 'projected_usd': 2.844, 'cap_usd': 2.6841, 'over_cap': True}
+  leaflet: 25 pages in 1 packs
+  leaflet pack 00: {'asked': 25, 'pages_written': 25, 'positions_written': 18, 'unreadable': 1, 'watermark': 10780}
+  @msuaaaa: measured 6.077 s/page on its first pack (n=25)
+  leaflet: 243 pages in 6 packs
+  leaflet pack 00: {'asked': 45, 'pages_written': 45, 'positions_written': 10, 'unreadable': 1, 'watermark': 10825}
+  leaflet pack 01: {'asked': 47, 'pages_written': 47, 'positions_written': 43, 'unreadable': 0, 'watermark': 10874}
+  leaflet pack 02: {'asked': 51, 'pages_written': 51, 'positions_written': 24, 'unreadable': 0, 'watermark': 10925}
+  leaflet pack 03: {'asked': 44, 'pages_written': 44, 'positions_written': 25, 'unreadable': 2, 'watermark': 10969}
+  leaflet pack 04: {'asked': 44, 'pages_written': 44, 'positions_written': 18, 'unreadable': 4, 'watermark': 11013}
+  leaflet pack 05: {'asked': 12, 'pages_written': 12, 'positions_written': 6, 'unreadable': 0, 'watermark': 11025}
+  after @msuaaaa: {'calls_done': 468, 'calls_total': 2225, 'opened_seconds': 26.87, 'billed_seconds': 1921.608, 'marginal_seconds_per_call': 4.0486, 'idle_tail_seconds': 60.0, 'spent_usd': 0.5893, 'remaining_usd': 2.1816, 'projected_usd': 2.7893, 'cap_usd': 2.6841, 'over_cap': True}
+  leaflet: 3 pages in 1 packs
+  leaflet pack 00: {'asked': 3, 'pages_written': 3, 'positions_written': 0, 'unreadable': 0, 'watermark': 564}
+  @fozzyshopua: measured 0.978 s/page on its first pack (n=3)
+  after @fozzyshopua: {'calls_done': 471, 'calls_total': 2225, 'opened_seconds': 26.87, 'billed_seconds': 1927.004, 'marginal_seconds_per_call': 4.0343, 'idle_tail_seconds': 60.0, 'spent_usd': 0.591, 'remaining_usd': 2.1702, 'projected_usd': 2.7796, 'cap_usd': 2.6841, 'over_cap': True}
+  leaflet: 7 pages in 1 packs
+  leaflet pack 00: {'asked': 7, 'pages_written': 7, 'positions_written': 4, 'unreadable': 0, 'watermark': 2091}
+  @xochydeshevshe: measured 3.569 s/page on its first pack (n=7)
+  after @xochydeshevshe: {'calls_done': 478, 'calls_total': 2225, 'opened_seconds': 26.87, 'billed_seconds': 1952.817, 'marginal_seconds_per_call': 4.0292, 'idle_tail_seconds': 60.0, 'spent_usd': 0.5989, 'remaining_usd': 2.1588, 'projected_usd': 2.7761, 'cap_usd': 2.6841, 'over_cap': True}
+  leaflet: 11 pages in 1 packs
+  leaflet pack 00: {'asked': 11, 'pages_written': 11, 'positions_written': 4, 'unreadable': 0, 'watermark': 6056}
+  @forainfo: measured 2.358 s/page on its first pack (n=11)
+  after @forainfo: {'calls_done': 489, 'calls_total': 2225, 'opened_seconds': 26.87, 'billed_seconds': 1983.77, 'marginal_seconds_per_call': 4.0018, 'idle_tail_seconds': 60.0, 'spent_usd': 0.6084, 'remaining_usd': 2.1306, 'projected_usd': 2.7574, 'cap_usd': 2.6841, 'over_cap': True}
+  leaflet: 17 pages in 1 packs
+  leaflet pack 00: {'asked': 17, 'pages_written': 17, 'positions_written': 7, 'unreadable': 1, 'watermark': 1472}
+  @ekomarket_shop: measured 2.876 s/page on its first pack (n=17)
+  after @ekomarket_shop: {'calls_done': 506, 'calls_total': 2225, 'opened_seconds': 26.87, 'billed_seconds': 2035.409, 'marginal_seconds_per_call': 3.9694, 'idle_tail_seconds': 60.0, 'spent_usd': 0.6242, 'remaining_usd': 2.0927, 'projected_usd': 2.7353, 'cap_usd': 2.6841, 'over_cap': True}
+  leaflet: 25 pages in 1 packs
+  leaflet pack 00: {'asked': 25, 'pages_written': 25, 'positions_written': 0, 'unreadable': 0, 'watermark': 3864}
+  @silposilpo: measured 0.819 s/page on its first pack (n=25)
+  leaflet: 9 pages in 1 packs
+  leaflet pack 00: {'asked': 9, 'pages_written': 9, 'positions_written': 0, 'unreadable': 0, 'watermark': 3875}
+  after @silposilpo: {'calls_done': 540, 'calls_total': 2225, 'opened_seconds': 26.87, 'billed_seconds': 2072.284, 'marginal_seconds_per_call': 3.7878, 'idle_tail_seconds': 60.0, 'spent_usd': 0.6355, 'remaining_usd': 1.9574, 'projected_usd': 2.6114, 'cap_usd': 2.6841, 'over_cap': False}
+  leaflet: 25 pages in 1 packs
+  leaflet pack 00: {'asked': 25, 'pages_written': 25, 'positions_written': 11, 'unreadable': 0, 'watermark': 2934}
+  @marketopt_promo: measured 2.758 s/page on its first pack (n=25)
+  leaflet: 27 pages in 1 packs
+  leaflet pack 00: {'asked': 27, 'pages_written': 27, 'positions_written': 10, 'unreadable': 1, 'watermark': 2961}
+  after @marketopt_promo: {'calls_done': 592, 'calls_total': 2225, 'opened_seconds': 26.87, 'billed_seconds': 2216.78, 'marginal_seconds_per_call': 3.6992, 'idle_tail_seconds': 60.0, 'spent_usd': 0.6799, 'remaining_usd': 1.8526, 'projected_usd': 2.5509, 'cap_usd': 2.6841, 'over_cap': False}
+  leaflet: 10 pages in 1 packs
+  leaflet pack 00: {'asked': 10, 'pages_written': 10, 'positions_written': 13, 'unreadable': 1, 'watermark': 1019}
+  @sim23_simi: measured 8.842 s/page on its first pack (n=10)
+  leaflet: 47 pages in 4 packs
+  leaflet pack 00: {'asked': 8, 'pages_written': 8, 'positions_written': 1, 'unreadable': 0, 'watermark': 1027}
+  leaflet pack 01: {'asked': 15, 'pages_written': 15, 'positions_written': 6, 'unreadable': 0, 'watermark': 1043}
+  leaflet pack 02: {'asked': 12, 'pages_written': 12, 'positions_written': 18, 'unreadable': 0, 'watermark': 1057}
+  leaflet pack 03: {'asked': 12, 'pages_written': 12, 'positions_written': 4, 'unreadable': 0, 'watermark': 1070}
+  after @sim23_simi: {'calls_done': 649, 'calls_total': 2225, 'opened_seconds': 26.87, 'billed_seconds': 2492.563, 'marginal_seconds_per_call': 3.7992, 'idle_tail_seconds': 60.0, 'spent_usd': 0.7644, 'remaining_usd': 1.8363, 'projected_usd': 2.6192, 'cap_usd': 2.6841, 'over_cap': False}
+  leaflet: 25 pages in 1 packs
+  leaflet pack 00: {'asked': 25, 'pages_written': 25, 'positions_written': 0, 'unreadable': 0, 'watermark': 6281}
+  @epicentrk_sale: measured 0.805 s/page on its first pack (n=25)
+  leaflet: 53 pages in 2 packs
+  leaflet pack 00: {'asked': 45, 'pages_written': 45, 'positions_written': 0, 'unreadable': 0, 'watermark': 6364}
+  leaflet pack 01: {'asked': 8, 'pages_written': 8, 'positions_written': 0, 'unreadable': 0, 'watermark': 6375}
+  after @epicentrk_sale: {'calls_done': 727, 'calls_total': 2225, 'opened_seconds': 26.87, 'billed_seconds': 2561.084, 'marginal_seconds_per_call': 3.4859, 'idle_tail_seconds': 60.0, 'spent_usd': 0.7855, 'remaining_usd': 1.6015, 'projected_usd': 2.4053, 'cap_usd': 2.6841, 'over_cap': False}
+  leaflet: 25 pages in 1 packs
+  leaflet pack 00: {'asked': 25, 'pages_written': 25, 'positions_written': 0, 'unreadable': 0, 'watermark': 18110}
+  @rrozetka: measured 0.819 s/page on its first pack (n=25)
+  leaflet: 88 pages in 3 packs
+  leaflet pack 00: {'asked': 44, 'pages_written': 44, 'positions_written': 0, 'unreadable': 0, 'watermark': 18197}
+  leaflet pack 01: {'asked': 39, 'pages_written': 39, 'positions_written': 0, 'unreadable': 0, 'watermark': 18265}
+  leaflet pack 02: {'asked': 5, 'pages_written': 5, 'positions_written': 0, 'unreadable': 0, 'watermark': 18270}
+  after @rrozetka: {'calls_done': 840, 'calls_total': 2225, 'opened_seconds': 26.87, 'billed_seconds': 2666.18, 'marginal_seconds_per_call': 3.142, 'idle_tail_seconds': 60.0, 'spent_usd': 0.8177, 'remaining_usd': 1.3346, 'projected_usd': 2.1707, 'cap_usd': 2.6841, 'over_cap': False}
+  leaflet: 25 pages in 1 packs
+  leaflet pack 00: {'asked': 25, 'pages_written': 25, 'positions_written': 18, 'unreadable': 0, 'watermark': 4549}
+  @ATB_FANatik: measured 4.179 s/page on its first pack (n=25)
+  leaflet: 108 pages in 5 packs
+  leaflet pack 00: {'asked': 28, 'pages_written': 28, 'positions_written': 25, 'unreadable': 0, 'watermark': 4577}
+  leaflet pack 01: {'asked': 30, 'pages_written': 30, 'positions_written': 19, 'unreadable': 0, 'watermark': 4607}
+  leaflet pack 02: {'asked': 25, 'pages_written': 25, 'positions_written': 11, 'unreadable': 1, 'watermark': 4632}
+  leaflet pack 03: {'asked': 13, 'pages_written': 13, 'positions_written': 3, 'unreadable': 0, 'watermark': 4645}
+  leaflet pack 04: {'asked': 12, 'pages_written': 12, 'positions_written': 19, 'unreadable': 0, 'watermark': 4657}
+  after @ATB_FANatik: {'calls_done': 973, 'calls_total': 2225, 'opened_seconds': 26.87, 'billed_seconds': 3315.379, 'marginal_seconds_per_call': 3.3798, 'idle_tail_seconds': 60.0, 'spent_usd': 1.0168, 'remaining_usd': 1.2977, 'projected_usd': 2.3329, 'cap_usd': 2.6841, 'over_cap': False}
+  leaflet: 25 pages in 1 packs
+  leaflet pack 00: {'asked': 25, 'pages_written': 25, 'positions_written': 63, 'unreadable': 0, 'watermark': 7702}
+  @blyzenkoua: measured 12.924 s/page on its first pack (n=25)
+  leaflet: 303 pages in 11 packs
+  leaflet pack 00: {'asked': 27, 'pages_written': 27, 'positions_written': 1, 'unreadable': 0, 'watermark': 7729}
+  leaflet pack 01: {'asked': 32, 'pages_written': 32, 'positions_written': 13, 'unreadable': 2, 'watermark': 7762}
+  leaflet pack 02: {'asked': 28, 'pages_written': 28, 'positions_written': 25, 'unreadable': 3, 'watermark': 7790}
+  leaflet pack 03: {'asked': 28, 'pages_written': 28, 'positions_written': 2, 'unreadable': 0, 'watermark': 7818}
+  leaflet pack 04: {'asked': 29, 'pages_written': 29, 'positions_written': 35, 'unreadable': 3, 'watermark': 7856}
+  leaflet pack 05: {'asked': 28, 'pages_written': 28, 'positions_written': 9, 'unreadable': 0, 'watermark': 7884}
+  leaflet pack 06: {'asked': 29, 'pages_written': 29, 'positions_written': 0, 'unreadable': 0, 'watermark': 7913}
+  leaflet pack 07: {'asked': 32, 'pages_written': 32, 'positions_written': 35, 'unreadable': 1, 'watermark': 7949}
+  leaflet pack 08: {'asked': 28, 'pages_written': 28, 'positions_written': 23, 'unreadable': 1, 'watermark': 7977}
+  leaflet pack 09: {'asked': 28, 'pages_written': 28, 'positions_written': 0, 'unreadable': 0, 'watermark': 8005}
+  leaflet pack 10: {'asked': 14, 'pages_written': 14, 'positions_written': 3, 'unreadable': 0, 'watermark': 8019}
+  after @blyzenkoua: {'calls_done': 1301, 'calls_total': 2225, 'opened_seconds': 26.87, 'billed_seconds': 4803.442, 'marginal_seconds_per_call': 3.6715, 'idle_tail_seconds': 60.0, 'spent_usd': 1.4732, 'remaining_usd': 1.0404, 'projected_usd': 2.532, 'cap_usd': 2.6841, 'over_cap': False}
+  leaflet: 25 pages in 1 packs
+  leaflet pack 00: {'asked': 25, 'pages_written': 25, 'positions_written': 0, 'unreadable': 0, 'watermark': 22018}
+  @kopiyochka1: measured 0.825 s/page on its first pack (n=25)
+  leaflet: 371 pages in 12 packs
+  leaflet pack 00: {'asked': 33, 'pages_written': 33, 'positions_written': 0, 'unreadable': 0, 'watermark': 22064}
+  leaflet pack 01: {'asked': 38, 'pages_written': 38, 'positions_written': 0, 'unreadable': 0, 'watermark': 22102}
+  leaflet pack 02: {'asked': 33, 'pages_written': 33, 'positions_written': 0, 'unreadable': 0, 'watermark': 22137}
+  leaflet pack 03: {'asked': 26, 'pages_written': 26, 'positions_written': 0, 'unreadable': 0, 'watermark': 22163}
+  leaflet pack 04: {'asked': 35, 'pages_written': 35, 'positions_written': 0, 'unreadable': 0, 'watermark': 22198}
+  leaflet pack 05: {'asked': 31, 'pages_written': 31, 'positions_written': 0, 'unreadable': 0, 'watermark': 22230}
+  leaflet pack 06: {'asked': 28, 'pages_written': 28, 'positions_written': 0, 'unreadable': 0, 'watermark': 22258}
+  leaflet pack 07: {'asked': 35, 'pages_written': 35, 'positions_written': 0, 'unreadable': 0, 'watermark': 22293}
+  leaflet pack 08: {'asked': 38, 'pages_written': 38, 'positions_written': 0, 'unreadable': 0, 'watermark': 22332}
+  leaflet pack 09: {'asked': 36, 'pages_written': 36, 'positions_written': 0, 'unreadable': 0, 'watermark': 22369}
+  leaflet pack 10: {'asked': 35, 'pages_written': 35, 'positions_written': 0, 'unreadable': 0, 'watermark': 22404}
+  leaflet pack 11: {'asked': 3, 'pages_written': 3, 'positions_written': 0, 'unreadable': 0, 'watermark': 22407}
+  after @kopiyochka1: {'calls_done': 1697, 'calls_total': 2225, 'opened_seconds': 26.87, 'billed_seconds': 5169.602, 'marginal_seconds_per_call': 3.0305, 'idle_tail_seconds': 60.0, 'spent_usd': 1.5855, 'remaining_usd': 0.4907, 'projected_usd': 2.0946, 'cap_usd': 2.6841, 'over_cap': False}
+  leaflet: 25 pages in 1 packs
+  leaflet pack 00: {'asked': 25, 'pages_written': 25, 'positions_written': 0, 'unreadable': 0, 'watermark': 392500}
+  @kop1chat: measured 0.800 s/page on its first pack (n=25)
+  leaflet: 503 pages in 14 packs
+  leaflet pack 00: {'asked': 41, 'pages_written': 41, 'positions_written': 0, 'unreadable': 0, 'watermark': 392593}
+  leaflet pack 01: {'asked': 42, 'pages_written': 42, 'positions_written': 0, 'unreadable': 0, 'watermark': 392706}
+  leaflet pack 02: {'asked': 53, 'pages_written': 53, 'positions_written': 0, 'unreadable': 0, 'watermark': 392807}
+  leaflet pack 03: {'asked': 35, 'pages_written': 35, 'positions_written': 0, 'unreadable': 0, 'watermark': 392888}
+  leaflet pack 04: {'asked': 39, 'pages_written': 39, 'positions_written': 0, 'unreadable': 0, 'watermark': 392967}
+  leaflet pack 05: {'asked': 26, 'pages_written': 26, 'positions_written': 0, 'unreadable': 0, 'watermark': 393008}
+  leaflet pack 06: {'asked': 37, 'pages_written': 37, 'positions_written': 0, 'unreadable': 0, 'watermark': 393100}
+  leaflet pack 07: {'asked': 28, 'pages_written': 28, 'positions_written': 0, 'unreadable': 0, 'watermark': 393132}
+  leaflet pack 08: {'asked': 34, 'pages_written': 34, 'positions_written': 0, 'unreadable': 0, 'watermark': 393204}
+  leaflet pack 09: {'asked': 38, 'pages_written': 38, 'positions_written': 0, 'unreadable': 0, 'watermark': 393285}
+  leaflet pack 10: {'asked': 51, 'pages_written': 51, 'positions_written': 0, 'unreadable': 0, 'watermark': 393374}
+  leaflet pack 11: {'asked': 34, 'pages_written': 34, 'positions_written': 0, 'unreadable': 0, 'watermark': 393440}
+  leaflet pack 12: {'asked': 37, 'pages_written': 37, 'positions_written': 0, 'unreadable': 0, 'watermark': 393516}
+  leaflet pack 13: {'asked': 8, 'pages_written': 8, 'positions_written': 0, 'unreadable': 0, 'watermark': 393535}
+  after @kop1chat: {'calls_done': 2225, 'calls_total': 2225, 'opened_seconds': 26.87, 'billed_seconds': 5651.297, 'marginal_seconds_per_call': 2.5278, 'idle_tail_seconds': 60.0, 'spent_usd': 1.7332, 'remaining_usd': 0.0, 'projected_usd': 1.7516, 'cap_usd': 2.6841, 'over_cap': False}
+
+wrote results/run_promo_c2.json (run 2)

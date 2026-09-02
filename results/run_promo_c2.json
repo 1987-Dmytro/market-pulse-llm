@@ -90,6 +90,1291 @@
         "REFUSED at the (10)(a) gate — projected $12.5928 against the $3.95 step cap (+218.8%); no gold call was made"
       ],
       "at": "2026-09-02T13:00:41+00:00"
+    },
+    {
+      "phase": "promo-pulse-1 S4 — the C2 backfill (PAID): vision for the census's pages, text for its price posts",
+      "authority": "results/prereg_promo_c2.json",
+      "endpoint": "tq5qxmrczx3iap",
+      "step": {
+        "cap_usd": 3.95,
+        "ledger": "results/spend_promo_pulse_1.json",
+        "name": "promo-pulse-1",
+        "spent_before_this_run_usd": 1.2659,
+        "cap_left_usd": 2.6841
+      },
+      "info": {
+        "adapter_dir": null,
+        "adapter_sha256": null,
+        "chat_template": {
+          "add_generation_prompt": true,
+          "enable_thinking": false
+        },
+        "max_new_tokens": 1200,
+        "merge_state": "base-no-adapter",
+        "merged_provenance": null,
+        "merged_sha256": null,
+        "model": "google/gemma-4-31b-it",
+        "positions_prompt_sha256": {
+          "positions_post_gm4": "ca6303c157d46e707aaf3fc52c7a05ed1450e24c26db0e7c93eefba4f6968754",
+          "positions_text_gm4": "7250b87aa1c2de407e06ab9eed565dd4d88025add7be0d2d2a87607c0d872860"
+        },
+        "quantization": {
+          "bnb_4bit_compute_dtype": "bfloat16",
+          "bnb_4bit_quant_type": "nf4",
+          "bnb_4bit_use_double_quant": true,
+          "load_in_4bit": true
+        },
+        "repo_commit": "3707a9c40484171aeb42a87d481552b79a14b791",
+        "revision_requested": "842da3794eaa0b77d5f08bae87a17459d91ff475",
+        "runtime": {
+          "accelerate": "1.14.0",
+          "bitsandbytes": "0.50.0",
+          "cuda_runtime": "12.8",
+          "driver": "580.159.04",
+          "gpu": "NVIDIA GeForce RTX 4090",
+          "gpu_count": 1,
+          "gpu_memory_total": "24564 MiB",
+          "model_revision": "842da3794eaa0b77d5f08bae87a17459d91ff475",
+          "peft": "0.20.0",
+          "pod_id": "0ny3oggrzi8syf",
+          "revision_requested": "842da3794eaa0b77d5f08bae87a17459d91ff475",
+          "runpod": "1.11.0",
+          "torch": "2.8.0+cu128",
+          "transformers": "5.14.1",
+          "weights_requested": "google/gemma-4-31b-it"
+        },
+        "serving_config": "POSITIONS",
+        "weights_dir": "google/gemma-4-31b-it"
+      },
+      "queued": {
+        "pages": 2225,
+        "posts": 0
+      },
+      "go_no_go": {
+        "when": "after the two non-gold warm-up calls of SPEC 3.17 (9), before the first gold call",
+        "billed_seconds": 26.87,
+        "page_marginal_seconds": 20.872,
+        "text_marginal_seconds": 0.0,
+        "gold_calls": 0,
+        "gold_seconds": 0.0,
+        "idle_tail_seconds": 60.0,
+        "projected_usd": 0.0266,
+        "budget_usd": 2.6841,
+        "refuse": false,
+        "leg": "post_text — ruling 02.09 (c) item 1: this gate prices the TEXT leg alone (n_pages = 0 by the law); the page legs gate per channel against the room, never as one step",
+        "page_warmup_seconds": 20.872,
+        "over_cap_by": -0.9901
+      },
+      "leaflet": [
+        {
+          "channel": "@atb_aktsiyi",
+          "pages_queued": 200,
+          "pages_bought": 200,
+          "pages_left": 0,
+          "measured_seconds_per_page": 7.1315,
+          "measured_n": 14,
+          "remainder_pages": 186,
+          "remainder_usd_at_its_rate": 0.4068,
+          "remainder_bought": true,
+          "room_usd_before": 2.3732,
+          "packs": [
+            {
+              "pack": 0,
+              "asked": 14,
+              "pages_written": 14,
+              "positions_written": 18,
+              "unreadable": 0,
+              "watermark": 3274
+            },
+            {
+              "pack": 1,
+              "asked": 14,
+              "pages_written": 14,
+              "positions_written": 9,
+              "unreadable": 0,
+              "watermark": 3288
+            },
+            {
+              "pack": 2,
+              "asked": 16,
+              "pages_written": 16,
+              "positions_written": 3,
+              "unreadable": 0,
+              "watermark": 3307
+            },
+            {
+              "pack": 3,
+              "asked": 19,
+              "pages_written": 19,
+              "positions_written": 2,
+              "unreadable": 1,
+              "watermark": 3326
+            },
+            {
+              "pack": 4,
+              "asked": 17,
+              "pages_written": 17,
+              "positions_written": 4,
+              "unreadable": 0,
+              "watermark": 3343
+            },
+            {
+              "pack": 5,
+              "asked": 14,
+              "pages_written": 14,
+              "positions_written": 8,
+              "unreadable": 0,
+              "watermark": 3357
+            },
+            {
+              "pack": 6,
+              "asked": 14,
+              "pages_written": 14,
+              "positions_written": 13,
+              "unreadable": 0,
+              "watermark": 3371
+            },
+            {
+              "pack": 7,
+              "asked": 15,
+              "pages_written": 15,
+              "positions_written": 4,
+              "unreadable": 0,
+              "watermark": 3387
+            },
+            {
+              "pack": 8,
+              "asked": 22,
+              "pages_written": 22,
+              "positions_written": 14,
+              "unreadable": 1,
+              "watermark": 3410
+            },
+            {
+              "pack": 9,
+              "asked": 32,
+              "pages_written": 32,
+              "positions_written": 34,
+              "unreadable": 2,
+              "watermark": 3442
+            },
+            {
+              "pack": 10,
+              "asked": 19,
+              "pages_written": 19,
+              "positions_written": 4,
+              "unreadable": 0,
+              "watermark": 3461
+            },
+            {
+              "pack": 11,
+              "asked": 4,
+              "pages_written": 4,
+              "positions_written": 0,
+              "unreadable": 0,
+              "watermark": 3466
+            }
+          ],
+          "stopped": false,
+          "room_usd_after_first_pack": 2.3408
+        },
+        {
+          "channel": "@msuaaaa",
+          "pages_queued": 268,
+          "pages_bought": 268,
+          "pages_left": 0,
+          "measured_seconds_per_page": 6.077,
+          "measured_n": 25,
+          "remainder_pages": 243,
+          "remainder_usd_at_its_rate": 0.4529,
+          "remainder_bought": true,
+          "room_usd_before": 2.1199,
+          "packs": [
+            {
+              "pack": 0,
+              "asked": 25,
+              "pages_written": 25,
+              "positions_written": 18,
+              "unreadable": 1,
+              "watermark": 10780
+            },
+            {
+              "pack": 1,
+              "asked": 45,
+              "pages_written": 45,
+              "positions_written": 10,
+              "unreadable": 1,
+              "watermark": 10825
+            },
+            {
+              "pack": 2,
+              "asked": 47,
+              "pages_written": 47,
+              "positions_written": 43,
+              "unreadable": 0,
+              "watermark": 10874
+            },
+            {
+              "pack": 3,
+              "asked": 51,
+              "pages_written": 51,
+              "positions_written": 24,
+              "unreadable": 0,
+              "watermark": 10925
+            },
+            {
+              "pack": 4,
+              "asked": 44,
+              "pages_written": 44,
+              "positions_written": 25,
+              "unreadable": 2,
+              "watermark": 10969
+            },
+            {
+              "pack": 5,
+              "asked": 44,
+              "pages_written": 44,
+              "positions_written": 18,
+              "unreadable": 4,
+              "watermark": 11013
+            },
+            {
+              "pack": 6,
+              "asked": 12,
+              "pages_written": 12,
+              "positions_written": 6,
+              "unreadable": 0,
+              "watermark": 11025
+            }
+          ],
+          "stopped": false,
+          "room_usd_after_first_pack": 2.0727
+        },
+        {
+          "channel": "@fozzyshopua",
+          "pages_queued": 3,
+          "pages_bought": 3,
+          "pages_left": 0,
+          "measured_seconds_per_page": 0.978,
+          "measured_n": 3,
+          "remainder_pages": 0,
+          "remainder_usd_at_its_rate": null,
+          "remainder_bought": true,
+          "room_usd_before": 1.7921,
+          "packs": [
+            {
+              "pack": 0,
+              "asked": 3,
+              "pages_written": 3,
+              "positions_written": 0,
+              "unreadable": 0,
+              "watermark": 564
+            }
+          ],
+          "stopped": false
+        },
+        {
+          "channel": "@xochydeshevshe",
+          "pages_queued": 7,
+          "pages_bought": 7,
+          "pages_left": 0,
+          "measured_seconds_per_page": 3.5694,
+          "measured_n": 7,
+          "remainder_pages": 0,
+          "remainder_usd_at_its_rate": null,
+          "remainder_bought": true,
+          "room_usd_before": 1.7904,
+          "packs": [
+            {
+              "pack": 0,
+              "asked": 7,
+              "pages_written": 7,
+              "positions_written": 4,
+              "unreadable": 0,
+              "watermark": 2091
+            }
+          ],
+          "stopped": false
+        },
+        {
+          "channel": "@forainfo",
+          "pages_queued": 11,
+          "pages_bought": 11,
+          "pages_left": 0,
+          "measured_seconds_per_page": 2.3584,
+          "measured_n": 11,
+          "remainder_pages": 0,
+          "remainder_usd_at_its_rate": null,
+          "remainder_bought": true,
+          "room_usd_before": 1.7825,
+          "packs": [
+            {
+              "pack": 0,
+              "asked": 11,
+              "pages_written": 11,
+              "positions_written": 4,
+              "unreadable": 0,
+              "watermark": 6056
+            }
+          ],
+          "stopped": false
+        },
+        {
+          "channel": "@ekomarket_shop",
+          "pages_queued": 17,
+          "pages_bought": 17,
+          "pages_left": 0,
+          "measured_seconds_per_page": 2.8762,
+          "measured_n": 17,
+          "remainder_pages": 0,
+          "remainder_usd_at_its_rate": null,
+          "remainder_bought": true,
+          "room_usd_before": 1.773,
+          "packs": [
+            {
+              "pack": 0,
+              "asked": 17,
+              "pages_written": 17,
+              "positions_written": 7,
+              "unreadable": 1,
+              "watermark": 1472
+            }
+          ],
+          "stopped": false
+        },
+        {
+          "channel": "@silposilpo",
+          "pages_queued": 34,
+          "pages_bought": 34,
+          "pages_left": 0,
+          "measured_seconds_per_page": 0.8188,
+          "measured_n": 25,
+          "remainder_pages": 9,
+          "remainder_usd_at_its_rate": 0.0023,
+          "remainder_bought": true,
+          "room_usd_before": 1.7572,
+          "packs": [
+            {
+              "pack": 0,
+              "asked": 25,
+              "pages_written": 25,
+              "positions_written": 0,
+              "unreadable": 0,
+              "watermark": 3864
+            },
+            {
+              "pack": 1,
+              "asked": 9,
+              "pages_written": 9,
+              "positions_written": 0,
+              "unreadable": 0,
+              "watermark": 3875
+            }
+          ],
+          "stopped": false,
+          "room_usd_after_first_pack": 1.7491
+        },
+        {
+          "channel": "@marketopt_promo",
+          "pages_queued": 52,
+          "pages_bought": 52,
+          "pages_left": 0,
+          "measured_seconds_per_page": 2.7583,
+          "measured_n": 25,
+          "remainder_pages": 27,
+          "remainder_usd_at_its_rate": 0.0228,
+          "remainder_bought": true,
+          "room_usd_before": 1.7458,
+          "packs": [
+            {
+              "pack": 0,
+              "asked": 25,
+              "pages_written": 25,
+              "positions_written": 11,
+              "unreadable": 0,
+              "watermark": 2934
+            },
+            {
+              "pack": 1,
+              "asked": 27,
+              "pages_written": 27,
+              "positions_written": 10,
+              "unreadable": 1,
+              "watermark": 2961
+            }
+          ],
+          "stopped": false,
+          "room_usd_after_first_pack": 1.7237
+        },
+        {
+          "channel": "@sim23_simi",
+          "pages_queued": 57,
+          "pages_bought": 57,
+          "pages_left": 0,
+          "measured_seconds_per_page": 8.842,
+          "measured_n": 10,
+          "remainder_pages": 47,
+          "remainder_usd_at_its_rate": 0.1275,
+          "remainder_bought": true,
+          "room_usd_before": 1.7015,
+          "packs": [
+            {
+              "pack": 0,
+              "asked": 10,
+              "pages_written": 10,
+              "positions_written": 13,
+              "unreadable": 1,
+              "watermark": 1019
+            },
+            {
+              "pack": 1,
+              "asked": 8,
+              "pages_written": 8,
+              "positions_written": 1,
+              "unreadable": 0,
+              "watermark": 1027
+            },
+            {
+              "pack": 2,
+              "asked": 15,
+              "pages_written": 15,
+              "positions_written": 6,
+              "unreadable": 0,
+              "watermark": 1043
+            },
+            {
+              "pack": 3,
+              "asked": 12,
+              "pages_written": 12,
+              "positions_written": 18,
+              "unreadable": 0,
+              "watermark": 1057
+            },
+            {
+              "pack": 4,
+              "asked": 12,
+              "pages_written": 12,
+              "positions_written": 4,
+              "unreadable": 0,
+              "watermark": 1070
+            }
+          ],
+          "stopped": false,
+          "room_usd_after_first_pack": 1.673
+        },
+        {
+          "channel": "@epicentrk_sale",
+          "pages_queued": 78,
+          "pages_bought": 78,
+          "pages_left": 0,
+          "measured_seconds_per_page": 0.8048,
+          "measured_n": 25,
+          "remainder_pages": 53,
+          "remainder_usd_at_its_rate": 0.0131,
+          "remainder_bought": true,
+          "room_usd_before": 1.617,
+          "packs": [
+            {
+              "pack": 0,
+              "asked": 25,
+              "pages_written": 25,
+              "positions_written": 0,
+              "unreadable": 0,
+              "watermark": 6281
+            },
+            {
+              "pack": 1,
+              "asked": 45,
+              "pages_written": 45,
+              "positions_written": 0,
+              "unreadable": 0,
+              "watermark": 6364
+            },
+            {
+              "pack": 2,
+              "asked": 8,
+              "pages_written": 8,
+              "positions_written": 0,
+              "unreadable": 0,
+              "watermark": 6375
+            }
+          ],
+          "stopped": false,
+          "room_usd_after_first_pack": 1.6105
+        },
+        {
+          "channel": "@rrozetka",
+          "pages_queued": 113,
+          "pages_bought": 113,
+          "pages_left": 0,
+          "measured_seconds_per_page": 0.8194,
+          "measured_n": 25,
+          "remainder_pages": 88,
+          "remainder_usd_at_its_rate": 0.0221,
+          "remainder_bought": true,
+          "room_usd_before": 1.5959,
+          "packs": [
+            {
+              "pack": 0,
+              "asked": 25,
+              "pages_written": 25,
+              "positions_written": 0,
+              "unreadable": 0,
+              "watermark": 18110
+            },
+            {
+              "pack": 1,
+              "asked": 44,
+              "pages_written": 44,
+              "positions_written": 0,
+              "unreadable": 0,
+              "watermark": 18197
+            },
+            {
+              "pack": 2,
+              "asked": 39,
+              "pages_written": 39,
+              "positions_written": 0,
+              "unreadable": 0,
+              "watermark": 18265
+            },
+            {
+              "pack": 3,
+              "asked": 5,
+              "pages_written": 5,
+              "positions_written": 0,
+              "unreadable": 0,
+              "watermark": 18270
+            }
+          ],
+          "stopped": false,
+          "room_usd_after_first_pack": 1.5879
+        },
+        {
+          "channel": "@ATB_FANatik",
+          "pages_queued": 133,
+          "pages_bought": 133,
+          "pages_left": 0,
+          "measured_seconds_per_page": 4.1792,
+          "measured_n": 25,
+          "remainder_pages": 108,
+          "remainder_usd_at_its_rate": 0.1384,
+          "remainder_bought": true,
+          "room_usd_before": 1.5637,
+          "packs": [
+            {
+              "pack": 0,
+              "asked": 25,
+              "pages_written": 25,
+              "positions_written": 18,
+              "unreadable": 0,
+              "watermark": 4549
+            },
+            {
+              "pack": 1,
+              "asked": 28,
+              "pages_written": 28,
+              "positions_written": 25,
+              "unreadable": 0,
+              "watermark": 4577
+            },
+            {
+              "pack": 2,
+              "asked": 30,
+              "pages_written": 30,
+              "positions_written": 19,
+              "unreadable": 0,
+              "watermark": 4607
+            },
+            {
+              "pack": 3,
+              "asked": 25,
+              "pages_written": 25,
+              "positions_written": 11,
+              "unreadable": 1,
+              "watermark": 4632
+            },
+            {
+              "pack": 4,
+              "asked": 13,
+              "pages_written": 13,
+              "positions_written": 3,
+              "unreadable": 0,
+              "watermark": 4645
+            },
+            {
+              "pack": 5,
+              "asked": 12,
+              "pages_written": 12,
+              "positions_written": 19,
+              "unreadable": 0,
+              "watermark": 4657
+            }
+          ],
+          "stopped": false,
+          "room_usd_after_first_pack": 1.5306
+        },
+        {
+          "channel": "@blyzenkoua",
+          "pages_queued": 328,
+          "pages_bought": 328,
+          "pages_left": 0,
+          "measured_seconds_per_page": 12.9238,
+          "measured_n": 25,
+          "remainder_pages": 303,
+          "remainder_usd_at_its_rate": 1.201,
+          "remainder_bought": true,
+          "room_usd_before": 1.3646,
+          "packs": [
+            {
+              "pack": 0,
+              "asked": 25,
+              "pages_written": 25,
+              "positions_written": 63,
+              "unreadable": 0,
+              "watermark": 7702
+            },
+            {
+              "pack": 1,
+              "asked": 27,
+              "pages_written": 27,
+              "positions_written": 1,
+              "unreadable": 0,
+              "watermark": 7729
+            },
+            {
+              "pack": 2,
+              "asked": 32,
+              "pages_written": 32,
+              "positions_written": 13,
+              "unreadable": 2,
+              "watermark": 7762
+            },
+            {
+              "pack": 3,
+              "asked": 28,
+              "pages_written": 28,
+              "positions_written": 25,
+              "unreadable": 3,
+              "watermark": 7790
+            },
+            {
+              "pack": 4,
+              "asked": 28,
+              "pages_written": 28,
+              "positions_written": 2,
+              "unreadable": 0,
+              "watermark": 7818
+            },
+            {
+              "pack": 5,
+              "asked": 29,
+              "pages_written": 29,
+              "positions_written": 35,
+              "unreadable": 3,
+              "watermark": 7856
+            },
+            {
+              "pack": 6,
+              "asked": 28,
+              "pages_written": 28,
+              "positions_written": 9,
+              "unreadable": 0,
+              "watermark": 7884
+            },
+            {
+              "pack": 7,
+              "asked": 29,
+              "pages_written": 29,
+              "positions_written": 0,
+              "unreadable": 0,
+              "watermark": 7913
+            },
+            {
+              "pack": 8,
+              "asked": 32,
+              "pages_written": 32,
+              "positions_written": 35,
+              "unreadable": 1,
+              "watermark": 7949
+            },
+            {
+              "pack": 9,
+              "asked": 28,
+              "pages_written": 28,
+              "positions_written": 23,
+              "unreadable": 1,
+              "watermark": 7977
+            },
+            {
+              "pack": 10,
+              "asked": 28,
+              "pages_written": 28,
+              "positions_written": 0,
+              "unreadable": 0,
+              "watermark": 8005
+            },
+            {
+              "pack": 11,
+              "asked": 14,
+              "pages_written": 14,
+              "positions_written": 3,
+              "unreadable": 0,
+              "watermark": 8019
+            }
+          ],
+          "stopped": false,
+          "room_usd_after_first_pack": 1.2641
+        },
+        {
+          "channel": "@kopiyochka1",
+          "pages_queued": 396,
+          "pages_bought": 396,
+          "pages_left": 0,
+          "measured_seconds_per_page": 0.8249,
+          "measured_n": 25,
+          "remainder_pages": 371,
+          "remainder_usd_at_its_rate": 0.0939,
+          "remainder_bought": true,
+          "room_usd_before": 0.9082,
+          "packs": [
+            {
+              "pack": 0,
+              "asked": 25,
+              "pages_written": 25,
+              "positions_written": 0,
+              "unreadable": 0,
+              "watermark": 22018
+            },
+            {
+              "pack": 1,
+              "asked": 33,
+              "pages_written": 33,
+              "positions_written": 0,
+              "unreadable": 0,
+              "watermark": 22064
+            },
+            {
+              "pack": 2,
+              "asked": 38,
+              "pages_written": 38,
+              "positions_written": 0,
+              "unreadable": 0,
+              "watermark": 22102
+            },
+            {
+              "pack": 3,
+              "asked": 33,
+              "pages_written": 33,
+              "positions_written": 0,
+              "unreadable": 0,
+              "watermark": 22137
+            },
+            {
+              "pack": 4,
+              "asked": 26,
+              "pages_written": 26,
+              "positions_written": 0,
+              "unreadable": 0,
+              "watermark": 22163
+            },
+            {
+              "pack": 5,
+              "asked": 35,
+              "pages_written": 35,
+              "positions_written": 0,
+              "unreadable": 0,
+              "watermark": 22198
+            },
+            {
+              "pack": 6,
+              "asked": 31,
+              "pages_written": 31,
+              "positions_written": 0,
+              "unreadable": 0,
+              "watermark": 22230
+            },
+            {
+              "pack": 7,
+              "asked": 28,
+              "pages_written": 28,
+              "positions_written": 0,
+              "unreadable": 0,
+              "watermark": 22258
+            },
+            {
+              "pack": 8,
+              "asked": 35,
+              "pages_written": 35,
+              "positions_written": 0,
+              "unreadable": 0,
+              "watermark": 22293
+            },
+            {
+              "pack": 9,
+              "asked": 38,
+              "pages_written": 38,
+              "positions_written": 0,
+              "unreadable": 0,
+              "watermark": 22332
+            },
+            {
+              "pack": 10,
+              "asked": 36,
+              "pages_written": 36,
+              "positions_written": 0,
+              "unreadable": 0,
+              "watermark": 22369
+            },
+            {
+              "pack": 11,
+              "asked": 35,
+              "pages_written": 35,
+              "positions_written": 0,
+              "unreadable": 0,
+              "watermark": 22404
+            },
+            {
+              "pack": 12,
+              "asked": 3,
+              "pages_written": 3,
+              "positions_written": 0,
+              "unreadable": 0,
+              "watermark": 22407
+            }
+          ],
+          "stopped": false,
+          "room_usd_after_first_pack": 0.8999
+        },
+        {
+          "channel": "@kop1chat",
+          "pages_queued": 528,
+          "pages_bought": 528,
+          "pages_left": 0,
+          "measured_seconds_per_page": 0.7997,
+          "measured_n": 25,
+          "remainder_pages": 503,
+          "remainder_usd_at_its_rate": 0.1234,
+          "remainder_bought": true,
+          "room_usd_before": 0.7959,
+          "packs": [
+            {
+              "pack": 0,
+              "asked": 25,
+              "pages_written": 25,
+              "positions_written": 0,
+              "unreadable": 0,
+              "watermark": 392500
+            },
+            {
+              "pack": 1,
+              "asked": 41,
+              "pages_written": 41,
+              "positions_written": 0,
+              "unreadable": 0,
+              "watermark": 392593
+            },
+            {
+              "pack": 2,
+              "asked": 42,
+              "pages_written": 42,
+              "positions_written": 0,
+              "unreadable": 0,
+              "watermark": 392706
+            },
+            {
+              "pack": 3,
+              "asked": 53,
+              "pages_written": 53,
+              "positions_written": 0,
+              "unreadable": 0,
+              "watermark": 392807
+            },
+            {
+              "pack": 4,
+              "asked": 35,
+              "pages_written": 35,
+              "positions_written": 0,
+              "unreadable": 0,
+              "watermark": 392888
+            },
+            {
+              "pack": 5,
+              "asked": 39,
+              "pages_written": 39,
+              "positions_written": 0,
+              "unreadable": 0,
+              "watermark": 392967
+            },
+            {
+              "pack": 6,
+              "asked": 26,
+              "pages_written": 26,
+              "positions_written": 0,
+              "unreadable": 0,
+              "watermark": 393008
+            },
+            {
+              "pack": 7,
+              "asked": 37,
+              "pages_written": 37,
+              "positions_written": 0,
+              "unreadable": 0,
+              "watermark": 393100
+            },
+            {
+              "pack": 8,
+              "asked": 28,
+              "pages_written": 28,
+              "positions_written": 0,
+              "unreadable": 0,
+              "watermark": 393132
+            },
+            {
+              "pack": 9,
+              "asked": 34,
+              "pages_written": 34,
+              "positions_written": 0,
+              "unreadable": 0,
+              "watermark": 393204
+            },
+            {
+              "pack": 10,
+              "asked": 38,
+              "pages_written": 38,
+              "positions_written": 0,
+              "unreadable": 0,
+              "watermark": 393285
+            },
+            {
+              "pack": 11,
+              "asked": 51,
+              "pages_written": 51,
+              "positions_written": 0,
+              "unreadable": 0,
+              "watermark": 393374
+            },
+            {
+              "pack": 12,
+              "asked": 34,
+              "pages_written": 34,
+              "positions_written": 0,
+              "unreadable": 0,
+              "watermark": 393440
+            },
+            {
+              "pack": 13,
+              "asked": 37,
+              "pages_written": 37,
+              "positions_written": 0,
+              "unreadable": 0,
+              "watermark": 393516
+            },
+            {
+              "pack": 14,
+              "asked": 8,
+              "pages_written": 8,
+              "positions_written": 0,
+              "unreadable": 0,
+              "watermark": 393535
+            }
+          ],
+          "stopped": false,
+          "room_usd_after_first_pack": 0.7893
+        }
+      ],
+      "stages": [
+        {
+          "after": "post_text",
+          "calls_done": 0,
+          "calls_total": 2225,
+          "opened_seconds": 26.87,
+          "billed_seconds": 26.87,
+          "marginal_seconds_per_call": 0.0,
+          "idle_tail_seconds": 60.0,
+          "spent_usd": 0.0082,
+          "remaining_usd": 0.0,
+          "projected_usd": 0.0266,
+          "cap_usd": 2.6841,
+          "over_cap": false,
+          "room_usd": 2.3732
+        },
+        {
+          "after": "@atb_aktsiyi",
+          "calls_done": 200,
+          "calls_total": 2225,
+          "opened_seconds": 26.87,
+          "billed_seconds": 852.594,
+          "marginal_seconds_per_call": 4.1286,
+          "idle_tail_seconds": 60.0,
+          "spent_usd": 0.2615,
+          "remaining_usd": 2.5641,
+          "projected_usd": 2.844,
+          "cap_usd": 2.6841,
+          "over_cap": true,
+          "room_usd": 2.1199
+        },
+        {
+          "after": "@msuaaaa",
+          "calls_done": 468,
+          "calls_total": 2225,
+          "opened_seconds": 26.87,
+          "billed_seconds": 1921.608,
+          "marginal_seconds_per_call": 4.0486,
+          "idle_tail_seconds": 60.0,
+          "spent_usd": 0.5893,
+          "remaining_usd": 2.1816,
+          "projected_usd": 2.7893,
+          "cap_usd": 2.6841,
+          "over_cap": true,
+          "room_usd": 1.7921
+        },
+        {
+          "after": "@fozzyshopua",
+          "calls_done": 471,
+          "calls_total": 2225,
+          "opened_seconds": 26.87,
+          "billed_seconds": 1927.004,
+          "marginal_seconds_per_call": 4.0343,
+          "idle_tail_seconds": 60.0,
+          "spent_usd": 0.591,
+          "remaining_usd": 2.1702,
+          "projected_usd": 2.7796,
+          "cap_usd": 2.6841,
+          "over_cap": true,
+          "room_usd": 1.7904
+        },
+        {
+          "after": "@xochydeshevshe",
+          "calls_done": 478,
+          "calls_total": 2225,
+          "opened_seconds": 26.87,
+          "billed_seconds": 1952.817,
+          "marginal_seconds_per_call": 4.0292,
+          "idle_tail_seconds": 60.0,
+          "spent_usd": 0.5989,
+          "remaining_usd": 2.1588,
+          "projected_usd": 2.7761,
+          "cap_usd": 2.6841,
+          "over_cap": true,
+          "room_usd": 1.7825
+        },
+        {
+          "after": "@forainfo",
+          "calls_done": 489,
+          "calls_total": 2225,
+          "opened_seconds": 26.87,
+          "billed_seconds": 1983.77,
+          "marginal_seconds_per_call": 4.0018,
+          "idle_tail_seconds": 60.0,
+          "spent_usd": 0.6084,
+          "remaining_usd": 2.1306,
+          "projected_usd": 2.7574,
+          "cap_usd": 2.6841,
+          "over_cap": true,
+          "room_usd": 1.773
+        },
+        {
+          "after": "@ekomarket_shop",
+          "calls_done": 506,
+          "calls_total": 2225,
+          "opened_seconds": 26.87,
+          "billed_seconds": 2035.409,
+          "marginal_seconds_per_call": 3.9694,
+          "idle_tail_seconds": 60.0,
+          "spent_usd": 0.6242,
+          "remaining_usd": 2.0927,
+          "projected_usd": 2.7353,
+          "cap_usd": 2.6841,
+          "over_cap": true,
+          "room_usd": 1.7572
+        },
+        {
+          "after": "@silposilpo",
+          "calls_done": 540,
+          "calls_total": 2225,
+          "opened_seconds": 26.87,
+          "billed_seconds": 2072.284,
+          "marginal_seconds_per_call": 3.7878,
+          "idle_tail_seconds": 60.0,
+          "spent_usd": 0.6355,
+          "remaining_usd": 1.9574,
+          "projected_usd": 2.6114,
+          "cap_usd": 2.6841,
+          "over_cap": false,
+          "room_usd": 1.7458
+        },
+        {
+          "after": "@marketopt_promo",
+          "calls_done": 592,
+          "calls_total": 2225,
+          "opened_seconds": 26.87,
+          "billed_seconds": 2216.78,
+          "marginal_seconds_per_call": 3.6992,
+          "idle_tail_seconds": 60.0,
+          "spent_usd": 0.6799,
+          "remaining_usd": 1.8526,
+          "projected_usd": 2.5509,
+          "cap_usd": 2.6841,
+          "over_cap": false,
+          "room_usd": 1.7015
+        },
+        {
+          "after": "@sim23_simi",
+          "calls_done": 649,
+          "calls_total": 2225,
+          "opened_seconds": 26.87,
+          "billed_seconds": 2492.563,
+          "marginal_seconds_per_call": 3.7992,
+          "idle_tail_seconds": 60.0,
+          "spent_usd": 0.7644,
+          "remaining_usd": 1.8363,
+          "projected_usd": 2.6192,
+          "cap_usd": 2.6841,
+          "over_cap": false,
+          "room_usd": 1.617
+        },
+        {
+          "after": "@epicentrk_sale",
+          "calls_done": 727,
+          "calls_total": 2225,
+          "opened_seconds": 26.87,
+          "billed_seconds": 2561.084,
+          "marginal_seconds_per_call": 3.4859,
+          "idle_tail_seconds": 60.0,
+          "spent_usd": 0.7855,
+          "remaining_usd": 1.6015,
+          "projected_usd": 2.4053,
+          "cap_usd": 2.6841,
+          "over_cap": false,
+          "room_usd": 1.5959
+        },
+        {
+          "after": "@rrozetka",
+          "calls_done": 840,
+          "calls_total": 2225,
+          "opened_seconds": 26.87,
+          "billed_seconds": 2666.18,
+          "marginal_seconds_per_call": 3.142,
+          "idle_tail_seconds": 60.0,
+          "spent_usd": 0.8177,
+          "remaining_usd": 1.3346,
+          "projected_usd": 2.1707,
+          "cap_usd": 2.6841,
+          "over_cap": false,
+          "room_usd": 1.5637
+        },
+        {
+          "after": "@ATB_FANatik",
+          "calls_done": 973,
+          "calls_total": 2225,
+          "opened_seconds": 26.87,
+          "billed_seconds": 3315.379,
+          "marginal_seconds_per_call": 3.3798,
+          "idle_tail_seconds": 60.0,
+          "spent_usd": 1.0168,
+          "remaining_usd": 1.2977,
+          "projected_usd": 2.3329,
+          "cap_usd": 2.6841,
+          "over_cap": false,
+          "room_usd": 1.3646
+        },
+        {
+          "after": "@blyzenkoua",
+          "calls_done": 1301,
+          "calls_total": 2225,
+          "opened_seconds": 26.87,
+          "billed_seconds": 4803.442,
+          "marginal_seconds_per_call": 3.6715,
+          "idle_tail_seconds": 60.0,
+          "spent_usd": 1.4732,
+          "remaining_usd": 1.0404,
+          "projected_usd": 2.532,
+          "cap_usd": 2.6841,
+          "over_cap": false,
+          "room_usd": 0.9082
+        },
+        {
+          "after": "@kopiyochka1",
+          "calls_done": 1697,
+          "calls_total": 2225,
+          "opened_seconds": 26.87,
+          "billed_seconds": 5169.602,
+          "marginal_seconds_per_call": 3.0305,
+          "idle_tail_seconds": 60.0,
+          "spent_usd": 1.5855,
+          "remaining_usd": 0.4907,
+          "projected_usd": 2.0946,
+          "cap_usd": 2.6841,
+          "over_cap": false,
+          "room_usd": 0.7959
+        },
+        {
+          "after": "@kop1chat",
+          "calls_done": 2225,
+          "calls_total": 2225,
+          "opened_seconds": 26.87,
+          "billed_seconds": 5651.297,
+          "marginal_seconds_per_call": 2.5278,
+          "idle_tail_seconds": 60.0,
+          "spent_usd": 1.7332,
+          "remaining_usd": 0.0,
+          "projected_usd": 1.7516,
+          "cap_usd": 2.6841,
+          "over_cap": false,
+          "room_usd": 0.6482
+        }
+      ],
+      "measured": {
+        "@atb_aktsiyi": 7.1315,
+        "@msuaaaa": 6.077,
+        "@fozzyshopua": 0.978,
+        "@xochydeshevshe": 3.5694,
+        "@forainfo": 2.3584,
+        "@ekomarket_shop": 2.8762,
+        "@silposilpo": 0.8188,
+        "@marketopt_promo": 2.7583,
+        "@sim23_simi": 8.842,
+        "@epicentrk_sale": 0.8048,
+        "@rrozetka": 0.8194,
+        "@ATB_FANatik": 4.1792,
+        "@blyzenkoua": 12.9238,
+        "@kopiyochka1": 0.8249,
+        "@kop1chat": 0.7997
+      },
+      "room": {
+        "rule": "ruling 02.09 (c) item 2(b): cap − step spent − one wedged job − the idle tail",
+        "cap_left_usd": 2.6841,
+        "reserve_usd": 0.2843,
+        "idle_tail_usd": 0.0184,
+        "pack_pages_by_count": 25,
+        "pack_note": "the COUNT bound; bytes bind first (8 MB), so a real pack is smaller and the pre-channel check below refuses early rather than late"
+      },
+      "post_text": [],
+      "unbought": {
+        "pages": {},
+        "posts": {},
+        "pages_total": 0,
+        "posts_total": 0
+      },
+      "timing": {
+        "calls": 87,
+        "rows": 2226,
+        "worker_seconds": 5339.532,
+        "queue_seconds": 16.696,
+        "wall_seconds": 5651.297,
+        "seconds_per_call": 61.374,
+        "wall_per_call": 64.957,
+        "wall_per_row": 2.539,
+        "seconds_per_row": 2.399,
+        "idle_share": 0.0552,
+        "worker_ids": [
+          "0ny3oggrzi8syf"
+        ]
+      },
+      "billed_usd_at_the_rate": 1.7332,
+      "notes": [],
+      "at": "2026-09-02T17:08:39+00:00"
     }
   ]
 }

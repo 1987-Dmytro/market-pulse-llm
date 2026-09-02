@@ -8276,3 +8276,13 @@ witness is present, at the same timestamp and the same balance, in `results/spen
 money is right and the check's idea of «the live ledger» is stale; three tests are red from
 `d854a63` onward. Not fixed here: it is a test that must change to pass, which the phase predicate
 makes a STOP. The guard itself is unaffected — it reads the cycle-3 file directly and exits 0.
+
+**Dv904 `[cause: tooling]` — the harness killed the paid run's process twice, and each kill threw
+away a job that had already been bought.** `TaskStop` on a sibling watcher took the run's process
+with it; a later plain foreground `Bash` call took the second attempt the same way. Each time the
+endpoint still had one job in flight, so those pages were billed and their answers discarded —
+about $0.09, re-asked on resume. The fix is not a retry policy: the third launch was detached into
+its own session (`os.setsid()` in a `nohup`ed wrapper, `PGID == PID`), and it survived every later
+foreground call. What held: the driver's own resume clause. `loop.queued_pages` subtracted the
+markers already on disk, so run 2c re-queued 2 225 of 3 008 pages and no page was written twice —
+the evidence is durable per pack because `page_pass` writes the row before the watermark moves.

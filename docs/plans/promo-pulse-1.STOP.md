@@ -1,58 +1,58 @@
-# STOP — promo-pulse-1, 2026-09-02 (the third of the day)
+# STOP — promo-pulse-1, 2026-09-02 (the fourth; the previous STOP was answered by ruling 02.09 (c) and deleted)
 
-**Stop-point:** a rung firing — PROCESS rung 2, the SPEC 3.17 (10)(a) gate: after the two warm-ups the WHOLE step projected at
-**$12.5928** against the **$3.95** step cap (+218.8 %), so the run made no gold call and ended (`results/run_promo_c2.json ::
-runs[0].go_no_go`, `results/run_promo_c2.log`). Ruling 02.09 (b) item 3: a stop on any gate is the next STOP with the table — the
-cap is not raised, the gate is not re-priced here. Beside it, unchanged: waiting on the team lead's labels (dev-40, positions-50).
+**Stop-point:** a design fork the plan does not settle, and it is also a sealed file that would have to move. **The money leg
+SUCCEEDED and is closed** — this is not a cap question. `scripts/build_aggregates.py`, the only producer of
+`data/derived/pulse.db`, reads the registry THROUGH the 5c2 seal (`registry_through_the_seal`, `results/prereg_5c2_run.json ::
+pinned_inputs`), which pins revision `d4e3b237…`. The live registry is r2, `eff8ba5b…`, and the handles r2 added are exactly the
+ones S4 just bought pages for: `@ATB_FANatik · @blyzenkoua · @fozzyshopua · @kop1chat · @rrozetka · @sim23_simi ·
+@xochydeshevshe`. `segment_for()` refuses them — «carry evidence rows and no registry entry — SPEC 3.20 (1)» — so **every**
+rebuild now refuses, and because the script unlinks the database before it builds, `data/derived/pulse.db` is **empty**.
+It is gitignored and rebuildable from `data/derived/*.jsonl`, which are intact; nothing bought is lost. Beside this, unchanged:
+waiting on the team lead's labels (dev-40, positions-50).
 
-**What was bought.** Ruling (b) applied at `f17d966` (cap 3.95, text leg = stage 0, rung 0 FITS at the dear corner $3.6059 / −8.7 %);
-the step anchored by the guard at $14.19 (`results/spend_promo_pulse_1.json`, `fba2d79`); endpoint `1w2cn98hcikl7b` on template
-`ih2rh0mvox` (ADA_24 · EU-RO-1 · 900 s · workers-max 1 · flash-boot) served the pin (`runs[0].info.revision_requested` =
-`842da379…`, POSITIONS, base, no adapter); the boot took 149.1 s inside `info()`; warm-ups: **page 13.466 s** on
-`atb_market_official_4571.jpg` (481 808 bytes, the first queued page of stage 1), **text 0.794 s**; projection 3 008 × 13.466 +
-385 × 0.794 + 60 = 40 811 s → $12.5928, `refuse: true`. Billed: worker 163.348 s, wall 188.918 s → **$0.0579** at the rate
-(`runs[0].billed_usd_at_the_rate`); the step ledger's reading is in the report. Torn down and proven by listing: `serverless list`
-→ `[]`, the template gone, `mp-srv2` still listed, `pod list -a` → `[]`. Queued posts 385 of 405: twenty were already answered on
-disk by 5c2's D cut and the loop subtracts them. Nothing else ran; the derived store did not move (`make tick` twice → 0 new rows).
+**What ruling 02.09 (c) bought — the whole population, inside the cap.** All **3 008 pages** (`promo_pagecount_c2.json`'s exact
+count, verified row for row in `data/derived/leaflet_pages/` against this run's endpoint) and **385 posts** (405 minus the 20
+5c2's D cut had already answered). `results/run_promo_c2.json :: runs[1].unbought` = **0 pages, 0 posts**. Positions on disk:
+**1 199** leaflet rows in 11 channels (106 before) and **54** post rows in 7. Step ledger: **$3.0335 of $3.95**
+(`results/spend_promo_pulse_1.json`, guard `--note`, step left OPEN — the billing walk reads $1.9197 and has not settled);
+cycle 3 **$3.3252 of $7.00**, remaining **$3.6748**, so the dev loop keeps its full `min($2.50, …)`. Endpoint `tq5qxmrczx3iap`
+and template `g92j8x1wkr` deleted, proven by listing: `serverless list` → `[]`, template gone, `mp-srv2` still listed, `pod list -a` → `[]`.
 
-**Why 13.466 s is not rung 0's 3.369 s — from files, not a diagnosis.**
-- The smoke's 2.623…3.369 s/page (`results/promo_projection_c2.json :: verdict.marginal_bound`) is ONE 30-page job's worker time less
-  a boot (`results/smoke_vision_c2.json :: timing.calls` = 2, worker 236.15 s) on VARUS 18 · atb_aktsiyi 6 · msuaaaa 4 · two others
-  (`results/prereg_smoke_vision_c2.json :: population.rows`): a packed marginal on promo photos.
-- 5c2 on the SAME channel (`results/run_5c2_positions.json`): its (10)(a) warm-up page read **1.729 s**; it then realised **10.408 s/row**
-  over 205 rows in 24 calls — 159 ATB pages in 11 packs, 106 positions (0.7 per page: the pages are sparse, the output short).
-- So one page alone has read 1.7 s and 13.5 s on the same channel, and the packed transport 2.6–3.4 s (promo photos) and ≈10 s
-  (ATB leaflet pages). An n = 1 warm-up carries a job's fixed cost and its own variance, and the gate's law multiplies it by 3 008.
+**The ruling's law, measured.** The text leg's own (10)(a) projected **$0.1867** against $3.8803 and passed; under the retired
+whole-step law the same warm-up (**11.726 s**, an ATB leaflet page) would have projected ≈$11 and refused the $0.19 leg a second
+time. Every channel was then measured by its own first pack, and the rates run **0.7997 s/page** (`@kop1chat`) to **12.9238**
+(`@blyzenkoua`) — a **16×** spread inside one instrument on one endpoint. The carrier measured **5.233 s** where its n=1 warm-up
+said 11.726 (over-priced 2.24×). Every one of the 17 channels fitted its room and ran WHOLE; `@blyzenkoua` fitted by $0.063
+($1.2010 against $1.2641 of room). One stage reading printed `over_cap: True` and the run correctly continued — that reading is
+no longer a gate.
 
-**The table (b) asked for** — `results/prereg_promo_c2.json :: population.pages.by_channel` × `runs[0].go_no_go.page_marginal_seconds`
-× `rung_0.rates.rate_usd_per_second`; run 1 predates the `outcome.unbought` fix (`8b7b965`), and nothing was bought, so every page is left:
+**THE QUESTION — one fork, three shapes; none of them is mine.** How does the C2 window reach `pulse.db`?
+1. **A new window and a new pre-registration for C2** (its own `WINDOW_ID`, its own pinned registry = r2), the 5c2 seal untouched.
+   Cleanest, and it is a new sealed record — the team lead's to authorise and name.
+2. **`segment_for` resolves unknown channels from the LIVE registry** while brands/watchlist stay at the seal. Smallest diff,
+   and it weakens exactly what the seal is for («a brand column measured against a different watchlist than the run was priced on»).
+3. **The build's input is restricted to the sealed populations** — the C2 rows stay in `data/derived/` and out of the DB until (1).
+   Nothing is re-sealed; the screen keeps showing the 5c2 window and S5's re-draw has no C2 population to draw from.
 
-| channel | pages left | $ at 13.466 s/page | channel | pages left | $ at 13.466 s/page |
-|---|---:|---:|---|---:|---:|
-| `@atb_market_official` | 209 | 0.8631 | `@silposilpo` | 34 | 0.1404 |
-| `@ATB_FANatik` | 133 | 0.5493 | `@fozzyshopua` | 3 | 0.0124 |
-| `@atb_aktsiyi` | 259 | 1.0696 | `@sim23_simi` | 57 | 0.2354 |
-| `@VARUS_channel` | 515 | 2.1269 | `@rrozetka` | 113 | 0.4667 |
-| `@ekomarket_shop` | 17 | 0.0702 | `@msuaaaa` | 268 | 1.1068 |
-| `@epicentrk_sale` | 78 | 0.3221 | `@kop1chat` | 528 | 2.1806 |
-| `@forainfo` | 11 | 0.0454 | `@xochydeshevshe` | 7 | 0.0289 |
-| `@marketopt_promo` | 52 | 0.2148 | `@kopiyochka1` | 396 | 1.6354 |
-| `@blyzenkoua` | 328 | 1.3546 | **total** | **3 008** | **12.4227** |
+**Blocked behind that fork, all $0:** (c) positions in `pulse.db` per channel · (d) the re-draw of the 50 over what was bought
+(`draw_positions_50.py` reads the DB and refuses below 3 chains) · (g) `make tick`'s per-table counts · (h) the clean-clone screen.
+**Do not run `make tick` again before the ruling** — it would overwrite `results/promo_screen_data.json` with zeros off the empty DB.
 
-Text leg: 385 × 0.794 s = **$0.0938**. Room after the text leg, the cap gate's reserve ($0.2843) and run 1 ($0.0579): **$3.5140** →
-851 pages at 13.466 s · ≈1 160 at 5c2's realised 10.408 s · all 3 008 at the smoke's 3.369 s. Each re-run pays one boot (≈$0.046
-at 149 s) inside the step cap. The cycle's room is a clock: $0.2333/day.
+**A SECOND, separate ruling is needed for check (j).** `tests/test_repair_phase4_ledger.py:167` types
+`LINE_LEDGER = results/spend_cycle2.json` as «the live ledger»; cycle 2 was superseded by cycle 3 on 01.09, so the first step
+ledger written under the new line (`results/spend_promo_pulse_1.json`, `d854a63`) reads as SILENT although its witness sits in
+`results/spend_cycle3.json` at the same timestamp and the same balance. Three tests red since `d854a63`, none of them from this
+session's code. Not touched: a test that must change to pass is a STOP by the predicate (Dv903).
 
-**THE QUESTIONS — the executor's table, not a decision; the cap stays $3.95 in every row.**
-1. **May the (10)(a) gate be applied PER LEG?** Today it is whole-step, so the $0.09 text leg was refused because of the $12.42 page
-   leg — the opposite of (b) item 2's intent. Per leg: the text leg projected on its own (385 × 0.794 s) and bought as stage 0.
-2. **Which marginal may the page projection read?** (a) the n = 1 warm-up as now — a re-run reads somewhere between 1.7 and 13.5 s and
-   the gate is a coin toss; (b) the first PACK of stage 1 as the warm-up (≈15 pages, ≈$0.05 at 10.4 s — «the rate on the transport
-   the paid pass would use», the smoke's own question), the whole step projected off it; (c) no whole-step page gate — the stage
-   projection after every channel and the per-pack cap gate carry rung 2 and the run stops where the money stops (the table says where).
-3. **If the page rate on ATB leaflets is ≈10–13 s, the cap buys 850–1 160 of 3 008 pages.** §3's order as ruled puts ATB's 601 pages
-   first; whether the order is re-ranked by pages per dollar is the team lead's, not this file's.
+**The $0 ranking instrument the ruling asked for is built and MEASURED, and it says no.** On 5c2's 159 ATB pages (30 positive,
+18.9 %): at the ruling's bar, recall ≥ 0.90, the OCR ranker keeps **100 %** — «buy top-ranked» and «buy whole» are the same
+purchase. Its only real cut is score ≥ 1: **23 % of pages for recall 0.60**, lift 2.58. The caption ranker scores 0 on all 159.
+`results/rank_remainder_c2.json`. It is not needed for THIS remainder (there is none) and stands ready for the next one.
 
-On «go» with the answers: one constant / one gate change in `scripts/run_promo_c2.py` with its test, a fresh `--register`, the runbook
-§2–§5 (one boot inside the cap), the same step ledger (left OPEN: no `--close`, a `--note` reading only). Evidence and the checks
-(a) (b) (d) (f) (g) (h) (i) (j) (k) (l): `docs/reports/promo-pulse-1.md`.
+**Deviation to log beside the money:** the harness killed the run's process twice mid-flight (a `TaskStop` on a sibling watcher,
+then a plain foreground call), each time discarding one in-flight job — ~$0.09 of pages paid for and not recorded, re-asked on
+resume. The third launch was detached with `os.setsid()` and survived. The driver's own resume did its job: markers on disk
+subtracted what was answered, and no page was written twice.
+
+On «go»: the ruling's shape for the DB, then `build_aggregates` → `make tick` twice → re-draw the 50 → `make promo-screen` →
+the clean-clone check → the report's checks (c) (d) (g) (h) closed. Evidence: `docs/reports/promo-pulse-1.md`.

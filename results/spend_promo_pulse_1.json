@@ -8,6 +8,12 @@
       "balance": 14.1283590146,
       "step_spent_usd": 0.0599,
       "note": "S4 C2 run 1: (10)(a) gate refused the whole step at a 13.466 s page warm-up — 0 pages, 0 posts bought; one boot + two warm-ups"
+    },
+    {
+      "at": "2026-09-02T17:09:37+00:00",
+      "balance": 11.154807737,
+      "step_spent_usd": 3.0335,
+      "note": "S4 C2 run 2 (a+b+c): 3008 pages + 385 posts bought, all 17 channels whole, per-channel rates 0.80-12.92 s/page"
     }
   ],
   "gpu_note": "RunPod account balance read before the first pod of promo-pulse-1. Step spend = the pessimistic maximum of this anchor minus the balance now and the billing walk since `anchored_at` (SPEC 3.23 (4), Dv411), enforced against $3.95. The SPEC amendment 3.4 (4) phase cap is enforced separately, against results/spend_phase4.json, and neither anchor may be regenerated."
