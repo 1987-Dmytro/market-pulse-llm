@@ -102,8 +102,18 @@ projection's `fits: false` is a true sentence about $6.1690 remaining on 2026-08
 tests that read it pin the cap that was IN FORCE at its write moment — `repair_phase4_ledger
 .CAP_IN_FORCE_USD` is the same pattern, one cap earlier."""
 
-CYCLE3_CAP_USD = 4.80
-"""Cycle 3, operator ruling 2026-09-01: «Цикл-3 = весь баланс, потолок $4.8».
+CYCLE3_CAP_USD = 7.00
+"""Cycle 3, operator ruling 2026-09-01 («Цикл-3 = весь баланс, потолок $4.8»), RAISED to $7.00 by
+the operator's later word the same evening — «Потолок $7.00, резерв не трогаем» — after he topped
+the account up by $10 (docs/reviews/2026-08-30-plan-promo-pulse-1.md, ruling «01.09 (later)»).
+
+Not a mid-run raise and not a cap raised to finish a run: no cycle-3 leg has been bought
+($0.2139 spent, all of it the network volume's drip). The raise is the operator's, on new money,
+before the first paid leg — and the ≈$7.4 of balance it does NOT cover is reserve, outside this
+phase. What it does not move is the anchor ($4.4800 at 2026-09-01T06:34:08+00:00), and the refusal
+on a balance ABOVE the anchor stays in force exactly as it does for PHASE_CAP_USD: the top-up put
+the balance above this line's anchor, so `enforce()` refuses until the operator re-anchors, which
+is his decision and not this script's.
 
 Anchored at whatever the balance reads when it is opened, not at cycle 2's anchor: the line is the
 REST of the money, and cycle 2's $17-and-change was already spent when the word was given. Cycle 2
@@ -411,7 +421,7 @@ def read_cycle3(balance_now: float) -> dict:
 
     Same one-shot as :func:`read_cycle2`, for the same reason: regenerate this file and the
     counter silently restarts at today's balance, so the line would never reach its cap and the
-    $4.80 would stop meaning anything.
+    ceiling (now $7.00) would stop meaning anything.
     """
     path = cycle3_path()
     if path.exists():
