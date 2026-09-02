@@ -47,9 +47,14 @@ mechanics. Operator-facing digest of the same rules: `docs/STATUS.md` («Пра�
    evaluator is a small model reading ONLY the transcript (it runs nothing); a passed-count floor,
    no test deleted, «a test that must change to pass» is a STOP. A STOP (stop-point · question ·
    tree state, ≤15 lines) is a PAUSE: the team lead APPENDS a dated ruling, the operator re-pastes
-   the SAME `/goal`. After pasting, WATCH FOR THE FIRST TOOL CALL: on this build `/goal` can merely
-   SET the condition («Goal set: …») without starting a turn — 02.09 idled 12 h on exactly this;
-   if nothing runs within a minute, send one word («go»). The predicate never changes mid-phase;
+   the SAME `/goal`. LAUNCH (02.09, from the transcripts): the operator TYPES `/goal ` by hand and
+   pastes the BODY — a pasted block that begins with the command is plain text, no goal is active
+   (01.09 08:18 ran 35 min with no evaluator, reading the turn cap as its own rule); the body carries
+   no slash command of its own — the args are cut at the first one (01.09 19:16 lost the turn cap
+   and the resume sentence); the phase spec's §8 holds the body's exact bytes. After pasting, WATCH
+   FOR THE FIRST TOOL CALL: on this build `/goal` can merely SET the condition («Goal set: …»)
+   without starting a turn — 02.09 idled 12 h on exactly this; if nothing runs within a minute, send
+   one word («go»). The predicate never changes mid-phase;
    the rulings file grows; handovers never
    assume session survival. Slices and per-slice predicates are the failure mode this rule prevents.
    `/report <name>` is a clause of the predicate. The evaluator's «met» is NOT acceptance (step 4).
