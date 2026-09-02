@@ -13,9 +13,9 @@ ranker reads the page image through `tesseract -l ukr`; the caption ranker reads
 own caption out of the live store. Neither buys anything and neither writes to `data/derived`.
 
 **The ground truth is the model's own answer, not a human's.** A page counts as positive when 5c2's
-paid pass wrote at least one position row for it (`data/derived/position_rows`, `parent_msg_id`).
-So the recall below is «how much of what the instrument WOULD have found does the ranker keep» —
-which is the question the money asks — and not «how much of what is on the page».
+paid pass wrote at least one position row for THAT IMAGE (`data/derived/position_rows`, joined on
+`image_path`). So the recall below is «how much of what the instrument WOULD have found does the
+ranker keep» — which is the question the money asks — and not «how much is on the page».
 
     PYTHONPATH=src python3.11 scripts/rank_remainder_c2.py --measure   # $0: OCR, rank, recall
     PYTHONPATH=src python3.11 scripts/rank_remainder_c2.py --table     # $0: $ whole vs $ ranked
@@ -40,7 +40,6 @@ from market_pulse import yield_screen  # noqa: E402
 from market_pulse.lexicon import load_lexicon  # noqa: E402
 from market_pulse.raw_store import RawStore, live_store  # noqa: E402
 
-MANIFEST_5C1 = REPO_ROOT / "results" / "post_media_5c1.json"
 RUN_5C2 = REPO_ROOT / "results" / "run_5c2_positions.json"
 DERIVED = REPO_ROOT / "data" / "derived"
 CHANNEL = "@atb_market_official"
@@ -67,8 +66,12 @@ def scorer():
     return lambda text: yield_screen.category_terms(text or "", compiled)
 
 
-def truth() -> tuple[set[int], set[int]]:
+def truth() -> tuple[list[dict], set[str]]:
     """5c2's pages and the ones its paid pass found a position on — read off the derived store.
+
+    Joined on `image_path`, which is the only field that names ONE page. `parent_msg_id` names the
+    album's key post, so every page of an 18-page album shares it: joining on it collapses 159
+    pages onto 50 posts and reports 11 positives where there are 30 ([[id_spaces_that_look_comparable]]).
 
     Filtered by `served_by` and not merely by channel: S4 writes ITS @atb_market_official pages into
     the same store, and a population that grew after the truth was fixed would silently re-scope the
@@ -76,48 +79,18 @@ def truth() -> tuple[set[int], set[int]]:
     """
     endpoint = json.loads(RUN_5C2.read_text(encoding="utf-8"))["endpoint"]
     store = RawStore(DERIVED)
-    pages = {
-        row["msg_id"] for row in store.rows("leaflet_page", CHANNEL) if row["served_by"] == endpoint
-    }
+    pages = [row for row in store.rows("leaflet_page", CHANNEL) if row["served_by"] == endpoint]
     positive = {
-        row["parent_msg_id"]
+        row["image_path"]
         for row in store.rows("position_row", CHANNEL)
         if row["served_by"] == endpoint
     }
-    return pages, positive & pages
-
-
-def pages_5c1() -> dict[int, Path]:
-    """`{page msg_id: file}` for the 159 pages of 5c2's manifest — the images, not the answers."""
-    manifest = json.loads(MANIFEST_5C1.read_text(encoding="utf-8"))
-    return {
-        int(image["msg_id"]): REPO_ROOT / image["file"]
-        for key, entry in manifest["entries"].items()
-        if entry["channel"] == CHANNEL
-        for image in entry["images"]
-    }
+    return pages, positive & {row["image_path"] for row in pages}
 
 
 def captions() -> dict[int, str]:
-    """`{parent post msg_id: caption}` for those pages' posts, out of the live store."""
-    text = {row["msg_id"]: row.get("text") or "" for row in live_store().rows("post", CHANNEL)}
-    manifest = json.loads(MANIFEST_5C1.read_text(encoding="utf-8"))
-    return {
-        int(entry["msg_id"]): text.get(int(entry["msg_id"]), "")
-        for entry in manifest["entries"].values()
-        if entry["channel"] == CHANNEL
-    }
-
-
-def parents() -> dict[int, int]:
-    """`{page msg_id: parent post msg_id}` — an album's members hang off the post's own id."""
-    manifest = json.loads(MANIFEST_5C1.read_text(encoding="utf-8"))
-    return {
-        int(image["msg_id"]): int(entry["msg_id"])
-        for entry in manifest["entries"].values()
-        if entry["channel"] == CHANNEL
-        for image in entry["images"]
-    }
+    """`{post msg_id: caption}` for this channel, out of the live store (v1 ∪ r2)."""
+    return {row["msg_id"]: row.get("text") or "" for row in live_store().rows("post", CHANNEL)}
 
 
 def recall_curve(ranked: list[dict], positive: set[int]) -> dict:
@@ -136,12 +109,31 @@ def recall_curve(ranked: list[dict], positive: set[int]) -> dict:
         keep = dict(keep, k=sum(1 for row in ranked if row["score"] >= cut), cut_score=cut)
         keep["found"] = sum(1 for row in ranked[: keep["k"]] if row["msg_id"] in positive)
         keep["recall"] = round(keep["found"] / max(len(positive), 1), 4)
+    base = len(positive) / max(len(ranked), 1)
+    by_score = []
+    for cut in sorted({row["score"] for row in ranked}, reverse=True):
+        kept = [row for row in ranked if row["score"] >= cut]
+        found = sum(1 for row in kept if row["msg_id"] in positive)
+        by_score.append(
+            {
+                "score_at_least": cut,
+                "pages_kept": len(kept),
+                "keep_fraction": round(len(kept) / len(ranked), 4),
+                "found": found,
+                "recall": round(found / max(len(positive), 1), 4),
+                "precision": round(found / len(kept), 4),
+                "lift": round((found / len(kept)) / base, 2) if base else None,
+            }
+        )
     return {
         "pages": len(ranked),
         "positive": len(positive),
-        "base_rate": round(len(positive) / max(len(ranked), 1), 4),
+        "base_rate": round(base, 4),
         "at_the_bar": keep,
         "keep_fraction": round(keep["k"] / len(ranked), 4) if keep else None,
+        # The cuts the ranker can actually make: a score is the only thing that separates two pages,
+        # so a k between two scores is a cut nothing implements ([[a_saturated_proxy_cannot_discriminate]]).
+        "by_score": by_score,
         "curve": [row for row in out if row["k"] % 10 == 0 or row["k"] == len(out)],
     }
 
@@ -149,33 +141,33 @@ def recall_curve(ranked: list[dict], positive: set[int]) -> dict:
 def measure() -> dict:
     """Both rankers on 5c2's own pages, and what each would have kept at the bar."""
     term = scorer()
-    files, parent_of, caption = pages_5c1(), parents(), captions()
+    caption = captions()
     pages, positive = truth()
-    missing = pages - set(files)
-    if missing:
-        raise SystemExit(
-            f"{len(missing)} of the {len(pages)} pages 5c2 bought are not in {driver.rel(MANIFEST_5C1)}"
-            " — the measurement would be taken over a different population than the truth"
-        )
     rows = []
-    for index, msg_id in enumerate(sorted(pages), 1):
-        text = ocr(files[msg_id])
+    for index, page in enumerate(sorted(pages, key=lambda one: one["msg_id"]), 1):
+        path = REPO_ROOT / page["image_path"]
+        if not path.exists():
+            raise SystemExit(
+                f"{page['image_path']} is not on disk — the page 5c2 was served cannot be re-read,"
+                " and a ranker measured on a different image measures nothing"
+            )
+        text = ocr(path)
         ocr_terms = term(text)
-        caption_terms = term(caption.get(parent_of[msg_id], ""))
+        caption_terms = term(caption.get(page["parent_msg_id"], ""))
         rows.append(
             {
-                "msg_id": msg_id,
-                "parent_msg_id": parent_of[msg_id],
-                "file": driver.rel(files[msg_id]),
+                "msg_id": page["msg_id"],
+                "parent_msg_id": page["parent_msg_id"],
+                "file": page["image_path"],
                 "ocr_chars": len(text.strip()),
                 "ocr_terms": sorted(set(ocr_terms)),
                 "ocr_score": len(set(ocr_terms)),
                 "caption_terms": sorted(set(caption_terms)),
                 "caption_score": len(set(caption_terms)),
-                "positive": msg_id in positive,
+                "positive": page["image_path"] in positive,
             }
         )
-        print(f"  {index:>3}/{len(pages)} {msg_id} ocr {len(set(ocr_terms))}", flush=True)
+        print(f"  {index:>3}/{len(pages)} {page['msg_id']} ocr {len(set(ocr_terms))}", flush=True)
     EVIDENCE.write_text(
         "".join(json.dumps(row, ensure_ascii=False, sort_keys=True) + "\n" for row in rows),
         encoding="utf-8",
@@ -187,6 +179,7 @@ def measure() -> dict:
         )
         for name in ("ocr", "caption")
     }
+    positive_ids = {row["msg_id"] for row in rows if row["positive"]}
     record = {
         "question": "does a $0 ranking keep what the paid pass would have found — and how much of"
         " the remainder can then be left unbought? (ruling 02.09 (c), «before the next STOP»)",
@@ -202,14 +195,15 @@ def measure() -> dict:
         },
         "population": {
             "pages": len(pages),
-            "source": "results/post_media_5c1.json :: entries, channel @atb_market_official — the"
-            f" pages 5c2 bought ({driver.rel(RUN_5C2)} :: selection.leaflet_page.rows)",
-            "truth": "data/derived/position_rows/atb_market_official.jsonl :: parent_msg_id — a"
-            " page is positive when 5c2's PAID pass wrote at least one position for it",
+            "source": "data/derived/leaflet_pages/atb_market_official.jsonl, the rows whose"
+            f" served_by is 5c2's endpoint ({driver.rel(RUN_5C2)} :: selection.leaflet_page.rows)",
+            "truth": "data/derived/position_rows/atb_market_official.jsonl :: image_path — a page"
+            " is positive when 5c2's PAID pass wrote at least one position for THAT image",
+            "positive": len(positive),
         },
         "recall_bar": RECALL_BAR,
-        "ocr": recall_curve(ranked["ocr"], positive),
-        "caption": recall_curve(ranked["caption"], positive),
+        "ocr": recall_curve(ranked["ocr"], positive_ids),
+        "caption": recall_curve(ranked["caption"], positive_ids),
         "evidence": driver.rel(EVIDENCE),
     }
     RECORD.write_text(
@@ -232,6 +226,13 @@ def table() -> dict:
     measured = run.get("measured") or {}
     worst = max(measured.values(), default=float(run["go_no_go"]["page_marginal_seconds"]))
     keep = record["ocr"]["keep_fraction"]
+    # The cut the ranker can actually make below «keep everything» — the ruling's bar may not be
+    # reachable, and a table that only priced the bar would hide the option that exists.
+    usable = max(
+        (row for row in record["ocr"]["by_score"] if row["keep_fraction"] < 1.0),
+        key=lambda row: row["recall"],
+        default=None,
+    )
     rows = []
     for handle, pages in sorted(run["unbought"]["pages"].items(), key=lambda one: -one[1]):
         seconds = measured.get(handle, worst)
@@ -245,6 +246,8 @@ def table() -> dict:
                 "usd_whole": round(whole, 4),
                 "pages_top_ranked": math.ceil(pages * keep) if keep else None,
                 "usd_top_ranked": round(whole * keep, 4) if keep else None,
+                "pages_usable_cut": math.ceil(pages * usable["keep_fraction"]) if usable else None,
+                "usd_usable_cut": round(whole * usable["keep_fraction"], 4) if usable else None,
             }
         )
     out = {
@@ -253,12 +256,16 @@ def table() -> dict:
         "keep_fraction_from": f"{driver.rel(RECORD)} :: ocr.keep_fraction (measured on"
         f" {record['ocr']['pages']} ATB leaflet pages; every other channel is an EXTRAPOLATION"
         " from that one carrier, and the caption ranker is the honest instrument for photo posts)",
+        "usable_cut": usable,
+        "usable_cut_note": "the deepest cut the ranker can make below «keep everything»; it is"
+        " BELOW the ruling's recall bar and is priced here because the bar itself buys nothing",
         "worst_measured_seconds_per_page": round(worst, 4),
         "rows": rows,
         "totals": {
             "pages_left": sum(row["pages_left"] for row in rows),
             "usd_whole": round(sum(row["usd_whole"] for row in rows), 4),
             "usd_top_ranked": round(sum(row["usd_top_ranked"] or 0.0 for row in rows), 4),
+            "usd_usable_cut": round(sum(row["usd_usable_cut"] or 0.0 for row in rows), 4),
         },
     }
     record["remainder_table"] = out
@@ -297,17 +304,28 @@ def main(argv: list[str] | None = None) -> int:
         print(f"wrote {driver.rel(RECORD)} and {driver.rel(EVIDENCE)}")
     if args.table:
         out = table()
+        print(f"  {'channel':<24}{'left':>5}{'s/page':>10}{'$ whole':>9}{'$ bar':>9}{'$ cut':>9}")
         for row in out["rows"]:
             print(
                 f"  {row['channel']:<24}{row['pages_left']:>5}"
                 f"{row['seconds_per_page']:>9.3f}{'' if row['measured'] else '*'}"
                 f"{row['usd_whole']:>9.4f}{row['usd_top_ranked']:>9.4f}"
+                f"{row['usd_usable_cut']:>9.4f}"
             )
         print(
-            f"  {'TOTAL':<24}{out['totals']['pages_left']:>5}{'':>9}"
+            f"  {'TOTAL':<24}{out['totals']['pages_left']:>5}{'':>10}"
             f"{out['totals']['usd_whole']:>9.4f}{out['totals']['usd_top_ranked']:>9.4f}"
+            f"{out['totals']['usd_usable_cut']:>9.4f}"
         )
         print("  * priced at the run's WORST measured rate — this channel was never measured")
+        cut = out["usable_cut"]
+        print(
+            f"  $ bar = recall >= {RECALL_BAR} (keeps {out['keep_fraction']:.0%} — the bar buys"
+            f" nothing); $ cut = score >= {cut['score_at_least']}: {cut['keep_fraction']:.0%} of the"
+            f" pages for recall {cut['recall']:.2f} at lift {cut['lift']}"
+            if cut
+            else "  the ranker makes no cut below «keep everything»"
+        )
     if not (args.measure or args.table):
         parser.error("choose --measure or --table")
     return 0

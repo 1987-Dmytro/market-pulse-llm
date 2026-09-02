@@ -1,0 +1,246 @@
+{
+  "authority": "docs/reviews/2026-08-30-plan-promo-pulse-1.md «Ruling 02.09 (c)»",
+  "caption": {
+    "at_the_bar": {
+      "cut_score": 0,
+      "found": 30,
+      "k": 159,
+      "recall": 1.0
+    },
+    "base_rate": 0.1887,
+    "by_score": [
+      {
+        "found": 30,
+        "keep_fraction": 1.0,
+        "lift": 1.0,
+        "pages_kept": 159,
+        "precision": 0.1887,
+        "recall": 1.0,
+        "score_at_least": 0
+      }
+    ],
+    "curve": [
+      {
+        "found": 4,
+        "k": 10,
+        "recall": 0.1333
+      },
+      {
+        "found": 8,
+        "k": 20,
+        "recall": 0.2667
+      },
+      {
+        "found": 9,
+        "k": 30,
+        "recall": 0.3
+      },
+      {
+        "found": 9,
+        "k": 40,
+        "recall": 0.3
+      },
+      {
+        "found": 14,
+        "k": 50,
+        "recall": 0.4667
+      },
+      {
+        "found": 14,
+        "k": 60,
+        "recall": 0.4667
+      },
+      {
+        "found": 18,
+        "k": 70,
+        "recall": 0.6
+      },
+      {
+        "found": 18,
+        "k": 80,
+        "recall": 0.6
+      },
+      {
+        "found": 21,
+        "k": 90,
+        "recall": 0.7
+      },
+      {
+        "found": 22,
+        "k": 100,
+        "recall": 0.7333
+      },
+      {
+        "found": 23,
+        "k": 110,
+        "recall": 0.7667
+      },
+      {
+        "found": 23,
+        "k": 120,
+        "recall": 0.7667
+      },
+      {
+        "found": 27,
+        "k": 130,
+        "recall": 0.9
+      },
+      {
+        "found": 28,
+        "k": 140,
+        "recall": 0.9333
+      },
+      {
+        "found": 30,
+        "k": 150,
+        "recall": 1.0
+      },
+      {
+        "found": 30,
+        "k": 159,
+        "recall": 1.0
+      }
+    ],
+    "keep_fraction": 1.0,
+    "pages": 159,
+    "positive": 30
+  },
+  "evidence": "results/rank_remainder_c2.jsonl",
+  "instrument": {
+    "caption": "the media post's own caption out of the live store (v1 ∪ r2)",
+    "ocr": "tesseract -l ukr, one page image at a time, stdout",
+    "scorer": "market_pulse.yield_screen.compile_categories over config/lexicon.yaml (status: law) — the count of DISTINCT tracked stems the text names",
+    "tesseract": "tesseract 5.5.1"
+  },
+  "ocr": {
+    "at_the_bar": {
+      "cut_score": 0,
+      "found": 30,
+      "k": 159,
+      "recall": 1.0
+    },
+    "base_rate": 0.1887,
+    "by_score": [
+      {
+        "found": 2,
+        "keep_fraction": 0.044,
+        "lift": 1.51,
+        "pages_kept": 7,
+        "precision": 0.2857,
+        "recall": 0.0667,
+        "score_at_least": 2
+      },
+      {
+        "found": 18,
+        "keep_fraction": 0.2327,
+        "lift": 2.58,
+        "pages_kept": 37,
+        "precision": 0.4865,
+        "recall": 0.6,
+        "score_at_least": 1
+      },
+      {
+        "found": 30,
+        "keep_fraction": 1.0,
+        "lift": 1.0,
+        "pages_kept": 159,
+        "precision": 0.1887,
+        "recall": 1.0,
+        "score_at_least": 0
+      }
+    ],
+    "curve": [
+      {
+        "found": 4,
+        "k": 10,
+        "recall": 0.1333
+      },
+      {
+        "found": 11,
+        "k": 20,
+        "recall": 0.3667
+      },
+      {
+        "found": 14,
+        "k": 30,
+        "recall": 0.4667
+      },
+      {
+        "found": 20,
+        "k": 40,
+        "recall": 0.6667
+      },
+      {
+        "found": 21,
+        "k": 50,
+        "recall": 0.7
+      },
+      {
+        "found": 23,
+        "k": 60,
+        "recall": 0.7667
+      },
+      {
+        "found": 23,
+        "k": 70,
+        "recall": 0.7667
+      },
+      {
+        "found": 25,
+        "k": 80,
+        "recall": 0.8333
+      },
+      {
+        "found": 25,
+        "k": 90,
+        "recall": 0.8333
+      },
+      {
+        "found": 25,
+        "k": 100,
+        "recall": 0.8333
+      },
+      {
+        "found": 27,
+        "k": 110,
+        "recall": 0.9
+      },
+      {
+        "found": 27,
+        "k": 120,
+        "recall": 0.9
+      },
+      {
+        "found": 29,
+        "k": 130,
+        "recall": 0.9667
+      },
+      {
+        "found": 29,
+        "k": 140,
+        "recall": 0.9667
+      },
+      {
+        "found": 30,
+        "k": 150,
+        "recall": 1.0
+      },
+      {
+        "found": 30,
+        "k": 159,
+        "recall": 1.0
+      }
+    ],
+    "keep_fraction": 1.0,
+    "pages": 159,
+    "positive": 30
+  },
+  "population": {
+    "pages": 159,
+    "positive": 30,
+    "source": "data/derived/leaflet_pages/atb_market_official.jsonl, the rows whose served_by is 5c2's endpoint (results/run_5c2_positions.json :: selection.leaflet_page.rows)",
+    "truth": "data/derived/position_rows/atb_market_official.jsonl :: image_path — a page is positive when 5c2's PAID pass wrote at least one position for THAT image"
+  },
+  "question": "does a $0 ranking keep what the paid pass would have found — and how much of the remainder can then be left unbought? (ruling 02.09 (c), «before the next STOP»)",
+  "recall_bar": 0.9
+}
