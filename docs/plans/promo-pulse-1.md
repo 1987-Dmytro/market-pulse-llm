@@ -571,3 +571,15 @@ and legs are imported; only the population and the step are this driver's. Choic
 `c2_priced_usd` = $3.1563, which priced the vision leg alone; the whole step at the same corner is
 **$3.5241** (priced) / **$3.6059** (dear) — rung 0 fires by 10–13%; only the cheap corner
 ($2.6041) fits. Not a threshold this plan adopts: the cap is the team lead's, the STOP asks.
+
+## 8b. Revision 2026-09-02, evening — ruling 02.09 (b) applied
+
+- **The step cap is $3.95** (`scripts/run_promo_c2.py :: STEP_CAP_USD`, the operator's «$3.95 — весь
+  шаг»); rung 0 re-registered at it. The cap test now reads the LAST `--step-cap` the rulings file
+  names, so an older ruling's number cannot keep it green (tightened, not weakened).
+- **The text leg runs FIRST — stage 0.** (10)(a) warm-ups → `post_leg` → re-projection → the leaflet
+  loop in §3's channel order, unchanged. `--dry-run` prints `post_text` as stage 0; the record's
+  `stages[0].after == "post_text"`; one new test pins the order on the stub.
+- **Mid-run the cap is never raised**: the gates decide, and a stop records `outcome.unbought` for
+  the next STOP's table (channel · pages left · $ at the measured marginal).
+- After S4 settles: the dev-loop cap = min($2.50, REMAINING − $0.30), floor $2.00 → below it, STOP.

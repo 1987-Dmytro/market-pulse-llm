@@ -1,6 +1,7 @@
 """The C2 backfill driver's $0 half — the registration, rung 0, and the served path on a stub."""
 
 import json
+import re
 import sys
 from pathlib import Path
 from types import SimpleNamespace
@@ -36,10 +37,13 @@ def test_rung_0_prices_the_whole_step_and_the_dear_corner_decides():
 
 
 def test_the_step_cap_is_the_rulings_number():
+    """The LAST cap the rulings file names — an older ruling's number must not keep this green."""
     ruling = (REPO_ROOT / "docs" / "reviews" / "2026-08-30-plan-promo-pulse-1.md").read_text(
         "utf-8"
     )
-    assert f"--step {driver.STEP} --step-cap {driver.STEP_CAP_USD:.2f}" in ruling
+    caps = re.findall(rf"--step {driver.STEP} --step-cap (\d+\.\d+)", ruling)
+    assert caps, "no ruling names the step cap"
+    assert float(caps[-1]) == driver.STEP_CAP_USD
 
 
 def test_the_order_is_the_specs_list_then_the_rest_sorted():
@@ -104,6 +108,7 @@ class StubClient:
 
     def __init__(self, pin: dict) -> None:
         self.pin, self.worker, self.calls, self.rows = pin, 0.0, 0, 0
+        self.tasks: list[str] = []
 
     def info(self) -> dict:
         self.calls += 1
@@ -112,6 +117,7 @@ class StubClient:
 
     def positions(self, task: str, items: list) -> list[dict]:
         self.calls += 1
+        self.tasks.append(task)
         self.rows += len(items)
         self.worker += 2.0 * len(items)
         content = run_loop.StubPageTransport.ANSWERS[1] if task == loop.PAGE_TASK else "[]"
@@ -235,6 +241,24 @@ def test_the_served_half_writes_the_rows_durably_and_a_second_run_re_asks_nothin
     assert record["runs"][1]["queued"] == {"pages": 0, "posts": 0}
     assert staged.rows == rows_after_first, "nothing was sent the second time"
     assert len(positions_file.read_text(encoding="utf-8").splitlines()) == 4
+
+
+def test_the_text_leg_is_stage_0_and_is_bought_before_any_page(staged, capsys):
+    """Ruling 02.09 (b): the cheapest, surest, cross-chain data goes first under the cap gate —
+    `--dry-run` says so, the record says so, and the stub saw the posts before the pages."""
+    driver.register()
+    assert driver.main(["--dry-run"]) == 0
+    stages = [
+        line for line in capsys.readouterr().out.splitlines() if line.strip().startswith("stage")
+    ]
+    assert "post_text" in stages[0] and CHANNEL in stages[1]
+
+    assert driver.main(["--run", "--endpoint", "e"]) == 0
+    run = json.loads(driver.RECORD.read_text(encoding="utf-8"))["runs"][0]
+    assert [stage["after"] for stage in run["stages"]] == ["post_text", CHANNEL]
+    after_warmups = staged.tasks[2:]
+    assert after_warmups[0] == loop.POST_TASK, "the first pass is the text leg"
+    assert set(after_warmups[1:]) == {loop.PAGE_TASK}, "then the pages, nothing else"
 
 
 def test_a_refusing_gate_makes_no_gold_call_and_still_writes_the_record(staged, monkeypatch):

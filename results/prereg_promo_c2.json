@@ -1,5 +1,5 @@
 {
-  "authority": "docs/reviews/2026-08-30-plan-promo-pulse-1.md «Ruling 02.09» — «Then rung 0 (--step promo-pulse-1 --step-cap 3.20) and S4 as the plan says»; docs/plans/promo-pulse-1.md S4, SP-1b",
+  "authority": "docs/reviews/2026-08-30-plan-promo-pulse-1.md «Ruling 02.09 (b)» — «STEP_CAP_USD = 3.95 … the guard's step anchor with --step promo-pulse-1 --step-cap 3.95 … The text leg runs FIRST … Mid-run: no cap raise, ever»; docs/plans/promo-pulse-1.md S4, SP-1b",
   "expected_worker": {
     "adapter_sha256": null,
     "max_new_tokens": 1200,
@@ -20,7 +20,8 @@
   },
   "kill_rules": [
     "the dear corner of rung 0 does not fit the step cap → nothing is created (STOP)",
-    "the guard refuses --step promo-pulse-1 --step-cap 3.20 → that is the answer",
+    "the guard refuses --step promo-pulse-1 --step-cap 3.95 → that is the answer",
+    "mid-run the cap is never raised: the (10)(a) gate, the re-projection after every stage and the per-pack cap gate decide (ruling 02.09 (b) item 3)",
     "info disagrees with expected_worker → tear down, send nothing, record the difference",
     "two boots without a served info → KILL, do not try a third",
     "the (10)(a) gate refuses → no gold call, tear down, record the measured marginals",
@@ -104,17 +105,18 @@
       "ids_sha256": "590f91e4b114c6d3a0d99bde7ced5f40673822f41fcfbd1030537d8ec682ce5f",
       "source": "results/promo_census_c2.json :: channels[].text_price_msg_ids, read off the live store (v1 ∪ r2)",
       "total": 405
-    }
+    },
+    "stage_0": "post_text — every channel's text posts BEFORE any page (ruling 02.09 (b))"
   },
   "recovery_clause": "one re-create of the SAME endpoint within the same step cap if the first boot dies without serving info; an interrupted run is re-entered with a second --run under the same step — the derived store's markers subtract what was answered",
   "rung_0": {
-    "cap_from": "docs/reviews/2026-08-30-plan-promo-pulse-1.md «Ruling 02.09»",
-    "cap_usd": 3.2,
+    "cap_from": "docs/reviews/2026-08-30-plan-promo-pulse-1.md «Ruling 02.09 (b)»",
+    "cap_usd": 3.95,
     "dear_usd": 3.6059,
-    "fits": false,
+    "fits": true,
     "fits_at_the_cheap_corner": true,
-    "fits_at_the_priced_corner": false,
-    "over_cap_by_at_the_dear_corner": 0.1268,
+    "fits_at_the_priced_corner": true,
+    "over_cap_by_at_the_dear_corner": -0.0871,
     "pages": 3008,
     "posts": 405,
     "priced_usd": 3.5241,
@@ -141,11 +143,11 @@
       "billable_seconds": 32506.61,
       "boot_seconds_each": 0.0,
       "boots": 0,
-      "cap_usd": 3.2,
+      "cap_usd": 3.95,
       "fits": false,
       "idle_tail_seconds": 60.0,
       "name": "READING, not a corner — the vision leg at 5c2's realised boot-inclusive rate on ATB leaflet pages; the projection's table carries it as `realised_5c2`",
-      "over_cap_by": 2.1155,
+      "over_cap_by": 1.5239,
       "page_seconds": 10.408,
       "text_seconds": 2.8132,
       "usd": 9.9695
@@ -156,11 +158,11 @@
         "billable_seconds": 8490.968,
         "boot_seconds_each": 157.449,
         "boots": 1,
-        "cap_usd": 3.2,
+        "cap_usd": 3.95,
         "fits": true,
         "idle_tail_seconds": 60.0,
         "name": "cheap — the marginal's lower end, the text warm-up, one derived boot",
-        "over_cap_by": -0.1862,
+        "over_cap_by": -0.3407,
         "page_seconds": 2.623,
         "text_seconds": 0.947,
         "usd": 2.6041
@@ -169,11 +171,11 @@
         "billable_seconds": 11490.747,
         "boot_seconds_each": 157.449,
         "boots": 1,
-        "cap_usd": 3.2,
-        "fits": false,
+        "cap_usd": 3.95,
+        "fits": true,
         "idle_tail_seconds": 60.0,
         "name": "priced — the projection's own corner (upper marginal + one derived boot) plus the text leg at its registered rate",
-        "over_cap_by": 0.1013,
+        "over_cap_by": -0.1078,
         "page_seconds": 3.369,
         "text_seconds": 2.8132,
         "usd": 3.5241
@@ -182,11 +184,11 @@
         "billable_seconds": 11757.38,
         "boot_seconds_each": 212.041,
         "boots": 2,
-        "cap_usd": 3.2,
-        "fits": false,
+        "cap_usd": 3.95,
+        "fits": true,
         "idle_tail_seconds": 60.0,
         "name": "dear — the upper marginal, the registered text rate, two measured boots (the smoke's rung 0: something boots at creation and the first job may boot again)",
-        "over_cap_by": 0.1268,
+        "over_cap_by": -0.0871,
         "page_seconds": 3.369,
         "text_seconds": 2.8132,
         "usd": 3.6059
@@ -194,7 +196,7 @@
     ]
   },
   "step": {
-    "cap_usd": 3.2,
+    "cap_usd": 3.95,
     "ledger": "results/spend_promo_pulse_1.json",
     "name": "promo-pulse-1"
   },

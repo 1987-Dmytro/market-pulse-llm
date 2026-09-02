@@ -4,7 +4,7 @@
 `results/promo_census_c2.json` pinned the population (968 media posts → 3 008 pages counted by
 `results/promo_pagecount_c2.json`, and 405 text price posts) and `results/promo_projection_c2.json`
 priced the vision leg at the smoke's marginal. This driver buys exactly that population under the
-step the ruling of 02.09 names — `--step promo-pulse-1 --step-cap 3.20` — and nothing decides a
+step ruling 02.09 (b) names — `--step promo-pulse-1 --step-cap 3.95` — and nothing decides a
 price, a cap or a population here: they are READ from those records and the run refuses when what
 is on disk has moved.
 
@@ -22,10 +22,12 @@ subtracts the page markers on disk) and a second `--run` continues under the sam
 BEFORE anything is created, and `--run` refuses to build a client when the dear corner does not fit
 the step cap; the guard's own step anchor is written by `scripts/runpod_guard.py`, not here.
 (1) liveness — the endpoint's execution timeout (900 s per job) and the client's `retries=0`.
-(2) the (10)(a) gate after two representative warm-ups (a real C2 page, a real C2 post), then a
-re-projection after EVERY channel at the measured marginal; over the cap → the run stops at that
-channel boundary and the unbought channels are recorded (silence = KILL: nobody can be asked
-mid-run). (3) the per-pack `cap_gate`: no job may be capable of billing past the remaining cap.
+(2) the (10)(a) gate after two representative warm-ups (a real C2 page, a real C2 post); then the
+TEXT leg first — stage 0, the cheapest, surest, cross-chain data (ruling 02.09 (b)) — and a
+re-projection after it and after EVERY channel at the measured marginal; over the cap → the run
+stops at that boundary and the unbought channels are recorded (silence = KILL: nobody can be asked
+mid-run; the cap is never raised mid-run). (3) the per-pack `cap_gate`: no job may be capable of
+billing past the remaining cap.
 
     python3.11 scripts/run_promo_c2.py --register                        # $0: the registration
     PYTHONPATH=src python3.11 scripts/run_promo_c2.py --dry-run          # $0: selections, hashes
@@ -57,9 +59,10 @@ from market_pulse.raw_store import RawStore, live_store  # noqa: E402
 from market_pulse.registry import load_registry  # noqa: E402
 
 STEP = "promo-pulse-1"
-STEP_CAP_USD = 3.20
-"""The ruling of 02.09 (`docs/reviews/2026-08-30-plan-promo-pulse-1.md`): «rung 0 (`--step
-promo-pulse-1 --step-cap 3.20`) and S4 as the plan says». The team lead's number, not this file's."""
+STEP_CAP_USD = 3.95
+"""Ruling 02.09 (b) (`docs/reviews/2026-08-30-plan-promo-pulse-1.md`), the operator's word «$3.95 —
+весь шаг»: «`STEP_CAP_USD = 3.95` … the guard's step anchor with `--step promo-pulse-1 --step-cap
+3.95`». The team lead's number, not this file's; never raised mid-run."""
 
 PREREG = REPO_ROOT / "results" / "prereg_promo_c2.json"
 RECORD = REPO_ROOT / "results" / "run_promo_c2.json"
@@ -311,7 +314,7 @@ def rung_0(n_pages: int, n_posts: int, cap: float = STEP_CAP_USD) -> dict:
         "pages": n_pages,
         "posts": n_posts,
         "cap_usd": cap,
-        "cap_from": "docs/reviews/2026-08-30-plan-promo-pulse-1.md «Ruling 02.09»",
+        "cap_from": "docs/reviews/2026-08-30-plan-promo-pulse-1.md «Ruling 02.09 (b)»",
         "rates": r,
         "table": table,
         "realised_5c2": realised,
@@ -353,9 +356,9 @@ def register() -> dict:
     record = {
         "phase": "promo-pulse-1 S4 — the C2 backfill (PAID): vision for the census's pages, text"
         " for its price posts",
-        "authority": "docs/reviews/2026-08-30-plan-promo-pulse-1.md «Ruling 02.09» — «Then rung 0"
-        " (--step promo-pulse-1 --step-cap 3.20) and S4 as the plan says»; docs/plans/"
-        "promo-pulse-1.md S4, SP-1b",
+        "authority": "docs/reviews/2026-08-30-plan-promo-pulse-1.md «Ruling 02.09 (b)» — «STEP_CAP_USD"
+        " = 3.95 … the guard's step anchor with --step promo-pulse-1 --step-cap 3.95 … The text leg"
+        " runs FIRST … Mid-run: no cap raise, ever»; docs/plans/promo-pulse-1.md S4, SP-1b",
         "step": {
             "name": STEP,
             "cap_usd": STEP_CAP_USD,
@@ -381,6 +384,7 @@ def register() -> dict:
             "order": ordered(set(page_queue) | set(post_queue)),
             "order_from": "docs/PHASE-promo-pulse-1.md §3, the operator's A1 list in its printed"
             " order; channels the list does not name follow it, sorted",
+            "stage_0": "post_text — every channel's text posts BEFORE any page (ruling 02.09 (b))",
         },
         "expected_worker": load(POSITIONS_PIN)["expected_worker"],
         "expected_worker_from": "results/sku_pilot_serving_v2.json — the pin run_5c2 and the smoke"
@@ -400,7 +404,9 @@ def register() -> dict:
         },
         "kill_rules": [
             "the dear corner of rung 0 does not fit the step cap → nothing is created (STOP)",
-            "the guard refuses --step promo-pulse-1 --step-cap 3.20 → that is the answer",
+            "the guard refuses --step promo-pulse-1 --step-cap 3.95 → that is the answer",
+            "mid-run the cap is never raised: the (10)(a) gate, the re-projection after every"
+            " stage and the per-pack cap gate decide (ruling 02.09 (b) item 3)",
             "info disagrees with expected_worker → tear down, send nothing, record the difference",
             "two boots without a served info → KILL, do not try a third",
             "the (10)(a) gate refuses → no gold call, tear down, record the measured marginals",
@@ -532,6 +538,48 @@ def run_the_legs(
     total = n_pages + n_posts
     done = 0
     outcome["leaflet"], outcome["stages"] = [], []
+
+    def halted(stage: str, before: int, reading: dict) -> bool:
+        """A pack the cap gate refused, or a projection over the cap: stop HERE, record the rest."""
+        if len(note) > before:
+            note.append(f"the run STOPPED at {stage}: the cap gate refused a pack")
+        elif reading["over_cap"]:
+            note.append(
+                f"the run STOPPED after {stage}: projected ${reading['projected_usd']:.4f} over"
+                f" the ${cap:.2f} step cap at the measured marginal (PROCESS rung 2, silence = KILL)"
+            )
+        else:
+            return False
+        outcome["unbought"] = unbought(prereg, queued_pages, queued_posts, derived, cursor)
+        return True
+
+    # Stage 0 — the TEXT leg first (ruling 02.09 (b)): the cheapest, surest, cross-chain data is
+    # bought before the dearest, so a gate that stops the run stops it on pages, not on posts.
+    before = len(note)
+    outcome["post_text"] = fivec2.post_leg(
+        client,
+        fivec2.SliceTransport(fivec2.text_key),
+        {handle: rows for handle, rows in queued_posts.items() if rows},
+        derived=derived,
+        cursor=cursor,
+        categories=categories,
+        aliases=aliases,
+        revision=revision,
+        endpoint=endpoint,
+        marginal=text_seconds,
+        registered_marginal=text_registered,
+        cap=cap,
+        rate=rate,
+        drift=drift,
+        note=note,
+    )
+    done += sum(pack["posts_read"] for pack in outcome["post_text"])
+    reading = stage_projection(client, opened=opened, done=done, total=total, rate=rate, cap=cap)
+    outcome["stages"].append({"after": "post_text"} | reading)
+    print(f"  after post_text: {reading}", flush=True)
+    if halted("post_text", before, reading):
+        return
+
     for handle in prereg["population"]["order"]:
         rows = queued_pages.get(handle) or []
         if not rows:
@@ -561,43 +609,8 @@ def run_the_legs(
         )
         outcome["stages"].append({"after": handle} | reading)
         print(f"  after {handle}: {reading}", flush=True)
-        if len(note) > before:
-            note.append(f"the run STOPPED at {handle}: the cap gate refused a pack")
-            outcome["unbought"] = unbought(prereg, queued_pages, queued_posts, derived, cursor)
+        if halted(handle, before, reading):
             return
-        if reading["over_cap"]:
-            note.append(
-                f"the run STOPPED after {handle}: projected ${reading['projected_usd']:.4f} over"
-                f" the ${cap:.2f} step cap at the measured marginal (PROCESS rung 2, silence = KILL)"
-            )
-            outcome["unbought"] = unbought(prereg, queued_pages, queued_posts, derived, cursor)
-            return
-
-    before = len(note)
-    outcome["post_text"] = fivec2.post_leg(
-        client,
-        fivec2.SliceTransport(fivec2.text_key),
-        {handle: rows for handle, rows in queued_posts.items() if rows},
-        derived=derived,
-        cursor=cursor,
-        categories=categories,
-        aliases=aliases,
-        revision=revision,
-        endpoint=endpoint,
-        marginal=text_seconds,
-        registered_marginal=text_registered,
-        cap=cap,
-        rate=rate,
-        drift=drift,
-        note=note,
-    )
-    done += sum(pack["posts_read"] for pack in outcome["post_text"])
-    outcome["stages"].append(
-        {"after": "post_text"}
-        | stage_projection(client, opened=opened, done=done, total=total, rate=rate, cap=cap)
-    )
-    if len(note) > before:
-        outcome["unbought"] = unbought(prereg, queued_pages, queued_posts, derived, cursor)
 
 
 def unbought(prereg: dict, page_queue: dict, post_queue: dict, derived, cursor) -> dict:
@@ -656,9 +669,11 @@ def main(argv: list[str] | None = None) -> int:
         wrong = pages_match_the_pagecount(page_queue)
         n_pages = sum(len(rows) for rows in page_queue.values())
         n_posts = sum(len(rows) for rows in post_queue.values())
-        for handle in ordered(set(page_queue) | set(post_queue)):
+        print(f"  stage  0  {'post_text':<24} posts {n_posts:>4}   (every channel, FIRST)")
+        for index, handle in enumerate(ordered(set(page_queue) | set(post_queue)), 1):
             print(
-                f"  {handle:<24} pages {len(page_queue.get(handle, [])):>5}  posts {len(post_queue.get(handle, [])):>4}"
+                f"  stage {index:>2}  {handle:<24} pages {len(page_queue.get(handle, [])):>5}"
+                f"  posts {len(post_queue.get(handle, [])):>4}"
             )
         print(
             f"pages {n_pages} ({pages_sha256(page_queue)[:16]}…) · posts {n_posts} ({posts_sha256(post_queue)[:16]}…)"

@@ -22,7 +22,7 @@ The key is NOT in `.env`: `~/.runpod/config.toml` holds it. Export it for the ru
 ## 1. Rung 0 in the guard's words — anchors the step ledger (a write, commit it)
 
 ```
-python3.11 scripts/runpod_guard.py --step promo-pulse-1 --step-cap 3.20
+python3.11 scripts/runpod_guard.py --step promo-pulse-1 --step-cap 3.95
 git add results/spend_promo_pulse_1.json && git commit -m "money(step): promo-pulse-1 anchored"
 ```
 
@@ -50,6 +50,7 @@ is the stock test and costs $0 ([[a_stock_window_needs_the_create_not_a_poll]]).
 ```
 PYTHONPATH=src python3.11 scripts/run_promo_c2.py --run --endpoint E 2>&1 | tee results/run_promo_c2.log
 ```
+Stage 0 is the text leg (ruling 02.09 (b)); the cap is never raised mid-run — the gates decide.
 Watch the PROCESS, not the log ([[long_run_watch_the_process]]); the record lands in
 `results/run_promo_c2.json` on every exit. A second `--run` continues (markers on disk).
 
@@ -66,7 +67,7 @@ runpodctl pod list -a                  # -> []
 ## 5. Close the step (the billing walk lags 30–40 min; close AFTER it settles)
 
 ```
-python3.11 scripts/runpod_guard.py --step promo-pulse-1 --step-cap 3.20 --note "S4 C2: <pages> pages, <posts> posts"
-python3.11 scripts/runpod_guard.py --step promo-pulse-1 --step-cap 3.20 --close --note "S4 C2 closed"
+python3.11 scripts/runpod_guard.py --step promo-pulse-1 --step-cap 3.95 --note "S4 C2: <pages> pages, <posts> posts"
+python3.11 scripts/runpod_guard.py --step promo-pulse-1 --step-cap 3.95 --close --note "S4 C2 closed"
 ```
 Then `make tick`, the re-draw of the 50 (`scripts/draw_positions_50.py`), `make promo-screen`.
