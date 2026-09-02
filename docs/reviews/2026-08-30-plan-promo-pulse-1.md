@@ -307,3 +307,49 @@ split inside the ceiling, and it is ruled as follows:
 as feedback; two cheap extra turns. The C6 redesign (`make done` printing STATE=COMPLETE|PAUSED|RUNNING) removes the
 ambiguity; §8 v3 stays byte-identical until then. Team lead's debts unchanged: dev-40 labels in batches of 10;
 positions-50 after the re-draw.
+
+---
+
+## Ruling 02.09 (c) — the (10)(a) gate goes per LEG and per CHANNEL; S4 buys whole channels in value order until the money stops; cap $3.95 unchanged
+
+**Acceptance of the third pause (`docs/reports/promo-pulse-1.md` @ `9ce3c0a`) — GREEN as a PAUSE; the gate did its job.**
+Team lead's own readings: guard exit 0, `CYCLE 3 SPENT $0.3516 of $7.00` (delta; walk $0.2917), `REMAINING $6.6484`;
+`results/spend_promo_pulse_1.json` anchored $14.1883, one session, $0.0599 by delta («0 pages, 0 posts bought; one boot + two
+warm-ups»); `serverless list` → `[]`, `pod list -a` → `[]`; porcelain on the contract paths empty. Run 1 bought a boot and two
+warm-ups ($0.0579 at the rate) and refused before the first gold call — exactly what SPEC 3.17 (10)(a) is for.
+
+**What the files say about the rate.** The population is not one population: pages per post — `@atb_market_official` 6.7,
+`@ATB_FANatik` 7.8, `@kopiyochka1` 8.6, `@blyzenkoua` 5.7, `@atb_aktsiyi` 4.7 (leaflet albums) against `@epicentrk_sale` 0.6,
+`@rrozetka` 0.7, `@silposilpo` 1.0 (single promo photos) (`results/promo_pagecount_c2.json` ÷ `promo_census_c2.json`). The smoke's
+2.623–3.369 s/page was VARUS 18 · atb_aktsiyi 6 · msuaaaa 4 pages; ATB leaflet pages read 10.408 s (5c2, n = 205) and 13.466 s
+(run 1, n = 1). A whole-step projection at ANY single rate is wrong in both directions: the rate is a property of the channel and
+the paid transport, and it is measured per channel, on the run.
+
+**The three answers (plan revision — log Dv `[cause: ruling]`; nothing narrowed silently):**
+1. **Per leg — yes.** The text leg (385 posts) is projected on its own and bought as stage 0. It is never refused for the page leg.
+2. **Per channel, measured by the channel's own first pack.** (a) The first pack of each channel (the transport's pack size) is
+   its measurement: worker seconds per page, n = pack size, max — one row per channel in `results/measurements.jsonl` (`source`
+   = this run's record). (b) The channel's remainder is projected at ITS measured rate against the room — cap − step spent − the
+   one-job reserve ($0.2843) − the idle tail; fits → the channel runs whole; does not fit → its remainder is left UNBOUGHT, recorded
+   per SPEC 3.17 (10)(b), and the next channel starts. (c) The run ends when the room is below one pack at the worst measured rate
+   plus the reserve. The per-pack `cap_gate` stays as the hard stop. The whole-step page projection is RETIRED for this step:
+   the test that asserted the whole-step refusal changes BY THIS RULING to assert the new law in both directions on the stub —
+   a channel that fits runs whole, one that does not is skipped whole, the text leg is bought regardless of the page rate.
+3. **Order (operator's word 02.09, quoted: «АТБ → дешёвые → малые»).** Stage 0 text → `@atb_market_official` whole (the
+   leaflet carrier, 209 pages) → the smoke-measured channels `@VARUS_channel`, `@atb_aktsiyi`, `@msuaaaa` → every other channel
+   ascending by page count (fozzy 3 · xochydeshevshe 7 · forainfo 11 · ekomarket 17 · silposilpo 34 · marketopt 52 · sim23 57 ·
+   epicentrk 78 · rrozetka 113 · ATB_FANatik 133 · blyzenkoua 328 · kopiyochka1 396 · kop1chat 528). Derived in the driver from
+   `promo_pagecount_c2.json` and the smoke's population file, not typed as a list; `--dry-run` prints it; `--register` again.
+
+**Money.** Cap $3.95 stands. Room for pages today ≈ $3.95 − 0.0599 − 0.0938 − 0.2843 − one boot ≈ **$3.46**. Expected: ATB
+≈ $0.9 at 13.5 s, the trio ≈ $1.1 at 3.4 s, then the small channels; the big albums (blyzenko · kopiyochka1 · kop1chat, 1 252
+pages) are the likely remainder. One boot; teardown proven by listing; the step ledger stays OPEN (`--note` reading, no
+`--close`) — the remainder, if bought, runs under the same step. C3's rule from (b) item 4 is unchanged.
+
+**Before the next STOP, all $0 (the decision table for the remainder):** (i) the measurement rows above; (ii) the remainder table —
+channel · pages left · measured s/page (or «unmeasured») · $ at its rate; (iii) a $0 RANKING instrument for the remainder, measured
+before it is trusted: caption-lexicon rank for photo posts (dairy/ice-cream terms of `lexicon.yaml`, read-only) and, if
+`tesseract` + `ukr` install in one `brew` command, OCR rank for leaflet pages — page-level recall on 5c2's 159 ATB pages against
+`results/run_5c2_positions.json` (pages with ≥ 1 position); the table shows $ whole vs $ top-ranked at recall ≥ 0.90. Then the
+STOP «unbought remainder» (a projection over the cap — a listed pause type) so the operator decides in ONE visit: buy whole ·
+buy ranked · stop. S5's re-draw (seed 42, ≥ 3 chains) runs over what was bought; S1's bars are unchanged.
