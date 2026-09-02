@@ -1,29 +1,30 @@
 # promo-pulse-1 — «Что и почём промоутируют сети по молочке и мороженому, и как покупатели на это реагируют — неделя за неделей?»
 
-**Still not answered, and this session got the money line open and the first paid step priced — where rung 0 fires.** The anchor moved
-exactly as ruling 02.09 says (`results/spend_cycle3.json`, `bf1665d`): `scripts/runpod_guard.py` → exit 0, `anchor $14.48`, `balance now $14.23`,
-`CYCLE 3 SPENT $0.2528 of $7.00`, `REMAINING $6.7472`. S4's step was then priced WHOLE before anything was created — `results/prereg_promo_c2.json ::
-rung_0` — and the dear corner is **$3.6059** against the ruling's `--step-cap 3.20` (+12.7 %; the priced corner $3.5241, +10.1 %; only the cheap corner,
-$2.6041, fits). The 3.20 was set from `results/promo_projection_c2.json :: verdict.c2_priced_usd` = $3.1563, which priced the vision leg alone («the text leg
-is not priced here»); the step buys 405 text posts too (`results/promo_census_c2.json :: selection.post_text`) and pays a second boot. `--run` refuses at
-rung 0 before a key or a client exists (`run exit=1`); nothing was created, nothing bought (`runpodctl serverless list` → `[]`). STOP with ONE yes/no
-question — the cap — in `docs/plans/promo-pulse-1.STOP.md`. The screen is still the pre-C2 one (`dashboard/promo.html` `28fffc93c723ab8d…`).
+**Still not answered; this session bought the first paid step's warm-ups and its own gate refused the step.** Ruling 02.09 (b) was applied
+at `f17d966` (`scripts/run_promo_c2.py :: STEP_CAP_USD` = 3.95, the text leg = stage 0, `results/prereg_promo_c2.json :: rung_0.fits` true — dear
+$3.6059, −8.7 %). The guard anchored the step (`results/spend_promo_pulse_1.json`, `fba2d79`, $14.19) and passed inside the run (exit 0, both caps);
+endpoint `1w2cn98hcikl7b` served the pin; the SPEC 3.17 (10)(a) gate then read the warm-ups — **page 13.466 s** on `atb_market_official_4571.jpg`,
+text 0.794 s — and projected the whole step at **$12.5928 against $3.95** (+218.8 %): `refuse: true`, no gold call (`results/run_promo_c2.json ::
+runs[0].go_no_go`, `results/run_promo_c2.log`). **Spend of the paid leg: $0.0579** at the rate (`runs[0].billed_usd_at_the_rate`, worker 163.348 s =
+one 149 s boot + the two warm-ups); the step ledger (`d854a63`, `gpu_sessions[0]`): `PROMO-PULSE-1 SPENT $0.0599 of $3.95` at 13:30 UTC — balance delta, billing rows
+not yet settled, a LOWER BOUND holding 34 min of drip; cycle `CYCLE 3 SPENT $0.3516 of $7.00`, `REMAINING $6.6484`. Torn down, proven by listing (`serverless list`
+→ `[]`, template `ih2rh0mvox` gone, `mp-srv2` listed, `pod list -a` → `[]`). Nothing landed in `data/derived/`. STOP with the ruling's table and
+three questions (per-leg gate · which page marginal · order under a partial buy): `docs/plans/promo-pulse-1.STOP.md`. The step stays OPEN.
 
-**Rung 0's table, every rate a file** (`results/prereg_promo_c2.json :: rung_0.rates`): pages 2.623…3.369 s (`results/promo_projection_c2.json ::
-verdict.marginal_bound`), text 0.947 s warm-up (`results/run_5c2_positions.json :: go_no_go`) / 2.8132 s registered (`results/prereg_5c2_run.json ::
-prices.post_text`), boots 157.449 s derived / 212.041 s measured (`results/smoke_vision_c2.json :: rung_0`), tail 60 s, $0.00030669/s. 5c2's realised
-10.408 s/page is carried as a READING ($9.9695) beside the corners. The per-pack cap gate reserves one wedged job ($0.2843, `results/prereg_5c2_run.json ::
-stop_rules.per_job_ceiling`) below the cap, so 3.20 has ≈$2.92 usable.
+**The rungs, logged.** (0) `rung_0` FITS in the registration (cheap $2.6041 · priced $3.5241 · dear $3.6059, every rate a file); (1) the create:
+`executionTimeoutMs` 900 000, `workersMax` 1, `retries=0` in the client; (2) the (10)(a) gate above — the projection over the cap stopped the run
+before any gold call; (3) the per-pack cap gate: not reached. Why 13.466 s is neither 5c2's 1.729 s warm-up on the same channel nor the smoke's
+2.623…3.369 s: the STOP walks the files (`run_5c2_positions.json`, `smoke_vision_c2.json`, `prereg_smoke_vision_c2.json`). A (10)(a) refusal now
+records `outcome.unbought` too (`8b7b965`, tested); run 1 predates it, so the STOP derives its table from `queued` and the registration.
+**The $0 checks, each run in the transcript.** (a) `results/promo_pagecount_c2.json`: 17 channels, `pages_exact` 3 008 = `pages` 3 008, 0 unreachable;
+`results/promo_projection_c2.json :: verdict.c2_priced_usd` = 3.1563, one number at `marginal_bound`. (b) `tests/test_collect_5c1.py -k collect`: 23 passed,
+both directions (`…paused_source_is_not_collected…`, `…same_source_collecting_is_collected`). (d) `scripts/draw_positions_50.py` twice → one sha
+`a3f659f9a8d73f5e…`, porcelain clean (pre-C2 population, 50 of 145; the re-draw waits for S4). (f) `tests/test_trends_sql.py`: 10 passed. (g) `make tick`
+twice: `new 0` on attribution · signal · evidence · digest · unsure · rollup, `results/promo_screen_data.json` `a64f5489…` both times. (h) clean clone at
+`8b7b965`: `make tick` → «no store … nothing written», `make promo-screen` renders `dashboard/promo.html` `28fffc93…` from the result file; the source removed
+→ «promo-screen REFUSED: missing source …», exit 2. (i) `scripts/draw_truth_20.py`: 20 rows, seed 42, `results/truth_20.json` byte-identical. (c), (e),
+(d)'s grade: wait on S4 and the labels. Debts unchanged: `scripts/promo_projection_c2.py` (`:366` / `:171` / `:153`), K4 not re-run; Dv15.
 
-**Landed this session, all $0.** (1) `scripts/fetch_promo_media_c2.py` → `results/post_media_promo_c2.json`: 968 posts, **3 008 of 3 008** photo members
-on disk (`data/annotation/promo_c2/posts_media/`, gitignored), `totals.channels_matching_pagecount` 17 of 17 against `results/promo_pagecount_c2.json`,
-188 non-photo members recorded (the pagecount's 146 video + 3 poll + 39 other); a download the harness killed mid-write was re-fetched (`intact()`, tested).
-(2) `scripts/run_promo_c2.py` — `--register` / `--dry-run` / `--run`; transport, money gates and legs are `run_5c2`'s by import; pages from the manifest,
-text posts pinned by id off the live store (`ids_sha256` `b6bc2f67…` / `590f91e4…`); stages in the phase spec §3's order; a re-projection after every
-channel; the guard (`--step promo-pulse-1 --step-cap 3.20`) runs before the first call. `tests/test_run_promo_c2.py`: 12 tests, the served half driven
-on a stub through the real passes — rows durable, a second `--run` sends nothing, a refusing (10)(a) gate makes no gold call and still writes the record.
-(3) `knowledge/runbooks/promo_c2_paid_leg.md`, the paid session's commands; plan §8 lists every choice. **Debts unchanged:** `scripts/promo_projection_c2.py`
-(`:366` / `:171` / `:153`) — K4 not re-run until fixed; Dv15 `[cause: process]`. No pin moved. Labels owed: dev-40, positions-50 (re-drawn after S4).
-
-**`make check` at `50ef7d9`: `ruff` «All checks passed!» · `4278 passed, 2 skipped in 685.64s (0:11:25)` · `make check exit=0`** (4 266 + the 12 new; no test
-file deleted, none changed to pass). `git status --porcelain src tests scripts config results docs/plans docs/reports` prints nothing.
+**`make check-stamped` at `b61f6b8`: `BEFORE HEAD b61f6b8` · `ruff` «All checks passed!» · `4279 passed, 2 skipped in 728.51s (0:12:08)` · `AFTER HEAD
+b61f6b8` · `suite make check → exit 0` · `reading HOLDS`** (4 266 + the 13 new; no test file deleted, none weakened — the cap test was tightened). After it:
+the ledger's `--note`, this report, `knowledge/`. `git status --porcelain src tests scripts config results docs/plans docs/reports` prints nothing.
