@@ -2,24 +2,24 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-09-01 07:32:29 (every SessionStart)
+**Auto-refreshed:** 2026-09-01 19:09:39 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
-8ae33e4 docs(report): keep the addendum inside PROCESS's 30-line rule
-6c31492 feat(collect): S2's join and comment phases finished — +1 190 comments into the live root
-ee23a13 docs(report): the smoke ran — the STOP is lifted and the rate is measured
-3f137b9 feat(smoke,projection): the smoke landed — 7.872 s/page measured, and K4 states one number
-1a8b1d4 feat(smoke): the C2 vision smoke, pre-registered before the first billable action
+c754cf7 docs(report,stop): make check green at 4 230 — the ledger hole is closed, not named
+d305953 fix(tests): no test can write a real spend ledger — the hole cycle 3 reopened
+e7d0c24 docs(stop): name the ledger-write hole cycle 3 inherited from cycle 2
+20d263f docs(report,plan): promo-pulse-1 pauses on the even cut's two unset parameters
+0a8d02a fix(guard): cycle 3's ledger follows cycle 2's, so an isolated test stays isolated
 ```
 
 ## 📋 Recent decisions
 
+- `the-goal-loop-never-engaged.md` — The `/goal` loop never engaged — §8's resume protocol rests on an unverified mechanism
 - `INDEX.md` — Decision records
 - `one-live-raw-root-and-an-opt-in-union.md` — One live raw root, and a union that is opt-in
-- `poltava-chats-carry-category-voice-not-brand-voice.md` — The Poltava chats carry category voice, not brand voice
 
 ## 📅 Recent daily logs
 
@@ -29,36 +29,37 @@ ee23a13 docs(report): the smoke ran — the STOP is lifted and the rate is measu
 
 <!-- AUTO-GEN END (everything below preserved across refreshes) -->
 # Hot Cache — curated
-**Last update:** 2026-09-01 (закрытие смены 30.08). Этап 1 `SPEC-v2-promo-pulse.md`, карта `STATUS.md`, цикл `PROCESS.md` v2.1. Руками, ≤40 строк; археология — в логах дня.
+**Last update:** 2026-09-01. Этап 1 `SPEC-v2-promo-pulse.md`, карта `STATUS.md`, цикл `PROCESS.md`
+v2.1. Руками, ≤40 строк; археология — в логах дня.
 
 ## 🔥 What's Hot
-**✅ СЛАЙС `promo-pulse-1-s2s3` ПРИНЯТ GREEN** — `docs/reports/promo-pulse-1-s2s3.md` @ `ee23a13`
-+ аддендум `8ae33e4`. **make check 4 205 · 2 skipped.** SP-4 закрыт рулингом (a): v1 — архив
-навсегда, `data/raw_r2/` — единственный живой корень, union **опционален**, дро читает ТОЛЬКО v1
-→ [[one-live-raw-root-and-an-opt-in-union]]. Реестр: **74 источника, collected 17 / not 57**;
-стор: **+1 340 постов, +1 190 комментов**, свежесть до 30.08; `shasum -c raw_v1_baseline` 6/6 OK.
+**⏸️ `promo-pulse-1` НА ПАУЗЕ — гард отказывает авторизованному прогону.** Потолок поднят до **$7.00**
+(`CYCLE3_CAP_USD`, `981202b`), но якорь цикла-3 остался $4.48 при балансе $14.26 → `enforce()` даёт
+**exit 1**, рунг 0 не пишет степ-леджер, S4 не стартует. Вопрос в `docs/plans/promo-pulse-1.STOP.md`:
+двинуть ТОЛЬКО `runpod_balance_at_cycle3_start` до $14.26, `anchored_at` не трогая? **make check
+4 266 · 2 skipped** @ `97e84e6`. Куплено НИЧЕГО, ни один рунг не сработал.
 
-**Числа, которые НЕ выводить заново.** Vision **7.872 с/стр. (n=30, БУТ ВНУТРИ)**; маргинал с
-бутом, оплаченным один раз, — **2.623…3.369**, бут **157.449 с = $0.0483**. 5c2 = 10.408; «1.7» —
-прогрев. Перепись (ПОСЛЕ докачки): окно **03–31.08**, `ids_sha256 a56dc6dace1bfb44`, **968 постов
-→ 1 022…9 653 страниц**, 405 текстово-ценовых. Дро **`6f9fa245b9d70254`**, 678 → 488 (182/306),
-20+20/20+20, seed 42 — не двигалось после докачки: это и есть контроль на утечку union.
+**НЕ выводить заново.** Vision **7.872 с/стр.** (n=30, бут внутри), маргинал **2.623…3.369**; страницы
+C2 **3 008** (968/968); **C2 = $3.1563**, при $7.00 влезает: 3.1563+2.50+0.30 = **$5.9563**. Дро
+позиций `a3f659f9a8d73f5e`, дро-20 `3d80c81a9c353130`, экран `28fffc93c723ab8d` — seed 42, дважды.
+
+**Сделано 02.09, всё $0:** `make tick`+`make promo-screen`+`draw_truth_20`+`draw_positions_50`, шесть
+промо-таблиц, дайджест остывших тредов, дельта поздних комментов. **`/code-review` перед платной
+ногой: BLOCKING ×2, обе починены** (`97e84e6`) — отказанный `--close` больше не закрывает линию,
+список леджеров тривайра ВЫВОДИТСЯ из констант гарда.
 
 ## ⏭️ Next
-1. **`docs/PROMPT-c2-pagecount.md` ($0)** — численность страниц: ЕДИНСТВЕННОЕ, на чём стоит SP-1.
-   Его п.2 — `collect_5c1 :: collectable` не читает `source.collect` (находка `/code-review`;
-   спасает только гард `RawStore.append`).
-2. **Разметка dev-40 разблокирована** (по 10 тредов); 50 позиций — после S4. Слово оператора по
-   SP-1 — **ОДИН раз**, на числе из п.1: цикл-3 / сузить / под-раннер.
+Свежая сессия → START RITUAL. Затем: 1) рулинг по якорю; 2) **S4 (платный C2)** → дро-50 ПЕРЕСНЯТЬ
+(нынешнее — до-C2 популяция, метить нельзя) → tick → screen; разметки тимлида ждём.
 
 ## 🚧 Blockers
-**⛔ SP-1 — ПРО СТРАНИЦЫ, НЕ ПРО СТАВКУ.** Остаток **$2.3202**, том ест $0.2333/день; у пола
-страниц C2 = **$0.87…$1.10 (влезает)**, у потолка **$7.81…$10.02 (нет)**.
-**⛔ ЭНДПОИНТ 5c2 И ШАБЛОН УДАЛЕНЫ 08.08**, выжил только том `mp-srv2`: следующий платный vision
-начинается со СБОРКИ, рунг 0 считать С бутом. Драйвер — `scripts/smoke_vision_c2.py`.
-**⛔ ЧИСЛОВОЙ ID И ИНВАЙТ-ХЭШ НЕАДРЕСУЕМЫ.** `1925810730` достижим ТОЛЬКО через `@ATB_FANatik`
-(`linked_chat_id`), `+Ejz6ubzm21IyMTQy` то же — убрать или пометить, **слово тимлида**.
-**⚠️ MEMORY.md на потолке:** 200 строк / 24 952 из 25 000 — мерить `context-census.py::loaded_memory`.
+**⛔ ЯКОРЬ ЦИКЛА-3 НИЖЕ БАЛАНСА** — единственный блокер платной ноги; ждём слова оператора.
+**⚠️ ДОЛГ K4:** `promo_projection_c2.py` пишет «$4.80» (`:366`), грепает `CYCLE 2 SPENT` (`:171`),
+игнорирует код возврата гарда (`:153`) — **не перезапускать K4**, пока не закрыто.
+**⛔ ЭНДПОИНТ 5c2 И ШАБЛОН УДАЛЕНЫ 08.08** (том `mp-srv2` жив, $0.2333/день): платный vision
+начинается со СБОРКИ, рунг 0 — С бутом (`scripts/smoke_vision_c2.py`). **⛔ `1925810730` и
+инвайт-хэш неадресуемы** — только через `@ATB_FANatik`. **⚠️ `/goal` НЕ ВКЛЮЧАЕТСЯ** →
+[[the-goal-loop-never-engaged]]. **⚠️ MEMORY.md на потолке** — только подселением к близнецу.
 
 ## 🔫 Footguns этого файла
 **⛔ ЭТОТ ФАЙЛ ГРЕПАЕТСЯ КАК ВХОД — ДВА ЛИТЕРАЛА.** `scripts/volume_calc_5c1.py :: quoted()` берёт
