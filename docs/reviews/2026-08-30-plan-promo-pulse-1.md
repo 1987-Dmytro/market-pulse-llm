@@ -190,3 +190,30 @@ notice before the ONE holdout shot. Everything else runs inside the ceiling.
 constant paste: the single-line predicate of phase spec §8 v2 (start ritual folded in, every check's
 output shown in-conversation), pasted fresh at start and after every STOP. The earlier two-line
 protocol is void.
+
+---
+
+## Ruling 01.09 (later) — the fork is VOID: the operator topped up; ceiling $7.00; C2 runs whole
+
+**Verified by the team lead's own reads:** RunPod balance **$14.3730** (guard's `balance()`; the
+operator's «я внёс последние 10 долларов» landed: $4.48 → $14.37); cycle-3 spent so far $0.0972
+(volume drip only), nothing bought.
+
+**Operator's words (01.09, quoted):** «Сверь остаток — я внёс последние 10 долларов» · «Потолок
+$7.00, резерв не трогаем». Executor: raise `CYCLE3_CAP_USD` to **7.00** (the operator's word, not a
+mid-run raise; note it in the ledger's `note`), anchor unchanged. The remaining ≈$7.4 of balance is
+RESERVE — outside the phase, not to be planned against.
+
+**Both STOP parameters are void:** C2 buys ALL 3 008 pages (≈$3.16 at the pessimistic marginal);
+C3 keeps its caps ($2.50 dev + $0.30 holdout); no page cut, no pod runner, no volume deletion.
+The STOP's second question (which pages survive) is moot.
+
+**Conditions before the FIRST paid leg (standing, from the scaffold acceptance):** `/code-review`
+(fresh subagent) on the money-guard diff of this pause — `0a8d02a` (cycle-3 line) + `d305953` (the
+ledger tripwire) + the cap change — correctness and stated-requirement gaps only, verdict quoted in
+the report. The tripwire's own negative control (a throwaway test writing to a real ledger fails
+the teardown) is accepted as reported; keep it.
+
+**Team lead's debts, named:** `docs/labels-promo-dev.jsonl` (dev-40) — in progress, lands in
+batches of 10; `docs/labels-positions-50.jsonl` — after S4's draw. The executor proceeds through
+S4 → draw-50 → tick → screen while blocked checks wait on these files, and STOPs only per §8.
