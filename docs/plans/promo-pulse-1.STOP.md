@@ -33,6 +33,6 @@ so a «yes» given tomorrow leaves C3 ≈$0.23 short of its two caps; the ruling
 **Everything else is done, all $0, this session.** The anchor moved exactly as ruled (`bf1665d`): guard exit 0, `anchor $14.48`,
 `CYCLE 3 SPENT $0.2528 of $7.00`, `REMAINING $6.7472`. The census's 3 008 pages are on disk with their manifest
 (`results/post_media_promo_c2.json`, per-channel match against `results/promo_pagecount_c2.json`), the driver `scripts/run_promo_c2.py`
-reuses `run_5c2`'s transport and gates (11 tests, the served half driven on a stub: rows durable, a second run sends nothing), the
+reuses `run_5c2`'s transport and gates (12 tests, the served half driven on a stub: rows durable, a second run sends nothing), the
 registration carries rung 0, and the runbook names every command of the paid session. Bought: nothing. No endpoint exists
 (`runpodctl serverless list` → `[]`). Evidence: `docs/reports/promo-pulse-1.md`.
