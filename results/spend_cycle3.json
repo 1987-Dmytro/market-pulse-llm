@@ -23,6 +23,16 @@
       "billing_since_usd": 2.211359,
       "billing_read": "read",
       "note": "S4 C2 run 2 (a+b+c): 3008 pages + 385 posts bought, all 17 channels whole, per-channel rates 0.80-12.92 s/page"
+    },
+    {
+      "at": "2026-09-03T12:43:10+00:00",
+      "balance": 10.9682256485,
+      "spent_usd": 3.5117,
+      "remaining_usd": 3.4883,
+      "balance_delta_usd": 3.5117,
+      "billing_since_usd": 3.502019,
+      "billing_read": "read",
+      "note": "promo-pulse-1 CLOSED at $2.9867 — promo-pulse-1 closed at the START RITUAL — ruling 03.09 (b) names the tolerance 0.05; the 3.15% gap is the always-on volume's drip inside the step's wall-clock, and it stays inside cycle 3"
     }
   ]
 }
