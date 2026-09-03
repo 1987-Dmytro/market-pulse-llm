@@ -153,11 +153,18 @@ CREATE TABLE positions (
     size_unit                    TEXT,
     pack_count                   INTEGER,
     attribute_pct                REAL,
-    PRIMARY KEY (window_id, row_id)
+    PRIMARY KEY (window_id, carrier, row_id)
 );
+
+-- `carrier` is in the key because `row_id` is `channel:msg_id:ordinal` and a POST can be both a
+-- leaflet page and a text price post: the C2 window holds 7 posts read by BOTH legs, two genuine
+-- rows about one message that the producer's id cannot tell apart. The id is the producer's and is
+-- never rewritten here (a sealed export names those rows); the carrier the table already stored is
+-- what completes it ([[id_spaces_that_look_comparable]]).
 
 CREATE TABLE position_warnings (
     window_id TEXT NOT NULL,
+    carrier   TEXT NOT NULL,
     row_id    TEXT NOT NULL,
     warning   TEXT NOT NULL
 );
@@ -614,8 +621,8 @@ def add_positions(conn, window_id: str, rows: list[dict]) -> None:
             ),
         )
         conn.executemany(
-            "INSERT INTO position_warnings VALUES (?, ?, ?)",
-            [(window_id, row["row_id"], name) for name in row["warnings"]],
+            "INSERT INTO position_warnings VALUES (?, ?, ?, ?)",
+            [(window_id, one["carrier"], row["row_id"], name) for name in row["warnings"]],
         )
 
 
@@ -852,7 +859,7 @@ def position_block(
         "warnings": counts(
             conn,
             f"SELECT warning, COUNT(*) FROM position_warnings JOIN positions USING (window_id,"
-            f" row_id) WHERE {where} GROUP BY warning",
+            f" carrier, row_id) WHERE {where} GROUP BY warning",
             params,
         ),
         "category": counts(

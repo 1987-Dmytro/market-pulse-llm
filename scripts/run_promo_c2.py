@@ -475,6 +475,51 @@ def register() -> dict:
     return record
 
 
+WINDOW_ID = "w2"
+"""The aggregate id of the window this registration bought — `windows.window_id`, ruling 02.09 (d)
+item 1 («the executor picks it and says so in the record»). `w1` stays 5c2's. A NAME and not a date,
+for the reason `build_aggregates.WINDOW_ID` gives: `windows.anchor` already carries the date."""
+
+REGISTRY = REPO_ROOT / "config" / "registry.yaml"
+
+
+def register_addendum() -> dict:
+    """Ruling 02.09 (d) item 1 — the registry this run bought under, ADDED to a sealed record.
+
+    An addendum and not a re-registration: `register()` would recompute every rate and population
+    against today's files and silently re-pin what the run was judged on. This adds the ONE key the
+    ruling names and refuses to touch a key that is already there, so the sealed half stays sealed
+    ([[a_self_pinning_producer_cannot_grow_a_parameter]]). The field is DATED, so the record says
+    when the pin joined it rather than reading as if it had always been there.
+    """
+    prereg = load(PREREG)
+    key = rel(REGISTRY)
+    if key in prereg["pinned_inputs"]:
+        raise SystemExit(
+            f"{rel(PREREG)} already pins {key} as {prereg['pinned_inputs'][key][:16]}… — an"
+            " addendum adds, it never re-pins. If the registry moved, that is a refusal for the"
+            " team lead, not a rewrite here."
+        )
+    prereg["pinned_inputs"][key] = sha256_of(REGISTRY)
+    prereg["addendum"] = [
+        {
+            "dated": "2026-09-03",
+            "authority": "docs/reviews/2026-08-30-plan-promo-pulse-1.md «Ruling 02.09 (d)» item 1"
+            " — «It pins the registry it was bought under … added to pinned_inputs by the"
+            " registration's own writer … never re-pinning what is already there»",
+            "added": [key],
+            "window_id": WINDOW_ID,
+            "why": "the C2 window is aggregated through ITS OWN seal, and the segment join is a"
+            " join to a set of channels: without this pin the window would be built against"
+            " whatever registry the checkout happens to hold",
+        }
+    ]
+    PREREG.write_text(
+        json.dumps(prereg, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
+    return prereg
+
+
 def preflight(prereg: dict) -> dict:
     """Every pinned input still reads as the registration pinned it. A moved one is a stop."""
     moved = {
@@ -885,6 +930,11 @@ def finalise(outcome: dict, note: list, client, rate: float) -> None:
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--register", action="store_true", help="$0: write the pre-registration")
+    parser.add_argument(
+        "--register-addendum",
+        action="store_true",
+        help="$0: add the registry pin + window id to the sealed registration (ruling 02.09 (d))",
+    )
     parser.add_argument("--dry-run", action="store_true", help="$0: selections, hashes, rung 0")
     parser.add_argument("--run", action="store_true", help="the PAID leg")
     parser.add_argument("--endpoint", help=f"the serving endpoint id (or ${ENDPOINT_ENV})")
@@ -894,6 +944,13 @@ def main(argv: list[str] | None = None) -> int:
         record = register()
         print(render_rung_0(record["rung_0"]))
         print(f"wrote {rel(PREREG)}")
+        return 0
+
+    if args.register_addendum:
+        prereg = register_addendum()
+        key = rel(REGISTRY)
+        print(f"{rel(PREREG)} :: pinned_inputs[{key}] = {prereg['pinned_inputs'][key]}")
+        print(f"{rel(PREREG)} :: addendum[0].window_id = {prereg['addendum'][0]['window_id']}")
         return 0
 
     if args.dry_run:
@@ -916,7 +973,7 @@ def main(argv: list[str] | None = None) -> int:
         return 0 if not wrong else 2
 
     if not args.run:
-        parser.error("choose --register, --dry-run or --run")
+        parser.error("choose --register, --register-addendum, --dry-run or --run")
 
     prereg = load(PREREG)
     preflight(prereg)
