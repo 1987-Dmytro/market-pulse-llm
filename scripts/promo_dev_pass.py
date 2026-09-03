@@ -1148,9 +1148,8 @@ def main(argv: list[str] | None = None) -> int:
         print(json.dumps(state["gates"][-1], ensure_ascii=False, indent=1))
         print(f"\nmeasured {row['name']} = {row['value']} s/thread (max {row['max']}, n={row['n']})"
               f" — appended to {rel(MEASUREMENTS)}, and it replaces {BORROWED_RATE}")
-        print(f"40 threads + {gate['corners'][0]['n_posts']} posts project to"
-              f" ${gate['usd_at_the_measured_mean']} at the mean and"
-              f" ${gate['usd_at_the_measured_max']} at the max, against the cap"
+        print(f"the pass projects to ${gate['usd_at_the_measured_mean']} at the measured mean and"
+              f" ${gate['usd_at_the_measured_max']} at its max, against the cap"
               f" ${gate['corners'][0]['cap_usd']}")
         print(f"VERDICT {gate['verdict']} — {gate['rule']}")
         return 0 if gate["verdict"] in ("GO", "GO-THEN-STOP") else 1
