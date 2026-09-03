@@ -31,8 +31,8 @@ the same session if the registration fits, the pod**». The first three are DONE
   so both legs ride one boot with the GO between them. Driven on the Mac with no GPU, the whole
   preamble passes on the REAL pack: the codebook handshake, `check_instrument`, and all 56 per-item
   shas.
-* **12 new tests, each with its negative control.** `make check` green at `bf21167`'s successor —
-  4 305 passed, 2 skipped, exit 0 — and re-run at this HEAD.
+* **12 new tests, each with its negative control.** `make check` at `ae99c7a`: **4 313 passed,
+  2 skipped in 751.97s, exit 0** — (j) holds, and no assertion of anyone else's moved.
 
 **The dry contact earned its keep.** It refused at `@ekomarket_shop:1457`: the pack pinned the sha of
 the PAYLOAD where the pod re-derives the RENDERED request, and the two differ by the whole positions
