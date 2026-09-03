@@ -67,6 +67,13 @@ REGISTRY = REPO_ROOT / "config" / "registry.yaml"
 LEXICON = REPO_ROOT / "config" / "lexicon.yaml"
 STORE_ROOT = REPO_ROOT / "data" / "raw"
 DERIVED_ROOT = REPO_ROOT / "data" / "derived"
+LIVE_DERIVED_ROOT = REPO_ROOT / "data" / "derived_w2"
+"""Where evidence rows are written NOW — window 2 and every tick after it.
+
+Ruling 03.09 (b), fork 1: each window writes under its own root, because the C2 run appending
+into :data:`DERIVED_ROOT` moved the bytes window 1's seal had hashed. `DERIVED_ROOT` is that
+sealed root and is READ from here on, never written; this one is the live one, the same split
+`raw_store.ARCHIVE_ROOT` / `raw_store.LIVE_ROOT` made for the raw store on 30.08."""
 """Where a SERVED pass will write its evidence rows — **registered here, written by nothing yet.**
 
 The decision this constant carries is the one 5c2-prep-b was asked to make: derived data lands

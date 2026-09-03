@@ -42,6 +42,14 @@ import window_summary_5c2 as summary  # noqa: E402
 from market_pulse import aggregates, brands, loop  # noqa: E402
 
 DERIVED = REPO_ROOT / "data" / "derived"
+LIVE = REPO_ROOT / "data" / "derived_w2"
+"""The live derived root — `run_loop.LIVE_DERIVED_ROOT`, read from here.
+
+Ruling 03.09 (b), fork 1: window 1's root is frozen at the bytes its seal hashed and window 2
+writes beside it. Both roots are READ here and the rows are pooled, because a row belongs to a
+window by that window's pinned population ids and by nothing else — the same law shape 1 wrote,
+with the store no longer having to hold two populations in one file. The 20 D-cut posts answered
+in BOTH windows stay in w1's root and w2 reads them from there."""
 PREREG = REPO_ROOT / "results" / "prereg_5c2_run.json"
 PREREG_C2 = REPO_ROOT / "results" / "prereg_promo_c2.json"
 CENSUS = REPO_ROOT / "results" / "census_5c2.json"
@@ -261,7 +269,7 @@ def c2_anchor(census: dict) -> dict:
     }
 
 
-def build(derived: Path, prereg_path: Path, registry_path: Path, out: Path):
+def build(derived: Path, prereg_path: Path, registry_path: Path, out: Path, live: Path = LIVE):
     """The database, and the sha256 of every file it was built from.
 
     TWO windows into the one database, each through ITS OWN seal — ruling 02.09 (d), shape 1. The
@@ -292,9 +300,20 @@ def build(derived: Path, prereg_path: Path, registry_path: Path, out: Path):
     sources: dict[str, str] = {rel(RULES): summary.sha256_of(RULES)}
 
     def load(record_type: str) -> list[dict]:
+        """Both roots, w1's first. Only w1's files enter `sources`.
+
+        `sources` is what the w1 export's `provenance.evidence` says made THAT record, so it names
+        the sealed root's files and nothing else: no leaf of window 1 is computed from a byte the
+        live root holds. A live leg that is silently absent is not caught here — `refuse_unless` holds
+        each window's derived id set against the count its own seal registered, which is where a
+        short window has always been refused.
+        """
         rows: list[dict] = []
         for path in summary.leg_files(derived, record_type):
             sources[rel(path)] = summary.sha256_of(path)
+            rows += summary.read_rows(path)
+        folder = live / f"{record_type}s"
+        for path in sorted(folder.glob("*.jsonl")) if folder.is_dir() else ():
             rows += summary.read_rows(path)
         return rows
 
@@ -409,6 +428,7 @@ def check_convergence(conn, anchor_path: Path) -> dict:
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--derived-root", type=Path, default=DERIVED)
+    parser.add_argument("--live-root", type=Path, default=LIVE)
     parser.add_argument("--prereg", type=Path, default=PREREG)
     parser.add_argument("--registry", type=Path, default=REGISTRY)
     parser.add_argument("--anchor", type=Path, default=ANCHOR)
@@ -416,7 +436,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--quiet", action="store_true")
     args = parser.parse_args(argv)
 
-    conn, _ = build(args.derived_root, args.prereg, args.registry, args.out)
+    conn, _ = build(args.derived_root, args.prereg, args.registry, args.out, args.live_root)
     verdict = check_convergence(conn, args.anchor)
     settle(conn, args.out)
     if args.quiet:

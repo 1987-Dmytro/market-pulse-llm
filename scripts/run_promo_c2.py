@@ -1005,7 +1005,10 @@ def main(argv: list[str] | None = None) -> int:
     cap_left = round(cap - prior, 4)
     print(f"step cap ${cap:.2f} − ${prior:.4f} already spent = ${cap_left:.4f} for this run")
     client = fivec2.client_for(endpoint, api_key)
-    derived = RawStore(run_loop.DERIVED_ROOT)
+    # Ruling 03.09 (b) fork 1: C2 writes under its OWN root. The sealed w1 root is passed as an
+    # archive so the dedupe still sees what window 1 already answered — a re-run must not re-buy
+    # a page because its evidence row now lives one directory over.
+    derived = RawStore(run_loop.LIVE_DERIVED_ROOT, archives=(run_loop.DERIVED_ROOT,))
     cursor = loop.load_cursor(run_loop.CURSOR)
     note: list[str] = []
     outcome = {

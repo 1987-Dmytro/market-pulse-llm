@@ -21,6 +21,7 @@ import export_dashboard_data as exporter  # noqa: E402
 from test_prompts import (  # noqa: E402
     MOVED_BY_R2,
     MOVED_BY_THE_PROMO_TABLES,
+    MOVED_BY_THE_SECOND_WINDOW,
     SEALED_AT_R2,
     assert_pinned,
     put_the_sealed_shas_back,
@@ -129,6 +130,9 @@ def test_two_exports_are_byte_identical_and_the_committed_one_is_that_record(tmp
     produced = put_the_sealed_shas_back(produced, times=1, moved=MOVED_BY_R2, at=SEALED_AT_R2)
     produced = put_the_sealed_shas_back(
         produced, times=1, moved=MOVED_BY_THE_PROMO_TABLES, at=SEALED_AT_R2
+    )
+    produced = put_the_sealed_shas_back(
+        produced, times=1, moved=MOVED_BY_THE_SECOND_WINDOW, at=SEALED_AT_R2
     )
     assert produced == exporter.OUT.read_bytes()
     assert b'"at"' not in first.read_bytes(), "no clock in the body"

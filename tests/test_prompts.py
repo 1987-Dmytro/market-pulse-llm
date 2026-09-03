@@ -1068,6 +1068,24 @@ Fourth sealing moment in this family, same manoeuvre as `SEALED_AT` and `SEALED_
 MOVED_BY_R2 = ("config/registry.yaml", "scripts/window_summary_5c2.py")
 """The revision and the producer that had to learn the revision exists."""
 
+MOVED_BY_THE_SECOND_WINDOW = ("scripts/build_aggregates.py",)
+"""The producer learned that the store holds a SECOND window — ruling 02.09 (d), then 03.09 (b).
+
+A third change sealing at `58ff037` for a third reason. Shape 1 taught this script to build two
+windows into one database, each through its own seal and partitioned by that window's pinned
+population ids (`WINDOW_ID_C2`, the witness below); fork 1 of ruling 03.09 (b) then split the store
+underneath it, so it reads window 1's frozen root and the live one and pools the rows — the law that
+decides which row is whose did not change, only how many directories it is spread over.
+
+Its own group and not a fourth name in :data:`MOVED_BY_R2`: this module is what the export CALLS,
+and the export pins it once. Nothing the C2 window adds to the database reaches a number
+`results/dashboard_data_w1.json` carries — `positions` for w1 is 145 rows before the second window
+and after it — which is why the record re-exports with five moved provenance shas and 4 474
+identical data leaves.
+
+    git show 58ff037:scripts/build_aggregates.py
+"""
+
 MOVED_BY_THE_PROMO_TABLES = ("src/market_pulse/aggregates.py",)
 """S6 of `docs/plans/promo-pulse-1.md` added the six promo tables to `aggregates.SCHEMA`.
 
@@ -1088,6 +1106,7 @@ WITNESS_AT = {
         "config/registry.yaml": "# --- r2 BEGIN",
         "scripts/window_summary_5c2.py": "load_registry_as_pinned",
         "src/market_pulse/aggregates.py": "PROMO_TABLES",
+        "scripts/build_aggregates.py": "WINDOW_ID_C2",
     },
     SEALED_AT: WITNESS,
     SEALED_AT_PASS1: {
@@ -1178,11 +1197,12 @@ def assert_pinned(name: str, digest: str) -> None:
 
     Keyed per sealing moment and not by one shared list: `scripts/window_summary_5c2.py` moved at
     r2 and `src/market_pulse/prompts.py` moved at the v5 reader, and a shared commit would assert
-    one file's sha at a tree that never carried it. `src/market_pulse/aggregates.py` shares r2's
-    commit and not its reason, so it is its own group at the same sealing moment.
+    one file's sha at a tree that never carried it. `src/market_pulse/aggregates.py` and
+    `scripts/build_aggregates.py` share r2's commit and not its reason, so each is its own group at
+    the same sealing moment.
     """
     live = live_sha256(name)
-    if name in MOVED_BY_R2 + MOVED_BY_THE_PROMO_TABLES:
+    if name in MOVED_BY_R2 + MOVED_BY_THE_PROMO_TABLES + MOVED_BY_THE_SECOND_WINDOW:
         assert live != digest and sealed_sha256(name, SEALED_AT_R2) == digest, name
     elif name in MOVED_BY_THE_V5_READER + MOVED_BY_THE_THINKING_READER:
         assert live != digest and sealed_sha256(name) == digest, name
