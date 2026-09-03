@@ -164,7 +164,16 @@ def test_a_step_ledger_with_no_paid_run_refuses(ledger, tmp_path, monkeypatch):
 
 # --- the permanent guard: a paid session may not leave the LIVE ledger silent -------------------
 
-LINE_LEDGER = REPO_ROOT / "results" / "spend_cycle2.json"
+LINE_LEDGERS = (guard.CYCLE2_LEDGER, guard.CYCLE3_LEDGER)
+"""Every ledger a paid run may be witnessed in once Phase 4 is closed — DERIVED from the guard's own
+constants, never restated here (`97e84e6`'s lesson: derive, never restate).
+
+This was `results/spend_cycle2.json`, typed. Cycle 2 was superseded by cycle 3 on 01.09 and the
+guard has written the line's sessions into `CYCLE3_LEDGER` since — so the FIRST paid step under the
+new line read as SILENT while its witness sat in `results/spend_cycle3.json` at the same timestamp
+and the same balance. Changed by ruling 02.09 (d) `[cause: ruling]`; the claim does not move — a
+paid step witnessed by NONE of the guard's lines is still named, both directions shown on the stub.
+"""
 """The ledger that witnesses a paid run once Phase 4 is closed — SPEC amendment 3.23 (1).
 
 The check below was written when `results/spend_phase4.json` was the only place a paid session could
@@ -196,6 +205,17 @@ exactly and two that do not, and excusing the file would blind this check to the
 already gone quiet twice."""
 
 
+def line_sessions() -> list[dict]:
+    """Every session of every live line, in the guard's own order. A line with no file yet is not
+    an error — `CYCLE3_LEDGER` did not exist until the first paid step under it."""
+    return [
+        session
+        for path in LINE_LEDGERS
+        if path.exists()
+        for session in json.loads(path.read_text(encoding="utf-8"))["sessions"]
+    ]
+
+
 def silent_paid_runs(sessions: list[dict]) -> list[tuple[str, str, float]]:
     """Every paid step-ledger run that the LIVE ledgers do not witness, and the used excuses.
 
@@ -209,7 +229,7 @@ def silent_paid_runs(sessions: list[dict]) -> list[tuple[str, str, float]]:
     One direction only. The converse is not an invariant: the guard's own `--note` readings and the
     phase's close-out entries have no step ledger behind them and never will.
     """
-    line = json.loads(LINE_LEDGER.read_text(encoding="utf-8"))["sessions"]
+    line = line_sessions()
     by_balance = {session["balance"] for session in sessions} | {one["balance"] for one in line}
     by_at = {session["at"]: session for session in [*sessions, *line]}
     silent, excused = [], []
@@ -253,7 +273,7 @@ def test_no_paid_step_ledger_is_silent_in_the_live_ledger():
     empty cycle-2 ledger would make the union silently equal to the phase ledger and this check
     would go on passing while testing the older half of it."""
     sessions = json.loads(repair.LEDGER.read_text(encoding="utf-8"))["sessions"]
-    line = json.loads(LINE_LEDGER.read_text(encoding="utf-8"))["sessions"]
+    line = line_sessions()
     assert guard.closing_entry(sessions) is not None, "Phase 4 is closed and the line took over"
     assert line, "the cycle-2 ledger witnesses the steps that ran after the close"
     assert silent_paid_runs(sessions) == []
@@ -314,15 +334,13 @@ def test_the_silence_check_fires_on_the_LINE_ledger_too(tmp_path, monkeypatch):
     known line entries with no step ledger, enumerated in
     :data:`LINE_SESSIONS_WITH_NO_STEP_LEDGER` and asserted to be exactly those two.
     """
-    empty = tmp_path / "spend_cycle2.json"
+    line = line_sessions()
+    empty = tmp_path / "spend_empty_line.json"
     empty.write_text(json.dumps({"sessions": []}), encoding="utf-8")
-    monkeypatch.setattr(sys.modules[__name__], "LINE_LEDGER", empty)
+    monkeypatch.setattr(sys.modules[__name__], "LINE_LEDGERS", (empty,))
 
     sessions = json.loads(repair.LEDGER.read_text(encoding="utf-8"))["sessions"]
     phase_balances = {session["balance"] for session in sessions}
-    line = json.loads(
-        (REPO_ROOT / "results" / "spend_cycle2.json").read_text(encoding="utf-8")
-    )["sessions"]
     only_the_line = {one["balance"] for one in line} - phase_balances
     assert only_the_line, "there is at least one paid step under the line to lose"
 
