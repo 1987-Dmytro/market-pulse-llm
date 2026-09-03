@@ -1,0 +1,92 @@
+{
+  "gates": [
+    {
+      "at": "2026-09-03T16:36:51+00:00",
+      "backstop_fits": true,
+      "cap_usd": 2.5,
+      "card": "NVIDIA GeForce RTX 4090",
+      "hard_stop_seconds": 12162.2,
+      "kind": "price",
+      "pod_id": "ocnsveqetsve8w",
+      "registered_card": "NVIDIA GeForce RTX 4090",
+      "registered_usd_per_hour": 0.74,
+      "rule": "rung 1: the create response's costPerHr ≤ the registered price, and the card is the registered card. Delete on KILL — the cap was computed against the other number",
+      "segment": 1,
+      "terminate_after_minutes": 90,
+      "usd_at_the_backstop": 1.11,
+      "usd_per_hour": 0.74,
+      "verdict": "GO"
+    },
+    {
+      "at": "2026-09-03T16:40:17+00:00",
+      "billed_seconds": 215.0,
+      "billed_usd": 0.044194,
+      "cap_usd": 2.5,
+      "kind": "close",
+      "left_usd": 2.455806,
+      "outcome": "dead-man fired: runpodctl ssh info said \"pod not ready\" through 180 s of create-elapsed; nothing was launched, no token bought",
+      "pod_id": "ocnsveqetsve8w",
+      "segment": 1,
+      "spent_all_segments_usd": 0.044194,
+      "verdict": "GO"
+    },
+    {
+      "at": "2026-09-03T16:40:40+00:00",
+      "backstop_fits": true,
+      "cap_usd": 2.5,
+      "card": "NVIDIA GeForce RTX 4090",
+      "hard_stop_seconds": 12162.2,
+      "kind": "price",
+      "pod_id": "gxuil044h61fkx",
+      "registered_card": "NVIDIA GeForce RTX 4090",
+      "registered_usd_per_hour": 0.74,
+      "rule": "rung 1: the create response's costPerHr ≤ the registered price, and the card is the registered card. Delete on KILL — the cap was computed against the other number",
+      "segment": 2,
+      "terminate_after_minutes": 90,
+      "usd_at_the_backstop": 1.11,
+      "usd_per_hour": 0.74,
+      "verdict": "GO"
+    },
+    {
+      "at": "2026-09-03T16:44:17+00:00",
+      "billed_seconds": 221.0,
+      "billed_usd": 0.045428,
+      "cap_usd": 2.5,
+      "kind": "close",
+      "left_usd": 2.410378,
+      "outcome": "dead-man fired a second time on a second machine: ssh info \"pod not ready\" through 180 s while status RUNNING; nothing launched, no token bought",
+      "pod_id": "gxuil044h61fkx",
+      "segment": 2,
+      "spent_all_segments_usd": 0.089622,
+      "verdict": "GO"
+    }
+  ],
+  "latest": {
+    "at": "2026-09-03T16:44:17+00:00",
+    "kind": "close",
+    "verdict": "GO"
+  },
+  "phase": "promo-dev-loop",
+  "segments": [
+    {
+      "billed_seconds": 215.0,
+      "billed_usd": 0.044194,
+      "card": "NVIDIA GeForce RTX 4090",
+      "created_at": "2026-09-03T16:36:40Z",
+      "deleted_at": "2026-09-03T16:40:15Z",
+      "outcome": "dead-man fired: runpodctl ssh info said \"pod not ready\" through 180 s of create-elapsed; nothing was launched, no token bought",
+      "pod_id": "ocnsveqetsve8w",
+      "usd_per_hour": 0.74
+    },
+    {
+      "billed_seconds": 221.0,
+      "billed_usd": 0.045428,
+      "card": "NVIDIA GeForce RTX 4090",
+      "created_at": "2026-09-03T16:40:34Z",
+      "deleted_at": "2026-09-03T16:44:15Z",
+      "outcome": "dead-man fired a second time on a second machine: ssh info \"pod not ready\" through 180 s while status RUNNING; nothing launched, no token bought",
+      "pod_id": "gxuil044h61fkx",
+      "usd_per_hour": 0.74
+    }
+  ]
+}
