@@ -653,3 +653,39 @@ lost; six root causes on the team-lead side: two collisions of growth with the s
 that named a mechanism or a figure the instrument then refused (1, 3, 6), one plan line accepted without its instrument (6 — S9), one
 session sized for a build AND a buy (7). The fix is in this ruling and in PROCESS: a ruling names the command whose output is the number,
 never the number; a fork on a sealed file lists the seals it touches before the ruling (the STOP already does); a paid run is a session.
+
+## Ruling 03.09 (e) — the eighth STOP: the dead-man is the PRODUCTION sibling's 500 s; rungs 1–2 are lifted for this step; the next session runs WITHOUT `/goal`; the process is re-based on the retro (`docs/reviews/2026-09-03-retro-process-v3.md`)
+
+**Accepted, by files, $0.09:** `e4340e1`, `9c5af91`, `49860d1` — two pods created at the registered $0.74/h, both killed at 180 s by the
+executor's own dead-man, $0.089622 of $2.50 spent, both listings `[]`, the unused recreate refused on the record (right: a gate set below
+the span it measures gives the same answer every time). The create line of ruling (d) is vindicated; `--terminate-after` is a datetime
+and was derived from the cap. The defect is named correctly by the executor: `gates.ssh_deadman_seconds` was read from a PROBE's record
+(`prereg_reader_probe_v5b.json`, 180 s) while the production sibling on the same image/card/datacenter registers **500 s** with six
+measurements (14.5 → 262.5 s; two pods unreachable past 230 s). Nothing else moved.
+
+**Ruled.** (1) `gates.ssh_deadman_seconds` = **500** from `results/prereg_pass2_signals_r2.json :: kill_clock[rung 2].deadline_seconds`,
+the record with measurements; the registration is re-emitted with that source named. (2) For THIS step and every step of ≤ $3.00 from
+now on, rungs 1 and 2 are LIFTED: the money is bounded by `--terminate-after` derived from the cap (rung 3, the platform) and by the
+step's registration (rung 0); one ledger line per session (`--note` at create, `--close` at delete); no per-stage re-projection, no ASK
+ladder. The retro's reason: the guard has cost more sessions than the money it guards. (3) The dead-man stays as a LIVENESS check only:
+no ssh by 500 s → delete, one recreate, then STOP — never a third. (4) `max_recreates` stays 2.
+
+**The next session runs the runbook WITHOUT `/goal`.** The `/goal` evaluator cannot honour a pause (three sessions, 27 blocked turns,
+the ADR `the-pause-branch-is-unsatisfiable-as-worded` and its sequel); the phase's stop-points are human decisions by design, so the
+loop is the wrong instrument. From now the operator pastes the STANDING PROMPT below into a fresh session; the session does ONE item
+and ends its turn at a stop-point after writing it to `docs/plans/promo-pulse-1.PROGRESS.md` (the executor creates it this session:
+done / next / open stop, ≤ 60 lines; it replaces new STOP files and reports for the rest of the phase — the existing STOP file is
+folded into it and deleted). §8 of the phase spec stays as the DONE list; it is no longer a `/goal` condition.
+
+**Standing prompt (the operator pastes this, verbatim, every session of the phase from now on):**
+```
+Phase promo-pulse-1. Read, in this order and nothing else first: git log -15 --oneline; docs/plans/promo-pulse-1.PROGRESS.md (create it from docs/plans/promo-pulse-1.STOP.md if it does not exist, then delete the STOP file); the NEWEST dated section of docs/reviews/2026-08-30-plan-promo-pulse-1.md; docs/PHASE-promo-pulse-1.md §8 as the DONE list. Commit any modified team-lead file by path first. Then do exactly ONE item: the "next" line of PROGRESS. Verify it with its own check and show the output. Commit by path. Update PROGRESS (done / next / open stop, ≤60 lines). If you reach a stop-point — a paid or irreversible step not yet authorised, a design fork the plan does not settle, a test that would have to be weakened, a sealed file that would move — write it into PROGRESS as the open stop (≤15 lines: stop-point, question, tree state) and END YOUR TURN. Never add a test, pin, guard or ledger the phase file did not ask for; name the need in PROGRESS instead. Money: the step's cap is in results/prereg_promo_dev_loop.json; --terminate-after is derived from it; one ledger line per session.
+```
+Today's «next» line, which the executor writes into PROGRESS first: *run `scripts/runbook_promo_dev_1.md` end to end with the
+dead-man at 500 s — create → smoke → the decision table of ruling 03.09 (b) → 40 threads + 16 posts → fetch → delete → settle → K8 →
+error table; end the turn with the open stop «iteration 1 read» and the three iteration-1 files named.*
+
+**Process re-base.** The retro `docs/reviews/2026-09-03-retro-process-v3.md` is the team lead's finding on the eight pauses and the
+15:1 verification inversion; its §5 (principles), §6 (brain-init M6 v2 deltas) and the team-lead skill v3 draft on the operator's card
+are proposed, not yet applied; nothing in the phase waits for them except what this ruling already applies: no `/goal`, one item per
+session, PROGRESS instead of STOP+report, rungs lifted for small steps, rulings ≤ 12 lines from here.

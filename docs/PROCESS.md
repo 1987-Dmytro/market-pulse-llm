@@ -67,6 +67,12 @@ mechanics. Operator-facing digest of the same rules: `docs/STATUS.md` («Пра�
    describes a STATE, never a sequence. The rulings file grows; handovers never
    assume session survival. Slices and per-slice predicates are the failure mode this rule prevents.
    `/report <name>` is a clause of the predicate. The evaluator's «met» is NOT acceptance (step 4).
+   **v3 (03.09 evening, ruling (e) + `docs/reviews/2026-09-03-retro-process-v3.md`): for phases with stop-points the
+   `/goal` launch above is RETIRED** — the evaluator cannot honour a pause (27 blocked turns in three sessions). The
+   operator pastes a STANDING PROMPT (≤12 lines, in the newest ruling) into a fresh session; the session does ONE item,
+   shows its check, updates `docs/plans/<name>.PROGRESS.md` (done / next / open stop, ≤60 lines — replaces STOP files
+   and reports) and ends its turn at a stop-point. Rulings ≤12 lines, decide and never legislate. `/goal` only for a
+   single session with one measurable end and no human decision inside.
 4. Team lead accepts by diff, artifact and check; STATUS refreshed; one retro line.
 One-sentence contracts (`docs/PROMPT-*.md`) remain for fixes and debts whose diff fits in a sentence.
 
