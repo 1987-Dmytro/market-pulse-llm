@@ -120,3 +120,56 @@ def test_the_strata_come_from_the_draw_record_and_name_the_dev_arm(tmp_path):
     strata = grader.strata_of(draw)
     assert strata == {(CH, "4519"): "currency"}
     assert (CH, "9999") not in strata
+
+
+# --- the shipped gold, and whether this grader can read IT ---------------------------------------
+
+GOLD = REPO_ROOT / "docs" / "labels-promo-dev.jsonl"
+
+
+def real_gold() -> list[dict]:
+    return [json.loads(one) for one in GOLD.read_text(encoding="utf-8").splitlines() if one.strip()]
+
+
+def test_the_grader_reads_the_shipped_gold_and_both_bars_are_independent():
+    """Everything above drives SYNTHETIC gold. This drives the team lead's real one, so a schema
+    drift between `docs/labels-promo-dev.jsonl` and this reader is caught BEFORE a paid iteration
+    spends its money measuring the plumbing ([[drive_the_consumer_not_only_the_producer]]).
+
+    Four directions, because a grader that answered 1.0 to everything would pass the first alone
+    ([[guard_selftest_negative_control]]): the gold against itself scores 1.0 on both bars; wrong
+    subjects redden ONLY the subject bar; stripped signals redden ONLY the signal bar; and silence
+    reddens both, which is what «an abstention is an answer» has to mean in a number.
+    """
+    gold = real_gold()
+    strata = grader.strata_of(grader.DRAW)
+
+    perfect = grader.grade(gold, gold, strata)["whole_40"]
+    assert perfect["subject_agreement"] == 1.0
+    assert perfect["signal_type_agreement"] == 1.0
+
+    wrong_subject = [{**row, "subject": "ZZZ", "subject_type": "post"} for row in gold]
+    hit = grader.grade(gold, wrong_subject, strata)["whole_40"]
+    assert hit["subject_agreement"] == 0.0, "a wrong subject is a miss"
+    assert hit["signal_type_agreement"] == 1.0, "and it does not move the OTHER bar"
+
+    # Threads whose gold carries no signal at all score 1.0 when the model also says nothing, so
+    # stripping every signal must land on exactly that share — DERIVED here, never typed.
+    threads = {(row["channel"], str(row["thread_root"])) for row in gold}
+    silent_in_gold = {
+        key
+        for key in threads
+        if not any(
+            row.get("signal_types")
+            for row in gold
+            if (row["channel"], str(row["thread_root"])) == key
+        )
+    }
+    stripped = [{**row, "signal_types": []} for row in gold]
+    hit = grader.grade(gold, stripped, strata)["whole_40"]
+    assert hit["signal_type_agreement"] == round(len(silent_in_gold) / len(threads), 4)
+    assert hit["subject_agreement"] == 1.0, "stripping signals does not move the subject bar"
+
+    silence = grader.grade(gold, [], strata)["whole_40"]
+    assert silence["subject_agreement"] == 0.0
+    assert silence["signal_type_agreement"] == round(len(silent_in_gold) / len(threads), 4)
