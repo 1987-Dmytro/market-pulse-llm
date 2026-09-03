@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-09-03 10:58:08 (every SessionStart)
+**Auto-refreshed:** 2026-09-03 14:23:23 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
-168ecc8 docs(stop,report): the full make check tail — 18 failed, 4 247 passed, 17 errors; 32 of 35 are the fork
-4707516 docs(stop): the fork's blast radius on the suite, measured — 8 failed, 26 passed, 10 errors
-379fcfa docs(report): 30 lines — the population is bought, the phase stops on the seal's fork
-218e027 s4(run 2): the WHOLE C2 population bought — 3 008 pages + 385 posts, $3.0335 of $3.95
-b2af6c7 tools(rank): the $0 remainder ranker, MEASURED — the bar buys nothing, the usable cut is score >= 1
+978b884 knowledge(log): session 5 closes at the fifth STOP
+1b99409 knowledge(hot): curated block back to its budget
+a5326ed knowledge(hot): the grader is proven at $0, and 4 268 passed at 6b6fe44
+dfeaa6d docs(stop,report): 4 268 passed at 6b6fe44, and the grader is proven against the shipped gold
+6b6fe44 tests(k8): the grader is proven against the SHIPPED gold, four directions, at $0
 ```
 
 ## 📋 Recent decisions
@@ -29,51 +29,40 @@ b2af6c7 tools(rank): the $0 remainder ranker, MEASURED — the bar buys nothing,
 
 <!-- AUTO-GEN END (everything below preserved across refreshes) -->
 # Hot Cache — curated
-**Last update:** 2026-09-03 (сессия 4, платная нога S4 ЗАКРЫТА). Этап 1 `SPEC-v2-promo-pulse.md`, карта `STATUS.md`,
-цикл `PROCESS.md` v2.1. Руками, ≤40 строк; археология — в логах дня.
+**Last update:** 2026-09-03 (сессия 6, ОБЕ ВИЛКИ ЗАКРЫТЫ). Этап 1 `SPEC-v2-promo-pulse.md`, карта `STATUS.md`, цикл `PROCESS.md` v2.1. Руками, ≤40 строк; археология — в логах дня.
 
 ## 🔥 What's Hot
-**⏸️ `promo-pulse-1` — ПЯТАЯ ПАУЗА, НЕ ПРО ДЕНЬГИ. ОКНО C2 В БАЗЕ.** Рулинг 02.09 (d) shape 1 (`1161187`): две
-запечатанные витрины в одном `pulse.db`, каждая через СВОЙ seal, живой реестр не читается нигде. `w1` пересобирает
-**902/902** листа запечатанной сводки; `w2` — **17 каналов · 3 397 маркеров · 1 113 позиций**. `--register-addendum`
-добавил `registry.yaml = eff8ba5b…` и `window_id = w2` (повтор ОТКАЗЫВАЕТ). Строки — по ЗАКРЕПЛЁННЫМ id: w1 = манифест
-по `selection_pin` + D-cut, ПЕРЕСЧИТАННЫЙ и сверенный с `postcut_c3b`; 20 постов D-cut — в ОБОИХ окнах.
+**⏸️ `promo-pulse-1` — ШЕСТАЯ ПАУЗА. НЕ ПРО ДЕНЬГИ: платной ноги S9 ПРОСТО НЕТ.** У
+`promo_dev_pass.py` только `--render` и `--dry-run` — ни `--smoke`, ни `--register`, ни `--run`;
+проверено по всему репо (`promo_prompts` не импортирует ни один скрипт, поднимающий под). Рулинг
+03.09 (b) санкционирует ЗАПУСК, плана на СБОРКУ нет → `docs/plans/promo-pulse-1.STOP.md`.
 
-**⛔ ДВЕ ВИЛКИ (`docs/plans/promo-pulse-1.STOP.md`) — ЖДУТ РУЛИНГА.** (1) shape 1 НЕ восстанавливает ЗАПЕЧАТАННЫЕ
-артефакты w1: ран C2 дописывал в ТЕ ЖЕ файлы. ИЗМЕРЕНО по листьям: `dashboard_data_w1.json` расходится в **55 листьях,
-КАЖДЫЙ под `provenance.*`** (evidence/inputs/producers), **ни одного снаружи**, все 4 474 листа данных идентичны →
-проверка самого рулинга «w1 export sha byte-identical» НЕВЫПОЛНИМА при одном общем `data/derived/`. Раскол корня
-восстановил бы всё ровно: **23 файла не тронуты · 15 точный байтовый ПРЕФИКС · 0 разошлись**. (2) `positions` не
-различает картинку и текст (7 постов C2 прочитаны ОБЕИМИ ногами): `carrier` добавлен в PRIMARY KEY,
-`test_positions_is_untouched` красный и НАЗВАН, не ослаблен.
+**✅ Вилка 1 — раскол стора.** Точка раздела найдена САМОЙ печатью (префиксный sha256 = дайджест):
+**38/38**, 23 целых · 15 префиксов · 35 файлов целиком. `data/derived/` = w1, заморожен;
+**`data/derived_w2/` = живой** (3008/1093/15/385). Экспорт w1: **55 листьев → 5**, ноль под
+`provenance.evidence`, 4 474 листа данных идентичны; пятый пин `build_aggregates.py` ЗАЯВЛЕН как
+`MOVED_BY_THE_SECOND_WINDOW` @ `58ff037`. 19 редов зелёные, ни один assert не тронут.
 
-**✅ Рулинг 03.09 применён; ждёт ЧТЕНИЯ тимлида за $0. Платный K8 НЕ запускать до него.** `CODEBOOK` несёт шесть
-дельт, `codebook_version()` = `a97d3c71b8cf9b14…`; рендер root `6009` — `promo_dev_pass.py --render 6009`. Эталон через
-все четыре хука: **140 about + 84 signal, 0 отказов**, покрытие 140/140. **Грейдер ПРОВЕРЕН на боевом эталоне, $0:**
-сам с собой 1.0/1.0 · неверный субъект → 0.0 RED при сигналах 1.0 (бары НЕЗАВИСИМЫ) · сигналы сняты → 0.15 RED = ровно
-6/40 (число рулинга, выведенное ДРУГИМ инструментом) · молчание → оба RED. **S9 $0-половина ГОТОВА:** `--dry-run` →
-`results/promo_dev40_prep.json`, 40 рендеров / 209 897 знаков; итерация 1 ОГРАНИЧЕНА, не оценена (своей ставки НЕТ,
-взаймы `pass2_r2_seconds_per_thread` 23.76 с, n=75): **$0.2915 по среднему · $1.659 по максимуму** против $2.50 —
-одна итерация влезает в обоих углах, пять только по среднему.
+**✅ Вилка 2 + кодбук + K6.** `carrier` в ключе: 7 row_id под обоими носителями, 6 сообщений, ровно
+**1** тройка обеими ногами (`@forainfo:6056`), в w1 — 0 → дедуп трендов по (window, channel, msg_id,
+SKU), приоритет `leaflet_page`. `codebook_version()` = **`a694d005972d3a66…`**; эталон через четыре
+хука: **140 about · 84 signal · 0 отказов**. K6 ПО СТРАНИЦАМ: **46**, `positions_50_predicted.jsonl`
+= **205** строк обеих ног (`781b02b4…`), `image` у 45 из 46. **Дро НЕ сдвинулось:**
+`rows_sha256_as_drawn` **`fe3f5841175a3953…`** — эталон-50 должен против НЕГО, а `61b4fda7…` был sha
+ФАЙЛА и сдвинулся от добавленного поля.
 
-**Проверки (s5):** (a)(b)(c)(d)(e-$0)(f)(g)(h)(i)(l) показаны. Дро-50 по C2: **50 из 1 113, 12 сетей, sha
-`61b4fda7fdc83197…`** — positions-50 против ЭТОЙ sha. `make check` @ `6b6fe44` = **13 failed · 4 268 passed ·
-7 errors** (35 → 20 красных, passed +21): каждый красный — вилка; счётная половина (j) ВЫПОЛНЕНА (4 268 ≥ 4 266),
-держит только зелёность. Dv903 закрыт рулингом; 7 редов от `--window w2` были МОИ и починены.
-**НЕ выводить:** $0.00030669/с, резерв $0.2843, хвост 60 с; 16 из 405 постов C2 без улики (14 `@epicentrk_sale`).
-
-## ⏭️ Next
-START RITUAL → два рулинга (корень `data/derived` · ключ `positions`) → чтение рендера → S9 платная петля dev-40 →
-positions-50 → закрыть (d)(e)(j). Шаг НЕ закрыт: `--close --tolerance` ждёт дробь от тимлида.
-
-## 🚧 Blockers
-**⛔ ДВЕ ВИЛКИ ВЫШЕ**, денег не касаются; `PROMO-PULSE-1 $3.1909 of $3.95` · `CYCLE 3 $3.4826 of $7.00`; комната
-$0.2333/день. **⚠️ K4 НЕ ПЕРЕЗАПУСКАТЬ** (`:366/:171/:153`). **⛔ `1925810730` и инвайт-хэш неадресуемы.**
-**⚠️ Фоновые задачи харнеса убивают друг друга** — платный ран отцеплённым (`os.setsid()`), Dv904.
+## ⏭️ Next / 🚧 Blockers
+START RITUAL → рулинг по трём вопросам: (1) сборка платной ноги S9, (2) линия расхода шага —
+**$2.9867** (осадка гарда) или $3.1909 (дельта рулинга), (3) эталон positions-50. Шаг ЗАКРЫТ:
+`PROMO-PULSE-1 $2.9867 of $3.95` · `CYCLE 3 $3.5117 of $7.00` · `REMAINING $3.4883`; dev-петля
+держит полные $2.50 (пол $2.00 чист). **⚠️ K4 НЕ ПЕРЕЗАПУСКАТЬ** (`:366/:171/:153`).
+**⛔ `1925810730` и инвайт-хэш неадресуемы.** **⚠️ Фоновые задачи харнеса убивают друг друга** —
+платный ран отцеплённым (`os.setsid()`), Dv904. **⚠️ Фикстура, пишущая в стор, ДОЛЖНА патчить ВСЕ
+derived-корни** (`stage()` дописала 13 строк в живой корень). **⚠️ `volume_calc_5c1.py` НЕ ЗАПУСКАТЬ
+просто так** — перезаписывает `generated_at`, из которого берётся граница обхода, и роняет свой тест.
 
 ## 🔫 Footguns этого файла
-**⛔ ЭТОТ ФАЙЛ ГРЕПАЕТСЯ КАК ВХОД — ДВА ЛИТЕРАЛА.** `scripts/volume_calc_5c1.py :: quoted()` берёт
-обе строки ниже посимвольно; пропажа любой роняет девять `tests/test_volume_calc_5c1.py`.
+**⛔ ЭТОТ ФАЙЛ ГРЕПАЕТСЯ КАК ВХОД — ДВА ЛИТЕРАЛА.** `scripts/volume_calc_5c1.py :: quoted()` берёт обе строки ниже посимвольно; пропажа любой роняет девять `tests/test_volume_calc_5c1.py`.
 - 100 GB сетевого тома стоят **~$0.24/day** — цена ЗА ТОМ, а не состояние счёта; с 27.08 том один,
   `mp-srv2`. Литерал обязан стоять ровно так, по-английски со слэшем.
 - **A stopped pod with no network volume still bills its container disk.** 80 GB is about what the

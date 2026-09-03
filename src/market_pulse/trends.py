@@ -43,19 +43,32 @@ The same string as `loop.CARRIER`, kept here so this module reads the store's vo
 importing the collection loop; `tests/test_trends_sql.py` holds the two against each other."""
 
 DEDUPED = f"""
-one_row_per_sku AS (
+one_leg_per_sku AS (
     SELECT * FROM (
         SELECT *,
-               ROW_NUMBER() OVER (
-                   PARTITION BY window_id, channel, msg_id, {SKU}
-                   ORDER BY carrier <> '{PREFERRED_CARRIER}', row_id) AS leg_rank
+               MIN(carrier <> '{PREFERRED_CARRIER}') OVER (
+                   PARTITION BY window_id, channel, msg_id, {SKU}) AS best_leg
           FROM positions
          WHERE window_id = ?)
-     WHERE leg_rank = 1)
+     WHERE (carrier <> '{PREFERRED_CARRIER}') = best_leg)
 """
-"""The one source both statements below read. `carrier <> 'leaflet_page'` sorts the preferred leg
-first (0 before 1) and `row_id` breaks the remaining tie, so the choice is TOTAL: two runs over one
-store pick the same row, which is what makes `make tick` idempotent on this table."""
+"""The one source both statements below read: when BOTH legs read the same SKU off one message, the
+leaflet page's rows are the ones that count and the text leg's are dropped.
+
+**It drops a LEG, not a row, and that is the correction the measurement forced.** Ruling 03.09 (b)
+names the key (window, channel, msg_id, brand, product, volume) with no carrier in it, and taking ONE
+row per that key drops 39 rows over 35 groups in this store — of which only ONE group spans carriers,
+the case the ruling was ruling on. The other 34 are two readings of one SKU by ONE leg, 24 of them
+holding more than one distinct promo price (`@atb_market_official:4359` prints Активіа Біфідойогурт
+260 г at 23.9 AND 24.7), and 2 of them sit inside the SEALED w1 window. Those are two promos, not one
+promo counted twice — and «prefer `leaflet_page`» cannot even be applied to a group with a single
+carrier, so it would fall through to an arbitrary `row_id`
+([[a_gate_wider_than_the_order_it_guards]]).
+
+So the partition selects the preferred LEG and keeps every row of it. `MIN(carrier <> 'leaflet_page')`
+over the group is 0 when any row is a leaflet page and 1 when none is, and a row is kept when its own
+leg matches that. Nothing is ORDERED, so there is no tiebreak to be arbitrary about, and two runs
+over one store return the same rows — which is what makes `make tick` idempotent on this table."""
 
 
 def iso_week(when: str) -> str:
@@ -100,7 +113,7 @@ SELECT week_of(channel, msg_id) AS week,
        MAX(price_promo)         AS price_max,
        AVG(price_promo)         AS price_mean,
        AVG(depth)               AS depth_mean
-  FROM one_row_per_sku
+  FROM one_leg_per_sku
  WHERE price_promo IS NOT NULL
    AND week_of(channel, msg_id) IS NOT NULL
  GROUP BY week, chain, {SKU}
@@ -123,7 +136,7 @@ SELECT week_of(channel, msg_id) AS week,
        brand_raw                AS brand,
        COUNT(*)                 AS n,
        AVG(depth)               AS depth_mean
-  FROM one_row_per_sku
+  FROM one_leg_per_sku
  WHERE depth IS NOT NULL
    AND week_of(channel, msg_id) IS NOT NULL
  GROUP BY week, chain, brand

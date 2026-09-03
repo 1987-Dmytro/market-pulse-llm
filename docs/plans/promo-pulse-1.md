@@ -635,5 +635,18 @@ exactly **one** (brand, product, volume) triple is read by both legs off one mes
 (`@forainfo:6056`), out of **7** row_ids stored under both carriers and **6** messages with position
 rows from both. `positions` keeps every paid row (`carrier` joins its key); the trend counts a
 promo once. New in `src/market_pulse/trends.py`: `PREFERRED_CARRIER` and the `DEDUPED` CTE, held
-against `loop.CARRIER` and driven in both directions by `tests/test_trends_sql.py` — one repeated
-reading collapses, two different SKUs on one message both survive.
+against `loop.CARRIER` and driven three ways by `tests/test_trends_sql.py` — a repeated CROSS-LEG
+reading collapses, two different SKUs on one message both survive, and two readings of ONE SKU by
+ONE leg both survive.
+
+**The rule drops a LEG, not a row, and that narrowing is mine — measured, and named here rather than
+only in the report.** The ruling's key carries no carrier, and taking one row per (window, channel,
+msg_id, SKU) drops **39** rows over **35** groups in today's store: only **1** group spans carriers
+(the ruled case), the other 34 are two readings of one SKU by one leg, **24** of them holding more
+than one distinct promo price (`@atb_market_official:4359` prints Активіа Біфідойогурт 260 г at
+23.9 AND 24.7), and **2** sit inside the SEALED w1 window. Those are two promos, not one counted
+twice, and «prefer `leaflet_page`» cannot be applied to a group with one carrier at all — it would
+fall through to an arbitrary `row_id`. So the CTE selects the preferred LEG and keeps every row of
+it. Effect, measured: **1 carrier-spanning group, 1 row dropped, 0 in w1**, and
+`results/promo_screen_data.json` moves in exactly one leaf — `@forainfo` · Ласунка · 2026-W35
+`priced_positions` 4.0 → 3.0. **If the team lead means the literal key, say so and I widen it.**

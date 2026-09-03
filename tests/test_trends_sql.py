@@ -210,6 +210,25 @@ def test_two_different_skus_on_one_message_both_survive(db):
     assert sorted(row["size_value"] for row in trends.sku_trends(db, WINDOW)) == [450.0, 900.0]
 
 
+def test_two_readings_of_one_sku_by_ONE_leg_both_survive(db):
+    """The correction the measurement forced. A page can print the same brand/line/size at two
+    prices — `@atb_market_official:4359` lists Активіа Біфідойогурт 260 г at 23.9 and 24.7 — and
+    those are two promos, not one counted twice. Taking one row per (message, SKU) regardless of
+    carrier dropped 39 rows in the live store, 38 of them exactly this shape and 2 of them inside
+    the SEALED w1 window. The rule drops the text LEG when the leaflet leg read the same SKU; it
+    never thins one leg's own rows.
+    """
+    aggregates.add_positions(db, WINDOW, [
+        position("@chain:1:0", 1, price=23.9),
+        position("@chain:1:1", 1, price=24.7),
+    ])
+    trends.bind_weeks(db, {(CHAIN, 1): "2026-W32"})
+
+    rows = trends.sku_trends(db, WINDOW)
+    assert len(rows) == 1 and rows[0]["n"] == 2, "both readings are counted"
+    assert (rows[0]["price_min"], rows[0]["price_max"]) == (23.9, 24.7)
+
+
 def test_the_preferred_carrier_is_the_leaflet_legs_own_string(db):
     """`trends` names the carrier without importing the collection loop, so the two are held against
     each other here — a rename on one side that missed the other would make the preference match
