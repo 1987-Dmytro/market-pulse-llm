@@ -61,7 +61,10 @@ mechanics. Operator-facing digest of the same rules: `docs/STATUS.md` («Пра�
    file is written and the report committed, the executor's last line is «STOP — /goal clear» and
    the OPERATOR types `/goal clear` (aliases `stop`, `off`); the resume is a fresh session with the
    same paste (an active goal is restored only by `--continue`/`--resume`, never by a new session).
-   The predicate never changes mid-phase; the rulings file grows; handovers never
+   The predicate never changes mid-phase — one exception ruled 03.09 (c): a clause the evaluator
+   provably reads as an unsatisfiable precondition (the PAUSE branch's resume tail) is REMOVED by the
+   team lead, the version bumps (§8 v4) and the operator pastes the new body from then on; a predicate
+   describes a STATE, never a sequence. The rulings file grows; handovers never
    assume session survival. Slices and per-slice predicates are the failure mode this rule prevents.
    `/report <name>` is a clause of the predicate. The evaluator's «met» is NOT acceptance (step 4).
 4. Team lead accepts by diff, artifact and check; STATUS refreshed; one retro line.

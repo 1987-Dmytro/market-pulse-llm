@@ -547,3 +547,65 @@ Iteration = one pass over dev-40 with thinking OFF, batch 1, `extractor_version`
 (Claude Code docs: the cap is eight; `/goal clear` — aliases `stop`, `off` — ends a goal). From now: when the STOP file is written and
 the report committed, the executor's last message says «STOP — /goal clear», and the OPERATOR types `/goal clear`; the next resume is a
 fresh session with the same §8 paste. §8 does not change.
+
+## Ruling 03.09 (c) — the sixth STOP: plan §9 (rev 9) is ACCEPTED with five amendments — build the S9 instrument at $0, then buy the smoke and iteration 1; the step's line of record is the SETTLEMENT $2.9867; the dedupe keeps the LEG; §8 becomes v4 (the PAUSE clause loses its tail)
+
+**Accepted, by diff and by files, $0:** `85138c2` (the split — 38/38 sealed sources hash to their sealed values after the truncation,
+backup `data/derived_backup_2026-09-03` listed before the first cut, `w1` 902/902, the w1 export 55 → 5 differing leaves and all five are
+moved-file pins claimed through `MOVED_BY_THE_SECOND_WINDOW`, `w2` 17 · 3 397 · 1 113 from `data/derived_w2/`, the 19 reds green with no
+assertion of theirs touched), `fe84da8` + `bbc7483` (fork 2 closed; the reading owed: 7 row_ids under both carriers, 6 messages, exactly
+1 cross-carrier triple `@forainfo:6056`, w1 0), `1f67c73` (step closed at tolerance 0.05), `a6e1994` (rule 6's whole-promo clause;
+`codebook_version()` `a694d005972d3a66…`; the gold re-driven 140/84/0), `c01f2ff` (K6 page-level: 46 pages, 205 predicted rows both
+carriers, `image` on 45/46 — `@silposilpo:3822` is its own text — and the draw unmoved: `rows_sha256_as_drawn` **`fe3f5841175a3953…`** is the
+anchor the positions gold is owed against). **`make check` GREEN at `bbc7483`: 4 297 passed, exit 0** — (j) holds in both halves. The
+defect the executor found in its own fixture (13 stub rows into the live root) was repaired from the backup byte for byte and the
+fixture now refuses any derived root outside `tmp_path` with a negative control shown — accepted as reported. Nothing silently narrowed;
+the one narrowing (the dedupe) was measured and asked, which is the rule.
+
+**Money — the settlement is the line of record; my delta figure is withdrawn.** `docs/STATUS.md` carries `PROMO-PULSE-1 CLOSED —
+settled $2.9867 of $3.95` (pods $0.0521 + serverless $2.9347; the network volume's $0.2236 stays in cycle 3 by the walk's own rule).
+«$3.1909 (delta)» in ruling 03.09 (b) was a balance reading, not a settlement, and the executor was right not to type it into the record —
+the guard settles what it settles, and a ruling that names a figure the guard cannot produce is the ruling's error. Cycle 3 today:
+spent $3.5117 of $7.00, remaining $3.4883; the dev loop's cap is the full **$2.50**, floor $2.00, the holdout's $0.30 untouched.
+
+**Fork 2's dedupe — the LEG, not the literal key.** The literal key (window, channel, msg_id, brand, product, volume) would drop 39 rows
+over 35 groups, 34 of which are two promos of ONE SKU by ONE leg at different prices (`@atb_market_official:4359`, Активіа 260 г at
+23.9 and 24.7) — two promos, not one counted twice — and 2 of them inside w1. The executor's CTE keeps the preferred leg (`leaflet_page`)
+whole per message and drops exactly the cross-carrier collision (1 group · 1 row · 0 in w1; `@forainfo` Ласунка 2026-W35 `priced_positions`
+4 → 3). That is the ruling now, by the measurement; the literal wording of 03.09 (b) is withdrawn. Plan rev 8's clause reads the same.
+
+**Plan §9 (rev 9, `d33c5a3`) — ACCEPTED as the shape of S9's paid instrument, with five amendments folded in by revision (one commit,
+before any code):**
+1. **Registration prices smoke + iteration 1, not five.** Rung 0 at `--register` runs on the BORROWED corners (23.76 s mean, its max) for
+   smoke (3) + iteration 1 (40) + the 16 posts + one boot + the idle inside one session; the dear corner must fit $2.50 or `--run` refuses.
+   Iterations 2–5 are each re-projected at the MEASURED rate against what remains of the cap before they are bought (rung 2); the step
+   is not priced at five iterations up front — the borrowed max ($1.659 × 5) would refuse a loop the smoke may prove cheap.
+2. **One pod per iteration; teardown before every STOP and before the session ends** — the listing (`serverless list` → `[]`,
+   `pod list -a` → `[]`) in the transcript each time. The team lead's read of an error table happens between sessions; no pod idles across it.
+3. **What an iteration may change, and what it may not.** Iteration 1 is the BASELINE: `CODEBOOK` `a694d005…` and today's TEMPLATE,
+   untouched — it measures the law as ruled. Iterations 2–5 may vary the TEMPLATE, the rendering (thread order, truncation), decoding
+   (temperature 0, max tokens) and the answer repair — each variant a new `extractor_version`, its diff named in `results/promo_dev40_errors_iter<N>.json`
+   and in the report. `CODEBOOK` itself changes only by the team lead, at the plateau STOP, as the plan already says.
+4. **Every iteration keeps its evidence:** `results/promo_dev40_predicted_iter<N>.jsonl` (never overwritten), `grade_promo_dev40_iter<N>.json`,
+   `promo_dev40_errors_iter<N>.json` — the error table carries per-stratum readings beside the two bars, the top-10 subject misses with the
+   gold row beside the model's, and the Jaccard per thread.
+5. **`--close --tolerance 0.05`**, the fraction named now, as on S4. The smoke's rate lands in `results/measurements.jsonl` under the
+   instrument's own name and the projection names it instead of the borrow — as §9 says; the borrow is never reused after the smoke.
+Everything else in §9 stands as written: the new step `promo-dev-loop` and its own ledger, cap `min($2.50, REMAINING − $0.30)`, floor
+$2.00, the four rungs, the four flags borrowing `run_promo_c2.py` and `read_threads_reader_v5b.py`, the smoke's n = 3 by the
+shortest/median/longest rule over `promo_dev40_prep.json :: chars`, the 5-run ceiling, the plateau rule (two without gain on either bar),
+the decision table of 03.09 (b) quoted and not moved, the out-of-scope list. **Sequence:** the flags and their stub tests at $0 (`--register`
+and the projection testable without a pod), `make check` green, `--register` shown with `fits` at the dear corner → **then, in the same
+session if the registration fits, the pod: smoke → the table → iteration 1 → K8 → error table → teardown → STOP «iteration 1 read»** (or
+the table's own STOP). Option (2) — registering iteration 1 on the borrowed bound with the smoke folded in — is refused: the rate is the
+one number nothing in the repo has measured for this prompt.
+
+**§8 becomes v4 — the PAUSE clause loses its tail.** The ADR `the-pause-branch-is-unsatisfiable-as-worded` is right and the evaluator's
+own words prove it: «after the ruling lands in the rulings file, the operator re-enters this SAME predicate in a fresh session» reads as a
+precondition that the pausing session can never satisfy. The predicate describes a STATE; the resume protocol is a sequence and lives
+in `docs/PROCESS.md` §Cadence 3 (ENDING A PAUSE), where the operator reads it. `docs/PHASE-promo-pulse-1.md` §8 is edited by the team
+lead today: the tail after «a test that would have to be weakened» is deleted, the sentence ends there; nothing else in the body moves.
+The operator pastes v4 from now on; a STOP still ends with «STOP — /goal clear» and the operator's `/goal clear`.
+
+**Team lead's debts.** `docs/labels-positions-50.jsonl` against `fe3f5841…` — 46 pages, every in-scope position, next team-lead session(s);
+the holdout-40 after the pre-registration STOP notice. The dev loop does not wait for the positions gold.
