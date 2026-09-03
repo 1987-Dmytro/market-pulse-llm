@@ -390,3 +390,38 @@ def test_a_channel_whose_remainder_does_not_fit_the_room_is_skipped_whole(staged
     assert run["unbought"]["pages"] == {CHANNEL: 39} and run["unbought"]["posts_total"] == 0
     assert any("pages left UNBOUGHT" in one for one in run["notes"])
     assert staged_40.rows == 4, "two warm-ups, one post, one page — and no thirty-ninth"
+
+
+# --- the addendum (ruling 02.09 (d) item 1) -------------------------------------------------------
+
+
+def test_the_addendum_adds_the_registry_pin_once_and_refuses_to_re_pin(tmp_path, monkeypatch):
+    """Both directions on a sealed record's ONE growable field.
+
+    The ruling lets the registration's own writer ADD the registry it was bought under and forbids
+    re-pinning what is already there — so the branch that decides between those two is a provenance
+    path, and a transcript demonstration is not a check that runs next week
+    ([[a_self_pinning_producer_cannot_grow_a_parameter]]). The negative direction asserts the BYTES,
+    not just the exception: a refusal that had already written half the record would pass an
+    exception-only test.
+    """
+    prereg = tmp_path / "prereg.json"
+    prereg.write_text(
+        json.dumps({"pinned_inputs": {"results/x.json": "0" * 64}}, indent=2), encoding="utf-8"
+    )
+    registry = tmp_path / "registry.yaml"
+    registry.write_text("watchlist: []\n", encoding="utf-8")
+    monkeypatch.setattr(driver, "PREREG", prereg)
+    monkeypatch.setattr(driver, "REGISTRY", registry)
+
+    record = driver.register_addendum()
+    key = driver.rel(registry)
+    assert record["pinned_inputs"][key] == driver.sha256_of(registry)
+    assert record["pinned_inputs"]["results/x.json"] == "0" * 64, "nothing already pinned moved"
+    assert record["addendum"][0]["window_id"] == driver.WINDOW_ID
+    assert record["addendum"][0]["dated"]
+
+    sealed = prereg.read_bytes()
+    with pytest.raises(SystemExit, match="an addendum adds, it never re-pins"):
+        driver.register_addendum()
+    assert prereg.read_bytes() == sealed, "a refusal writes nothing"

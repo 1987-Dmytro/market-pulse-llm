@@ -15,8 +15,11 @@ where the seal hashed 159). Every w1 record that says «what bytes made this» t
   `set(record["sources"]) == everything`, where `everything` is a LIVE glob of `summary.DERIVED`, and then hashes each
   file live. It reads the committed record and a module constant: no fixture and no producer edit can reach either half.
 - `tests/test_export_dashboard_data.py`, `tests/test_build_dashboard.py`, `tests/test_build_validate_pack.py` — the
-  same, one layer up: the w1 export's DATA is unchanged (145 position rows, 902/902 leaves, 30 shared figures equal)
-  and only `provenance.sources` moved — it now names 17 leaflet files where the committed record names one.
+  same, one layer up, and MEASURED leaf by leaf rather than eyeballed: today's `dashboard_data_w1.json` differs from
+  the committed one in **55 leaves (20 changed + 35 new) and every single one is under `provenance.*`** —
+  `provenance.evidence`, `provenance.inputs`, `provenance.producers`. **0 differing leaves outside it**, and the 4 474
+  data leaves are identical (145 position rows, 902/902 anchor leaves, 30 shared figures equal). The record's numbers
+  did not move; its statement about which bytes made it did.
 - **So the ruling's own check «the `w1` export sha is byte-identical before and after» cannot hold** under one shared
   derived root. The MIRROR half of that check does hold and is shown above.
 
