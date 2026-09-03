@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """The pod side of the promo-signal dev loop — one pack, two legs, one out-file, one GO.
 
-Nothing about the transport is new. `reader_v5_pod_runner` is IMPORTED and exactly ONE function of
-it is swapped — the render — the way `pass2_r2_pod_runner` swaps in pass 2's; the resume clause
-(`already_answered`), the per-item sha check, the balanced-prefix stop, the flushing writer and the
+Nothing about the transport is new. `reader_v5_pod_runner` is IMPORTED and TWO of its functions are
+swapped, the way `pass2_r2_pod_runner` swaps in pass 2's: the render, and the balanced prefix — which
+gains the ARRAY leg B's registered prompt answers with and keeps the shipped rule verbatim for every
+object. The resume clause (`already_answered`), the per-item sha check, the flushing writer and the
 row shape are the shipped ones, so a reply written here is a reply of the same instrument family.
 
 **Two legs on one pod, dispatched by the ITEM and never by inspection.** Leg A is the promo-signal
@@ -63,6 +64,49 @@ def render(prompts, item: dict, task: str) -> str:
     return SHIPPED_RENDER(prompts, item, task)
 
 
+def balanced_prefix(text: str, shipped):
+    """The prefix that closes the first top-level VALUE — an ARRAY as well as an object.
+
+    Leg B's registered prompt ends «the first thing you write is "["», and the shipped rule closes
+    the first top-level OBJECT: on a post with three offers it would keep one and drop the `]`, and
+    every one of the 16 would come back unparseable with `balanced: true`. The rule is dispatched on
+    the answer's own first character — leg A's template asks for `{"about": …}` and can never begin
+    with `[` — so leg A keeps the shipped rule VERBATIM and nothing sealed moves.
+
+    An array closes by `json.JSONDecoder().raw_decode`, the parser itself, rather than a second
+    depth-walk: two spellings of one rule drift, and only the one nothing exercises is wrong
+    ([[two_values_for_one_input_get_quoted_kindly]]).
+    """
+    lead = text.lstrip()
+    if not lead.startswith("["):
+        return shipped(text)
+    try:
+        _, end = json.JSONDecoder().raw_decode(lead)
+    except ValueError:
+        return None
+    return text[: len(text) - len(lead) + end]
+
+
+def close_arrays_too(reader_v5) -> None:
+    """Wire the rule above into the module BOTH readers of it resolve at call time.
+
+    `stop_at_balanced` is handed this module and `run` imports it, so one attribute serves the stop
+    that ends generation and the prefix that is persisted; patching only the stop would end
+    generation on a whole array and still write a third of it down. Idempotent, and the shipped
+    callable is captured before the attribute is replaced — a patch that called itself would recurse
+    on the first reply.
+    """
+    shipped = reader_v5.balanced_prefix
+    if getattr(shipped, "closes_arrays", False):
+        return
+
+    def dispatched(text: str):
+        return balanced_prefix(text, shipped)
+
+    dispatched.closes_arrays = True
+    reader_v5.balanced_prefix = dispatched
+
+
 def check_law(pack: dict, repo: Path) -> dict:
     """The promo instrument's own handshake: this checkout IS the codebook the pack registered.
 
@@ -111,6 +155,9 @@ def main(argv: list[str] | None = None, loader=runner.load_reader, sleep=time.sl
     runner.say(started, f"codebook {law['codebook_version'][:16]}… matches the pack")
 
     runner.render = render
+    from market_pulse import reader_v5
+
+    close_arrays_too(reader_v5)
     held = once(loader)
     smoke = [item for item in pack["items"] if item.get("smoke")]
     if not smoke:

@@ -940,6 +940,97 @@ def open_segment(*, pod_id: str, created_at: str, usd_per_hour: float, card: str
     return append_gate(state, "price", gate)
 
 
+MEASURED_RATE = "promo_dev40_seconds_per_thread"
+"""This instrument's OWN name in `results/measurements.jsonl`. The borrow
+(`pass2_r2_seconds_per_thread`, another prompt and another pod) is never reused after the smoke —
+plan §9, and [[the_smokes_rate_carries_the_smokes_transport]]."""
+
+
+def project(replies: Path) -> dict:
+    """The smoke's own rate, and ruling 03.09 (b)'s verdict on it. $0, on a pod that is waiting.
+
+    The gate that decides whether the remaining 37 threads are bought must not be a number typed
+    into its own decision, so the projection is `corner()` — the very function that priced the
+    registration's three corners — fed the MEASURED seconds instead of the borrowed ones. Same
+    shape, same units, same cap: the bands were written against that arithmetic.
+
+    Two readings, one verdict. The band is read at the MEAN, because the smoke's three units are
+    chosen to SPAN the population (shortest, median, longest) and their mean is what estimates it;
+    the max is a deliberately worst-case draw and projecting all 40 at it would refuse a loop the
+    sample was built to price. The max is still decisive for MONEY: a max corner above the cap is a
+    KILL whatever band the mean falls in ([[a_reproducible_probe_can_be_unrepresentative]]).
+    """
+    record = committed_registration()
+    smoke = record["population"]["leg_a"]["smoke"]["units"]
+    rows = {}
+    for line in replies.read_text(encoding="utf-8").splitlines():
+        if line.strip():
+            row = json.loads(line)
+            rows[row["id"]] = row
+    missing = [one["unit_id"] for one in smoke if one["unit_id"] not in rows]
+    if missing:
+        raise SystemExit(
+            f"{rel(replies)} carries no reply for {missing} — the smoke's own units are the rate's"
+            " only sample, and a projection over a partial smoke prices a population nothing"
+            " measured. Wait for the three, or STOP."
+        )
+    seconds = [float(rows[one["unit_id"]]["seconds"]) for one in smoke]
+    price = record["rung_0"]["price"]
+    threads = record["population"]["leg_a"]["threads"]
+    common = {
+        "n_threads": SMOKE_N + threads,
+        "n_posts": record["population"]["leg_b"]["posts"],
+        "s_post": float(load(PREREG_5C2)["prices"]["post_text"]["seconds_model"]["value"]),
+        "overhead": float(record["rung_0"]["overhead"]["seconds"]),
+        "usd_per_second": float(price["usd_per_hour"]) / 3600.0,
+        "cap": float(record["step"]["cap_usd"]),
+    }
+    mean = corner("measured mean", s_thread=sum(seconds) / len(seconds), **common)
+    worst = corner("measured max", s_thread=max(seconds), **common)
+    bands = record["decision_table"]["after_the_smoke_for_40_threads"]
+    usd = mean["usd"]
+    verdict = "GO" if usd <= 0.80 else ("GO-THEN-STOP" if usd <= 1.20 else "NO-GO")
+    if not worst["fits"]:
+        verdict = "KILL"
+    return {
+        "verdict": verdict,
+        "rule": "ruling 03.09 (b), quoted and not moved — the band is read at the MEAN corner; a"
+        " MAX corner over the cap is a KILL whatever the band says",
+        "bands": bands,
+        "usd_at_the_measured_mean": mean["usd"],
+        "usd_at_the_measured_max": worst["usd"],
+        "corners": [mean, worst],
+        "measured": {
+            "name": MEASURED_RATE,
+            "seconds": {one["unit_id"]: rows[one["unit_id"]]["seconds"] for one in smoke},
+            "value": round(sum(seconds) / len(seconds), 3),
+            "max": round(max(seconds), 3),
+            "n": len(seconds),
+            "replaces": BORROWED_RATE,
+        },
+        "replies": rel(replies),
+    }
+
+
+def write_measurement(gate: dict) -> dict:
+    """The smoke's rate into `results/measurements.jsonl`, under its OWN name and never the borrow's."""
+    row = {
+        "contract": "promo-pulse-1-s9",
+        "name": MEASURED_RATE,
+        "instrument": "promo-signal prompt (leg A), READER serving, thinking OFF, batch 1 — the"
+        f" SMOKE's three units on this pod; it replaces the borrowed {BORROWED_RATE}",
+        "measured_on": ", ".join(f"{unit} {seconds}s" for unit, seconds in gate["measured"]["seconds"].items()),
+        "n": gate["measured"]["n"],
+        "unit": "seconds",
+        "value": gate["measured"]["value"],
+        "max": gate["measured"]["max"],
+        "source": rel(RUN_RECORD),
+    }
+    with MEASUREMENTS.open("a", encoding="utf-8") as handle:
+        handle.write(json.dumps(row, ensure_ascii=False, sort_keys=True) + "\n")
+    return row
+
+
 def close_segment(*, deleted_at: str, billed_seconds: float, outcome: str) -> dict:
     """The segment's own bill, at its OWN price. Never a balance delta — that prices the account."""
     state = run_state()
@@ -982,6 +1073,9 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--close-segment", action="store_true", help="$0: the segment's own bill")
     parser.add_argument(
         "--score", action="store_true", help="$0: the pod's replies → K8's rows and the error table"
+    )
+    parser.add_argument(
+        "--project", action="store_true", help="$0: the smoke's rate and the decision table"
     )
     parser.add_argument("--replies", type=Path, help="the out-file the pod wrote")
     parser.add_argument("--iteration", type=int, help="names the two files this iteration keeps")
@@ -1044,6 +1138,22 @@ def main(argv: list[str] | None = None) -> int:
         )
         print(json.dumps(state["gates"][-1], ensure_ascii=False, indent=1))
         return 0 if state["latest"]["verdict"] == "GO" else 1
+
+    if args.project:
+        if args.replies is None:
+            parser.error("--project needs --replies: the smoke's own out-file is the only sample")
+        gate = project(args.replies)
+        state = append_gate(run_state(), "smoke", gate)
+        row = write_measurement(gate)
+        print(json.dumps(state["gates"][-1], ensure_ascii=False, indent=1))
+        print(f"\nmeasured {row['name']} = {row['value']} s/thread (max {row['max']}, n={row['n']})"
+              f" — appended to {rel(MEASUREMENTS)}, and it replaces {BORROWED_RATE}")
+        print(f"40 threads + {gate['corners'][0]['n_posts']} posts project to"
+              f" ${gate['usd_at_the_measured_mean']} at the mean and"
+              f" ${gate['usd_at_the_measured_max']} at the max, against the cap"
+              f" ${gate['corners'][0]['cap_usd']}")
+        print(f"VERDICT {gate['verdict']} — {gate['rule']}")
+        return 0 if gate["verdict"] in ("GO", "GO-THEN-STOP") else 1
 
     if args.score:
         for name in ("replies", "iteration"):
