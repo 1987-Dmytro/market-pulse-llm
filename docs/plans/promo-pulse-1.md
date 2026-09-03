@@ -650,3 +650,66 @@ fall through to an arbitrary `row_id`. So the CTE selects the preferred LEG and 
 it. Effect, measured: **1 carrier-spanning group, 1 row dropped, 0 in w1**, and
 `results/promo_screen_data.json` moves in exactly one leaf — `@forainfo` · Ласунка · 2026-W35
 `priced_positions` 4.0 → 3.0. **If the team lead means the literal key, say so and I widen it.**
+
+---
+
+## 9. Revision 2026-09-03 (b) — S9's PAID instrument, proposed for review. NOT implemented.
+
+Ruling 03.09 (b) gives iteration 1 a decision table «after the smoke», and there is no smoke:
+`scripts/promo_dev_pass.py` offers `--render`, `--channel`, `--dry-run`, `--out` and nothing else.
+This section is the shape I would build, written BEFORE any code so the team lead rules on it rather
+than on a diff (CLAUDE.md workflow §2). **Nothing here is implemented and no pod exists.** Every
+threshold, sample and floor the instrument would introduce is listed, because one that reached only
+the report would be a scope change.
+
+**The question it answers.** Does the promo-signal instrument, under `CODEBOOK` `a694d005972d3a66…`,
+clear subject ≥ 0.80 and signal ≥ 0.75 on dev-40 within at most 5 dev runs?
+
+**Money, and it is a NEW step.** `STEP = promo-dev-loop`, its own ledger
+(`results/spend_promo_dev_loop.json`), cap `min($2.50, REMAINING − $0.30)` = **$2.50** at today's
+`REMAINING $3.4883`, floor **$2.00** — below it, STOP for the operator's word before the first dev
+run (ruling 02.09 (b) §4). The holdout's **$0.30** is a separate pre-registration and is not
+reachable from this step. Four rungs per `docs/PROCESS.md`: (0) `--register` prices the WHOLE step —
+smoke + iterations + the 16 posts + one boot + the idle tail — at the measured corners BEFORE
+anything is created, and `--run` refuses to build a client when the dear corner does not fit;
+(1) liveness; (2) re-projection after every stage at the MEASURED rate, over cap by ≤ 20 % → ASK;
+(3) the platform hard stop from the cap at the observed price. **No cap raise mid-run, ever.**
+
+**Surface — four flags, borrowing what exists rather than inventing it.** `scripts/run_promo_c2.py`
+already carries `--register` / `--run` / `guard_says_go` / the per-stage re-projection, and
+`scripts/read_threads_reader_v5b.py` carries the pod lifecycle (`--pre-create-check` never-two-pods,
+`--open`, `--gate0` ssh dead-man, `--deadlines`, `--close-segment`). `promo_dev_pass.py` gains:
+
+- `--register` — $0. Writes `results/prereg_promo_dev_loop.json`: the step cap, the corners, the
+  rung-0 table, the codebook sha, the gold sha, the draw sha, and the population as PINNED ids.
+- `--smoke --endpoint <id>` — PAID, **3 threads**. The sample is a rule and not a pick: the
+  shortest, the median and the longest render by `promo_dev40_prep.json`'s own `chars` (8 170 is the
+  longest today). Writes `seconds_per_thread` to `results/measurements.jsonl` under its OWN
+  instrument name, which REPLACES the borrowed `pass2_r2_seconds_per_thread` (23.76 s, n = 75,
+  another prompt and another pod) — the record says which rate it used and where it came from.
+- `--run --endpoint <id>` — PAID. One pass over dev-40, thinking OFF, batch 1, `extractor_version`
+  on every row → `results/promo_dev40_predicted.jsonl`. Then K8 on it
+  (`scripts/grade_promo_signals.py`) → `results/grade_promo_dev40_iter<N>.json`, and the error table
+  (top-10 subject misses with the gold row beside the model's, signal Jaccard per thread) →
+  `results/promo_dev40_errors_iter<N>.json`. The **16** pinned posts with no evidence row ride the
+  same pod as their own step-ledger line (≈ $0.004 of compute, no separate boot).
+- `--close --tolerance <fraction>` — the settlement, the fraction named by the team lead as on S4.
+
+**The decision table is the ruling's and is not mine to move.** After the smoke, the projection for
+40 threads at the measured mean and max: ≤ $0.80 → run iteration 1 now; $0.80–$1.20 → run it, then
+STOP with the error table; > $1.20 → STOP before buying, pod torn down, listing shown.
+
+**Thresholds and samples this would introduce** — all of them, so none reaches only a report:
+the smoke's **n = 3** and its shortest/median/longest selection rule; the dev-loop cap **$2.50** and
+floor **$2.00** (ruling 02.09 (b)); the **5**-dev-run ceiling (the phase predicate); the plateau rule
+— **two** iterations without gain on either bar is a STOP; and the bars themselves, **subject ≥ 0.80
+· signal ≥ 0.75**, which are the predicate's and are not restated as new numbers.
+
+**Checks.** `--register` prints `fits` true at the dear corner or refuses · the smoke's rate is in
+`results/measurements.jsonl` with its own instrument name and the projection names it instead of the
+borrow · teardown proven by `runpodctl serverless list` → `[]` and `pod list -a` → `[]` · each paid
+leg's spend line named in the report · `make check` green after every commit · the stub-driven tests
+of the new flags pass without a pod (`--register` and the projection are $0 and testable).
+
+**Out of scope.** No training. No holdout spend — the ONE attempt stays pre-registered, announced by
+a STOP notice, and spent once, after dev-40 clears. No new sources, no re-collection, no cap raise.
