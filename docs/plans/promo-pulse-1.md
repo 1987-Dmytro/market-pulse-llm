@@ -713,3 +713,56 @@ of the new flags pass without a pod (`--register` and the projection are $0 and 
 
 **Out of scope.** No training. No holdout spend — the ONE attempt stays pre-registered, announced by
 a STOP notice, and spent once, after dev-40 clears. No new sources, no re-collection, no cap raise.
+
+## 9a. Revision 2026-09-03 (c) — ruling 03.09 (c) applied, `[cause: ruling]`. Still $0, still no pod.
+
+Ruling 03.09 (c) ACCEPTS §9 with five amendments, folded in here before any code. §9 stands as
+written except where a numbered clause below replaces a sentence of it, and one mechanic §9 left
+loose — the transport — is fixed by a fact the build hit and is named here rather than in a report.
+
+1. **Rung 0 prices the SMOKE plus ITERATION 1, not five iterations.** `--register` runs at the
+   BORROWED corners (`pass2_r2_seconds_per_thread` 23.76 s mean, 135.232 s max) over 3 + 40 threads
+   + the 16 posts + one boot + one idle tail; the DEAR corner must fit $2.50 or `--run` refuses.
+   Iterations 2–5 are each re-projected at the MEASURED rate against what is left of the cap before
+   they are bought (rung 2). §9's «prices the WHOLE step — smoke + iterations» is replaced by this:
+   the borrowed max over five iterations ($1.659 × 5) would refuse a loop the smoke may prove cheap.
+2. **One pod per iteration; teardown before every STOP and before the session ends**, with the
+   listing in the transcript each time — `runpodctl serverless list` → `[]` and `pod list -a` → `[]`.
+   The team lead reads the error table between sessions and no pod idles across that read.
+3. **What an iteration may change.** Iteration 1 is the BASELINE: `CODEBOOK` `a694d005972d3a66…`
+   and today's `TEMPLATE`, untouched — it measures the law as ruled. Iterations 2–5 may vary the
+   TEMPLATE, the rendering (thread order, truncation), the decoding (temperature 0, max tokens) and
+   the answer repair; each variant is a new `extractor_version`, its diff named in
+   `results/promo_dev40_errors_iter<N>.json` and in the report. `CODEBOOK` moves only by the team
+   lead, at the plateau STOP.
+4. **Every iteration keeps its evidence, never overwritten:**
+   `results/promo_dev40_predicted_iter<N>.jsonl`, `results/grade_promo_dev40_iter<N>.json`,
+   `results/promo_dev40_errors_iter<N>.json` — the error table carrying the per-stratum readings
+   beside the two bars, the top-10 subject misses with the gold row beside the model's, and the
+   Jaccard per thread.
+5. **`--close --tolerance 0.05`**, the fraction named now, as on S4. The smoke's rate lands in
+   `results/measurements.jsonl` under this instrument's OWN name and the projection names it instead
+   of the borrow; the borrow is never reused after the smoke.
+
+**The transport is a POD, and it is not a choice — the serverless worker cannot render this prompt.**
+`scripts/serve_handler.py` dispatches every op (`batch` / `positions` / `reader` / `caption`) to
+`local_llm.LocalClient`, whose `batch` renders `self.render(task, text, post)` from a task registered
+in `src/market_pulse/prompts.py` — and `prompts.py` is PINNED, which is why `promo_prompts.py` was
+written as a new module at all. A serverless endpoint could therefore only serve this instrument by
+moving a pinned file, so `--endpoint` in §9 reads as the POD, exactly as amendment 2 words it.
+The shape is pass-2's, which is also where the borrowed rate comes from: a pack built and hashed on
+the Mac, `scripts/read_threads_reader_v5b.py`'s lifecycle (`--pre-create-check` never-two-pods,
+`--open`, `--gate0` ssh dead-man, `--close-segment`), and a `scripts/promo_dev_pod_runner.py` that
+imports `reader_v5_pod_runner` and swaps ONE function — the render — for `promo_prompts.render`,
+the way `pass2_r2_pod_runner.py` swaps in pass 2's. No new module of the model's is written.
+
+**Sequence, as the ruling fixes it:** the flags and their stub tests at $0 (`--register` and the
+projection are testable without a pod) · `make check` green · `--register` shown with `fits` at the
+dear corner → then, in the SAME session if the registration fits: the pod → the smoke (3 threads) →
+the decision table of 03.09 (b), quoted and not moved → iteration 1 → K8 → the error table →
+teardown → STOP «iteration 1 read» (or the table's own STOP). Option (2) of the sixth STOP —
+registering iteration 1 on the borrowed bound with the smoke folded in — is REFUSED by the ruling.
+
+**No new threshold enters here.** The numbers above are §9's own (cap $2.50, floor $2.00, smoke
+n = 3, 5-run ceiling, plateau = two without gain, subject ≥ 0.80 · signal ≥ 0.75) and the ruling's
+tolerance 0.05. What changed is WHAT rung 0 prices — two legs, not five iterations.
