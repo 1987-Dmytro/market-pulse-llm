@@ -15,7 +15,8 @@ WINDOW = "w-test"
 CHAIN = "@chain"
 
 
-def position(row_id, msg_id, *, brand="Яготинське", price=52.9, depth=0.2, size=900.0):
+def position(row_id, msg_id, *, brand="Яготинське", price=52.9, depth=0.2, size=900.0,
+             carrier="leaflet_page"):
     """One `positions` row in `add_positions`'s shape — the producer's, never a hand-built tuple
     ([[a_fixture_on_disk_pins_yesterdays_schema]])."""
     return {
@@ -27,7 +28,7 @@ def position(row_id, msg_id, *, brand="Яготинське", price=52.9, depth=
         "warnings": [],
         "presence": dict.fromkeys(aggregates.PRESENCE, True),
         "position": {
-            "carrier": "leaflet_page",
+            "carrier": carrier,
             "brand_id": "yagotynske",
             "category": "dairy",
             "price_promo": price,
@@ -175,3 +176,45 @@ def test_a_connection_with_no_bound_weeks_refuses_rather_than_returning_nothing(
     fresh.executescript(aggregates.SCHEMA)
     with pytest.raises(sqlite3.OperationalError, match="week_of"):
         trends.sku_trends(fresh, WINDOW)
+
+
+# --- one message read by both legs is one reading, not two ---------------------------------------
+
+
+def test_the_same_sku_off_one_message_is_counted_once_and_the_leaflet_wins(db):
+    """Ruling 03.09 (b), fork 2. Two carriers may hold two genuine rows about one message — the
+    C2 window has 7 such row_ids — and `positions` keeps both because both were paid for. A TREND
+    must not count one promo twice: `n` of 2 for a single price, and that price weighted double in
+    the mean, is a number about the collection and not about the market."""
+    aggregates.add_positions(db, WINDOW, [
+        position("@chain:1:0", 1, price=52.9),
+        position("@chain:1:0", 1, price=48.0, carrier="post_text"),
+    ])
+    trends.bind_weeks(db, {(CHAIN, 1): "2026-W32"})
+
+    rows = trends.sku_trends(db, WINDOW)
+    assert len(rows) == 1 and rows[0]["n"] == 1
+    assert rows[0]["price_min"] == rows[0]["price_max"] == rows[0]["price_mean"] == 52.9
+    assert [row["n"] for row in trends.depth_trends(db, WINDOW)] == [1]
+
+
+def test_two_different_skus_on_one_message_both_survive(db):
+    """The negative control: the rule collapses a repeated READING, never two products. A dedupe
+    keyed one field too short would quietly halve a leaflet page that lists two sizes."""
+    aggregates.add_positions(db, WINDOW, [
+        position("@chain:1:0", 1, size=900.0),
+        position("@chain:1:1", 1, size=450.0, carrier="post_text"),
+    ])
+    trends.bind_weeks(db, {(CHAIN, 1): "2026-W32"})
+
+    assert sorted(row["size_value"] for row in trends.sku_trends(db, WINDOW)) == [450.0, 900.0]
+
+
+def test_the_preferred_carrier_is_the_leaflet_legs_own_string(db):
+    """`trends` names the carrier without importing the collection loop, so the two are held against
+    each other here — a rename on one side that missed the other would make the preference match
+    nothing and silently fall back to the row_id tiebreak."""
+    from market_pulse import loop
+
+    assert trends.PREFERRED_CARRIER == loop.CARRIER
+

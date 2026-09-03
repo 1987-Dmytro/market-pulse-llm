@@ -8,6 +8,7 @@ nobody touched. `rollup` is the exception — a rollup IS a per-week fact — an
 asserted here rather than described in a comment.
 """
 
+import json
 import sqlite3
 import sys
 import unicodedata
@@ -167,7 +168,43 @@ def test_the_closed_vocabularies_are_closed(conn):
     assert aggregates.ATTRIBUTION_SOURCES == ("explicit", "reply_context", "post_context")
 
 
-def test_positions_is_untouched(conn):
-    """The plan says so and the schema has to be able to prove it: C2 is a POPULATION change."""
-    assert primary_key(conn, "positions") == ["window_id", "row_id"]
+def test_no_stored_row_id_moves_and_the_carrier_is_what_completes_the_key(conn):
+    """Ruling 03.09 (b), fork 2 — re-scoped from `test_positions_is_untouched`, Dv [cause: ruling].
+
+    The plan's claim was «C2 is a POPULATION change, the table is untouched», and the population is
+    what broke it: 7 C2 posts were read by BOTH legs, and `row_id` is `channel:msg_id:ordinal`, an
+    id the producer owns and that carries no carrier. Under a two-column key the second leg's row
+    REPLACED the first — two paid readings, one stored. The ruling's answer is that the id does not
+    move (a sealed export names those rows by it) and the carrier the table already stored joins the
+    key. So what is asserted here is what the plan actually protects, and it is more than the old
+    line said: the ids stay, the rows stay apart, and window 1's values are the shipped record's.
+    """
+    assert primary_key(conn, "positions") == ["window_id", "row_id", "carrier"]
     assert "brand_raw" in columns(conn, "positions") and "price_old" in columns(conn, "positions")
+
+    # Every row_id the shipped w1 export names is `channel:msg_id:ordinal` — no carrier in it, which
+    # is exactly why the key needs one. The record is committed, so this holds on a clean clone.
+    shipped = json.loads((REPO_ROOT / "results" / "dashboard_data_w1.json").read_text("utf-8"))
+    rows = shipped["promo"]["positions_table"]["rows"]
+    assert len(rows) == 145
+    carriers = {row["carrier"] for row in rows}
+    for row in rows:
+        channel, msg_id, ordinal = row["row_id"].rsplit(":", 2)
+        assert channel.startswith("@") and msg_id.isdigit() and ordinal.isdigit(), row["row_id"]
+        assert row["carrier"] not in row["row_id"], row["row_id"]
+    assert carriers == {"leaflet_page", "post_text"}
+
+    # and the reason, driven: one message read by both legs is two rows, not one overwriting the
+    # other. Under the old key the second INSERT would have replaced the first and this would read 1.
+    for carrier in sorted(carriers):
+        conn.execute(
+            "INSERT INTO positions (window_id, row_id, channel, carrier, msg_id, ordinal, tier,"
+            " presence_brand, presence_line, presence_category, presence_size, presence_attribute)"
+            " VALUES ('w2', '@ekomarket_shop:1465:0', '@ekomarket_shop', ?, 1465, 0, 'full',"
+            " 0, 0, 0, 0, 0)",
+            (carrier,),
+        )
+    stored = conn.execute(
+        "SELECT carrier FROM positions WHERE row_id = '@ekomarket_shop:1465:0'"
+    ).fetchall()
+    assert sorted(one[0] for one in stored) == ["leaflet_page", "post_text"]

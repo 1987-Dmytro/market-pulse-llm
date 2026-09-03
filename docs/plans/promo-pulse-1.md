@@ -609,3 +609,31 @@ and legs are imported; only the population and the step are this driver's. Choic
   it is trusted. Then the STOP «unbought remainder», for one operator decision.
 - **Money unchanged**: cap $3.95 for the whole step, never raised mid-run; the dev loop still takes
   `min($2.50, REMAINING − $0.30)` with a $2.00 floor and the holdout's $0.30 protected.
+
+---
+
+## 8. Revision 2026-09-03 — ruling 03.09 (b), the two forks, `[cause: ruling]`
+
+Both entries are the team lead's amendments to this plan, not findings of mine. PROCESS §Cadence 1:
+they join the plan here rather than reaching only the report.
+
+**S4's write target `data/derived/` is amended — each window writes under its own root.** The C2 run
+appended to the per-channel files window 1's seal had hashed, so the seal's statement stopped being
+true. The store splits the way the raw store split on 30.08: `data/derived/` is window 1's, frozen
+at its sealed bytes and read-only from here; **`data/derived_w2/` is the live root** — the executor's
+name, as the ruling delegates — and C2 and every later tick write there. The split point is found in
+the seal itself (`scripts/split_derived_w2.py`), never inferred. Checks, all shown in the transcript:
+the 38 sealed sources hash to their sealed values; `w1` re-derives 902/902; `results/dashboard_data_w1.json`
+re-exports with 0 differing leaves under `provenance.evidence` and 4 474 identical data leaves;
+`w2` is 17 channels · 3 397 markers · 1 113 positions from the new root. The 20 D-cut posts stay in
+w1's root and w2 reads them from there — `build_aggregates.build` pools both roots and partitions by
+each window's pinned population ids, the law shape 1 already wrote.
+
+**S3's trends dedupe per (window, channel, msg_id, brand, product, volume), preferring
+`carrier = leaflet_page`** — the ruling's conditional check, and its condition is MET: over w2
+exactly **one** (brand, product, volume) triple is read by both legs off one message
+(`@forainfo:6056`), out of **7** row_ids stored under both carriers and **6** messages with position
+rows from both. `positions` keeps every paid row (`carrier` joins its key); the trend counts a
+promo once. New in `src/market_pulse/trends.py`: `PREFERRED_CARRIER` and the `DEDUPED` CTE, held
+against `loop.CARRIER` and driven in both directions by `tests/test_trends_sql.py` — one repeated
+reading collapses, two different SKUs on one message both survive.

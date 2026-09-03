@@ -28,6 +28,35 @@ SKU = "brand_raw, line, size_value, size_unit"
 """What makes two positions the same SKU. The four fields SPEC 3.21 (4) asks for, and no price:
 a SKU whose identity contained its own promo price would have one row per promo and no trend."""
 
+PREFERRED_CARRIER = "leaflet_page"
+"""Which leg wins when both read the same SKU off the same message — ruling 03.09 (b), fork 2.
+
+A post can be both a leaflet page and a text price post, and the C2 window holds 7 row_ids stored
+under both carriers. Those are two genuine paid readings and `positions` keeps them both, but a
+trend must not COUNT one promo twice: `n` would be 2 for one price and the mean would be that price
+weighted double. So the aggregation takes one row per (window, channel, msg_id, SKU) and prefers the
+leaflet page — the carrier that carries the printed badge and the old price the depth is checked
+against. Measured, not assumed: over w2 exactly ONE (brand, product, volume) triple is read by both
+legs off one message (`@forainfo:6056`), which is why this rule exists and how small it is.
+
+The same string as `loop.CARRIER`, kept here so this module reads the store's vocabulary without
+importing the collection loop; `tests/test_trends_sql.py` holds the two against each other."""
+
+DEDUPED = f"""
+one_row_per_sku AS (
+    SELECT * FROM (
+        SELECT *,
+               ROW_NUMBER() OVER (
+                   PARTITION BY window_id, channel, msg_id, {SKU}
+                   ORDER BY carrier <> '{PREFERRED_CARRIER}', row_id) AS leg_rank
+          FROM positions
+         WHERE window_id = ?)
+     WHERE leg_rank = 1)
+"""
+"""The one source both statements below read. `carrier <> 'leaflet_page'` sorts the preferred leg
+first (0 before 1) and `row_id` breaks the remaining tie, so the choice is TOTAL: two runs over one
+store pick the same row, which is what makes `make tick` idempotent on this table."""
+
 
 def iso_week(when: str) -> str:
     return datetime.fromisoformat(when).strftime("%G-W%V")
@@ -62,6 +91,7 @@ def bind_weeks(conn: sqlite3.Connection, weeks: dict[tuple[str, int], str]) -> N
 
 
 TREND_SQL = f"""
+WITH {DEDUPED}
 SELECT week_of(channel, msg_id) AS week,
        channel                  AS chain,
        {SKU},
@@ -70,9 +100,8 @@ SELECT week_of(channel, msg_id) AS week,
        MAX(price_promo)         AS price_max,
        AVG(price_promo)         AS price_mean,
        AVG(depth)               AS depth_mean
-  FROM positions
- WHERE window_id = ?
-   AND price_promo IS NOT NULL
+  FROM one_row_per_sku
+ WHERE price_promo IS NOT NULL
    AND week_of(channel, msg_id) IS NOT NULL
  GROUP BY week, chain, {SKU}
  ORDER BY week, chain, {SKU}
@@ -87,15 +116,15 @@ def sku_trends(conn: sqlite3.Connection, window_id: str) -> list[dict]:
     return [dict(row) for row in conn.execute(TREND_SQL, (window_id,))]
 
 
-DEPTH_SQL = """
+DEPTH_SQL = f"""
+WITH {DEDUPED}
 SELECT week_of(channel, msg_id) AS week,
        channel                  AS chain,
        brand_raw                AS brand,
        COUNT(*)                 AS n,
        AVG(depth)               AS depth_mean
-  FROM positions
- WHERE window_id = ?
-   AND depth IS NOT NULL
+  FROM one_row_per_sku
+ WHERE depth IS NOT NULL
    AND week_of(channel, msg_id) IS NOT NULL
  GROUP BY week, chain, brand
  ORDER BY week, chain, brand
