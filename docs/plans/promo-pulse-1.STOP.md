@@ -67,11 +67,19 @@ threads, thinking off — another prompt, another pod, another transport). **$0.
 boot excluded, against the dev loop's $2.50: one iteration fits at either corner, and FIVE fit only at the mean
 (5 × $1.659 = $8.30 does not). The smoke replaces the borrow before anything is bought.
 
+**The GRADER is proven against the shipped gold, four directions, $0 — so iteration 1 measures the model, not the
+plumbing.** Gold against itself **1.0 / 1.0**, both bars HOLD and both strata read 1.0. Every subject replaced →
+subject **0.0 RED** while signals stay 1.0: the two bars are INDEPENDENT and neither carries the other. Every signal
+stripped → signals **0.15 RED** while subject stays 1.0 — and **0.15 is exactly 6/40**, your own «6 of 40 threads have
+an EMPTY signal set» re-derived by a different instrument. Silence → **both RED**, which is what «an abstention is an
+answer» has to mean in a number. All four live in `tests/test_grade_promo_signals.py` with the share DERIVED, never
+typed, so a drift between your gold's schema and the grader's reader goes red before a pod exists.
+
 ## `make check`, and it is now a clean statement
 
-**13 failed · 4 267 passed · 2 skipped · 7 errors in 736.04 s**, measured at `b74123f` over a clean tree — 20 red
-against the 35 of the last report, **+20 passed**. Check (j) has two halves and the COUNT half is now MET —
-**4 267 ≥ 4 266** — so the only thing holding (j) is green-ness, and that is the two forks. **Every red is one of the two forks above:** 19 are fork 1 — `test_build_dashboard` (7 errors + 4 failed),
+**13 failed · 4 268 passed · 2 skipped · 7 errors in 732.67 s**, measured at `6b6fe44` — 20 red against the 35 of
+the last report, **+21 passed**. Check (j) has two halves and the COUNT half is MET — **4 268 ≥ 4 266** — so the
+only thing holding (j) is green-ness, and that is the two forks. **Every red is one of the two forks above:** 19 are fork 1 — `test_build_dashboard` (7 errors + 4 failed),
 `test_build_validate_pack` (4), `test_window_summary_5c2` (2), `test_export_dashboard_data` (2), each a w1 record whose
 provenance names the store as it was sealed and refuses on a C2 file («`data/derived/position_rows/ATB_FANatik.jsonl`
 is not in the export's provenance.evidence») — and 1 is fork 2. Nothing else is red. The 7 reds the new `--window w2`
