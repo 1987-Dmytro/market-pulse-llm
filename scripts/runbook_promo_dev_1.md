@@ -6,8 +6,11 @@ committed: `results/prereg_promo_dev_loop.json` (rung 0 FITS, dear corner $1.319
 runs until `make check` is green at the HEAD the bundle is cut from.**
 
 Money: cap **$2.50**, floor $2.00, holdout's $0.30 untouchable. Rung 1 refuses a `costPerHr` above
-the registered **$0.74**. Rung 3 is the platform's `--terminate-after 90m` — 5 400 s inside the
-registered 12 162 s hard stop, $1.11 at the registered price.
+the registered **$0.74**. Rung 3 is the platform stop at the CAP, and `--terminate-after` is a
+DATETIME, not a duration (`runpodctl pod create --help`): the value is create + the seconds the cap
+buys at the registered price — `results/prereg_promo_dev_loop.json :: rung_0.hard_stop_seconds`,
+**12 162.2 s**, read from the record and never typed (ruling 03.09 (d); the old `90m` was 5 400 s,
+inside the dear corner's own ≈107 min, and would have cut this run inside its own registration).
 
 ## 0 — before the create
 ```bash
@@ -17,10 +20,14 @@ runpodctl gpu list | grep -A3 '"RTX 4090"'               # the price, read on th
 ```
 
 ## 1 — create, then rung 1 on the response
+Every flag is the sibling's (`scripts/runbook_pass2_signals_r2.md:89`), changed only in the name and
+the stop; the volume `qw4nwleanc` lives in EU-RO-1 and the registration priced that cloud.
 ```bash
+STOP_AT=$(python3.11 -c "import json,datetime as d; s=json.load(open('results/prereg_promo_dev_loop.json'))['rung_0']['hard_stop_seconds']; print((d.datetime.now(d.timezone.utc)+d.timedelta(seconds=s)).strftime('%Y-%m-%dT%H:%M:%SZ'))")
 runpodctl pod create --name mp-promo-dev-1 --gpu-id 'NVIDIA GeForce RTX 4090' --gpu-count 1 \
-  --network-volume-id qw4nwleanc --container-disk-in-gb 20 --terminate-after 90m \
-  --image-name <the image the sibling used> --ports '22/tcp'
+  --network-volume-id qw4nwleanc --data-center-ids EU-RO-1 --cloud-type SECURE \
+  --image runpod/pytorch:1.0.2-cu1281-torch280-ubuntu2404 --container-disk-in-gb 30 \
+  --ports '22/tcp' --ssh --terminate-after "$STOP_AT"
 PYTHONPATH=src python3.11 scripts/promo_dev_pass.py --open --pod-id <ID> \
   --created-at '<the create stamp, UTC ISO8601>' --usd-per-hour <costPerHr> --card '<the card>'
 ```
