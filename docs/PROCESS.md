@@ -8,7 +8,8 @@ mechanics. Operator-facing digest of the same rules: `docs/STATUS.md` («Пра�
 ## File ownership (single writer per file)
 - Team-lead files: `docs/STATUS.md`, `docs/SPEC.md` (frozen rev. 3.x), `docs/SPEC-*.md` (current product
   spec), `docs/PRODUCT.md`, `docs/PROCESS.md`, `docs/PHASE-*.md` (executable phase specs), `docs/PROMPT-*.md`
-  (one-sentence contracts and legacy prompts), `docs/PLAN-*.md`, `docs/reviews/`, `docs/labels-*.jsonl`.
+  (one-sentence contracts and legacy prompts), `docs/PLAN-*.md`, `docs/reviews/`, `docs/labels-*.jsonl`,
+  `docs/CODEBOOK-*.md` (the annotator's law the labels follow; versioned inside the file, cited by the dev-loop report).
   Executor commits them by path, never edits. Deny rules for Edit/Write on these paths live in
   `.claude/settings.json`; `/save` and `/close` carry the negative line.
 - Executor files: `src/`, `tests/`, `scripts/`, `results/`, `config/`, `knowledge/**`, `implementation-notes.md`,
@@ -60,6 +61,13 @@ mechanics. Operator-facing digest of the same rules: `docs/STATUS.md` («Пра�
    `/report <name>` is a clause of the predicate. The evaluator's «met» is NOT acceptance (step 4).
 4. Team lead accepts by diff, artifact and check; STATUS refreshed; one retro line.
 One-sentence contracts (`docs/PROMPT-*.md`) remain for fixes and debts whose diff fits in a sentence.
+
+## Models and effort (02.09; skill v2.5 §5 — named per task, never a session default)
+- Executor = **Claude Opus 5 (1M)**. Before pasting a `/goal` the operator sets **`/effort xhigh`** (session-scoped);
+  `ultracode` (xhigh + a workflow for every task, no mid-run input, up to 16 agents) is OFF for goal loops and paid
+  runs — the keyword goes into a prompt only for a fan-out the team lead names (an audit, a review sweep).
+- Fresh-context reviewer on money/guards (`/code-review`): the strongest model available (Fable when offered, else
+  Opus); mechanical sweeps (file audits, migrations): Sonnet. A model change re-dials autonomy and re-issues prompts.
 
 ## Hooks and guards (deterministic — "must happen every time")
 - `PreToolUse(Bash)` `scripts/hooks/refuse-sweeping-commands.sh`: refuses `git add -A|--all|.` and
@@ -119,7 +127,11 @@ One-sentence contracts (`docs/PROMPT-*.md`) remain for fixes and debts whose dif
   enable `code-review` (fresh-subagent diff review before `/report` on money/secrets/guard code — skill v2.1
   §6); deliberately unused here — `blockscout`, `rust-analyzer-lsp`, `serena`, `claude-in-chrome`, `drawio`,
   account connectors. Team-lead side (Cowork): device folder access to the repo, web search for sources,
-  Project docs for handoffs; it never runs the executor's tools on the repo.
+  Project docs for handoffs; it never runs the executor's tools on the repo. Its shell on the linked Mac is a VM
+  that cannot delete files: never run `git status`/`git add` there (a leftover `.git/index.lock` blocks the
+  executor's git — 03.09) — read-only `git --no-optional-locks status`, `git log`, `git rev-parse` only; the
+  labels are written whole (`device_commit_files`), checked by the team lead's own validator against a dump of
+  the drawn threads (`data/annotation/dev40_threads.json`, gitignored), never edited in place.
 
 ## Operator language
 - Conversation and `docs/STATUS.md` in Russian; code, commits, prompts, ADRs, reports in English.

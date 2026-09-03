@@ -353,3 +353,121 @@ before it is trusted: caption-lexicon rank for photo posts (dairy/ice-cream term
 `results/run_5c2_positions.json` (pages with ≥ 1 position); the table shows $ whole vs $ top-ranked at recall ≥ 0.90. Then the
 STOP «unbought remainder» (a projection over the cap — a listed pause type) so the operator decides in ONE visit: buy whole ·
 buy ranked · stop. S5's re-draw (seed 42, ≥ 3 chains) runs over what was bought; S1's bars are unchanged.
+
+---
+
+## Ruling 02.09 (d) — the C2 window is its own sealed window in the same DB (shape 1); the ledger test derives the live line; S4 is bought
+
+**Acceptance of the fourth pause (`docs/reports/promo-pulse-1.md` @ `168ecc8`) — GREEN as a PAUSE; S4's money leg is DONE.**
+Team lead's own readings (03.09 morning): guard exit 0, `CYCLE 3 SPENT $3.4437 of $7.00` (walk: serverless $2.9347 + volume
+$0.4472), `REMAINING $3.5563`; `results/spend_promo_pulse_1.json` — two sessions, run 2 `$3.0335` by delta at 17:09Z; listing
+`[]` / `[]`; `results/run_promo_c2.json :: runs[-1].unbought` = 0 pages · 0 posts; `data/derived/leaflet_pages/` = **3 167 rows
+in 17 channels** (159 of 5c2 + the 3 008 of C2, every channel's count = `promo_pagecount_c2.json`'s); porcelain on the contract
+paths empty. The per-channel law paid for itself twice: the text leg passed its own gate ($0.19 where the whole-step law would have
+refused at ≈$11 again), and the rates ran 0.80–12.92 s/page across channels, the carrier at 5.23 s against its 11.7 s n=1 warm-up.
+Ruling (c)'s expectation («12–14 chains, the big albums unbought») was too pessimistic: all 17 ran whole for $3.03. The ranker's
+answer is a measured NEGATIVE and is accepted as such: at recall ≥ 0.90 the OCR rank keeps 100 % of pages (no cut exists), the
+caption rank scores 0 — `results/rank_remainder_c2.json`; the instrument stays on the shelf, unused. The two harness kills
+(≈$0.09 re-asked, nothing written twice) are logged beside the money; the runbook gains the rule: a paid run is launched detached
+(`os.setsid`, output to a file, the PROCESS watched), never as a foreground call.
+
+**The fork — shape 1, and nothing else.** `data/derived/pulse.db` gets a SECOND window, not a weaker seal:
+1. **The C2 window's sealed record is `results/prereg_promo_c2.json`** (the S4 registration: population by ids, pagecount,
+   manifest, rates). It pins the registry it was bought under — `config/registry.yaml` at revision r2, `eff8ba5b…` — added to
+   `pinned_inputs` by the registration's own writer (`--register`, a dated addendum field; never by hand, never re-pinning what
+   is already there). Window id: as the aggregate schema names its windows (`windows.window_id`; the plan's §5.7 convention) —
+   the executor picks it and says so in the record; `w1` stays 5c2's.
+2. **`scripts/build_aggregates.py` builds ALL windows into the one DB**, each window through ITS OWN seal: 5c2 → `w1` through
+   r1 (`prereg_5c2_run.json`, exactly as today); C2 → its window through r2 (`prereg_promo_c2.json`). A row belongs to a window by
+   that window's pinned population ids (the 20 D-cut posts belong to both — one position row, two windows: `window_id` is a key
+   of the aggregate tables, never of the position's identity). `segment_for` keeps its law per window: a row whose channel the
+   window's registry does not carry refuses, SPEC 3.20 (1). Brands and watchlist per window from its own seal (one lexicon pin).
+   **No live-registry read anywhere in the build** — shape 2 is refused for the reason the STOP itself gives; shape 3 is refused
+   because the phase's artifact IS the C2 screen.
+3. **Checks that close this:** the `w1` mirror verdict (`aggregates.converge`) and the `w1` export sha are byte-identical before
+   and after — a test pins it; the C2 window shows positions for all 17 channels; the 32 fixture-driven tests turn green by
+   WIRING the second prereg into the fixtures, with no assertion weakened; `make tick` twice → zero new rows per table; the screen
+   (`make promo-screen`) reads the C2 window; the clean-clone check (h) as before. Then S5's re-draw over the C2 population.
+
+**Check (j), the second ruling — the test's pointer is stale, not its claim.** `tests/test_repair_phase4_ledger.py :: LINE_LEDGER`
+names `results/spend_cycle2.json` as «the live ledger»; the guard's live line has been `results/spend_cycle3.json` since 01.09
+(cycle 2 SUPERSEDED, `CYCLE3_LEDGER`). Change BY THIS RULING (Dv `[cause: ruling]`): the test DERIVES the lines a paid run may be
+witnessed in from the guard's own constants — `PHASE4`, `CYCLE2_LEDGER`, `CYCLE3_LEDGER` — the same lesson as the tripwire
+(`97e84e6`: derive, never restate); the claim is unchanged: a paid step witnessed by NONE of the guard's lines is still named,
+both directions shown on the stub. Nothing else in that file moves.
+
+**Money, closing S4.** The step ledger is closed by `--close --tolerance` in the START RITUAL once the billing walk has settled
+against the delta (the guard's own rule); the settled line is the spend line check (c) names. C3 keeps `min($2.50, REMAINING −
+$0.30)` = $2.50 today; the drip ($0.2333/day) is on the clock — the dev loop starts the day the labels land.
+
+**Team lead's debts (the critical path, from here):** `docs/labels-promo-dev.jsonl` (dev-40, batches of 10, draw sha
+`6f9fa245…`) — starts 03.09; `docs/labels-positions-50.jsonl` after the re-draw. No further money word is needed in this phase
+unless a rung fires.
+
+## Ruling 03.09 — dev-40 labels LANDED (140 lines, codebook v1); the prompt's law is re-rendered from the codebook BEFORE the first paid K8 run; the codebook is a team-lead file
+
+**The open STOP (the fourth, 02.09 — the DB-window fork) is answered by Ruling 02.09 (d) above and NOTHING in it moves:** shape 1,
+`prereg_promo_c2.json` as the C2 seal with the r2 registry pinned by the registration's writer, all windows built into the one DB each
+through its own seal, `LINE_LEDGER` derived from the guard's constants, S4 closed by `--close --tolerance`. This ruling ADDS the labels'
+arrival and the prompt-law contract; apply (d) and this together, then delete the STOP file. The «waiting on the team lead's labels
+(dev-40)» line of that STOP is closed by the file below; positions-50 stays owed after the re-draw.
+
+**What landed (team lead, 03.09, $0).** `docs/labels-promo-dev.jsonl` — 140 lines, sha256 `302113b8ae3c9598…`, ALL 40 dev threads
+of the draw (`results/promo_threads_draw.json`, sha `6f9fa245…`, seed 42), one line per comment WITH TEXT: 208 comments − 68 wordless
+= 140. Wordless comments (`text.strip() == ""`; the draw's `n_wordless`) are NOT labelled — SPEC 3.19 takes them out of the inference
+queue, the prompt's rule 4 does not label them, so the grader's denominator is comments with text; a gold line for a wordless comment
+is a defect. Self-check passed on every line: valid JSON, exactly the schema's fields (+ optional `unsure`), enums closed, `msg_id` in
+its thread, `quote` a non-empty verbatim substring, every comment with text covered, no holdout id. The law the gold is labelled by
+is `docs/CODEBOOK-promo-signals.md` **v1 · 2026-09-03** (sha256 `6a74bc81cd2a922d…`); the dev-loop report cites that version.
+Reading of the gold (a reading, not a bar): subject types chain 56 · post 53 · sku 30 · brand 1; signals жалоба 40 · спрос 22 ·
+похвала 12 · цена 10 · привычка 0; 63 lines carry no signal (23 admin replies, 14 noise, 26 neutral); 6 of 40 threads have an
+EMPTY signal set (Jaccard 1.0 only if the model also says nothing); 7 lines carry `unsure` and stay in the denominator. Per stratum:
+currency 61 lines (sku-heavy: boxes, chips, beer), decimal_only 79 lines (chain-heavy: VARUS support, app, loyalty).
+START RITUAL: commit `docs/labels-promo-dev.jsonl` and `docs/CODEBOOK-promo-signals.md` by path, nothing edited.
+
+**Ownership.** `docs/CODEBOOK-*.md` is a TEAM-LEAD file (PROCESS.md §File ownership names it as of today). Harness contract, ONE
+line, one commit with the labels: add `"Edit(/docs/CODEBOOK-*.md)"` to `permissions.deny` in `.claude/settings.json`. Nothing else
+in the harness moves.
+
+**The prompt carries the annotator's law — so the law is re-rendered BEFORE S9's first paid iteration.** `promo_prompts.CODEBOOK`
+(the Ukrainian block) was written before the codebook existed and disagrees with v1 in the places the grader scores. The executor
+rewrites that block to carry the deltas below (its own words, Ukrainian, the model's language), `codebook_version()` moves, the
+tests that pin the sha are updated with no assertion weakened, and the RENDERED prompt for one dev thread (`render(...)` on
+`@VARUS_channel` root `6009`) is shown in the report — the team lead reads it at $0 before any pod exists. The deltas:
+1. **about — exactly ONE subject per comment with text; every such comment gets an about-row.** Two explicit subjects → the one
+   the comment OPENS with (the other may appear in a signal row). Wordless comments: rule 4 unchanged.
+2. **`post` is the post or the CHANNEL as the object, and it is where noise goes.** Emoji-only, greetings, bare «дякую/спасибо»,
+   punctuation, tags, off-topic («Слава ЗСУ»), banter between commenters, and the channel's OWN replies (admin: «Розуміємо вас»,
+   «передали», «Фото вже прибрали», «напишіть у чат @varusua_bot») → `subject_type: post`, `subject: <root msg_id as a string>`,
+   NO signal. A comment about the post/channel itself carries signals ONLY in an aggregator channel (msuaaaa: «на фото
+   неправильна ціна» → post, жалоба + цена; «канал не о скидках, а о треше» → post, жалоба). In the RETAILER's own channel
+   (VARUS) the channel, its posts and copy, app, site, loyalty program, support, hotline and promo mechanics are the chain →
+   `chain` / `VARUS`. A `post` row is an answer, never an `unsure`.
+3. **Surface form of `subject`: nominative; the POST's spelling when the entity is in the post** (`VARUS` even when the comment
+   writes «варусу»; `McDonald’s` with the post's apostrophe; `Сільпо`, `KFC`, `Roshen`), otherwise the comment's spelling in
+   nominative («масло», «атб», «рошен»). `sku` = brand + product type as written in the source text (`чипси Люкс`, `ПИВО BAVARIA`,
+   `Щастябокс`, `МакМеню`, `курячі чіпси`) — NO volume/weight/fat unless the post lists several variants of one product. Chain
+   named nowhere in the thread → the channel handle without `@`.
+4. **Signals.** `спрос` = interest in the offer: availability / where / until when / what is inside → the PRODUCT (`sku`/`brand`);
+   promo mechanics (promo code, coupon, voucher, app, kiosk, cashback, delivery, «у Вінниці є ваш магазин?») → the CHAIN; a request
+   to the aggregator for another chain's promos («Нових знижок атб ще не виклали?») → that chain, explicit. `цена` includes the
+   correctness or unit of a printed price («ціна на фото вірна», «це за 100г ціна?»). Pairs are BOTH types: «дорого», «500 грн за
+   картонку» → цена + жалоба; «класна ціна» → цена + похвала. A grievance question («Що з бонусами, у мене нуль») → жалоба, not
+   спрос. `привычка` needs a REGULARITY word (постійно, завжди, щотижня, регулярно, роками) — a purchase count («перший раз… вчора»,
+   «декілька разів купувала») is not one. Thanks WITH an object («дякую за вашу працю») → похвала to the addressee; bare thanks →
+   noise. Sarcasm by meaning: «Торгівля повітрям», «Потужно-незламний», «Шикарно. Цілий день тиша, а потім скидка» → жалоба.
+5. **Neutral comments keep their subject and carry NO signal** — explanations, factual answers, clarifications, jokes without an
+   evaluation («так працює система», «Або з 9 числа», «Працює 5%»); the model must not invent a signal to fill the row.
+6. **`unsure` remains for a subject that cannot be established from post + thread**; noise is not unsure (2).
+
+**Checks around the gold, all $0.** The gold passes the same hooks the model's output passes (msg_id exists · quote substring ·
+schema) — run them on `docs/labels-promo-dev.jsonl` as a fixture once; a hook that refuses a gold line is a hook bug or a codebook
+question, reported, never patched around. K8's first reading on dev-40 IS S9 iteration 1 — no paid iteration was to run on a
+partial gold, and none is needed: the gold is complete. Optional, plan-named or not at all: the channel's own account has a stable
+`sender_anon_id` (VARUS `2fa2b7…`, msuaaaa `58805a…`); rendering `[admin]` beside those comments would let the model apply (2)
+mechanically — a scope change, allowed only if the plan names it.
+
+**Team-lead debts from here.** `docs/labels-positions-50.jsonl` — after S5's re-draw over the C2 population
+(`results/positions_draw_50.json`): STOP «waiting on the team lead's labels (positions-50)» names the draw's sha. Holdout-40 is
+labelled by the team lead only AFTER the pre-registration STOP notice; the executor never sees `docs/labels-promo-holdout.jsonl`
+before the ONE shot.

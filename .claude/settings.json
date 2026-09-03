@@ -11,6 +11,7 @@
       "Edit(/docs/PLAN-*.md)",
       "Edit(/docs/reviews/**)",
       "Edit(/docs/labels-*.jsonl)",
+      "Edit(/docs/CODEBOOK-*.md)",
       "Edit(/docs/archive/**)"
     ]
   },
