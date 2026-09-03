@@ -766,6 +766,7 @@ def score(replies: Path, iteration: int) -> dict:
     rows: list[dict] = []
     failures: list[dict] = []
     answered: list[str] = []
+    fenced = 0
     for line in replies.read_text(encoding="utf-8").splitlines():
         if not line.strip():
             continue
@@ -775,6 +776,7 @@ def score(replies: Path, iteration: int) -> dict:
             continue  # leg B rides the same out-file and is not leg A's gold
         answered.append(reply["id"])
         answer = promo_prompts.parse(reply["reply"])
+        fenced += 1 if answer.get("fenced") else 0
         if answer["parse_failure"]:
             failures.append(
                 {
@@ -852,6 +854,10 @@ def score(replies: Path, iteration: int) -> dict:
             "leg_a_units_registered": len(units),
             "gold_shaped_rows": len(rows),
             "parse_failures": len(failures),
+            "fenced_answers": fenced,
+            "fenced_note": "the codebook asks for JSON and never forbids a markdown fence; the"
+            " object inside it is read as it stands and nothing in it is repaired"
+            " (promo_prompts.unfence)",
             "parse_failures_by_cause": causes,
             "unparsed": failures,
         },

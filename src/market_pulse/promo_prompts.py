@@ -164,6 +164,25 @@ def vocabulary() -> dict:
     }
 
 
+def unfence(answer: str) -> tuple[str, bool]:
+    """The JSON inside a markdown fence, and whether there was one.
+
+    The CODEBOOK asks for JSON and nowhere forbids a fence — `prompts.positions_messages_text_gm4`
+    is the registration that does — and gemma-4 fenced every reply of iteration 1: ```` ```json ````
+    then a complete object. Reading the fence off is not answer repair, which ruling 03.09 (c) item
+    3 reserves for iterations 2–5: nothing inside the object is changed, added or closed, and an
+    object that is malformed or was cut by the ceiling is still a parse failure counted by cause
+    ([[empty_class_eats_the_parse_failures]]). The closing fence is usually absent — the balanced
+    stop ends generation at the object's own last brace, so the trailing ```` ``` ```` is the four
+    characters it cut.
+    """
+    text = answer.strip()
+    if not text.startswith("```"):
+        return answer, False
+    body = text.split("\n", 1)[1] if "\n" in text else ""
+    return (body.rsplit("```", 1)[0] if body.rstrip().endswith("```") else body), True
+
+
 def parse(answer: str) -> dict:
     """The model's answer as a dict, or a counted parse failure — never an exception.
 
@@ -171,15 +190,20 @@ def parse(answer: str) -> dict:
     ([[empty_class_eats_the_parse_failures]]), so an unparseable answer returns its own marked
     shape and the caller counts it as what it is.
     """
+    body_text, fenced = unfence(answer)
     try:
-        body = json.loads(answer)
+        body = json.loads(body_text)
     except json.JSONDecodeError as bad:
-        return {"about": [], "signals": [], "unsure": [], "parse_failure": str(bad)}
+        return {"about": [], "signals": [], "unsure": [], "fenced": fenced, "parse_failure": str(bad)}
     if not isinstance(body, dict):
-        return {"about": [], "signals": [], "unsure": [], "parse_failure": "not an object"}
+        return {
+            "about": [], "signals": [], "unsure": [], "fenced": fenced,
+            "parse_failure": "not an object",
+        }
     return {
         "about": body.get("about") or [],
         "signals": body.get("signals") or [],
         "unsure": body.get("unsure") or [],
+        "fenced": fenced,
         "parse_failure": None,
     }
