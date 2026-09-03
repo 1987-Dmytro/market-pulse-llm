@@ -14,10 +14,11 @@
     "3_hard_stop": "12162.2 s of pod existence at the registered price — the platform-side backstop is terminate_after",
     "boot_kill_seconds": 720.0,
     "delete_margin_seconds": 60.0,
-    "from": "results/prereg_reader_probe_v5b.json — frozen, and none of these numbers is new here",
+    "from": "results/prereg_reader_probe_v5b.json — frozen; boot_kill_seconds, delete_margin_seconds and max_recreates only",
     "max_recreates": 2,
-    "ssh_deadman_rule": "derived, not typed: a dead segment costs the dead-man plus one delete margin, and both of those are fields of that record",
-    "ssh_deadman_seconds": 180.0,
+    "ssh_deadman_from": "results/prereg_pass2_signals_r2.json :: kill_clock[rung 2].deadline_seconds",
+    "ssh_deadman_rule": "ruling 03.09 (e) item 1, read and not typed: the PRODUCTION sibling's deadline on the same card and datacenter — «the ssh endpoint has to answer inside this pod's create-elapsed deadline or KILL. Unmoved: six readings run 14.5 → 262.5 and two pods of 2026-08-20 were still unreachable past 230 s»",
+    "ssh_deadman_seconds": 500.0,
     "terminate_after_minutes": 90
   },
   "law": {
@@ -186,9 +187,9 @@
         0.74,
         0.34
       ],
-      "read_at": "2026-09-03T15:37:12+00:00",
+      "read_at": "2026-09-03T19:42:57+00:00",
       "rule": "the DEARER offer of secure/community, read on the day; the create response's own costPerHr is the price the meter bills and the price gate re-checks it",
-      "stock": "Medium",
+      "stock": "High",
       "usd_per_hour": 0.74
     },
     "rule": "docs/PROCESS.md «Money» rung (0): price at create ≤ the registered ceiling — the ceiling is the step cap, the price is the DEAR corner",
@@ -237,11 +238,11 @@
     "floor_usd": 2.0,
     "ledger": "results/spend_promo_dev_loop.json",
     "money": {
-      "at": "2026-09-03T15:37:11+00:00",
+      "at": "2026-09-03T19:42:56+00:00",
       "cycle3_cap_usd": 7.0,
-      "cycle3_spent_usd": 3.5409,
+      "cycle3_spent_usd": 3.6695,
       "from": "scripts/runpod_guard.py, its own printed REMAINING and CYCLE 3 lines",
-      "remaining_usd": 3.4591
+      "remaining_usd": 3.3305
     },
     "name": "promo-dev-loop",
     "no_cap_raise": "never, mid-run. Silence is KILL: nobody can be asked."
