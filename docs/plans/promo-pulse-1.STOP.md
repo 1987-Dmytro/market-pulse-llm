@@ -1,105 +1,135 @@
-# STOP — promo-pulse-1, 2026-09-03 (the fifth; the fourth was answered by rulings 02.09 (d) + 03.09 and deleted)
+# STOP — promo-pulse-1, 2026-09-03 (the sixth; the fifth was answered by ruling 03.09 (b) and deleted)
 
-**Stop-points, in order of size:** a design fork the plan does not settle · a test that would have to be weakened ·
-waiting on the team lead's labels (positions-50). **No money question and no rung fired.** Ruling 02.09 (d) shape 1
-is IMPLEMENTED and the C2 window is in `pulse.db`: `w1` re-derives **902/902** numeric leaves of the sealed
-`results/window_summary_5c2.json`, 0 disagreed, 0 missing, and `w2` carries **17 channels · 3 397 markers · 1 113
-positions**. What the ruling could not foresee is that shape 1 alone does not restore w1's SEALED artifacts.
+**Stop-points, in order of size:** a design fork the plan does not settle · waiting on the team
+lead's labels (positions-50) · one money figure that disagrees with the ruling that named it.
+**Nothing was created and nothing was bought. No rung fired.** Both forks of ruling 03.09 (b) are
+IMPLEMENTED and closed by their own checks, the codebook carries the ruled line, and K6's record is
+page-level. What the ruling could not foresee is that S9's paid half has no instrument to run.
 
-## Fork 1 — w1's sealed records pin FILE hashes of a store that now holds two windows
+## Fork — S9 iteration 1 is AUTHORISED and there is nothing to authorise: the paid leg is unwritten
 
-The C2 run wrote into the SAME per-channel files (`data/derived/leaflet_pages/atb_market_official.jsonl` is 368 lines
-where the seal hashed 159). Every w1 record that says «what bytes made this» therefore moved, and no fixture can reach it:
+Ruling 03.09 (b) gives the decision table for iteration 1 «after the smoke». `scripts/promo_dev_pass.py`
+has **no paid path at all** — `--help` offers `--render`, `--channel`, `--dry-run`, `--out` and
+nothing else. There is no `--smoke` that reads the shortest/median/longest thread and writes
+seconds/thread into `promo_dev40_prep.json`, no `--register` with the dev loop's own cap and ledger,
+no `--run` over dev-40 with `extractor_version` per row, no K8 call on the result and no error
+table. Every one of those is named by the ruling as an input to the decision, and each is new code
+on the money path: a pod lifecycle, four rungs, a step ledger, a teardown proof.
 
-- `tests/test_window_summary_5c2.py` (2 red) — `test_the_record_carries_the_producer_and_every_source_it_read` asserts
-  `set(record["sources"]) == everything`, where `everything` is a LIVE glob of `summary.DERIVED`, and then hashes each
-  file live. It reads the committed record and a module constant: no fixture and no producer edit can reach either half.
-- `tests/test_export_dashboard_data.py`, `tests/test_build_dashboard.py`, `tests/test_build_validate_pack.py` — the
-  same, one layer up, and MEASURED leaf by leaf rather than eyeballed: today's `dashboard_data_w1.json` differs from
-  the committed one in **55 leaves (20 changed + 35 new) and every single one is under `provenance.*`** —
-  `provenance.evidence`, `provenance.inputs`, `provenance.producers`. **0 differing leaves outside it**, and the 4 474
-  data leaves are identical (145 position rows, 902/902 anchor leaves, 30 shared figures equal). The record's numbers
-  did not move; its statement about which bytes made it did.
-- **So the ruling's own check «the `w1` export sha is byte-identical before and after» cannot hold** under one shared
-  derived root. The MIRROR half of that check does hold and is shown above.
+Checked repo-wide, not just in that file: `promo_prompts` is imported by `promo_dev_pass.py` and by
+two files that touch no endpoint, and `promo_dev_pass.py` is absent from every script that creates a
+pod or calls one (`client_for` / `runpodctl` / `--endpoint`). **There is no paid runner for this
+instrument anywhere.** The build is tractable — `scripts/read_threads_reader_v5b.py` and
+`scripts/run_promo_c2.py` already carry the pod lifecycle, the rung ladder, the step ledger and the
+teardown proof, and the dev pass would borrow them rather than invent them — which is exactly why it
+is a design question and not a typing exercise: whose cap, whose ledger, which rungs, which stop-points.
 
-**The two shapes, and the second one is MEASURED, not hoped.** (1) The team lead re-scopes those claims: a sealed
-record's `sources` is a statement about the run, not about today's directory, and the tests read it that way.
-(2) The derived store splits — `data/derived/` returns to being 5c2's, C2 gets its own root, both windows still build
-into the one DB (the 20 D-cut posts are read from w1's root). **The C2 run only APPENDED**: I checked every one of the
-38 sealed sources against today's bytes — **23 unchanged · 15 an exact byte PREFIX · 0 diverged** — so the split
-restores every sealed hash exactly and is verifiable in one command. I did not take it: plan S4 names `data/derived/`
-as the write target, and where the sealed evidence root lives is the team lead's line, not mine.
+**So the ruling authorises a RUN and what is missing is a BUILD**, and the plan's S9 does not carry
+that instrument — building it and firing it in one unreviewed session is exactly the scope change
+`CLAUDE.md` forbids («a threshold that is not in the plan is a scope change — stop and ask»).
+What I need is one of: (1) a plan revision I write and you review before any pod exists, naming the
+instrument's shape, its cap, its rungs and its stop-points; or (2) your ruling that the $0 half plus
+the borrowed bound is enough to register iteration 1 directly, and the smoke is folded into the run.
+**The 16 posts without an evidence row ride that same pod and stay a named gap until it exists.**
 
-## Fork 2 — `positions` cannot tell the image row from the text row, and the plan says it is untouched
+## The money figure the ruling named is not the one the guard settles
 
-Seven C2 posts were read by BOTH legs (`@ekomarket_shop:1465`, `@VARUS_channel:11300`, …): the producer's
-`row_id` is `channel:msg_id:ordinal` and carries no carrier, so `PRIMARY KEY (window_id, row_id)` refuses two genuine
-rows about one message. I added `carrier` to that key (and to `position_warnings`, which the warnings JOIN needs) —
-**no stored id moves and w1 is untouched by it** — and `tests/test_promo_tables.py::test_positions_is_untouched` is RED
-for exactly that, named and not weakened. The alternatives both lose: rewriting `row_id` moves a sealed export's rows,
-dropping one leg's row throws away evidence that was paid for. If the ruling prefers the test's claim, say which row goes.
+The START RITUAL closed the step at the ruling's tolerance and it PASSED — but not at the ruling's
+number. `--step promo-pulse-1 --step-cap 3.95 --close --tolerance 0.05` wrote
+`results/spend_promo_pulse_1.json :: gpu_sessions[2]`: **`settled_usd` $2.986741**, checked against
+`recorded_reading_usd` $3.0335 — a 1.54 % gap, inside 0.05. The decomposition is pods $0.052079 +
+serverless $2.934662; the network volume's **$0.223611** is excluded by the closing walk's own rule
+(«always on, beside the run and never inside it») and stays inside cycle 3, as the ruling directs.
+
+The ruling says «the step's spend line is the guard's settled **$3.1909** (delta)». That figure is a
+BALANCE DELTA read yesterday; today's delta is $3.220074 and the walk prices by billing lines.
+**I did not type your number into the record** — the guard settled what it settled. Which figure is
+the step's spend line of record for `docs/STATUS.md`: the settlement **$2.9867**, or the delta?
+Cycle 3 today: **`CYCLE 3 SPENT $3.5117 of $7.00` · `REMAINING $3.4883`**, so the dev loop's
+`min($2.50, $3.4883 − $0.30)` is the full **$2.50** and its $2.00 floor is clear.
+
+## Fork 1 — CLOSED. The store is split and every sealed byte is back
+
+The split point was found in the SEAL, never guessed: for each of the 38 sources
+`results/window_summary_5c2.json` hashes, the k whose prefix sha256 IS the sealed digest.
+**38/38 placed** — 23 at their full length, 15 shorter (529 lines), and 35 files the seal never
+named moved whole (3 972 lines). Copy → verify → truncate, the backup (`data/derived_backup_2026-09-03`,
+44 M) made before the first cut and its `ls -la` in the transcript. Closing check, all shown:
+
+- **38/38 sealed sources hash to their sealed values**, re-read from disk after the truncation.
+- `w1` re-derives **902/902** numeric leaves of the sealed summary, 0 disagreed, 0 missing.
+- `results/dashboard_data_w1.json` re-exported: **55 differing leaves → 5**, all 4 474 data leaves
+  identical and **0 under `provenance.evidence`**. The five are moved-file pins: four are the
+  existing `MOVED_BY_*` groups; the fifth, `scripts/build_aggregates.py`, is CLAIMED through the
+  same machinery — `MOVED_BY_THE_SECOND_WINDOW` at `58ff037`, witness `WINDOW_ID_C2` — and never
+  re-pinned, as `CLAUDE.md` requires.
+- `w2` from the new root: **17 channels · 3 397 markers · 1 113 positions**, unchanged.
+- **The 19 fork-1 reds are green with no assertion of theirs changed.**
+
+Named: `data/derived_w2/` is the live root (the ruling delegates the name); `pulse.db` stays at
+`data/derived/pulse.db` — both windows build into the one DB and the seal hashes FILES, none of
+which is the database. `build_aggregates.build` pools both roots and partitions by each window's
+pinned population ids, so the 20 D-cut posts stay in w1's root and w2 reads them there.
+
+## Fork 2 — CLOSED, and the ruling's conditional check FIRED
+
+`test_positions_is_untouched` is re-scoped, not deleted (Dv `[cause: ruling]`): the shipped w1
+export's 145 `row_id`s are all `channel:msg_id:ordinal` carrying no carrier, the key is
+`(window_id, row_id, carrier)`, and one message read by both legs now stores two rows instead of one
+replacing the other — driven, not described. The $0 reading you owed: **7 row_ids stored under BOTH
+carriers**, **6 messages** with position rows from both, and **exactly 1** (brand, product, volume)
+triple read by both legs — `@forainfo:6056`. **w1 has 0.** 1 > 0, so S3's trends dedupe — named in
+the plan by revision 8 and driven three ways.
+
+**And a third question for you: your key over-reaches, and I narrowed it rather than widen a
+denominator quietly.** Taking ONE row per (window, channel, msg_id, brand, product, volume) — the key
+as written, no carrier in it — drops **39** rows over **35** groups in today's store. Only **1**
+group spans carriers. The other 34 are two readings of ONE SKU by ONE leg, **24** of them holding
+more than one distinct promo price (`@atb_market_official:4359` prints Активіа Біфідойогурт 260 г at
+**23.9 AND 24.7**), and **2** sit inside the w1 window whose seal this session spent its first half
+restoring. Those are two promos, not one promo counted twice — and «prefer `leaflet_page`» cannot be
+applied to a group with a single carrier at all, so it would fall through to an arbitrary `row_id`.
+So the CTE keeps the preferred LEG whole instead of one row: measured effect **1 group · 1 row
+dropped · 0 in w1** (`@forainfo:6056:0`, the very collision fork 2's key made storable), and
+`results/promo_screen_data.json` moves in exactly one leaf — `@forainfo` · Ласунка · 2026-W35
+`priced_positions` 4.0 → 3.0. **If you mean the literal key, say so and I widen it in one commit.**
+
+## The codebook, and K6's record
+
+`promo_prompts.CODEBOOK` rule 6 carries your line verbatim; `codebook_version()`
+`a97d3c71b8cf9b14…` → **`a694d005972d3a66…`**, and the rendered rule 6 is in the transcript. The
+gold re-driven through all four hooks after the edit: **140 about · 84 signal · 0 failures**,
+140/140 comments with text covered, 0 rows on a wordless comment. `results/promo_dev40_prep.json`
+re-emitted so its pinned sha is the live one — 40 renders, 214 817 chars, longest 8 170.
+
+K6 is page-level as ruled: **46 pages**, `results/positions_50_predicted.jsonl` re-emitted as
+**205** extracted rows of those pages (both carriers), sha `781b02b473ed8104…`. Each drawn row and
+each page gained `image` — **45 of 46 resolve**; `@silposilpo:3822` is a `post_text` carrier and its
+link is the whole of it. **The draw did not move**: the 50 `row_id`s are identical to the committed
+record's and the rows without `image` are byte-identical to it, so `rows_sha256_as_drawn`
+**`fe3f5841175a3953…`** is unchanged and is the anchor the labels are owed against; the FILE's own
+sha necessarily moved from `61b4fda7…` and the record says so in `anchor_note`. Drawn twice:
+`f221fa520ceba8e6…` and `781b02b473ed8104…` both times. **`docs/labels-positions-50.jsonl` is owed
+against `fe3f5841…` — 46 pages, every in-scope position, one line each.**
+
+## A defect of mine, found and repaired inside the session
+
+`tests/test_run_promo_c2.py::stage()` patched `run_loop.DERIVED_ROOT` only, so when the driver
+started writing to `LIVE_DERIVED_ROOT` the stub run appended **13 rows** into the REAL
+`data/derived_w2/` (`@atb_aktsiyi`, msg_ids 101/102/103/7, all stamped 12:50:37). The live root was
+rebuilt from the backup by re-running the split — **3008/1093/15/385**, byte for byte — and the w1
+seal never moved (38/38 throughout). The fixture now checks that EVERY derived root is under
+`tmp_path`, derived from `dir(run_loop)` rather than a list of two names; it refused `STORE_ROOT` by
+name when first written too wide, which is its negative control.
 
 ## What is DONE and shown in the transcript
 
-(a) `promo_pagecount_c2.json` — 17 channels, 3 008 pages exact, from store/metadata; `promo_projection_c2.json` —
-`c2_priced_usd` **$3.1563** as ONE number at the marginal (`the_one_number_usd` $7.2621 is the boot-inclusive ceiling).
-(b) `collect: false` honoured, both directions, `tests/test_collect_5c1.py` 23 passed. (c) positions per channel in
-`pulse.db`, spend lines named below. (d) the 50 re-drawn over the C2 population, twice, sha **`61b4fda7fdc83197…`**
-— **the positions-50 labels are owed against THIS sha**. (f) `tests/test_trends_sql.py` 10 passed. (g) `make tick`
-twice: attribution/signal/evidence/digest/unsure 0→0, rollup 401→401, **zero new rows per table**. (h) clean clone:
-`make tick && make promo-screen` exit 0; source removed → exit 2, «promo-screen REFUSED: missing source …». (i)
-`draw_truth_20.py` 20 rows, seed 42. (l) porcelain clean on the contract paths.
-
-**Ruling 03.09 is applied and its $0 gate is READY FOR YOUR READ.** `promo_prompts.CODEBOOK` carries all six deltas,
-`codebook_version()` = `a97d3c71b8cf9b14…`, no test assertion weakened (none pinned a literal sha). The RENDERED prompt
-for `@VARUS_channel` root `6009` is in the transcript; `python3.11 scripts/promo_dev_pass.py --render 6009` reprints it.
-The gold went through all four hooks as a fixture: **140 about rows and 84 signal rows, 0 failures**, 140 of 140
-comments with text covered, 0 lines on a wordless comment. **S9 iteration 1 is not started: the ruling puts your read
-of that rendering before the first paid K8 call.**
-
-**And the ask is bounded so you can rule on the rendering and the money in one read.**
-`scripts/promo_dev_pass.py --dry-run` → `results/promo_dev40_prep.json`: the codebook's sha and version beside the
-vocabulary the prompt closes, the gold's sha and 140 lines, the draw's sha, and all 40 renders with their sizes —
-**209 897 chars, longest 8 047, 40 distinct renders**. The seconds are a BOUND and the record says so in its own field:
-this instrument has NO measured rate, so they are borrowed from `pass2_r2_seconds_per_thread` (23.76 s over 75 cooled
-threads, thinking off — another prompt, another pod, another transport). **$0.2915 at that mean · $1.659 at its max**,
-boot excluded, against the dev loop's $2.50: one iteration fits at either corner, and FIVE fit only at the mean
-(5 × $1.659 = $8.30 does not). The smoke replaces the borrow before anything is bought.
-
-**The GRADER is proven against the shipped gold, four directions, $0 — so iteration 1 measures the model, not the
-plumbing.** Gold against itself **1.0 / 1.0**, both bars HOLD and both strata read 1.0. Every subject replaced →
-subject **0.0 RED** while signals stay 1.0: the two bars are INDEPENDENT and neither carries the other. Every signal
-stripped → signals **0.15 RED** while subject stays 1.0 — and **0.15 is exactly 6/40**, your own «6 of 40 threads have
-an EMPTY signal set» re-derived by a different instrument. Silence → **both RED**, which is what «an abstention is an
-answer» has to mean in a number. All four live in `tests/test_grade_promo_signals.py` with the share DERIVED, never
-typed, so a drift between your gold's schema and the grader's reader goes red before a pod exists.
-
-## `make check`, and it is now a clean statement
-
-**13 failed · 4 268 passed · 2 skipped · 7 errors in 732.67 s**, measured at `6b6fe44` — 20 red against the 35 of
-the last report, **+21 passed**. Check (j) has two halves and the COUNT half is MET — **4 268 ≥ 4 266** — so the
-only thing holding (j) is green-ness, and that is the two forks. **Every red is one of the two forks above:** 19 are fork 1 — `test_build_dashboard` (7 errors + 4 failed),
-`test_build_validate_pack` (4), `test_window_summary_5c2` (2), `test_export_dashboard_data` (2), each a w1 record whose
-provenance names the store as it was sealed and refuses on a C2 file («`data/derived/position_rows/ATB_FANatik.jsonl`
-is not in the export's provenance.evidence») — and 1 is fork 2. Nothing else is red. The 7 reds the new `--window w2`
-default caused in `test_draw_positions_50` and `test_tick` were MINE and are FIXED: both helpers now NAME the window
-their own fixture builds rather than riding a production default. Nothing weakened, no test file deleted, and the only
-test changed to pass is the one ruling 02.09 (d) names.
-
-## Two findings beside the money, and one number I refused to invent
-
-1. **16 of the 405 pinned C2 posts have no evidence row** (14 `@epicentrk_sale`, 1 `@ekomarket_shop`, 1 `@forainfo`);
-   all 16 are in the store with real text. `runs[1].unbought` reads 0/0 and `runs[1].post_text` is `[]` — the post
-   leg's detail block was lost to the two harness kills, so that 0/0 is a claim about the PAGE stages only. Re-asking
-   them is ~16 × 0.845 s ≈ $0.004 of compute plus a boot (~$0.065). Not bought: it is a new paid leg.
-2. **Five channels have 0 positions and it is an ANSWER, not a gap** — `@epicentrk_sale`, `@fozzyshopua`, `@kop1chat`,
-   `@kopiyochka1`, `@rrozetka`: every page and post was answered (`unreadable` 0) and `n_positions` sums to 0. They
-   are DIY, coupon-aggregator and electronics channels; the dairy/ice-cream parser found nothing to write.
-3. **The step is not closed.** `--close --tolerance` needs a FRACTION and the plan names none: the ledger's own
-   readings sum to **$3.0934** ($0.0599 run 1 + $3.0335 run 2, `results/spend_promo_pulse_1.json`) and the guard settles
-   the step at **$3.1909** by delta / **$3.1812** by the walk — a 3.15 % gap that is the always-on volume. A threshold
-   I pick is a scope change; name it and the START RITUAL closes the step.
-
-Money, unchanged and read today: `PROMO-PULSE-1 SPENT $3.1909 of $3.95` · `CYCLE 3 SPENT $3.4826 of $7.00` ·
-`REMAINING $3.5174` — the dev loop keeps its full `min($2.50, …)`. Nothing was created and nothing was bought today.
+(a) 17 channels · 3 008 pages exact; `c2_priced_usd` $3.1563. (b) `collect: false` honoured, both
+directions. (c) w2 positions per channel, 17 channels summing to **1 113**; five channels read 0 and
+that is an ANSWER, not a gap — `@epicentrk_sale`, `@fozzyshopua`, `@kop1chat`, `@kopiyochka1`,
+`@rrozetka` are DIY, coupon-aggregator and electronics channels and the dairy/ice-cream parser found
+nothing to write. (d) the draw twice, one sha, labels owed. (e) the $0 half only. (f) `tests/test_trends_sql.py`
+**14 passed** (10 + the dedupe's four). (g) `make tick` twice, zero new rows in all six tables. (h)
+clean clone `make tick && make promo-screen` exit 0 from `results/promo_screen_data.json` alone, and
+that source removed → exit 2, «promo-screen REFUSED: missing source …». (i) `draw_truth_20.py`
+20 rows, seed 42. (l) porcelain clean on the contract paths. (j) **`make check` GREEN at `bbc7483` — `4297 passed, 2 skipped in 735.60s`, exit 0, zero failed and zero errors.** Both halves of (j) hold: 4 297 ≥ 4 266, and green. The 20 reds of the last report are gone — 19 with no assertion of theirs touched.
