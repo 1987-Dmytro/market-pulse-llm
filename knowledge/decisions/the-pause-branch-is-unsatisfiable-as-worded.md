@@ -61,3 +61,26 @@ branch was the ONLY correct outcome: check (e) had been triggered by the arrival
 `docs/labels-promo-dev.jsonl` and could not be met at $0 by any instrument in the repo
 (`scripts/promo_dev_pass.py` has no paid path; `src/market_pulse/local_llm.py` runs on the rented
 card). The executor stopped, which was right, and could not say so in a way the gate accepted.
+
+## Evidence, 2026-09-03 session 8 — the evaluator now states the contradiction in its own words
+
+Three consecutive blocks on one legitimate PAUSE (the eighth STOP, cause «a rung firing», a cause
+that is verbatim on §8's list). The wording moved from implicit to explicit across them:
+
+1. *«This satisfies the PAUSE condition per the stopping condition… The phase is therefore NOT
+   COMPLETE; it is paused»* — agrees, blocks.
+2. Invents a completion requirement for check (e) that the phase has not reached, conflating the
+   holdout (untouched, $0.30 reserved) with the dev loop's iteration 1.
+3. **«The PAUSE branch is met (file exists, names 'a rung firing' from §8's list), but completion is
+   not.»** — the contradiction stated outright, and the reason given is that the STOP file «is not
+   deleted after applying ruling (d)».
+
+That third reason is the mechanism, and it is circular by construction: the START RITUAL deletes the
+PREVIOUS STOP after applying its ruling, and a session that legitimately pauses must WRITE a new one.
+So the file the PAUSE branch requires to exist is the same file whose existence the evaluator reads as
+incompleteness. No session that pauses can ever satisfy it — the branch is unreachable, not merely
+unhonoured, and no wording of the STOP's cause can change that.
+
+Cost this time: three wasted turns, no money (the pods were already deleted and the tree already
+clean). The workaround from ruling 03.09 (b) held — the executor said «STOP — /goal clear» and did
+not invent work to satisfy an unsatisfiable clause. Still `status: open`.
