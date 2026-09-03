@@ -424,7 +424,13 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--out", type=Path, default=EXPORT)
     parser.add_argument("--schedule", type=Path, default=SCHEDULE)
     parser.add_argument("--state", type=Path, default=STATE)
-    parser.add_argument("--window", default="w1")
+    parser.add_argument(
+        "--window",
+        default="w2",
+        help="the aggregate window the screen is built from. w2 is the C2 window"
+        " (results/prereg_promo_c2.json :: addendum[0].window_id): ruling 02.09 (d) refuses the"
+        " shape that leaves the screen on w1 «because the phase's artifact IS the C2 screen».",
+    )
     parser.add_argument("--now", help="ISO timestamp; the cooled queue's clock (default: now)")
     parser.add_argument(
         "--if-due", action="store_true",

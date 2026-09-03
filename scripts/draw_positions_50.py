@@ -132,7 +132,12 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--db", type=Path, default=DB)
     parser.add_argument("--out", type=Path, default=DRAW)
     parser.add_argument("--predicted", type=Path, default=PREDICTED)
-    parser.add_argument("--window", default="w1")
+    parser.add_argument(
+        "--window",
+        default="w2",
+        help="the C2 window — S5's re-draw is over the population S4 bought (ruling 02.09 (d),"
+        " «Then S5's re-draw over the C2 population»); w1 draws 5c2's 145 rows.",
+    )
     parser.add_argument("--rows", type=int, default=ROWS)
     args = parser.parse_args(argv)
 
