@@ -60,8 +60,8 @@ of that rendering before the first paid K8 call.**
 
 ## `make check`, and it is now a clean statement
 
-**13 failed · 4 262 passed · 2 skipped · 7 errors in 735.44 s** — 20 red against the 35 of the last report, **+15
-passed**. **Every red is one of the two forks above:** 19 are fork 1 — `test_build_dashboard` (7 errors + 4 failed),
+**13 failed · 4 263 passed · 2 skipped · 7 errors in 734.74 s**, measured at `82346cf` over a clean tree — 20 red
+against the 35 of the last report, **+16 passed**. **Every red is one of the two forks above:** 19 are fork 1 — `test_build_dashboard` (7 errors + 4 failed),
 `test_build_validate_pack` (4), `test_window_summary_5c2` (2), `test_export_dashboard_data` (2), each a w1 record whose
 provenance names the store as it was sealed and refuses on a C2 file («`data/derived/position_rows/ATB_FANatik.jsonl`
 is not in the export's provenance.evidence») — and 1 is fork 2. Nothing else is red. The 7 reds the new `--window w2`
