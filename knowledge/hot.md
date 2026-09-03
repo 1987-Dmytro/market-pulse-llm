@@ -2,23 +2,23 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-09-03 18:18:57 (every SessionStart)
+**Auto-refreshed:** 2026-09-03 21:27:47 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
-261bb79 docs(check): make check green at ae99c7a — 4 313 passed, 2 skipped, exit 0
-ae99c7a docs(stop,report): the seventh STOP — S9's $0 half is built and priced, at the money boundary
-491687a s9($0): the transport gates, the pack fix the dry contact caught, and the runbook
-f47ea1a s9($0): the pack — 40 threads and 16 posts, smoke first, and the runner's stub tests
-379edb1 s9($0): the dev loop's paid instrument — rung 0 FITS at the dear corner, $1.3193 of $2.50
+6104455 knowledge(decision): the PAUSE branch is unreachable, not just unhonoured — the evaluator's own third block says so
+d7e7810 docs(check): make check green at 49860d1 — 4 313 passed, 2 skipped, exit 0
+49860d1 docs(stop,report): the pod was REACHED, and the unused recreate is refused on the record
+9c5af91 knowledge: session 8 — the paid attempt, the dead-man that is set below its own span
+e4340e1 s9(paid,stop): two pods bought and killed by my own ssh dead-man — 180 s from a PROBE where the settled sibling registers 500 s
 ```
 
 ## 📋 Recent decisions
 
-- `INDEX.md` — Decision records
 - `the-pause-branch-is-unsatisfiable-as-worded.md` — §8's PAUSE branch is unsatisfiable as worded — the evaluator agrees and still returns «not met»
+- `INDEX.md` — Decision records
 - `the-schedule-reports-it-does-not-gate-the-tick.md` — `data/schedule.json` reports whether a tick is due; it does not refuse one — because a gate there would make the idempotence check untestable
 
 ## 📅 Recent daily logs
