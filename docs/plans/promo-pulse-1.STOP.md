@@ -38,11 +38,12 @@ no longer a gate.
 (`draw_positions_50.py` reads the DB and refuses below 3 chains) · (g) `make tick`'s per-table counts · (h) the clean-clone screen.
 **Do not run `make tick` again before the ruling** — it would overwrite `results/promo_screen_data.json` with zeros off the empty DB.
 
-**Check (j) is red in TWO places, and the bigger one is the fork above.** A targeted reading —
-`pytest tests/test_aggregates.py tests/test_repair_phase4_ledger.py tests/test_draw_positions_50.py
-tests/test_export_dashboard_data.py -q` → **8 failed, 26 passed, 10 errors**: the errors are session
-fixtures that BUILD the aggregates from the live derived store, so they refuse for the same SPEC
-3.20 (1) reason, and the failures follow the empty database. None of it is weakened here.
+**Check (j) is red in TWO places, and the bigger one is the fork above.** Full `make check`:
+**18 failed, 4 247 passed, 2 skipped, 17 errors in 723.62 s**. Of the 35, **32 are the fork** — every
+one of them in a file whose fixture BUILDS the aggregates from the live derived store and therefore
+refuses for the same SPEC 3.20 (1) reason: `test_aggregates` (9 errors, 2 failed), `test_build_dashboard`
+(7 errors, 4 failed), `test_build_validate_pack` (4), `test_export_dashboard_data` (1 error, 3 failed),
+`test_window_summary_5c2` (2). The other **3** are the ledger-witness tests below. Nothing weakened.
 
 **The second, separate ruling for check (j).** `tests/test_repair_phase4_ledger.py:167` types
 `LINE_LEDGER = results/spend_cycle2.json` as «the live ledger»; cycle 2 was superseded by cycle 3 on 01.09, so the first step

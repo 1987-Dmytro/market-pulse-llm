@@ -26,5 +26,5 @@ is in `spend_cycle3.json` at the same timestamp and balance; 3 tests red since `
 the harness killed the run's process twice mid-flight, discarding one in-flight job each (~$0.09, re-asked); the third launch was detached (`os.setsid()`).
 
 **Checks.** (a) 17 channels · 3 008 pages from store metadata · projection one number $3.1563 · (b) 23 passed, both directions · (f) 10 passed · (i) 20 rows,
-seed 42 · (k) 30 lines · (l) empty. (c) bought and durable, blocked from `pulse.db` by the fork, with (d) (g) (h); (e) waits on the labels; (j) red on that
-fork and on Dv903 — neither weakened here, both in the STOP.
+seed 42 · (k) 30 lines · (l) empty. (c) bought and durable, blocked from `pulse.db` by the fork, with (d) (g) (h); (e) waits on the labels; (j) `make check` 18 failed,
+4 247 passed, 2 skipped, 17 errors — 32 of the 35 are the fork, 3 are Dv903; neither weakened here, both in the STOP.
