@@ -53,10 +53,18 @@ def database(tmp_path: Path, chains: dict[str, int]) -> Path:
     return path
 
 
+FIXTURE_WINDOW = "w1"
+"""The window :func:`database` writes its rows into — the one every assertion below is about."""
+
+
 def run(db: Path, tmp_path: Path, name: str, rows: int = 50) -> tuple[int, Path, Path]:
     out, pred = tmp_path / f"{name}.json", tmp_path / f"{name}.jsonl"
     code = draw.main(
-        ["--db", str(db), "--out", str(out), "--predicted", str(pred), "--rows", str(rows)]
+        # `--window` is NAMED and not inherited: `database()` above builds `w1`, the script's
+        # default moved to the C2 window `w2`, and a fixture that rides a production default is a
+        # test about whichever window production happens to draw ([[a_moved_constant_fails_green]]).
+        ["--db", str(db), "--out", str(out), "--predicted", str(pred), "--rows", str(rows),
+         "--window", FIXTURE_WINDOW]
     )
     return code, out, pred
 

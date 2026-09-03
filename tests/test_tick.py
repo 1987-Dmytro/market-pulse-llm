@@ -153,6 +153,9 @@ def run(world, now: str = NOW) -> int:
             "--state", str(world["state"]),
             "--schedule", str(world["schedule"]),
             "--archive", str(world["archive"]),
+            # named, not inherited: the fixture builds `w1` and the script's default is now the C2
+            # window `w2` ([[a_moved_constant_fails_green]]).
+            "--window", "w1",
             "--now", now,
         ]
     )
