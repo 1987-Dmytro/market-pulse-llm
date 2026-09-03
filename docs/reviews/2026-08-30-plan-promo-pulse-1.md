@@ -471,3 +471,79 @@ mechanically — a scope change, allowed only if the plan names it.
 (`results/positions_draw_50.json`): STOP «waiting on the team lead's labels (positions-50)» names the draw's sha. Holdout-40 is
 labelled by the team lead only AFTER the pre-registration STOP notice; the executor never sees `docs/labels-promo-holdout.jsonl`
 before the ONE shot.
+
+## Ruling 03.09 (b) — the fifth STOP: fork 1 = SPLIT the derived store (shape 2); fork 2 = `carrier` joins the key, the test's claim is re-scoped; the render is READ and accepted (+1 line); K6's gold is PAGE-level; S9 iteration 1 may start after the smoke, with its decision table; `/goal clear` ends a pause
+
+**Accepted, by diff and by files, $0:** `1161187` (w2 through its own seal — `w1` 902/902 mirror leaves, `w2` 17 channels · 1 113
+positions), `abe6e18` (ledger lines DERIVED from the guard's constants — the one test ruling 02.09 (d) named), `7c93fb0` (CODEBOOK
+re-rendered; `codebook_version()` `a97d3c71…`), `6b6fe44` (the grader proven four directions against the shipped gold — 1.0/1.0 · subject
+0.0 with signals 1.0 · signals 0.15 = 6/40 with subject 1.0 · silence both red; the share DERIVED), `b74123f` (dev-40 corpus and the dry
+run: 40 renders, 209 897 chars, bound $0.29–$1.66 per iteration on a BORROWED rate and said so). The report `docs/reports/promo-pulse-1.md`
+answers the question in its first four lines. **4 268 ≥ 4 266**: (j)'s count half is met; its green half is the two forks below.
+Nothing silently narrowed; the seven reds the `--window w2` default caused were the executor's own and are fixed the right way (the
+fixture names its window).
+
+**Fork 1 — shape 2, the SPLIT. Ruled, with the check that closes it.** A seal is a statement «these bytes made this»; a seal whose bytes
+move is not re-scoped into prose, it is restored. The C2 run only APPENDED (23 of 38 sealed sources unchanged, 15 an exact byte prefix,
+0 diverged — measured by the executor), so the derived store splits the way the raw store did on 30.08 (v1 archive frozen, r2 live):
+1. `data/derived/` returns to 5c2's bytes: every one of the 38 sealed sources hashes to its sealed value. The C2 rows move to their own
+   root — the executor names it (the plan's S4 «write target `data/derived/`» is amended by THIS ruling, Dv `[cause: ruling]`: each
+   window writes under its own root; C2 and every later tick under the new one). The 20 D-cut posts stay in w1's root and w2 reads them
+   from there, as ruling (d) already says.
+2. Order of operations is the safety: **copy first, verify, then cut.** A script writes the appended lines to the C2 root, verifies the
+   C2 root's line counts (= today's minus the sealed prefix) and the sealed prefix hashes BEFORE truncating anything, and `data/` being
+   gitignored, a dated backup listing (`tar` or a copy under `data/derived_backup_2026-09-03/`, with its `ls -la` in the transcript) exists
+   before the first truncation. `unbought` and every C2 record keep their sha pins — nothing sealed is edited.
+3. Closing check, shown: `sha256sum` of the 38 sealed sources == their sealed values (one command, 38/38); `w1` mirror 902/902 as before;
+   `dashboard_data_w1.json` re-exported == the committed one **including `provenance.*`** (0 differing leaves, not 55); `w2` still 17
+   channels / 1 113 positions from the new root; `make tick` twice zero rows; the 19 fork-1 reds go green with NO assertion changed.
+Shape 1 is refused: it would leave the seals true only by definition.
+
+**Fork 2 — `carrier` is part of the key; the test's claim is re-scoped, not deleted.** Two legs reading one message are two paid rows and
+neither is dropped; `row_id` does not move (a sealed export's rows keep their ids). `tests/test_promo_tables.py::test_positions_is_untouched`
+changes BY THIS RULING (Dv `[cause: ruling]`) to assert what the plan actually protects: no stored `row_id` moves, `w1`'s rows and values
+are byte-identical before and after (the mirror + the export sha of fork 1), and the key is `(window_id, row_id, carrier)`. Reading owed in
+the report, $0: for the 7 messages read by both legs, how many (brand, product, volume) triples appear in BOTH rows — if that number is
+> 0, S3's trends dedupe per (window, channel, msg_id, brand, product, volume) preferring `carrier = leaflet_page`, named as a check in the
+plan by revision; if 0, nothing changes and the number is the evidence.
+
+**`--close --tolerance`: 0.05.** The 3.15 % gap is the always-on volume's drip inside the step's wall-clock, not pages; the step's spend
+line is the guard's settled **$3.1909** (delta), the drip stays inside cycle 3 as it is. The START RITUAL closes the step at 0.05.
+
+**The 16 pinned posts without an evidence row (14 `@epicentrk_sale`, 1 `@ekomarket_shop`, 1 `@forainfo`).** Re-asked ONLY on the S9
+smoke's pod (≈$0.004 of compute, no separate boot), as its own step-ledger line; if the smoke never runs, the 16 stay in the report as a
+named gap. Five channels with 0 positions are an answer — one line in the report and in `docs/STATUS.md`, no action.
+
+**The render is READ (`render()` of `@VARUS_channel/6009`, the CODEBOOK block as committed) and ACCEPTED with ONE line added before the
+pod:** rule 6 gains «строки чи умови акції В ЦІЛОМУ, без товару («акція діє 17.03?», «4 січня акції одного дня немає?») → МЕРЕЖА (chain)»
+— the gold labels dec 09 and dec 15 that way and the block today routes «до коли» to the product only. Everything else matches codebook
+v1 clause for clause. `codebook_version()` moves once more; the gold-as-fixture hooks (140/84/0) are re-run after the edit.
+
+**K6's gold is PAGE-level — the row-level draw cannot be labelled blind.** The draw hands the labeller `(channel, msg_id, link)` and no
+extraction, the grader matches on content, and a page carries up to 10 extracted rows (`@VARUS_channel:10843` — 10): a gold row written
+blind for `…:0` names whichever item the labeller picks, and completeness would measure luck. Ruled: the gold `docs/labels-positions-50.jsonl`
+carries EVERY in-scope position (the parser's own scope: dairy — milk, kefir/ryazhanka, yogurt, curd/syrky, sour cream, butter, cheese,
+dairy desserts, plant-based analogs — and ice cream, `positions.py` categories) the team lead reads on each of the **46 pages/posts** the
+50 drawn rows come from (draw sha `61b4fda7…` stays the anchor), one line per position, schema per SP-0 q1 above (`row_id · brand · product · volume · price_promo · badge_pct · price_old · note`;
+`row_id` = `channel:msg_id:g<n>`, the labeller's own ordinal, never the extraction's). `positions_50_predicted.jsonl` is re-emitted as ALL extracted rows of those 46
+messages (both carriers), `scripts/draw_positions_50.py --predicted-for-pages` or equivalent, sha in the record; the grader's rule is
+unchanged (one-to-one content matching), `completeness` keeps its bar over the gold rows, `predicted_rows_no_gold_row_claims` is
+reported as the precision reading (no bar). The 46 images live in `data/annotation/promo_c2/posts_media/` (gitignored); the executor
+lists them by `msg_id` in `results/positions_draw_50.json` — add `image` (relative path) to each row in the next redraw-free write of the
+record (a field, not a re-draw; sha of `rows` unchanged, said so in the record). The team lead labels in a fresh session; expect two.
+
+**S9 iteration 1 — allowed after the smoke, on this table.** Pod up → smoke on 3 dev threads (the shortest, the median, the longest
+render) → measured seconds/thread replace the borrow in `promo_dev40_prep.json` → projection for 40 threads at the measured mean and max:
+| projected per iteration (mean) | do |
+|---|---|
+| ≤ $0.80 | run iteration 1 now; ≥ 3 iterations fit inside $2.50 with the holdout's $0.30 untouched |
+| $0.80 – $1.20 | run iteration 1; STOP after it with the error table — the plateau rule needs two more and they may not fit |
+| > $1.20 | STOP before buying: the table with mean and max, the pod torn down, listing shown |
+Iteration = one pass over dev-40 with thinking OFF, batch 1, `extractor_version` on every row, K8 on the result, the error table
+(top-10 subject misses with the gold row beside the model's, signal Jaccard per thread) in `results/` and the report. The 16 posts
+(above) ride the same pod. Nothing else is bought.
+
+**Pauses and `/goal`.** The Stop-hook evaluator does not honour the PAUSE branch and blocked eight turns before the cap ended the session
+(Claude Code docs: the cap is eight; `/goal clear` — aliases `stop`, `off` — ends a goal). From now: when the STOP file is written and
+the report committed, the executor's last message says «STOP — /goal clear», and the OPERATOR types `/goal clear`; the next resume is a
+fresh session with the same §8 paste. §8 does not change.

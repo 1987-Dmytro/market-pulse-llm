@@ -55,8 +55,13 @@ mechanics. Operator-facing digest of the same rules: `docs/STATUS.md` («Пра�
    and the resume sentence); the phase spec's §8 holds the body's exact bytes. After pasting, WATCH
    FOR THE FIRST TOOL CALL: on this build `/goal` can merely SET the condition («Goal set: …»)
    without starting a turn — 02.09 idled 12 h on exactly this; if nothing runs within a minute, send
-   one word («go»). The predicate never changes mid-phase;
-   the rulings file grows; handovers never
+   one word («go»). ENDING A PAUSE (03.09, from the transcript + the /goal docs): the evaluator
+   does not honour the predicate's PAUSE branch — it blocked eight turns in a row before the
+   Stop-hook cap (`CLAUDE_CODE_STOP_HOOK_BLOCK_CAP`, default 8) forced the end. So when the STOP
+   file is written and the report committed, the executor's last line is «STOP — /goal clear» and
+   the OPERATOR types `/goal clear` (aliases `stop`, `off`); the resume is a fresh session with the
+   same paste (an active goal is restored only by `--continue`/`--resume`, never by a new session).
+   The predicate never changes mid-phase; the rulings file grows; handovers never
    assume session survival. Slices and per-slice predicates are the failure mode this rule prevents.
    `/report <name>` is a clause of the predicate. The evaluator's «met» is NOT acceptance (step 4).
 4. Team lead accepts by diff, artifact and check; STATUS refreshed; one retro line.
