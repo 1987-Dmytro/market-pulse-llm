@@ -1,0 +1,250 @@
+{
+  "authority": "docs/reviews/2026-08-30-plan-promo-pulse-1.md «Ruling 03.09 (c)» — «the flags and their stub tests at $0 … --register shown with fits at the dear corner → then, in the same session if the registration fits, the pod: smoke → the table → iteration 1 → K8 → error table → teardown»; docs/plans/promo-pulse-1.md §9 and §9a",
+  "class": "PRE-REGISTRATION. Written and committed before any pod of this step exists; git history is the only witness that it preceded the money.",
+  "decision_table": {
+    "after_the_smoke_for_40_threads": {
+      "0.80 - 1.20": "run it, then STOP with the error table",
+      "<= 0.80": "run iteration 1 now",
+      "> 1.20": "STOP before buying; pod torn down, listing shown"
+    },
+    "authority": "ruling 03.09 (b), quoted and not moved"
+  },
+  "gates": {
+    "1_liveness": "the ssh dead-man above; never two pods, checked BEFORE `pod create`",
+    "3_hard_stop": "12162.2 s of pod existence at the registered price — the platform-side backstop is terminate_after",
+    "boot_kill_seconds": 720.0,
+    "delete_margin_seconds": 60.0,
+    "from": "results/prereg_reader_probe_v5b.json — frozen, and none of these numbers is new here",
+    "max_recreates": 2,
+    "ssh_deadman_rule": "derived, not typed: a dead segment costs the dead-man plus one delete margin, and both of those are fields of that record",
+    "ssh_deadman_seconds": 180.0,
+    "terminate_after_minutes": 90
+  },
+  "law": {
+    "baseline": "iteration 1 changes NOTHING (ruling 03.09 (c) item 3): this CODEBOOK and today's TEMPLATE, untouched. Iterations 2–5 may vary the template, the rendering, the decoding and the answer repair, each a new extractor_version.",
+    "codebook": "docs/CODEBOOK-promo-signals.md",
+    "codebook_sha256": "6a74bc81cd2a922d9956dd06af21f52916bb7f842c32b19688efd01030d61dc3",
+    "codebook_version": "a694d005972d3a66dd5ca74402a0091faca110be0e3e335c9c97f3793cf5130a",
+    "vocabulary": {
+      "attribution_sources": [
+        "explicit",
+        "reply_context",
+        "post_context"
+      ],
+      "codebook_sha256": "a694d005972d3a66dd5ca74402a0091faca110be0e3e335c9c97f3793cf5130a",
+      "signal_types": [
+        "жалоба",
+        "похвала",
+        "спрос",
+        "привычка",
+        "цена"
+      ],
+      "subject_types": [
+        "chain",
+        "brand",
+        "sku",
+        "post"
+      ]
+    }
+  },
+  "out_of_scope": "no training; no holdout spend; no new sources; no cap raise. Leg B's answers land on disk as evidence for the store, and the ingest into data/derived_w2 is NOT in this session's sequence.",
+  "phase": "promo-pulse-1 S9 — the dev loop's PAID instrument, iteration 1 (the BASELINE)",
+  "pinned_inputs": {
+    "docs/CODEBOOK-promo-signals.md": "6a74bc81cd2a922d9956dd06af21f52916bb7f842c32b19688efd01030d61dc3",
+    "docs/labels-promo-dev.jsonl": "302113b8ae3c9598093131800842298afe43e02aded1d7fbb4e4ac47fe21865f",
+    "results/prereg_5c2_run.json": "d5d3afd5e6d7e966233a7e449546b2001f9c2a08646cab207e87531f5df4cbc8",
+    "results/promo_dev40_prep.json": "7971ed668ec6c57ab1aa92e81f815d2dc526bc636c64db3a7f49fcb6f642c02a",
+    "results/promo_threads_draw.json": "6f9fa245b9d702549cdc323849146de1825a12df8048c8ba8077c42e2508a407"
+  },
+  "population": {
+    "leg_a": {
+      "digest": "89e193dace806a6a7e4648f9e69d110cab80d053dbbd0ef324a72e86b49aaea0",
+      "digest_rule": "sha256 over `channel:thread_root` per thread, in the draw's order",
+      "order": [
+        "@VARUS_channel:2537",
+        "@VARUS_channel:5589",
+        "@VARUS_channel:6009",
+        "@VARUS_channel:9999",
+        "@msuaaaa:10121",
+        "@msuaaaa:10169",
+        "@msuaaaa:10219",
+        "@msuaaaa:10617",
+        "@msuaaaa:3454",
+        "@msuaaaa:5513",
+        "@msuaaaa:7693",
+        "@msuaaaa:7847",
+        "@msuaaaa:7900",
+        "@msuaaaa:8096",
+        "@msuaaaa:8717",
+        "@msuaaaa:8907",
+        "@msuaaaa:9013",
+        "@msuaaaa:9014",
+        "@msuaaaa:9139",
+        "@msuaaaa:9952",
+        "@VARUS_channel:10187",
+        "@VARUS_channel:1901",
+        "@VARUS_channel:3163",
+        "@VARUS_channel:3621",
+        "@VARUS_channel:4202",
+        "@VARUS_channel:4871",
+        "@VARUS_channel:5186",
+        "@VARUS_channel:6216",
+        "@VARUS_channel:6278",
+        "@VARUS_channel:8308",
+        "@VARUS_channel:9006",
+        "@VARUS_channel:9046",
+        "@VARUS_channel:9853",
+        "@msuaaaa:2684",
+        "@msuaaaa:3034",
+        "@msuaaaa:3915",
+        "@msuaaaa:4173",
+        "@msuaaaa:6523",
+        "@msuaaaa:7187",
+        "@msuaaaa:8788"
+      ],
+      "smoke": {
+        "n": 3,
+        "prefix": "these three are the pass's FIRST three units; the pod answers them, the Mac reads the rate, and the decision table of ruling 03.09 (b) decides whether the remaining 37 are bought at all",
+        "rule": "shortest, median and longest render by promo_dev40_prep.json's own chars — a rule, not a pick",
+        "units": [
+          {
+            "chars": 4895,
+            "role": "shortest",
+            "unit_id": "@msuaaaa:6523"
+          },
+          {
+            "chars": 5202,
+            "role": "median",
+            "unit_id": "@VARUS_channel:9006"
+          },
+          {
+            "chars": 8170,
+            "role": "longest",
+            "unit_id": "@VARUS_channel:6009"
+          }
+        ]
+      },
+      "threads": 40
+    },
+    "leg_b": {
+      "by_channel": {
+        "@ekomarket_shop": [
+          "1457"
+        ],
+        "@epicentrk_sale": [
+          "6234",
+          "6235",
+          "6240",
+          "6241",
+          "6242",
+          "6243",
+          "6244",
+          "6250",
+          "6251",
+          "6252",
+          "6253",
+          "6254",
+          "6255",
+          "6256"
+        ],
+        "@forainfo": [
+          "6042"
+        ]
+      },
+      "posts": 16,
+      "rule": "S4's own subtraction: results/promo_census_c2.json's price posts less the rows data/derived_w2/ already answers. A REGISTERED prompt, so the pod renders them with the shipped render and nothing new is written for them",
+      "task": "positions_text_gm4"
+    }
+  },
+  "question": "does the promo-signal instrument, under CODEBOOK a694d005972d3a66…, clear subject ≥ 0.80 and signal ≥ 0.75 on dev-40 within at most 5 dev runs?",
+  "rung_0": {
+    "amendment": "ruling 03.09 (c) item 1 — smoke + iteration 1 + the 16 posts, not five iterations: the borrowed max over five would refuse a loop the smoke may prove cheap",
+    "borrowed_rate": {
+      "instrument": "READER (enable_thinking false) — the BEFORE column's own rate",
+      "max": 135.232,
+      "n": 75,
+      "name": "pass2_r2_seconds_per_thread",
+      "source": "results/pass2_signals_r2_v1.jsonl",
+      "value": 23.76
+    },
+    "cap_usd": 2.5,
+    "dear_usd": 1.3193,
+    "fits": true,
+    "hard_stop_seconds": 12162.2,
+    "overhead": {
+      "from": "results/pass2_signals_r2_run.json :: pods[0].billed_seconds 2061.0 and results/measurements.jsonl :: pass2_r2_seconds_per_thread × 75",
+      "rule": "the sibling's BILLED seconds less its generation at the same borrowed rate over its own 75 threads — boot, the 31B load, scp up and back, the polls and the delete",
+      "seconds": 279.0,
+      "sibling_billed_usd": 0.42365,
+      "sibling_usd_per_hour": 0.74
+    },
+    "posts": 16,
+    "price": {
+      "card": "NVIDIA GeForce RTX 4090",
+      "datacenter": "EU-RO-1",
+      "offers_usd_per_hour": [
+        0.74,
+        0.34
+      ],
+      "read_at": "2026-09-03T15:37:12+00:00",
+      "rule": "the DEARER offer of secure/community, read on the day; the create response's own costPerHr is the price the meter bills and the price gate re-checks it",
+      "stock": "Medium",
+      "usd_per_hour": 0.74
+    },
+    "rule": "docs/PROCESS.md «Money» rung (0): price at create ≤ the registered ceiling — the ceiling is the step cap, the price is the DEAR corner",
+    "seconds_per_post_from": "results/prereg_5c2_run.json :: prices.post_text.seconds_model",
+    "table": [
+      {
+        "billable_seconds": 1345.7,
+        "cap_usd": 2.5,
+        "fits": true,
+        "name": "cheap — the borrowed MEAN over every leg, the sibling's measured overhead",
+        "over_cap_by": -0.8894,
+        "overhead_seconds": 279.0,
+        "seconds_per_post": 2.813,
+        "seconds_per_thread": 23.76,
+        "usd": 0.2766
+      },
+      {
+        "billable_seconds": 1624.7,
+        "cap_usd": 2.5,
+        "fits": true,
+        "name": "priced — the borrowed mean plus one whole extra overhead (a second segment after a dead-man KILL, which the transport allows twice)",
+        "over_cap_by": -0.8664,
+        "overhead_seconds": 558.0,
+        "seconds_per_post": 2.813,
+        "seconds_per_thread": 23.76,
+        "usd": 0.334
+      },
+      {
+        "billable_seconds": 6418.0,
+        "cap_usd": 2.5,
+        "fits": true,
+        "name": "dear — the borrowed MAX on every thread (135.232 s was ONE of the sibling's 75) and two overheads. Pessimistic by construction: the guard's spend is a maximum and a cap blown after the money is spent cannot be un-spent",
+        "over_cap_by": -0.4723,
+        "overhead_seconds": 558.0,
+        "seconds_per_post": 2.813,
+        "seconds_per_thread": 135.232,
+        "usd": 1.3193
+      }
+    ],
+    "threads": 43,
+    "threads_note": "3 smoke + 40 dev-40. The smoke's three ARE the pass's first three units, so the pod answers 40 and the registration is bought high, spent low"
+  },
+  "step": {
+    "cap_rule": "min($2.50, REMAINING − $0.30)",
+    "cap_usd": 2.5,
+    "floor_usd": 2.0,
+    "ledger": "results/spend_promo_dev_loop.json",
+    "money": {
+      "at": "2026-09-03T15:37:11+00:00",
+      "cycle3_cap_usd": 7.0,
+      "cycle3_spent_usd": 3.5409,
+      "from": "scripts/runpod_guard.py, its own printed REMAINING and CYCLE 3 lines",
+      "remaining_usd": 3.4591
+    },
+    "name": "promo-dev-loop",
+    "no_cap_raise": "never, mid-run. Silence is KILL: nobody can be asked."
+  },
+  "teardown": "`runpodctl pod delete <id>`, then `runpodctl pod list -a` → [] and `runpodctl serverless list` → [] in the transcript, before every STOP and before the session ends (ruling 03.09 (c) item 2)"
+}

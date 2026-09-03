@@ -31,7 +31,10 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import re
+import subprocess
 import sys
+from datetime import UTC, datetime
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -109,6 +112,10 @@ def predicted_rows(row: dict, answer: dict) -> list[dict]:
 
 def sha256_of(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def load(path: Path) -> dict:
+    return json.loads(path.read_text(encoding="utf-8"))
 
 
 def borrowed_rate() -> dict:
@@ -190,13 +197,577 @@ def prep() -> dict:
     }
 
 
+# --- the PAID half: the dev loop's own step, its rungs, its registration ---------------------------
+
+STEP = "promo-dev-loop"
+"""Its OWN step and its own ledger (plan §9). S4's `promo-pulse-1` is CLOSED at $2.9867 and a closed
+step cannot carry a new run's spend; ruling 03.09 (c) opens this one."""
+
+STEP_CAP_USD = 2.50
+STEP_FLOOR_USD = 2.00
+HOLDOUT_RESERVE_USD = 0.30
+"""Plan §9: cap `min($2.50, REMAINING − $0.30)`, floor $2.00, and the holdout's $0.30 is a separate
+pre-registration this step may not reach. The REMAINING is the guard's, read at `--register`."""
+
+SMOKE_N = 3
+"""Plan §9's sample, and a RULE rather than a pick: the shortest, the median and the longest render
+by `promo_dev40_prep.json :: corpus.threads[].chars`."""
+
+PREREG = REPO_ROOT / "results" / "prereg_promo_dev_loop.json"
+PACK = REPO_ROOT / "results" / "promo_dev40_pack.json"
+SIBLING = REPO_ROOT / "results" / "pass2_signals_r2_run.json"
+BORROWED_GATES = REPO_ROOT / "results" / "prereg_reader_probe_v5b.json"
+PREREG_5C2 = REPO_ROOT / "results" / "prereg_5c2_run.json"
+
+CARD = "NVIDIA GeForce RTX 4090"
+DATACENTER = "EU-RO-1"
+"""The volume decides the datacenter (`qw4nwleanc`, `mp-srv2`), and the card is the sibling's — the
+same RTX 4090 `pass2-signals-r2` measured the borrowed rate on."""
+
+POST_TASK = "positions_text_gm4"
+"""Leg B's task, and it is a REGISTERED prompt of `src/market_pulse/prompts.py`: the 16 posts ride
+this pod through the SHIPPED render, so nothing new is written for them."""
+
+GUARD = REPO_ROOT / "scripts" / "runpod_guard.py"
+
+
+def guard_reading() -> dict:
+    """What the cycle has left, in the guard's own words. Never re-derived here.
+
+    `run_promo_c2.guard_says_go`'s rule, one line further: a missing REMAINING reads as unlimited,
+    so a run that cannot find the guard's own line refuses instead of pricing itself against a
+    number it invented ([[a_budget_is_not_an_elapsed]])."""
+    done = subprocess.run(
+        [sys.executable, str(GUARD)], check=False, capture_output=True, text=True
+    )
+    print(done.stdout, end="", flush=True)
+    print(done.stderr, end="", file=sys.stderr, flush=True)
+    if done.returncode != 0:
+        raise SystemExit(f"the guard refused (exit {done.returncode}) — no registration is written")
+    found = re.search(r"^REMAINING\s+\$([0-9.]+)", done.stdout, re.M)
+    cycle = re.search(r"^CYCLE 3 SPENT\s+\$([0-9.]+) of \$([0-9.]+)", done.stdout, re.M)
+    if not found or not cycle:
+        raise SystemExit(
+            "the guard printed no 'REMAINING $…' / 'CYCLE 3 SPENT $… of $…' pair — the cycle's"
+            " headroom is unreadable and an unreadable headroom is not $∞. Refuse."
+        )
+    return {
+        "remaining_usd": float(found.group(1)),
+        "cycle3_spent_usd": float(cycle.group(1)),
+        "cycle3_cap_usd": float(cycle.group(2)),
+        "from": "scripts/runpod_guard.py, its own printed REMAINING and CYCLE 3 lines",
+        "at": datetime.now(UTC).isoformat(timespec="seconds"),
+    }
+
+
+def offered_price() -> dict:
+    """The card's price in this datacenter, READ ON THE DAY — v5b's `money.meter.price_rule`.
+
+    The DEARER of the two clouds is registered: the create response's `costPerHr` is the price that
+    is actually billed, and a registration written at the cheaper offer would be a ceiling the run
+    can exceed without a single gate firing ([[a_ceiling_derived_from_one_span_measured_over_another]]).
+    """
+    done = subprocess.run(
+        ["runpodctl", "gpu", "list"], check=False, capture_output=True, text=True
+    )
+    if done.returncode != 0:
+        raise SystemExit(f"runpodctl gpu list failed: {done.stderr.strip()[:200]}")
+    for gpu in json.loads(done.stdout):
+        if gpu.get("displayName") not in ("RTX 4090",):
+            continue
+        here = [
+            one
+            for one in (gpu.get("dataCenterAvailability") or [])
+            if one.get("dataCenterId") == DATACENTER
+        ]
+        prices = [
+            float(one)
+            for one in (gpu.get("securePricePerHr"), gpu.get("communityPricePerHr"))
+            if one
+        ]
+        if not here or not prices:
+            continue
+        return {
+            "card": CARD,
+            "datacenter": DATACENTER,
+            "stock": here[0].get("stockStatus"),
+            "usd_per_hour": max(prices),
+            "offers_usd_per_hour": prices,
+            "rule": "the DEARER offer of secure/community, read on the day; the create response's"
+            " own costPerHr is the price the meter bills and the price gate re-checks it",
+            "read_at": datetime.now(UTC).isoformat(timespec="seconds"),
+        }
+    raise SystemExit(
+        f"{CARD} is not offered in {DATACENTER} today — the volume pins the datacenter, so this is"
+        " a STOP for the operator's word, not a card to substitute"
+    )
+
+
+def borrowed_gates() -> dict:
+    """v5b's frozen transport gates, READ and not retyped — plan §9a's borrow.
+
+    The ssh dead-man's 180 s lives only in that record's prose, so it is DERIVED from the two
+    numeric fields that bound it: a dead segment costs the dead-man plus one delete margin."""
+    v5b = json.loads(BORROWED_GATES.read_text(encoding="utf-8"))
+    gate0 = v5b["go_no_go"]["gates"]["0_transport_ssh_deadman"]
+    money = v5b["money"]["arithmetic"]
+    dead = float(v5b["money"]["segments"]["a_dead_segment_costs_seconds"])
+    margin = float(money["delete_margin_seconds"])
+    return {
+        "from": rel(BORROWED_GATES) + " — frozen, and none of these numbers is new here",
+        "ssh_deadman_seconds": dead - margin,
+        "ssh_deadman_rule": "derived, not typed: a dead segment costs the dead-man plus one delete"
+        " margin, and both of those are fields of that record",
+        "max_recreates": int(gate0["max_recreates"]),
+        "boot_kill_seconds": float(money["boot_kill_seconds"]),
+        "delete_margin_seconds": margin,
+        "terminate_after_minutes": int(v5b["go_no_go"]["backstop"]["terminate_after_minutes"]),
+    }
+
+
+def sibling_overhead() -> dict:
+    """Everything a pod bills that is NOT generation, measured on the sibling that settled.
+
+    `pass2-signals-r2` billed 2 061 s for 75 threads at 23.76 s each; the remainder is boot, the
+    31B load, the scp up and back, the poll gaps and the delete. A registration that multiplied
+    per-thread seconds by a per-second price and stopped there would price the generation and not
+    the bill ([[no_rung_watches_an_idle_pod]])."""
+    pod = json.loads(SIBLING.read_text(encoding="utf-8"))["pods"][0]
+    rate = borrowed_rate()
+    generation = float(rate["value"]) * 75
+    return {
+        "seconds": round(float(pod["billed_seconds"]) - generation, 1),
+        "rule": "the sibling's BILLED seconds less its generation at the same borrowed rate over"
+        " its own 75 threads — boot, the 31B load, scp up and back, the polls and the delete",
+        "from": f"{rel(SIBLING)} :: pods[0].billed_seconds {pod['billed_seconds']} and"
+        f" results/measurements.jsonl :: {BORROWED_RATE} × 75",
+        "sibling_usd_per_hour": float(pod["usd_per_hour"]),
+        "sibling_billed_usd": float(pod["billed_usd"]),
+    }
+
+
+def smoke_units(threads: list[dict]) -> list[dict]:
+    """The shortest, the median and the longest render — a rule, never a pick (plan §9)."""
+    order = sorted(threads, key=lambda one: (one["chars"], one["channel"], one["thread_root"]))
+    picked = [order[0], order[len(order) // 2], order[-1]]
+    for one, role in zip(picked, ("shortest", "median", "longest")):
+        one["smoke_role"] = role
+    return picked
+
+
+def unit_id(row: dict) -> str:
+    return f"{row['channel']}:{row['thread_root']}"
+
+
+def corner(name: str, *, n_threads, n_posts, s_thread, s_post, overhead, usd_per_second, cap):
+    seconds = overhead + n_threads * s_thread + n_posts * s_post
+    usd = round(seconds * usd_per_second, 4)
+    return {
+        "name": name,
+        "seconds_per_thread": round(s_thread, 3),
+        "seconds_per_post": round(s_post, 3),
+        "overhead_seconds": round(overhead, 1),
+        "billable_seconds": round(seconds, 1),
+        "usd": usd,
+        "cap_usd": round(cap, 4),
+        "fits": usd <= cap,
+        "over_cap_by": round(usd / cap - 1, 4),
+    }
+
+
+def rung_0(*, cap: float, price: dict, threads: list[dict], n_posts: int) -> dict:
+    """The step at three corners, in the POD's own unit — seconds of existence × $/s.
+
+    Ruling 03.09 (c) amendment 1: this prices the SMOKE plus ITERATION 1 and the 16 posts, never
+    five iterations. Iterations 2–5 are re-projected at the MEASURED rate before they are bought.
+    """
+    rate = borrowed_rate()
+    overhead = sibling_overhead()
+    text_s = float(load(PREREG_5C2)["prices"]["post_text"]["seconds_model"]["value"])
+    usd_per_second = price["usd_per_hour"] / 3600.0
+    n_threads = SMOKE_N + len(threads)
+    common = {
+        "n_threads": n_threads,
+        "n_posts": n_posts,
+        "s_post": text_s,
+        "overhead": overhead["seconds"],
+        "usd_per_second": usd_per_second,
+        "cap": cap,
+    }
+    table = [
+        corner(
+            "cheap — the borrowed MEAN over every leg, the sibling's measured overhead",
+            s_thread=rate["value"],
+            **common,
+        ),
+        corner(
+            "priced — the borrowed mean plus one whole extra overhead (a second segment after a"
+            " dead-man KILL, which the transport allows twice)",
+            s_thread=rate["value"],
+            **(common | {"overhead": overhead["seconds"] * 2}),
+        ),
+        corner(
+            "dear — the borrowed MAX on every thread (135.232 s was ONE of the sibling's 75) and"
+            " two overheads. Pessimistic by construction: the guard's spend is a maximum and a cap"
+            " blown after the money is spent cannot be un-spent",
+            s_thread=rate["max"],
+            **(common | {"overhead": overhead["seconds"] * 2}),
+        ),
+    ]
+    dear = table[-1]
+    return {
+        "rule": "docs/PROCESS.md «Money» rung (0): price at create ≤ the registered ceiling — the"
+        " ceiling is the step cap, the price is the DEAR corner",
+        "amendment": "ruling 03.09 (c) item 1 — smoke + iteration 1 + the 16 posts, not five"
+        " iterations: the borrowed max over five would refuse a loop the smoke may prove cheap",
+        "threads": n_threads,
+        "threads_note": f"{SMOKE_N} smoke + {len(threads)} dev-40. The smoke's three ARE the pass's"
+        " first three units, so the pod answers 40 and the registration is bought high, spent low",
+        "posts": n_posts,
+        "cap_usd": round(cap, 4),
+        "price": price,
+        "borrowed_rate": {k: rate[k] for k in ("name", "value", "max", "n", "instrument", "source")},
+        "overhead": overhead,
+        "seconds_per_post_from": "results/prereg_5c2_run.json :: prices.post_text.seconds_model",
+        "table": table,
+        "dear_usd": dear["usd"],
+        "fits": dear["fits"],
+        "hard_stop_seconds": round(cap / usd_per_second, 1),
+    }
+
+
+def render_rung_0(verdict: dict) -> str:
+    lines = [
+        f"rung 0 — {verdict['threads']} threads + {verdict['posts']} posts on one"
+        f" {verdict['price']['card']} at ${verdict['price']['usd_per_hour']}/h"
+        f" ({verdict['price']['datacenter']}, stock {verdict['price']['stock']})"
+        f" against the step cap ${verdict['cap_usd']:.4f}",
+        f"{'corner':<8}{'s/thread':>10}{'overhead':>10}{'seconds':>10}{'usd':>9}  fits",
+    ]
+    for row in verdict["table"]:
+        lines.append(
+            f"{row['name'].split(' ')[0]:<8}{row['seconds_per_thread']:>10.3f}"
+            f"{row['overhead_seconds']:>10.1f}{row['billable_seconds']:>10.1f}{row['usd']:>9.4f}"
+            f"  {'yes' if row['fits'] else 'NO':<4} ({row['over_cap_by']:+.1%})"
+        )
+    lines.append(
+        f"verdict: {'FITS' if verdict['fits'] else 'DOES NOT FIT'} at the dear corner"
+        f" · hard stop {verdict['hard_stop_seconds']:.0f} s of pod existence"
+    )
+    return "\n".join(lines)
+
+
+def leg_b_posts() -> dict:
+    """The C2 posts S4 left without an evidence row, enumerated from the store and not from prose.
+
+    `docs/reports/promo-pulse-1.md` names 16 of them; this reads the same subtraction S4's own
+    driver makes — the registered posts less what the derived store already answers — so the
+    registration pins IDS and not a count ([[count_in_prose_is_not_the_enumeration]])."""
+    import run_loop
+    import run_promo_c2 as c2
+
+    from market_pulse import loop
+    from market_pulse.raw_store import RawStore
+
+    derived = RawStore(run_loop.LIVE_DERIVED_ROOT, archives=(run_loop.DERIVED_ROOT,))
+    left = {}
+    for handle, rows in c2.posts().items():
+        queued = loop.queued_posts(rows, derived, handle, None)
+        if queued:
+            left[handle] = sorted(str(one["msg_id"]) for one in queued)
+    return {
+        "task": POST_TASK,
+        "rule": "S4's own subtraction: results/promo_census_c2.json's price posts less the rows"
+        " data/derived_w2/ already answers. A REGISTERED prompt, so the pod renders them with the"
+        " shipped render and nothing new is written for them",
+        "by_channel": left,
+        "posts": sum(len(ids) for ids in left.values()),
+    }
+
+
+def register() -> dict:
+    """Rung 0 before anything exists — plan §9, ruling 03.09 (c) amendments 1 and 5."""
+    money = guard_reading()
+    cap = round(min(STEP_CAP_USD, money["remaining_usd"] - HOLDOUT_RESERVE_USD), 4)
+    if cap < STEP_FLOOR_USD:
+        raise SystemExit(
+            f"the dev loop's cap is ${cap:.4f} — below the ${STEP_FLOOR_USD:.2f} floor plan §9"
+            " names. Ruling 02.09 (b) §4 makes that the operator's word, not this script's: STOP."
+        )
+    threads = dev_threads()
+    prep = json.loads(PREP.read_text(encoding="utf-8"))["corpus"]["threads"]
+    smoke = smoke_units([dict(one) for one in prep])
+    posts = leg_b_posts()
+    price = offered_price()
+    verdict = rung_0(cap=cap, price=price, threads=threads, n_posts=posts["posts"])
+    return {
+        "phase": "promo-pulse-1 S9 — the dev loop's PAID instrument, iteration 1 (the BASELINE)",
+        "class": "PRE-REGISTRATION. Written and committed before any pod of this step exists; git"
+        " history is the only witness that it preceded the money.",
+        "authority": "docs/reviews/2026-08-30-plan-promo-pulse-1.md «Ruling 03.09 (c)» — «the flags"
+        " and their stub tests at $0 … --register shown with fits at the dear corner → then, in the"
+        " same session if the registration fits, the pod: smoke → the table → iteration 1 → K8 →"
+        " error table → teardown»; docs/plans/promo-pulse-1.md §9 and §9a",
+        "question": "does the promo-signal instrument, under CODEBOOK"
+        f" {promo_prompts.codebook_version()[:16]}…, clear subject ≥ 0.80 and signal ≥ 0.75 on"
+        " dev-40 within at most 5 dev runs?",
+        "step": {
+            "name": STEP,
+            "ledger": rel(REPO_ROOT / "results" / f"spend_{STEP.replace('-', '_')}.json"),
+            "cap_usd": cap,
+            "cap_rule": f"min(${STEP_CAP_USD:.2f}, REMAINING − ${HOLDOUT_RESERVE_USD:.2f})",
+            "floor_usd": STEP_FLOOR_USD,
+            "money": money,
+            "no_cap_raise": "never, mid-run. Silence is KILL: nobody can be asked.",
+        },
+        "law": {
+            "codebook": rel(CODEBOOK),
+            "codebook_sha256": sha256_of(CODEBOOK),
+            "codebook_version": promo_prompts.codebook_version(),
+            "baseline": "iteration 1 changes NOTHING (ruling 03.09 (c) item 3): this CODEBOOK and"
+            " today's TEMPLATE, untouched. Iterations 2–5 may vary the template, the rendering, the"
+            " decoding and the answer repair, each a new extractor_version.",
+            "vocabulary": promo_prompts.vocabulary(),
+        },
+        "pinned_inputs": {
+            rel(path): sha256_of(path) for path in (CODEBOOK, GOLD, DRAW, PREP, PREREG_5C2)
+        },
+        "population": {
+            "leg_a": {
+                "threads": len(threads),
+                "order": [unit_id(one) for one in threads],
+                "digest": hashlib.sha256(
+                    "\n".join(unit_id(one) for one in threads).encode("utf-8")
+                ).hexdigest(),
+                "digest_rule": "sha256 over `channel:thread_root` per thread, in the draw's order",
+                "smoke": {
+                    "n": SMOKE_N,
+                    "rule": "shortest, median and longest render by promo_dev40_prep.json's own"
+                    " chars — a rule, not a pick",
+                    "units": [
+                        {
+                            "unit_id": f"{one['channel']}:{one['thread_root']}",
+                            "chars": one["chars"],
+                            "role": one["smoke_role"],
+                        }
+                        for one in smoke
+                    ],
+                    "prefix": "these three are the pass's FIRST three units; the pod answers them,"
+                    " the Mac reads the rate, and the decision table of ruling 03.09 (b) decides"
+                    " whether the remaining 37 are bought at all",
+                },
+            },
+            "leg_b": posts,
+        },
+        "rung_0": verdict,
+        "gates": borrowed_gates()
+        | {
+            "1_liveness": "the ssh dead-man above; never two pods, checked BEFORE `pod create`",
+            "3_hard_stop": f"{verdict['hard_stop_seconds']:.1f} s of pod existence at the"
+            " registered price — the platform-side backstop is terminate_after",
+        },
+        "decision_table": {
+            "authority": "ruling 03.09 (b), quoted and not moved",
+            "after_the_smoke_for_40_threads": {
+                "<= 0.80": "run iteration 1 now",
+                "0.80 - 1.20": "run it, then STOP with the error table",
+                "> 1.20": "STOP before buying; pod torn down, listing shown",
+            },
+        },
+        "teardown": "`runpodctl pod delete <id>`, then `runpodctl pod list -a` → [] and"
+        " `runpodctl serverless list` → [] in the transcript, before every STOP and before the"
+        " session ends (ruling 03.09 (c) item 2)",
+        "out_of_scope": "no training; no holdout spend; no new sources; no cap raise. Leg B's"
+        " answers land on disk as evidence for the store, and the ingest into data/derived_w2 is"
+        " NOT in this session's sequence.",
+    }
+
+
+def prompt_shas() -> dict:
+    """The READER texts this checkout serves, for `reader_v4_pod_runner.check_instrument`.
+
+    Leg A's law is NOT in this map — `promo_prompts` is a module of its own — so the pack pins its
+    codebook version beside it and the pod checks both."""
+    from market_pulse import prompts
+
+    return {task: prompts.prompt_sha256(task) for task in sorted(prompts.READER)}
+
+
+OUTPUT_TOKENS = 4000
+"""BORROWED, not chosen: `results/prereg_reader_probe_v5b.json :: instruments.ceilings.output_tokens`
+— the sibling instrument's registered ceiling on the same card and the same template. Ruling
+03.09 (c) item 3 makes max tokens a knob iterations 2-5 may turn; iteration 1 is the baseline."""
+
+PROMO_TASK = "promo_signals_gm4_v1"
+"""Leg A's task name. NOT a `prompts.py` registration — that module is pinned, which is why
+`promo_prompts` exists at all — so the pod's client dispatches on it and refuses anything else."""
+
+
+def committed_registration() -> dict:
+    """The pre-registration, refused unless it is committed and unmodified — v5's check, its file.
+
+    Until it is committed nothing stops it from being rewritten once the numbers are in
+    ([[preregistration_is_a_file_not_a_constant]])."""
+    for argv, message in (
+        (["git", "ls-files", "--error-unmatch", str(PREREG)], f"{rel(PREREG)} is not tracked"),
+        (["git", "diff", "HEAD", "--quiet", "--", str(PREREG)], f"{rel(PREREG)} differs from HEAD"),
+    ):
+        if subprocess.run(argv, cwd=REPO_ROOT, capture_output=True).returncode != 0:
+            raise SystemExit(
+                f"{message} — the committed registration is the one this run is read against, and"
+                " it is FROZEN. Commit it before the pack, and never after the pod."
+            )
+    return load(PREREG)
+
+
+def build_pack() -> dict:
+    """Every UNIT as the pod will be given it, each held to its own rendering sha.
+
+    Built on the Mac and checked again ON the pod: shipping the rendered string would only prove the
+    two machines agree about a string, and what has to be true is that the model is shown what the
+    registration registered (v5b's `reading`, quoted). The SMOKE's three units come FIRST, because
+    the decision table of ruling 03.09 (b) reads their rate before the remaining 37 are bought.
+    """
+    import run_promo_c2 as c2
+
+    from market_pulse import loop
+
+    record = committed_registration()
+    smoke = [one["unit_id"] for one in record["population"]["leg_a"]["smoke"]["units"]]
+    leg_a = {}
+    for row in dev_threads():
+        post, comments = thread_of(row)
+        ordered = sorted(comments, key=lambda one: int(one["msg_id"]))
+        rendered = promo_prompts.render(row["channel"], row["thread_root"], post, comments)
+        leg_a[unit_id(row)] = {
+            "id": unit_id(row),
+            "thread": unit_id(row),
+            "leg": "a",
+            "task": PROMO_TASK,
+            "channel": row["channel"],
+            "post_id": str(row["thread_root"]),
+            "post": post,
+            "comments": [[int(one["msg_id"]), one.get("text") or ""] for one in ordered],
+            "rendering_sha256": promo_prompts.extractor_version(rendered),
+            "chars": len(rendered),
+            "smoke": unit_id(row) in smoke,
+        }
+    if sorted(smoke) != sorted(one for one in leg_a if leg_a[one]["smoke"]):
+        raise SystemExit(f"the registration's smoke units are not in the draw: {smoke}")
+    items = [leg_a[one] for one in smoke] + [
+        leg_a[one] for one in record["population"]["leg_a"]["order"] if one not in smoke
+    ]
+
+    wanted = record["population"]["leg_b"]["by_channel"]
+    by_id = {
+        f"{handle}:{one['msg_id']}": one for handle, rows in c2.posts().items() for one in rows
+    }
+    for handle, ids in sorted(wanted.items()):
+        for msg_id in ids:
+            row = by_id.get(f"{handle}:{msg_id}")
+            if row is None:
+                raise SystemExit(f"{handle}:{msg_id} is registered and not in the census — stop")
+            text = loop.render_post(row)[1]
+            items.append(
+                {
+                    "id": f"{handle}:{msg_id}",
+                    "thread": f"{handle}:{msg_id}",
+                    "leg": "b",
+                    "task": POST_TASK,
+                    "text": text,
+                    "rendering_sha256": hashlib.sha256(text.encode("utf-8")).hexdigest(),
+                    "chars": len(text),
+                    "smoke": False,
+                }
+            )
+    return {
+        "phase": STEP,
+        "iteration": 1,
+        "registration": {"record": rel(PREREG), "sha256": sha256_of(PREREG)},
+        "instruments": {
+            "leg_a": {
+                "task": PROMO_TASK,
+                "module": "src/market_pulse/promo_prompts.py",
+                "sha256": sha256_of(REPO_ROOT / "src" / "market_pulse" / "promo_prompts.py"),
+                "codebook_version": promo_prompts.codebook_version(),
+            },
+            "leg_b": {"task": POST_TASK, "module": "src/market_pulse/prompts.py — REGISTERED"},
+            "prompt_sha256": prompt_shas(),
+            "parser": {"sha256": sha256_of(REPO_ROOT / "src" / "market_pulse" / "prompts.py")},
+        },
+        "task": PROMO_TASK,
+        "reading": "the pod renders each item ITSELF and refuses unless its sha equals the one"
+        " pinned here; the rendered string never travels",
+        "serving": {
+            "adapter": None,
+            "merge_state": "base-no-adapter",
+            "chat_template": {"add_generation_prompt": True, "enable_thinking": False},
+            "decoding": "greedy",
+            "do_sample": False,
+            "forward_batch_size": 1,
+            "model": "google/gemma-4-31b-it",
+            "model_revision": "842da3794eaa0b77d5f08bae87a17459d91ff475",
+            "serving_config": "READER",
+            "output_tokens": OUTPUT_TOKENS,
+        },
+        "smoke_ids": smoke,
+        "items": items,
+    }
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--render", metavar="THREAD_ROOT")
     parser.add_argument("--channel", default=None, help="disambiguate a root two channels share")
     parser.add_argument("--dry-run", action="store_true", help="$0: the corpus, its sizes, the bound")
+    parser.add_argument(
+        "--register", action="store_true", help="$0: rung 0 and the pre-registration"
+    )
+    parser.add_argument(
+        "--pack", action="store_true", help="$0: the units as the pod will be given them"
+    )
     parser.add_argument("--out", type=Path, default=PREP)
     args = parser.parse_args(argv)
+
+    if args.register:
+        record = register()
+        out = PREREG if args.out == PREP else args.out
+        out.write_text(
+            json.dumps(record, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
+            encoding="utf-8",
+        )
+        print(f"\nwrote {rel(out)}")
+        print(
+            f"  step          {record['step']['name']} · cap ${record['step']['cap_usd']:.4f}"
+            f" = {record['step']['cap_rule']} · floor ${record['step']['floor_usd']:.2f}"
+        )
+        print(
+            f"  population    leg A {record['population']['leg_a']['threads']} threads"
+            f" (smoke {SMOKE_N}: "
+            + ", ".join(
+                f"{one['role']} {one['unit_id']} {one['chars']}c"
+                for one in record["population"]["leg_a"]["smoke"]["units"]
+            )
+            + f") · leg B {record['population']['leg_b']['posts']} posts"
+        )
+        print(render_rung_0(record["rung_0"]))
+        return 0 if record["rung_0"]["fits"] else 1
+
+    if args.pack:
+        pack = build_pack()
+        PACK.write_text(
+            json.dumps(pack, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
+            encoding="utf-8",
+        )
+        legs = {"a": 0, "b": 0}
+        for item in pack["items"]:
+            legs[item["leg"]] += 1
+        print(f"wrote {rel(PACK)}")
+        print(f"  registration  {pack['registration']['record']} sha {pack['registration']['sha256'][:16]}…")
+        print(f"  units         leg A {legs['a']} threads · leg B {legs['b']} posts")
+        print(f"  smoke first   {', '.join(pack['smoke_ids'])}")
+        print(f"  codebook      {pack['instruments']['leg_a']['codebook_version'][:16]}…")
+        return 0
 
     if args.dry_run:
         record = prep()
