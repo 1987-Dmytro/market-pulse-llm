@@ -33,6 +33,16 @@
       "billing_since_usd": 3.502019,
       "billing_read": "read",
       "note": "promo-pulse-1 CLOSED at $2.9867 — promo-pulse-1 closed at the START RITUAL — ruling 03.09 (b) names the tolerance 0.05; the 3.15% gap is the always-on volume's drip inside the step's wall-clock, and it stays inside cycle 3"
+    },
+    {
+      "at": "2026-09-03T20:17:18+00:00",
+      "balance": 10.8007573653,
+      "spent_usd": 3.6792,
+      "remaining_usd": 3.3208,
+      "balance_delta_usd": 3.6792,
+      "billing_since_usd": 3.669487,
+      "billing_read": "read",
+      "note": "promo-dev-loop iteration 1 — pod about to be created"
     }
   ]
 }

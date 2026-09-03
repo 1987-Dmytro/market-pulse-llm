@@ -59,10 +59,92 @@
       "segment": 2,
       "spent_all_segments_usd": 0.089622,
       "verdict": "GO"
+    },
+    {
+      "at": "2026-09-03T20:17:47+00:00",
+      "backstop_fits": true,
+      "cap_usd": 2.5,
+      "card": "NVIDIA GeForce RTX 4090",
+      "hard_stop_seconds": 12162.2,
+      "kind": "price",
+      "pod_id": "0z95ve2n570f0t",
+      "registered_card": "NVIDIA GeForce RTX 4090",
+      "registered_usd_per_hour": 0.74,
+      "rule": "rung 1: the create response's costPerHr ≤ the registered price, and the card is the registered card. Delete on KILL — the cap was computed against the other number",
+      "segment": 3,
+      "terminate_after_minutes": 90,
+      "usd_at_the_backstop": 1.11,
+      "usd_per_hour": 0.74,
+      "verdict": "GO"
+    },
+    {
+      "at": "2026-09-03T20:26:59+00:00",
+      "bands": {
+        "0.80 - 1.20": "run it, then STOP with the error table",
+        "<= 0.80": "run iteration 1 now",
+        "> 1.20": "STOP before buying; pod torn down, listing shown"
+      },
+      "corners": [
+        {
+          "billable_seconds": 3816.1,
+          "cap_usd": 2.5,
+          "fits": true,
+          "name": "measured mean",
+          "over_cap_by": -0.6862,
+          "overhead_seconds": 279.0,
+          "seconds_per_post": 2.813,
+          "seconds_per_thread": 81.212,
+          "usd": 0.7844
+        },
+        {
+          "billable_seconds": 7990.8,
+          "cap_usd": 2.5,
+          "fits": true,
+          "name": "measured max",
+          "over_cap_by": -0.343,
+          "overhead_seconds": 279.0,
+          "seconds_per_post": 2.813,
+          "seconds_per_thread": 178.298,
+          "usd": 1.6426
+        }
+      ],
+      "kind": "smoke",
+      "measured": {
+        "max": 178.298,
+        "n": 3,
+        "name": "promo_dev40_seconds_per_thread",
+        "replaces": "pass2_r2_seconds_per_thread",
+        "seconds": {
+          "@VARUS_channel:6009": 178.298,
+          "@VARUS_channel:9006": 47.718,
+          "@msuaaaa:6523": 17.621
+        },
+        "value": 81.212
+      },
+      "pod_id": "0z95ve2n570f0t",
+      "replies": "results/promo_dev40_iter1.jsonl",
+      "rule": "ruling 03.09 (b), quoted and not moved — the band is read at the MEAN corner; a MAX corner over the cap is a KILL whatever the band says",
+      "segment": 3,
+      "usd_at_the_measured_max": 1.6426,
+      "usd_at_the_measured_mean": 0.7844,
+      "verdict": "GO"
+    },
+    {
+      "at": "2026-09-03T20:53:11+00:00",
+      "billed_seconds": 2120.0,
+      "billed_usd": 0.435778,
+      "cap_usd": 2.5,
+      "kind": "close",
+      "left_usd": 1.9746,
+      "outcome": "iteration 1 ran whole: 56 of 56 units answered (40 leg-A threads, 16 leg-B posts), every reply balanced, finish stop; 1717.7 s of generation, boot 179.9 s off the warm volume",
+      "pod_id": "0z95ve2n570f0t",
+      "segment": 3,
+      "spent_all_segments_usd": 0.5254,
+      "verdict": "GO"
     }
   ],
   "latest": {
-    "at": "2026-09-03T16:44:17+00:00",
+    "at": "2026-09-03T20:53:11+00:00",
     "kind": "close",
     "verdict": "GO"
   },
@@ -86,6 +168,16 @@
       "deleted_at": "2026-09-03T16:44:15Z",
       "outcome": "dead-man fired a second time on a second machine: ssh info \"pod not ready\" through 180 s while status RUNNING; nothing launched, no token bought",
       "pod_id": "gxuil044h61fkx",
+      "usd_per_hour": 0.74
+    },
+    {
+      "billed_seconds": 2120.0,
+      "billed_usd": 0.435778,
+      "card": "NVIDIA GeForce RTX 4090",
+      "created_at": "2026-09-03T20:17:41Z",
+      "deleted_at": "2026-09-03T20:53:01Z",
+      "outcome": "iteration 1 ran whole: 56 of 56 units answered (40 leg-A threads, 16 leg-B posts), every reply balanced, finish stop; 1717.7 s of generation, boot 179.9 s off the warm volume",
+      "pod_id": "0z95ve2n570f0t",
       "usd_per_hour": 0.74
     }
   ]
