@@ -193,3 +193,83 @@ def test_leg_b_pins_ids_and_not_a_count():
     assert posts["posts"] == sum(len(ids) for ids in posts["by_channel"].values())
     assert posts["task"] == "positions_text_gm4"
     assert all(one.isdigit() for ids in posts["by_channel"].values() for one in ids)
+
+
+REGISTERED = {
+    "step": {"cap_usd": 2.5},
+    "rung_0": {"price": {"usd_per_hour": 0.74, "card": dev.CARD}, "hard_stop_seconds": 12162.0},
+    "gates": {"terminate_after_minutes": 90},
+}
+
+
+@pytest.fixture
+def staged(tmp_path, monkeypatch):
+    monkeypatch.setattr(dev, "RUN_RECORD", tmp_path / "run.json")
+    monkeypatch.setattr(dev, "committed_registration", lambda: REGISTERED)
+    return tmp_path / "run.json"
+
+
+def test_rung_one_kills_a_pod_dearer_than_the_registration(staged):
+    """The registration priced the cap at an offer read on the day; the meter bills what the create
+    response says. A pod that came back dearer is a different pod's price, and the cap was computed
+    against the other number — so the gate has to be able to say KILL, not only GO."""
+    ok = dev.open_segment(
+        pod_id="a1", created_at="2026-09-03T18:00:00Z", usd_per_hour=0.74, card=dev.CARD
+    )
+    assert ok["latest"]["verdict"] == "GO"
+    assert ok["gates"][-1]["backstop_fits"] is True
+    assert ok["gates"][-1]["usd_at_the_backstop"] < REGISTERED["step"]["cap_usd"]
+
+    dev.close_segment(deleted_at="2026-09-03T18:10:00Z", billed_seconds=600, outcome="test")
+    dear = dev.open_segment(
+        pod_id="a2", created_at="2026-09-03T18:20:00Z", usd_per_hour=1.19, card=dev.CARD
+    )
+    assert dear["latest"]["verdict"] == "KILL"
+
+
+def test_never_two_pods_is_checked_before_the_second_create(staged):
+    """The ban's goal is that two meters never run at once, so it is a check BEFORE `pod create`
+    and not a refusal after the second one has started billing."""
+    dev.open_segment(
+        pod_id="a1", created_at="2026-09-03T18:00:00Z", usd_per_hour=0.74, card=dev.CARD
+    )
+    with pytest.raises(SystemExit, match="still OPEN"):
+        dev.open_segment(
+            pod_id="a2", created_at="2026-09-03T18:01:00Z", usd_per_hour=0.74, card=dev.CARD
+        )
+
+
+def test_the_bill_is_the_segments_own_price_and_the_gates_append(staged):
+    """Never a balance delta — that prices the account, not the leg
+    ([[a_balance_delta_is_not_a_per_leg_cost]]). And no snapshot is overwritten."""
+    dev.open_segment(
+        pod_id="a1", created_at="2026-09-03T18:00:00Z", usd_per_hour=0.74, card=dev.CARD
+    )
+    state = dev.close_segment(
+        deleted_at="2026-09-03T18:34:21Z", billed_seconds=2061.0, outcome="56 of 56 answered"
+    )
+    assert state["gates"][-1]["billed_usd"] == round(2061.0 * 0.74 / 3600, 6)
+    assert state["gates"][-1]["left_usd"] == round(2.5 - 2061.0 * 0.74 / 3600, 6)
+    assert [one["kind"] for one in state["gates"]] == ["price", "close"]
+    assert json.loads(staged.read_text())["segments"][0]["deleted_at"] == "2026-09-03T18:34:21Z"
+
+
+def test_the_pack_pins_exactly_what_the_pod_re_derives():
+    """The dry contact, as a test: every one of the 56 shipped units re-renders on this checkout to
+    the sha the pack pinned. Leg B's pin is of the RENDERED request and not of the payload — the two
+    differ by the whole positions instruction, and pinning the payload refused every leg-B unit on a
+    healthy pod ([[the_fixture_and_the_artifact_share_anchors]])."""
+    import promo_dev_pod_runner as pod
+    import reader_v5_pod_runner as pod_runner
+
+    from market_pulse import prompts
+
+    pack = dev.load(dev.PACK)
+    keep, pod_runner.render = pod_runner.render, pod.render
+    try:
+        items = pod_runner.check_requests(pack, prompts)
+    finally:
+        pod_runner.render = keep
+    assert len(items) == 56
+    assert sum(1 for one in items if one["leg"] == "b") == 16
+    assert [one["id"] for one in items[:3]] == pack["smoke_ids"]

@@ -667,7 +667,11 @@ def build_pack() -> dict:
             row = by_id.get(f"{handle}:{msg_id}")
             if row is None:
                 raise SystemExit(f"{handle}:{msg_id} is registered and not in the census — stop")
-            text = loop.render_post(row)[1]
+            messages, text = loop.render_post(row)
+            # the sha is of the RENDERED request and not of the payload, because that is what the
+            # pod re-derives and compares — the two differ by the whole positions instruction, and
+            # a pack pinning the payload would refuse every leg-B unit on a healthy pod
+            rendered = messages[0]["content"]
             items.append(
                 {
                     "id": f"{handle}:{msg_id}",
@@ -675,8 +679,8 @@ def build_pack() -> dict:
                     "leg": "b",
                     "task": POST_TASK,
                     "text": text,
-                    "rendering_sha256": hashlib.sha256(text.encode("utf-8")).hexdigest(),
-                    "chars": len(text),
+                    "rendering_sha256": hashlib.sha256(rendered.encode("utf-8")).hexdigest(),
+                    "chars": len(rendered),
                     "smoke": False,
                 }
             )
@@ -715,6 +719,106 @@ def build_pack() -> dict:
     }
 
 
+RUN_RECORD = REPO_ROOT / "results" / "promo_dev_loop_run.json"
+
+
+def run_state() -> dict:
+    return load(RUN_RECORD) if RUN_RECORD.exists() else {"phase": STEP, "segments": [], "gates": []}
+
+
+def append_gate(state: dict, kind: str, gate: dict) -> dict:
+    """Every WAIT/GO/KILL snapshot APPENDED, none overwritten — v5's rule, its shape.
+
+    A gate verdict that lives only in the transcript is prose, and prose is not the gate
+    ([[gate_verdicts_need_an_artifact]])."""
+    segment = state["segments"][-1] if state["segments"] else {}
+    state["gates"].append(
+        {
+            "kind": kind,
+            "at": datetime.now(UTC).isoformat(timespec="seconds"),
+            "segment": len(state["segments"]),
+            "pod_id": segment.get("pod_id"),
+            **gate,
+        }
+    )
+    state["latest"] = {"kind": kind, "verdict": gate["verdict"], "at": state["gates"][-1]["at"]}
+    RUN_RECORD.write_text(
+        json.dumps(state, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
+    return state
+
+
+def open_segment(*, pod_id: str, created_at: str, usd_per_hour: float, card: str) -> dict:
+    """Rung 1 at the create, on the numbers the create RESPONSE gave.
+
+    The registration priced the step at an offer read on the day; the meter bills what the response
+    says. A pod whose price came back above the registered one is a different pod's price and the
+    run stops before a single token — the cap was computed against the other number."""
+    record = committed_registration()
+    registered = float(record["rung_0"]["price"]["usd_per_hour"])
+    state = run_state()
+    if any(one.get("deleted_at") is None for one in state["segments"]):
+        raise SystemExit(
+            "a segment of this attempt is still OPEN — never two pods at once, and the check runs"
+            " BEFORE the second create rather than as a refusal after the second meter started."
+        )
+    state["segments"].append(
+        {
+            "pod_id": pod_id,
+            "created_at": created_at,
+            "usd_per_hour": usd_per_hour,
+            "card": card,
+            "deleted_at": None,
+        }
+    )
+    hard_stop = float(record["rung_0"]["hard_stop_seconds"])
+    gate = {
+        "verdict": "GO" if usd_per_hour <= registered and card == record["rung_0"]["price"]["card"]
+        else "KILL",
+        "rule": "rung 1: the create response's costPerHr ≤ the registered price, and the card is"
+        " the registered card. Delete on KILL — the cap was computed against the other number",
+        "usd_per_hour": usd_per_hour,
+        "registered_usd_per_hour": registered,
+        "card": card,
+        "registered_card": record["rung_0"]["price"]["card"],
+        "hard_stop_seconds": hard_stop,
+        "terminate_after_minutes": int(record["gates"]["terminate_after_minutes"]),
+        "backstop_fits": record["gates"]["terminate_after_minutes"] * 60 <= hard_stop,
+        "cap_usd": float(record["step"]["cap_usd"]),
+        "usd_at_the_backstop": round(
+            record["gates"]["terminate_after_minutes"] * 60 * usd_per_hour / 3600, 4
+        ),
+    }
+    return append_gate(state, "price", gate)
+
+
+def close_segment(*, deleted_at: str, billed_seconds: float, outcome: str) -> dict:
+    """The segment's own bill, at its OWN price. Never a balance delta — that prices the account."""
+    state = run_state()
+    if not state["segments"] or state["segments"][-1].get("deleted_at"):
+        raise SystemExit("no segment is open — there is nothing to close")
+    segment = state["segments"][-1]
+    segment["deleted_at"] = deleted_at
+    segment["billed_seconds"] = billed_seconds
+    segment["billed_usd"] = round(billed_seconds * float(segment["usd_per_hour"]) / 3600, 6)
+    segment["outcome"] = outcome
+    spent = sum(float(one.get("billed_usd") or 0) for one in state["segments"])
+    cap = float(committed_registration()["step"]["cap_usd"])
+    return append_gate(
+        state,
+        "close",
+        {
+            "verdict": "GO" if spent <= cap else "OVER",
+            "billed_seconds": billed_seconds,
+            "billed_usd": segment["billed_usd"],
+            "spent_all_segments_usd": round(spent, 6),
+            "cap_usd": cap,
+            "left_usd": round(cap - spent, 6),
+            "outcome": outcome,
+        },
+    )
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--render", metavar="THREAD_ROOT")
@@ -726,6 +830,15 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "--pack", action="store_true", help="$0: the units as the pod will be given them"
     )
+    parser.add_argument("--open", action="store_true", help="$0: rung 1 at the create response")
+    parser.add_argument("--close-segment", action="store_true", help="$0: the segment's own bill")
+    parser.add_argument("--pod-id")
+    parser.add_argument("--created-at")
+    parser.add_argument("--deleted-at")
+    parser.add_argument("--usd-per-hour", type=float)
+    parser.add_argument("--billed-seconds", type=float)
+    parser.add_argument("--card")
+    parser.add_argument("--outcome")
     parser.add_argument("--out", type=Path, default=PREP)
     args = parser.parse_args(argv)
 
@@ -752,6 +865,32 @@ def main(argv: list[str] | None = None) -> int:
         )
         print(render_rung_0(record["rung_0"]))
         return 0 if record["rung_0"]["fits"] else 1
+
+    if args.open:
+        for name in ("pod_id", "created_at", "usd_per_hour", "card"):
+            if getattr(args, name) is None:
+                parser.error(f"--open needs --{name.replace('_', '-')}: a pod that exists against"
+                             " no counter is a pod nothing is measuring")
+        state = open_segment(
+            pod_id=args.pod_id,
+            created_at=args.created_at,
+            usd_per_hour=args.usd_per_hour,
+            card=args.card,
+        )
+        print(json.dumps(state["gates"][-1], ensure_ascii=False, indent=1))
+        return 0 if state["latest"]["verdict"] == "GO" else 1
+
+    if args.close_segment:
+        for name in ("deleted_at", "billed_seconds", "outcome"):
+            if getattr(args, name) is None:
+                parser.error(f"--close-segment needs --{name.replace('_', '-')}")
+        state = close_segment(
+            deleted_at=args.deleted_at,
+            billed_seconds=args.billed_seconds,
+            outcome=args.outcome,
+        )
+        print(json.dumps(state["gates"][-1], ensure_ascii=False, indent=1))
+        return 0 if state["latest"]["verdict"] == "GO" else 1
 
     if args.pack:
         pack = build_pack()
