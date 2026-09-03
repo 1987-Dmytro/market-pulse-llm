@@ -128,7 +128,13 @@ name when first written too wide, which is its negative control.
 directions. (c) w2 positions per channel, 17 channels summing to **1 113**; five channels read 0 and
 that is an ANSWER, not a gap — `@epicentrk_sale`, `@fozzyshopua`, `@kop1chat`, `@kopiyochka1`,
 `@rrozetka` are DIY, coupon-aggregator and electronics channels and the dairy/ice-cream parser found
-nothing to write. (d) the draw twice, one sha, labels owed. (e) the $0 half only. (f) `tests/test_trends_sql.py`
+nothing to write. (d) the draw twice, one sha, labels owed. (e) **the $0 half only, and the other half is
+UNREACHABLE at $0 — demonstrated, not asserted.** `scripts/grade_promo_signals.py` requires
+`--predicted`, the model's dev-40 output; the only `promo_dev*` file in `results/` is
+`promo_dev40_prep.json`, the $0 corpus record. The grader refuses by name: «results/promo_dev40_predicted.jsonl
+is missing — the grader may not score against nothing». `docs/labels-promo-dev.jsonl` exists, so (e)'s
+condition IS triggered and its bars cannot be read until a paid pass writes a predicted file — which
+is the fork at the top of this document, in one command. (f) `tests/test_trends_sql.py`
 **14 passed** (10 + the dedupe's four). (g) `make tick` twice, zero new rows in all six tables. (h)
 clean clone `make tick && make promo-screen` exit 0 from `results/promo_screen_data.json` alone, and
 that source removed → exit 2, «promo-screen REFUSED: missing source …». (i) `draw_truth_20.py`
