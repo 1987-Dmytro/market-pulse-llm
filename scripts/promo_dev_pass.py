@@ -217,6 +217,7 @@ PREREG = REPO_ROOT / "results" / "prereg_promo_dev_loop.json"
 PACK = REPO_ROOT / "results" / "promo_dev40_pack.json"
 SIBLING = REPO_ROOT / "results" / "pass2_signals_r2_run.json"
 BORROWED_GATES = REPO_ROOT / "results" / "prereg_reader_probe_v5b.json"
+SIBLING_PREREG = REPO_ROOT / "results" / "prereg_pass2_signals_r2.json"
 PREREG_5C2 = REPO_ROOT / "results" / "prereg_5c2_run.json"
 
 CARD = "NVIDIA GeForce RTX 4090"
@@ -303,21 +304,45 @@ def offered_price() -> dict:
     )
 
 
+def ssh_deadman() -> dict:
+    """The liveness deadline, from the PRODUCTION sibling — ruling 03.09 (e) item 1.
+
+    v5b is a PROBE. Its 180 s killed two healthy pods of this step on 2026-09-03 while
+    `prereg_pass2_signals_r2.json` — the sibling that SETTLED on the same image, card and
+    datacenter — registers 500 s with six readings running 14.5 → 262.5 s. A gate set below the
+    observed maximum of the span it measures returns KILL before a measurement can exist
+    ([[a_reproducible_probe_can_be_unrepresentative]]), which is what happened."""
+    clock = json.loads(SIBLING_PREREG.read_text(encoding="utf-8"))["kill_clock"]
+    rows = [one for one in clock if one.get("rung") == 2 and one.get("name") == "ssh dead-man"]
+    if len(rows) != 1 or not isinstance(rows[0].get("deadline_seconds"), (int, float)):
+        raise SystemExit(
+            f"{rel(SIBLING_PREREG)} :: kill_clock has {len(rows)} rung-2 ssh dead-man rows with a"
+            " numeric deadline — the ruled source is unreadable, and an unreadable gate is not 500 s"
+        )
+    return {
+        "seconds": float(rows[0]["deadline_seconds"]),
+        "from": f"{rel(SIBLING_PREREG)} :: kill_clock[rung 2].deadline_seconds",
+        "rule": rows[0]["rule"],
+    }
+
+
 def borrowed_gates() -> dict:
     """v5b's frozen transport gates, READ and not retyped — plan §9a's borrow.
 
-    The ssh dead-man's 180 s lives only in that record's prose, so it is DERIVED from the two
-    numeric fields that bound it: a dead segment costs the dead-man plus one delete margin."""
+    The dead-man is NOT v5b's any more: ruling 03.09 (e) item 1 moved that one field to the
+    production sibling's record. The other three stay where they were."""
     v5b = json.loads(BORROWED_GATES.read_text(encoding="utf-8"))
     gate0 = v5b["go_no_go"]["gates"]["0_transport_ssh_deadman"]
     money = v5b["money"]["arithmetic"]
-    dead = float(v5b["money"]["segments"]["a_dead_segment_costs_seconds"])
+    dead = ssh_deadman()
     margin = float(money["delete_margin_seconds"])
     return {
-        "from": rel(BORROWED_GATES) + " — frozen, and none of these numbers is new here",
-        "ssh_deadman_seconds": dead - margin,
-        "ssh_deadman_rule": "derived, not typed: a dead segment costs the dead-man plus one delete"
-        " margin, and both of those are fields of that record",
+        "from": rel(BORROWED_GATES)
+        + " — frozen; boot_kill_seconds, delete_margin_seconds and max_recreates only",
+        "ssh_deadman_seconds": dead["seconds"],
+        "ssh_deadman_from": dead["from"],
+        "ssh_deadman_rule": "ruling 03.09 (e) item 1, read and not typed: the PRODUCTION sibling's"
+        f" deadline on the same card and datacenter — «{dead['rule']}»",
         "max_recreates": int(gate0["max_recreates"]),
         "boot_kill_seconds": float(money["boot_kill_seconds"]),
         "delete_margin_seconds": margin,
@@ -722,6 +747,129 @@ def build_pack() -> dict:
 RUN_RECORD = REPO_ROOT / "results" / "promo_dev_loop_run.json"
 
 
+def score(replies: Path, iteration: int) -> dict:
+    """The pod's replies → the grader's rows and the error table. $0, and after the pod is gone.
+
+    The pod writes the reader family's row (`id`, `reply`, `balanced`, timings); K8 scores the GOLD
+    shape (one row per comment). Nothing joined the two, so this does — and it invents no metric:
+    `grade_promo_signals` is the judge and its own functions produce every number here
+    ([[a_number_typed_into_its_own_checker]]). What the table adds is what a grade cannot say —
+    which comments were missed and what the model said instead, and how many answers never parsed,
+    counted by cause ([[empty_class_eats_the_parse_failures]]).
+
+    Iteration 1 is the BASELINE, so an unparseable answer is COUNTED and never repaired: answer
+    repair is a knob ruling 03.09 (c) item 3 gives iterations 2–5, each a new extractor_version.
+    """
+    import grade_promo_signals as k8
+
+    units = {item["id"]: item for item in load(PACK)["items"] if item["leg"] == "a"}
+    rows: list[dict] = []
+    failures: list[dict] = []
+    answered: list[str] = []
+    for line in replies.read_text(encoding="utf-8").splitlines():
+        if not line.strip():
+            continue
+        reply = json.loads(line)
+        item = units.get(reply["id"])
+        if item is None:
+            continue  # leg B rides the same out-file and is not leg A's gold
+        answered.append(reply["id"])
+        answer = promo_prompts.parse(reply["reply"])
+        if answer["parse_failure"]:
+            failures.append(
+                {
+                    "unit_id": reply["id"],
+                    "cause": answer["parse_failure"],
+                    "balanced": reply.get("balanced"),
+                    "finish_reason": reply.get("finish_reason"),
+                    "emitted_chars": reply.get("emitted_chars"),
+                }
+            )
+        where = {"channel": item["channel"], "thread_root": item["post_id"]}
+        stamp = {"extractor_version": reply["rendering_sha256"]}
+        placed = predicted_rows(where, answer)
+        rows += [one | stamp for one in placed]
+        said = {one["msg_id"] for one in placed}
+        # an abstention is an answer: the model's `unsure` comments become rows that carry no
+        # subject, so the grader's own reading counts them instead of reporting a silent zero
+        rows += [
+            where
+            | stamp
+            | {
+                "msg_id": str(one.get("msg_id")),
+                "subject_type": None,
+                "subject": None,
+                "source": None,
+                "signal_types": [],
+                "unsure": one.get("reason") or True,
+            }
+            for one in answer["unsure"]
+            if str(one.get("msg_id")) not in said
+        ]
+
+    gold = k8.rows(GOLD)
+    strata = k8.strata_of(DRAW)
+    graded = k8.grade(gold, rows, strata)
+    said_rows = {(k8.thread_key(one), str(one["msg_id"])): one for one in rows if one.get("msg_id")}
+    misses = []
+    for one in gold:
+        if not one.get("msg_id"):
+            continue
+        found = said_rows.get((k8.thread_key(one), str(one["msg_id"])))
+        if found is not None and k8.subject(found) == k8.subject(one):
+            continue
+        misses.append(
+            {
+                "channel": one.get("channel"),
+                "thread_root": str(one.get("thread_root")),
+                "msg_id": str(one["msg_id"]),
+                "gold": {key: one.get(key) for key in ("subject_type", "subject", "signal_types")},
+                "model": found
+                and {
+                    key: found.get(key)
+                    for key in ("subject_type", "subject", "signal_types", "unsure")
+                },
+            }
+        )
+    # ponytail: 40 threads × 140 rows — the filter is O(n²) and runs in milliseconds
+    jaccard = {
+        f"{key[0]}:{key[1]}": k8.agree(
+            [one for one in gold if k8.thread_key(one) == key],
+            [one for one in rows if k8.thread_key(one) == key],
+        )["signal_type_agreement"]
+        for key in sorted({k8.thread_key(one) for one in gold})
+    }
+    causes: dict[str, int] = {}
+    for one in failures:
+        causes[str(one["cause"]).split(":")[0]] = causes.get(str(one["cause"]).split(":")[0], 0) + 1
+    return {
+        "contract": f"docs/plans/promo-pulse-1.md §9 — the error table of iteration {iteration}",
+        "iteration": iteration,
+        "replies": rel(replies),
+        "rows": rows,
+        "answers": {
+            "leg_a_units_answered": len(answered),
+            "leg_a_units_registered": len(units),
+            "gold_shaped_rows": len(rows),
+            "parse_failures": len(failures),
+            "parse_failures_by_cause": causes,
+            "unparsed": failures,
+        },
+        "grade": {
+            "from": "scripts/grade_promo_signals.py — its own functions, never re-derived here",
+            "bars": graded["bars"],
+            "whole_40": graded["whole_40"],
+            "by_stratum": graded["by_stratum"],
+            "readings": graded["readings"],
+        },
+        "subject_misses_total": len(misses),
+        "subject_misses_rule": "the first ten in the GOLD file's own order — a rule, not a pick;"
+        " the total stands beside them",
+        "subject_misses": misses[:10],
+        "signal_jaccard_per_thread": jaccard,
+    }
+
+
 def run_state() -> dict:
     return load(RUN_RECORD) if RUN_RECORD.exists() else {"phase": STEP, "segments": [], "gates": []}
 
@@ -832,6 +980,11 @@ def main(argv: list[str] | None = None) -> int:
     )
     parser.add_argument("--open", action="store_true", help="$0: rung 1 at the create response")
     parser.add_argument("--close-segment", action="store_true", help="$0: the segment's own bill")
+    parser.add_argument(
+        "--score", action="store_true", help="$0: the pod's replies → K8's rows and the error table"
+    )
+    parser.add_argument("--replies", type=Path, help="the out-file the pod wrote")
+    parser.add_argument("--iteration", type=int, help="names the two files this iteration keeps")
     parser.add_argument("--pod-id")
     parser.add_argument("--created-at")
     parser.add_argument("--deleted-at")
@@ -891,6 +1044,32 @@ def main(argv: list[str] | None = None) -> int:
         )
         print(json.dumps(state["gates"][-1], ensure_ascii=False, indent=1))
         return 0 if state["latest"]["verdict"] == "GO" else 1
+
+    if args.score:
+        for name in ("replies", "iteration"):
+            if getattr(args, name) is None:
+                parser.error(f"--score needs --{name}")
+        table = score(args.replies, args.iteration)
+        rows = table.pop("rows")
+        out = REPO_ROOT / "results" / f"promo_dev40_predicted_iter{args.iteration}.jsonl"
+        out.write_text(
+            "".join(json.dumps(one, ensure_ascii=False, sort_keys=True) + "\n" for one in rows),
+            encoding="utf-8",
+        )
+        errors = REPO_ROOT / "results" / f"promo_dev40_errors_iter{args.iteration}.json"
+        errors.write_text(
+            json.dumps(table, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
+            encoding="utf-8",
+        )
+        answers = table["answers"]
+        print(f"wrote {rel(out)} — {len(rows)} rows from {answers['leg_a_units_answered']} of"
+              f" {answers['leg_a_units_registered']} leg-A units"
+              f" · {answers['parse_failures']} unparsed {answers['parse_failures_by_cause'] or ''}")
+        print(f"wrote {rel(errors)} — {table['subject_misses_total']} subject misses, top 10 named")
+        for name, block in sorted(table["grade"]["bars"].items()):
+            print(f"  {name:<24} {block['value']} against {block['bar']}"
+                  f" — {'HOLDS' if block['held'] else 'RED'}")
+        return 0
 
     if args.pack:
         pack = build_pack()

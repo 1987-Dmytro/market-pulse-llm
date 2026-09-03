@@ -34,15 +34,22 @@ PYTHONPATH=src python3.11 scripts/promo_dev_pass.py --open --pod-id <ID> \
 A non-zero exit is a KILL: `runpodctl pod delete <ID>`, prove it with `pod list -a`, and STOP.
 
 ## 2 — the ssh dead-man, bounded by the CLOCK and never by an iteration count
-180 s of THIS pod's create-elapsed (`results/prereg_promo_dev_loop.json :: gates.ssh_deadman_seconds`).
+**500 s** of THIS pod's create-elapsed, READ from the record and never typed
+(`results/prereg_promo_dev_loop.json :: gates.ssh_deadman_seconds`, which ruling 03.09 (e) item 1
+takes from `results/prereg_pass2_signals_r2.json :: kill_clock[rung 2]` — the PRODUCTION sibling,
+six readings 14.5 → 262.5 s). The 180 s this runbook used on 2026-09-03 came from a PROBE and killed
+two healthy pods before either could publish a port: a gate below the observed maximum of the span
+it measures returns KILL before a measurement exists.
 ```bash
+DEAD=$(python3.11 -c "import json;print(int(json.load(open('results/prereg_promo_dev_loop.json'))['gates']['ssh_deadman_seconds']))")
 CREATED=$(date -u -j -f '%Y-%m-%dT%H:%M:%S' '<create stamp without Z>' +%s)
-while [ "$(date -u +%s)" -lt $((CREATED + 180)) ]; do
+while [ "$(date -u +%s)" -lt $((CREATED + DEAD)) ]; do
   runpodctl ssh info <ID> | grep -q '"port"' && break; sleep 5
 done
 runpodctl ssh info <ID>
 ```
-No port by 180 s → delete, prove the listing, recreate (at most twice), then STOP.
+No port by the deadline → delete, prove the listing, ONE recreate, then STOP — never a third pod
+(ruling 03.09 (e) item 3). The dead-man is a LIVENESS check only.
 
 ## 3 — stage. The repo has no remote; the transport is a git bundle.
 ```bash
@@ -95,5 +102,18 @@ PYTHONPATH=src python3.11 scripts/promo_dev_pass.py --close-segment --deleted-at
 python3.11 scripts/runpod_guard.py --step promo-dev-loop --step-cap 2.50 \
   --note 'promo-dev-loop, pod deleted' --close --tolerance 0.05
 ```
-Then K8 (`scripts/grade_promo_signals.py`) → `results/grade_promo_dev40_iter1.json`, the error table
-→ `results/promo_dev40_errors_iter1.json`, and the STOP «iteration 1 read».
+## 7 — the join, K8 and the error table, all $0 and after the pod is gone
+The pod writes the reader family's rows; K8 scores the GOLD shape. `--score` joins them, keeps the
+`extractor_version` of every row, counts the answers that never parsed by cause, and writes the
+error table (the grade's own numbers, the top-10 subject misses with the gold row beside the
+model's, the Jaccard per thread).
+```bash
+PYTHONPATH=src python3.11 scripts/promo_dev_pass.py --score \
+  --replies results/promo_dev40_iter1.jsonl --iteration 1
+python3.11 scripts/grade_promo_signals.py \
+  --predicted results/promo_dev40_predicted_iter1.jsonl --out results/grade_promo_dev40_iter1.json
+```
+Iteration 1 is the BASELINE: an unparseable answer is COUNTED, never repaired — answer repair is a
+knob ruling 03.09 (c) item 3 gives iterations 2–5, each a new `extractor_version`.
+
+Then the STOP «iteration 1 read» in `docs/plans/promo-pulse-1.PROGRESS.md`.

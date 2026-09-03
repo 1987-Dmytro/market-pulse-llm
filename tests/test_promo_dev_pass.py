@@ -145,9 +145,10 @@ def test_the_price_is_the_dearer_offer_and_a_missing_card_is_a_stop(monkeypatch)
         dev.offered_price()
 
 
-def test_the_transport_gates_are_read_from_the_frozen_record_and_not_typed():
-    """Plan §9a's borrow: v5b's numbers, and the 180 s dead-man DERIVED from the two fields that
-    bound it rather than retyped out of that record's prose."""
+def test_the_transport_gates_are_read_from_the_frozen_record_and_not_typed(tmp_path, monkeypatch):
+    """Plan §9a's borrow: v5b's numbers — and the dead-man from the PRODUCTION sibling's record,
+    ruling 03.09 (e) item 1, which names it and its measurements. v5b is a PROBE: its 180 s killed
+    two healthy pods of this step before either could publish an ssh port."""
     v5b = dev.load(dev.BORROWED_GATES)
     gates = dev.borrowed_gates()
     assert gates["boot_kill_seconds"] == v5b["money"]["arithmetic"]["boot_kill_seconds"]
@@ -155,10 +156,38 @@ def test_the_transport_gates_are_read_from_the_frozen_record_and_not_typed():
     assert gates["max_recreates"] == v5b["go_no_go"]["gates"]["0_transport_ssh_deadman"][
         "max_recreates"
     ]
-    assert (
-        gates["ssh_deadman_seconds"] + gates["delete_margin_seconds"]
-        == v5b["money"]["segments"]["a_dead_segment_costs_seconds"]
+    (ruled,) = [
+        one
+        for one in dev.load(dev.SIBLING_PREREG)["kill_clock"]
+        if one.get("rung") == 2 and one.get("name") == "ssh dead-man"
+    ]
+    assert gates["ssh_deadman_seconds"] == ruled["deadline_seconds"]
+    assert dev.rel(dev.SIBLING_PREREG) in gates["ssh_deadman_from"]
+    assert gates["ssh_deadman_seconds"] > v5b["money"]["segments"][
+        "a_dead_segment_costs_seconds"
+    ] - v5b["money"]["arithmetic"]["delete_margin_seconds"], "the probe's 180 s is what fired"
+
+    other = tmp_path / "sibling.json"
+    other.write_text(
+        json.dumps(
+            {
+                "kill_clock": [
+                    {
+                        "rung": 2,
+                        "name": "ssh dead-man",
+                        "deadline_seconds": 321.0,
+                        "rule": "another record, another number",
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
     )
+    monkeypatch.setattr(dev, "SIBLING_PREREG", other)
+    assert dev.ssh_deadman()["seconds"] == 321.0, "the deadline is READ, not typed"
+    other.write_text(json.dumps({"kill_clock": []}), encoding="utf-8")
+    with pytest.raises(SystemExit, match="unreadable gate"):
+        dev.ssh_deadman()
 
 
 def test_rung_zero_fits_at_the_dear_corner_and_refuses_when_the_cap_shrinks():
