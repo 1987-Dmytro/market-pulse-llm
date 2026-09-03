@@ -30,6 +30,15 @@ that instrument — building it and firing it in one unreviewed session is exact
 What I need is one of: (1) a plan revision I write and you review before any pod exists, naming the
 instrument's shape, its cap, its rungs and its stop-points; or (2) your ruling that the $0 half plus
 the borrowed bound is enough to register iteration 1 directly, and the smoke is folded into the run.
+
+**Option (1) is WRITTEN and waiting — `docs/plans/promo-pulse-1.md` §9 (rev 9, `d33c5a3`), $0, no
+pod.** It names the new step `promo-dev-loop` and its own ledger, the cap `min($2.50, REMAINING −
+$0.30)` = $2.50 today with the $2.00 floor, the four rungs, the four flags and which existing modules
+each borrows (`run_promo_c2.py`'s registration and per-stage re-projection,
+`read_threads_reader_v5b.py`'s never-two-pods / ssh dead-man / close-segment), the smoke's **n = 3**
+and its shortest-median-longest rule, the 5-run ceiling, the plateau rule, and the checks. Your
+decision table is quoted, not moved. **Nothing is implemented.** Rule on §9 or on option (2), and the
+next session buys.
 **The 16 posts without an evidence row ride that same pod and stay a named gap until it exists.**
 
 ## The money figure the ruling named is not the one the guard settles
