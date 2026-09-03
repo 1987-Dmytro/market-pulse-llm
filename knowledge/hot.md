@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-09-02 15:21:08 (every SessionStart)
+**Auto-refreshed:** 2026-09-03 10:58:08 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
-b61f6b8 docs(stop): the (10)(a) gate refused the whole step at a 13.466 s page warm-up — the ruling's table and three questions, cap unchanged
-8b7b965 s4(run 1): the (10)(a) gate REFUSED — projected $12.5928 against $3.95 at a 13.466 s page warm-up; no gold call, $0.0579 billed
-fba2d79 money(step): promo-pulse-1 anchored at $14.19, cap $3.95 (ruling 02.09 (b))
-f17d966 s4: ruling 02.09 (b) applied — step cap $3.95, the text leg is stage 0, re-registered (rung 0 FITS at the dear corner)
-76df8ec docs(status,reviews): ruling 02.09 (b) — S4's step cap is $3.95, the whole step, text leg first
+168ecc8 docs(stop,report): the full make check tail — 18 failed, 4 247 passed, 17 errors; 32 of 35 are the fork
+4707516 docs(stop): the fork's blast radius on the suite, measured — 8 failed, 26 passed, 10 errors
+379fcfa docs(report): 30 lines — the population is bought, the phase stops on the seal's fork
+218e027 s4(run 2): the WHOLE C2 population bought — 3 008 pages + 385 posts, $3.0335 of $3.95
+b2af6c7 tools(rank): the $0 remainder ranker, MEASURED — the bar buys nothing, the usable cut is score >= 1
 ```
 
 ## 📋 Recent decisions
@@ -23,42 +23,50 @@ f17d966 s4: ruling 02.09 (b) applied — step cap $3.95, the text leg is stage 0
 
 ## 📅 Recent daily logs
 
+- `2026-09-03.md`
 - `2026-09-02.md`
 - `2026-09-01.md`
-- `2026-08-30.md`
 
 <!-- AUTO-GEN END (everything below preserved across refreshes) -->
 # Hot Cache — curated
-**Last update:** 2026-09-02 15:40 (session 3). Этап 1 `SPEC-v2-promo-pulse.md`, карта `STATUS.md`, цикл
-`PROCESS.md` v2.1. Руками, ≤40 строк; археология — в логах дня.
+**Last update:** 2026-09-03 (сессия 4, платная нога S4 ЗАКРЫТА). Этап 1 `SPEC-v2-promo-pulse.md`, карта `STATUS.md`,
+цикл `PROCESS.md` v2.1. Руками, ≤40 строк; археология — в логах дня.
 
 ## 🔥 What's Hot
-**⏸️ `promo-pulse-1` — ТРЕТЬЯ ПАУЗА 02.09: ГЕЙТ (10)(a) ОТКАЗАЛ ВЕСЬ ШАГ.** Рулинг (b) применён (`f17d966`: кэп
-$3.95, текст-нога = stage 0, rung 0 FITS, dear $3.6059); шаг заякорен гардом ($14.19, `fba2d79`); эндпоинт
-`1w2cn98hcikl7b` отслужил пин; прогрев: **страница 13.466 с** (`atb_market_official_4571.jpg`), текст 0.794 с →
-проекция **$12.5928 против $3.95** (+218.8 %), `refuse: true`, ни одного gold-вызова. Куплено **$0.0579** (бут
-149 с + два прогрева; `results/run_promo_c2.json :: runs[0]`). Снесено, доказано листингом. STOP с таблицей и
-тремя вопросами (гейт по ногам? · какой маргинал страниц? · порядок при частичной покупке?) —
-`docs/plans/promo-pulse-1.STOP.md`. Шаг-леджер `results/spend_promo_pulse_1.json` ОТКРЫТ: `--note`, без `--close`.
+**⏸️ `promo-pulse-1` — ПЯТАЯ ПАУЗА, НЕ ПРО ДЕНЬГИ. ОКНО C2 В БАЗЕ.** Рулинг 02.09 (d) shape 1 реализован (`1161187`):
+две запечатанные витрины в одном `pulse.db`, каждая через СВОЙ seal, живой реестр не читается нигде. `w1` пересобирает
+**902/902** числовых листа запечатанного `window_summary_5c2.json` (0 расхождений); `w2` — **17 каналов · 3 397 маркеров
+· 1 113 позиций**. `--register-addendum` добавил `config/registry.yaml = eff8ba5b…` и `window_id = w2` (12 вставок / 0
+удалений, повтор ОТКАЗЫВАЕТ). Строки выбираются по ЗАКРЕПЛЁННЫМ id: w1 — манифест по `selection_pin` + D-cut,
+ПЕРЕСЧИТАННЫЙ и сверенный с `postcut_c3b :: kept.ids_sha256` (`c64bbd47…`); 20 постов D-cut — в ОБОИХ окнах.
 
-**Почему 13.5 с ≠ 3.4 с (файлы, не диагноз):** смок = ОДИН джоб на 30 стр. VARUS/atb_aktsiyi/msuaaaa (2.6–3.4 с/стр.);
-5c2 на том же канале: прогрев 1.729 с, реализовано 10.408 с/строку (159 стр. ATB, 0.7 позиции/стр.). n = 1 × 3 008.
-Комната после текста + резерва + рана: $3.514 → 851 стр. при 13.5 с · ≈1 160 при 10.4 · все 3 008 при 3.37.
+**⛔ ДВЕ ВИЛКИ (`docs/plans/promo-pulse-1.STOP.md`).** (1) shape 1 НЕ восстанавливает ЗАПЕЧАТАННЫЕ артефакты w1: ран C2
+дописывал в ТЕ ЖЕ файлы → всякая запись w1 «какими байтами это сделано» сдвинулась (19 красных), и проверка самого
+рулинга «w1 export sha byte-identical» НЕ МОЖЕТ выполниться при одном общем `data/derived/`. **ИЗМЕРЕНО: 23 файла не
+тронуты · 15 — точный байтовый ПРЕФИКС · 0 разошлись** → раскол корня восстановил бы все хэши ровно. (2) `positions` не
+различает картинку и текст (7 постов C2 прочитаны ОБЕИМИ ногами): `carrier` добавлен в PRIMARY KEY,
+`test_positions_is_untouched` красный и НАЗВАН, не ослаблен.
 
-**Проверки в транскрипте (s3):** (a)(b)(d)(f)(g)(h)(i) показаны; `make check-stamped` @ `b61f6b8` **4 279 · 2 skipped ·
-HOLDS**. (10)(a)-отказ теперь пишет `outcome.unbought` (`8b7b965`). Дро-50 `a3f659f9a8d73f5e` (ДО-C2), экран `28fffc93c723ab8d`.
+**✅ Рулинг 03.09 применён, ждёт ЧТЕНИЯ тимлида за $0.** `CODEBOOK` несёт все шесть дельт, `codebook_version()` =
+`a97d3c71b8cf9b14…`; рендер `@VARUS_channel` root `6009` показан (`scripts/promo_dev_pass.py --render 6009`). Эталон
+через все четыре хука: **140 about + 84 signal, 0 отказов**, покрытие 140/140. **S9 итерация 1 НЕ начата** — рулинг
+ставит чтение рендера ПЕРЕД первым платным K8.
 
-**НЕ выводить заново.** Маргинал смока **2.623…3.369 с/стр.**, текст 0.947 / 2.8132 с, буты 157.449 / 212.041 с,
-$0.00030669/с. Гард 15:00: `CYCLE 3 SPENT $0.2917 of $7.00`, `REMAINING $6.7083`. Эндпоинта нет, `mp-srv2` жив.
+**Проверки (s5):** (a)(b)(c)(d)(f)(g)(h)(i)(l) показаны. Дро-50 переснято по C2: **50 из 1 113, 12 сетей, sha
+`61b4fda7fdc83197…`** — positions-50 размечать против ЭТОЙ sha. `make check` = **21 failed · 4 254 passed · 2 skipped ·
+7 errors** (было 35 красных → 28, passed +7): 19 — вилка 1, 1 — вилка 2, 7 — фикстуры под новый default `--window w2`.
+Dv903 закрыт рулингом (леджер-тест ВЫВОДИТ линии из констант гарда, 12 passed).
+**НЕ выводить заново:** ставка $0.00030669/с, резерв $0.2843, хвост 60 с, страница 11.726 с / текст 0.845 с; 16 из 405
+постов C2 без строки-улики (14 `@epicentrk_sale`) — `runs[1].post_text` = [], потеряно на убийствах харнеса.
 
 ## ⏭️ Next
-START RITUAL → рулинг по трём вопросам STOP → правка гейта/константы + тест → `--register` → ранбук §2–§5 (один бут
-в кэпе) → `make tick` → **дро-50 переснять** → `make promo-screen` → отчёт. Разметки тимлида (dev-40, positions-50) — по 10.
+START RITUAL → два рулинга (корень `data/derived` · ключ `positions`) → починить 7 фикстур окна → S9: платная петля
+dev-40 ПОСЛЕ чтения рендера → positions-50 → закрыть (d)(e)(j). Шаг НЕ закрыт: `--close --tolerance` ждёт дробь.
 
 ## 🚧 Blockers
-**⛔ ГЕЙТ (10)(a): $12.59 > $3.95 при 13.466 с/стр.** — единственный блокер платной ноги; кэп не двигать (рулинг (b) п. 3).
-**⏳ Комната — часы:** $0.2333/день. **⚠️ K4 НЕ ПЕРЕЗАПУСКАТЬ** (`:366/:171/:153`). **⛔ `1925810730` и инвайт-хэш
-неадресуемы.** `/goal` дважды оценил паузу верно (02.09) → [[the-goal-loop-never-engaged]] закрыт для протокола запуска.
+**⛔ ДВЕ ВИЛКИ ВЫШЕ** — денег не касаются; `PROMO-PULSE-1 $3.1909 of $3.95` · `CYCLE 3 $3.4826 of $7.00`.
+**⏳ Комната:** $0.2333/день. **⚠️ K4 НЕ ПЕРЕЗАПУСКАТЬ** (`:366/:171/:153`). **⛔ `1925810730` и инвайт-хэш
+неадресуемы.** **⚠️ Фоновые задачи харнеса убивают друг друга** — платный ран отцеплённым (`os.setsid()`), Dv904.
 
 ## 🔫 Footguns этого файла
 **⛔ ЭТОТ ФАЙЛ ГРЕПАЕТСЯ КАК ВХОД — ДВА ЛИТЕРАЛА.** `scripts/volume_calc_5c1.py :: quoted()` берёт
