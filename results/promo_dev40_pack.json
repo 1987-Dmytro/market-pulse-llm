@@ -1579,7 +1579,7 @@
   "reading": "the pod renders each item ITSELF and refuses unless its sha equals the one pinned here; the rendered string never travels",
   "registration": {
     "record": "results/prereg_promo_dev_loop.json",
-    "sha256": "321bc9b50b14d41097e24be9bf415ccfa7a9da93529fa9c4d77c7410ac0aaeb9"
+    "sha256": "fd4574fc852a1965ec0293b9acb94cfa4736cfcb8efda9efcb7123d1696da47a"
   },
   "serving": {
     "adapter": null,
