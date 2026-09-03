@@ -14,6 +14,26 @@
       "balance": 11.154807737,
       "step_spent_usd": 3.0335,
       "note": "S4 C2 run 2 (a+b+c): 3008 pages + 385 posts bought, all 17 channels whole, per-channel rates 0.80-12.92 s/page"
+    },
+    {
+      "at": "2026-09-03T12:43:10+00:00",
+      "closed": true,
+      "balance": 10.9682256485,
+      "window_start": "2026-09-02T12:56:24+00:00",
+      "window_end": null,
+      "walk_ms": 9821341,
+      "expected_ms": null,
+      "balance_delta_usd": 3.220074,
+      "billing_since_usd": 3.210352,
+      "billing_by_kind": {
+        "pods": 0.052079,
+        "network-volume": 0.223611,
+        "serverless": 2.934662
+      },
+      "note": "promo-pulse-1 closed at the START RITUAL — ruling 03.09 (b) names the tolerance 0.05; the 3.15% gap is the always-on volume's drip inside the step's wall-clock, and it stays inside cycle 3",
+      "settled_usd": 2.986741,
+      "recorded_reading_usd": 3.0335,
+      "tolerance": 0.05
     }
   ],
   "gpu_note": "RunPod account balance read before the first pod of promo-pulse-1. Step spend = the pessimistic maximum of this anchor minus the balance now and the billing walk since `anchored_at` (SPEC 3.23 (4), Dv411), enforced against $3.95. The SPEC amendment 3.4 (4) phase cap is enforced separately, against results/spend_phase4.json, and neither anchor may be regenerated."
