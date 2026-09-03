@@ -40,6 +40,8 @@ report that they were dead: I can only report that I stopped measuring before a 
 A gate that returns KILL before its measurement can be taken is not a gate, and its second firing is
 not a second data point — it is the same instrument giving the same answer.
 
+**The second recreate the runbook allows is deliberately UNUSED.** `gates.max_recreates` is 2 and I spent one. That clause was written for machine luck; two firings of an instrument set below its own span are not two data points, so the remaining recreate would have bought a third identical KILL for ≈$0.045 and ended the session with the same finding and less money. Refusing a purchase whose outcome the records already predict is cheaper than proving it a third time.
+
 **Root cause, one sentence:** rung 0's overhead was borrowed from the sibling that SETTLED
 (`results/pass2_signals_r2_run.json`) and the transport gate was borrowed from the probe — two
 records for two halves of one transport model, and only the cheap half was checked against reality.
