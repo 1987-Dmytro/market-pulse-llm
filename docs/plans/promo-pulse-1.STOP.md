@@ -41,6 +41,13 @@ decision table is quoted, not moved. **Nothing is implemented.** Rule on §9 or 
 next session buys.
 **The 16 posts without an evidence row ride that same pod and stay a named gap until it exists.**
 
+**And there is no $0 route round it — checked, not assumed.** `src/market_pulse/local_llm.py` reads
+«Local GPU inference: the same zero-shot evaluation, **on weights we rent**»; every consumer of it is
+a `*_pod_runner.py`, and its torch / transformers / bitsandbytes imports live in the `gpu` extra
+precisely so no test may import them. «Local» there means local to the RENTED card, not to this
+machine. So (e) cannot be read at $0 by another instrument either: a predicted file needs a pod, a
+pod needs a registration, and a registration needs §9 ruled.
+
 ## The money figure the ruling named is not the one the guard settles
 
 The START RITUAL closed the step at the ruling's tolerance and it PASSED — but not at the ruling's
