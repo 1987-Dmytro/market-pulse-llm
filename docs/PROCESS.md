@@ -96,6 +96,10 @@ One-sentence contracts (`docs/PROMPT-*.md`) remain for fixes and debts whose dif
   measured on; a remembered number is not a prior (the 97 s/thread error, 26.08).
 
 ## Money (rented GPUs; console empty between sessions)
+- A PAID run is a whole session (03.09, the seventh STOP): create → settlement in one session, no $0 work in
+  front of it and no second create behind it; the runbook for the run is written and reviewed in the session
+  BEFORE. A session that cannot finish a run does not start it — the money is bounded by `--terminate-after`,
+  the evidence is not. Rulings name the command whose output is the number, never the number itself.
 - Readings come from the guard (`results/spend_cycle2.json`), pod hours are the quotable number,
   the billing walk lags 30–40 min. Cap = 2× the registry estimate; one paid run per prompt.
 - Four rungs on every paid contract: (0) price at create ≤ the registered ceiling; (1) liveness —

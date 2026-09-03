@@ -609,3 +609,47 @@ The operator pastes v4 from now on; a STOP still ends with «STOP — /goal clea
 
 **Team lead's debts.** `docs/labels-positions-50.jsonl` against `fe3f5841…` — 46 pages, every in-scope position, next team-lead session(s);
 the holdout-40 after the pre-registration STOP notice. The dev loop does not wait for the positions gold.
+
+## Ruling 03.09 (d) — the seventh STOP: the $0 half of S9 is ACCEPTED; the next session is the runbook and nothing else; the create line is the sibling's, verbatim; `--terminate-after` is derived from the cap, never typed
+
+**Accepted, by diff and by files, $0:** `379edb1` (`--register` — `results/prereg_promo_dev_loop.json`: step `promo-dev-loop`, its own
+ledger, cap `min($2.50, REMAINING − $0.30)` = $2.50 from the guard's own REMAINING $3.4591, floor $2.00, rung 0 FITS at the dear corner
+**$1.3193 of $2.50** in the pod's own unit — seconds × the day's $/h on the dearer cloud, the boot/load/scp/delete overhead taken from the
+sibling that SETTLED, the dead-man derived; nothing typed), `f47ea1a` (the pack — 56 units re-derived: leg A 40 dev threads, leg B the 16 C2
+posts by ids, the smoke's three first by the shortest/median/longest rule: `@msuaaaa:6523` · `@VARUS_channel:9006` · `@VARUS_channel:6009`;
+the runner swaps ONE function of `reader_v5_pod_runner`; stub tests), `491687a` (transport gates from v5b's frozen record; the dry contact's
+refusal at `@ekomarket_shop:1457` — payload sha vs rendered sha — fixed and now a test; the runbook), `bf21167` (plan §9a: the five
+amendments folded in; the transport is a POD because `local_llm.batch` renders from the pinned `prompts.py` — a fact, accepted).
+`make check` at `ae99c7a`: **4 313 passed, 2 skipped, exit 0**; 12 new tests each with a negative control. Nothing bought, listings `[]`.
+
+**The pause is legitimate and it is now a rule.** A paid run is a whole session: create → settlement, with nothing else in front of it. The
+executor drew the boundary where the money is instead of starting a run it could not finish — the right call, and the reason is stated
+plainly rather than dressed as a listed cause. `docs/PROCESS.md` §Money gains the line; §8 does not change (the STOP file may name «the
+session boundary before a paid run» as its cause; the evaluator's list is not the law, the rulings file is).
+
+**The create line — the sibling's, verbatim, name and stop changed.** `scripts/runbook_pass2_signals_r2.md:89–92` is the authority the
+runbook's placeholder asked for:
+```
+runpodctl pod create --name mp-promo-dev-1 --gpu-id 'NVIDIA GeForce RTX 4090' --gpu-count 1 \
+  --network-volume-id qw4nwleanc --data-center-ids EU-RO-1 --cloud-type SECURE \
+  --image runpod/pytorch:1.0.2-cu1281-torch280-ubuntu2404 --container-disk-in-gb 30 \
+  --ports '22/tcp' --ssh --terminate-after '<the seconds the registration's cap buys at the day's price, printed by --pre-create-check>'
+```
+Three corrections to `scripts/runbook_promo_dev_1.md` §1, by the executor before the create, one commit: (1) `--image` with that image —
+the sibling's flag spelling (`runpodctl pod create --help` is the authority; the runbook's `--image-name` is not r1's); (2) `--data-center-ids
+EU-RO-1 --cloud-type SECURE --ssh` and disk 30 as the sibling — the network volume `qw4nwleanc` lives in EU-RO-1 and the registration
+priced that cloud; (3) **`--terminate-after` is DERIVED, not typed:** the runbook's `90m` is below the dear corner ($1.3193 at $0.74/h is
+≈107 min) and would cut a run inside its own registration; rung 3 is the platform stop at the CAP at the observed price (§9a), so the
+value is the seconds `--pre-create-check`/`--register` prints for the cap — and the record carries it.
+
+**Next session, in this order and nothing else:** `scripts/runbook_promo_dev_1.md` §0 → §6 — guard read, price read, create, rung 1, dead-man,
+bundle, launch detached, the smoke, the decision table of 03.09 (b) (≤ $0.80 → run; $0.80–1.20 → run then STOP; > $1.20 → STOP before
+buying, pod deleted, listing shown), the GO, 40 threads + 16 posts, fetch, delete, settle (`--close --tolerance 0.05`), K8, the error
+table → STOP «iteration 1 read» with `results/promo_dev40_predicted_iter1.jsonl`, `grade_promo_dev40_iter1.json`,
+`promo_dev40_errors_iter1.json`, the spend line, and both listings `[]`. No $0 work before the create; no second create in the session.
+
+**Pattern of the seven pauses (the operator's question, answered in `docs/STATUS.md` §Уроки).** Seven STOPs, seven correct refusals, $0
+lost; six root causes on the team-lead side: two collisions of growth with the seals the spec never queried (4, 5), three money rulings
+that named a mechanism or a figure the instrument then refused (1, 3, 6), one plan line accepted without its instrument (6 — S9), one
+session sized for a build AND a buy (7). The fix is in this ruling and in PROCESS: a ruling names the command whose output is the number,
+never the number; a fork on a sealed file lists the seals it touches before the ruling (the STOP already does); a paid run is a session.
