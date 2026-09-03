@@ -116,7 +116,9 @@ def test_a_download_killed_mid_write_is_not_a_page(tmp_path):
 def test_the_driver_writes_to_the_derived_root_and_never_to_the_smoke_store():
     source = (REPO_ROOT / "scripts" / "run_promo_c2.py").read_text(encoding="utf-8")
     assert "SMOKE_DERIVED" not in source
-    assert "run_loop.DERIVED_ROOT" in source
+    # Ruling 03.09 (b) fork 1: the driver WRITES to the live root and reads the sealed w1 root as
+    # an archive, so the dedupe still sees what window 1 answered. Both names, both roles.
+    assert "run_loop.LIVE_DERIVED_ROOT, archives=(run_loop.DERIVED_ROOT,)" in source
 
 
 def test_a_moved_pinned_input_is_a_stop_and_not_a_re_derivation(tmp_path):
@@ -207,6 +209,7 @@ def stage(tmp_path, monkeypatch, page_ids):
     monkeypatch.setattr(run_loop, "REPO_ROOT", tmp_path)
     monkeypatch.setattr(loop, "REPO_ROOT", tmp_path)
     monkeypatch.setattr(run_loop, "DERIVED_ROOT", tmp_path / "derived")
+    monkeypatch.setattr(run_loop, "LIVE_DERIVED_ROOT", tmp_path / "derived_w2")
     monkeypatch.setattr(run_loop, "CURSOR", tmp_path / "cursor.json")
     monkeypatch.setattr(driver, "MANIFEST", tmp_path / "manifest.json")
     monkeypatch.setattr(driver, "PAGECOUNT", tmp_path / "pagecount.json")
@@ -218,6 +221,22 @@ def stage(tmp_path, monkeypatch, page_ids):
     monkeypatch.setattr(driver, "guard_says_go", lambda: (0, 0.0))
     monkeypatch.setattr(driver.fivec2, "client_for", lambda endpoint, key, dump=None: client)
     monkeypatch.setenv(driver.API_KEY_ENV, "stub")
+    # DERIVED: every DERIVED root this module owns, checked to be under `tmp_path`, rather than the
+    # two names above trusted to be all of them. `LIVE_DERIVED_ROOT` was added on 03.09 and this
+    # fixture went on patching only its sibling, so the stub run appended 13 rows into the REAL
+    # `data/derived_w2/` ([[a_probe_must_not_create_what_it_measures]]). A third derived root would
+    # have done it again; now it stops the fixture instead. The RAW `STORE_ROOT` is deliberately
+    # not in scope: `driver.live_store` is replaced by `FakeStore` above, so nothing reads it and
+    # nothing has ever written it.
+    stray = [
+        name
+        for name in dir(run_loop)
+        if name.endswith("_ROOT")
+        and "DERIVED" in name
+        and isinstance(getattr(run_loop, name), Path)
+        and not getattr(run_loop, name).is_relative_to(tmp_path)
+    ]
+    assert not stray, f"{stray} still point outside {tmp_path} — a stub run would write into them"
     return client
 
 
@@ -262,7 +281,7 @@ def test_the_served_half_writes_the_rows_durably_and_a_second_run_re_asks_nothin
     driver.register()
     assert driver.main(["--run", "--endpoint", "e"]) == 0
 
-    derived = RawStore(run_loop.DERIVED_ROOT)
+    derived = RawStore(run_loop.LIVE_DERIVED_ROOT)
     assert derived.index(loop.PAGE_RECORD_TYPE, CHANNEL).ids == {101, 102}
     assert derived.index(loop.POST_RECORD_TYPE, CHANNEL).ids == {7}
     positions_file = derived.path(loop.POSITION_RECORD_TYPE, CHANNEL)

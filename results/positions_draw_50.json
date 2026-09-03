@@ -1,4 +1,5 @@
 {
+  "anchor_note": "`image` is a POINTER added by ruling 03.09 (b), not part of the draw, so the file's own sha256 moved from 61b4fda7fdc83197… while `rows_sha256_as_drawn` — the same rows without that field — did not. The labels are owed against the rows, and their 50 row_ids are the ones the re-draw fixed.",
   "by_chain": {
     "atb": 6,
     "atb_aktsiyi": 7,
@@ -28,13 +29,250 @@
     "xochydeshevshe"
   ],
   "contract": "docs/plans/promo-pulse-1.md K5 — the 50 positions the team lead labels into docs/labels-positions-50.jsonl. Rows carry the carrier and its link, never the extraction: the labeller must not see what he is grading.",
+  "pages": [
+    {
+      "channel": "@ATB_FANatik",
+      "image": "data/annotation/promo_c2/posts_media/ATB_FANatik_4542.jpg",
+      "msg_id": 4542
+    },
+    {
+      "channel": "@ATB_FANatik",
+      "image": "data/annotation/promo_c2/posts_media/ATB_FANatik_4545.jpg",
+      "msg_id": 4545
+    },
+    {
+      "channel": "@ATB_FANatik",
+      "image": "data/annotation/promo_c2/posts_media/ATB_FANatik_4651.jpg",
+      "msg_id": 4651
+    },
+    {
+      "channel": "@ATB_FANatik",
+      "image": "data/annotation/promo_c2/posts_media/ATB_FANatik_4657.jpg",
+      "msg_id": 4657
+    },
+    {
+      "channel": "@VARUS_channel",
+      "image": "data/annotation/promo_c2/posts_media/VARUS_channel_10802.jpg",
+      "msg_id": 10802
+    },
+    {
+      "channel": "@VARUS_channel",
+      "image": "data/annotation/promo_c2/posts_media/VARUS_channel_10815.jpg",
+      "msg_id": 10815
+    },
+    {
+      "channel": "@VARUS_channel",
+      "image": "data/annotation/promo_c2/posts_media/VARUS_channel_10816.jpg",
+      "msg_id": 10816
+    },
+    {
+      "channel": "@VARUS_channel",
+      "image": "data/annotation/promo_c2/posts_media/VARUS_channel_10843.jpg",
+      "msg_id": 10843
+    },
+    {
+      "channel": "@VARUS_channel",
+      "image": "data/annotation/promo_c2/posts_media/VARUS_channel_10844.jpg",
+      "msg_id": 10844
+    },
+    {
+      "channel": "@VARUS_channel",
+      "image": "data/annotation/promo_c2/posts_media/VARUS_channel_10845.jpg",
+      "msg_id": 10845
+    },
+    {
+      "channel": "@VARUS_channel",
+      "image": "data/annotation/promo_c2/posts_media/VARUS_channel_10850.jpg",
+      "msg_id": 10850
+    },
+    {
+      "channel": "@VARUS_channel",
+      "image": "data/annotation/promo_c2/posts_media/VARUS_channel_10968.jpg",
+      "msg_id": 10968
+    },
+    {
+      "channel": "@VARUS_channel",
+      "image": "data/annotation/promo_c2/posts_media/VARUS_channel_11010.jpg",
+      "msg_id": 11010
+    },
+    {
+      "channel": "@VARUS_channel",
+      "image": "data/annotation/promo_c2/posts_media/VARUS_channel_11064.jpg",
+      "msg_id": 11064
+    },
+    {
+      "channel": "@VARUS_channel",
+      "image": "data/annotation/promo_c2/posts_media/VARUS_channel_11174.jpg",
+      "msg_id": 11174
+    },
+    {
+      "channel": "@VARUS_channel",
+      "image": "data/annotation/promo_c2/posts_media/VARUS_channel_11282.jpg",
+      "msg_id": 11282
+    },
+    {
+      "channel": "@atb_aktsiyi",
+      "image": "data/annotation/promo_c2/posts_media/atb_aktsiyi_3200.jpg",
+      "msg_id": 3200
+    },
+    {
+      "channel": "@atb_aktsiyi",
+      "image": "data/annotation/promo_c2/posts_media/atb_aktsiyi_3232.jpg",
+      "msg_id": 3232
+    },
+    {
+      "channel": "@atb_aktsiyi",
+      "image": "data/annotation/promo_c2/posts_media/atb_aktsiyi_3233.jpg",
+      "msg_id": 3233
+    },
+    {
+      "channel": "@atb_aktsiyi",
+      "image": "data/annotation/promo_c2/posts_media/atb_aktsiyi_3272.jpg",
+      "msg_id": 3272
+    },
+    {
+      "channel": "@atb_aktsiyi",
+      "image": "data/annotation/promo_c2/posts_media/atb_aktsiyi_3279.jpg",
+      "msg_id": 3279
+    },
+    {
+      "channel": "@atb_aktsiyi",
+      "image": "data/annotation/promo_c2/posts_media/atb_aktsiyi_3289.jpg",
+      "msg_id": 3289
+    },
+    {
+      "channel": "@atb_market_official",
+      "image": "data/annotation/promo_c2/posts_media/atb_market_official_4575.jpg",
+      "msg_id": 4575
+    },
+    {
+      "channel": "@atb_market_official",
+      "image": "data/annotation/promo_c2/posts_media/atb_market_official_4625.jpg",
+      "msg_id": 4625
+    },
+    {
+      "channel": "@atb_market_official",
+      "image": "data/annotation/promo_c2/posts_media/atb_market_official_4637.jpg",
+      "msg_id": 4637
+    },
+    {
+      "channel": "@atb_market_official",
+      "image": "data/annotation/promo_c2/posts_media/atb_market_official_4655.jpg",
+      "msg_id": 4655
+    },
+    {
+      "channel": "@atb_market_official",
+      "image": "data/annotation/promo_c2/posts_media/atb_market_official_4665.jpg",
+      "msg_id": 4665
+    },
+    {
+      "channel": "@atb_market_official",
+      "image": "data/annotation/promo_c2/posts_media/atb_market_official_4712.jpg",
+      "msg_id": 4712
+    },
+    {
+      "channel": "@blyzenkoua",
+      "image": "data/annotation/promo_c2/posts_media/blyzenkoua_7680.jpg",
+      "msg_id": 7680
+    },
+    {
+      "channel": "@blyzenkoua",
+      "image": "data/annotation/promo_c2/posts_media/blyzenkoua_7682.jpg",
+      "msg_id": 7682
+    },
+    {
+      "channel": "@blyzenkoua",
+      "image": "data/annotation/promo_c2/posts_media/blyzenkoua_7683.jpg",
+      "msg_id": 7683
+    },
+    {
+      "channel": "@blyzenkoua",
+      "image": "data/annotation/promo_c2/posts_media/blyzenkoua_7687.jpg",
+      "msg_id": 7687
+    },
+    {
+      "channel": "@blyzenkoua",
+      "image": "data/annotation/promo_c2/posts_media/blyzenkoua_7698.jpg",
+      "msg_id": 7698
+    },
+    {
+      "channel": "@blyzenkoua",
+      "image": "data/annotation/promo_c2/posts_media/blyzenkoua_7761.jpg",
+      "msg_id": 7761
+    },
+    {
+      "channel": "@blyzenkoua",
+      "image": "data/annotation/promo_c2/posts_media/blyzenkoua_7946.jpg",
+      "msg_id": 7946
+    },
+    {
+      "channel": "@blyzenkoua",
+      "image": "data/annotation/promo_c2/posts_media/blyzenkoua_7950.jpg",
+      "msg_id": 7950
+    },
+    {
+      "channel": "@ekomarket_shop",
+      "image": "data/annotation/promo_c2/posts_media/ekomarket_shop_1458.jpg",
+      "msg_id": 1458
+    },
+    {
+      "channel": "@forainfo",
+      "image": "data/annotation/promo_c2/posts_media/forainfo_6056.jpg",
+      "msg_id": 6056
+    },
+    {
+      "channel": "@marketopt_promo",
+      "image": "data/annotation/promo_c2/posts_media/marketopt_promo_2953.jpg",
+      "msg_id": 2953
+    },
+    {
+      "channel": "@msuaaaa",
+      "image": "data/annotation/promo_c2/posts_media/msuaaaa_10775.jpg",
+      "msg_id": 10775
+    },
+    {
+      "channel": "@msuaaaa",
+      "image": "data/annotation/promo_c2/posts_media/msuaaaa_10805.jpg",
+      "msg_id": 10805
+    },
+    {
+      "channel": "@msuaaaa",
+      "image": "data/annotation/promo_c2/posts_media/msuaaaa_10807.jpg",
+      "msg_id": 10807
+    },
+    {
+      "channel": "@msuaaaa",
+      "image": "data/annotation/promo_c2/posts_media/msuaaaa_10830.jpg",
+      "msg_id": 10830
+    },
+    {
+      "channel": "@msuaaaa",
+      "image": "data/annotation/promo_c2/posts_media/msuaaaa_10853.jpg",
+      "msg_id": 10853
+    },
+    {
+      "channel": "@msuaaaa",
+      "image": "data/annotation/promo_c2/posts_media/msuaaaa_10870.jpg",
+      "msg_id": 10870
+    },
+    {
+      "channel": "@silposilpo",
+      "image": null,
+      "msg_id": 3822
+    }
+  ],
+  "pages_drawn_from": 46,
   "population": 1113,
-  "population_state": "PRE-C2 — these are 5c2's rows, not the backfilled four weeks K5 names. C2 is unbought (the cycle-3 guard refuses; see docs/plans/promo-pulse-1.STOP.md), so this file proves the DRAW's mechanics and is NOT yet the file to label. Re-draw after S4.",
+  "population_state": "C2 — the population S4 bought, re-drawn over window w2 (ruling 02.09 (d)). This IS the file to label: `rows` is the draw, `pages` is the unit the gold is written on (ruling 03.09 (b)) and `predicted` is every extracted row of those pages.",
+  "predicted_rows": 205,
+  "predicted_scope": "every extracted row of the pages above, both carriers — what the page-level gold is scored against.",
+  "predicted_sha256": "781b02b473ed8104f4f2c206796d9d84557f99b9796ad10cbfa2bee4dfcbc818",
   "rows": [
     {
       "carrier": "leaflet_page",
       "chain": "atb_fanatik",
       "channel": "@ATB_FANatik",
+      "image": "data/annotation/promo_c2/posts_media/ATB_FANatik_4542.jpg",
       "link": "https://t.me/ATB_FANatik/4542",
       "msg_id": 4542,
       "row_id": "@ATB_FANatik:4542:0",
@@ -44,6 +282,7 @@
       "carrier": "leaflet_page",
       "chain": "atb_fanatik",
       "channel": "@ATB_FANatik",
+      "image": "data/annotation/promo_c2/posts_media/ATB_FANatik_4545.jpg",
       "link": "https://t.me/ATB_FANatik/4545",
       "msg_id": 4545,
       "row_id": "@ATB_FANatik:4545:0",
@@ -53,6 +292,7 @@
       "carrier": "leaflet_page",
       "chain": "atb_fanatik",
       "channel": "@ATB_FANatik",
+      "image": "data/annotation/promo_c2/posts_media/ATB_FANatik_4651.jpg",
       "link": "https://t.me/ATB_FANatik/4651",
       "msg_id": 4651,
       "row_id": "@ATB_FANatik:4651:1",
@@ -62,6 +302,7 @@
       "carrier": "leaflet_page",
       "chain": "atb_fanatik",
       "channel": "@ATB_FANatik",
+      "image": "data/annotation/promo_c2/posts_media/ATB_FANatik_4657.jpg",
       "link": "https://t.me/ATB_FANatik/4657",
       "msg_id": 4657,
       "row_id": "@ATB_FANatik:4657:6",
@@ -71,6 +312,7 @@
       "carrier": "leaflet_page",
       "chain": "varus",
       "channel": "@VARUS_channel",
+      "image": "data/annotation/promo_c2/posts_media/VARUS_channel_10802.jpg",
       "link": "https://t.me/VARUS_channel/10802",
       "msg_id": 10802,
       "row_id": "@VARUS_channel:10802:1",
@@ -80,6 +322,7 @@
       "carrier": "leaflet_page",
       "chain": "varus",
       "channel": "@VARUS_channel",
+      "image": "data/annotation/promo_c2/posts_media/VARUS_channel_10815.jpg",
       "link": "https://t.me/VARUS_channel/10815",
       "msg_id": 10815,
       "row_id": "@VARUS_channel:10815:0",
@@ -89,6 +332,7 @@
       "carrier": "leaflet_page",
       "chain": "varus",
       "channel": "@VARUS_channel",
+      "image": "data/annotation/promo_c2/posts_media/VARUS_channel_10816.jpg",
       "link": "https://t.me/VARUS_channel/10816",
       "msg_id": 10816,
       "row_id": "@VARUS_channel:10816:0",
@@ -98,6 +342,7 @@
       "carrier": "leaflet_page",
       "chain": "varus",
       "channel": "@VARUS_channel",
+      "image": "data/annotation/promo_c2/posts_media/VARUS_channel_10843.jpg",
       "link": "https://t.me/VARUS_channel/10843",
       "msg_id": 10843,
       "row_id": "@VARUS_channel:10843:6",
@@ -107,6 +352,7 @@
       "carrier": "leaflet_page",
       "chain": "varus",
       "channel": "@VARUS_channel",
+      "image": "data/annotation/promo_c2/posts_media/VARUS_channel_10843.jpg",
       "link": "https://t.me/VARUS_channel/10843",
       "msg_id": 10843,
       "row_id": "@VARUS_channel:10843:9",
@@ -116,6 +362,7 @@
       "carrier": "leaflet_page",
       "chain": "varus",
       "channel": "@VARUS_channel",
+      "image": "data/annotation/promo_c2/posts_media/VARUS_channel_10844.jpg",
       "link": "https://t.me/VARUS_channel/10844",
       "msg_id": 10844,
       "row_id": "@VARUS_channel:10844:4",
@@ -125,6 +372,7 @@
       "carrier": "leaflet_page",
       "chain": "varus",
       "channel": "@VARUS_channel",
+      "image": "data/annotation/promo_c2/posts_media/VARUS_channel_10845.jpg",
       "link": "https://t.me/VARUS_channel/10845",
       "msg_id": 10845,
       "row_id": "@VARUS_channel:10845:1",
@@ -134,6 +382,7 @@
       "carrier": "leaflet_page",
       "chain": "varus",
       "channel": "@VARUS_channel",
+      "image": "data/annotation/promo_c2/posts_media/VARUS_channel_10850.jpg",
       "link": "https://t.me/VARUS_channel/10850",
       "msg_id": 10850,
       "row_id": "@VARUS_channel:10850:0",
@@ -143,6 +392,7 @@
       "carrier": "leaflet_page",
       "chain": "varus",
       "channel": "@VARUS_channel",
+      "image": "data/annotation/promo_c2/posts_media/VARUS_channel_10968.jpg",
       "link": "https://t.me/VARUS_channel/10968",
       "msg_id": 10968,
       "row_id": "@VARUS_channel:10968:5",
@@ -152,6 +402,7 @@
       "carrier": "leaflet_page",
       "chain": "varus",
       "channel": "@VARUS_channel",
+      "image": "data/annotation/promo_c2/posts_media/VARUS_channel_11010.jpg",
       "link": "https://t.me/VARUS_channel/11010",
       "msg_id": 11010,
       "row_id": "@VARUS_channel:11010:0",
@@ -161,6 +412,7 @@
       "carrier": "leaflet_page",
       "chain": "varus",
       "channel": "@VARUS_channel",
+      "image": "data/annotation/promo_c2/posts_media/VARUS_channel_11064.jpg",
       "link": "https://t.me/VARUS_channel/11064",
       "msg_id": 11064,
       "row_id": "@VARUS_channel:11064:7",
@@ -170,6 +422,7 @@
       "carrier": "leaflet_page",
       "chain": "varus",
       "channel": "@VARUS_channel",
+      "image": "data/annotation/promo_c2/posts_media/VARUS_channel_11174.jpg",
       "link": "https://t.me/VARUS_channel/11174",
       "msg_id": 11174,
       "row_id": "@VARUS_channel:11174:0",
@@ -179,6 +432,7 @@
       "carrier": "post_text",
       "chain": "varus",
       "channel": "@VARUS_channel",
+      "image": "data/annotation/promo_c2/posts_media/VARUS_channel_11282.jpg",
       "link": "https://t.me/VARUS_channel/11282",
       "msg_id": 11282,
       "row_id": "@VARUS_channel:11282:0",
@@ -188,6 +442,7 @@
       "carrier": "leaflet_page",
       "chain": "atb_aktsiyi",
       "channel": "@atb_aktsiyi",
+      "image": "data/annotation/promo_c2/posts_media/atb_aktsiyi_3200.jpg",
       "link": "https://t.me/atb_aktsiyi/3200",
       "msg_id": 3200,
       "row_id": "@atb_aktsiyi:3200:0",
@@ -197,6 +452,7 @@
       "carrier": "leaflet_page",
       "chain": "atb_aktsiyi",
       "channel": "@atb_aktsiyi",
+      "image": "data/annotation/promo_c2/posts_media/atb_aktsiyi_3232.jpg",
       "link": "https://t.me/atb_aktsiyi/3232",
       "msg_id": 3232,
       "row_id": "@atb_aktsiyi:3232:1",
@@ -206,6 +462,7 @@
       "carrier": "leaflet_page",
       "chain": "atb_aktsiyi",
       "channel": "@atb_aktsiyi",
+      "image": "data/annotation/promo_c2/posts_media/atb_aktsiyi_3232.jpg",
       "link": "https://t.me/atb_aktsiyi/3232",
       "msg_id": 3232,
       "row_id": "@atb_aktsiyi:3232:3",
@@ -215,6 +472,7 @@
       "carrier": "leaflet_page",
       "chain": "atb_aktsiyi",
       "channel": "@atb_aktsiyi",
+      "image": "data/annotation/promo_c2/posts_media/atb_aktsiyi_3233.jpg",
       "link": "https://t.me/atb_aktsiyi/3233",
       "msg_id": 3233,
       "row_id": "@atb_aktsiyi:3233:2",
@@ -224,6 +482,7 @@
       "carrier": "leaflet_page",
       "chain": "atb_aktsiyi",
       "channel": "@atb_aktsiyi",
+      "image": "data/annotation/promo_c2/posts_media/atb_aktsiyi_3272.jpg",
       "link": "https://t.me/atb_aktsiyi/3272",
       "msg_id": 3272,
       "row_id": "@atb_aktsiyi:3272:0",
@@ -233,6 +492,7 @@
       "carrier": "leaflet_page",
       "chain": "atb_aktsiyi",
       "channel": "@atb_aktsiyi",
+      "image": "data/annotation/promo_c2/posts_media/atb_aktsiyi_3279.jpg",
       "link": "https://t.me/atb_aktsiyi/3279",
       "msg_id": 3279,
       "row_id": "@atb_aktsiyi:3279:3",
@@ -242,6 +502,7 @@
       "carrier": "leaflet_page",
       "chain": "atb_aktsiyi",
       "channel": "@atb_aktsiyi",
+      "image": "data/annotation/promo_c2/posts_media/atb_aktsiyi_3289.jpg",
       "link": "https://t.me/atb_aktsiyi/3289",
       "msg_id": 3289,
       "row_id": "@atb_aktsiyi:3289:2",
@@ -251,6 +512,7 @@
       "carrier": "leaflet_page",
       "chain": "atb",
       "channel": "@atb_market_official",
+      "image": "data/annotation/promo_c2/posts_media/atb_market_official_4575.jpg",
       "link": "https://t.me/atb_market_official/4575",
       "msg_id": 4575,
       "row_id": "@atb_market_official:4575:1",
@@ -260,6 +522,7 @@
       "carrier": "leaflet_page",
       "chain": "atb",
       "channel": "@atb_market_official",
+      "image": "data/annotation/promo_c2/posts_media/atb_market_official_4625.jpg",
       "link": "https://t.me/atb_market_official/4625",
       "msg_id": 4625,
       "row_id": "@atb_market_official:4625:2",
@@ -269,6 +532,7 @@
       "carrier": "leaflet_page",
       "chain": "atb",
       "channel": "@atb_market_official",
+      "image": "data/annotation/promo_c2/posts_media/atb_market_official_4637.jpg",
       "link": "https://t.me/atb_market_official/4637",
       "msg_id": 4637,
       "row_id": "@atb_market_official:4637:3",
@@ -278,6 +542,7 @@
       "carrier": "leaflet_page",
       "chain": "atb",
       "channel": "@atb_market_official",
+      "image": "data/annotation/promo_c2/posts_media/atb_market_official_4655.jpg",
       "link": "https://t.me/atb_market_official/4655",
       "msg_id": 4655,
       "row_id": "@atb_market_official:4655:7",
@@ -287,6 +552,7 @@
       "carrier": "leaflet_page",
       "chain": "atb",
       "channel": "@atb_market_official",
+      "image": "data/annotation/promo_c2/posts_media/atb_market_official_4665.jpg",
       "link": "https://t.me/atb_market_official/4665",
       "msg_id": 4665,
       "row_id": "@atb_market_official:4665:3",
@@ -296,6 +562,7 @@
       "carrier": "leaflet_page",
       "chain": "atb",
       "channel": "@atb_market_official",
+      "image": "data/annotation/promo_c2/posts_media/atb_market_official_4712.jpg",
       "link": "https://t.me/atb_market_official/4712",
       "msg_id": 4712,
       "row_id": "@atb_market_official:4712:2",
@@ -305,6 +572,7 @@
       "carrier": "leaflet_page",
       "chain": "blyzenko",
       "channel": "@blyzenkoua",
+      "image": "data/annotation/promo_c2/posts_media/blyzenkoua_7680.jpg",
       "link": "https://t.me/blyzenkoua/7680",
       "msg_id": 7680,
       "row_id": "@blyzenkoua:7680:1",
@@ -314,6 +582,7 @@
       "carrier": "leaflet_page",
       "chain": "blyzenko",
       "channel": "@blyzenkoua",
+      "image": "data/annotation/promo_c2/posts_media/blyzenkoua_7682.jpg",
       "link": "https://t.me/blyzenkoua/7682",
       "msg_id": 7682,
       "row_id": "@blyzenkoua:7682:5",
@@ -323,6 +592,7 @@
       "carrier": "leaflet_page",
       "chain": "blyzenko",
       "channel": "@blyzenkoua",
+      "image": "data/annotation/promo_c2/posts_media/blyzenkoua_7683.jpg",
       "link": "https://t.me/blyzenkoua/7683",
       "msg_id": 7683,
       "row_id": "@blyzenkoua:7683:5",
@@ -332,6 +602,7 @@
       "carrier": "leaflet_page",
       "chain": "blyzenko",
       "channel": "@blyzenkoua",
+      "image": "data/annotation/promo_c2/posts_media/blyzenkoua_7687.jpg",
       "link": "https://t.me/blyzenkoua/7687",
       "msg_id": 7687,
       "row_id": "@blyzenkoua:7687:1",
@@ -341,6 +612,7 @@
       "carrier": "leaflet_page",
       "chain": "blyzenko",
       "channel": "@blyzenkoua",
+      "image": "data/annotation/promo_c2/posts_media/blyzenkoua_7698.jpg",
       "link": "https://t.me/blyzenkoua/7698",
       "msg_id": 7698,
       "row_id": "@blyzenkoua:7698:1",
@@ -350,6 +622,7 @@
       "carrier": "leaflet_page",
       "chain": "blyzenko",
       "channel": "@blyzenkoua",
+      "image": "data/annotation/promo_c2/posts_media/blyzenkoua_7761.jpg",
       "link": "https://t.me/blyzenkoua/7761",
       "msg_id": 7761,
       "row_id": "@blyzenkoua:7761:2",
@@ -359,6 +632,7 @@
       "carrier": "leaflet_page",
       "chain": "blyzenko",
       "channel": "@blyzenkoua",
+      "image": "data/annotation/promo_c2/posts_media/blyzenkoua_7946.jpg",
       "link": "https://t.me/blyzenkoua/7946",
       "msg_id": 7946,
       "row_id": "@blyzenkoua:7946:3",
@@ -368,6 +642,7 @@
       "carrier": "leaflet_page",
       "chain": "blyzenko",
       "channel": "@blyzenkoua",
+      "image": "data/annotation/promo_c2/posts_media/blyzenkoua_7950.jpg",
       "link": "https://t.me/blyzenkoua/7950",
       "msg_id": 7950,
       "row_id": "@blyzenkoua:7950:5",
@@ -377,6 +652,7 @@
       "carrier": "leaflet_page",
       "chain": "blyzenko",
       "channel": "@blyzenkoua",
+      "image": "data/annotation/promo_c2/posts_media/blyzenkoua_7950.jpg",
       "link": "https://t.me/blyzenkoua/7950",
       "msg_id": 7950,
       "row_id": "@blyzenkoua:7950:6",
@@ -386,6 +662,7 @@
       "carrier": "post_text",
       "chain": "ekomarket_shop",
       "channel": "@ekomarket_shop",
+      "image": "data/annotation/promo_c2/posts_media/ekomarket_shop_1458.jpg",
       "link": "https://t.me/ekomarket_shop/1458",
       "msg_id": 1458,
       "row_id": "@ekomarket_shop:1458:0",
@@ -395,6 +672,7 @@
       "carrier": "leaflet_page",
       "chain": "forainfo",
       "channel": "@forainfo",
+      "image": "data/annotation/promo_c2/posts_media/forainfo_6056.jpg",
       "link": "https://t.me/forainfo/6056",
       "msg_id": 6056,
       "row_id": "@forainfo:6056:1",
@@ -404,6 +682,7 @@
       "carrier": "leaflet_page",
       "chain": "marketopt_promo",
       "channel": "@marketopt_promo",
+      "image": "data/annotation/promo_c2/posts_media/marketopt_promo_2953.jpg",
       "link": "https://t.me/marketopt_promo/2953",
       "msg_id": 2953,
       "row_id": "@marketopt_promo:2953:0",
@@ -413,6 +692,7 @@
       "carrier": "leaflet_page",
       "chain": "msuaaaa",
       "channel": "@msuaaaa",
+      "image": "data/annotation/promo_c2/posts_media/msuaaaa_10775.jpg",
       "link": "https://t.me/msuaaaa/10775",
       "msg_id": 10775,
       "row_id": "@msuaaaa:10775:0",
@@ -422,6 +702,7 @@
       "carrier": "leaflet_page",
       "chain": "msuaaaa",
       "channel": "@msuaaaa",
+      "image": "data/annotation/promo_c2/posts_media/msuaaaa_10805.jpg",
       "link": "https://t.me/msuaaaa/10805",
       "msg_id": 10805,
       "row_id": "@msuaaaa:10805:1",
@@ -431,6 +712,7 @@
       "carrier": "leaflet_page",
       "chain": "msuaaaa",
       "channel": "@msuaaaa",
+      "image": "data/annotation/promo_c2/posts_media/msuaaaa_10807.jpg",
       "link": "https://t.me/msuaaaa/10807",
       "msg_id": 10807,
       "row_id": "@msuaaaa:10807:1",
@@ -440,6 +722,7 @@
       "carrier": "leaflet_page",
       "chain": "msuaaaa",
       "channel": "@msuaaaa",
+      "image": "data/annotation/promo_c2/posts_media/msuaaaa_10830.jpg",
       "link": "https://t.me/msuaaaa/10830",
       "msg_id": 10830,
       "row_id": "@msuaaaa:10830:5",
@@ -449,6 +732,7 @@
       "carrier": "leaflet_page",
       "chain": "msuaaaa",
       "channel": "@msuaaaa",
+      "image": "data/annotation/promo_c2/posts_media/msuaaaa_10853.jpg",
       "link": "https://t.me/msuaaaa/10853",
       "msg_id": 10853,
       "row_id": "@msuaaaa:10853:1",
@@ -458,6 +742,7 @@
       "carrier": "leaflet_page",
       "chain": "msuaaaa",
       "channel": "@msuaaaa",
+      "image": "data/annotation/promo_c2/posts_media/msuaaaa_10853.jpg",
       "link": "https://t.me/msuaaaa/10853",
       "msg_id": 10853,
       "row_id": "@msuaaaa:10853:6",
@@ -467,6 +752,7 @@
       "carrier": "leaflet_page",
       "chain": "msuaaaa",
       "channel": "@msuaaaa",
+      "image": "data/annotation/promo_c2/posts_media/msuaaaa_10870.jpg",
       "link": "https://t.me/msuaaaa/10870",
       "msg_id": 10870,
       "row_id": "@msuaaaa:10870:0",
@@ -476,6 +762,7 @@
       "carrier": "post_text",
       "chain": "silpo",
       "channel": "@silposilpo",
+      "image": null,
       "link": "https://t.me/silposilpo/3822",
       "msg_id": 3822,
       "row_id": "@silposilpo:3822:0",
@@ -483,5 +770,6 @@
     }
   ],
   "rows_drawn": 50,
+  "rows_sha256_as_drawn": "fe3f5841175a3953b017d85c8eac5085216baafe6679e9e89c55bacace517c3f",
   "seed": 42
 }

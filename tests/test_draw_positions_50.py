@@ -116,20 +116,41 @@ def test_the_labeller_never_sees_the_extraction_he_is_grading(tmp_path):
     _, out, pred = run(db, tmp_path, "a")
     record = json.loads(out.read_text(encoding="utf-8"))
     for row in record["rows"]:
-        assert set(row) == {"row_id", "chain", "carrier", "channel", "msg_id", "week", "link"}
+        # `image` joined the closed list by ruling 03.09 (b) — Dv [cause: ruling]. It is a POINTER
+        # to the page the labeller reads, never an extraction, and the list stays closed so the
+        # next field has to be argued for too ([[guard_list_closed_by_its_anchor]]).
+        assert set(row) == {
+            "row_id", "chain", "carrier", "channel", "msg_id", "week", "link", "image"
+        }
     predicted = [json.loads(line) for line in pred.read_text(encoding="utf-8").splitlines()]
-    assert len(predicted) == len(record["rows"])
-    assert {row["row_id"] for row in predicted} == {row["row_id"] for row in record["rows"]}
+    # The gold is PAGE-level (same ruling), so the predicted set is every extracted row of the pages
+    # the draw came from — a superset of the 50, never a subset: a drawn row missing from it could
+    # not be matched at all.
+    assert len(predicted) >= len(record["rows"])
+    assert {row["row_id"] for row in record["rows"]} <= {row["row_id"] for row in predicted}
     assert all("price_promo" in row and "brand" in row for row in predicted)
+    assert not any(key in row for row in record["rows"] for key in ("price_promo", "brand"))
 
 
-def test_the_record_says_its_population_is_not_yet_the_one_K5_names(tmp_path):
-    """C2 is unbought, and a draw that did not SAY so would be labelled off the wrong rows."""
+def test_the_record_names_the_population_it_was_actually_drawn_from(tmp_path):
+    """A draw that did not SAY which population it came from would be labelled off the wrong rows.
+
+    Re-scoped from `test_the_record_says_its_population_is_not_yet_the_one_K5_names`, Dv [cause:
+    ruling] — that test pinned the LITERAL «PRE-C2», which was true only while C2 was unbought. S4
+    bought it, ruling 03.09 (b) makes this the file the team lead labels, and a test that pins a
+    moment goes on asserting it after the moment passes ([[a_reading_that_outlived_its_state]]).
+    What the record has to do is name the window it read, so that is what is asserted — of BOTH
+    windows, so neither answer can be hard-coded.
+    """
     db = database(tmp_path, {"atb": 100, "varus": 20, "silpo": 10})
     _, out, _ = run(db, tmp_path, "a")
     record = json.loads(out.read_text(encoding="utf-8"))
-    assert record["population_state"].startswith("PRE-C2")
-    assert "Re-draw after S4" in record["population_state"]
+
+    assert record["population_state"] == draw.population_state(FIXTURE_WINDOW)
+    assert record["population_state"].startswith("5c2")
+    assert draw.population_state("w2").startswith("C2")
+    with pytest.raises(SystemExit):
+        draw.population_state("w3")
 
 
 def test_a_missing_store_is_a_non_zero_exit(tmp_path, capsys):
