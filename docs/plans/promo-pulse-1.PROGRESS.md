@@ -34,25 +34,25 @@ $1.9746.** Cycle 3 **$4.2531 of $7.00**, holdout $0.30 untouched; this session s
     `23610346…`), `law.template_sha256 57dd9d25…`, `"iteration": 2` in the pack, rung 0 FITS at the
     dear corner **$1.3193 of $2.4469**. `promo_dev40_prep.json` had been **stale since A(1)** (it
     still measured a render carrying wordless comments), so the shortest smoke unit moves
-    **`@msuaaaa:6523` → `@msuaaaa:7187`** — same rule, fixed input; the predicted red closed by it.
+    **`@msuaaaa:6523` → `@msuaaaa:7187`** — same rule, fixed input. **Two reds, both mine:** the
+    predicted pack one, closed by the pack; and `test_the_layer_reads_nothing_and_parses_nothing` —
+    `aggregates` may not OPEN a path, so `registry.chain_spellings()` reads the sidecar and hands it
+    over. The design moved, never the test.
 
 ## Next — «sources-r3: Маркетопт» (ruling 04.09 (i)), BEFORE the paid B
-Join `marketopt_private` (`+Ejz6ubzm21IyMTQy`, already a registry row) → collect ($0) → census → its
+Join `marketopt_private` (`+Ejz6ubzm21IyMTQy`, a registry row already) → collect ($0) → census → its
 leaflet pages under `prereg_promo_c3.json` **cap $0.50** → a THIRD window through its own seal →
-`make tick` twice → `make promo-screen` shows Маркетопт beside w2; `@ON_LINE_MO` by side file if its
-census shows prices. THEN B: `*_iter2.*`, **≤ $1.9215**.
+`make tick` ×2 → `make promo-screen` shows Маркетопт beside w2. THEN B: `*_iter2.*`, **≤ $1.9215**.
 
 ## Open stop
 **None.** A-rest closed inside its own session; nothing paid or irreversible was reached.
 
 ## Needs named, not built (the standing prompt forbids adding what the phase did not ask for)
-- **A near-quote survives:** «Шикарно. Цілий день тиша, а потім скидка» is not a substring of its
-  dev comment («…а потім вот вам скидка») — the lead decides if that is a quote. **The codebook doc
-  still carries all 11 verbatim**: the lead's file, and (j)2 has it follow from these pairs.
+- **A near-quote survives:** «Шикарно. Цілий день тиша, а потім скидка» is not a substring of its dev
+  comment («…вот вам скидка») — the lead's call. **The codebook doc still carries all 11 verbatim.**
 - **The pod's `check_law` compares `codebook_version` only** (it re-derives every `rendering_sha256`,
   which covers it); **`committed_registration()` ignores `pinned_inputs`**; **`--score` without
-  `--suffix`, and the runbook's K8 `--out`, both still point at the PAID `…_iter1.*` files — B's
-  runbook must repoint them to `*_iter2.*` before it runs.
+  `--suffix`, and the runbook's K8 `--out`, still point at the PAID `…_iter1.*` — B must repoint them.
 - **Coverage is not «every collected channel»:** @kopiyochka1 has an admin account and is not in
   `channel_admins.yaml`; 28 VARUS comments carry `sender_anon_id: null` → recall 874/902 (96.9 %).
 - **Chains the alias file leaves out:** KFC, Roshen, Велмарт, Mono are gold `chain` subjects whose
