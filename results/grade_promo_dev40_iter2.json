@@ -1,0 +1,48 @@
+{
+  "bars": {
+    "signal_type_agreement": {
+      "bar": 0.75,
+      "held": true,
+      "value": 0.8854
+    },
+    "subject_agreement": {
+      "bar": 0.8,
+      "held": false,
+      "value": 0.75
+    }
+  },
+  "by_stratum": {
+    "currency": {
+      "signal_type_agreement": 0.875,
+      "signal_type_threads": 20,
+      "subject_agreed": 48,
+      "subject_agreement": 0.7869,
+      "subject_comments": 61
+    },
+    "decimal_only": {
+      "signal_type_agreement": 0.8958,
+      "signal_type_threads": 20,
+      "subject_agreed": 57,
+      "subject_agreement": 0.7215,
+      "subject_comments": 79
+    }
+  },
+  "contract": "docs/plans/promo-pulse-1.md K8 — the S2 grader ($0)",
+  "definitions": {
+    "signal_type_agreement": "per THREAD: Jaccard over the SET of signal types, averaged; a thread where both sides say nothing scores 1.0 rather than dividing by zero",
+    "subject_agreement": "per COMMENT: (subject_type, subject) after aggregates.promo_key, with `chain` names folded to the chain id by aggregates.chain_key (ruling 04.09 (j) item 1) on gold and prediction alike; denominator = gold comments; a comment the model said nothing about is a miss"
+  },
+  "gold": "/Users/hdv_1987/Desktop/Projects/market-pulse-llm/docs/labels-promo-dev.jsonl",
+  "predicted": "results/promo_dev40_predicted_iter2.jsonl",
+  "readings": {
+    "note": "an abstention is an answer: `unsure` rows stay in the denominator and are counted here, never dropped from it",
+    "unsure_rows": 0
+  },
+  "whole_40": {
+    "signal_type_agreement": 0.8854,
+    "signal_type_threads": 40,
+    "subject_agreed": 105,
+    "subject_agreement": 0.75,
+    "subject_comments": 140
+  }
+}
