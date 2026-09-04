@@ -829,3 +829,13 @@ The «needs named» list stays in PROGRESS as debts; none blocks iteration 2.
    remainder as the guard prints it; `project()`'s KILL against the whole cap stays named). Subject ≥ 0.80 → the holdout NOTICE is the
    open stop, END (the law freeze of (k)2 and the holdout gold are the team lead's, before the registration); RED → the error table, END.
    c3 follows either way, as (l)4.
+
+## Ruling 04.09 (n) — s16 ACCEPTED by diff ($0): the repair is both halves as (m)2 wrote it; the re-emission pins BOTH files; iteration 3 is bought next
+
+1. Accepted: `f872a53` — `balanced_prefix` unfences BEFORE the dispatch and returns a prefix of the emitted text; `promo_prompts.fold` reads a
+   bare array as the rows it is, a non-object element still a parse failure; the law (`CODEBOOK`, template) untouched; `make preflight` 0 pinned
+   paths touched; the one test is §6.5's $0 drill (object · array × fenced · unfenced, three negative controls); the paid record re-parses to
+   the SAME 122 rows and the SAME one failure — iteration 2 stands. PROGRESS ≤60 lines, open stop «none».
+2. The executor's reading is right: `extractor_version` = sha256(rendered prompt) cannot carry a transport repair, so the re-emission pins
+   `scripts/promo_dev_pod_runner.py` AND `src/market_pulse/promo_prompts.py` beside it — that IS (m)5's «runner's sha among the pins», not
+   a new pin. Nothing else moves; the named list stays named. Next session = iteration 3 whole, as (m)5 and PROGRESS «Next» say.
