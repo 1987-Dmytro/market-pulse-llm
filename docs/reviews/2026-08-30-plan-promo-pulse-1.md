@@ -738,3 +738,31 @@ The «needs named» list stays in PROGRESS as debts; none blocks iteration 2.
    not verifying `pinned_inputs` is a named debt, not built now. B is not bought before A(3) lands.
 4. A(4)'s reading writes to `results/promo_dev40_errors_iter1_v1.1.json`; the paid `…_iter1.json` is never rewritten. The runbook's `--out`
    takes the iteration number (`promo_dev40_iter2.jsonl`). C2 collection stays open (not (c)). The rest of the «needs named» list stays as debts.
+
+## Ruling 04.09 (h) — A(1) accepted; A(2)–A(5) and the (g)3 re-emission are ONE item in ONE session; B follows without a team-lead read
+
+1. A(1) `c7a63a7` accepted by diff: `config/channel_admins.yaml` (two ids, resolved from the store, one reader), the render marks 23 and
+   drops 68 = the draw's `n_wordless`, the pack's per-unit sha covers the unpinned file (refusal shown), `make check` 4 313 green.
+2. «One item per session» is for items that carry a check of their own; A(2)–A(5) share one — so they are ONE item, «A-rest», in the
+   next session: `promo_key` chain canonicalisation via the registry's names/aliases (grader + `aggregates`) → the template's ≤12-line
+   examples block → the $0 v1.1 reading into `results/promo_dev40_errors_iter1_v1.1.json` → stub tests → the registration re-emitted
+   under v1.1's shas with `template_sha256` and `"iteration": 2` in the pack → `make check` green. End the turn with NEXT = B.
+3. The examples block is VERBATIM sentences and examples from `docs/CODEBOOK-promo-signals.md` v1.1 §3–§6, each cited by section, never a
+   dev-40 or holdout thread; PROGRESS carries the block. Because the words are the codebook's own, B does not wait for a team-lead read of
+   the render — the team lead reads it with iteration 2's numbers at «iteration 2 read».
+4. B = the runbook with `--out results/promo_dev40_iter2.jsonl`, files `*_iter2.*`, ≤ $1.9746; the debts list stays as it is.
+
+## Ruling 04.09 (i) — Маркетопт's own promo channel is collected NOW: the item goes right after «A-rest», before B
+
+1. The operator authorised joining the private Маркетопт channel on 30.08 (rulings (ц)/(ш)); five days later it is still uncollected —
+   the team lead's sequencing error, not a fork. It becomes the executor's NEXT item after «A-rest», ahead of the paid iteration 2.
+2. The item «sources-r3: Маркетопт»: join `marketopt_private` (`+Ejz6ubzm21IyMTQy`, already a registry row — no registry change) → collect
+   its posts into the live root ($0) → census reading (posts, price/media share, comments) → its leaflet pages through the same S4
+   machinery under its own registration `results/prereg_promo_c3.json`, **cap $0.50** (cycle 3 remaining $2.94 − dev loop $1.97 − holdout
+   $0.30 = $0.67 free) → its positions in a THIRD window through its own seal, exactly as w2 was built → `make tick` twice, the screen
+   shows the Маркетопт rows beside w2's. The check the operator reads: `make promo-screen` renders Маркетопт positions from the new window.
+3. `@ON_LINE_MO` (Маркетопт ON_LINE, 1 091 subscribers, census verdict «enter») is not a registry row: it joins through a side file
+   (`config/registry_extra.yaml`, read beside the sealed registry — the `channel_admins` pattern), same item if the census shows prices,
+   else named in PROGRESS. `@rozlyvne` (beer) and `@marketoptwork` (jobs) are out of scope.
+4. Wholesalers: the operator names them or says «find» — discovery by HTTP of official handles is allowed; they enter through the same
+   side file as a separate item. Nothing in the dev loop waits for this item; B follows it in the next session.
