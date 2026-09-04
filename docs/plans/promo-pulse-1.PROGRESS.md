@@ -22,17 +22,16 @@ worked examples, A(4) the $0 v1.1 reading, A(5) the stub tests of A's code.
 
 ## Open stop — «where `admin_anon_ids` may live»
 **Stop-point.** A(1) puts `admin_anon_ids` in `config/registry.yaml`, a file **21 sealed records** pin
-in four sha families (counted, `results/`): r1 `d4e3b237…` 7 · pre-(13)(b) `920c7f20…` 8 ·
-signed-screen `c82d0cff…` 5 (reconstructed only inside `tests/test_registry.py`) · LIVE `eff8ba5b…` 1
-(`results/prereg_promo_c2.json`, put there by the 02.09 (d) addendum). `@VARUS_channel` (`:36`) and
-`@msuaaaa` (`:45`) are r1-era rows OUTSIDE the r2 bracket, so ANY added line lands in every
-reconstruction. Driven, not reasoned: `run_promo_c2.preflight` passes at HEAD and refuses after one
-added line; `build_aggregates.py:294` reaches the C2 seal from `tests/test_export_dashboard_data.py`,
-so `make check` — session A's own exit condition — goes RED. A fourth revision (`R3_MARK` +
-`registry_before_r3` composed under `registry_before_r2`) restores all four families exactly, and is
-still NOT enough: `run_promo_c2.py::preflight` (`:523-535`, live at `:979`) compares raw bytes, never
-walks revisions, and its own writer says «If the registry moved, that is a refusal for the team lead,
-not a rewrite here».
+in four sha families (counted in `results/`): r1 `d4e3b237…` 7 · pre-(13)(b) `920c7f20…` 8 ·
+signed-screen `c82d0cff…` 5 (rebuilt only inside `tests/test_registry.py`) · LIVE `eff8ba5b…` 1
+(`prereg_promo_c2.json`, via the 02.09 (d) addendum). `@VARUS_channel` (`:36`) and `@msuaaaa` (`:45`)
+are r1-era rows OUTSIDE the r2 bracket, so ANY added line lands in every reconstruction. Driven, not
+reasoned: `run_promo_c2.preflight` passes at HEAD and refuses after one added line, and
+`build_aggregates.py:294` reaches the C2 seal from `tests/test_export_dashboard_data.py` — `make
+check`, session A's own exit condition, goes RED. A fourth revision (`R3_MARK` + `registry_before_r3`
+under `registry_before_r2`) restores all four families exactly and is still NOT enough: that
+preflight (`:523-535`, live at `:979`) compares raw bytes, never walks revisions, and its own writer
+says «If the registry moved, that is a refusal for the team lead, not a rewrite here».
 **Question.** (a) authorise revision r3 in `registry.py` AND teach `preflight` the `run_5c2.py:145-148`
 walk; (b) the ids live outside the registry — no pin moves, the render/pack path is identical; or
 (c) rule C2 collection closed, so only (a)'s first half is needed?
