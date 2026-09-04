@@ -2,24 +2,24 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-09-04 16:26:48 (every SessionStart)
+**Auto-refreshed:** 2026-09-04 18:16:11 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
-97880de docs(progress): the $0 write moved the corpus anchor, and the census artifact is inside the stop
-e6299fe docs(progress): the $0 leg of «sources-r3» is done; the paid leg has no instrument
-449cab1 fix(collect): the invite form Telethon reads is `t.me/+hash`, not `+hash`
-32d05ba knowledge: session 13's checkpoint artifacts, left uncommitted by the auto-end
-b2a4a1b docs(lead): ruling 04.09 (k) — A-rest accepted in full, B at ≤ $1.9215
+c46f9e3 docs(lead): ruling 04.09 (n) — s16 accepted by diff, and the map moved with it
+6aabc3c docs(progress): the stop's cost is measured, and the re-emission must pin BOTH halves of the repair
+65ae76c docs(progress): the stop is closed by (m), the dispatch is repaired, next is iteration 3's re-emission
+f872a53 fix(promo-dev): unfence BEFORE the dispatch, and a bare array is the rows it is
+b220acc docs(lead): ruling 04.09 (m) + PHASE v5 + the day's stop-pattern review, committed by path
 ```
 
 ## 📋 Recent decisions
 
 - `INDEX.md` — Decision records
+- `the-fence-defeats-the-dispatch-that-fixes-the-array.md` — The fence defeats the dispatch that fixes the array
 - `the-invite-hash-is-resolved-at-the-call-site.md` — The invite hash is resolved at the call site, not in the registry
-- `the-sealed-file-does-not-grow-it-gets-a-sibling.md` — A file 21 seals pin does not grow — the new key gets a sibling file (ruling 04.09 (g), option b)
 
 ## 📅 Recent daily logs
 
@@ -29,37 +29,37 @@ b2a4a1b docs(lead): ruling 04.09 (k) — A-rest accepted in full, B at ≤ $1.92
 
 <!-- AUTO-GEN END (everything below preserved across refreshes) -->
 # Hot Cache — curated
-**Last update:** 2026-09-04 (s15, B куплена: $0.2239). Этап 1 `SPEC-v2`, карта `STATUS.md`, цикл `PROCESS.md` v3. Руками, ≤40 строк.
+**Last update:** 2026-09-04 (close дня). Этап 1 `SPEC-v2`, карта `STATUS.md`, цикл `PROCESS.md` v3,
+файл фазы **PHASE v5**. Руками, ≤40 строк.
 
 ## 🔥 What's Hot
-**⛔ ОТКРЫТЫЙ СТОП — «iteration 2 read».** Субъект **0.7500** против бара 0.80 (итерация 1 по тому
-же v1.1-голду — 0.8214), сигналы **0.8854** ✅. **ВЕСЬ провал — один тред** `@VARUS_channel:6216`:
-18 → 0 строк; без него было бы **0.8786**, а на 122 комментах вне него итерация 2 ЛУЧШЕ (17 против 25).
+**Открытого стопа НЕТ.** Рулинг **(m)** закрыл «iteration 2 read»: итерация 2 стоит как измерена
+(сигналы **0.8854** ✅, субъект **0.7500** ❌ — весь провал один тред `@VARUS_channel:6216`, 18 → 0),
+починка = **НОВЫЙ инструмент = итерация 3** в той же сессии; **плато нет** (0 из 2); B закрыта.
 
-**🔬 Транспорт, а не закон.** Ответ пришёл ARRAY внутри ```json-забора; `balanced_prefix`
-(`promo_dev_pod_runner.py`) диспатчит массив по `text.lstrip().startswith("[")` — забор делает это
-False (`fenced_answers: 40 из 40`), сработало правило объекта, а оно же стоит на СТОПЕ ГЕНЕРАЦИИ
-(213 симв., 5.9 с, `finish stop`): 17 ответов НЕ СГЕНЕРИРОВАНЫ, парсером не вернуть. Проверено:
-массивный ответ **1 из 40**; `9014` (11→1) и `9999` (6→5) — целые объекты, 0 голд-строк.
+**✅ Починка сделана и ПРИНЯТА рулингом (n) по диффу (s16, $0, `f872a53`).** `balanced_prefix` читает забор через
+`promo_prompts.unfence` ПЕРВЫМ, диспатчит по форме ВТОРЫМ; `fold` читает голый массив как строки.
+ОДИН тест = $0-дрилл §6.5. `make check` **4 320 / 2 skipped**. Платная запись НЕ двигается: перепарс
+`_iter2` даёт те же 122 строки и тот же один parse failure.
 
-**❓ Тимлиду (в PROGRESS).** Починка диспатча — ДЕФЕКТ (тот же `extractor_version`, итерация 2
-перекупается) или НОВЫЙ ИНСТРУМЕНТ (03.09 (c) 3 → итерация 3)? От этого зависит, что куплено за
-$0.2239: чтение ЗАКОНА или ТРАНСПОРТА. И второй: рост или плато?
+## ⏭️ Next — итерация 3, ОДНОЙ сессией ((m)5)
+Переиздание регистрации (`iteration: 3`; **пиннуть sha И раннера, И `promo_prompts.py`** — половина
+починки в каждом, `check_law` не покрывает ни одного; `extractor_version` = `sha256(rendered)` и
+идентичность нести НЕ может) → три числа ДО смока → покупка → K8 → таблица ошибок с диффом.
+Субъект ≥ 0.80 → НОТИС холдаута = стоп, END; красный → таблица, END. Потом «c3» по (l) 2–4.
+Раннбук: репоинтить `_iter2`-пути и юниты смока `7187/9006/6009`.
 
-**💰** Шаг `promo-dev-loop` ОТКРЫТ: **$0.7493 из $2.4469**, осталось $1.6977 — гарду `--close` НЕ
-звать, итерации 3–5 обязаны влезть. Цикл 3: **$4.5265 из $7.00, REMAINING $2.4735** (баланс-дельта,
-биллинг отстаёт). Кап c3 = min($0.50, REMAINING−$0.30) = **$0.50**; холдаут $0.30 цел.
+**💰** Шаг `promo-dev-loop` ОТКРЫТ: **$0.7493 из $2.4469, осталось $1.6977** — гарду `--close` НЕ
+звать, итерации 3–5 обязаны влезть. Цикл 3: **$4.5265 из $7.00, REMAINING $2.4735** (дельта баланса,
+биллинг отстаёт 30–40 мин). Кап c3 = **$0.50**; холдаут $0.30 цел. Одна леджер-строка за сессию.
 
-
-## ⏭️ Next / 🚧 Blockers
-**Ждём рулинг по стопу**, потом «c3» одной сессией (рулинг (l) 2–4). Раннбук `promo_dev_1.md` уже
-на `_iter2` — ни одной ссылки на ПЛАТНЫЕ `…_iter1.*`, юниты смока `7187/9006/6009`. Долги: лег B в ОБЕИХ итерациях
-вернул `[]` на всех 16 постах · голд покрывает 140 из 208 комментов (меньше строк — выше процент) ·
-`committed_registration()` не смотрит `pinned_inputs` (сверено руками, держат) · `check_law` — только
-`codebook_version` · `project()` меряет KILL против ВСЕГО капа шага. **⚠️ Не гонять `make check` во
-время платной сессии** (параллельный прогон — красный ERROR в `test_zero_spend_45g5.py`, на тихом
-дереве 4 319 / 2 skipped) · **⚠️ ДЛИННЫЙ ПРОГОН ТОЛЬКО ОТЦЕПЛЁННЫМ** (`os.setsid`) · **⚠️ K4 НЕ
-ПЕРЕЗАПУСКАТЬ** · **⛔ `1925810730` неадресуем** · **⛔ `aggregates.py` НЕ СМЕЕТ открывать путь**.
+## 🚧 Blockers / долги (названы, не построены)
+`pod.main` не снимает свой патч с `reader_v5` · `committed_registration()` не смотрит
+`pinned_inputs` · тест `resolvable()` с `+` разрешён (l)1, не написан · `project()` меряет KILL
+против ВСЕГО капа шага · голд — 140 из 208 комментов · near-quote «Шикарно…» ждёт заморозки ((k)2).
+**⚠️ Не гонять `make check` во время платной сессии** · **⚠️ ДЛИННЫЙ ПРОГОН ТОЛЬКО ОТЦЕПЛЁННЫМ**
+(`os.setsid`) · **⚠️ K4 НЕ ПЕРЕЗАПУСКАТЬ** · **⛔ `1925810730` неадресуем** · **⛔ `aggregates.py`
+НЕ СМЕЕТ открывать путь**.
 
 ## 🔫 Footguns этого файла
 **⛔ ЭТОТ ФАЙЛ ГРЕПАЕТСЯ КАК ВХОД — ДВА ЛИТЕРАЛА.** `scripts/volume_calc_5c1.py :: quoted()` берёт обе строки ниже посимвольно; пропажа любой роняет девять `tests/test_volume_calc_5c1.py`.
