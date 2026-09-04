@@ -32,24 +32,24 @@ Cycle 3: $4.0631 of $7.00, REMAINING $2.9369; holdout $0.30 untouched. **This se
   **`make check` 4 313 passed, 2 skipped, exit 0** (681.84 s) — the same count as the previous HEAD.
   `git status --porcelain src tests scripts config results docs/plans docs/reports` prints nothing.
 
-## Next
-A(2) `promo_key` chain canonicalisation via the registry's names/aliases (grader + `aggregates`);
-then A(3) the template's ≤12-line worked-examples block, A(4) the $0 v1.1 reading into
-`results/promo_dev40_errors_iter1_v1.1.json`, A(5) the stub tests of A's code.
+## Next — «A-rest», ONE item (ruling 04.09 (h) item 2: A(2)–A(5) share one check, so they are one)
+`promo_key` chain canonicalisation via the registry's names/aliases (grader + `aggregates`) → the
+template's ≤12-line examples block, VERBATIM from codebook v1.1 §3–§6 with each sentence's section
+cited, never a dev-40 or holdout thread, the block copied into PROGRESS → the $0 v1.1 reading into
+`results/promo_dev40_errors_iter1_v1.1.json` → stub tests → the registration re-emitted under v1.1's
+shas with `template_sha256`, and `"iteration": 2` in the pack → `make check` green. End with NEXT = B
+(the runbook at `--out results/promo_dev40_iter2.jsonl`, files `*_iter2.*`, ≤ $1.9746). B does NOT
+wait for a team-lead read of the render: the words are the codebook's own ((h) item 3).
 
-## Open stop — none. A(1) is committed, the tree is clean, `make check` green at `c7a63a7`.
+## Open stop — none. A(1) accepted by ruling (h) item 1; tree clean, `make check` green at `c7a63a7`.
 
 ## Needs named, not built (the standing prompt forbids adding what the phase did not ask for)
-- **`build_pack` still writes `"iteration": 1`** and the pack it now writes is the v1.1-marker one.
-  A(3) moves the render again, so the pack is rebuilt a third time; the literal belongs to the (g)3
-  re-emission, not to A(1), and changing it now would be scope this session does not have.
 - **The dev-loop registration's pinned gold and codebook MOVED** under the lead's own v1.1 commit
   `7675946`: `prereg_promo_dev_loop.json` pins `302113b8…`/`6a74bc81…`, HEAD is `2303ea43…`/`23610346…`.
   `committed_registration()` only checks the prereg is tracked and unmodified — nothing re-verifies
   `pinned_inputs`, so both pass SILENTLY. (g)3 re-emits the record for B; the debt is that check.
-- **`check_law` compares `codebook_version` only**, and A(1) did not move `CODEBOOK`: a v1.1-marker
-  checkout hashes as iteration 1's law did. Only (g)3's `template_sha256` separates the two
-  instruments in a record; until then the per-unit `rendering_sha256` is the whole guard.
+- **`check_law` compares `codebook_version` only** and A(1) did not move `CODEBOOK`: only (g)3's
+  `template_sha256` separates the two instruments in a record — A-rest builds it.
 - **Coverage is not «every collected channel».** @kopiyochka1 has such an account too and is NOT in
   the new file: outside dev-40, outside the ruling, two handles for one id (per-source vs
   per-channel undecided). 28 VARUS comments carry `sender_anon_id: null` → recall 874/902 (96.9 %).
