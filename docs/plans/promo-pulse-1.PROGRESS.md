@@ -11,50 +11,50 @@ Cycle 3: $4.0631 of $7.00, REMAINING $2.9369; holdout $0.30 untouched. **This se
 - **2026-09-03 s9 — ITERATION 1 RAN WHOLE** (pod `0z95ve2n570f0t`, 2 120 s, $0.4358): 56/56 units,
   signal 0.8792 HOLDS 0.75, subject 111/140 = 0.7929 against 0.80. Files:
   `results/promo_dev40_predicted_iter1.jsonl` · `grade_promo_dev40_iter1.json` · `…errors_iter1.json`.
-- **2026-09-04 s10 — ruling (f) committed** (`7675946`) + s9's knowledge (`5fcecad`); the stop came
-  before any edit, and ruling **(g)** answered it with option (b) (`5d6aecf`).
-- **2026-09-04 s11 — A(1) BUILT** (`c7a63a7`, $0). `config/channel_admins.yaml` is a NEW file, the
-  registry untouched: each prefix the codebook names resolves to exactly ONE `sender_anon_id`, in
-  exactly one channel, across all of `data/raw/comments/` (VARUS `2fa2b73f…`, msuaaaa `58805a36…`).
-  `promo_prompts.admin_ids` is its only reader; the marker is the ID, so a `null` sender matches
-  nothing; wordless comments leave the render. The flag rides IN the pack (`comments` entries are now
-  `[msg_id, text, sender_anon_id]`), since the pod re-renders from those rows and nothing else; the
-  pod names the columns, so an older pack of pairs still renders.
-  **Checks, all shown in the transcript.** Over the 40 dev threads: dropped wordless lines **68** =
-  the draw's own summed `n_wordless` **68**; `[admin] ` markers **23** = admin comments WITH text
-  **23** (= 82 − 59). `@VARUS_channel:9999` printed before/after: it gains `[19483] [admin] Розуміємо
-  вас…` and loses the blank `[19485]`. The pod's own checker accepts **56/56** on the rebuilt pack and
-  REFUSES at `@VARUS_channel:2537` when the admins file diverges — the unpinned config is covered by
-  the per-unit sha, demonstrated not asserted. Against the pack iteration 1 was rendered from: leg B's
-  16 shas unmoved, leg A's `(msg_id, text)` identical, 26 of 40 renders moved — the live store grew
-  nothing into the rebuild. `promo_dev40_prep.json` still hashes the pinned `7971ed66…`, and the drop
-  can move no denominator: `promo_hooks.screen` has no caller outside `tests/`.
-  **`make check` 4 313 passed, 2 skipped, exit 0** (681.84 s) — the same count as the previous HEAD.
-  `git status --porcelain src tests scripts config results docs/plans docs/reports` prints nothing.
+- **2026-09-04 s10/s11 — A(1) BUILT AND ACCEPTED** (`c7a63a7`; ruling (h) item 1, $0): the admin ids
+  in the NEW `config/channel_admins.yaml`, the registry untouched; `[admin]` marks 23 and the render
+  drops 68 = the draw's `n_wordless`; the pack's per-unit sha covers the unpinned file (refusal shown).
+- **2026-09-04 s12 — rulings (h)+(i) committed by path (`ec1b55a`), s11's knowledge (`1590ab8`).**
+  A-rest stopped BEFORE its first edit, on two $0 in-transcript measurements: (1) the v1.1 re-reading of
+  iteration 1's own replies reproduces the lead's number exactly — **114/140 = 0.8143**, 26 misses; not
+  written to a file, since the out-path A(4) needs is part of the stopped item. (2) the leak check.
 
-## Next — «A-rest», ONE item (ruling 04.09 (h) item 2: A(2)–A(5) share one check, so they are one)
-`promo_key` chain canonicalisation via the registry's names/aliases (grader + `aggregates`) → the
-template's ≤12-line examples block, VERBATIM from codebook v1.1 §3–§6 with each sentence's section
-cited, never a dev-40 or holdout thread, the block copied into PROGRESS → the $0 v1.1 reading into
-`results/promo_dev40_errors_iter1_v1.1.json` → stub tests → the registration re-emitted under v1.1's
-shas with `template_sha256`, and `"iteration": 2` in the pack → `make check` green. End with NEXT = B
-(the runbook at `--out results/promo_dev40_iter2.jsonl`, files `*_iter2.*`, ≤ $1.9746). B does NOT
-wait for a team-lead read of the render: the words are the codebook's own ((h) item 3).
+## Next — «A-rest» (ruling (h) item 2), BLOCKED on the open stop
+Then, by ruling 04.09 **(i)**: «sources-r3: Маркетопт» — join `marketopt_private`, collect, census, its
+leaflet pages under `results/prereg_promo_c3.json` **cap $0.50**, a THIRD window, `make promo-screen`
+beside w2's. AFTER A-rest, BEFORE B. Only then B: `--out results/promo_dev40_iter2.jsonl`, ≤ $1.9746.
 
-## Open stop — none. A(1) accepted by ruling (h) item 1; tree clean, `make check` green at `c7a63a7`.
+## Open stop — A(2)'s premise is false, and A(3)'s fifth category has no clean example
+**Stop-point: a design fork the plan does not settle.** Ruling (f)(б) folds chain names «via the
+registry's names/aliases». `Source` has NO alias field, «Варус» occurs **0 times** in
+`config/registry.yaml`, and (g)1 forbids moving that file. Measured on iteration 1: of 5 chain-vs-chain
+misses, 3 (`додаток`, `програма лояльності`, `сертифікати`, all in `@VARUS_channel:5186`) are A(3)'s
+examples, not folding, and `msuaaaa`→`Roshen` folds in no branch. So **(b)** fold via
+`id`/`name`/`telegram_channels` only = **+0 rows** (both sides already collide under `promo_key`'s
+NFC+lower — measured, not guessed); **(a)** a new alias carrier = **+1 row**, its content a synonym list
+built from the dev-40 misses; **(c)** Cyrillic↔Latin = **+1 row**, named nowhere. An `aliases` field on
+`Source` would void `prereg_promo_c2.json`'s live pin `eff8ba5b…` with `make check` still GREEN.
+**Q1 — A(2) is (a), (b) or (c)?** **Q2 —** (f)3's fifth category «bare reply → post» has NO clean
+codebook example: all four of §6's are gold rows (8044, 20083, 8049, +1). Rule sentence with no example,
+or does the lead supply one? The other four categories DO have clean examples.
+**Tree:** nothing in `src/ tests/ scripts/ config/ results/` moved; HEAD `1590ab8`; `make check` 4 313
+passed / 2 skipped carries by inspection (`c7a63a7`→HEAD touches only `docs/` and `knowledge/`).
 
 ## Needs named, not built (the standing prompt forbids adding what the phase did not ask for)
-- **The dev-loop registration's pinned gold and codebook MOVED** under the lead's own v1.1 commit
-  `7675946`: `prereg_promo_dev_loop.json` pins `302113b8…`/`6a74bc81…`, HEAD is `2303ea43…`/`23610346…`.
-  `committed_registration()` only checks the prereg is tracked and unmodified — nothing re-verifies
-  `pinned_inputs`, so both pass SILENTLY. (g)3 re-emits the record for B; the debt is that check.
+- **The SHIPPED `promo_prompts.CODEBOOK` quotes 11 dev-40 gold comments verbatim** (of its 27 literals
+  ≥8 chars) — «Розуміємо вас», «Фото вже прибрали», «так працює система», «Торгівля повітрям», +7.
+  Iteration 1's 0.7929 was measured on an instrument that had seen 7.9 % of its own denominator.
+  **All 11 are dev; the holdout is CLEAN** — the real claim is intact. CODEBOOK moves only by the lead.
+- **The registration's pinned gold and codebook MOVED** under the lead's v1.1 commit `7675946`: it pins
+  `302113b8…`/`6a74bc81…`, HEAD is `2303ea43…`/`23610346…`. `committed_registration()` only checks the
+  prereg is tracked and unmodified — nothing re-verifies `pinned_inputs`, so both pass SILENTLY.
 - **`check_law` compares `codebook_version` only** and A(1) did not move `CODEBOOK`: only (g)3's
   `template_sha256` separates the two instruments in a record — A-rest builds it.
-- **Coverage is not «every collected channel».** @kopiyochka1 has such an account too and is NOT in
-  the new file: outside dev-40, outside the ruling, two handles for one id (per-source vs
-  per-channel undecided). 28 VARUS comments carry `sender_anon_id: null` → recall 874/902 (96.9 %).
-- **`--score --iteration 1` rewrites `results/promo_dev40_errors_iter1.json` in place** — A(4) needs
-  the out-path (g)4 names. The runbook's `--out` is still iteration-1-specific: a B run under that
-  name overwrites the committed iteration-1 raw replies.
-- Report-only drift: `gates.terminate_after_minutes` (90) is voided by ruling (d) and still printed at
-  every rung-1 GO; `rung_0.dear_usd` prices 279 s where the gate allows 560; `--go-deadline` unpriced.
+- **A TEMPLATE edit reddens exactly one test** — `test_the_pack_pins_exactly_what_the_pod_re_derives`,
+  by `SystemExit` in the pod runner: the 40 leg-A `rendering_sha256` go stale. A-rest's own pack
+  re-emission is the fix, the test untouched; the v1.1 registration must be COMMITTED before `--pack`.
+- **Coverage is not «every collected channel»:** @kopiyochka1 has such an account and is NOT in
+  `channel_admins.yaml`; 28 VARUS comments carry `sender_anon_id: null` → recall 874/902 (96.9 %).
+- **`--score --iteration 1` rewrites `results/promo_dev40_errors_iter1.json` in place** — A(4) needs the
+  out-path (g)4 names. Report-only drift: `gates.terminate_after_minutes` (90) is voided by ruling (d)
+  and still printed at every rung-1 GO; `rung_0.dear_usd` prices 279 s where the gate allows 560.
