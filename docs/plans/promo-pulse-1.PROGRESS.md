@@ -50,11 +50,11 @@ census shows prices. THEN B: `*_iter2.*`, **≤ $1.9215**.
   dev comment («…а потім вот вам скидка») — the lead decides if that is a quote. **The codebook doc
   still carries all 11 verbatim**: the lead's file, and (j)2 has it follow from these pairs.
 - **The pod's `check_law` compares `codebook_version` only** (it re-derives every `rendering_sha256`,
-  which covers the template); **`committed_registration()` ignores `pinned_inputs`**; **`--score`
-  without `--suffix`** still rewrites the paid pair in place.
+  which covers it); **`committed_registration()` ignores `pinned_inputs`**; **`--score` without
+  `--suffix`, and the runbook's K8 `--out`, both still point at the PAID `…_iter1.*` files — B's
+  runbook must repoint them to `*_iter2.*` before it runs.
 - **Coverage is not «every collected channel»:** @kopiyochka1 has an admin account and is not in
   `channel_admins.yaml`; 28 VARUS comments carry `sender_anon_id: null` → recall 874/902 (96.9 %).
 - **Chains the alias file leaves out:** KFC, Roshen, Велмарт, Mono are gold `chain` subjects whose
   spellings could only come from the exam; `marketopt_private` is `marketopt_promo`'s own chain.
-- Report-only drift: `gates.terminate_after_minutes` (90) is voided by ruling (d) and still printed
-  at every rung-1 GO; `rung_0.dear_usd` prices 279 s of overhead where the gate allows 560.
+- Report-only drift: `terminate_after_minutes` 90 is voided by ruling (d) yet printed at every rung-1 GO; `rung_0.dear_usd` prices 279 s of overhead where the gate allows 560.
