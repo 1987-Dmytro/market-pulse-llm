@@ -766,3 +766,18 @@ The «needs named» list stays in PROGRESS as debts; none blocks iteration 2.
    else named in PROGRESS. `@rozlyvne` (beer) and `@marketoptwork` (jobs) are out of scope.
 4. Wholesalers: the operator names them or says «find» — discovery by HTTP of official handles is allowed; they enter through the same
    side file as a separate item. Nothing in the dev loop waits for this item; B follows it in the next session.
+
+## Ruling 04.09 (j) — A(2) is a side file of chain spellings; the 11 verbatim dev quotes leave the law; every example is synthetic and checked against the store
+
+1. **A(2) = (a), principled, not per-miss:** `config/chain_aliases.yaml` (the `channel_admins` pattern — the registry does not move) lists,
+   per registry chain id, its nominative spellings in Latin and Cyrillic derived from the chain's NAME (`varus: [VARUS, Varus, Варус]`,
+   `silpo: [Сільпо, Silpo]`, `atb: [АТБ, ATB]`, `mcdonalds: [McDonald’s, McDonald's, Макдональдс]`…) — never a synonym harvested from a
+   miss. `promo_key` folds `chain` rows through it, gold and predicted alike. +1 row on dev today; the dashboard's one-id-per-chain tomorrow.
+2. **The leak is real and is closed now, at $0.** The 11 dev-40 comments quoted verbatim in `promo_prompts.CODEBOOK` are replaced by
+   paraphrases of the same shape; the old→new pairs go into PROGRESS; a check shows none of the new strings (and none of A(3)'s examples)
+   is a substring of any dev-40 or holdout-40 comment text. `codebook_version` moves (law v1.2); `docs/CODEBOOK-promo-signals.md` follows
+   at the next acceptance from those pairs. Iteration 1 stands as measured, marked in STATUS «instrument had seen 11 of 140 dev comments»;
+   the dev bar is claimed only from iteration 2 on; the holdout claim was never touched.
+3. **A(3), fifth category — the examples are the team lead's, synthetic:** «Ну да» · «Ок, зрозуміло» · «+1» · «І що?» → `post`. (h)3 is
+   amended: examples are synthetic paraphrases in the codebook's shape, cited by section, never store text.
+4. Order unchanged: A-rest (with 1–3) → «sources-r3: Маркетопт» (ruling (i)) → B.
