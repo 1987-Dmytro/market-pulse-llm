@@ -1,10 +1,11 @@
 {
   "instruments": {
     "leg_a": {
-      "codebook_version": "a694d005972d3a66dd5ca74402a0091faca110be0e3e335c9c97f3793cf5130a",
+      "codebook_version": "a587e0d6d50462552a483a688533cae275c28c0959cc01a9673ea860b912f7d7",
       "module": "src/market_pulse/promo_prompts.py",
-      "sha256": "58d6e1edd61fabdc6b0c118908fe41285a3fe63c1cdf3ede8826dde24c2ebfdb",
-      "task": "promo_signals_gm4_v1"
+      "sha256": "8d52ee79fe9fd7a3f5f7b59e5840ed49c09b4d9f9d01558792003cd155979e42",
+      "task": "promo_signals_gm4_v1",
+      "template_sha256": "57dd9d25dd54a1d58dfa2efe1980cdfbb0a97c9e0c27d7f3101131945f42e79a"
     },
     "leg_b": {
       "module": "src/market_pulse/prompts.py — REGISTERED",
@@ -23,26 +24,31 @@
   "items": [
     {
       "channel": "@msuaaaa",
-      "chars": 4895,
+      "chars": 5751,
       "comments": [
         [
-          5208,
-          "Лімо😍",
-          "b4742cb7c81f60b17d3480c562577c830e841077e43724b36f37487849f1e017"
+          6284,
+          "👍",
+          "25fab095a085d39082a127eac637c1ae322aa9f3f7b2fcc33a04d6be3f5793f8"
+        ],
+        [
+          6285,
+          "",
+          "d639298ec31179c0383f71bdbdab75035fd36659f1385f7c007ad4c42e3fcd9f"
         ]
       ],
-      "id": "@msuaaaa:6523",
+      "id": "@msuaaaa:7187",
       "leg": "a",
-      "post": "Знижки  в АТБ 😜🤪\n\n🗓з 27.08.2025 по 02.09.2025\n\nВигода до -51%",
-      "post_id": "6523",
-      "rendering_sha256": "e24bfcfdedd15139ad350e5f9a1fbdd003d73f25410f3d1a1c32c88d1e12382a",
+      "post": "Знижки в АТБ 😜🤪\n\n🗓з 08.10.2025 по 14.10.2025\n\nВигода до -46%",
+      "post_id": "7187",
+      "rendering_sha256": "2ec85f480df82ca61826d4199439c6dd164dbc5f9b4f436212f005004f07a2ee",
       "smoke": true,
       "task": "promo_signals_gm4_v1",
-      "thread": "@msuaaaa:6523"
+      "thread": "@msuaaaa:7187"
     },
     {
       "channel": "@VARUS_channel",
-      "chars": 5202,
+      "chars": 6063,
       "comments": [
         [
           16691,
@@ -59,14 +65,14 @@
       "leg": "a",
       "post": "Якщо все, що тобі хочеться в таку погоду — це пірнути у прохолодний басейн, то маємо альтернативу. Басейн акцій на різне-прерізне!\n\n📍Акції діють з 12.05 до 25.05\n\nБільше приємного шукай у супермаркетах VARUS\nабо на VARUS.UA🧡",
       "post_id": "9006",
-      "rendering_sha256": "edf2ee56092acfbf317b26e3dd7cbe75d6f96b8fc5f749f79106e0489fb150e4",
+      "rendering_sha256": "52f0056d93135eabede62821d41d3be0694ec50df37ba6be5e49265775a953bd",
       "smoke": true,
       "task": "promo_signals_gm4_v1",
       "thread": "@VARUS_channel:9006"
     },
     {
       "channel": "@VARUS_channel",
-      "chars": 8162,
+      "chars": 9023,
       "comments": [
         [
           8030,
@@ -178,14 +184,14 @@
       "leg": "a",
       "post": "Хто Щастябокс придбає, той обовʼязково знайде сертифікат із промокодом від нашого партнера АЗК WOG 🤩\n\nВаріантів промокоду декілька: \n\n🔸 бонуси на наступну заправку якісним пальним на WOG \n🔸 30% бонусами на WOG CAFE\n🔸 50 грн бонусами на WOG PRIDE \n\nЦікаво, який дістанеться тобі? Шукай Щастябокс у супермаркетах VARUS та на VARUS.UA 🧡\n\nP.S. Для учасників гри тамагочі-Варусятко на бокс діє знижка 30%",
       "post_id": "6009",
-      "rendering_sha256": "332c5ec80e51798e53c62b428417c8c8e8d9d2c7f01c9f20d4f2ccdaac06d4b0",
+      "rendering_sha256": "edef28ea1fc8c1ab39747a83b1dc02e7a4aeb5438decdc0b2a9ce80d7b0b7a75",
       "smoke": true,
       "task": "promo_signals_gm4_v1",
       "thread": "@VARUS_channel:6009"
     },
     {
       "channel": "@VARUS_channel",
-      "chars": 5372,
+      "chars": 6233,
       "comments": [
         [
           1681,
@@ -207,14 +213,14 @@
       "leg": "a",
       "post": "Допомагати ще ніколи не було так просто, смачно та приємно 💪 \n\nДостатньо просто взяти собі за звичку класти в кошик товари з лого «ГеройCar». Бо кожна така покупка дорівнює донату 1 грн на авто для ЗСУ. \nДо речі, в рамках проєкту було передано вже 27 авто! \n\nА в каруселі зібрали товари від наших постачальників, які підтримали масштабну благодійну кампанію VARUS і Герой Car. \n\nЗнайомся, і нумо мчати до Перемоги разом!",
       "post_id": "2537",
-      "rendering_sha256": "92f06613b99284759ed248400bc4d7a81f763fc66460bcbaad5a679f24a935cf",
+      "rendering_sha256": "2295330a356dfa635568474501d11a26da6474d9f46d46606d58478a0d5ef847",
       "smoke": false,
       "task": "promo_signals_gm4_v1",
       "thread": "@VARUS_channel:2537"
     },
     {
       "channel": "@VARUS_channel",
-      "chars": 5201,
+      "chars": 6062,
       "comments": [
         [
           6903,
@@ -226,14 +232,14 @@
       "leg": "a",
       "post": "Твій кошик поповнюється смаколиками, а збір на автівки для 424-го батальйону безпілотних систем «SVAROG» — гривнями.\n\nГоловне — обирати товари з логотипом ГеройCar, адже 1 грн з кожного такого товару йде на потреби Захисників.\n\nЗараз мета збору — закупити 75 автівок, вони дуже потрібні військовим для виконання завдань.\n\nМчимо до Перемоги разом на крилах 🧡",
       "post_id": "5589",
-      "rendering_sha256": "3eb9633fbad027ad28f31d902569b42fdb537fd7285d9f4fd1b285862cbe098d",
+      "rendering_sha256": "c8c817fd478fc4fb80885ec202b9a0a915b8697f7918b918efa29efb6315c42a",
       "smoke": false,
       "task": "promo_signals_gm4_v1",
       "thread": "@VARUS_channel:5589"
     },
     {
       "channel": "@VARUS_channel",
-      "chars": 5837,
+      "chars": 6698,
       "comments": [
         [
           19477,
@@ -270,14 +276,14 @@
       "leg": "a",
       "post": "Наша #знижкосереда вже тут, щоб зробити літо ще солодшим 🍓\n\nЛови знижку 25% на чеки від 1000 грн із промокодом FRESHSWEET25 на замовлення:\nфруктів, морозива, йогуртів та печива 😋\n\n👉 Термін дії промокоду: з 25.06.2026 до 08.07.2026.\n👉 Наступний секретний промокод з’явиться зовсім скоро й лише для нашого Telegram-ком’юніті.\n\nЗнижка має свої правила:\n📍 не поширюється на акцизні товари, пакети та вартість доставки;\n📍 не діє на акційні товари та тютюнові вироби;\n📍 не може перевищувати 500 грн на одне замовлення.\n\nДодавай у кошик усе для солодких моментів літа на VARUS.UA 🧡",
       "post_id": "9999",
-      "rendering_sha256": "20caf9d3fcb47af16e648ca41e0c3b8687437aa170afa7ce3e309d4bac933f0f",
+      "rendering_sha256": "e4fd12a114b44976023b062743d5452f83ec496bbe4898705d377811a36111ab",
       "smoke": false,
       "task": "promo_signals_gm4_v1",
       "thread": "@VARUS_channel:9999"
     },
     {
       "channel": "@msuaaaa",
-      "chars": 4963,
+      "chars": 5824,
       "comments": [
         [
           12388,
@@ -289,14 +295,14 @@
       "leg": "a",
       "post": "Купони KFC 🍔 – в застосунку 📲\n\n🔥ТІЛЬКИ 3 ЧЕРВНЯ\nГРАНДЕР БУРГЕР 1+1 🌯\n🪙 Усього 242 грн",
       "post_id": "10121",
-      "rendering_sha256": "0ce0e022706e6f7f632628f39783742239969c0be55d3ebb273001b6d41afccf",
+      "rendering_sha256": "5270fab77a0ae19b8a31a87f4cd19d82c94eacad9ce0ce5b031e6c919a06235b",
       "smoke": false,
       "task": "promo_signals_gm4_v1",
       "thread": "@msuaaaa:10121"
     },
     {
       "channel": "@msuaaaa",
-      "chars": 5235,
+      "chars": 6096,
       "comments": [
         [
           12507,
@@ -333,14 +339,14 @@
       "leg": "a",
       "post": "🍔 У McDonald’s вже з’явилося нове МакМеню з колекційними футбольними стаканами до FIFA 2026! 🏆🆗\n\nЦіни стартують від 235 грн 🪙",
       "post_id": "10169",
-      "rendering_sha256": "6e89a22a26e2fb6953b5eaa5d6b7039082d507618e5eb1916f17f8ba8a3ed69d",
+      "rendering_sha256": "9f914d904b9f0dbaf3dbdcf02b93b9bae428809004601c455769e7fa8af1b7a6",
       "smoke": false,
       "task": "promo_signals_gm4_v1",
       "thread": "@msuaaaa:10169"
     },
     {
       "channel": "@msuaaaa",
-      "chars": 5350,
+      "chars": 6211,
       "comments": [
         [
           12638,
@@ -382,14 +388,14 @@
       "leg": "a",
       "post": "Знижка на чипси Люкс у 🥲😊\n\n Лише по 29,99 грн 🍿 \n🗓 з 12 по 13 червня",
       "post_id": "10219",
-      "rendering_sha256": "85baca0e6f723d1e54a66b598871de543d944d998783648bfd0b3c750d5c0020",
+      "rendering_sha256": "5c3764f02f4ecbd845e8f2e1bf98cf644f9f5cfa17786f8ab6a7c2402e206fd7",
       "smoke": false,
       "task": "promo_signals_gm4_v1",
       "thread": "@msuaaaa:10219"
     },
     {
       "channel": "@msuaaaa",
-      "chars": 4968,
+      "chars": 5829,
       "comments": [
         [
           13519,
@@ -406,14 +412,14 @@
       "leg": "a",
       "post": "🍺 -64% на безалкогольне пиво в Ашан 🤒\n\nПИВО BAVARIA\nPOMEGRANATE Б/А 0,33Л\n\nЛише 19,90 грн 🔣",
       "post_id": "10617",
-      "rendering_sha256": "d13e87aaa363297cada1e736a5fba2070e38a2df3770f18baacca588a6c58497",
+      "rendering_sha256": "99af16c802d33da9c914fe4739db5c35e7e30f4f6a5840b8e2f12e25a90a2c18",
       "smoke": false,
       "task": "promo_signals_gm4_v1",
       "thread": "@msuaaaa:10617"
     },
     {
       "channel": "@msuaaaa",
-      "chars": 5029,
+      "chars": 5890,
       "comments": [
         [
           1217,
@@ -425,14 +431,14 @@
       "leg": "a",
       "post": "Новий ваучер МакДональдс 🍟 \n2 МакСанді по ціні 85 грн🍦\n\nШукайте у своєму додатку на телефоні📱\nДіє до 21.03.25 включно 📆",
       "post_id": "3454",
-      "rendering_sha256": "7ea15ce31b2118dacfa1ca62cef16501f6f78fb8f63f93afe9046bd4296dee35",
+      "rendering_sha256": "eab936385dade9f4005ae213644c021a292736e18d5b1e6785798e249ec63342",
       "smoke": false,
       "task": "promo_signals_gm4_v1",
       "thread": "@msuaaaa:3454"
     },
     {
       "channel": "@msuaaaa",
-      "chars": 5074,
+      "chars": 5935,
       "comments": [
         [
           3683,
@@ -484,14 +490,14 @@
       "leg": "a",
       "post": "🍟Новий тижневий ваучер \nвід McDonald’s! 🍟\n\n🍔Роял Чізбургер + Фрі середня + Напій середній = 215 грн \n\n🗓️діє до 06.07.2025р. \n\nА більше ваучерів шукай у коментарях 🗯",
       "post_id": "5513",
-      "rendering_sha256": "4ba1b335a46a75eb14cefe2d0410e445a6753ecee1b2ac675239a60354bbf4ba",
+      "rendering_sha256": "7aba1a2c2ad5201b91ce6e2f1096efeec3a8105298d3c7c018c58faad399687d",
       "smoke": false,
       "task": "promo_signals_gm4_v1",
       "thread": "@msuaaaa:5513"
     },
     {
       "channel": "@msuaaaa",
-      "chars": 5070,
+      "chars": 5931,
       "comments": [
         [
           7339,
@@ -503,14 +509,14 @@
       "leg": "a",
       "post": "У Сільпо 🏢 акція 1+1 \n\n🗓 Лише 11.11 — купуй на silpo.ua або в застосунку Сільпо міючі засоби та засоби для прання 🫧\nі отримуй другий — за 0,19 грн 🔣\n\n⚠️ До 6 товарів за повною ціною і до 6 — за 0,19 грн \nОплата лише карткою Mastercard 💸",
       "post_id": "7693",
-      "rendering_sha256": "6c96f0c212117868819174c34f94797ed48655365465d51b105a61617662f5f2",
+      "rendering_sha256": "1705e7d0a9d57e80300cabe237f1c99289d6cc3950d4698f5a9c6f1a782d95ee",
       "smoke": false,
       "task": "promo_signals_gm4_v1",
       "thread": "@msuaaaa:7693"
     },
     {
       "channel": "@msuaaaa",
-      "chars": 4945,
+      "chars": 5806,
       "comments": [
         [
           7497,
@@ -522,14 +528,14 @@
       "leg": "a",
       "post": "Лише сьогодні!\n🍕Вся готова піца в Сільпо по 99 грн 🪙\n\nЗнижки до –60% 🔣\nВстигни забрати свою!",
       "post_id": "7847",
-      "rendering_sha256": "bd3061317856f58c8ee8cde67ea733313215cabde75533b2696cbc9cfb334cab",
+      "rendering_sha256": "218336ec0a62727f746a5f61c976ed75b9797bc804b7c7b1882101dc1adc16bf",
       "smoke": false,
       "task": "promo_signals_gm4_v1",
       "thread": "@msuaaaa:7847"
     },
     {
       "channel": "@msuaaaa",
-      "chars": 5055,
+      "chars": 5916,
       "comments": [
         [
           7594,
@@ -556,14 +562,14 @@
       "leg": "a",
       "post": "🏢Новорічні новинки в Сільпо \nДуже милі й максимально незвичні - для тих, хто любить атмосферні та креативні іграшки ❄️\n\nЦіна 499 грн 🪙\nБрали б собі на ялинку?🎄✨",
       "post_id": "7900",
-      "rendering_sha256": "1980f4ca3eaeb41f2ed34e2f21096aa47805b8f7c4723ab7f85fab4782ecfeb4",
+      "rendering_sha256": "3a3c89e65cb0093da0729909e7c8a1bf8e37ef0d88baea54d3d6731de30beebc",
       "smoke": false,
       "task": "promo_signals_gm4_v1",
       "thread": "@msuaaaa:7900"
     },
     {
       "channel": "@msuaaaa",
-      "chars": 5231,
+      "chars": 6092,
       "comments": [
         [
           8047,
@@ -605,14 +611,14 @@
       "leg": "a",
       "post": "Золотисті чіпси x Mono 🏦 вже в  Аврорі - 29 грн за пачку 🪙\n\nРаніше 4 пачки виходили 160 грн\nУ 😨😰 дешевше на 11 грн за пачку 👀",
       "post_id": "8096",
-      "rendering_sha256": "09ac692837db6d9104644c8a021cc31def37a061045610ee592f77c51dcdf912",
+      "rendering_sha256": "9e994c51d49dc0a5257984195d742f9e146f854a06d36f3ecfca53f594c32cf2",
       "smoke": false,
       "task": "promo_signals_gm4_v1",
       "thread": "@msuaaaa:8096"
     },
     {
       "channel": "@msuaaaa",
-      "chars": 5025,
+      "chars": 5886,
       "comments": [
         [
           9262,
@@ -679,14 +685,14 @@
       "leg": "a",
       "post": "🍟Новий тижневий ваучер \nвід McDonald’s! 🍔\n\nДабл Чізбургер + Фрі М + Напій М + Стріпси 3 шт. = 269 грн 🍟\n\n📆 діє до  01.02.2026\n\nЩе більше ваучерів, вже у коментарях 🗯",
       "post_id": "8717",
-      "rendering_sha256": "1abce8e429833c31c5194b0d5282f48569d25bac62974f5e86700e062351c4c1",
+      "rendering_sha256": "533c8e8efe7490b82852d3bff086c2e082da70d2680509504268da5de1156513",
       "smoke": false,
       "task": "promo_signals_gm4_v1",
       "thread": "@msuaaaa:8717"
     },
     {
       "channel": "@msuaaaa",
-      "chars": 5010,
+      "chars": 5871,
       "comments": [
         [
           9641,
@@ -708,14 +714,14 @@
       "leg": "a",
       "post": "У Lviv Croissants новинка 💕\n\nКруасан з маскарпоне та малиновим джемом \n🥐 Круасан – 165 грн\n\nПінкШейк з білим шоколадом і малиною\n🥤 ПінкШейк – 129 грн",
       "post_id": "8907",
-      "rendering_sha256": "8c13a080402257aef294e067f465194c073fe3c69abb787ad371912b50133ffb",
+      "rendering_sha256": "c7ac946d225c9f5fc7419b244effd2dd54dda3330539dc20b25dcee605a6d47c",
       "smoke": false,
       "task": "promo_signals_gm4_v1",
       "thread": "@msuaaaa:8907"
     },
     {
       "channel": "@msuaaaa",
-      "chars": 5347,
+      "chars": 6208,
       "comments": [
         [
           9838,
@@ -727,14 +733,14 @@
       "leg": "a",
       "post": "Львів, тут хтось є? 📍\n\nУ новому Watsons (вул. Городоцька, 45) триває святкова пропозиція 💄\n\n🔣 –100 грн при покупці від 500 грн\n📆Акція діє лише до 15.02 включно",
       "post_id": "9013",
-      "rendering_sha256": "5452adeadb576a53635006adfd58ddb08c2e0bb135488d5cd2704a53ac64d0fa",
+      "rendering_sha256": "20327bd1f7e7110391ec9a55121c668235870ecf3d6388bf6de08b3641ef541e",
       "smoke": false,
       "task": "promo_signals_gm4_v1",
       "thread": "@msuaaaa:9013"
     },
     {
       "channel": "@msuaaaa",
-      "chars": 5001,
+      "chars": 5862,
       "comments": [
         [
           9843,
@@ -796,14 +802,14 @@
       "leg": "a",
       "post": "🍟Новий тижневий ваучер \nвід McDonald’s! 🍔\n\nЧізбургер + Чізбургер з беконом + Фрі мала + Напій малий= 229 грн 🍟\n\n📆 діє до 22.02.2026\n\nЩе більше ваучерів, вже у коментарях 🗯",
       "post_id": "9014",
-      "rendering_sha256": "8b58f9cdc41495f7183f66c661a2a8ed231d8ac31eac686ad6d417ba715cfb6a",
+      "rendering_sha256": "9a94a366537360caa8fef5cf6993abbac9c62f3d614bfa4e428376e2ad1d5bf6",
       "smoke": false,
       "task": "promo_signals_gm4_v1",
       "thread": "@msuaaaa:9014"
     },
     {
       "channel": "@msuaaaa",
-      "chars": 5140,
+      "chars": 6001,
       "comments": [
         [
           10093,
@@ -815,14 +821,14 @@
       "leg": "a",
       "post": "Купони KFC 🍔 – в застосунку 📲\n\n🔥ТІЛЬКИ 25 ЛЮТОГО\n5 ГОСТРИХ КРИЛ 1+1 🍗\n\n🪙 Усього 150 грн за два\n\nЗавантажуй застосунок KFC\nта шукай свій купон вже зараз 🚀",
       "post_id": "9139",
-      "rendering_sha256": "1f9e1250e34cc9572fce6d88e9cd71fd7406dc1d542b41a1c131dfcf21ed2700",
+      "rendering_sha256": "5145d0891063b2364f2a2cbbe3c68a88e26e66df6d86ac325e3635e568e8b57e",
       "smoke": false,
       "task": "promo_signals_gm4_v1",
       "thread": "@msuaaaa:9139"
     },
     {
       "channel": "@msuaaaa",
-      "chars": 5296,
+      "chars": 6157,
       "comments": [
         [
           11970,
@@ -834,14 +840,14 @@
       "leg": "a",
       "post": "Новинка у Pizza Day 🤩\n\nТепер піцу можна брати буквально “на ходу” – ПІЦА-КАПКЕЙК 🍕\nУ боксі 6 міні-піц, які зручно взяти з собою 🧺\n\nЦіна від 99 грн 🪙",
       "post_id": "9952",
-      "rendering_sha256": "944f4e08e114f4db8845de76a3d6cb1aa8f66d924fcbaec159030a4bac5f0d86",
+      "rendering_sha256": "0ef6e118fe3ae80cf00127b97dac85dcae2a7656fa2d22e762bb6b4c2b5e4471",
       "smoke": false,
       "task": "promo_signals_gm4_v1",
       "thread": "@msuaaaa:9952"
     },
     {
       "channel": "@VARUS_channel",
-      "chars": 5675,
+      "chars": 6536,
       "comments": [
         [
           20081,
@@ -878,14 +884,14 @@
       "leg": "a",
       "post": "ЗнижКиця вчора прийшла на точку, де ловить на-а-а-йзнижковіші знижки. А там жаба тримає в пащі торбу вигоди. Пухнаста не розгубилася й одним махом хвоста вихопила її для тебе! \n\n🔸Молоко пряжене ТМ ПростоНаше\n🔸Кава мелена Espresso Krönung Gold ТМ Jacobs\n🔸Паста креветочна ТМ Veladis\n🔸Тісто листково-дріжджове ТМ Рудь\n🔸Лікери ТМ Jim Beam\n🔸Зубна паста ТМ Dentissimo\n🔸Гель для прання ТМ Sarmix\n\nЗабирай, тільки обовʼязково завантаж додаток VARUS і зареєструйся в програмі лояльності VARUS PERFECT. Інакше — дзуськи 🧡\n\n📍 Акції діють з 02.07 до 08.07.",
       "post_id": "10187",
-      "rendering_sha256": "6bff80cb2de9aa28498afcca31d9e5171284ce8182a12a1c810c06395f70f993",
+      "rendering_sha256": "f28fa7afd66a922bad773942426248ac74160e895ca357de8c178a43d57a7b62",
       "smoke": false,
       "task": "promo_signals_gm4_v1",
       "thread": "@VARUS_channel:10187"
     },
     {
       "channel": "@VARUS_channel",
-      "chars": 5463,
+      "chars": 6324,
       "comments": [
         [
           414,
@@ -907,14 +913,14 @@
       "leg": "a",
       "post": "Жили-були колись зайві витрати. Постійно згризали велику частку місячного бюджету. І ніхто не міг їм раду дати, бо і сирочку смачного хочеться, і о 22:00 за шоколадкою сходити — то вже традиція 🍫\n\nТа знайшлася в цьому супермаркеті добірка вигідна-превигідна, та й показала, як жити ррраціонально, бюджетно та смачно. Кінець, а більше щасливо-знижкових історій шукай у нашій газеті на VARUS.UA 🧡\n\nЗаощаджуй з акційними товарами з 24.04 по 30.04 у мережі VARUS, окрім магазинів формату «VARUS to go» за адресами: м. Дніпро, вул. Акінфієва, 9В; м. Київ, вул. Жилянська, 59.",
       "post_id": "1901",
-      "rendering_sha256": "145ffd606789233bd99fba149415f8532c1155582384a55a54bed6a85c764748",
+      "rendering_sha256": "3cfb55f56cd136db0f2fc976d94a99e9bae4886d9c2d009ef15c9e8b3a3f79ac",
       "smoke": false,
       "task": "promo_signals_gm4_v1",
       "thread": "@VARUS_channel:1901"
     },
     {
       "channel": "@VARUS_channel",
-      "chars": 5739,
+      "chars": 6600,
       "comments": [
         [
           2784,
@@ -951,14 +957,14 @@
       "leg": "a",
       "post": "Зайти «просто по хліб» не вийде — двотижневий каталог знижок так і манить новими пропозиціями. І смачненьке взяв, і сума в чеку ррраціональна!\n\n📍Пропозиції діють з 22.07 по 04.08\n\nБільше вигідного шукай у супермаркетах VARUS або на VARUS.UA 🧡",
       "post_id": "3163",
-      "rendering_sha256": "1619b5bfcdae9cd568e6a2b892fb4efbf3398641dbacdf44813f3417a26620fd",
+      "rendering_sha256": "03d20e2b027a2cb4d35b855149ba4a7cd5c220bd36c906fc37d38653a1e0c9d7",
       "smoke": false,
       "task": "promo_signals_gm4_v1",
       "thread": "@VARUS_channel:3163"
     },
     {
       "channel": "@VARUS_channel",
-      "chars": 5353,
+      "chars": 6214,
       "comments": [
         [
           3570,
@@ -975,14 +981,14 @@
       "leg": "a",
       "post": "Ми ЗнижКицю молочком напоїли, за вушком почесали — а вона нам смако-акції намуркотіла.\n\nПухнаста дозволяє себе гладити тільки учасникам програми лояльності VARUS PERFECT. Завантажуй додаток VARUS і користуйся вигодою 🧡\n\n📍 Пропозиції діють з 14.08 по 20.08",
       "post_id": "3621",
-      "rendering_sha256": "d28843ecc02e19a6627648b3ef794bdebab6a3cf561415b6766619ce805fed17",
+      "rendering_sha256": "bd6b1cfede44f7c76caaaa1d4c25baab29fafd48c5f3ba79bf3e9bdef2cc22c7",
       "smoke": false,
       "task": "promo_signals_gm4_v1",
       "thread": "@VARUS_channel:3621"
     },
     {
       "channel": "@VARUS_channel",
-      "chars": 5466,
+      "chars": 6327,
       "comments": [
         [
           4396,
@@ -999,14 +1005,14 @@
       "leg": "a",
       "post": "У VARUS є свої методи раціональності: він каже цінам «ррр», а вигідним покупкам — «ммм» 🫶\n\nБільше акційного шукай у нашій газеті на VARUS.UA 🧡\n\nЗаощаджуй з акційними товарами з 11.09 по 17.09 у мережі VARUS, окрім магазинів формату «VARUS to go» за адресами: м. Дніпро, вул. Акінфієва, 9В; м. Київ, вул. Жилянська, 59.",
       "post_id": "4202",
-      "rendering_sha256": "cbe33e768fe45ab930869d97112c49799059a593a4698423423eb5e8073a7552",
+      "rendering_sha256": "bc959e5e6ddc008b5d79ba361cbc90a90c4e2c3f0c97c9b3310acaf93fa468d5",
       "smoke": false,
       "task": "promo_signals_gm4_v1",
       "thread": "@VARUS_channel:4202"
     },
     {
       "channel": "@VARUS_channel",
-      "chars": 5440,
+      "chars": 6301,
       "comments": [
         [
           5587,
@@ -1028,14 +1034,14 @@
       "leg": "a",
       "post": "Ніколи не знаєш, що може чекати тебе у СироКосмосі. Але як би там не було — це точно буде щось цікавенько-смачненьке 😋\n\nСирФест трива-а-а-ає! Подорож крізь дванадцять сирних планет можлива до 15.10 🧀\n\nА на нашому мінімалістичному, але від того не менш смачному плато сьогодні:\n\n🔸Сир La Cueva del Abuelo Манчего овечий 6 місяців витримки 50% ваговий",
       "post_id": "4871",
-      "rendering_sha256": "6ed5a8745e36448ad787459a26dbddf7ad230b321d7f63d2e437929449adfc14",
+      "rendering_sha256": "8fa7b5b984c39fc2e73ee1cfc02ba56e05232eac84f6b50f387ea4ab162e5728",
       "smoke": false,
       "task": "promo_signals_gm4_v1",
       "thread": "@VARUS_channel:4871"
     },
     {
       "channel": "@VARUS_channel",
-      "chars": 6975,
+      "chars": 7836,
       "comments": [
         [
           6111,
@@ -1112,14 +1118,14 @@
       "leg": "a",
       "post": "Не пропусти! Пухнаста курʼєрка несе в лапах порцію акцій на різні-різні товари.\n\nЗнижКиця доставляє їх тільки учасникам програми лояльності VARUS PERFECT, у кого встановлений додаток VARUS. Тож не пронявкай свій пакунок вигоди 🧡\n\n📍 Пропозиції діють з 23.10 по 29.10",
       "post_id": "5186",
-      "rendering_sha256": "8f1b3981ebc87843d602362d759d207a91595a33c5d5a0a4e727a399281c1a93",
+      "rendering_sha256": "295bf85e36c1f4cac07aa475bbe72bd27d57e7da7bb0e3176a223dab16dd282f",
       "smoke": false,
       "task": "promo_signals_gm4_v1",
       "thread": "@VARUS_channel:5186"
     },
     {
       "channel": "@VARUS_channel",
-      "chars": 7035,
+      "chars": 7896,
       "comments": [
         [
           8679,
@@ -1216,14 +1222,14 @@
       "leg": "a",
       "post": "Прикрась свято цінами!  Якщо вже й летіти на мітлі крізь заметіль і красти Місяць, то лише з гарним настроєм. А наш акційний алкокаталог знає, як його створити 😉\n\nГортай добірку напоїв із фільму «Вечори на хуторі біля Диканьки» і купуй їх зі знижками з 22.12 по 24.12\n\nБільше новорічно-колоритного шукай на VARUS.UA 🧡",
       "post_id": "6216",
-      "rendering_sha256": "3089c41a1657ead9b754389aaadd121a93e12f8bfbac46b786ced5fa3a466edf",
+      "rendering_sha256": "6bd3ed8ee9ed337a2250a1a2d58792c0b2bc6f511fef8727fda685277c98e877",
       "smoke": false,
       "task": "promo_signals_gm4_v1",
       "thread": "@VARUS_channel:6216"
     },
     {
       "channel": "@VARUS_channel",
-      "chars": 5248,
+      "chars": 6109,
       "comments": [
         [
           9383,
@@ -1240,14 +1246,14 @@
       "leg": "a",
       "post": "Почни новий рік вигідно-правильно — з нового каталогу знижок! Більше позицій шукай у нашій газеті на VARUS.UA 🧡\n\n📍 Пропозиції діють з 03.01.26 по 07.01.26 у мережі VARUS, окрім магазинів формату «VARUS to go» за адресами: м. Дніпро, вул. Акінфієва, 9В; м. Київ, вул. Жилянська, 59.",
       "post_id": "6278",
-      "rendering_sha256": "6c1fb828fdd3883caa3d8dd4c2f3efde9239813f6c128b673ff27c7eee1c0228",
+      "rendering_sha256": "32232ecf0cfefb8f3f2f8e0bfd9120eca8f57c245b7b90c2d9ff276b1e1fc97d",
       "smoke": false,
       "task": "promo_signals_gm4_v1",
       "thread": "@VARUS_channel:6278"
     },
     {
       "channel": "@VARUS_channel",
-      "chars": 5254,
+      "chars": 6115,
       "comments": [
         [
           14724,
@@ -1264,14 +1270,14 @@
       "leg": "a",
       "post": "🔸Шоколадний крем Nutella ТМ Ferrero\n🔸Пиво світле Київське Розливне ТМ Оболонь\n🔸Сир кулінарний ТМ Baltais\n🔸Кетчуп Чилі ТМ Щедро\n\n📍 Пропозиції діють з 02.04 по 15.04.\n\nБільше шукай у супермаркетах VARUS або на VARUS.UA",
       "post_id": "8308",
-      "rendering_sha256": "fd4a5188fb4852a2447311c44500a5118f7e56a7579fb03f25e1dfa117a84e90",
+      "rendering_sha256": "3b3bc7f0e0c359ffe032cc8f019fd60a51f8bd18e993217ad00d4d9908baa00c",
       "smoke": false,
       "task": "promo_signals_gm4_v1",
       "thread": "@VARUS_channel:8308"
     },
     {
       "channel": "@VARUS_channel",
-      "chars": 5491,
+      "chars": 6352,
       "comments": [
         [
           16805,
@@ -1308,14 +1314,14 @@
       "leg": "a",
       "post": "Надягай вигодозахисні окуляри! У цьому каталозі знижки ого-го як засліплюють.\n\nБільше товарів шукай у нашій газеті на VARUS.UA 🧡\n\nЗаощаджуй з акційними товарами з 14.05 до 20.05 у мережі VARUS, окрім магазинів формату «VARUS to go» за адресами: м. Дніпро, вул. Акінфієва, 9В; м. Київ, вул. Жилянська, 59.",
       "post_id": "9046",
-      "rendering_sha256": "61573eeaec6ac16105fabd4b09f0ff1fddbe179c74c153ae0a00994a1bd071bc",
+      "rendering_sha256": "336b4b709b803b5fcd8a8825bad0300506b75bd17489ab6f8d1de619d5afdf92",
       "smoke": false,
       "task": "promo_signals_gm4_v1",
       "thread": "@VARUS_channel:9046"
     },
     {
       "channel": "@VARUS_channel",
-      "chars": 5183,
+      "chars": 6044,
       "comments": [
         [
           19007,
@@ -1332,14 +1338,14 @@
       "leg": "a",
       "post": "Коли ловиш тільки зелені світлофори дорогою додому, стаєш першим у черзі до каси чи виходить новий каталог знижок — це, безперечно, джекпоти. Не знаємо, як у тебе сьогодні з першими двома, але останній ти таки зірвав! \n\nБільше вигідного шукай у нашій газеті на VARUS.UA 🧡\n\nЗаощаджуй з акційними товарами з 18.06 до 24.06 в мережі VARUS",
       "post_id": "9853",
-      "rendering_sha256": "66e49013cee2450a3b3f15ea2b427a028b6230577c7b98b59dab42b8e9322f38",
+      "rendering_sha256": "6fa87e13d2ac9613af9291adba2ecf19859c52c7904a1938539f6619b2fcf97f",
       "smoke": false,
       "task": "promo_signals_gm4_v1",
       "thread": "@VARUS_channel:9853"
     },
     {
       "channel": "@msuaaaa",
-      "chars": 4918,
+      "chars": 5779,
       "comments": [
         [
           406,
@@ -1356,14 +1362,14 @@
       "leg": "a",
       "post": "Товар тижня у Велмарт🔽\n\n3 17.02.25 до 23.02.25\nзнижки до - 42%",
       "post_id": "2684",
-      "rendering_sha256": "b718d71232bdd3b21f9c71cac5ad3301883314d9784f1c54c9dbc522cd34c00c",
+      "rendering_sha256": "ba0f34012124d70ea65ed74dbe2527d28e4df39bef66b5b61eb0b4b410d0f370",
       "smoke": false,
       "task": "promo_signals_gm4_v1",
       "thread": "@msuaaaa:2684"
     },
     {
       "channel": "@msuaaaa",
-      "chars": 4986,
+      "chars": 5847,
       "comments": [
         [
           1069,
@@ -1385,14 +1391,14 @@
       "leg": "a",
       "post": "Нові акції в Roshen 🍫\n\nЗнижки до -50%\nз 04.03.25 по 17.03.25 🗓",
       "post_id": "3034",
-      "rendering_sha256": "160eac4ca610b7815af3bac08e23705ebe535914cad277173361aef082de3577",
+      "rendering_sha256": "2608fec03838ef5b01c0eb20ac563f7c2fdc1c80a4ea570781d9c0155f4e29f0",
       "smoke": false,
       "task": "promo_signals_gm4_v1",
       "thread": "@msuaaaa:3034"
     },
     {
       "channel": "@msuaaaa",
-      "chars": 5020,
+      "chars": 5881,
       "comments": [
         [
           1745,
@@ -1404,14 +1410,14 @@
       "leg": "a",
       "post": "1+1 на всю каву у Сільпо 🥲😊\n\nЛише у понеділок 14.04.25\n\nКупуйте будь-які 2 упаковки\nкави та отримуйте одну найдешевшу з них у подарунок.\n\n*тільки з мобільним застосунком «Сільпо»",
       "post_id": "3915",
-      "rendering_sha256": "a1e14e7ce62bc77cfc1b657010564c2f21f6e68fc9c578c6386f288ca55968d6",
+      "rendering_sha256": "dc08af3dbfe31ee5a2f8bfd5c5539e6d5fb036dc1aefb59d21d84db4ac96d2e7",
       "smoke": false,
       "task": "promo_signals_gm4_v1",
       "thread": "@msuaaaa:3915"
     },
     {
       "channel": "@msuaaaa",
-      "chars": 4945,
+      "chars": 5806,
       "comments": [
         [
           2012,
@@ -1428,38 +1434,33 @@
       "leg": "a",
       "post": "Товар тижня у Велмарт🔽\n\n3 28.04.25 до 04.05.25\nзнижки до - 46%",
       "post_id": "4173",
-      "rendering_sha256": "bd1e2389d4325ba448292688b7fa6378c74df877dd9d38e8a15068c5cc5c07d5",
+      "rendering_sha256": "405e83f206ab5c0e19dbac0b9d89bbbd44e43ecb1d9bb7e6ec2fdd21136a878d",
       "smoke": false,
       "task": "promo_signals_gm4_v1",
       "thread": "@msuaaaa:4173"
     },
     {
       "channel": "@msuaaaa",
-      "chars": 4890,
+      "chars": 5756,
       "comments": [
         [
-          6284,
-          "👍",
-          "25fab095a085d39082a127eac637c1ae322aa9f3f7b2fcc33a04d6be3f5793f8"
-        ],
-        [
-          6285,
-          "",
-          "d639298ec31179c0383f71bdbdab75035fd36659f1385f7c007ad4c42e3fcd9f"
+          5208,
+          "Лімо😍",
+          "b4742cb7c81f60b17d3480c562577c830e841077e43724b36f37487849f1e017"
         ]
       ],
-      "id": "@msuaaaa:7187",
+      "id": "@msuaaaa:6523",
       "leg": "a",
-      "post": "Знижки в АТБ 😜🤪\n\n🗓з 08.10.2025 по 14.10.2025\n\nВигода до -46%",
-      "post_id": "7187",
-      "rendering_sha256": "1286cebadda55d5e12877c07bd7e812093a9f112f70b20bb1a0fc33110946350",
+      "post": "Знижки  в АТБ 😜🤪\n\n🗓з 27.08.2025 по 02.09.2025\n\nВигода до -51%",
+      "post_id": "6523",
+      "rendering_sha256": "977e40a3a73565ba8195002b6594bad30993077d867175b747500744fbdf45b0",
       "smoke": false,
       "task": "promo_signals_gm4_v1",
-      "thread": "@msuaaaa:7187"
+      "thread": "@msuaaaa:6523"
     },
     {
       "channel": "@msuaaaa",
-      "chars": 4965,
+      "chars": 5826,
       "comments": [
         [
           9424,
@@ -1616,7 +1617,7 @@
       "leg": "a",
       "post": "Нові акції в Рошен 🍫\n\nЗнижки до -50%\nз 03.02.26 по 16.02.26 🗓\n\nБільше знижок у коментарях 🗯",
       "post_id": "8788",
-      "rendering_sha256": "1c44e483982198b1ee8f25b2491b52b237cd6fd1b5fe5182199c8a5cc0df4ec7",
+      "rendering_sha256": "979735789fce296be3f1e7b1125e4290a17f2983b61bba1c46d123ffa6471ea4",
       "smoke": false,
       "task": "promo_signals_gm4_v1",
       "thread": "@msuaaaa:8788"
@@ -1782,12 +1783,12 @@
       "thread": "@forainfo:6042"
     }
   ],
-  "iteration": 1,
+  "iteration": 2,
   "phase": "promo-dev-loop",
   "reading": "the pod renders each item ITSELF and refuses unless its sha equals the one pinned here; the rendered string never travels",
   "registration": {
     "record": "results/prereg_promo_dev_loop.json",
-    "sha256": "fd4574fc852a1965ec0293b9acb94cfa4736cfcb8efda9efcb7123d1696da47a"
+    "sha256": "3065efd4d68fd8e2173f175cc014b20eb97a08f364f22ea9c4c22d81c97a205a"
   },
   "serving": {
     "adapter": null,
@@ -1805,7 +1806,7 @@
     "serving_config": "READER"
   },
   "smoke_ids": [
-    "@msuaaaa:6523",
+    "@msuaaaa:7187",
     "@VARUS_channel:9006",
     "@VARUS_channel:6009"
   ],
