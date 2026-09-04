@@ -48,13 +48,13 @@ leaflet pages under `prereg_promo_c3.json` **cap $0.50** → a THIRD window thro
 **None.** A-rest closed inside its own session; nothing paid or irreversible was reached.
 
 ## Needs named, not built (the standing prompt forbids adding what the phase did not ask for)
-- **A near-quote survives:** «Шикарно. Цілий день тиша, а потім скидка» is not a substring of its dev
-  comment («…вот вам скидка») — the lead's call. **The codebook doc still carries all 11 verbatim.**
+- **A near-quote survives, and ruling (k)2 keeps it there on purpose:** «Шикарно. Цілий день тиша,
+  а потім скидка» and the codebook doc's 11 verbatim quotes move TOGETHER at the law FREEZE before
+  the holdout pre-registration — moving the law now would re-derive the pack for cosmetics.
 - **The pod's `check_law` compares `codebook_version` only** (it re-derives every `rendering_sha256`,
   which covers it); **`committed_registration()` ignores `pinned_inputs`**; **`--score` without
   `--suffix`, and the runbook's K8 `--out`, still point at the PAID `…_iter1.*` — B must repoint them.
 - **Coverage is not «every collected channel»:** @kopiyochka1 has an admin account and is not in
   `channel_admins.yaml`; 28 VARUS comments carry `sender_anon_id: null` → recall 874/902 (96.9 %).
-- **Chains the alias file leaves out:** KFC, Roshen, Велмарт, Mono are gold `chain` subjects whose
-  spellings could only come from the exam; `marketopt_private` is `marketopt_promo`'s own chain.
+- **Chains the alias file leaves out:** KFC, Roshen, Велмарт, Mono — their spellings could only come from the exam; `marketopt_private` is `marketopt_promo`'s own chain.
 - Report-only drift: `terminate_after_minutes` 90 is voided by ruling (d) yet printed at every rung-1 GO; `rung_0.dear_usd` prices 279 s of overhead where the gate allows 560.
