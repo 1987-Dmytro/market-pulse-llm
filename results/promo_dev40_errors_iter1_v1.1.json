@@ -1,0 +1,290 @@
+{
+  "answers": {
+    "fenced_answers": 40,
+    "fenced_note": "the codebook asks for JSON and never forbids a markdown fence; the object inside it is read as it stands and nothing in it is repaired (promo_prompts.unfence)",
+    "gold_shaped_rows": 151,
+    "leg_a_units_answered": 40,
+    "leg_a_units_registered": 40,
+    "parse_failures": 0,
+    "parse_failures_by_cause": {},
+    "unparsed": []
+  },
+  "contract": "docs/plans/promo-pulse-1.md §9 — the error table of iteration 1",
+  "grade": {
+    "bars": {
+      "signal_type_agreement": {
+        "bar": 0.75,
+        "held": true,
+        "value": 0.8792
+      },
+      "subject_agreement": {
+        "bar": 0.8,
+        "held": true,
+        "value": 0.8214
+      }
+    },
+    "by_stratum": {
+      "currency": {
+        "signal_type_agreement": 0.8583,
+        "signal_type_threads": 20,
+        "subject_agreed": 46,
+        "subject_agreement": 0.7541,
+        "subject_comments": 61
+      },
+      "decimal_only": {
+        "signal_type_agreement": 0.9,
+        "signal_type_threads": 20,
+        "subject_agreed": 69,
+        "subject_agreement": 0.8734,
+        "subject_comments": 79
+      }
+    },
+    "from": "scripts/grade_promo_signals.py — its own functions, never re-derived here",
+    "readings": {
+      "note": "an abstention is an answer: `unsure` rows stay in the denominator and are counted here, never dropped from it",
+      "unsure_rows": 0
+    },
+    "whole_40": {
+      "signal_type_agreement": 0.8792,
+      "signal_type_threads": 40,
+      "subject_agreed": 115,
+      "subject_agreement": 0.8214,
+      "subject_comments": 140
+    }
+  },
+  "iteration": 1,
+  "replies": "results/promo_dev40_iter1.jsonl",
+  "signal_jaccard_per_thread": {
+    "@VARUS_channel:10187": 1.0,
+    "@VARUS_channel:1901": 1.0,
+    "@VARUS_channel:2537": 1.0,
+    "@VARUS_channel:3163": 0.6667,
+    "@VARUS_channel:3621": 1.0,
+    "@VARUS_channel:4202": 1.0,
+    "@VARUS_channel:4871": 1.0,
+    "@VARUS_channel:5186": 0.3333,
+    "@VARUS_channel:5589": 1.0,
+    "@VARUS_channel:6009": 1.0,
+    "@VARUS_channel:6216": 1.0,
+    "@VARUS_channel:6278": 1.0,
+    "@VARUS_channel:8308": 0.0,
+    "@VARUS_channel:9006": 1.0,
+    "@VARUS_channel:9046": 1.0,
+    "@VARUS_channel:9853": 1.0,
+    "@VARUS_channel:9999": 1.0,
+    "@msuaaaa:10121": 1.0,
+    "@msuaaaa:10169": 1.0,
+    "@msuaaaa:10219": 0.6667,
+    "@msuaaaa:10617": 1.0,
+    "@msuaaaa:2684": 1.0,
+    "@msuaaaa:3034": 1.0,
+    "@msuaaaa:3454": 1.0,
+    "@msuaaaa:3915": 1.0,
+    "@msuaaaa:4173": 1.0,
+    "@msuaaaa:5513": 1.0,
+    "@msuaaaa:6523": 1.0,
+    "@msuaaaa:7187": 1.0,
+    "@msuaaaa:7693": 1.0,
+    "@msuaaaa:7847": 0.0,
+    "@msuaaaa:7900": 1.0,
+    "@msuaaaa:8096": 0.5,
+    "@msuaaaa:8717": 1.0,
+    "@msuaaaa:8788": 1.0,
+    "@msuaaaa:8907": 0.0,
+    "@msuaaaa:9013": 1.0,
+    "@msuaaaa:9014": 1.0,
+    "@msuaaaa:9139": 1.0,
+    "@msuaaaa:9952": 1.0
+  },
+  "subject_misses": [
+    {
+      "channel": "@VARUS_channel",
+      "gold": {
+        "signal_types": [
+          "жалоба"
+        ],
+        "subject": "Щастябокс",
+        "subject_type": "sku"
+      },
+      "model": {
+        "signal_types": [
+          "жалоба"
+        ],
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "unsure": null
+      },
+      "msg_id": "8034",
+      "thread_root": "6009"
+    },
+    {
+      "channel": "@VARUS_channel",
+      "gold": {
+        "signal_types": [
+          "цена",
+          "жалоба"
+        ],
+        "subject": "Щастябокс",
+        "subject_type": "sku"
+      },
+      "model": {
+        "signal_types": [],
+        "subject": "6009",
+        "subject_type": "post",
+        "unsure": null
+      },
+      "msg_id": "8056",
+      "thread_root": "6009"
+    },
+    {
+      "channel": "@VARUS_channel",
+      "gold": {
+        "signal_types": [
+          "жалоба"
+        ],
+        "subject": "Щастябокс",
+        "subject_type": "sku"
+      },
+      "model": {
+        "signal_types": [],
+        "subject": "6009",
+        "subject_type": "post",
+        "unsure": null
+      },
+      "msg_id": "8134",
+      "thread_root": "6009"
+    },
+    {
+      "channel": "@msuaaaa",
+      "gold": {
+        "signal_types": [],
+        "subject": "10169",
+        "subject_type": "post"
+      },
+      "model": {
+        "signal_types": [],
+        "subject": "McDonald’s",
+        "subject_type": "chain",
+        "unsure": null
+      },
+      "msg_id": "12507",
+      "thread_root": "10169"
+    },
+    {
+      "channel": "@msuaaaa",
+      "gold": {
+        "signal_types": [
+          "спрос"
+        ],
+        "subject": "МакМеню",
+        "subject_type": "sku"
+      },
+      "model": {
+        "signal_types": [
+          "спрос"
+        ],
+        "subject": "McDonald’s",
+        "subject_type": "chain",
+        "unsure": null
+      },
+      "msg_id": "12510",
+      "thread_root": "10169"
+    },
+    {
+      "channel": "@msuaaaa",
+      "gold": {
+        "signal_types": [],
+        "subject": "МакМеню",
+        "subject_type": "sku"
+      },
+      "model": {
+        "signal_types": [],
+        "subject": "McDonald’s",
+        "subject_type": "chain",
+        "unsure": null
+      },
+      "msg_id": "12511",
+      "thread_root": "10169"
+    },
+    {
+      "channel": "@msuaaaa",
+      "gold": {
+        "signal_types": [
+          "спрос"
+        ],
+        "subject": "іграшки",
+        "subject_type": "sku"
+      },
+      "model": {
+        "signal_types": [
+          "спрос"
+        ],
+        "subject": "МакМеню",
+        "subject_type": "sku",
+        "unsure": null
+      },
+      "msg_id": "12590",
+      "thread_root": "10169"
+    },
+    {
+      "channel": "@msuaaaa",
+      "gold": {
+        "signal_types": [
+          "жалоба",
+          "цена"
+        ],
+        "subject": "10219",
+        "subject_type": "post"
+      },
+      "model": {
+        "signal_types": [
+          "жалоба",
+          "цена"
+        ],
+        "subject": "Сільпо",
+        "subject_type": "chain",
+        "unsure": null
+      },
+      "msg_id": "12638",
+      "thread_root": "10219"
+    },
+    {
+      "channel": "@msuaaaa",
+      "gold": {
+        "signal_types": [
+          "цена"
+        ],
+        "subject": "чипси Люкс",
+        "subject_type": "sku"
+      },
+      "model": {
+        "signal_types": [
+          "цена"
+        ],
+        "subject": "Сільпо",
+        "subject_type": "chain",
+        "unsure": null
+      },
+      "msg_id": "12639",
+      "thread_root": "10219"
+    },
+    {
+      "channel": "@msuaaaa",
+      "gold": {
+        "signal_types": [],
+        "subject": "10219",
+        "subject_type": "post"
+      },
+      "model": {
+        "signal_types": [],
+        "subject": "чипси Люкс",
+        "subject_type": "sku",
+        "unsure": null
+      },
+      "msg_id": "12647",
+      "thread_root": "10219"
+    }
+  ],
+  "subject_misses_rule": "the first ten in the GOLD file's own order — a rule, not a pick; the total stands beside them",
+  "subject_misses_total": 25
+}

@@ -46,7 +46,7 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "src"))
 
-from market_pulse.aggregates import promo_key  # noqa: E402
+from market_pulse.aggregates import chain_key, promo_key  # noqa: E402
 
 DRAW = REPO_ROOT / "results" / "promo_threads_draw.json"
 OUT = REPO_ROOT / "results" / "grade_promo_dev40.json"
@@ -65,7 +65,16 @@ def rows(path: Path) -> list[dict]:
 
 
 def subject(row: dict) -> tuple:
-    return (promo_key(row.get("subject_type") or ""), promo_key(row.get("subject") or ""))
+    """(type, name) as the grade compares them — `chain` names folded to the chain's id.
+
+    Codebook v1.1 (б) and ruling 04.09 (j) item 1: «VARUS» and «Варус» are one chain, so both sides
+    of the comparison go through `aggregates.chain_key` — gold and prediction alike, and `chain`
+    rows only ([[correcting_gold_moves_the_denominator]]: the fold moves no row's gold, it stops
+    two spellings of one answer from reading as two answers).
+    """
+    kind = promo_key(row.get("subject_type") or "")
+    name = row.get("subject") or ""
+    return (kind, chain_key(name) if kind == "chain" else promo_key(name))
 
 
 def thread_key(row: dict) -> tuple:
@@ -144,7 +153,9 @@ def grade(gold: list[dict], predicted: list[dict], strata: dict) -> dict:
         },
         "definitions": {
             "subject_agreement": "per COMMENT: (subject_type, subject) after aggregates.promo_key,"
-            " denominator = gold comments; a comment the model said nothing about is a miss",
+            " with `chain` names folded to the chain id by aggregates.chain_key (ruling 04.09 (j)"
+            " item 1) on gold and prediction alike; denominator = gold comments; a comment the"
+            " model said nothing about is a miss",
             "signal_type_agreement": "per THREAD: Jaccard over the SET of signal types, averaged;"
             " a thread where both sides say nothing scores 1.0 rather than dividing by zero",
         },

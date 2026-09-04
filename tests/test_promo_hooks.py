@@ -7,6 +7,7 @@ that only fed clean rows would be green over a screen that raised on every real 
 ([[guard_selftest_negative_control]]).
 """
 
+import hashlib
 import sys
 from pathlib import Path
 
@@ -174,3 +175,20 @@ def test_the_render_carries_the_law_and_the_version_is_the_render():
     assert "[104] [admin] Передали колегам" in marked
     assert "[105] Передали колегам" in marked
     assert not promo_prompts.admin_ids("@no_such_channel")
+
+
+def test_the_examples_block_is_in_the_render_and_the_template_has_a_version_of_its_own():
+    """Ruling 03.09 (f) item 3 and 04.09 (g) item 3. The block is rendered — a worked example the
+    model never sees is a comment — and the TEMPLATE gets a sha of its own, because
+    `codebook_version` compares the LAW and would read a render-only change as no change at all
+    ([[the_identity_field_stops_covering_the_change]], [[check_granularity_matches_the_claim]])."""
+    rendered = promo_prompts.render("@VARUS_channel", 4519, "Знижки тижня", COMMENTS)
+    assert promo_prompts.EXAMPLES in promo_prompts.TEMPLATE
+    assert promo_prompts.EXAMPLES in rendered
+    assert rendered.index(promo_prompts.CODEBOOK) < rendered.index(promo_prompts.EXAMPLES)
+    assert "«Ок, зрозуміло»" in rendered, "the fifth category — a bare reply carries no signal"
+
+    version = promo_prompts.template_version()
+    assert version != promo_prompts.codebook_version(), "one sha cannot answer two questions"
+    assert version != promo_prompts.extractor_version(rendered), "the render is per THREAD"
+    assert version == hashlib.sha256(promo_prompts.TEMPLATE.encode("utf-8")).hexdigest()

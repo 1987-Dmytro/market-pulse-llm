@@ -173,3 +173,25 @@ def test_the_grader_reads_the_shipped_gold_and_both_bars_are_independent():
     silence = grader.grade(gold, [], strata)["whole_40"]
     assert silence["subject_agreement"] == 0.0
     assert silence["signal_type_agreement"] == round(len(silent_in_gold) / len(threads), 4)
+
+
+def test_the_grade_folds_chain_spellings_on_both_sides_and_leaves_brands_alone():
+    """Codebook v1.1 (б) and ruling 04.09 (j) item 1. The fold is applied to GOLD and PREDICTION
+    alike — a fold on one side only would move the denominator's own answers
+    ([[correcting_gold_moves_the_denominator]]) — and to `chain` rows only.
+
+    Measured on iteration 1's own replies this is worth exactly one row,
+    `@VARUS_channel:6216:8865` (gold «VARUS», model «Варус»): 114/140 → 115/140.
+    """
+    rows = [gold(msg_id="1", subject="VARUS"), gold(msg_id="2", subject="Яготинське")]
+    said = [
+        dict(gold(msg_id="1", subject="Варус"), subject_type="chain"),
+        dict(gold(msg_id="2", subject="яготинське")),
+    ]
+    rows[0]["subject_type"] = "chain"
+    assert grader.agree(rows, said)["subject_agreement"] == 1.0
+
+    # and a BRAND written two ways is still two answers: the chain table has nothing to say here
+    brand_gold = [dict(gold(msg_id="3", subject="VARUS"), subject_type="brand")]
+    brand_said = [dict(gold(msg_id="3", subject="Варус"), subject_type="brand")]
+    assert grader.agree(brand_gold, brand_said)["subject_agreement"] == 0.0

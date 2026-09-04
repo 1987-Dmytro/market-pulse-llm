@@ -86,6 +86,93 @@ def thread_of(row: dict) -> tuple[str, list[dict]]:
     return posts[root].get("text") or "", comments
 
 
+LEAK_CHECK = REPO_ROOT / "results" / "promo_law_leak_check.json"
+CODEBOOK_LITERAL_FLOOR = 8
+"""Chars, and NOT a new threshold: it is the rule the 04.09 session-12 measurement ran under, which
+PROGRESS at `d002967` writes down as «of its 27 literals ≥8 chars». Below it the law's quotes are
+marker WORDS the ruling never asked anyone to touch («дякую», «постійно», «завжди»), and every
+comment in the store contains some of them. A(3)'s examples take NO floor — they were written today
+and every one of them is checked."""
+
+
+def quoted(text: str) -> list[str]:
+    """Every «…» literal of a law text, whitespace-collapsed — the shape a quote takes in it."""
+    return [" ".join(one.split()) for one in re.findall(r"«([^»]+)»", text)]
+
+
+def store_texts(path: Path = DRAW) -> list[dict]:
+    """Every dev-40 AND holdout-40 comment with text, from the frozen archive the draw read.
+
+    Both splits, because the leak the check looks for is the instrument having seen its own exam,
+    and the holdout is the exam that has not been sat yet ([[the_instruments_examples_came_from_the_exam]]).
+    """
+    body = json.loads(path.read_text(encoding="utf-8"))
+    return [
+        {
+            "split": split,
+            "channel": row["channel"],
+            "thread_root": str(row["thread_root"]),
+            "msg_id": str(one["msg_id"]),
+            "text": " ".join((one.get("text") or "").split()),
+        }
+        for split in ("dev", "holdout")
+        for stratum in sorted(body["draw"])
+        for row in body["draw"][stratum][split]
+        for one in thread_of(row)[1]
+        if (one.get("text") or "").strip()
+    ]
+
+
+def leak_check(texts: list[dict]) -> dict:
+    """Ruling 04.09 (j) item 2's check: no string of the LAW is a store comment. $0.
+
+    The strings are read out of the shipped module, never retyped here
+    ([[a_number_typed_into_its_own_checker]]) — a list beside the law would go on passing the day
+    the law changed. Two populations, one rule each, and each hit names the comment it landed on so
+    a reader can see WHICH thread the instrument had read.
+    """
+    populations = {
+        "codebook": [one for one in quoted(promo_prompts.CODEBOOK) if len(one) >= CODEBOOK_LITERAL_FLOOR],
+        "examples": quoted(promo_prompts.EXAMPLES),
+    }
+    hits = [
+        {
+            "population": name,
+            "literal": literal,
+            "split": row["split"],
+            "unit": f"{row['channel']}:{row['thread_root']}:{row['msg_id']}",
+        }
+        for name, literals in populations.items()
+        for literal in literals
+        for row in texts
+        if literal in row["text"]
+    ]
+    return {
+        "contract": "docs/reviews/2026-08-30-plan-promo-pulse-1.md «Ruling 04.09 (j)» item 2 — no"
+        " string of the rendered law is a substring of a dev-40 or holdout-40 comment",
+        "codebook_version": promo_prompts.codebook_version(),
+        "template_version": promo_prompts.template_version(),
+        "corpus": {
+            "comments_with_text": len(texts),
+            "dev": sum(1 for one in texts if one["split"] == "dev"),
+            "holdout": sum(1 for one in texts if one["split"] == "holdout"),
+            "from": rel(DRAW) + " + the frozen v1 archive data/raw",
+        },
+        "populations": {
+            "codebook": {
+                "literals": len(populations["codebook"]),
+                "rule": f"«…» literals of promo_prompts.CODEBOOK, >= {CODEBOOK_LITERAL_FLOOR} chars",
+            },
+            "examples": {
+                "literals": len(populations["examples"]),
+                "rule": "«…» literals of promo_prompts.EXAMPLES, no floor — every one of them",
+            },
+        },
+        "hits": hits,
+        "verdict": "CLEAN" if not hits else "LEAK",
+    }
+
+
 def render_thread(row: dict) -> str:
     post, comments = thread_of(row)
     return promo_prompts.render(row["channel"], row["thread_root"], post, comments)
@@ -198,6 +285,11 @@ def prep() -> dict:
 
 
 # --- the PAID half: the dev loop's own step, its rungs, its registration ---------------------------
+
+ITERATION = 2
+"""The dev-loop iteration the registration and the pack are emitted for — ruling 04.09 (h) item 2.
+Iteration 1 is bought, priced and on disk; this is the re-emission ruling 04.09 (g) item 3 asks
+for, under the v1.1 gold, the v1.2 law and the TEMPLATE the examples block moved."""
 
 STEP = "promo-dev-loop"
 """Its OWN step and its own ledger (plan §9). S4's `promo-pulse-1` is CLOSED at $2.9867 and a closed
@@ -526,9 +618,13 @@ def register() -> dict:
     price = offered_price()
     verdict = rung_0(cap=cap, price=price, threads=threads, n_posts=posts["posts"])
     return {
-        "phase": "promo-pulse-1 S9 — the dev loop's PAID instrument, iteration 1 (the BASELINE)",
+        "phase": f"promo-pulse-1 S9 — the dev loop's PAID instrument, iteration {ITERATION}",
         "class": "PRE-REGISTRATION. Written and committed before any pod of this step exists; git"
         " history is the only witness that it preceded the money.",
+        "re_emission": "ruling 04.09 (g) item 3 and (h) item 2 — iteration 1's registration is"
+        " kept by git history; THIS record is the one iteration 2 is bought under, and it moves"
+        " because the gold (v1.1), the law (v1.2) and the TEMPLATE all moved after iteration 1."
+        " `committed_registration()` still does not re-verify `pinned_inputs`: a named debt.",
         "authority": "docs/reviews/2026-08-30-plan-promo-pulse-1.md «Ruling 03.09 (c)» — «the flags"
         " and their stub tests at $0 … --register shown with fits at the dear corner → then, in the"
         " same session if the registration fits, the pod: smoke → the table → iteration 1 → K8 →"
@@ -549,9 +645,15 @@ def register() -> dict:
             "codebook": rel(CODEBOOK),
             "codebook_sha256": sha256_of(CODEBOOK),
             "codebook_version": promo_prompts.codebook_version(),
-            "baseline": "iteration 1 changes NOTHING (ruling 03.09 (c) item 3): this CODEBOOK and"
-            " today's TEMPLATE, untouched. Iterations 2–5 may vary the template, the rendering, the"
-            " decoding and the answer repair, each a new extractor_version.",
+            "template_sha256": promo_prompts.template_version(),
+            "template_rule": "ruling 04.09 (g) item 3 — the sha of the TEMPLATE with its examples"
+            " block, so a render-only change is visible in the record; `codebook_version` alone"
+            " compares the law and would read two instruments as one.",
+            "baseline": "iteration 1 was the baseline and is priced on disk (ruling 03.09 (c)"
+            " item 3). Iteration 2 moves three things and nothing else: the law drops the 11"
+            " dev-40 comments it quoted verbatim (ruling 04.09 (j) item 2), the TEMPLATE gains"
+            " the examples block, and `chain` subjects fold to the registry chain id. Decoding,"
+            " the token ceiling and the answer repair are untouched.",
             "vocabulary": promo_prompts.vocabulary(),
         },
         "pinned_inputs": {
@@ -716,7 +818,7 @@ def build_pack() -> dict:
             )
     return {
         "phase": STEP,
-        "iteration": 1,
+        "iteration": ITERATION,
         "registration": {"record": rel(PREREG), "sha256": sha256_of(PREREG)},
         "instruments": {
             "leg_a": {
@@ -724,6 +826,7 @@ def build_pack() -> dict:
                 "module": "src/market_pulse/promo_prompts.py",
                 "sha256": sha256_of(REPO_ROOT / "src" / "market_pulse" / "promo_prompts.py"),
                 "codebook_version": promo_prompts.codebook_version(),
+                "template_sha256": promo_prompts.template_version(),
             },
             "leg_b": {"task": POST_TASK, "module": "src/market_pulse/prompts.py — REGISTERED"},
             "prompt_sha256": prompt_shas(),
@@ -1088,6 +1191,14 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "--project", action="store_true", help="$0: the smoke's rate and the decision table"
     )
+    parser.add_argument(
+        "--leak-check", action="store_true", help="$0: no string of the law is a store comment"
+    )
+    parser.add_argument(
+        "--suffix",
+        default="",
+        help="names a $0 RE-reading beside the paid files, never over them (ruling 04.09 (g) 4)",
+    )
     parser.add_argument("--replies", type=Path, help="the out-file the pod wrote")
     parser.add_argument("--iteration", type=int, help="names the two files this iteration keeps")
     parser.add_argument("--pod-id")
@@ -1165,18 +1276,36 @@ def main(argv: list[str] | None = None) -> int:
         print(f"VERDICT {gate['verdict']} — {gate['rule']}")
         return 0 if gate["verdict"] in ("GO", "GO-THEN-STOP") else 1
 
+    if args.leak_check:
+        record = leak_check(store_texts())
+        LEAK_CHECK.write_text(
+            json.dumps(record, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
+            encoding="utf-8",
+        )
+        print(f"wrote {rel(LEAK_CHECK)}")
+        print(f"  corpus     {record['corpus']['comments_with_text']} comments with text"
+              f" ({record['corpus']['dev']} dev + {record['corpus']['holdout']} holdout)")
+        for name, block in sorted(record["populations"].items()):
+            print(f"  {name:<10} {block['literals']} literals — {block['rule']}")
+        for hit in record["hits"]:
+            print(f"  LEAK       [{hit['population']}] «{hit['literal']}»"
+                  f" is in {hit['split']} {hit['unit']}")
+        print(f"VERDICT {record['verdict']} — codebook {record['codebook_version'][:16]}…"
+              f" · template {record['template_version'][:16]}…")
+        return 0 if record["verdict"] == "CLEAN" else 1
+
     if args.score:
         for name in ("replies", "iteration"):
             if getattr(args, name) is None:
                 parser.error(f"--score needs --{name}")
         table = score(args.replies, args.iteration)
         rows = table.pop("rows")
-        out = REPO_ROOT / "results" / f"promo_dev40_predicted_iter{args.iteration}.jsonl"
+        out = REPO_ROOT / "results" / f"promo_dev40_predicted_iter{args.iteration}{args.suffix}.jsonl"
         out.write_text(
             "".join(json.dumps(one, ensure_ascii=False, sort_keys=True) + "\n" for one in rows),
             encoding="utf-8",
         )
-        errors = REPO_ROOT / "results" / f"promo_dev40_errors_iter{args.iteration}.json"
+        errors = REPO_ROOT / "results" / f"promo_dev40_errors_iter{args.iteration}{args.suffix}.json"
         errors.write_text(
             json.dumps(table, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
             encoding="utf-8",

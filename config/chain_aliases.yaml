@@ -1,0 +1,32 @@
+# Chain SPELLINGS → the chain's id. The forms a chain's NAME is written in, per id.
+#
+# Ruling 04.09 (j) item 1, option (a): a file of its own — the `channel_admins.yaml` pattern —
+# because `config/registry.yaml` is pinned by 21 sealed records and may not grow a field. Read by
+# ONE caller, `market_pulse.aggregates.chain_key`, through which the grader and the promo tables
+# fold `chain` rows alike; `sku` and `brand` names are untouched.
+#
+# The rule that built every line: the spellings come from the chain's own NAME (and, for a Latin
+# form of a Cyrillic name, from its official handle in the registry) — NEVER a synonym harvested
+# from a model's miss. `varus`, `silpo`, `atb` and `mcdonalds` are ruling (j)'s own four, verbatim.
+#
+# Matching happens AFTER `promo_key` (NFC, lower, whitespace-collapsed), so case is already folded
+# and a case variant here is redundant; the ruling's four keep the lead's own spelling anyway.
+# A spelling claimed by two ids is refused, not last-wins — the loader raises.
+#
+# `marketopt_private` carries no spellings: it is the SAME chain as `marketopt_promo`, a second
+# channel of it, and one spelling may name only one id. `mcdonalds` is not a registry row — the
+# ruling names it, and a chain the aggregator posts about is a chain the dashboard counts.
+
+varus: [VARUS, Varus, Варус]
+silpo: [Сільпо, Silpo]
+atb: [АТБ, ATB]
+mcdonalds: [McDonald’s, McDonald's, Макдональдс]
+
+epicentrk_sale: [ЕПІЦЕНТР, Epicentr]
+marketopt_promo: [Маркетопт, Marketopt]
+forainfo: [Фора, Fora]
+ekomarket_shop: [ЕКО Маркет, Eko Market]
+blyzenko: [БЛИЗЕНЬКО, Blyzenko]
+fozzy: [Fozzy, Фоззі]
+sim23: [Сім23, Sim23, Сімі, Simi]
+rozetka: [Rozetka, Розетка]

@@ -302,3 +302,40 @@ def test_the_pack_pins_exactly_what_the_pod_re_derives():
     assert len(items) == 56
     assert sum(1 for one in items if one["leg"] == "b") == 16
     assert [one["id"] for one in items[:3]] == pack["smoke_ids"]
+
+
+def test_the_leak_check_finds_a_planted_quote_and_clears_a_corpus_that_has_none():
+    """Ruling 04.09 (j) item 2's check, driven both ways on a SYNTHETIC corpus.
+
+    A guard that only ever refuses reads as broken and a guard that only ever passes proves nothing
+    ([[guard_selftest_negative_control]]), so the law's own strings are planted into a comment here
+    and the check must name the unit they landed on. The strings are read out of the shipped module
+    rather than retyped ([[a_number_typed_into_its_own_checker]]): a list beside the law would go on
+    passing the day the law changed, which is exactly how the 11 dev-40 quotes survived iteration 1.
+    """
+    def comment(text, split="dev"):
+        return {"split": split, "channel": "@c", "thread_root": "1", "msg_id": "2", "text": text}
+
+    law = next(one for one in dev.quoted(promo_prompts.CODEBOOK) if len(one) >= dev.CODEBOOK_LITERAL_FLOOR)
+    example = dev.quoted(promo_prompts.EXAMPLES)[0]
+
+    clean = dev.leak_check([comment("нормальна ціна, дякую")])
+    assert clean["verdict"] == "CLEAN" and clean["hits"] == []
+    assert clean["populations"]["examples"]["literals"] == len(dev.quoted(promo_prompts.EXAMPLES))
+
+    planted = dev.leak_check([comment(f"чесно кажучи {law} і по факту"), comment(example, "holdout")])
+    assert planted["verdict"] == "LEAK"
+    assert {one["population"] for one in planted["hits"]} == {"codebook", "examples"}
+    assert all(one["unit"] == "@c:1:2" for one in planted["hits"]), "a hit names the thread it hit"
+    assert {one["split"] for one in planted["hits"]} == {"dev", "holdout"}
+
+
+def test_the_shipped_law_is_clean_against_the_frozen_dev_and_holdout_threads():
+    """The real run of the check above — the one ruling 04.09 (j) item 2 asks for. It reads
+    `data/raw`, which is not in the repository, so on a machine without the frozen archive it says
+    so instead of passing silently ([[a_checker_whose_failure_is_silence]])."""
+    if not (REPO_ROOT / "data" / "raw" / "comments").is_dir():
+        pytest.skip("the frozen v1 archive data/raw is not on this machine — nothing was checked")
+    record = dev.leak_check(dev.store_texts())
+    assert record["corpus"]["dev"] == 140 and record["corpus"]["holdout"] == 188
+    assert record["verdict"] == "CLEAN", record["hits"]

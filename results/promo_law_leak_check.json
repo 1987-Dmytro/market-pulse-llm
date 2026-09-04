@@ -1,0 +1,23 @@
+{
+  "codebook_version": "a587e0d6d50462552a483a688533cae275c28c0959cc01a9673ea860b912f7d7",
+  "contract": "docs/reviews/2026-08-30-plan-promo-pulse-1.md «Ruling 04.09 (j)» item 2 — no string of the rendered law is a substring of a dev-40 or holdout-40 comment",
+  "corpus": {
+    "comments_with_text": 328,
+    "dev": 140,
+    "from": "results/promo_threads_draw.json + the frozen v1 archive data/raw",
+    "holdout": 188
+  },
+  "hits": [],
+  "populations": {
+    "codebook": {
+      "literals": 27,
+      "rule": "«…» literals of promo_prompts.CODEBOOK, >= 8 chars"
+    },
+    "examples": {
+      "literals": 8,
+      "rule": "«…» literals of promo_prompts.EXAMPLES, no floor — every one of them"
+    }
+  },
+  "template_version": "57dd9d25dd54a1d58dfa2efe1980cdfbb0a97c9e0c27d7f3101131945f42e79a",
+  "verdict": "CLEAN"
+}

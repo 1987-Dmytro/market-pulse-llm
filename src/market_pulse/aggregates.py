@@ -25,11 +25,15 @@ by construction rather than by luck.
 database alone. It exists so the convergence gate can compare 902 numbers instead of four.
 """
 
+import functools
 import json
 import sqlite3
 import unicodedata
 import uuid
 import statistics
+from pathlib import Path
+
+import yaml
 
 SCHEMA = """
 CREATE TABLE windows (
@@ -287,6 +291,44 @@ def promo_id(*parts) -> str:
     return str(uuid.uuid5(NAMESPACE, promo_key(*parts)))
 
 
+CHAIN_ALIASES = Path(__file__).resolve().parents[2] / "config" / "chain_aliases.yaml"
+"""The spellings of each chain's NAME, per chain id — ruling 04.09 (j) item 1, option (a). A file
+of its own because `config/registry.yaml` is pinned by 21 sealed records and may not grow a field;
+:func:`chain_key` is its ONE reader."""
+
+
+@functools.lru_cache(maxsize=1)
+def _chain_ids() -> dict[str, str]:
+    """normalised spelling -> chain id, and a spelling two chains claim is REFUSED.
+
+    A dict built by iteration is last-wins, and last-wins here would silently give one chain's
+    comments another chain's id ([[select_one_row_refuse_ambiguity]]). Маркетопт is why the case is
+    real: two registry rows, `marketopt_promo` and `marketopt_private`, are one chain.
+    """
+    found: dict[str, str] = {}
+    for chain_id, spellings in (yaml.safe_load(CHAIN_ALIASES.read_text("utf-8")) or {}).items():
+        for spelling in spellings or ():
+            key = promo_key(spelling)
+            if found.setdefault(key, chain_id) != chain_id:
+                raise ValueError(
+                    f"{CHAIN_ALIASES.name}: {spelling!r} is claimed by {found[key]!r} and"
+                    f" {chain_id!r} — one spelling may name only one chain"
+                )
+    return found
+
+
+def chain_key(name) -> str:
+    """A chain's name folded to its chain id; any other name normalised as :func:`promo_key`.
+
+    Codebook v1.1 (б): the subject of a `chain` row is the chain's NAME, and «VARUS», «Varus» and
+    «Варус» are one chain to every reader and three ids to a store that never folded them. Applied
+    to gold and prediction alike, and to `chain` rows ONLY — a `brand` called «АТБ» is not the
+    retailer, which is why the fold lives here and not inside :func:`promo_key`.
+    """
+    key = promo_key(name)
+    return _chain_ids().get(key, key)
+
+
 def subject_id(subject_type: str, name: str) -> str:
     """uuid5 over (subject_type, normalised name) — SP-5 amendment (2).
 
@@ -296,7 +338,7 @@ def subject_id(subject_type: str, name: str) -> str:
     """
     if subject_type not in SUBJECT_TYPES:
         raise ValueError(f"unknown subject_type {subject_type!r}, expected one of {SUBJECT_TYPES}")
-    return promo_id(subject_type, name)
+    return promo_id(subject_type, chain_key(name) if subject_type == "chain" else name)
 
 
 PROMO_KEYS = {

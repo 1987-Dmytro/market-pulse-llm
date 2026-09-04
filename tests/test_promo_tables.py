@@ -208,3 +208,41 @@ def test_no_stored_row_id_moves_and_the_carrier_is_what_completes_the_key(conn):
         "SELECT carrier FROM positions WHERE row_id = '@ekomarket_shop:1465:0'"
     ).fetchall()
     assert sorted(one[0] for one in stored) == ["leaflet_page", "post_text"]
+
+
+def test_a_chain_name_folds_to_the_chain_id_and_only_a_chain_row_does(tmp_path, monkeypatch):
+    """Ruling 04.09 (j) item 1: «VARUS», «Varus» and «Варус» are ONE chain to every reader and
+    three ids to a store that never folded them. The fold is on `chain` rows only — a `brand`
+    called «АТБ» is not the retailer — which is why it lives in `chain_key` and not in `promo_key`,
+    and why `promo_key` itself still answers exactly what it did before."""
+    assert aggregates.chain_key("VARUS") == aggregates.chain_key("Варус") == "varus"
+    assert aggregates.chain_key("Сільпо") == aggregates.chain_key("Silpo") == "silpo"
+    assert aggregates.chain_key("McDonald’s") == "mcdonalds"
+    # a name no chain claims is normalised and NOT invented into an id
+    assert aggregates.chain_key("  Молокія ") == aggregates.promo_key("молокія") == "молокія"
+
+    assert aggregates.subject_id("chain", "VARUS") == aggregates.subject_id("chain", "Варус")
+    assert aggregates.subject_id("brand", "VARUS") != aggregates.subject_id("brand", "Варус"), (
+        "a brand is not folded: two spellings of a trade mark are two surface forms, and the"
+        " registry's chain names have nothing to say about them"
+    )
+    assert aggregates.subject_id("chain", "АТБ") != aggregates.subject_id("brand", "АТБ")
+
+
+def test_one_spelling_may_name_only_one_chain(tmp_path, monkeypatch):
+    """A dict built by iteration is last-wins, and last-wins here would hand one chain's comments
+    another chain's id ([[select_one_row_refuse_ambiguity]]). Маркетопт is the live case: two
+    registry rows, `marketopt_promo` and `marketopt_private`, are one chain — which is why the
+    shipped file gives the spellings to one of them and says so."""
+    bad = tmp_path / "chain_aliases.yaml"
+    bad.write_text("marketopt_promo: [Маркетопт]\nmarketopt_private: [Маркетопт]\n", "utf-8")
+    monkeypatch.setattr(aggregates, "CHAIN_ALIASES", bad)
+    aggregates._chain_ids.cache_clear()
+    with pytest.raises(ValueError, match="only one chain"):
+        aggregates.chain_key("Маркетопт")
+
+    # the negative control: the same loader accepts the SHIPPED file, so the refusal above is the
+    # duplicate and not a loader that refuses everything ([[guard_selftest_negative_control]])
+    monkeypatch.undo()
+    aggregates._chain_ids.cache_clear()
+    assert aggregates.chain_key("Маркетопт") == "marketopt_promo"
