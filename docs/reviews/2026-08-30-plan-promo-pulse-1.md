@@ -689,3 +689,39 @@ error table; end the turn with the open stop «iteration 1 read» and the three 
 15:1 verification inversion; its §5 (principles), §6 (brain-init M6 v2 deltas) and the team-lead skill v3 draft on the operator's card
 are proposed, not yet applied; nothing in the phase waits for them except what this ruling already applies: no `/goal`, one item per
 session, PROGRESS instead of STOP+report, rungs lifted for small steps, rulings ≤ 12 lines from here.
+
+## Ruling 03.09 (f) — iteration 1 READ: accepted; the misses are attribution, not meaning; codebook v1.1; iteration 2 = admin marker + chain canonical id + codebook examples in the template
+
+**Accepted ($0.4358, pod `0z95ve2n570f0t`, 2 120 s at $0.74/h):** `b0c90cc` — 56/56 units answered, `results/grade_promo_dev40_iter1.json`:
+signal 0.8792 (bar 0.75 HOLDS; currency 0.8583 · decimal 0.9000), subject 111/140 = 0.7929 (bar 0.80, one comment short).
+`36ef74f` (fence stripped in `parse`, nothing else; malformed still fails by cause) — accepted, `[cause: the data]`; the raw replies are on
+disk. The $0 pre-work (`--project`, `--score`, the eight audit fixes) accepted; the stub tests for `--score`/`--project` are AUTHORISED
+now (product path, not process). Leg B: 16 empty arrays are correct. Reading of the 29 misses, by the team lead against the texts: 4 are the
+channel's own account (12507, 9838, 16807, 1071 → the model says chain, the gold says post: it cannot see who wrote them); 5 are the
+CHAIN's name written as a feature or a spelling (`додаток`, `програма лояльності`, `сертифікати`, `Варус` for VARUS; `msuaaaa` for Roshen);
+3 are the availability rule (12510, 12511, 13529: «коли у всіх маках?», «в якому ашані?» → the gold says product, the model says chain);
+3 were the gold's own ambiguous calls (8044, 20083, 407 — two carried `unsure`); the rest are hard ironies and jokes (8056, 8134, 2785,
+7497) and post-vs-chain on the aggregator (12638, 12639, 12647). Meaning is read (sarcasm 8030/8038 right, both types); attribution is
+where the model stumbles — exactly the layer the operator named on 27.08, now with a number and a table.
+
+**Codebook v1.1 (team-lead file, committed by path):** (а) a reply to another commenter that names nothing and carries no signal → `post`
+— gold rows 8044, 20083, 407 re-labelled under it (the three ambiguous ones; re-graded at $0 they turn iteration 1 into a READING of
+114/140 = 0.814, which is not a claim on the bar — the bar is claimed on dev-40 by iteration 2 and on the holdout once); (б) the subject
+of a `chain` row is the chain's NAME, never its feature; chain names are canonicalised to the registry's chain id in `promo_key` for chain
+rows only (`VARUS`=`Варус`=`варус`; `sku`/`brand` unchanged) — applied to gold and predicted alike, before iteration 2, as a product
+normalisation the dashboard needs anyway; (в) the render marks the channel's own account `[admin]`.
+
+**Iteration 2 — two sessions, one item each.** Session A ($0): (1) `config/registry.yaml` gains `admin_anon_ids` per collected channel — the
+executor resolves the full ids in the store from the prefixes the codebook names (VARUS `2fa2b7…`, msuaaaa `58805a…`) and pins them; the
+render prefixes those comments with `[admin] `; (2) `promo_key` canonicalises chain rows via the registry's names/aliases; the grader and
+`aggregates` use it; (3) the TEMPLATE (not CODEBOOK) gains a ≤12-line block of worked examples taken from `docs/CODEBOOK-promo-signals.md`
+§3–§6 — never from a dev-40 or holdout thread — covering: feature → chain name; availability question → product with the store in the
+note; admin → post; aggregator's own posting → post; bare reply → post; (4) `--score` re-run on iteration 1's replies under v1.1 as a $0
+reading, printed beside the paid number, never replacing it; (5) the stub tests of (A)'s code; `make check` green. Session B (paid, ≤ the
+step's $1.9746): the runbook with a new `extractor_version` → `promo_dev40_predicted_iter2.jsonl`, `grade_…_iter2.json`, `errors_…_iter2.json`.
+Plateau rule unchanged (two without gain on either bar). Nothing else changes in the prompt for iteration 2.
+
+**Money.** The step's line of record is pod-priced: `promo_dev_loop_run.json :: spent_all_segments_usd` = $0.5254 of $2.50 (both sessions);
+the $0.089622 of session 8 enters the ledger as its own line from that record (`[cause: ruling]`, the anchor of the ledger post-dates it);
+`--close --tolerance` is not applied to pod-priced steps — the walk is informational. Cycle 3: $4.0631 of $7.00, remaining $2.9369.
+The «needs named» list stays in PROGRESS as debts; none blocks iteration 2.
