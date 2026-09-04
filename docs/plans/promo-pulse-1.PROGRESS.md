@@ -32,8 +32,7 @@ Ruling 03.09 (e) made this file the phase's state; §8 of the phase file stays t
   **78.4 min** of pod life. The reasoning stands to be accepted or overruled.
 
 ## Next — the HOLDOUT NOTICE (an operator decision), then «c3» by (l) 2–4
-Subject cleared 0.80 on dev-40 in 3 of the 5 allowed runs, so §8 (e)'s remaining clause is the ONE holdout attempt —
-the open stop below. Plateau 0 of 2, and moot: iteration 3 gained.
+Subject cleared 0.80 on dev-40 in 3 of the 5 allowed runs, so §8 (e)'s remaining clause is the ONE holdout attempt — the open stop below. Plateau 0 of 2, and moot: iteration 3 gained.
 
 ## Open stop — the holdout attempt needs the operator's word BEFORE anything is written
 - **Stop-point:** §8 (e)'s holdout is ONE shot, announced by a STOP notice; (m)5 and (o)5 both end this session at
