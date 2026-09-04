@@ -861,3 +861,13 @@ The «needs named» list stays in PROGRESS as debts; none blocks iteration 2.
    in one line — no stop, the whole step being inside ruling (e)'s «a step ≤ $3 the operator can lose without a word»; only a mean corner
    that does not fit comes to the operator.
 5. Order unchanged: `make check` green → buy iteration 3 → K8 → the error table; subject ≥ 0.80 → the holdout notice, END; RED → the table, END.
+
+## Ruling 04.09 (p) — s18 ACCEPTED by diff ($0): the pack test reads the record in both directions; nothing is open; the next session is the purchase of iteration 3 and nothing else
+
+1. Accepted: `2f2b62c` — the population is read from the committed registration (`leg_a.order` + `leg_b.by_channel`, the count
+   `threads + posts`), «exactly» stated both ways with no id twice, leg B's render-pin loop over the record's own units (empty while (m)4
+   holds), the pack's registration sha checked against `PREREG` first; three negative controls refused at $0; `make check` 4 320 passed,
+   exit 0, no file deleted. The synthetic unit stayed refused; `test_leg_b_pins_ids_and_not_a_count` untouched. Exactly (o)2.
+2. Next session = the paid item alone, as PROGRESS «Next» writes it: runbook §0–§6, the three numbers already declared ($1.4146 · KILL by
+   hand · 90 min = $1.1100), `--score --iteration 3`, K8, the error table naming the diff against iteration 2; subject ≥ 0.80 → the holdout
+   NOTICE, END; RED → the table, END. `items[:3] == pack["smoke_ids"]` stays as it is — named, not moved.
