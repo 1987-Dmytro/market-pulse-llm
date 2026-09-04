@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-09-04 10:15:01 (every SessionStart)
+**Auto-refreshed:** 2026-09-04 12:02:04 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
+d002967 docs(progress): the stop before A-rest's first edit — the registry carries no chain aliases
+1590ab8 knowledge: session 11's artifacts and the PROGRESS next-line under ruling (h)
+ec1b55a docs(lead): rulings 04.09 (h) and (i) — A(1) accepted, A(2)–A(5) are one item, Маркетопт collected before B
 be6a35e docs(progress): the rebuild proved against iteration 1's own pack, inside the 60-line cap
 b4f1700 knowledge(hot): the curated block says A(1) is BUILT — it is injected before PROGRESS is read
-9f77ac8 docs(progress): A(1) built and checked — the open stop is closed, next is A(2)
-d01586a knowledge: session 9's Stop-hook artifacts, left uncommitted by the auto-end
-c7a63a7 s10 A(1): the channel's own account is marked `[admin]`, and a wordless comment leaves the render
 ```
 
 ## 📋 Recent decisions
@@ -29,34 +29,41 @@ c7a63a7 s10 A(1): the channel's own account is marked `[admin]`, and a wordless 
 
 <!-- AUTO-GEN END (everything below preserved across refreshes) -->
 # Hot Cache — curated
-**Last update:** 2026-09-04 (с11 — **A(1) ПРИНЯТ** рулингом (h), `c7a63a7`; следующее — «A-rest»). Этап 1 `SPEC-v2-promo-pulse.md`, карта `STATUS.md`, цикл `PROCESS.md` v3. Руками, ≤40 строк.
+**Last update:** 2026-09-04 (с13 — «A-rest» СДЕЛАН целиком за $0; следующее — «sources-r3: Маркетопт», потом платная B). Этап 1 `SPEC-v2-promo-pulse.md`, карта `STATUS.md`, цикл `PROCESS.md` v3. Руками, ≤40 строк.
 
 ## 🔥 What's Hot
-**▶️ `promo-pulse-1` — стопа нет, следующий шаг A(2).** Состояние — в
-`docs/plans/promo-pulse-1.PROGRESS.md`. Рулинг (f) + (g) закоммичены (`7675946`, `5d6aecf`): кодбук
-**v1.1**, 3 строки эталона → `post`, итерация 2 = сессия A ($0: метка `[admin]`, id сети, примеры в
-шаблоне, тесты) → сессия B (платная ≤$1.9746). Итерация 1: signal **0.8792** ✅ · subject **0.7929** / 0.80.
+**✅ `promo-pulse-1` — «A-rest» ЗАКРЫТ** (`1ae3c40` рулинги по путям · `c2234a4` код+регистрация ·
+`d64faf7` пак). Итерация 1 под v1.1 + свёрткой = **115/140 = 0.8214**, signal **0.8792** ✅.
+Открытого стопа НЕТ. Всё, что ниже, — состояние ПОСЛЕ A-rest.
 
-**✅ A(1) готов (`c7a63a7`, $0).** id админов — в НОВОМ `config/channel_admins.yaml`, реестр НЕ тронут
-(21 печать; r3 закрыта опцией (b) — [[the-sealed-file-does-not-grow-it-gets-a-sibling]]). Читатель один — `promo_prompts.admin_ids`; метка по ID,
-`null`-отправитель ни с чем не совпадает; бестекстовые комменты выброшены из рендера. Флаг едет В
-ПАКЕТЕ: `comments` = `[msg_id, text, sender_anon_id]`, под называет колонки (пакет пар ещё рендерится).
-Проверено: сброшено **68** = `n_wordless` жеребьёвки; меток **23** = админских коммента с текстом;
-пакет пересобран, `56/56`, при расхождении yaml — ОТКАЗ на `@VARUS_channel:2537`; `prep` = `7971ed66…`.
+**💰 ДВЕ ЦИФРЫ ИЗМЕНИЛИСЬ, обе вниз.** Кап шага `promo-dev-loop` **$2.50 → $2.4469** (переиздание
+пересчитало `min($2.50, REMAINING − $0.30)`), REMAINING цикла **$3.3305 → $2.7469** — это сутки
+всегда-включённого тома, не ран. **У B остаётся $1.9215, а НЕ $1.9746 из рулинга (h)4** —
+`--terminate-after` выводится из этого. Цикл 3: **$4.2531 из $7.00**; сессии 10–13 = **$0**.
 
-**🔴 Пины регистрации УЖЕ сдвинулись** (деньги сессии B): `prereg_promo_dev_loop.json` держит эталон
-`302113b8…` / кодбук `6a74bc81…`, на HEAD `2303ea43…` / `23610346…` — коммит v1.1 тимлида, а
-`pinned_inputs` не переверяет никто. `check_law` сверяет ТОЛЬКО `codebook_version`, и A(1) его не
-двинул: пока нет `template_sha256`, защита — по-юнитный `rendering_sha256`. Обе дыры закрывает A-rest.
+**🧪 Закон теперь v1.2.** `codebook_version a587e0d6…`, `template_sha256 57dd9d25…` (новое поле
+регистрации, (g)3). 11 дословных dev-комментов ушли из `promo_prompts.CODEBOOK` — пары старое→новое
+лежат в PROGRESS. Чек живой: `promo_dev_pass.py --leak-check` → `results/promo_law_leak_check.json`,
+берёт строки ИЗ модуля, 27+8 литералов × 328 комментов (dev+холдаут) → **CLEAN**.
+**Два примера тимлида из (j)3 заменены**, потому что не проходят его же чек: «Ну да» — это холдаут
+`@VARUS_channel:8647:15419`, «+1» — внутри dev'ского «по акції 1+1». Откат — одна строка.
+
+**🔧 Свёртка сети:** `config/chain_aliases.yaml` → `aggregates.chain_key` (единственный читатель);
+`subject_id` и грейдер сводят ТОЛЬКО `chain`. Одно написание на два id — отказ. +1 строка, названа:
+`@VARUS_channel:6216:8865`. KFC / Roshen / Велмарт / Mono НЕ внесены — их написания пришлось бы
+брать из экзамена. [[measure_what_the_normalisation_would_fix]]
+
+**⚠️ `promo_dev40_prep.json` был протухшим с A(1)** — мерил рендер с бессловесными комментами.
+После перегенерации короткий дымовой юнит: `@msuaaaa:6523` → **`@msuaaaa:7187`**. Пины регистрации
+теперь v1.1 (`2303ea43…` / `23610346…`) — старый разрыв закрыт; `pinned_inputs` по-прежнему никто
+не переверяет. [[a_fixture_on_disk_pins_yesterdays_schema]]
 
 ## ⏭️ Next / 🚧 Blockers
-**Рулинг (h): A(2)–A(5) + переиздание регистрации = ОДИН пункт «A-rest» в одной сессии.** `promo_key`
-→ примеры в TEMPLATE (ДОСЛОВНО из кодбука v1.1 §3–§6, со ссылкой на §, блок в PROGRESS) → чтение v1.1
-за $0 в `errors_iter1_v1.1.json` (НЕ через `--score --iteration 1`: перезапишет платный) → stub-тесты
-→ регистрация под sha v1.1 + `template_sha256`, в пакете `"iteration": 2`. Дальше сразу B, БЕЗ чтения
-рендера тимлидом ((h) п.3): `--out …_iter2.jsonl`, ≤ $1.9746.
-Параллельно за $0: разметка позиций тимлидом ПО СТРАНИЦАМ (46 страниц) — критический путь S1.
-Деньги: шаг `promo-dev-loop` **$0.5254 из $2.50** ($1.9746) · `CYCLE 3 SPENT $4.0631 of $7.00 · REMAINING $2.9369`; сессии 10 и 11 = **$0**.
+**Следующий пункт — «sources-r3: Маркетопт» (рулинг (i)), ДО платной B:** вступить в
+`marketopt_private` (`+Ejz6ubzm21IyMTQy`, строка реестра есть), сбор ($0), ценз, страницы под
+`results/prereg_promo_c3.json` **кап $0.50**, ТРЕТЬЕ окно, `make tick` дважды, `make promo-screen`
+рядом с w2. `@ON_LINE_MO` — через боковой файл, если ценз покажет цены. Потом B: `*_iter2.*`,
+**≤ $1.9215**. Параллельно за $0: позиции тимлидом ПО СТРАНИЦАМ (46).
 **⚠️ K4 НЕ ПЕРЕЗАПУСКАТЬ** (`:366/:171/:153`) · **⛔ `1925810730` и инвайт-хэш неадресуемы** ·
 **⚠️ платный ран отцеплённым (`setsid`), Dv904** · **⚠️ фикстура в стор патчит ВСЕ derived-корни** ·
 **⚠️ `volume_calc_5c1.py` НЕ ЗАПУСКАТЬ просто так.**
