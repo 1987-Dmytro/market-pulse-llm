@@ -725,3 +725,16 @@ Plateau rule unchanged (two without gain on either bar). Nothing else changes in
 the $0.089622 of session 8 enters the ledger as its own line from that record (`[cause: ruling]`, the anchor of the ledger post-dates it);
 `--close --tolerance` is not applied to pod-priced steps — the walk is informational. Cycle 3: $4.0631 of $7.00, remaining $2.9369.
 The «needs named» list stays in PROGRESS as debts; none blocks iteration 2.
+
+## Ruling 04.09 (g) — `admin_anon_ids` live OUTSIDE the registry (option b); wordless comments leave the render; session B is bought under a registration re-emitted for v1.1
+
+1. **(b).** The ids go into a new file `config/channel_admins.yaml` (`"@VARUS_channel": [<full sender_anon_id>], "@msuaaaa": [...]`,
+   resolved from the store, committed), read ONLY by the render. `config/registry.yaml` does not move; no revision r3; no preflight change.
+   The seals pin a file that must not grow — the same lesson as the derived store, applied before it costs a session.
+2. The render DROPS wordless comments (`text.strip()==""`): they are outside the queue (SPEC 3.19), outside the gold, and a blank
+   `[admin]` line would be content nobody labelled. `[admin] ` is prefixed only where the sender id matches; a null sender gets nothing.
+3. Session B is bought under `results/prereg_promo_dev_loop.json` RE-EMITTED with v1.1's shas (gold `2303ea43…`, codebook `23610346…`)
+   and a new `template_sha256` (TEMPLATE + the examples block) so a render-only change is visible in the record; `committed_registration()`
+   not verifying `pinned_inputs` is a named debt, not built now. B is not bought before A(3) lands.
+4. A(4)'s reading writes to `results/promo_dev40_errors_iter1_v1.1.json`; the paid `…_iter1.json` is never rewritten. The runbook's `--out`
+   takes the iteration number (`promo_dev40_iter2.jsonl`). C2 collection stays open (not (c)). The rest of the «needs named» list stays as debts.
