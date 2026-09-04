@@ -247,6 +247,25 @@ async def join_group(client, handle: str) -> dict:
     return row | {"outcome": "joined"}
 
 
+def resolvable(handle: str) -> str:
+    """The spelling `get_entity` accepts — the registry's own is not one, for an invite hash.
+
+    `marketopt_private` is a private channel with no username, so its registry handle IS its
+    invite hash (`+Ejz6ubzm21IyMTQy`). Telethon's `utils.parse_username` recognises the `+` form
+    only AFTER a `t.me/`: it returns `(None, False)` for the bare hash and `('Ejz6ubzm21IyMTQy',
+    True)` for `t.me/+Ejz6ubzm21IyMTQy`. The bare spelling then falls through to a session lookup
+    that misses, and the r2 run's `except Exception` swallowed the ValueError into a silent zero
+    row — which is why this channel has been «joined but uncollected» since 30.08 while the account
+    has been a member all along (`results/joins_5c1.jsonl:33`, `already_member`).
+
+    Only the RESOLVE argument is rewritten. `handle` stays the registry spelling everywhere else,
+    because it is the store key (`data/raw_r2/posts/<handle>.jsonl`) and the segment key
+    `build_aggregates.segment_for` joins on: a channel collected under a second spelling would be
+    a second channel to every reader downstream.
+    """
+    return f"t.me/{handle}" if handle.startswith("+") else handle
+
+
 def since_of(record: dict | None) -> datetime:
     """The window's start, FIXED by the first run and read back afterwards.
 
@@ -364,7 +383,7 @@ async def run(args, registry) -> dict:
         if args.posts:
             for source, handle in channels:
                 try:
-                    entity = await client.get_entity(handle)
+                    entity = await client.get_entity(resolvable(handle))
                     # Per source, not once for the run: `source_type` and `comments_enabled` are
                     # the SOURCE's, so one provenance hoisted out of this loop would stamp every
                     # channel with whichever came first.

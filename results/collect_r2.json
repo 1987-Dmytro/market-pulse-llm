@@ -202,10 +202,10 @@
       "comments_enabled": false,
       "comments_stored": 0,
       "damaged_lines": 0,
-      "posts_added_r2": 0,
-      "posts_first": null,
-      "posts_last": null,
-      "posts_stored": 0,
+      "posts_added_r2": 33,
+      "posts_first": "2026-08-04T08:36:56+00:00",
+      "posts_last": "2026-09-04T08:40:42+00:00",
+      "posts_stored": 33,
       "source_id": "marketopt_private",
       "source_type": "official_retail",
       "threads_with_comments": 0
@@ -336,7 +336,7 @@
       "outcome": "joined"
     }
   ],
-  "phase": "comments",
+  "phase": "plan",
   "since": "2026-08-02T14:07:39.042521+00:00",
   "window_days": 28
 }
