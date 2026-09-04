@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-09-04 19:13:08 (every SessionStart)
+**Auto-refreshed:** 2026-09-04 19:40:10 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
+4133f17 knowledge: s18's boot state — no stop is open, make check is 4320/0, next is the paid session
+cb84bfa docs(progress): the stop is closed by (o) — the test reads the record, and next is the purchase
+2f2b62c test(promo-dev): the pack test reads the population from the registration, both directions
+ec16e82 docs(lead): ruling 04.09 (o) + PHASE v6 §6.6 + the day's fifth stop, committed by path
 e18ce58 docs(progress): the stop names the WHOLE repair — the docstring's «56» and the leg-B test beside it
-5e133af docs(progress): iteration 3's $0 half is done and proven; the open stop is a test that must change
-1962ee5 s17: the pack is 40 leg-A units, and the runbook is off every paid `…_iter2.*`
-48537b9 s17(prereg): the registration re-emitted for iteration 3 — cap $2.1638, dear $1.3100, FITS
-8efb0c8 s17: the emitter is iteration 3 — both halves of the repair pinned, leg B closed
 ```
 
 ## 📋 Recent decisions
@@ -29,7 +29,7 @@ e18ce58 docs(progress): the stop names the WHOLE repair — the docstring's «56
 
 <!-- AUTO-GEN END (everything below preserved across refreshes) -->
 # Hot Cache — curated
-**Last update:** 2026-09-04 19:35 (checkpoint s18). Этап 1 `SPEC-v2`, карта `STATUS.md`, цикл
+**Last update:** 2026-09-04 19:39 (checkpoint s18). Этап 1 `SPEC-v2`, карта `STATUS.md`, цикл
 `PROCESS.md` v3, файл фазы **PHASE v6**. Руками, ≤40 строк.
 
 ## 🔥 What's Hot
