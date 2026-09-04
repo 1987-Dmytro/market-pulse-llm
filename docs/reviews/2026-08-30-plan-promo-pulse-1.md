@@ -781,3 +781,15 @@ The «needs named» list stays in PROGRESS as debts; none blocks iteration 2.
 3. **A(3), fifth category — the examples are the team lead's, synthetic:** «Ну да» · «Ок, зрозуміло» · «+1» · «І що?» → `post`. (h)3 is
    amended: examples are synthetic paraphrases in the codebook's shape, cited by section, never store text.
 4. Order unchanged: A-rest (with 1–3) → «sources-r3: Маркетопт» (ruling (i)) → B.
+
+## Ruling 04.09 (k) — «A-rest» ACCEPTED in full; the near-quote waits for the law freeze before the holdout; next: Маркетопт, then B at ≤ $1.9215
+
+1. Accepted by diff and files (`c2234a4`, `d64faf7`, `3f75106`): `config/chain_aliases.yaml` from the chains' NAMES (+1 row, `8865`, none broken
+   — 0.8214 as a $0 reading under v1.1); law v1.2 (`a587e0d6…`) with the 11 paraphrases; the synthetic examples block, two of the team lead's
+   own examples rightly swapped («Ну да» was holdout text — the check caught its author); `--leak-check` CLEAN over 328 comments;
+   `--score --suffix`; the registration re-emitted with v1.1 pins, `template_sha256`, `"iteration": 2`, rung 0 FITS $1.3193 of $2.4469;
+   `make check` 4 319 green; the layering invariant kept (the layer is handed the spellings, it opens nothing).
+2. The near-quote «Шикарно. Цілий день тиша, а потім скидка» is NOT changed before B: a law move now would re-derive the pack for a
+   cosmetic gain. It is replaced (with the codebook doc synced to the same paraphrases, v1.2) at the law FREEZE that precedes the holdout
+   pre-registration — one move, one registration.
+3. The cap fell with the always-on volume to $2.4469; B is bought at ≤ $1.9215 as PROGRESS says. Order stands: Маркетопт (ruling (i)) → B.
