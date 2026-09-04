@@ -672,7 +672,12 @@ def build_pack() -> dict:
             "channel": row["channel"],
             "post_id": str(row["thread_root"]),
             "post": post,
-            "comments": [[int(one["msg_id"]), one.get("text") or ""] for one in ordered],
+            # the sender id rides IN the pack: the pod re-renders from these rows and nothing else,
+            # so a marker resolved only on the Mac would render two different prompts
+            "comments": [
+                [int(one["msg_id"]), one.get("text") or "", one.get("sender_anon_id")]
+                for one in ordered
+            ],
             "rendering_sha256": promo_prompts.extractor_version(rendered),
             "chars": len(rendered),
             "smoke": unit_id(row) in smoke,

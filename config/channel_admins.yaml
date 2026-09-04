@@ -1,0 +1,15 @@
+# The channel's OWN account, per collected channel — the ids the render marks `[admin] `.
+#
+# Ruling 04.09 (g) item 1: these live HERE and not in `config/registry.yaml`, which 21 sealed
+# records pin in four sha families — a file that must not grow. Read by ONE caller,
+# `market_pulse.promo_prompts.admin_ids`, so nothing but the render depends on the shape.
+#
+# The two handles are the ones ruling 03.09 (f) names by prefix (VARUS `2fa2b7…`,
+# msuaaaa `58805a…`); each prefix resolves to exactly ONE `sender_anon_id` across the whole of
+# `data/raw/comments/`, and that id appears in exactly one channel. Resolved from the store, never
+# typed from the codebook. @kopiyochka1 has such an account too and is NOT here: it is outside
+# dev-40 and outside the ruling, and its source carries two handles for one id.
+"@VARUS_channel":
+  - 2fa2b73f617ba1fb3bf7fbe3aa5819142aa95c4080a3e23a196d2efe022dc888
+"@msuaaaa":
+  - 58805a362c3943d21a04fed9da12edeebe9433208e83e9a643f926aef3d41531

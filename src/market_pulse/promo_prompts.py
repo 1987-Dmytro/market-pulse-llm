@@ -26,8 +26,16 @@ caption and reader legs each loop one item per forward (plan §5.11).
 
 from __future__ import annotations
 
+import functools
 import hashlib
 import json
+from pathlib import Path
+
+import yaml
+
+ADMINS = Path(__file__).resolve().parents[2] / "config" / "channel_admins.yaml"
+"""The channel's own account per handle. A file of its own by ruling 04.09 (g) item 1 — the
+registry 21 sealed records pin may not grow — and this module is its ONE reader."""
 
 SUBJECT_TYPES = ("chain", "brand", "sku", "post")
 """What a comment can be about. Mirrors `aggregates.SUBJECT_TYPES`; asserted equal in the tests, so
@@ -120,23 +128,47 @@ TEMPLATE = """{codebook}
   unsure : {{"msg_id": int, "reason": str, "candidates": [str]}}"""
 
 
+@functools.lru_cache(maxsize=1)
+def _admins() -> dict[str, frozenset[str]]:
+    return {
+        handle: frozenset(ids or ())
+        for handle, ids in (yaml.safe_load(ADMINS.read_text(encoding="utf-8")) or {}).items()
+    }
+
+
+def admin_ids(channel: str) -> frozenset[str]:
+    """The `sender_anon_id`s of `channel`'s own account, empty for a channel with none named."""
+    return _admins().get(channel, frozenset())
+
+
 def render(channel: str, thread_root, post: str, comments: list[dict]) -> str:
     """The text the model reads, for one cooled thread. Deterministic — no clock, no ordering luck.
 
     Comments are rendered in msg_id order rather than store order: the store is append-only and a
     resumed collection can interleave, and a prompt whose lines move between runs would move
     `extractor_version` with them.
+
+    Two rules of ruling 04.09 (g), both mechanical so the model never guesses at them. A comment the
+    channel's OWN account wrote is prefixed `[admin] ` — iteration 1 missed four of them because the
+    text alone cannot say who wrote it (codebook §6, rule 2). A comment with no text is DROPPED: it
+    is outside the queue, outside the gold, and a blank `[admin] ` line would be content nobody
+    labelled ([[an_exclusion_by_id_is_not_an_exclusion_by_text]] — the id decides, the text does
+    not, and a `null` sender matches no admin).
     """
-    lines = "\n".join(
-        f"[{row['msg_id']}] {(row.get('text') or '').strip()}"
-        for row in sorted(comments, key=lambda row: int(row["msg_id"]))
-    )
+    admins = admin_ids(channel)
+    lines = []
+    for row in sorted(comments, key=lambda row: int(row["msg_id"])):
+        text = (row.get("text") or "").strip()
+        if not text:
+            continue
+        mark = "[admin] " if row.get("sender_anon_id") in admins else ""
+        lines.append(f"[{row['msg_id']}] {mark}{text}")
     return TEMPLATE.format(
         codebook=CODEBOOK,
         channel=channel,
         thread_root=thread_root,
         post=(post or "").strip() or "(без тексту — ціна в зображенні)",
-        comments=lines,
+        comments="\n".join(lines),
     )
 
 

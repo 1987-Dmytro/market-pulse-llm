@@ -148,13 +148,29 @@ def test_the_prompt_and_the_tables_share_one_vocabulary():
 def test_the_render_carries_the_law_and_the_version_is_the_render():
     """The prompt must carry the annotator's law, or the grader scores a guideline the model never
     read. And `extractor_version` is the RENDER: a comment change in the module must not move it,
-    a template change must."""
+    a template change must.
+
+    The two `[103]` lines below were re-pointed at ruling 04.09 (g) item 2 (authorised for this
+    session by ruling 03.09 (f) A(5)): the wordless comment used to be rendered as a bare `[103] `
+    and now leaves the render entirely, so the assertion that saw it asserts its absence.
+    """
     rendered = promo_prompts.render("@VARUS_channel", 4519, "Знижки тижня", COMMENTS)
     assert promo_prompts.CODEBOOK in rendered
     for name in promo_prompts.SIGNAL_TYPES:
         assert name in rendered, name
-    assert "[101]" in rendered and "[103]" in rendered
+    assert "[101]" in rendered and "[103]" not in rendered
     assert promo_prompts.extractor_version(rendered) != promo_prompts.codebook_version()
     # deterministic: the comments are rendered in msg_id order, not store order
     shuffled = promo_prompts.render("@VARUS_channel", 4519, "Знижки тижня", COMMENTS[::-1])
     assert promo_prompts.extractor_version(shuffled) == promo_prompts.extractor_version(rendered)
+
+    # ruling 04.09 (g) item 1: the marker is the sender's ID, never the text — and a null sender
+    # matches no admin, which is what 28 of the VARUS comments carry
+    admin = next(iter(promo_prompts.admin_ids("@VARUS_channel")))
+    marked = promo_prompts.render("@VARUS_channel", 4519, "Знижки тижня", [
+        {"msg_id": "104", "text": "Передали колегам", "sender_anon_id": admin},
+        {"msg_id": "105", "text": "Передали колегам", "sender_anon_id": None},
+    ])
+    assert "[104] [admin] Передали колегам" in marked
+    assert "[105] Передали колегам" in marked
+    assert not promo_prompts.admin_ids("@no_such_channel")

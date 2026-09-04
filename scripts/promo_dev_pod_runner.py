@@ -57,7 +57,12 @@ def render(prompts, item: dict, task: str) -> str:
             item["channel"],
             item["post_id"],
             item.get("post") or "",
-            [{"msg_id": msg_id, "text": text} for msg_id, text in item.get("comments") or ()],
+            # named by column, not unpacked: a pack written before ruling 04.09 (g) carries pairs,
+            # and a row with no `sender_anon_id` key is simply a comment no admin wrote
+            [
+                dict(zip(("msg_id", "text", "sender_anon_id"), one, strict=False))
+                for one in item.get("comments") or ()
+            ],
         )
     if kind == POST_TASK:
         return prompts.positions_messages_text_gm4(item["text"])[0]["content"]
