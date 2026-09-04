@@ -25,10 +25,10 @@ min late). c3's cap under (l)4 = `min($0.50, REMAINING − $0.30)` = **$0.50**; 
   it IS §6.5's $0 drill — object · array × fenced · unfenced, driven through `close_arrays_too` +
   `stops_here` (the wiring the `StoppingCriteria` applies, not the bare function), three negative
   controls: the shipped rule still cuts the fenced array short, an object comes back byte-for-byte
-  from it, an unclosed array is `None`. 5 passed; ruff clean.
+  from it, an unclosed array is `None`. 5 passed; ruff clean; the added `unfence`+`index` costs the
+  stop **+5.7 ms over a whole 6.6 KB array generation** (+0.4 ms on the longest paid leg-A answer).
 - **The paid record does not move:** re-parsing `results/promo_dev40_iter2.jsonl` with the fold gives
-  the SAME 122 `about` rows and the SAME one parse failure at `@VARUS_channel:6216` — the 17 answers
-  were never generated, exactly as (m)1 says.
+  the SAME 122 `about` rows and the SAME one parse failure at `@VARUS_channel:6216` ((m)1).
 
 ## Next
 **Iteration 3, ONE session as B was ((m)5), starting at its re-emission:** the registration
@@ -44,8 +44,8 @@ None — (m) answered both: the repair is a NEW instrument bought under the NEXT
 ## Named, not built (the standing prompt forbids adding what the phase did not ask for)
 - **`extractor_version` cannot carry iteration 3's identity:** it is `sha256(rendered prompt)`
   (`promo_prompts.py:194`) and a transport/parser repair leaves every one of the 40 identical.
-  (m)5's «the runner's sha among the pins» is what actually separates the two instruments — the
-  re-emission must pin `scripts/promo_dev_pod_runner.py`, and no version field was invented here.
+  (m)5's «the runner's sha among the pins» is what separates them — and the re-emission must pin
+  `promo_prompts.py` BESIDE the runner: half the repair is in each and `check_law` covers neither.
 - **`pod.main` installs `close_arrays_too` on `market_pulse.reader_v5` and never lifts it**, so by
   file order the attribute is patched when a later test reads it; the new test takes the shipped rule
   from a reload and puts back what it found. Not fixed — nothing asked for it.
