@@ -30,14 +30,14 @@ $1.9746.** Cycle 3 **$4.2531 of $7.00**, holdout $0.30 untouched; this session s
     chars) + 8 examples literals (no floor) × **328** comments (140 dev + 188 holdout) → **CLEAN**.
   - **A(4)** `--score --suffix _v1.1` → `promo_dev40_errors_iter1_v1.1.json` (subject 0.8214, signal
     0.8792, **25** misses); the paid `…_iter1.*` pair untouched, shown by `git diff`.
-  - **A(5)+(g)3** stub tests; registration re-emitted — pins are v1.1's (gold `2303ea43…`, codebook
-    `23610346…`), `law.template_sha256 57dd9d25…`, `"iteration": 2` in the pack, rung 0 FITS at the
-    dear corner **$1.3193 of $2.4469**. `promo_dev40_prep.json` had been **stale since A(1)** (it
-    still measured a render carrying wordless comments), so the shortest smoke unit moves
-    **`@msuaaaa:6523` → `@msuaaaa:7187`** — same rule, fixed input. **Two reds, both mine:** the
-    predicted pack one, closed by the pack; and `test_the_layer_reads_nothing_and_parses_nothing` —
-    `aggregates` may not OPEN a path, so `registry.chain_spellings()` reads the sidecar and hands it
-    over. The design moved, never the test.
+  - **A(5)+(g)3** stub tests (`make check` **4319 passed / 2 skipped**, was 4313); registration
+    re-emitted — pins are v1.1's (gold `2303ea43…`, codebook `23610346…`), `law.template_sha256`,
+    `"iteration": 2` in the pack, rung 0 FITS at the dear corner **$1.3193 of $2.4469**.
+    `promo_dev40_prep.json` had been **stale since A(1)** (it still measured a render carrying
+    wordless comments), so the shortest smoke unit moves **`@msuaaaa:6523` → `@msuaaaa:7187`** —
+    same rule, fixed input. **Two reds, both mine:** the pack one, predicted and closed by the
+    pack; and `test_the_layer_reads_nothing_and_parses_nothing` — `aggregates` may not OPEN a
+    path, so `registry.chain_spellings()` reads the sidecar. The design moved, not the test.
 
 ## Next — «sources-r3: Маркетопт» (ruling 04.09 (i)), BEFORE the paid B
 Join `marketopt_private` (`+Ejz6ubzm21IyMTQy`, a registry row already) → collect ($0) → census → its
