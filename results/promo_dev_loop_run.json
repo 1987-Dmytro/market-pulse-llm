@@ -223,10 +223,92 @@
       "segment": 4,
       "spent_all_segments_usd": 0.74925,
       "verdict": "GO"
+    },
+    {
+      "at": "2026-09-04T18:00:02+00:00",
+      "backstop_fits": true,
+      "cap_usd": 2.1638,
+      "card": "NVIDIA GeForce RTX 4090",
+      "hard_stop_seconds": 10526.6,
+      "kind": "price",
+      "pod_id": "cd918wet7sea5b",
+      "registered_card": "NVIDIA GeForce RTX 4090",
+      "registered_usd_per_hour": 0.74,
+      "rule": "rung 1: the create response's costPerHr ≤ the registered price, and the card is the registered card. Delete on KILL — the cap was computed against the other number",
+      "segment": 5,
+      "terminate_after_minutes": 90,
+      "usd_at_the_backstop": 1.11,
+      "usd_per_hour": 0.74,
+      "verdict": "GO"
+    },
+    {
+      "at": "2026-09-04T18:09:39+00:00",
+      "bands": {
+        "0.80 - 1.20": "run it, then STOP with the error table",
+        "<= 0.80": "run iteration 1 now",
+        "> 1.20": "STOP before buying; pod torn down, listing shown"
+      },
+      "corners": [
+        {
+          "billable_seconds": 4096.2,
+          "cap_usd": 2.1638,
+          "fits": true,
+          "name": "measured mean",
+          "over_cap_by": -0.6109,
+          "overhead_seconds": 279.0,
+          "seconds_per_post": 2.813,
+          "seconds_per_thread": 88.772,
+          "usd": 0.842
+        },
+        {
+          "billable_seconds": 8963.6,
+          "cap_usd": 2.1638,
+          "fits": true,
+          "name": "measured max",
+          "over_cap_by": -0.1485,
+          "overhead_seconds": 279.0,
+          "seconds_per_post": 2.813,
+          "seconds_per_thread": 201.967,
+          "usd": 1.8425
+        }
+      ],
+      "kind": "smoke",
+      "measured": {
+        "max": 201.967,
+        "n": 3,
+        "name": "promo_dev40_seconds_per_thread",
+        "replaces": "pass2_r2_seconds_per_thread",
+        "seconds": {
+          "@VARUS_channel:6009": 201.967,
+          "@VARUS_channel:9006": 52.706,
+          "@msuaaaa:7187": 11.643
+        },
+        "value": 88.772
+      },
+      "pod_id": "cd918wet7sea5b",
+      "replies": "results/promo_dev40_iter3.jsonl",
+      "rule": "ruling 03.09 (b), quoted and not moved — the band is read at the MEAN corner; a MAX corner over the cap is a KILL whatever the band says",
+      "segment": 5,
+      "usd_at_the_measured_max": 1.8425,
+      "usd_at_the_measured_mean": 0.842,
+      "verdict": "GO-THEN-STOP"
+    },
+    {
+      "at": "2026-09-04T18:40:17+00:00",
+      "billed_seconds": 2402.0,
+      "billed_usd": 0.493744,
+      "cap_usd": 2.1638,
+      "kind": "close",
+      "left_usd": 0.920806,
+      "outcome": "iteration 3 ran whole: 40 of 40 leg-A units answered (leg B closed by (m)4), every reply balanced, finish stop; boot 210.7 s off the warm volume, 266.3 s of smoke and 1163.4 s of the remaining 37, no second boot across the GO",
+      "pod_id": "cd918wet7sea5b",
+      "segment": 5,
+      "spent_all_segments_usd": 1.242994,
+      "verdict": "GO"
     }
   ],
   "latest": {
-    "at": "2026-09-04T15:01:05+00:00",
+    "at": "2026-09-04T18:40:17+00:00",
     "kind": "close",
     "verdict": "GO"
   },
@@ -270,6 +352,16 @@
       "deleted_at": "2026-09-04T15:00:54Z",
       "outcome": "iteration 2 ran whole: 56 of 56 units answered (40 leg-A threads, 16 leg-B posts), every reply balanced, finish stop; boot 167.0 s off the warm volume, 283.4 s of smoke and 604.1 s of the rest, no second boot across the GO",
       "pod_id": "ej1dxfcpe0etff",
+      "usd_per_hour": 0.74
+    },
+    {
+      "billed_seconds": 2402.0,
+      "billed_usd": 0.493744,
+      "card": "NVIDIA GeForce RTX 4090",
+      "created_at": "2026-09-04T17:59:53Z",
+      "deleted_at": "2026-09-04T18:39:55Z",
+      "outcome": "iteration 3 ran whole: 40 of 40 leg-A units answered (leg B closed by (m)4), every reply balanced, finish stop; boot 210.7 s off the warm volume, 266.3 s of smoke and 1163.4 s of the remaining 37, no second boot across the GO",
+      "pod_id": "cd918wet7sea5b",
       "usd_per_hour": 0.74
     }
   ]
