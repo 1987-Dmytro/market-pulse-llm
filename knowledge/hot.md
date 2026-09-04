@@ -2,65 +2,65 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-09-03 21:27:47 (every SessionStart)
+**Auto-refreshed:** 2026-09-04 06:37:14 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
-6104455 knowledge(decision): the PAUSE branch is unreachable, not just unhonoured — the evaluator's own third block says so
-d7e7810 docs(check): make check green at 49860d1 — 4 313 passed, 2 skipped, exit 0
-49860d1 docs(stop,report): the pod was REACHED, and the unused recreate is refused on the record
-9c5af91 knowledge: session 8 — the paid attempt, the dead-man that is set below its own span
-e4340e1 s9(paid,stop): two pods bought and killed by my own ssh dead-man — 180 s from a PROBE where the settled sibling registers 500 s
+126555c docs(progress): iteration 1 is read — the open stop is «iteration 1 read», with its three questions
+b0c90cc s9(paid): iteration 1 ran WHOLE — signal 0.8792 HOLDS, subject 0.7929 against 0.80, one comment short
+36ef74f s9(parse): gemma-4 fences its answer, and the fence is not the answer
+77bfed7 s9(project): the summary line read a key `corner()` does not return
+d562d34 s9(ledger): the promo-dev-loop step ledger anchored BEFORE the first pod of this session
 ```
 
 ## 📋 Recent decisions
 
-- `the-pause-branch-is-unsatisfiable-as-worded.md` — §8's PAUSE branch is unsatisfiable as worded — the evaluator agrees and still returns «not met»
 - `INDEX.md` — Decision records
-- `the-schedule-reports-it-does-not-gate-the-tick.md` — `data/schedule.json` reports whether a tick is due; it does not refuse one — because a gate there would make the idempotence check untestable
+- `terminate-after-is-the-cap-less-what-the-step-spent.md` — `--terminate-after` is derived from the cap LESS what the step already spent
+- `the-fence-is-not-the-answer.md` — The ```json fence is read off, and nothing inside it is repaired — iteration 1's one deviation
 
 ## 📅 Recent daily logs
 
+- `2026-09-04.md`
 - `2026-09-03.md`
 - `2026-09-02.md`
-- `2026-09-01.md`
 
 <!-- AUTO-GEN END (everything below preserved across refreshes) -->
 # Hot Cache — curated
-**Last update:** 2026-09-03 (сессия 8, ПЕРВЫЙ ПЛАТНЫЙ заход S9 — два пода куплены и убиты моим же
-dead-man). Этап 1 `SPEC-v2-promo-pulse.md`, карта `STATUS.md`, цикл `PROCESS.md` v2.1. Руками, ≤40 строк.
+**Last update:** 2026-09-03 (сессия 9 — ИТЕРАЦИЯ 1 КУПЛЕНА И ПРОШЛА ЦЕЛИКОМ). Этап 1
+`SPEC-v2-promo-pulse.md`, карта `STATUS.md`, цикл `PROCESS.md` v3 (без `/goal`). Руками, ≤40 строк.
 
 ## 🔥 What's Hot
-**⏸️ `promo-pulse-1` — ВОСЬМАЯ ПАУЗА, сработал РУНГ.** Рулинг (d) исполнен §0→§2: листинги `[]`,
-гард, цена ($0.74 secure / $0.34 community — как в регистрации), **create ДВАЖДЫ**, рунг 1 GO оба
-раза. Оба пода `RUNNING`, а `runpodctl ssh info` — `{"error": "pod not ready"}`; ssh dead-man убил
-обоих. `ocnsveqetsve8w` 215 с $0.044194 · `gxuil044h61fkx` 221 с $0.045428 →
-`results/promo_dev_loop_run.json` **$0.089622 из $2.50, осталось $2.410378**. Ничего не
-сгенерировано, ни одного токена, ни одна нога не стейджилась. Листинги `[]` после каждого delete.
+**⏸️ `promo-pulse-1` — стоп «iteration 1 read».** Состояние живёт в
+`docs/plans/promo-pulse-1.PROGRESS.md` (done / next / open stop) — он заменил STOP-файлы и отчёты.
+Итерация 1: под `0z95ve2n570f0t`, 2 120 с, **$0.435778**; 56/56 юнитов, все balanced, 0 ошибок
+разбора. **signal-type 0.8792 ДЕРЖИТ 0.75 · subject 111/140 = 0.7929 против 0.80 — красный на ОДИН
+коммент.** Страты: currency 0.7377/0.8583, decimal_only 0.8354/0.9000. Нога B — 16 пустых массивов,
+и они ВЕРНЫЕ (рыба, свинина, шланги, люстры — молочки там нет).
 
-**🎯 ДЕФЕКТ — сам гейт.** `prereg_promo_dev_loop.json :: gates.ssh_deadman_seconds` = **180 с**, взяты
-из ЗОНДА `prereg_reader_probe_v5b.json`. Продакшн-сиблинг `prereg_pass2_signals_r2.json ::
-kill_clock[рунг 2]` = **500 с** для ТОГО ЖЕ рунга/образа/карты/ДЦ, и в его `rule` — **шесть замеров
-14.5 → 262.5 с**. Гейт НИЖЕ наблюдённого максимума ⇒ KILL раньше, чем возможен замер. Корень: оверхед
-рунга 0 занят у сиблинга, который РАСЧИТАЛСЯ, а гейт — у зонда. Починка $0 и посчитана: 500 с →
-мёртвый сегмент 560 с = $0.1151, два = $0.2302, дорогой угол + два = **$1.5495 из $2.50**. НЕ ДВИГАЛ:
-это зарегистрированное число в преregister'е, чьи деньги уже пошли → заходу 2 нужна НОВАЯ запись.
+**🎯 Три вопроса тимлиду** (все в PROGRESS): (1) 29 промахов subject одной формы — модель отвечает
+СЕТЬЮ там, где кодбук хочет товар; это вопрос КОДБУКА, файла тимлида. (2) Забор ```json вокруг всех
+40 ответов: `promo_prompts.parse` теперь снимает его и больше ничего — [[the-fence-is-not-the-answer]];
+сырые ответы на диске, пересчитывается в любую сторону за $0. (3) Леджер шага ОТКРЫТ: `--close`
+отказался на неприземлившемся billing walk (0 мс против 2 120 000) вместо ~$0.00 навсегда.
 
-**✅ Строка create рулинга (d) ОПРАВДАНА.** `--image runpod/pytorch:1.0.2-cu1281-torch280-ubuntu2404`,
-EU-RO-1/SECURE/`--ssh`/диск 30 — распарсилось, оба пода по **$0.74/ч**. `--terminate-after` —
-**ДАТА-ВРЕМЯ** (`pod create --help`), т.е. `90m` вообще не значение этого флага; из капа вышло
-`2026-09-03T19:59:22Z`. `make check` на `5d0386b` (HEAD бандла): **4 313 passed, exit 0**.
+**✅ Что построено за $0 до денег.** `--project` (гейт таблицы решений; GO $0.7844 против $0.80),
+`--score` (соединение ответов с K8 + таблица ошибок), закрытие МАССИВА для ноги B, и восемь
+дефектов, подтверждённых состязательным аудитом (`git show 4e75e04`). Дед-ман 500 с оправдался —
+порт на 37-й секунде. `--terminate-after` = кап МИНУС уже потраченное
+([[terminate-after-is-the-cap-less-what-the-step-spent]]).
 
 ## ⏭️ Next / 🚧 Blockers
-START RITUAL → рулинг по восьмой паузе: dead-man 500 с в НОВОЙ регистрации, и два денежных вопроса —
-(1) несёт ли леджер шага `promo-dev-loop` $0.089622 как открывающий баланс (якорь ПОСЛЕ траты соврал
-бы), (2) гард: delta $3.5506 → **$3.6322**, а walk всё ещё $3.5409 — лаг 30–40 мин.
-Деньги цикла: `CYCLE 3 SPENT $3.6322 of $7.00 · REMAINING $3.3678`; холдаут $0.30 не тронут.
+Ждём рулинг по «iteration 1 read» → итерация 2. Параллельно и за $0: разметка позиций тимлидом ПО
+СТРАНИЦАМ (46 страниц) — критический путь S1.
+Деньги: шаг `promo-dev-loop` **$0.5254 из $2.50** ($1.9746 осталось) · `CYCLE 3 SPENT $4.0631 of
+$7.00 · REMAINING $2.9369`; холдаут $0.30 не тронут. Леджер шага заякорен 20:17:16Z и не закрыт.
 **⚠️ K4 НЕ ПЕРЕЗАПУСКАТЬ** (`:366/:171/:153`). **⛔ `1925810730` и инвайт-хэш неадресуемы.**
-**⚠️ Платный ран — отцеплённым (`setsid`), Dv904.** **⚠️ Фикстура, пишущая в стор, ДОЛЖНА патчить
-ВСЕ derived-корни.** **⚠️ `volume_calc_5c1.py` НЕ ЗАПУСКАТЬ просто так.**
+**⚠️ Платный ран — отцеплённым (`setsid`), Dv904** — сегодня хостовые вотчеры убили, под выжил.
+**⚠️ Фикстура, пишущая в стор, ДОЛЖНА патчить ВСЕ derived-корни.**
+**⚠️ `volume_calc_5c1.py` НЕ ЗАПУСКАТЬ просто так.**
 
 ## 🔫 Footguns этого файла
 **⛔ ЭТОТ ФАЙЛ ГРЕПАЕТСЯ КАК ВХОД — ДВА ЛИТЕРАЛА.** `scripts/volume_calc_5c1.py :: quoted()` берёт обе строки ниже посимвольно; пропажа любой роняет девять `tests/test_volume_calc_5c1.py`.
