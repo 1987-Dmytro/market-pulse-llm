@@ -12,9 +12,10 @@ Ruling 03.09 (e) made this file the phase's state; §8 of the phase file stays t
 - **Bought:** s9 iter. 1 ($0.5254) · s15 iter. 2 ($0.2239, subject 0.7500 RED) · $0 slices s10–s18 accepted.
 - **04.09 s19 — ITERATION 3 BOUGHT AND SCORED (`b93c997`, $0.493744). BOTH BARS HOLD.** Gate first: `make check`
   **4320 passed, 2 skipped, exit 0** at `edfe12f` (floor §8 (j) 4266) — run BEFORE the create, because `df1b8e2`'s
-  team-lead STATUS edit is read by ten test files. Pod `cd918wet7sea5b` RTX 4090 EU-RO-1; price gate GO ($0.74 =
-  registered, `usd_at_the_backstop` $1.1100); ssh port at **20 s** of the record's 500 s; bundle HEAD `edfe12f`
-  byte-equal both sides; boot **210.7 s** off the warm 59 G volume, no second boot across the GO; smoke 3/3 →
+  team-lead STATUS edit is named in ten test files and READ by four (`lora_c_{run,prep,armb}` via `quoted()`, and
+  `think_zero_shot`). Pod `cd918wet7sea5b` RTX 4090 EU-RO-1; price gate GO ($0.74 = registered,
+  `usd_at_the_backstop` $1.1100); ssh port at **20 s** of the record's 500 s; bundle HEAD `edfe12f` byte-equal both
+  sides; boot **210.7 s** off the warm 59 G volume, no second boot across the GO; smoke 3/3 →
   `--project` **GO-THEN-STOP** ($0.8420 mean). 40 of 40 units, every reply `balanced True` / `finish stop`, **0 parse
   failures**, 140 gold-shaped rows. **K8: subject 0.8714 ≥ 0.80 HOLDS · signal 0.9104 ≥ 0.75 HOLDS** (iter. 2: 0.7500
   RED · 0.8854).
