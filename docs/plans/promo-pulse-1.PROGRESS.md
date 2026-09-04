@@ -3,58 +3,58 @@
 Ruling 03.09 (e) made this file the phase's state; §8 of the phase file stays the DONE list.
 
 ## The money, live
-`promo-dev-loop`: **$0.7493 of the registered $2.4469** (iteration 1 $0.5254 + B $0.2239), **$1.6977
-left**, the step OPEN — **this session spent $0, no pod, no ledger line**. Cycle 3: **$4.5265 of
-$7.00, REMAINING $2.4735** (balance delta, the pessimistic reading; billing still says $4.2920, 30–40
-min late). c3's cap under (l)4 = `min($0.50, REMAINING − $0.30)` = **$0.50**; holdout $0.30 untouched.
+`promo-dev-loop`: **$0.749250 of the re-registered cap $2.1638**, **$1.4146 left**, the step OPEN —
+**this session spent $0: no pod created, no ledger line taken.** The cap fell $2.4469 → $2.1638 on
+the guard's REMAINING **$2.4638** at 16:35Z (the always-on volume, never a run), floor $2.00 cleared
+by $0.16. Cycle 3 **$4.5362 of $7.00**; holdout $0.30 untouched; c3 cap $0.50.
 
 ## Done
-- **03.09 s9 iteration 1** ($0.4358): signal 0.8792, subject 0.7929 — **0.8214 re-read under the
-  v1.1 gold**; **s10/s11 A(1)**; **04.09 s12 «A-rest», $0** — ACCEPTED by (k); **s14 «sources-r3»,
-  $0** — ACCEPTED by (l)1; **04.09 s15 B, $0.2239** — pod `ej1dxfcpe0etff`, 1089 s, 56/56 units, one
-  boot, ACCEPTED by (m)1: **signal 0.8854 HOLDS (bar 0.75) · subject 0.7500 RED (bar 0.80)**, the
-  `…_iter2.*` files never rewritten. Plateau counter **0 of 2** ((m)3: signal gained, and the 122
-  delivered comments went 25 → 17 misses; subject fell by transport, not by law).
-- **04.09 s16 — the stop is CLOSED by (m) and the repair is written and green ($0).** Team-lead files
-  committed by path first (`b220acc`); `make preflight ARGS='promo_dev_pod_runner promo_prompts'` —
-  **0 of the touched paths pinned by any record**. The repair as (m)2 wrote it: `balanced_prefix`
-  reads the fence off with `promo_prompts.unfence` FIRST, dispatches on the shape SECOND, and returns
-  a prefix of the emitted text (fence opener kept — what `run` persists and `parse` unfences again);
-  `promo_prompts.fold` reads a bare array as the rows it is (`about` singular = one row), an element
-  that is not an object still counting as «not an object». **ONE test, both directions** (§4 v5) and
-  it IS §6.5's $0 drill — object · array × fenced · unfenced, driven through `close_arrays_too` +
-  `stops_here` (the wiring the `StoppingCriteria` applies, not the bare function), three negative
-  controls: the shipped rule still cuts the fenced array short, an object comes back byte-for-byte
-  from it, an unclosed array is `None`. 5 passed; ruff clean; the added `unfence`+`index` costs the
-  stop **+5.7 ms over a whole 6.6 KB array generation** (+0.4 ms on the longest paid leg-A answer).
-- **The paid record does not move:** re-parsing `results/promo_dev40_iter2.jsonl` with the fold gives
-  the SAME 122 `about` rows and the SAME one parse failure at `@VARUS_channel:6216` ((m)1).
+- **Bought and accepted:** s9 iteration 1 ($0.5254; signal 0.8792, subject 0.8214 under the v1.1
+  gold) · s15 B = iteration 2 ($0.2239, `ej1dxfcpe0etff`, 1 089 s, 56/56) by (m)1 — **signal 0.8854
+  HOLDS, subject 0.7500 RED**, `…_iter2.*` never rewritten. Plateau **0 of 2**. $0 slices s10–s16 in.
+- **04.09 s17 — the whole $0 half of iteration 3, four commits by path.** `83f90d9` s16's knowledge
+  tail. `8efb0c8` the emitter: `ITERATION = 3`; `pinned_inputs` gains `promo_dev_pod_runner.py`
+  `102fa524…` and `promo_prompts.py` `dd260cb5…` ((m)5, (n)2); leg B closed by (m)4 — `by_channel`
+  empty (the map `build_pack` iterates), `posts` 0, the 16 ids kept NAMED under `not_bought`.
+  `48537b9` the registration at 16:35Z: rung 0 over 43 threads + 0 posts at $0.74/h — cheap $0.2674 ·
+  priced $0.3247 · **dear $1.3100, FITS**. `1962ee5` the pack (40 units, leg A) + the runbook.
+- **The pins do what `extractor_version` cannot:** all 40 leg-A renders are byte-identical to
+  iteration 2's while the module sha moved `8d52ee79…` → `dd260cb5…`; `make preflight` 0 of 21.
+- **The three numbers, pre-declared before the smoke ((m)5):** (1) iteration 3 has **$1.4146** = cap
+  less the step's own $0.749250 over four segments; (2) `project()` reads its KILL against the WHOLE
+  cap, so it is read BY HAND against $1.4146 — dear $1.3100 fits at **−7.4%**, its own line saying
+  −39.5%; (3) `--terminate-after` = min(runway 114.7, registered 90 min) = **90 min = $1.1100**.
 
 ## Next
-**Iteration 3, ONE session as B was ((m)5), starting at its re-emission:** the registration
-(`iteration: 3`, the runner's sha among the pins, three money numbers pre-declared before the smoke,
-cap = the step's remainder as the guard prints it) → buy → K8 → the error table naming the diff
-((c)3). Subject ≥ 0.80 → the holdout NOTICE is the open stop, END; RED → the error table, END; «c3»
-as (l) 2–4 either way. The runbook is off every paid `…_iter1.*` — its `_iter2` paths and the smoke
-units `7187/9006/6009` repoint first.
+Blocked by the open stop. When ruled: `make check` green → `scripts/runbook_promo_dev_1.md` §0–§6
+(create, dead-man 500 s, bundle, detached launch, smoke, decision table, teardown) → `--score
+--iteration 3` → K8 → the error table naming the diff against iteration 2 ((c)3). Subject ≥ 0.80 →
+the holdout NOTICE is the next stop, END; RED → the table, END. «c3» by (l) 2–4 either way.
 
-## Open stop
-None — (m) answered both: the repair is a NEW instrument bought under the NEXT number, no plateau.
+## Open stop — a test that must change to pass (PHASE §8 (j), and the standing prompt)
+`make check` at `1962ee5`: **1 failed, 4319 passed, 2 skipped** (728 s). Nothing paid ran.
+`tests/test_promo_dev_pass.py::test_the_pack_pins_exactly_what_the_pod_re_derives` asserts the
+iteration-2 population — `len(items) == 56` (line 302) and 16 leg-B units (line 303). (m)4 closes
+leg B, so the committed pack is 40/0 and those two lines fail. **The test's own claim PASSED:**
+`check_requests` re-derived all 40 pinned shas and refused none; only the counts are iteration 2's.
+It is the only test in the suite reading that population (grepped). **How is it repointed, since
+the executor may not weaken a test?** (a) counts read from
+the registration (`population.leg_a.threads`, `leg_b.posts`): self-updating, but leg B's own claim —
+the pin is of the RENDERED request, not the payload — then has no population and is exercised by
+nothing; (b) typed 40 / 0: the same loss, plainly; (c) a synthetic leg-B unit keeps the claim alive
+and buys no post. Each edits a test file, which is the stop.
+**Tree.** HEAD `1962ee5`; clean but for `knowledge/index.md` + `knowledge/daily_logs/2026-09-04.md`
+(Stop-hook regeneration). No pod exists; `--register` and `--pack` were the only platform commands,
+both $0 reads.
 
 ## Named, not built (the standing prompt forbids adding what the phase did not ask for)
-- **`extractor_version` cannot carry iteration 3's identity:** it is `sha256(rendered prompt)`
-  (`promo_prompts.py:194`) and a transport/parser repair leaves every one of the 40 identical.
-  (m)5's «the runner's sha among the pins» is what separates them — and the re-emission must pin
-  `promo_prompts.py` BESIDE the runner: half the repair is in each and `check_law` covers neither.
-- **`pod.main` installs `close_arrays_too` on `market_pulse.reader_v5` and never lifts it**, so by
-  file order the attribute is patched when a later test reads it; the new test takes the shipped rule
-  from a reload and puts back what it found. Not fixed — nothing asked for it.
-- **Leg B is closed by (m)4:** 16 of 16 posts answered `[]` in BOTH iterations; iteration 3 buys leg
-  A only, S4's leftover posts staying without a position row. **Gold covers 140 of the 208 comments**
-  in the 40 threads, so fewer rows can score better (iteration 2 wrote 122, iteration 1 151).
-- **A unit test for `resolvable()` with a `+` handle is AUTHORISED by (l)1**, not yet written.
-- **`project()` prices its KILL against the whole step cap, never the step's remainder.**
-- **`check_law` compares `codebook_version` only**; **`committed_registration()` ignores
-  `pinned_inputs`** — checked by hand in s15, all five held. **(k)2** holds the near-quote «Шикарно…»
-  and the codebook doc's 11 quotes to the law FREEZE. **c3 stays as (l) 2–4 wrote it**;
-  `@ON_LINE_MO` after c3, `1925810730` unaddressable.
+- **Rung 0 still prices at the BORROWED max** (135.232 s, §9a 1), though this instrument has two
+  measured smoke maxima — iteration 1's **178.298 s**, iteration 2's **88.237 s**; at iteration 1's
+  the dear corner reads **$1.6906**, over iteration 3's $1.4146, and the 90-min backstop $1.1100 is
+  what bounds the run. Unchanged: §9a 1 and (m)5's «money as in B».
+- **`pod.main` installs `close_arrays_too` on `reader_v5` and never lifts it.**
+  **`committed_registration()` ignores `pinned_inputs`**, so iteration 3's pins are witnessed by git
+  and not by it. **`check_law` compares `codebook_version` only.** **`project()` prices its KILL
+  against the whole step cap.** A `resolvable()` test with `+` is AUTHORISED by (l)1, not written.
+  **Gold covers 140 of 208 comments.** **(k)2** holds «Шикарно…» and the 11 quotes to the law
+  FREEZE. `@ON_LINE_MO` after c3; `1925810730` unaddressable.
