@@ -3,58 +3,58 @@
 Ruling 03.09 (e) made this file the phase's state; §8 of the phase file stays the DONE list.
 
 ## The money, live
-Step `promo-dev-loop`: **$0.5254 spent**; the cap FELL **$2.50 → $2.4469** at the re-emission
-(REMAINING $3.3305 → **$2.7469**, the always-on volume, not a run). **B ≤ $1.9215, not (h)4's
-$1.9746.** Cycle 3 **$4.2531 of $7.00**, holdout $0.30 untouched; this session spent **$0**.
+`promo-dev-loop`: **$0.5254 spent**, cap **$2.4469** → **B ≤ $1.9215**. Cycle 3 **$4.2531 of $7.00**,
+REMAINING **$2.7469**. Free for c3 = $2.7469 − $1.9215 − $0.30 = **$0.5254**: ruling (i)'s **$0.50 cap
+still fits, by $0.0254** — the volume drips ~$0.24/day, so NOT tomorrow. This session spent **$0**.
 
 ## Done
-- **03.09 s9 iteration 1** ($0.4358): signal 0.8792 HOLDS, subject 0.7929. **s10/s11 A(1)** (`c7a63a7`): `[admin]` on 23, 68 wordless drop.
-- **04.09 s12 — «A-rest» DONE, $0** (`c2234a4` code + registration, `d64faf7` the pack):
-  - **A(2)** `config/chain_aliases.yaml` — spellings from each chain's NAME (registry ids +
-    `mcdonalds`; (j)1's four verbatim); `aggregates.chain_key` is its ONE reader, `subject_id` and
-    the grader fold `chain` rows through it, `sku`/`brand` untouched, a spelling two ids claim is
-    refused. **+1, named: `@VARUS_channel:6216:8865`** («VARUS» vs «Варус»), 0 broken — **0.8214**.
-  - **(j)2** the 11 verbatim dev-40 quotes leave `promo_prompts.CODEBOOK` — **law v1.2**,
-    `codebook_version a587e0d6…`. old → new: Торгівля повітрям → Торгують порожнечею · Потужно-
-    незламний → Могутньо і незламно · ціна на фото вірна → на світлині ціна правильна · Розуміємо
-    вас → Дякуємо за звернення · передали → переказали колегам · Фото вже прибрали → Світлину вже
-    замінили · У Вінниці є ваш магазин? → У Житомирі є ваша крамниця? · Нових знижок атб ще не
-    виклали? → Свіжих акцій сільпо ще не було? · так працює система → такі в них правила · Або з 9
-    числа → Чи з 12 числа · Працює 5% → Діє знижка 3%.
-  - **A(3)** an 11-line SYNTHETIC examples block in the TEMPLATE — (f)3's five categories, cited by
-    codebook §. **Two of the lead's four fifth-category examples fail (j)2's own check and were
-    swapped:** «Ну да» → «Ага, ясно» (it IS holdout text, `@VARUS_channel:8647:15419`) and «+1» →
-    «Плюсую» (dev `@msuaaaa:9139:10093`) — one line each to reverse; keeping them needed a new
-    threshold (a min-length floor).
-  - **the check** `--leak-check` → `results/promo_law_leak_check.json`: 27 CODEBOOK literals (≥8
-    chars) + 8 examples literals (no floor) × **328** comments (140 dev + 188 holdout) → **CLEAN**.
-  - **A(4)** `--score --suffix _v1.1` → `promo_dev40_errors_iter1_v1.1.json` (subject 0.8214, signal
-    0.8792, **25** misses); the paid `…_iter1.*` pair untouched, shown by `git diff`.
-  - **A(5)+(g)3** stub tests (`make check` **4319 passed / 2 skipped**, was 4313); registration
-    re-emitted — pins are v1.1's (gold `2303ea43…`, codebook `23610346…`), `law.template_sha256`,
-    `"iteration": 2` in the pack, rung 0 FITS at the dear corner **$1.3193 of $2.4469**.
-    `promo_dev40_prep.json` had been **stale since A(1)** (it still measured a render carrying
-    wordless comments), so the shortest smoke unit moves **`@msuaaaa:6523` → `@msuaaaa:7187`** —
-    same rule, fixed input. **Two reds, both mine:** the pack one, predicted and closed by the
-    pack; and `test_the_layer_reads_nothing_and_parses_nothing` — `aggregates` may not OPEN a
-    path, so `registry.chain_spellings()` reads the sidecar. The design moved, not the test.
+- **03.09 s9 iteration 1** ($0.4358): signal 0.8792 HOLDS, subject 0.7929; **s10/s11 A(1)**
+  (`c7a63a7`). **04.09 s12 «A-rest», $0** (`c2234a4`, `d64faf7`, `3f75106`) — ACCEPTED WHOLE by (k):
+  fold → subject **0.8214**, law **v1.2**, `--leak-check` CLEAN, rung 0 FITS $1.3193 of $2.4469.
+- **04.09 s14 «sources-r3: Маркетопт» — the $0 leg DONE; the PAID leg is the open stop.**
+  - **Never unjoined; no join was owed.** `results/joins_5c1.jsonl:33` logged `already_member` on
+    30.08, and a live `CheckChatInviteRequest` (a read — `ImportChatInvite` NOT called) returns
+    `ChatInviteAlready`, `left: False`, chat `1255265634`. PHASE §3's «joined 30.08» and STATUS's
+    «НЕ собран» are BOTH right: five days were ONE swallowed defect.
+  - **The defect.** Telethon reads the `+` invite form only AFTER a `t.me/`:
+    `parse_username('+Ejz6ubzm21IyMTQy')` → `(None, False)`, `'t.me/+Ejz…'` → `('Ejz6…', True)`;
+    `collect_r2.py:377`'s `except Exception` swallowed the ValueError into a silent zero row.
+    `resolvable()` rewrites the RESOLVE ARGUMENT ONLY — `handle` stays the registry spelling, the
+    store key and `segment_for`'s join key.
+  - **Collected, $0: +33 posts, 2026-08-04 → 2026-09-04, all 33 carrying media**, 6 album heads, 9
+    price-shaped texts. `--only` COLLAPSES the record (`write_record` sets `channels` wholesale,
+    19 → 1), so `--plan` rebuilt every row from the durable store: `git diff results/collect_r2.json`
+    is marketopt's four fields plus `phase` («comments»→«plan»), the other 18 rows byte-identical.
+  - **The page count is NOT derivable at $0** — `collapse_albums` keeps one record per album, no
+    member count. Estimate for pricing only: the public sibling is 12 media posts → 52 pages
+    (`promo_pagecount_c2.json`), so 33 posts ≈ **143 pages** ≈ **$0.12** at 2.7583 s/page ×
+    $0.00030669/s (`run_promo_c2.json::runs[1].measured`) + boot $0.065.
 
-## Next — «sources-r3: Маркетопт» (ruling 04.09 (i)), BEFORE the paid B
-Join `marketopt_private` (`+Ejz6ubzm21IyMTQy`, a registry row already) → collect ($0) → census → its
-leaflet pages under `prereg_promo_c3.json` **cap $0.50** → a THIRD window through its own seal →
-`make tick` ×2 → `make promo-screen` shows Маркетопт beside w2. THEN B: `*_iter2.*`, **≤ $1.9215**.
+## Next — the paid leg of «sources-r3», once the stop is ruled. THEN B: `*_iter2.*`, ≤ $1.9215.
 
-## Open stop
-**None.** A-rest closed inside its own session; nothing paid or irreversible was reached.
+## Open stop — the paid leg has no instrument, and its acceptance check is not expressible
+1. **Every C2 producer writes a PINNED path and takes no `--out`:** `fetch_promo_media_c2.py` and
+   `promo_pagecount_c2.py` declare only `--plan`; `promo_census_c2.py` has no channel filter and
+   its `anchor_of()` would re-pin all 19 rows under a new window. All ten `prereg_promo_c2.json ::
+   pinned_inputs` MATCH on disk today, so running any of them moves a sealed sha and
+   `build_aggregates.through_the_seal()` then refuses to rebuild w2 at all. `run_promo_c2.py` takes
+   no `--prereg/--census/--cap/--step`; its `STEP promo-pulse-1` ledger is `closed: true`.
+   **Q1 — parameters on the C2 producers, or c3 siblings?** Either is new code + its own ledger.
+2. **«The screen shows Маркетопт beside w2» cannot pass as written.** `tick.py --window` is one
+   scalar (default `w2`) and `build_promo_screen` renders one window id, so `--window w3` hides
+   w2's 1 113 positions; and `config/chain_aliases.yaml` gives the spellings to `marketopt_promo`
+   alone («`marketopt_private` … is the SAME chain»), so a w3 row would render a SECOND chain id for
+   one chain — against A(2). **Q2 — one screen over two windows, or folded into the one chain id?**
+3. Tree clean, `make check` 4 319 passed / 2 skipped. Nothing paid or irreversible was reached.
 
 ## Needs named, not built (the standing prompt forbids adding what the phase did not ask for)
-- **A near-quote survives, and ruling (k)2 keeps it there on purpose:** «Шикарно. Цілий день тиша,
-  а потім скидка» and the codebook doc's 11 verbatim quotes move TOGETHER at the law FREEZE before
-  the holdout pre-registration — moving the law now would re-derive the pack for cosmetics.
-- **The pod's `check_law` compares `codebook_version` only** (it re-derives every `rendering_sha256`,
-  which covers it); **`committed_registration()` ignores `pinned_inputs`**; **`--score` without
-  `--suffix`, and the runbook's K8 `--out`, still point at the PAID `…_iter1.*` — B must repoint them.
-- **Coverage is not «every collected channel»:** @kopiyochka1 has an admin account and is not in
-  `channel_admins.yaml`; 28 VARUS comments carry `sender_anon_id: null` → recall 874/902 (96.9 %).
-- **Chains the alias file leaves out:** KFC, Roshen, Велмарт, Mono — their spellings could only come from the exam; `marketopt_private` is `marketopt_promo`'s own chain.
-- Report-only drift: `terminate_after_minutes` 90 is voided by ruling (d) yet printed at every rung-1 GO; `rung_0.dear_usd` prices 279 s of overhead where the gate allows 560.
+- **`resolvable()` has no unit test** — the fake in `tests/test_collect_r2.py` keys on `@{username}`
+  and no test uses a `+` handle; its check was the live collection. **Ruling (k)2 holds the
+  near-quote** «Шикарно…» + the codebook doc's 11 quotes to the law FREEZE — one move, one record.
+- **`check_law` compares `codebook_version` only**; **`committed_registration()` ignores
+  `pinned_inputs`**; **`--score` without `--suffix` and the runbook's K8 `--out` still point at the
+  PAID `…_iter1.*` — B must repoint them.** Coverage: @kopiyochka1's admin account is outside
+  `channel_admins.yaml`, 28 VARUS comments carry `sender_anon_id: null` (recall 874/902); PHASE §8
+  (c)'s «every collected channel» now counts marketopt_private, and `1925810730` stays
+  unaddressable. Alias file omits KFC, Roshen, Велмарт, Mono; `@ON_LINE_MO` ((i)3) waits on Q1/Q2;
+  `terminate_after_minutes` 90, voided by (d), still prints at rung-1 GO.
