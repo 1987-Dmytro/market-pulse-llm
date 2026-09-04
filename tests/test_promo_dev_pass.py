@@ -284,23 +284,47 @@ def test_the_bill_is_the_segments_own_price_and_the_gates_append(staged):
 
 
 def test_the_pack_pins_exactly_what_the_pod_re_derives():
-    """The dry contact, as a test: every one of the 56 shipped units re-renders on this checkout to
-    the sha the pack pinned. Leg B's pin is of the RENDERED request and not of the payload — the two
-    differ by the whole positions instruction, and pinning the payload refused every leg-B unit on a
-    healthy pod ([[the_fixture_and_the_artifact_share_anchors]])."""
+    """The dry contact, as a test: every shipped unit re-renders on this checkout to the sha the
+    pack pinned. «Exactly» is both directions — every unit the committed registration names is in
+    the pack, and the pack ships nothing the registration does not name — and the population is READ
+    from that record, never typed: a literal here pins ONE registration's population, which a ruling
+    moves ([[a_number_typed_into_its_own_checker]], PHASE §6.6).
+
+    Leg B's pin is of the RENDERED request and not of the payload — the two differ by the whole
+    positions instruction, and pinning the payload refused every leg-B unit on a healthy pod
+    ([[the_fixture_and_the_artifact_share_anchors]]). Its loop runs over the record's own leg-B
+    units, so it is empty exactly while ruling 04.09 (m) item 4 keeps the leg closed, and fills
+    again the day a ruling puts ids back into `by_channel` — which is what `build_pack` iterates.
+    """
     import promo_dev_pod_runner as pod
     import reader_v5_pod_runner as pod_runner
 
     from market_pulse import prompts
 
+    population = dev.committed_registration()["population"]
+    registered_a = list(population["leg_a"]["order"])
+    registered_b = [
+        f"{handle}:{msg_id}"
+        for handle, ids in sorted(population["leg_b"]["by_channel"].items())
+        for msg_id in ids
+    ]
+
     pack = dev.load(dev.PACK)
+    # the two reads are one record or the comparison below compares two populations
+    assert pack["registration"]["sha256"] == dev.sha256_of(dev.PREREG)
     keep, pod_runner.render = pod_runner.render, pod.render
     try:
         items = pod_runner.check_requests(pack, prompts)
     finally:
         pod_runner.render = keep
-    assert len(items) == 56
-    assert sum(1 for one in items if one["leg"] == "b") == 16
+
+    by_id = {one["id"]: one for one in items}
+    assert len(by_id) == len(items), "an id twice is one unit shipped twice"
+    assert len(items) == population["leg_a"]["threads"] + population["leg_b"]["posts"]
+    assert sorted(by_id) == sorted(registered_a + registered_b)
+    assert sum(1 for one in items if one["leg"] == "b") == population["leg_b"]["posts"]
+    for one in registered_b:
+        assert by_id[one]["leg"] == "b"
     assert [one["id"] for one in items[:3]] == pack["smoke_ids"]
 
 
