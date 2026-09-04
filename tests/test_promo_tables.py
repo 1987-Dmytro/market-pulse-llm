@@ -20,7 +20,7 @@ import pytest
 REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "src"))
 
-from market_pulse import aggregates  # noqa: E402
+from market_pulse import aggregates, registry  # noqa: E402
 
 WITHOUT_WINDOW = ("attribution", "signal", "evidence", "digest", "unsure")
 
@@ -236,7 +236,7 @@ def test_one_spelling_may_name_only_one_chain(tmp_path, monkeypatch):
     shipped file gives the spellings to one of them and says so."""
     bad = tmp_path / "chain_aliases.yaml"
     bad.write_text("marketopt_promo: [Маркетопт]\nmarketopt_private: [Маркетопт]\n", "utf-8")
-    monkeypatch.setattr(aggregates, "CHAIN_ALIASES", bad)
+    monkeypatch.setattr(registry, "CHAIN_ALIASES", bad)
     aggregates._chain_ids.cache_clear()
     with pytest.raises(ValueError, match="only one chain"):
         aggregates.chain_key("Маркетопт")

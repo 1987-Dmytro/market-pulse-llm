@@ -359,6 +359,34 @@ def _watchlist(path: str | Path, entries) -> tuple[WatchlistBrand, ...]:
     return tuple(brands)
 
 
+CHAIN_ALIASES = Path(__file__).resolve().parents[2] / "config" / "chain_aliases.yaml"
+"""The spellings of each chain's NAME, per chain id — ruling 04.09 (j) item 1, option (a).
+
+A sidecar and not a field: `config/registry.yaml` is pinned by 21 sealed records and may not grow.
+It is read HERE, beside the registry it is a sidecar to, because this module is where the project
+reads config — `aggregates.py` is handed rows and never opens a path
+(`tests/test_aggregates.py::test_the_layer_reads_nothing_and_parses_nothing`)."""
+
+
+def chain_spellings(path: Path | None = None) -> dict[str, tuple[str, ...]]:
+    """chain id -> its spellings, validated the way every other registry file is.
+
+    Strict for `load_registry`'s reason: a spelling that is not a string, or an id whose value is
+    not a list, would fold silently into something nobody wrote. The FOLD itself is not here — it
+    needs `aggregates.promo_key`'s normalisation, and this module knows nothing about that.
+    """
+    path = path or CHAIN_ALIASES  # read at CALL time: a default binds the module's value once
+    body = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+    if not isinstance(body, dict):
+        raise ValueError(f"{path}: expected a mapping of chain id -> spellings")
+    out = {}
+    for chain_id, spellings in body.items():
+        if not isinstance(spellings, list) or not all(isinstance(one, str) for one in spellings):
+            raise ValueError(f"{path}: {chain_id!r} must carry a list of spellings, got {spellings!r}")
+        out[str(chain_id)] = tuple(spellings)
+    return out
+
+
 if __name__ == "__main__":
     import sys
 

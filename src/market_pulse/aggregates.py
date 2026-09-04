@@ -31,9 +31,8 @@ import sqlite3
 import unicodedata
 import uuid
 import statistics
-from pathlib import Path
 
-import yaml
+from market_pulse import registry
 
 SCHEMA = """
 CREATE TABLE windows (
@@ -291,27 +290,23 @@ def promo_id(*parts) -> str:
     return str(uuid.uuid5(NAMESPACE, promo_key(*parts)))
 
 
-CHAIN_ALIASES = Path(__file__).resolve().parents[2] / "config" / "chain_aliases.yaml"
-"""The spellings of each chain's NAME, per chain id — ruling 04.09 (j) item 1, option (a). A file
-of its own because `config/registry.yaml` is pinned by 21 sealed records and may not grow a field;
-:func:`chain_key` is its ONE reader."""
-
-
 @functools.lru_cache(maxsize=1)
 def _chain_ids() -> dict[str, str]:
     """normalised spelling -> chain id, and a spelling two chains claim is REFUSED.
 
-    A dict built by iteration is last-wins, and last-wins here would silently give one chain's
-    comments another chain's id ([[select_one_row_refuse_ambiguity]]). Маркетопт is why the case is
-    real: two registry rows, `marketopt_promo` and `marketopt_private`, are one chain.
+    The file is `registry.chain_spellings()`'s to read — this layer is handed rows and never opens
+    a path. What is done HERE is the part that needs `promo_key`: a dict built by iteration is
+    last-wins, and last-wins would silently give one chain's comments another chain's id
+    ([[select_one_row_refuse_ambiguity]]). Маркетопт is why the case is real: two registry rows,
+    `marketopt_promo` and `marketopt_private`, are one chain.
     """
     found: dict[str, str] = {}
-    for chain_id, spellings in (yaml.safe_load(CHAIN_ALIASES.read_text("utf-8")) or {}).items():
-        for spelling in spellings or ():
+    for chain_id, spellings in registry.chain_spellings().items():
+        for spelling in spellings:
             key = promo_key(spelling)
             if found.setdefault(key, chain_id) != chain_id:
                 raise ValueError(
-                    f"{CHAIN_ALIASES.name}: {spelling!r} is claimed by {found[key]!r} and"
+                    f"chain_aliases.yaml: {spelling!r} is claimed by {found[key]!r} and"
                     f" {chain_id!r} — one spelling may name only one chain"
                 )
     return found
