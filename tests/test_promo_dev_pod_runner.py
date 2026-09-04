@@ -100,3 +100,64 @@ def test_no_go_leaves_the_rest_unasked(tmp_path, monkeypatch):
             "--go", str(tmp_path / "never"), "--go-deadline", "0"]
     assert pod.main(argv, loader=lambda p, r: object(), sleep=lambda _: None) == 0
     assert asked == [["@c:1"]]
+
+
+def test_every_shape_the_codebook_permits_stops_at_its_own_close_and_parses(monkeypatch):
+    """Ruling 04.09 (m)'s one test, both directions — and §6.5's $0 drill of the four shapes.
+
+    Iteration 2 lost 17 of `@VARUS_channel:6216`'s 18 answers because the array rule dispatched on
+    the RAW first character and every one of the 40 answers was fenced: the object rule ran and
+    ENDED GENERATION at the first element's brace. So the drill is over object · array × fenced ·
+    unfenced, and it is driven through `close_arrays_too` and `stops_here` — the wiring the
+    `StoppingCriteria` actually applies — because a pure function called by hand proves the rule and
+    not the path that ran on the pod ([[the_guard_you_built_and_then_bypassed]]).
+
+    The negative controls are three: the SHIPPED rule still cuts the fenced array short (the defect,
+    named where it lives), an object of either shape comes back byte-for-byte from the shipped rule,
+    and an array that has not closed yet is `None`, so generation keeps going instead of writing a
+    third of an answer down.
+
+    The shipped rule is taken from a RELOAD and not from the attribute: `main` installs the dispatch
+    on the module and never lifts it, so by file order the attribute is already patched and a control
+    read off it would compare the fix with itself. What the attribute held is put back.
+    """
+    import importlib
+
+    import reader_v5_pod_runner as pod_runner
+
+    from market_pulse import reader_v5
+
+    about = [{"msg_id": one, "subject_type": "post", "subject": "6216",
+              "source": "post_context", "confidence": 1.0} for one in (8679, 8680, 8681)]
+    array = json.dumps([{"about": one, "signals": [], "unsure": []} for one in about], indent=2)
+    obj = json.dumps({"about": about, "signals": [], "unsure": []}, indent=2)
+    fenced = "```json\n{}".format  # the closing fence is the tail the stop cuts off
+    shapes = {"array": (array, 3), "fenced array": (fenced(array), 3),
+              "object": (obj, 3), "fenced object": (fenced(obj), 3)}
+
+    installed = reader_v5.balanced_prefix
+    shipped = importlib.reload(reader_v5).balanced_prefix
+    assert shipped(fenced(array) + "\n```") != fenced(array), "the defect is not in the shipped rule"
+
+    pod.close_arrays_too(reader_v5)
+    try:
+        pod.close_arrays_too(reader_v5)  # idempotent: a second install must not recurse
+        for name, (text, rows) in shapes.items():
+            emitted = text + "\n```\nі ще трохи прози"
+            assert pod_runner.stops_here(emitted, prompts, reader_v5), f"{name}: no stop"
+            prefix = reader_v5.balanced_prefix(emitted)
+            assert prefix == text, f"{name}: cut at the wrong character"
+            answer = promo_prompts.parse(prefix)
+            assert answer["parse_failure"] is None, f"{name}: {answer['parse_failure']}"
+            assert answer["about"] == about, f"{name}: {len(answer['about'])} rows, not {rows}"
+            if "object" in name:
+                assert prefix == shipped(emitted), f"{name}: the shipped rule did not run verbatim"
+
+        for partial in (array[: array.index("]")], fenced(array)[:60]):
+            assert reader_v5.balanced_prefix(partial) is None, "an open array stopped generation"
+            assert not pod_runner.stops_here(partial, prompts, reader_v5)
+    finally:
+        reader_v5.balanced_prefix = installed
+
+    assert promo_prompts.fold(["не об'єкт"]) is None
+    assert promo_prompts.parse(fenced(json.dumps(["не об'єкт"])))["parse_failure"] == "not an object"

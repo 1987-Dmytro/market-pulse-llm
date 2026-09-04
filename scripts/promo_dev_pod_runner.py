@@ -75,21 +75,34 @@ def balanced_prefix(text: str, shipped):
     Leg B's registered prompt ends «the first thing you write is "["», and the shipped rule closes
     the first top-level OBJECT: on a post with three offers it would keep one and drop the `]`, and
     every one of the 16 would come back unparseable with `balanced: true`. The rule is dispatched on
-    the answer's own first character — leg A's template asks for `{"about": …}` and can never begin
-    with `[` — so leg A keeps the shipped rule VERBATIM and nothing sealed moves.
+    the answer's shape — leg A's template asks for `{"about": …}` — so leg A keeps the shipped rule
+    VERBATIM and nothing sealed moves.
+
+    **The fence is read off BEFORE the dispatch, and that is ruling 04.09 (m).** Iteration 2 answered
+    `@VARUS_channel:6216` with an array inside a ```` ```json ```` fence — the codebook asks for JSON
+    and never fixes the outer container — and a dispatch on `text.lstrip()` read `` ` `` as «not an
+    array»: the object rule ran, ENDED GENERATION at the first element's brace after 88 tokens, and 17
+    of the thread's 18 answers were never written, which no parse-time repair can recover. All 40
+    answers of that iteration were fenced, so the dispatch was reading the fence and never the shape.
+    `promo_prompts.unfence` is the one spelling of «read the fence off» and it is imported, not
+    re-written here ([[two_values_for_one_input_get_quoted_kindly]]); what is returned stays a prefix
+    of the emitted TEXT, fence opener included, because that is what `run` persists and what
+    `promo_prompts.parse` unfences again on the Mac.
 
     An array closes by `json.JSONDecoder().raw_decode`, the parser itself, rather than a second
-    depth-walk: two spellings of one rule drift, and only the one nothing exercises is wrong
-    ([[two_values_for_one_input_get_quoted_kindly]]).
+    depth-walk — same reason. `None` while it has not closed is the run-to-the-ceiling case and is
+    left to the ceiling: generation simply continues.
     """
-    lead = text.lstrip()
+    from market_pulse import promo_prompts
+
+    lead = promo_prompts.unfence(text)[0].lstrip()
     if not lead.startswith("["):
         return shipped(text)
     try:
         _, end = json.JSONDecoder().raw_decode(lead)
     except ValueError:
         return None
-    return text[: len(text) - len(lead) + end]
+    return text[: text.index(lead) + end]
 
 
 def close_arrays_too(reader_v5) -> None:

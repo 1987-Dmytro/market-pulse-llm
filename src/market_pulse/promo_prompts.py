@@ -244,6 +244,31 @@ def unfence(answer: str) -> tuple[str, bool]:
     return (body.rsplit("```", 1)[0] if body.rstrip().endswith("```") else body), True
 
 
+def fold(rows: list) -> dict | None:
+    """An ARRAY answer read as the rows it is — one element per comment — or `None`.
+
+    The other half of ruling 04.09 (m). The codebook asks for JSON and fixes the KEYS, never the
+    outer container, and iteration 2's `@VARUS_channel:6216` answered a list of `{"about": …,
+    "signals": …, "unsure": …}` — one element per comment, `about` singular where the object shape
+    carries a list. Reading it is not answer repair: no row is changed, added or closed, only the
+    wrapper is dropped. `promo_dev_pod_runner.balanced_prefix` is the half that lets such an answer
+    finish generating; this is the half that counts its rows.
+
+    `None` — an element that is not an object — leaves the caller to count the answer as what it is
+    ([[empty_class_eats_the_parse_failures]]): a list of strings is not three rows, it is a refusal
+    of the shape, and folding it to an empty class would spend a paid reply on silence.
+    """
+    folded: dict[str, list] = {"about": [], "signals": [], "unsure": []}
+    for row in rows:
+        if not isinstance(row, dict):
+            return None
+        for key, out in folded.items():
+            value = row.get(key)
+            if value is not None:
+                out.extend(value if isinstance(value, list) else [value])
+    return folded
+
+
 def parse(answer: str) -> dict:
     """The model's answer as a dict, or a counted parse failure — never an exception.
 
@@ -256,6 +281,8 @@ def parse(answer: str) -> dict:
         body = json.loads(body_text)
     except json.JSONDecodeError as bad:
         return {"about": [], "signals": [], "unsure": [], "fenced": fenced, "parse_failure": str(bad)}
+    if isinstance(body, list):
+        body = fold(body)
     if not isinstance(body, dict):
         return {
             "about": [], "signals": [], "unsure": [], "fenced": fenced,
