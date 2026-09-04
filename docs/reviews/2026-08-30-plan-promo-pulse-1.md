@@ -793,3 +793,19 @@ The «needs named» list stays in PROGRESS as debts; none blocks iteration 2.
    cosmetic gain. It is replaced (with the codebook doc synced to the same paraphrases, v1.2) at the law FREEZE that precedes the holdout
    pre-registration — one move, one registration.
 3. The cap fell with the always-on volume to $2.4469; B is bought at ≤ $1.9215 as PROGRESS says. Order stands: Маркетопт (ruling (i)) → B.
+
+## Ruling 04.09 (l) — Маркетопт's 33 posts are in; B goes first (it is ready and it is the critical path); the c3 leg gets parameters, not siblings; one screen over all windows, one existing chain id
+
+1. Accepted: `449cab1` — the invite-form defect found by a live read and fixed in the resolve argument only; **33 posts, 2026-08-04 → 09-04,
+   all with media, $0**. A unit test for `resolvable()` with a `+` handle is authorised (product path). The moved corpus anchor is harmless
+   while no C2 producer re-runs: C2's truth is its sealed result files, not the store's max date.
+2. **Q1 — parameters on the C2 producers, no siblings:** `--out`, `--channels`, `--anchor` (pinned in the registration), `--prereg`, `--step`,
+   `--cap`; every C2 result file stays byte-identical (the ten pins hold, nothing under `prereg_promo_c2.json` is re-run) and c3 writes
+   `results/*_c3.json` under `results/prereg_promo_c3.json` with its own anchor (the day after its last post) and its own ledger `promo-c3`.
+3. **Q2 — the screen renders ALL windows** (`tick.py --window all`; it becomes the default unless a test pins `w2`, then the runbook's tick
+   line carries `--window all`), and BOTH channels carry ONE chain id — the EXISTING `marketopt_promo` (w2's id; nothing sealed moves):
+   the alias side file gains a `chain_of_channel: {marketopt_private: marketopt_promo}` map, read by the same one reader before the spellings.
+4. **Order: B now** — everything for it is ready and the dev loop is the phase's critical path — **then «c3» in ONE session: the $0 build (2, 3,
+   the census artifact) and its paid leg together**, because the leg is minutes of serverless pages, not an hour of pod: cap = min($0.50,
+   REMAINING − $0.30 as `runpod_guard.py` prints it after B); if that room is under $0.15, STOP for the operator's word before buying.
+   `@ON_LINE_MO` after c3 if its census shows prices; the ATB group id stays unaddressable, named.
