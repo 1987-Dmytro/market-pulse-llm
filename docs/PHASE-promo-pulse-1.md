@@ -1,4 +1,4 @@
-# PHASE — `promo-pulse-1` (stage 1 whole: C2–C5 of `docs/SPEC-v2-promo-pulse.md` §8)
+# PHASE — `promo-pulse-1` (stage 1 whole: C2–C5 of `docs/SPEC-v2-promo-pulse.md` §8) — v5 04.09: §4 «asked for once», §6.5 validity of a paid reading
 
 Team-lead file. Executor: read this, then run `/plan-phase promo-pulse-1` and STOP for the plan
 review. Mechanics named below are CONSTRAINTS; the goal is the question and the checks.
@@ -69,6 +69,13 @@ as amended by `docs/reviews/2026-08-30-plan-promo-pulse-1.md` SP-5 — ids are u
 `prompts.py`, `local_llm.py`, pod runners, `registry.yaml`/`lexicon.yaml` are PINNED — new prompt
 text goes in a NEW module; `make preflight` before touching anything pinned. Serving: existing stack,
 thinking OFF, batch 1 for gate readings. Money mechanics: `docs/PROCESS.md` («Money»).
+**Asked for here, once for all (v5, 04.09):** a caught PRODUCT defect gets ONE test, both directions, in the
+same commit as its fix — no authorisation needed; every other new test, pin, guard or ledger stays forbidden.
+Growth of a PINNED structure enters through its declared side file (`config/channel_admins.yaml`,
+`config/chain_aliases.yaml`, `config/registry_extra.yaml` for a new channel), read by the one reader that
+reads the pinned file; a second instance of anything (window, channel, carrier) keeps ONE id per entity across
+sources and the screen renders all instances (`--window all`). Producers a new leg re-uses take their paths
+as parameters (`--out --channels --anchor --prereg --step --cap`); a seal pins results, never a code path.
 
 ## 5. Out of scope
 
@@ -88,6 +95,13 @@ scanning the 81 unscanned census candidates.
 3. The dev loop plateaus below the bars → STOP with the error table; the team lead reworks the
    codebook/prompt, not the executor.
 4. Anything that would edit a sealed record, a frozen set, or a team-lead file.
+5. **Validity of a paid reading (v5, 04.09, ruling (m)):** a reading COUNTS only when every registered unit
+   is answered and parsed (`parse_failures = 0` in its error table). An incomplete run is recorded under its
+   number, never compared to the bars or to the plateau rule; its transport defect (an answer the runner
+   truncated, dropped or misparsed) is fixed with its one test (§4) and re-bought under the NEXT number
+   inside the step's cap and the 5-run ceiling — NOT a stop, the diff named in the error table. Before
+   the first purchase of a new instrument, the runner and the parser are drilled at $0 on every answer shape
+   the prompt permits (object · array · fenced · unfenced); a shape the model produces later joins the drill once.
 
 ## 7. Dependency the team lead owes
 

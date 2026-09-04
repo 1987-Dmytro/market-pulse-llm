@@ -809,3 +809,23 @@ The «needs named» list stays in PROGRESS as debts; none blocks iteration 2.
    the census artifact) and its paid leg together**, because the leg is minutes of serverless pages, not an hour of pod: cap = min($0.50,
    REMAINING − $0.30 as `runpod_guard.py` prints it after B); if that room is under $0.15, STOP for the operator's word before buying.
    `@ON_LINE_MO` after c3 if its census shows prices; the ATB group id stays unaddressable, named.
+
+## Ruling 04.09 (m) — iteration 2 stands as measured (signal HOLDS, subject RED by ONE fenced array); the repair is a new `extractor_version` = iteration 3, bought in the session that fixes it; no plateau; leg B closes at two `[]` readings
+
+1. Accepted: `8d4108d`, `90996cc`, `20fdeb9` — B ran whole at the registered price ($0.2239, 1 089 s, teardown shown, 4 319 green), the
+   runbook repointed off every paid `…_iter1.*`. **Iteration 2 is the record as measured:** signal 0.8854 HOLDS, subject 0.7500 RED
+   (`grade_promo_dev40_iter2.json`); its `…_iter2.*` files are never rewritten ((c)4). The counterfactual 0.8786 enters no record.
+2. **Q1 — a new `extractor_version`, iteration 3, by (c)3's own letter:** the stop rule and the answer repair ARE the instrument, and
+   nothing is «re-bought» under an old number. Law v1.2, the template and the gold do not move. The repair: the dispatch reads the
+   first `[`/`{` AFTER the fence that all 40 answers carry (`unfence` first, dispatch second), and a bare array is read as the rows it is.
+   ONE test, both directions, is authorised as a caught product defect (§7): a fenced 3-object array stops at its `]` and parses to 3 rows;
+   an unfenced object still stops at its own close. The diff is named in `promo_dev40_errors_iter3.json` as (c)3 asks.
+3. **Q2 — no plateau.** The registered rule is «two without gain on EITHER bar»; iteration 2 gained on signal (0.8792 → 0.8854) and on the
+   122 delivered comments (25 → 17 misses); subject fell by one transport failure, not by the law. The plateau counter stands at 0.
+4. **Leg B closes at two identical readings:** 16 of 16 posts answered `[]` twice — the evidence is the empty array under iteration 2's
+   files; iteration 3 buys leg A only, the re-emission says so. S4's leftover posts stay without a position row, named, not bought a third time.
+5. **Iteration 3 = ONE session, as B was:** the fix and its test → the re-emission (`iteration: 3`, the runner's sha among the pins) →
+   the purchase → K8 → the error table; money as in B (the three numbers pre-declared before the smoke, the cap being the step's
+   remainder as the guard prints it; `project()`'s KILL against the whole cap stays named). Subject ≥ 0.80 → the holdout NOTICE is the
+   open stop, END (the law freeze of (k)2 and the holdout gold are the team lead's, before the registration); RED → the error table, END.
+   c3 follows either way, as (l)4.
