@@ -1,4 +1,4 @@
-# PHASE — `promo-pulse-1` (stage 1 whole: C2–C5 of `docs/SPEC-v2-promo-pulse.md` §8) — v5 04.09: §4 «asked for once», §6.5 validity of a paid reading
+# PHASE — `promo-pulse-1` (stage 1 whole: C2–C5 of `docs/SPEC-v2-promo-pulse.md` §8) — v6 04.09: §4 «asked for once», §6.5 validity of a paid reading, §6.6 a test that reads the record
 
 Team-lead file. Executor: read this, then run `/plan-phase promo-pulse-1` and STOP for the plan
 review. Mechanics named below are CONSTRAINTS; the goal is the question and the checks.
@@ -102,6 +102,10 @@ scanning the 81 unscanned census candidates.
    inside the step's cap and the 5-run ceiling — NOT a stop, the diff named in the error table. Before
    the first purchase of a new instrument, the runner and the parser are drilled at $0 on every answer shape
    the prompt permits (object · array · fenced · unfenced); a shape the model produces later joins the drill once.
+6. **A test that pinned a literal of the record (v6, 04.09, ruling (o)):** when a ruling moves the registered record (a population,
+   a leg, a pin) and a test's INVARIANT still passes while only literals of that record diverge, the executor rewrites the test to read
+   the committed record — the claim stated in both directions — in the same commit and shows the diff: NOT a stop. Weakening an
+   invariant, or a test whose claim fails on the record, remains the stop of §8 (j). A fixture never invents a unit the record lacks.
 
 ## 7. Dependency the team lead owes
 

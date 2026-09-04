@@ -839,3 +839,25 @@ The «needs named» list stays in PROGRESS as debts; none blocks iteration 2.
 2. The executor's reading is right: `extractor_version` = sha256(rendered prompt) cannot carry a transport repair, so the re-emission pins
    `scripts/promo_dev_pod_runner.py` AND `src/market_pulse/promo_prompts.py` beside it — that IS (m)5's «runner's sha among the pins», not
    a new pin. Nothing else moves; the named list stays named. Next session = iteration 3 whole, as (m)5 and PROGRESS «Next» say.
+
+## Ruling 04.09 (o) — the count was never the claim: the test reads the population from the registration, both directions; the synthetic unit is refused; the borrow retires from rung 0 before iteration 4, with the mean corner as the fallback — no further stop on either
+
+1. Accepted: s17's $0 half (`8efb0c8`, `48537b9`, `1962ee5`) — `ITERATION = 3`, both halves of the repair among the pins, leg B closed
+   with its 16 ids named under `not_bought`, the 40 leg-A renders byte-identical to iteration 2's, dear $1.3100 FITS at cap $2.1638, the
+   runbook off every `_iter2`, the three numbers pre-declared. The stop was right under §8 (j) as it was written.
+2. **(a):** `len(items)` and the leg-B count are read from the committed registration (`population.leg_a.threads`, `population.leg_b.posts`),
+   and the claim is stated in BOTH directions — every registered unit is in `items`, every item is registered; that is what «exactly»
+   meant, and the literal 56 was iteration 2's population, a process pin (§7). The docstring loses «56». Leg B's render-pin claim is kept
+   as a loop over the record's leg-B units — empty today by the record's truth, not by weakening. **(c) is refused:** a fixture that
+   invents a unit the record does not carry tests the fixture. `test_leg_b_pins_ids_and_not_a_count` stays as is. Diff in the commit.
+3. **PHASE §6.6 (v6), so this class never stops again:** when a ruling moves the registered record and a test's invariant still passes while
+   only literals of that record diverge, the test is rewritten to read the record, both directions, in the same commit — the diff shown;
+   weakening an invariant remains the stop of §8 (j).
+4. **The borrow:** (c)5 retired it after the first smoke; two smoke rows in `measurements.jsonl` say «it replaces the borrowed…», the emitter
+   kept reading it, and the team lead accepted two registrations without re-reading `rung_0` against that file — my miss. Iteration 3 runs
+   as registered (its `--project` reads the measured rate; the 90-min stop is $1.1100). **Before iteration 4's re-emission the emitter prices
+   rung 0 on the instrument's OWN measured maximum** (the larger smoke row, 178.298 s until iteration 3's smoke adds a third); if that dear
+   corner does not fit the remainder, the registration is issued FITS on the measured MEAN corner with the cap as the hard stop and says so
+   in one line — no stop, the whole step being inside ruling (e)'s «a step ≤ $3 the operator can lose without a word»; only a mean corner
+   that does not fit comes to the operator.
+5. Order unchanged: `make check` green → buy iteration 3 → K8 → the error table; subject ≥ 0.80 → the holdout notice, END; RED → the table, END.
