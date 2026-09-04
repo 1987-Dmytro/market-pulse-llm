@@ -286,10 +286,11 @@ def prep() -> dict:
 
 # --- the PAID half: the dev loop's own step, its rungs, its registration ---------------------------
 
-ITERATION = 2
-"""The dev-loop iteration the registration and the pack are emitted for — ruling 04.09 (h) item 2.
-Iteration 1 is bought, priced and on disk; this is the re-emission ruling 04.09 (g) item 3 asks
-for, under the v1.1 gold, the v1.2 law and the TEMPLATE the examples block moved."""
+ITERATION = 3
+"""The dev-loop iteration the registration and the pack are emitted for — ruling 04.09 (m) item 5.
+Iterations 1 and 2 are bought, priced and on disk; the transport repair of `f872a53` is a NEW
+`extractor_version` by ruling 03.09 (c) item 3's own letter, so it is bought under the NEXT number
+and never re-bought under iteration 2's."""
 
 STEP = "promo-dev-loop"
 """Its OWN step and its own ledger (plan §9). S4's `promo-pulse-1` is CLOSED at $2.9867 and a closed
@@ -306,6 +307,12 @@ SMOKE_N = 3
 by `promo_dev40_prep.json :: corpus.threads[].chars`."""
 
 PREREG = REPO_ROOT / "results" / "prereg_promo_dev_loop.json"
+RUNNER = REPO_ROOT / "scripts" / "promo_dev_pod_runner.py"
+PROMO_PROMPTS = REPO_ROOT / "src" / "market_pulse" / "promo_prompts.py"
+"""The two halves of iteration 3's repair — the dispatch is in the runner, the fold in the module.
+`extractor_version` is `sha256(rendered prompt)` and a transport repair leaves all 40 renders
+identical, so the record separates the instruments by these shas or by nothing at all (ruling
+04.09 (m) item 5, confirmed by (n) item 2)."""
 PACK = REPO_ROOT / "results" / "promo_dev40_pack.json"
 SIBLING = REPO_ROOT / "results" / "pass2_signals_r2_run.json"
 BORROWED_GATES = REPO_ROOT / "results" / "prereg_reader_probe_v5b.json"
@@ -614,17 +621,20 @@ def register() -> dict:
     threads = dev_threads()
     prep = json.loads(PREP.read_text(encoding="utf-8"))["corpus"]["threads"]
     smoke = smoke_units([dict(one) for one in prep])
-    posts = leg_b_posts()
+    left_over = leg_b_posts()
     price = offered_price()
-    verdict = rung_0(cap=cap, price=price, threads=threads, n_posts=posts["posts"])
+    verdict = rung_0(cap=cap, price=price, threads=threads, n_posts=0)
     return {
         "phase": f"promo-pulse-1 S9 — the dev loop's PAID instrument, iteration {ITERATION}",
         "class": "PRE-REGISTRATION. Written and committed before any pod of this step exists; git"
         " history is the only witness that it preceded the money.",
-        "re_emission": "ruling 04.09 (g) item 3 and (h) item 2 — iteration 1's registration is"
-        " kept by git history; THIS record is the one iteration 2 is bought under, and it moves"
-        " because the gold (v1.1), the law (v1.2) and the TEMPLATE all moved after iteration 1."
-        " `committed_registration()` still does not re-verify `pinned_inputs`: a named debt.",
+        "re_emission": "ruling 04.09 (m) item 5 and (n) item 2 — iterations 1 and 2 are kept by"
+        " git history; THIS record is the one iteration 3 is bought under. The law, the TEMPLATE"
+        " and the gold do NOT move: what moves is the answer's transport, and `extractor_version`"
+        " = sha256(rendered prompt) cannot see it — so `scripts/promo_dev_pod_runner.py` and"
+        " `src/market_pulse/promo_prompts.py` are pinned beside the law, half the repair in each"
+        " and `check_law` covering neither. `committed_registration()` still does not re-verify"
+        " `pinned_inputs`: a named debt.",
         "authority": "docs/reviews/2026-08-30-plan-promo-pulse-1.md «Ruling 03.09 (c)» — «the flags"
         " and their stub tests at $0 … --register shown with fits at the dear corner → then, in the"
         " same session if the registration fits, the pod: smoke → the table → iteration 1 → K8 →"
@@ -649,15 +659,17 @@ def register() -> dict:
             "template_rule": "ruling 04.09 (g) item 3 — the sha of the TEMPLATE with its examples"
             " block, so a render-only change is visible in the record; `codebook_version` alone"
             " compares the law and would read two instruments as one.",
-            "baseline": "iteration 1 was the baseline and is priced on disk (ruling 03.09 (c)"
-            " item 3). Iteration 2 moves three things and nothing else: the law drops the 11"
-            " dev-40 comments it quoted verbatim (ruling 04.09 (j) item 2), the TEMPLATE gains"
-            " the examples block, and `chain` subjects fold to the registry chain id. Decoding,"
-            " the token ceiling and the answer repair are untouched.",
+            "baseline": "iterations 1 and 2 are bought and priced on disk (ruling 03.09 (c)"
+            " item 3; 04.09 (m) item 1 — signal 0.8854 HOLDS, subject 0.7500 RED). Iteration 3"
+            " moves ONE thing and nothing else: the answer's TRANSPORT — `balanced_prefix` reads"
+            " the fence off before it dispatches on the shape, and a bare array is read as the"
+            " rows it is (`f872a53`, ruling 04.09 (m) item 2). The law (v1.2), the TEMPLATE, the"
+            " gold (v1.1), the decoding and the token ceiling are untouched.",
             "vocabulary": promo_prompts.vocabulary(),
         },
         "pinned_inputs": {
-            rel(path): sha256_of(path) for path in (CODEBOOK, GOLD, DRAW, PREP, PREREG_5C2)
+            rel(path): sha256_of(path)
+            for path in (CODEBOOK, GOLD, DRAW, PREP, PREREG_5C2, RUNNER, PROMO_PROMPTS)
         },
         "population": {
             "leg_a": {
@@ -684,7 +696,15 @@ def register() -> dict:
                     " whether the remaining 37 are bought at all",
                 },
             },
-            "leg_b": posts,
+            "leg_b": {
+                "posts": 0,
+                "by_channel": {},
+                "closed": "ruling 04.09 (m) item 4 — 16 of 16 posts answered `[]` under BOTH"
+                " iteration 1 and iteration 2: two identical readings. Iteration 3 buys leg A"
+                " only. `build_pack` iterates `by_channel`, so the empty map is what actually"
+                " keeps them off the pod; `not_bought` keeps them NAMED, not deleted.",
+                "not_bought": left_over,
+            },
         },
         "rung_0": verdict,
         "gates": borrowed_gates()
