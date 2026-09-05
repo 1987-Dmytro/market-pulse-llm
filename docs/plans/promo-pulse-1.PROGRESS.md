@@ -52,10 +52,9 @@ was written this session** — the close refused before its write and both ledge
 - **(q)3's expected $0.37–0.58 is BELOW what the instrument's own pace prices**: the registered mean corner is $0.8420
   and iteration 3's realised $0.493744 scaled by text rows (140 → 188) is ≈$0.64 — not a KILL, the cap is the hard stop,
   but optimistic. **The `priced` corner (one dead-man recreate) leaves $0.0007** — a second pod is no free retry.
-- **The holdout branches of `rung_0`, `register`, `use_part` and `build_pack` carry no test** — §4 forbids adding one and
-  the $0 dry contacts are their only exercise · `prep()` still calls its count `draw.dev_threads` on the holdout, pinned
-  by `tests/test_promo_dev_pass.py:61` (renaming it is §8 (j)), so `part` sits beside it · `items[:3] ==
+- **The holdout branches of `rung_0`, `register`, `use_part` and `build_pack` carry no test** — §4 forbids adding one
+  and the $0 dry contacts are their only exercise · `prep()` still calls its count `draw.dev_threads` on the holdout,
+  pinned by `tests/test_promo_dev_pass.py:61` (renaming it is §8 (j)), so `part` sits beside it · `items[:3] ==
   pack["smoke_ids"]` is pack-vs-pack · `pod.main` never lifts `close_arrays_too` from `reader_v5` ·
   `committed_registration()` ignores `pinned_inputs` · `check_law` compares `codebook_version` only · `resolvable()`
-  with `+` is AUTHORISED by (l)1, not written · **gold covers 140 of 208 dev comments** · `1925810730` unaddressable ·
-  (k)2 and `@ON_LINE_MO` are the team lead's now.
+  with `+` is AUTHORISED by (l)1 · **gold covers 140 of 208** · `1925810730` unaddressable.
