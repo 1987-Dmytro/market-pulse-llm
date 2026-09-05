@@ -8,6 +8,12 @@
       "balance": 8.9448611773,
       "step_spent_usd": 0.0097,
       "note": "promo-iter4, iteration 4 — pod about to be created"
+    },
+    {
+      "at": "2026-09-05T14:40:49+00:00",
+      "balance": 8.2403244051,
+      "step_spent_usd": 0.7143,
+      "note": "promo-iter4 POST-RUN reading, the reference the close settles against: pod kzcnhe01mgdwvk 13:21:09Z -> 14:17:13Z, 3364 billed s, smoke INCOMPLETE per PHASE 6.5 (CUDA OOM on the longest render), no GO, none of the 80 bought"
     }
   ],
   "gpu_note": "RunPod account balance read before the first pod of promo-iter4. Step spend = the pessimistic maximum of this anchor minus the balance now and the billing walk since `anchored_at` (SPEC 3.23 (4), Dv411), enforced against $1.20. The SPEC amendment 3.4 (4) phase cap is enforced separately, against results/spend_phase4.json, and neither anchor may be regenerated."
