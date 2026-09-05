@@ -65,6 +65,11 @@ is one module with a part, not a fork of itself ([[a_moved_guard_that_left_its_c
 `use_part` rebinds the file constants below and every function reads them by name — the mechanism
 `tests/test_promo_dev_pass.py`'s own fixture already uses to redirect the run record."""
 
+ARMS: tuple[str, ...] = ("dev",)
+"""Which arms of the draw this leg's population IS, in the order the pod answers them. Bound by
+`use_part` from `DEV_FILES`/`HOLDOUT_FILES` — a part is a leg, and a leg may be more than one arm
+since ruling 05.09 (s) item 3 relabelled the spent holdout-40 as `dev-2`."""
+
 CONTRACT = "promo-pulse-1-s9"
 """What every measurement row of THIS instrument is written under — the dev loop's and the
 holdout's alike, because ruling 05.09 (q) item 2 froze one instrument across both legs."""
@@ -84,11 +89,21 @@ def rel(path: Path) -> str:
     return str(path.relative_to(REPO_ROOT)) if path.is_relative_to(REPO_ROOT) else str(path)
 
 
-def dev_threads(path: Path = DRAW, part: str | None = None) -> list[dict]:
-    """The draw's rows for THIS part, both strata, in the record's own order."""
+def dev_threads(path: Path = DRAW, arms: tuple[str, ...] | None = None) -> list[dict]:
+    """This leg's rows — arm by arm in the ORDER given, both strata, in the record's own order.
+
+    A leg was one arm of the draw until ruling 05.09 (s) item 3 turned the spent holdout-40 into
+    `dev-2`; iteration 4's leg A is dev-40 AND dev-2, dev-40 FIRST because the bar is dev-40's and
+    dev-2 is a reading the hard stop may cut (ruling 05.09 (t) item 5). The order is the pod's, so
+    it is the record's: what a hard stop cuts is the tail.
+    """
     body = json.loads(path.read_text(encoding="utf-8"))
-    part = part or PART
-    return [row for stratum in sorted(body["draw"]) for row in body["draw"][stratum][part]]
+    return [
+        row
+        for arm in (arms or ARMS)
+        for stratum in sorted(body["draw"])
+        for row in body["draw"][stratum][arm]
+    ]
 
 
 def thread_of(row: dict) -> tuple[str, list[dict]]:
@@ -325,7 +340,7 @@ def rate_for(part: str) -> dict:
 def prep(part: str | None = None, gold: Path | None = None) -> dict:
     """The part's corpus as the model will read it, its sizes, and the ask BOUNDED, not priced."""
     part, gold = part or PART, gold or GOLD
-    rows = dev_threads(part=part)
+    rows = dev_threads()
     rate = rate_for(part)
     usd_per_second = json.loads(RATE_RECORD.read_text(encoding="utf-8"))["rate"]["usd_per_second"]
     threads = []
@@ -357,7 +372,10 @@ def prep(part: str | None = None, gold: Path | None = None) -> dict:
         },
         "gold": {"path": rel(gold), "sha256": sha256_of(gold), "lines": len(
             [one for one in gold.read_text(encoding="utf-8").splitlines() if one.strip()]
-        )} if gold.exists() else {
+        ), "covers": "the BAR arm of this leg. A leg of two arms has two answer keys and this"
+        " record names one: dev-2's is docs/labels-promo-dev2.jsonl and no record pins it yet —"
+        " named, not built ([[a_named_defect_is_not_a_fixed_defect]])."
+        if len(ARMS) > 1 else "this leg's only arm"} if gold.exists() else {
             "path": rel(gold),
             "sha256": None,
             "lines": 0,
@@ -366,7 +384,12 @@ def prep(part: str | None = None, gold: Path | None = None) -> dict:
             " ([[preregistration_is_a_file_not_a_constant]]). The dry run prices the leg anyway —"
             " the pricing is the pod's arithmetic and does not read a label.",
         },
-        "draw": {"path": rel(DRAW), "sha256": sha256_of(DRAW), "dev_threads": len(threads)},
+        "draw": {
+            "path": rel(DRAW),
+            "sha256": sha256_of(DRAW),
+            "arms": list(ARMS),
+            "dev_threads": len(threads),
+        },
         "corpus": {
             "threads": threads,
             "chars_total": sum(one["chars"] for one in threads),
@@ -409,11 +432,13 @@ def prep(part: str | None = None, gold: Path | None = None) -> dict:
 
 # --- the PAID half: the dev loop's own step, its rungs, its registration ---------------------------
 
-ITERATION = 3
+ITERATION = 4
 """The dev-loop iteration the registration and the pack are emitted for — ruling 04.09 (m) item 5.
-Iterations 1 and 2 are bought, priced and on disk; the transport repair of `f872a53` is a NEW
-`extractor_version` by ruling 03.09 (c) item 3's own letter, so it is bought under the NEXT number
-and never re-bought under iteration 2's."""
+Iterations 1-3 are bought, priced and on disk; the transport repair of `f872a53` was a NEW
+`extractor_version` by ruling 03.09 (c) item 3's own letter, so it was bought under the NEXT number
+and never re-bought under iteration 2's. Iteration 4 is the codebook-v1.2 law over BOTH arms of the
+first draw (ruling 05.09 (s) item 3, (t) item 5): dev-40 keeps the bars, dev-2 rides beside it as a
+reading. Four of the five runs §2 allows are now spent."""
 
 STEP = "promo-dev-loop"
 """Its OWN step and its own ledger (plan §9). S4's `promo-pulse-1` is CLOSED at $2.9867 and a closed
@@ -461,6 +486,7 @@ HOLDOUT_FILES = {
     "run": REPO_ROOT / "results" / "promo_holdout_run.json",
     "step": "promo-holdout",
     "stem": "promo_holdout40",
+    "arms": ("holdout",),
 }
 """The holdout's OWN files — ruling 05.09 (q) item 5. Its own everything: the dev registration is
 committed, frozen and already spent against, and a second population in one record voids the first
@@ -840,12 +866,14 @@ def register(cap_usd: float | None = None) -> dict:
         else "promo-pulse-1 S9 — the FROZEN holdout-40, the ONE shot (ruling 05.09 (q))",
         "class": "PRE-REGISTRATION. Written and committed before any pod of this step exists; git"
         " history is the only witness that it preceded the money.",
-        "re_emission": "ruling 04.09 (m) item 5 and (n) item 2 — iterations 1 and 2 are kept by"
-        " git history; THIS record is the one iteration 3 is bought under. The law, the TEMPLATE"
-        " and the gold do NOT move: what moves is the answer's transport, and `extractor_version`"
-        " = sha256(rendered prompt) cannot see it — so `scripts/promo_dev_pod_runner.py` and"
-        " `src/market_pulse/promo_prompts.py` are pinned beside the law, half the repair in each"
-        " and `check_law` covering neither. `committed_registration()` still does not re-verify"
+        "re_emission": "ruling 04.09 (m) item 5 and (n) item 2 — iterations 1-3 are kept by git"
+        f" history; THIS record is the one iteration {ITERATION} is bought under. What moves since"
+        " iteration 3 is the LAW (codebook v1.2, ruling 05.09 (s) item 2: partners, the off-domain"
+        " thread, three product forms, price-as-quality) and the POPULATION (dev-2, the spent"
+        " holdout-40 relabelled by (s) item 3, riding beside dev-40 as a reading). The transport"
+        " does not move, so `scripts/promo_dev_pod_runner.py` and `src/market_pulse/promo_prompts.py`"
+        " stay pinned beside the law — `check_law` compares only `codebook_version` and covers"
+        " neither the template nor the runner. `committed_registration()` still does not re-verify"
         " `pinned_inputs`: a named debt."
         if PART == "dev"
         else "there is no re-emission of THIS record: §8 (e) spends the holdout ONCE and ruling"
@@ -855,10 +883,11 @@ def register(cap_usd: float | None = None) -> dict:
         " bars, and re-bought under the NEXT number with the law UNMOVED and after the operator's"
         " money word. `committed_registration()` still does not re-verify `pinned_inputs`: a named"
         " debt it inherits from the dev loop.",
-        "authority": "docs/reviews/2026-08-30-plan-promo-pulse-1.md «Ruling 03.09 (c)» — «the flags"
-        " and their stub tests at $0 … --register shown with fits at the dear corner → then, in the"
-        " same session if the registration fits, the pod: smoke → the table → iteration 1 → K8 →"
-        " error table → teardown»; docs/plans/promo-pulse-1.md §9 and §9a"
+        "authority": "docs/reviews/2026-08-30-plan-promo-pulse-1.md «Ruling 05.09 (t)» item 6 —"
+        " «`rate_for`/`rung_0`/`--close-segment` as 3–4 → whole-run rows → `ITERATION = 4`,"
+        " `--dry-run --part dev --cap 1.20` FITS on the mean → `--register` → commit → `--pack`"
+        " (green) → the paid iteration 4»; item 5 is the operator's cap and the arm order;"
+        " docs/PHASE-promo-pulse-1.md §6.1 v10; docs/plans/promo-pulse-1.md §9 and §9a"
         if PART == "dev"
         else "docs/reviews/2026-08-30-plan-promo-pulse-1.md «Ruling 05.09 (r)» item 5 — «`register()`'s"
         " part branch (item 2) → `--register --part holdout --step promo-holdout --cap 1.10 --gold"
@@ -869,7 +898,9 @@ def register(cap_usd: float | None = None) -> dict:
         " word of 05.09; docs/PHASE-promo-pulse-1.md §6.1–6.2 v8",
         "question": "does the promo-signal instrument, under CODEBOOK"
         f" {promo_prompts.codebook_version()[:16]}…, clear subject ≥ 0.80 and signal ≥ 0.75 on"
-        " dev-40 within at most 5 dev runs?"
+        " dev-40 within at most 5 dev runs — and what does the SAME law read on dev-2, the spent"
+        " holdout-40 whose 0.7181 subject sent the codebook back for v1.2? dev-40 carries the bars;"
+        " dev-2 is a reading beside them and no bar of this record."
         if PART == "dev"
         else "does the instrument that took the dev bar — the SAME four pins, byte for byte"
         " (ruling 05.09 (q) item 2) — clear subject ≥ 0.80 and signal ≥ 0.75 on the frozen"
@@ -898,12 +929,16 @@ def register(cap_usd: float | None = None) -> dict:
             " block, so a render-only change is visible in the record; `codebook_version` alone"
             " compares the law and would read two instruments as one.",
             "baseline": (
-                "iterations 1 and 2 are bought and priced on disk (ruling 03.09 (c) item 3;"
-                " 04.09 (m) item 1 — signal 0.8854 HOLDS, subject 0.7500 RED). Iteration 3 moves"
-                " ONE thing and nothing else: the answer's TRANSPORT — `balanced_prefix` reads the"
-                " fence off before it dispatches on the shape, and a bare array is read as the rows"
-                " it is (`f872a53`, ruling 04.09 (m) item 2). The law (v1.2), the TEMPLATE, the"
-                " gold (v1.1), the decoding and the token ceiling are untouched."
+                "iterations 1-3 are bought and priced on disk; iteration 3 took BOTH dev bars on a"
+                " complete reading (subject 0.8714, signal 0.9104,"
+                " `results/grade_promo_dev40_iter3.json`) and ruling 05.09 (q) item 1 accepted it."
+                " Then the holdout came back subject 0.7181 RED under that same law"
+                " (`results/grade_promo_holdout40.json`), and ruling 05.09 (s) turned the shot into"
+                " dev-2 and sent the codebook back. So iteration 4 moves TWO things and names both:"
+                " the LAW (codebook v1.2 — partners to `chain`, rule 11 for an off-domain thread,"
+                " three product forms in rule 4, price-as-quality; `--leak-check` CLEAN over all"
+                " three sets) and the POPULATION (dev-40 + dev-2, 80 threads). The transport, the"
+                " decoding and the token ceiling are untouched — this is not a transport iteration."
                 if PART == "dev"
                 else "iteration 3 took BOTH dev bars on a complete reading (subject 0.8714, signal"
                 " 0.9104; `results/grade_promo_dev40_iter3.json`) and ruling 05.09 (q) item 1"
@@ -1563,10 +1598,16 @@ DEV_FILES = {
     "run": RUN_RECORD,
     "step": STEP,
     "stem": STEM,
+    "arms": ("dev", "holdout"),
 }
 """The dev loop's own files, captured here so `use_part` binds BOTH halves and neither is «what the
 constants already are». A selector with a leg that quietly does nothing reads as a selector that
-worked ([[a_moved_guard_that_left_its_copy]])."""
+worked ([[a_moved_guard_that_left_its_copy]]).
+
+`arms` is the dev leg's population from iteration 4 on: dev-40 FIRST, then dev-2 — the SAME first
+draw's two arms, because ruling 05.09 (s) item 3 relabelled the spent holdout-40 as a reading. The
+holdout leg still names the first draw's holdout arm; holdout-2 lives in `DRAW2` and nothing reads
+it yet outside `CORPUS`."""
 
 
 def use_part(part: str, *, gold: Path | None = None, step: str | None = None) -> None:
@@ -1577,11 +1618,11 @@ def use_part(part: str, *, gold: Path | None = None, step: str | None = None) ->
     holdout call really returns to the dev loop instead of leaving the holdout in place. `--gold`
     and `--step` override afterwards, because §4 makes a re-used producer take its paths as
     parameters and the holdout's gold is a pin the paid session names on the command line."""
-    global PART, GOLD, PREP, PREREG, PACK, RUN_RECORD, STEP, STEM
+    global PART, GOLD, PREP, PREREG, PACK, RUN_RECORD, STEP, STEM, ARMS
     files = {"dev": DEV_FILES, "holdout": HOLDOUT_FILES}.get(part)
     if files is None:
         raise SystemExit(f"--part {part}: the draw has two halves, dev and holdout, and no third")
-    PART, STEM, STEP = part, files["stem"], files["step"]
+    PART, STEM, STEP, ARMS = part, files["stem"], files["step"], files["arms"]
     GOLD, PREP = files["gold"], files["prep"]
     PREREG, PACK, RUN_RECORD = files["prereg"], files["pack"], files["run"]
     if gold is not None:

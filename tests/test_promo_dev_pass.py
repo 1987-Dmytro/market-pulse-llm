@@ -58,7 +58,18 @@ def test_the_dry_run_writes_the_record_and_every_number_in_it_is_derived(tmp_pat
 
     assert record["law"]["codebook_version"] == promo_prompts.codebook_version()
     assert record["law"]["vocabulary"]["signal_types"] == list(promo_prompts.SIGNAL_TYPES)
-    assert record["draw"]["dev_threads"] == len(dev.dev_threads()) == 40
+    # ruling 05.09 (s) item 3 relabelled the spent holdout-40 as `dev-2`, so from iteration 4 the
+    # dev leg is TWO arms of the first draw and `== 40` was a literal of the old population, not
+    # the claim ([[a_shrunk_population_is_a_test_change]], read the other way). The claim is that
+    # the record counts what the draw holds for the arms this leg IS, and dev-40 comes first.
+    drawn = json.loads(dev.DRAW.read_text(encoding="utf-8"))["draw"]
+    expected = sum(len(drawn[stratum][arm]) for arm in dev.ARMS for stratum in drawn)
+    assert record["draw"]["arms"] == list(dev.ARMS) == ["dev", "holdout"]
+    assert record["draw"]["dev_threads"] == len(dev.dev_threads()) == expected == 80
+    first = {dev.unit_id(one) for one in dev.dev_threads()[:40]}
+    assert first == {
+        dev.unit_id(one) for one in dev.dev_threads(arms=("dev",))
+    }, "dev-40 is answered first: what a hard stop cuts is dev-2's tail"
 
     bound = record["bound"]
     priced = bound["priced_from"]
