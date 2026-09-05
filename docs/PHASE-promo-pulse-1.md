@@ -1,4 +1,4 @@
-# PHASE — `promo-pulse-1` (stage 1 whole: C2–C5 of `docs/SPEC-v2-promo-pulse.md` §8) — v12 05.09: §6.5 a serving failure moves the serving, never the instrument, and surfaces at once; v11: §6.1 one paid run = one step line, the registration reads the guard with the step it names; v10: every leg prices on the slowest WHOLE run and issues on the mean when the dear corner refuses, a cap is quoted from the dry run; v9: §2 S2 holdout-40 read RED on subject → codebook v1.2, dev-2, holdout-2 (in-domain population), K8 v2; §4 «asked for once» + a re-used producer's record branches every decision field, §6.5 validity of a paid reading, §6.6 a test that reads the record, §6.1–6.2 a fence is an estimate and the frozen-set instrument is byte-for-byte
+# PHASE — `promo-pulse-1` (stage 1 whole: C2–C5 of `docs/SPEC-v2-promo-pulse.md` §8) — v13 05.09: §6.1 a step line's close settles against its POST-RUN reading (taken before any next pod); a line without one closes on the walk alone and never takes a late reading; §2 iteration 5 is the dev-40 read; v12 05.09: §6.5 a serving failure moves the serving, never the instrument, and surfaces at once; v11: §6.1 one paid run = one step line, the registration reads the guard with the step it names; v10: every leg prices on the slowest WHOLE run and issues on the mean when the dear corner refuses, a cap is quoted from the dry run; v9: §2 S2 holdout-40 read RED on subject → codebook v1.2, dev-2, holdout-2 (in-domain population), K8 v2; §4 «asked for once» + a re-used producer's record branches every decision field, §6.5 validity of a paid reading, §6.6 a test that reads the record, §6.1–6.2 a fence is an estimate and the frozen-set instrument is byte-for-byte
 
 Team-lead file. Executor: read this, then run `/plan-phase promo-pulse-1` and STOP for the plan
 review. Mechanics named below are CONSTRAINTS; the goal is the question and the checks.
@@ -31,8 +31,8 @@ chain and brand as a WINDOW AGGREGATE only (SPEC 3.22 (1)), price trend per SKU,
   ≥ 0.75. Holdout-40 (disjoint, frozen at the draw): ONE pre-registered attempt when the dev loop
   plateaus (two iterations without gain). **v9 (05.09, ruling (s)): holdout-40 was SPENT under law v1.2/K8 v1 —
   signal 0.7958 HOLDS, subject 0.7181 RED (`results/grade_promo_holdout40.json`, complete reading); it is now
-  `dev-2`, a reading, never a bar again. The line continues: codebook v1.2 (team lead) → law re-rendered → iteration 4
-  on dev-40 (the same two bars; dev-2 read beside it, no bar; ≤ 5 dev runs in total still) → the ONE `holdout-2` shot.
+  `dev-2`, a reading, never a bar again. The line continues: codebook v1.2 (team lead) → law re-rendered → iteration 4 (INCOMPLETE, OOM — v12) → iteration 5
+  on dev-40 (the same two bars; dev-2 read beside it, no bar; the LAST of the 5 dev runs) → the ONE `holdout-2` shot.
   `holdout-2`: seed 42 over the frozen 678 price threads MINUS channels with `collect: false` in registry r2 (the
   product's population) MINUS the 80 already drawn, 20/20 by stratum, a NEW draw file — the old draw stays frozen.
   K8 v2 for that line: `sku`/`brand` match on normalised exact OR token-Jaccard ≥ 0.5, `chain` folds as today, `post`
@@ -94,19 +94,23 @@ scanning the 81 unscanned census candidates.
 
 ## 6. Stop-points (ask BEFORE, never report after)
 
-1. Any pod/serverless create (paid): smoke first, project at measured rates; the 30.08 estimate table (C2 ≈ $0.4 · dev loop
-   ≈ $1.1–1.7 · holdout ≈ $0.3) and the cycle-2 remainder are history — cycle 3 (ceiling $9.00, operator 05.09) governs; never trim scope silently.
-   **A fence for a LATER paid step is an estimate, never a cap (v7, ruling (q)):** it is re-priced at that
-   step's registration on the instrument's OWN measured pace of the SLOWEST pod seen (hosts of one card ran
-   1.5–2.3× apart on identical outputs), the cap becoming the hard stop; the holdout's cap was **$1.10**
-   (operator 05.09; spent $0.2966 on a fast host); iteration 4 ≤ $1.20 (dev-40 first, dev-2 after, in one pod — operator 05.09 13:05), holdout-2 ≤ $0.90 on the measured pace,
-   each with rung 0 FITS + the hard stop as its only money gate (ruling (r)). **v10 (ruling (t)):** on EVERY leg `rung_0` issues on the dear
-   corner when it fits, else on the MEAN corner with the cap as the hard stop and the (r)2 table (no band gate); the mean is the WHOLE-RUN
-   mean of the slowest pod seen (n = the run's units, never a smoke of three), written from the run record per pod; a cap named in a ruling is
-   quoted from the `--dry-run` that priced it, never typed; **v11 (ruling (v)): one paid run = ONE step line** (`promo-iter<N>`, `promo-holdout2`,
-   `promo-c3`) — opened by its own `--note` before the pod, capped at the run's cap, closed by its run record in the same session; an open multi-run
-   line carries no new run; the registration names its line and reads the guard WITH `--step`, so FITS is judged against that line's own remaining; the cycle-3 ceiling is $9.00 from 05.09 (operator's word, ruling (s) addendum 8; anchor unchanged); c3 is deferred behind holdout-2.
-   The volume `mp-srv2` is deleted after the phase's last paid run — now the holdout-2 shot (operator 05.09).
+1. Any pod/serverless create (paid): smoke first, project at measured rates; cycle 3 governs (ceiling **$9.00**, operator 05.09, ruling (s)
+   addendum 8, anchor unchanged) — the 30.08 estimate table and the cycle-2 remainder are history; never trim scope silently.
+   **A fence for a LATER paid step is an estimate, never a cap (v7, ruling (q)):** it is re-priced at that step's registration on the
+   instrument's OWN measured pace of the SLOWEST pod seen (hosts of one card ran 1.5–2.3× apart on identical outputs), the cap becoming
+   the hard stop — holdout $1.10 (spent $0.2966), iteration 4 $1.20 (spent $0.6915, INCOMPLETE — v12), **iteration 5 $1.40 on a ≥ 32 GB
+   card (operator 05.09 16:35)**, holdout-2 ≤ $0.90 on the measured pace — each with rung 0 FITS + the hard stop as its only money gate
+   (ruling (r)). **v10 (ruling (t)):** on EVERY leg `rung_0` issues on the dear corner when it fits, else on the MEAN corner with the cap as
+   the hard stop and the (r)2 table (no band gate); the mean is the WHOLE-RUN mean of the slowest pod seen (n = the run's units, never a
+   smoke of three), written from the run record per pod; a cap named in a ruling is quoted from the `--dry-run` that priced it, never typed.
+   **v11 (ruling (v)): one paid run = ONE step line** (`promo-iter<N>`, `promo-holdout2`, `promo-c3`) — opened by its own `--note` before
+   the pod, capped at the run's cap, closed by its run record; an open multi-run line carries no new run; the registration names its line
+   and reads the guard WITH `--step`, so FITS is judged against that line's own remaining. **v13 (ruling (w) addendum): a line's close
+   settles against its POST-RUN reading** — one more `--note` on the line after its pod is deleted and before ANY next pod (the guard's
+   right-hand side is the line's LAST open reading; a pre-pod one refuses the close for ever, 7000 % off); the close then waits at $0 for
+   the walk to cover the run record's billed span (`--expect-ms`, a PARTIAL walk is a third state), retried at each session's start; a line
+   whose readings all predate its pod (last reading 0 / absent) closes on the walk alone and NEVER takes a late reading — it would carry
+   the next run's money. c3 is deferred behind holdout-2; the volume `mp-srv2` is deleted after the phase's last paid run — the holdout-2 shot.
 2. The ONE holdout attempt: pre-register (readings + the two bars), tell the operator it is being
    spent. **The instrument on the frozen set is the one that took the dev bar, byte for byte** — every pin
    of the dev-bar registration unchanged; cosmetic law moves queue behind the attempt (v7, ruling (q)).
@@ -137,12 +141,9 @@ the graded readings and the holdout shot do.
 
 ## 8. DONE WHEN — the ONE `/goal` paste (v4, 03.09 — the PAUSE clause lost its resume tail, ruling 03.09 (c); v3 02.09; rulings file: `docs/reviews/2026-08-30-plan-promo-pulse-1.md`)
 
-Only the USER can invoke `/goal`. Launch, every time (start and after every STOP, always in a
-FRESH session): the operator TYPES `/goal ` by hand, then pastes the BODY below as the arguments —
-a pasted block that begins with the command is plain text and no goal is active; the body must be
-the file's bytes (it carries no slash command of its own — the parser cut v2 at its inner one);
-if only «Goal set: …» appears and no tool call follows within a minute, send one word: «go».
-Effort: `/effort xhigh` before the paste (PROCESS «Models and effort»); not `ultracode`.
+Process v3 (ruling 03.09 (e)): `/goal` is RETIRED for this phase — every session (start and after every STOP, always FRESH) is launched by
+the operator's standing prompt after `/effort xhigh` (PROCESS «Models and effort»; never `ultracode`). The block below is the phase's DONE
+list: clauses (a)–(l) are the contract, kept as bytes — a clause moves only by a dated ruling of the team lead, never by the executor.
 
 ```
 Phase promo-pulse-1 (docs/PHASE-promo-pulse-1.md) is COMPLETE per docs/plans/promo-pulse-1.md and every dated ruling in docs/reviews/2026-08-30-plan-promo-pulse-1.md. START RITUAL every session, before anything else: commit any modified team-lead file by path (docs/STATUS.md, docs/PROCESS.md, docs/PHASE-*.md, docs/reviews/*); read the plan and the NEWEST dated section of the rulings file; if docs/plans/promo-pulse-1.STOP.md exists, apply the newest ruling to it and delete it. Money: cycle-3 is OPEN — the ceiling and per-leg caps are those the NEWEST dated ruling in the rulings file names, four rungs per docs/PROCESS.md; a projection over the ceiling is a STOP. Demonstrate every check by running its command and showing the output in the conversation — the evaluator reads only the transcript. Met when ALL hold: (a) results/promo_pagecount_c2.json states the exact page count per channel for the census window from store/metadata only (or a <=10-line impossibility note with the priced alternative), and results/promo_projection_c2.json prices C2 as ONE number at the marginal rate against the re-read remainder; (b) scripts/collect_5c1.py::collectable honours collect: false, both directions tested; (c) positions for the census window exist in data/derived/pulse.db for every collected channel (vision for image carriers, text for the rest), bought inside the ceiling with the rungs logged and each paid leg's spend line named in the report; (d) results/positions_draw_50.json drawn twice with identical sha256 and, once docs/labels-positions-50.jsonl exists, scripts/grade_positions.py reports completeness >= 0.90 and promo-price accuracy >= 0.95; (e) once docs/labels-promo-dev.jsonl exists, scripts/grade_promo_signals.py on dev-40 reports subject >= 0.80 and signal >= 0.75 within at most 5 dev runs, and the ONE holdout attempt is pre-registered in a committed record, announced via a STOP notice, then spent once; (f) pytest tests/test_trends_sql.py green: trends recomputed twice identical, an empty week absent never zero; (g) make tick exists and a second run on an unchanged store writes zero new rows, counted per table including unsure; (h) on a clean clone, make tick && make promo-screen renders the screen from result files only, and a removed source yields a non-zero exit with a named error; (i) scripts/draw_truth_20.py renders 20 rows under seed 42 for the operator's gate; (j) make check is green with passed >= 4266 plus the new tests and no test file deleted — a test that must change to pass is a STOP; (k) docs/reports/promo-pulse-1.md exists, <=30 lines, opens with the phase's question and answers it in the first ten lines, every number naming its file; (l) git status --porcelain src tests scripts config results docs/plans docs/reports prints nothing. ALSO met, as a PAUSE, when docs/plans/promo-pulse-1.STOP.md exists (shown with cat) naming one of: waiting on the team lead's labels (dev-40 or positions-50), the dev-loop plateau (two iterations without gain), the holdout pre-registration notice, a rung firing or a projection over the ceiling, a design fork the plan does not settle, a sealed or frozen file that would move, a test that would have to be weakened. Or stop after 80 turns.

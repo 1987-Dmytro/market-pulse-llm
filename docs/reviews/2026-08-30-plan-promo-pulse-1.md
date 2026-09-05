@@ -1072,3 +1072,15 @@ The «needs named» list stays in PROGRESS as debts; none blocks iteration 2.
    stop from the cap, the 90-min backstop lifted to the cap's own minutes if it bites first (the registration says which). Sequence as (v)4. If iteration 5 reads
    RED on dev-40, the registered question closes red and the operator decides; GREEN → holdout-2's gold and its shot on `promo-holdout2`.
 5. Money after it: cycle 3 REMAINING $2.81 → ≥ $1.41 → holdout-2 ≤ $0.90 → c3 needs the ceiling raised (the account holds $8.29) — the operator's word then.
+6. **(w) addendum, 05.09 18:20 — s27 ACCEPTED by diff (`961d425` the team-lead files; `e75342b` the ledger; `a68d999`…`89f775a` PROGRESS, 60 lines; $0):**
+   (w)1 could not pass as the ledger stood — `recorded_reading()` takes the line's LAST open `step_spent_usd` as the tolerance gate's right-hand
+   side, and `promo-iter4`'s only entry was s26's PRE-pod $0.0097: a settled ~$0.6915 is ~7000 % off, refused every time, not once. Every line that
+   ever closed under a tolerance settled against a POST-run reading (`lora-c` 0.7338→0.764952 · `promo-pulse-1` 3.0335→2.986741 · `srv2b` · `srv2d`
+   · `45h2`, re-read in the ledgers today), so the reading is the guard's own path: **$0.7143 at 14:40:49Z (balance 8.2403244051), the session's one
+   ledger line — accepted**; expected gap to the settle 3.19 % < 5 % (the volume's drip, as `promo-pulse-1` named at 3.15 %). The close waits on
+   billing (walk 57.7 % at 14:57Z; `complete()` refuses a PARTIAL walk): **retried at the next session's start, read-only walk first, $0, the command
+   as PROGRESS carries it**. My miss, the day's fourth money one: (w)1 ordered a close whose reference the line did not have. **PHASE v13 §6.1: a
+   line's gate reference is its post-run `--note`, taken after the pod is deleted and before ANY next pod; a line whose readings all predate its pod
+   closes on the walk alone and never takes a late reading.** That line is `promo-holdout` today: its one entry reads 0.0 (pre-pod) and the guard
+   skips the tolerance on a 0/None reading, so it closes at $0 on `--expect-ms 1443000 --until <any instant between its last billing row and
+   13:21:09Z> --tolerance 0.05` (unbounded, the walk swallows iteration 4's pod); a `--note` on it NOW would read ≈ $1.06 and shut it for good. Order: both closes → (w)3 → (w)4.
