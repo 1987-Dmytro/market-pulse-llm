@@ -49,7 +49,7 @@ $1.8462 (balance delta; $1.153372 by run record) are still OPEN; neither carries
    Its line takes its POST-RUN `--note` after the pod is deleted and before any next pod (v13 §6.1).
 
 ## Open stop — NONE. Nothing waits on the operator or the team lead; the next item is $0 and mine.
-**Tree.** Clean at `f5d5cea`; $0 spent this session, no pod, no red test, no test or pin added.
+**Tree.** Clean at HEAD; $0 spent this session, no pod, no red test, no test or pin added.
 
 ## Named, not built (the phase file forbids adding what it did not ask for)
 - **§6.5's ONE test for the OOM fix** — the longest registered render must be proven to fit BEFORE a
