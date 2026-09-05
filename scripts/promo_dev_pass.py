@@ -1341,21 +1341,35 @@ def close_segment(*, deleted_at: str, billed_seconds: float, outcome: str) -> di
     )
 
 
+DEV_FILES = {
+    "gold": GOLD,
+    "prep": PREP,
+    "prereg": PREREG,
+    "pack": PACK,
+    "run": RUN_RECORD,
+    "step": STEP,
+    "stem": STEM,
+}
+"""The dev loop's own files, captured here so `use_part` binds BOTH halves and neither is «what the
+constants already are». A selector with a leg that quietly does nothing reads as a selector that
+worked ([[a_moved_guard_that_left_its_copy]])."""
+
+
 def use_part(part: str, *, gold: Path | None = None, step: str | None = None) -> None:
-    """Point this module's file constants at ONE half of the draw. `dev` is what they already are.
+    """Point this module's file constants at ONE half of the draw.
 
     Called once, from `main`, before any branch reads them — so a process is about the dev loop or
-    about the holdout and never about both. `--gold` and `--step` override afterwards, because §4
-    makes a re-used producer take its paths as parameters and the holdout's gold is a pin the paid
-    session names on the command line."""
+    about the holdout and never about both. BOTH parts are bound, so `use_part("dev")` after a
+    holdout call really returns to the dev loop instead of leaving the holdout in place. `--gold`
+    and `--step` override afterwards, because §4 makes a re-used producer take its paths as
+    parameters and the holdout's gold is a pin the paid session names on the command line."""
     global PART, GOLD, PREP, PREREG, PACK, RUN_RECORD, STEP, STEM
-    if part not in ("dev", "holdout"):
+    files = {"dev": DEV_FILES, "holdout": HOLDOUT_FILES}.get(part)
+    if files is None:
         raise SystemExit(f"--part {part}: the draw has two halves, dev and holdout, and no third")
-    if part != "dev":
-        PART, STEM = part, HOLDOUT_FILES["stem"]
-        GOLD, PREP = HOLDOUT_FILES["gold"], HOLDOUT_FILES["prep"]
-        PREREG, PACK = HOLDOUT_FILES["prereg"], HOLDOUT_FILES["pack"]
-        RUN_RECORD, STEP = HOLDOUT_FILES["run"], HOLDOUT_FILES["step"]
+    PART, STEM, STEP = part, files["stem"], files["step"]
+    GOLD, PREP = files["gold"], files["prep"]
+    PREREG, PACK, RUN_RECORD = files["prereg"], files["pack"], files["run"]
     if gold is not None:
         GOLD = gold
     if step is not None:
