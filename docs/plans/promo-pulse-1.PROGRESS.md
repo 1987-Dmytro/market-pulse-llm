@@ -1,60 +1,61 @@
-# PROGRESS — promo-pulse-1 (executor's one file: done / next / open stop, ≤60 lines)
+# PROGRESS — promo-pulse-1 (ruling 03.09 (e): the executor's one file — done / next / open stop, ≤60 lines; §8 of the phase file stays the DONE list)
 
-Ruling 03.09 (e) made this file the phase's state; §8 of the phase file stays the DONE list.
-
-## The money, live
-`promo-dev-loop`: **$1.242994 of the cap $2.1638**, **$0.920806 left**, the step OPEN — s19 bought iteration 3 for
-**$0.493744** (segment 5, 2402 billed s at the registered $0.74/h), under the $0.842 mean projection. ONE ledger line
-(`--note`, before the pod); `--close` NOT called — iterations remain and `closing_entry` is one-way. Cycle 3
-**$5.0299 of $7.00**; holdout $0.30 untouched; c3 cap $0.50.
+## The money, live — read BY HAND from the guard today, never carried from a record
+Cycle 3 **REMAINING $1.8312** of $7.00 ($1.97 on the evening of 04.09; the volume drips ≈$0.24/day). `promo-dev-loop`
+settles at **$1.159076** of own resources and its ledger is **still OPEN** — the authorised `--close` REFUSED, stop (b).
+`promo-holdout` is a NEW step: cap **$0.90** ((q)3, the operator's), spent **$0.00**, own ledger
+`results/spend_promo_holdout.json` and run record `results/promo_holdout_run.json`; c3 follows at ≤$0.50. **No ledger line
+was written this session** — the close refused before its write and both ledgers are byte-unchanged.
 
 ## Done
-- **Bought:** s9 iter. 1 ($0.5254) · s15 iter. 2 ($0.2239, subject 0.7500 RED) · $0 slices s10–s18 accepted.
-- **04.09 s19 — ITERATION 3 BOUGHT AND SCORED (`b93c997`, $0.493744). BOTH BARS HOLD.** Gate first: `make check`
-  **4320 passed, 2 skipped, exit 0** at `edfe12f` (floor §8 (j) 4266) — run BEFORE the create, because `df1b8e2`'s
-  team-lead STATUS edit is named in ten test files and READ by four (`lora_c_{run,prep,armb}` via `quoted()`, and
-  `think_zero_shot`). Pod `cd918wet7sea5b` RTX 4090 EU-RO-1; price gate GO ($0.74 = registered,
-  `usd_at_the_backstop` $1.1100); ssh port at **20 s** of the record's 500 s; bundle HEAD `edfe12f` byte-equal both
-  sides; boot **210.7 s** off the warm 59 G volume, no second boot across the GO; smoke 3/3 →
-  `--project` **GO-THEN-STOP** ($0.8420 mean). 40 of 40 units, every reply `balanced True` / `finish stop`, **0 parse
-  failures**, 140 gold-shaped rows. **K8: subject 0.8714 ≥ 0.80 HOLDS · signal 0.9104 ≥ 0.75 HOLDS** (iter. 2: 0.7500
-  RED · 0.8854).
-- **The diff against iteration 2 is the transport repair and NOTHING else** (ruling (c)3's ask): all **122** iteration-2
-  predicted rows present UNCHANGED, iteration 3 adds **18** — 0 moved, 0 vanished. Per stratum the currency leg is
-  identical to the row (48/61, subject 0.7869, types 0.8750); the whole gain is decimal_only, **57/79 → 74/79**. All 40
-  answers came back FENCED and `unfence` read each object as it stood. Law, template, gold, decoding, ceiling unmoved.
-- **The KILL was read BY HAND and did not fire — the first time it was close.** REMAINING had dripped $2.4638 →
-  $2.4540, so the cap RULE gave $2.1540 and the headroom **$1.4048**, not the declared $1.4146; the measured MAX corner
-  **$1.8425 is OVER it** (first time in three smokes). Not a KILL: `--terminate-after` hard-bounds this pod at
-  **$1.1098**, a ceiling the meter cannot pass, so $1.8425 is unreachable; and the 201.967 s pricing that corner IS
-  `@VARUS_channel:6009`, the longest render of all 40 — already answered, so the bound is taken over a population whose
-  maximum has been removed. The binding question was TIME, computed before the GO: 37 × 88.772 s = **54.7 min** against
-  **78.4 min** of pod life. The reasoning stands to be accepted or overruled.
+- **05.09 s20 — team-lead files committed by path (`7378326`):** ruling (q), PHASE v7, STATUS 05.09, the (q) stop-pattern
+  review, and the **holdout-40 gold** — 188 rows, sha256 `6fa804880d5d14db…`, byte-for-byte the sha (q)7 names.
+- **05.09 s20 — «holdout-prep», (q)5's ONE item. $0, no pod, no registration written.** The emitter and grader take the
+  holdout as PARAMETERS (§4): `--part {dev,holdout} --gold --step --cap`. `use_part()` binds the module's file constants
+  once at the entry point — both halves, so the holdout owns its prep, registration, pack, run record and step and **`dev`
+  is the default**: every reading taken before (q) still means what it meant. `own_rate()` RETIRES the borrow ((o)4) onto
+  this instrument's own **88.772 s mean / 201.967 s max** (n=3), the SLOWEST pod it ran on, read from
+  `measurements.jsonl` and never typed. `rung_0` issues (q)3's verdict: a dear corner over the cap is issued FITS on the
+  MEAN corner with the cap as the hard stop, the dear one staying in the table, priced and named. `--register` REFUSES on
+  an absent gold; the smoke's rate row takes the PART's own name so the holdout's rate never joins the dev population
+  that priced it. The runbook is off every `_iter3` path onto `_holdout`, smoke = the HOLDOUT's own three.
+- **Checks, all shown.** (1) `--dry-run --part holdout` → 40 threads, 261 283 chars, gold 188 rows, the MEASURED rate, the
+  bound. (2) The refusal BOTH ways — an absent gold prints «gold missing -> no record», `--register` on it writes
+  nothing, exit 1. (3) `grep -n _iter3 scripts/runbook_promo_dev_1.md` → nothing. (4) **The dev leg is byte-identical:**
+  `promo_dev40_prep.json` re-emits at `5510dd2b3098cdd3…`, the sha the registration PINS. (5) **`make check` 4320
+  passed, 2 skipped, exit 0** at `858ead0` — s19's own count, so no test was added and none changed (floor 4266).
+  (6) **$0 dry contacts on `--register` and `--pack`, into the scratchpad — nothing under `results/` moved.** They
+  priced the table (cheap **$0.8420 −6.4%** · priced **$0.8993 −0.1%** · dear **$1.8999 +111%**), proved the pack
+  renders 40 leg-A units whose ids ARE the registration's population, smoke first and none of them a dev-40 thread, and
+  caught three defects now fixed — a `None` floor crashing the print after the write, the rate row landing under the dev
+  name, and `use_part("dev")` a silent no-op — two of them reachable only on the paid path.
 
-## Next — the HOLDOUT NOTICE (an operator decision), then «c3» by (l) 2–4
-Subject cleared 0.80 on dev-40 in 3 of the 5 allowed runs, so §8 (e)'s remaining clause is the ONE holdout attempt — the open stop below. Plateau 0 of 2, and moot: iteration 3 gained.
+## Next — the paid shot, §0a-§7 of the runbook; then «c3» by (l)2-4, then the volume. **BLOCKED by stop (a).**
 
-## Open stop — the holdout attempt needs the operator's word BEFORE anything is written
-- **Stop-point:** §8 (e)'s holdout is ONE shot, announced by a STOP notice; (m)5 and (o)5 both end this session at
-  «subject ≥ 0.80 → the holdout NOTICE, END». It is also money ($0.30 fenced off, untouched), and freezing the law
-  (near-quote, codebook v1.2) + holdout-40 is the team lead's dependency (§7), not mine to start.
-- **Question:** is the holdout fired now, on iteration 3's instrument, and does the team lead freeze the law and hand
-  over holdout-40 first? Nothing of it is pre-registered and I wrote no part.
-- **Tree state:** clean; HEAD `b93c997`; `make check` re-run after the commit, result named below. No pod (`pod list
-  -a` and `serverless list` both `[]` in the transcript); segment 5 closed.
+## Open stop — two questions the ruling does not settle; nothing was written for either
+- **(a) `--project`'s decision table is the DEV loop's and it KILLs the holdout by construction.** Its bands are 03.09
+  (b)'s absolute dollars (`GO ≤ $0.80 · GO-THEN-STOP ≤ $1.20 · NO-GO above`) — the $1.20 edge is ABOVE the $0.90 cap — and
+  its KILL is «the MAX corner over the cap». The holdout's max corner is $1.8999 against $0.90, which (q)3 already ACCEPTS
+  at rung 0: `--register` says FITS and `--project`, minutes later on the same pod, says KILL. **Question:** does (q)3's
+  «FITS on the mean corner, the cap as the hard stop» extend to `--project`, or does the holdout get its own bands? A
+  threshold not in the plan is a scope change: `project()` is UNTOUCHED.
+- **(b) `--close` on `promo-dev-loop` REFUSED and I did not force it.** It settles at **$1.159076** against the ledger's
+  own recorded reading **$0.866700** — **33.7% off**, outside the runbook's 5%. Its right-hand side is
+  `recorded_reading()` — the last `--note`, ALWAYS taken BEFORE the last pod — so a multi-pod step can never close inside
+  5%, and the dev loop's own runbook line was never runnable. The settled figure is sound — the run record's $1.153372 is
+  0.49% from it. **Question:** does the tolerance read against the run record's segments, or against a number the team
+  lead names? Picking one to make it pass is greening a guard; the step stays OPEN and named.
+- **Tree state:** every path committed — `7378326` lead files · `f879bf9` `7a7d90c` `858ead0` code · `31f9461`
+  runbook · `032b69d` knowledge; no pod existed and every RunPod call this session was a $0 read.
 
-## Named, not built (the standing prompt forbids adding what the phase did not ask for)
-- **The borrow's replacement is measured and BIGGER.** Iteration 3's smoke wrote a third row:
-  `promo_dev40_seconds_per_thread` **max 201.967 s** (mean 88.772, n=3) — above the 178.298 s (o)4 named as the own
-  measured maximum and the 135.232 s borrow still in `rung_0`. (o)4 retires the borrow before iteration 4's re-emission
-  on the instrument's OWN maximum; that is now this one, at which the dear corner does NOT fit the remainder — so
-  (o)4's mean-corner branch with the cap as a hard stop applies. `rung_0` NOT touched this session.
-- **The currency stratum reads 0.7869 subject and did not move by one row across the repair**, while the whole-40 bar
-  reads 0.8714. The bar is on the whole and the stratum has none — but a holdout drawn currency-heavy would sit near
-  the line. Named for whoever pre-registers holdout-40.
-- `items[:3] == pack["smoke_ids"]` is pack-vs-pack, no external anchor — (o) did not name it, untouched.
-- `pod.main` never lifts `close_arrays_too` from `reader_v5` · `committed_registration()` ignores `pinned_inputs` (all
-  7 re-derived BY HAND at $0 before the create) · `check_law` compares `codebook_version` only · `project()` prices
-  KILL against the whole cap (hand-read above) · a `resolvable()` test with `+` is AUTHORISED by (l)1, not written ·
-  **gold covers 140 of 208 comments** · (k)2 holds «Шикарно…» and the 11 quotes to the law FREEZE · `@ON_LINE_MO`
-  after c3 · `1925810730` unaddressable.
+## Named, not built (the phase file forbids adding what it did not ask for)
+- **(q)3's expected $0.37–0.58 is BELOW what the instrument's own pace prices**: the registered mean corner is $0.8420
+  and iteration 3's realised $0.493744 scaled by text rows (140 → 188) is ≈$0.64 — not a KILL, the cap is the hard stop,
+  but optimistic. **The `priced` corner (one dead-man recreate) leaves $0.0007** — a second pod is no free retry.
+- **The holdout branches of `rung_0`, `register`, `use_part` and `build_pack` carry no test** — §4 forbids adding one and
+  the $0 dry contacts are their only exercise · `prep()` still calls its count `draw.dev_threads` on the holdout, pinned
+  by `tests/test_promo_dev_pass.py:61` (renaming it is §8 (j)), so `part` sits beside it · `items[:3] ==
+  pack["smoke_ids"]` is pack-vs-pack · `pod.main` never lifts `close_arrays_too` from `reader_v5` ·
+  `committed_registration()` ignores `pinned_inputs` · `check_law` compares `codebook_version` only · `resolvable()`
+  with `+` is AUTHORISED by (l)1, not written · **gold covers 140 of 208 dev comments** · `1925810730` unaddressable ·
+  (k)2 and `@ON_LINE_MO` are the team lead's now.
