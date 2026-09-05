@@ -53,6 +53,22 @@ OUT = REPO_ROOT / "results" / "grade_promo_dev40.json"
 
 BARS = {"subject_agreement": 0.80, "signal_type_agreement": 0.75}
 
+K8_VERSION = "v2"
+"""Which comparison the number in this record was taken under, written INTO it.
+
+v1 (up to and including `results/grade_promo_holdout40.json`, whose 0.7181 / 0.7958 stay v1 numbers
+by ruling 05.09 (s) item 3): every subject compared as a normalised string. v2 (ruling (s) item 3's
+K8 v2, from iteration 4): `sku` and `brand` also agree on token-Jaccard, below. A grade file written
+before this key existed is a v1 reading — the field is absent, not false
+([[a_reading_that_outlived_its_state]])."""
+
+SUBJECT_JACCARD_FLOOR = 0.5
+"""Ruling 05.09 (s) item 3: `sku`/`brand` match on normalised exact OR token-Jaccard >= 0.5 — «the
+product's identity, not its spelling». Seven of holdout-40's 53 subject misses were one product
+written two ways, and codebook v1.2 rule (в) now trims ТМ / від / volume / percent out of the form,
+so a DROPPED modifier token must not read as a different product while a SUBSTITUTED one still
+does: {a,b} vs {a} = 0.5 agrees, {a,b} vs {a,c} = 0.333 does not."""
+
 
 def rows(path: Path) -> list[dict]:
     if not path.exists():
@@ -75,6 +91,30 @@ def subject(row: dict) -> tuple:
     kind = promo_key(row.get("subject_type") or "")
     name = row.get("subject") or ""
     return (kind, chain_key(name) if kind == "chain" else promo_key(name))
+
+
+def subjects_agree(gold_row: dict, said_row: dict) -> bool:
+    """Do these two rows name the same subject? The ONE comparison — K8 v2, ruling 05.09 (s) item 3.
+
+    Every caller goes through here, the grade and `promo_dev_pass.score`'s error table alike: two
+    gates over one spend that read different corners is how a record ends up disagreeing with itself
+    ([[two_gates_on_one_spend_read_different_corners]]).
+
+    Exact after normalisation first, so `chain`'s registry fold and `post`'s thread_root keep working
+    exactly as they did. Only then, and only for `sku` and `brand`, the token-Jaccard: whitespace
+    tokens of the name AFTER `promo_key`, so the floor is applied to the same string the exact test
+    used. A side with no tokens — the `unsure` rows carry `subject: None` — can never reach the
+    floor, and is refused before the union is divided by ([[empty_class_eats_the_parse_failures]]).
+    """
+    want, said = subject(gold_row), subject(said_row)
+    if want == said:
+        return True
+    if want[0] != said[0] or want[0] not in ("sku", "brand"):
+        return False
+    a, b = set(want[1].split()), set(said[1].split())
+    if not a or not b:
+        return False
+    return len(a & b) / len(a | b) >= SUBJECT_JACCARD_FLOOR
 
 
 def thread_key(row: dict) -> tuple:
@@ -106,7 +146,7 @@ def agree(gold: list[dict], predicted: list[dict]) -> dict:
         row
         for row in comments
         if (found := said.get((thread_key(row), str(row["msg_id"])))) is not None
-        and subject(found) == subject(row)
+        and subjects_agree(row, found)
     ]
 
     gold_types, said_types = defaultdict(set), defaultdict(set)
@@ -141,6 +181,7 @@ def grade(gold: list[dict], predicted: list[dict], strata: dict) -> dict:
         )
     unsure = [row for row in predicted if row.get("unsure")]
     return {
+        "k8_version": K8_VERSION,
         "bars": {
             name: {
                 "value": whole[name],
@@ -160,7 +201,10 @@ def grade(gold: list[dict], predicted: list[dict], strata: dict) -> dict:
             "subject_agreement": "per COMMENT: (subject_type, subject) after aggregates.promo_key,"
             " with `chain` names folded to the chain id by aggregates.chain_key (ruling 04.09 (j)"
             " item 1) on gold and prediction alike; denominator = gold comments; a comment the"
-            " model said nothing about is a miss",
+            " model said nothing about is a miss."
+            f" K8 {K8_VERSION} (ruling 05.09 (s) item 3): a `sku` or `brand` also agrees when the"
+            f" token-Jaccard of the two normalised names is >= {SUBJECT_JACCARD_FLOOR} — the"
+            " product's identity, not its spelling. `chain` and `post` are unchanged",
             "signal_type_agreement": "per THREAD: Jaccard over the SET of signal types, averaged;"
             " a thread where both sides say nothing scores 1.0 rather than dividing by zero",
         },

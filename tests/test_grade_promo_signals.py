@@ -195,3 +195,39 @@ def test_the_grade_folds_chain_spellings_on_both_sides_and_leaves_brands_alone()
     brand_gold = [dict(gold(msg_id="3", subject="VARUS"), subject_type="brand")]
     brand_said = [dict(gold(msg_id="3", subject="Варус"), subject_type="brand")]
     assert grader.agree(brand_gold, brand_said)["subject_agreement"] == 0.0
+
+
+def test_k8_v2_agrees_on_a_dropped_modifier_token_and_refuses_a_substituted_one():
+    """K8 v2, ruling 05.09 (s) item 3 — the caught grader defect PHASE §4 gives ONE test.
+
+    The defect: seven of holdout-40's 53 subject misses were one product written two ways, and
+    codebook v1.2 rule (в) now trims «ТМ», «від», volume and percent out of the form — so the two
+    sides legitimately differ by a MODIFIER token. Both directions, because a comparison loose
+    enough to agree with everything is not a comparison ([[guard_selftest_negative_control]]):
+    a dropped token agrees, a SUBSTITUTED one does not, and neither `chain` nor `post` moves.
+    """
+    def sku(subject, msg_id="1"):
+        return dict(gold(msg_id=msg_id, subject=subject), subject_type="sku")
+
+    # fires: {морозиво, сніжинка} vs {морозиво} — Jaccard 0.5, the trimmed modifier
+    assert grader.subjects_agree(sku("морозиво Сніжинка"), sku("морозиво"))
+    assert grader.agree([sku("морозиво Сніжинка")], [sku("морозиво")])["subject_agreement"] == 1.0
+    # and does NOT fire: {морозиво, сніжинка} vs {морозиво, зимова} — Jaccard 0.333, another product
+    assert not grader.subjects_agree(sku("морозиво Сніжинка"), sku("морозиво Зимова"))
+    said = [sku("морозиво Зимова")]
+    assert grader.agree([sku("морозиво Сніжинка")], said)["subject_agreement"] == 0.0
+    # the floor is a floor, not a "share a token" rule
+    assert not grader.subjects_agree(sku("пиво світле Кварта"), sku("пиво"))
+
+    # the two types K8 v2 does not touch: a chain still folds only through the registry, and a
+    # `post` subject is the thread root — two roots that share no token stay two answers
+    chain_gold = dict(gold(subject="VARUS"), subject_type="chain")
+    assert grader.subjects_agree(chain_gold, dict(gold(subject="Варус"), subject_type="chain"))
+    assert not grader.subjects_agree(chain_gold, dict(gold(subject="АТБ"), subject_type="chain"))
+    post_gold = dict(gold(subject="4519"), subject_type="post")
+    assert not grader.subjects_agree(post_gold, dict(gold(subject="4520"), subject_type="post"))
+
+    # an `unsure` row carries no subject at all: no tokens, so it can never reach the floor
+    assert not grader.subjects_agree(sku("морозиво"), dict(sku("morozyvo"), subject=None))
+
+    assert grader.grade([sku("морозиво")], [sku("морозиво")], {})["k8_version"] == "v2"
