@@ -918,9 +918,14 @@ def register(cap_usd: float | None = None) -> dict:
         f" history; THIS record is the one iteration {ITERATION} is bought under. What moves since"
         " iteration 3 is the LAW (codebook v1.2, ruling 05.09 (s) item 2: partners, the off-domain"
         " thread, three product forms, price-as-quality) and the POPULATION (dev-2, the spent"
-        " holdout-40 relabelled by (s) item 3, riding beside dev-40 as a reading). The transport"
-        " does not move, so `scripts/promo_dev_pod_runner.py` and `src/market_pulse/promo_prompts.py`"
-        " stay pinned beside the law — `check_law` compares only `codebook_version` and covers"
+        " holdout-40 relabelled by (s) item 3, riding beside dev-40 as a reading)."
+        " `src/market_pulse/promo_prompts.py` stays pinned beside the law and"
+        " `scripts/promo_dev_pod_runner.py` MOVES by ruling 05.09 (w) item 3: the runner catches a"
+        " unit's exception, writes it down as that unit's ERROR reply and exits non-zero, so the Mac"
+        " reads a death instead of waiting out the GO deadline. That is the SERVING and not the"
+        " instrument (PHASE v12 §6.5) — the render, the prefix rule, the law handshake and the GO"
+        " are byte-for-byte iteration 3's, and `pinned_inputs` above carries the runner's new sha,"
+        " re-read from disk at this call. `check_law` compares only `codebook_version` and covers"
         " neither the template nor the runner. Ruling 05.09 (u) item 2 adds the reading arm's own"
         " answer key, docs/labels-promo-dev2.jsonl, to `pinned_inputs`: dev-2 carries no bar of this"
         " record, and a reading still needs its reference pinned as much as a bar does."
@@ -1492,6 +1497,80 @@ chosen by NAME. `own_rate()` selects on `contract` + `sample`, so both legs' row
 instrument's history and the per-part names stay provenance instead of a filter."""
 
 
+SMOKE_IN = "3 replies are in"
+SMOKE_GONE = "the smoke did not come back"
+"""The two outcomes of the registration's `after_the_smoke_for_40_threads`, by their own key names.
+`smoke_state` indexes the record with these, so a renamed branch is a KeyError and not a silent
+third meaning ([[gate_verdicts_need_an_artifact]])."""
+
+
+def smoke_state(replies: Path) -> dict:
+    """Which branch of the registration's OWN decision table this out-file is in — $0, on a live pod.
+
+    Ruling 05.09 (w) item 3, the Mac half. The pod's runner now writes an ERROR reply for the unit it
+    died on, and this is the reading that makes it decisive: an error reply among the replies IS «the
+    smoke did not come back», so the pod is deleted AT ONCE instead of at the GO deadline.
+
+    Three states, and the third is why this is a reading and not a verdict. A file with fewer than
+    the smoke's rows is WAITING — the pod may still be generating, and no file can tell that from a
+    death by itself. What tells them apart is the PROCESS, which the runbook already watches
+    (`pgrep -fa promo_dev_pod_runner`) — so WAITING with no runner alive is the same outcome, read by
+    the operator's own eyes ([[long_run_watch_the_process]]). An error reply needs neither.
+
+    The units and the branch prose are READ from the committed registration, never typed here: a
+    literal would pin ONE record's smoke, which a ruling moves ([[a_number_typed_into_its_own_checker]]).
+    The presence rule is the one the runbook's heredoc already enforced; the `finish_reason` of each
+    unit is REPORTED and not judged, exactly as that heredoc left it for the operator.
+    """
+    record = committed_registration()
+    bands = record["decision_table"]["after_the_smoke_for_40_threads"]
+    want = [one["unit_id"] for one in record["population"]["leg_a"]["smoke"]["units"]]
+    rows = {}
+    for line in replies.read_text(encoding="utf-8").splitlines():
+        if line.strip():
+            row = json.loads(line)
+            rows[row["id"]] = row
+    dead = [row for row in rows.values() if row.get("error")]
+    missing = [one for one in want if one not in rows]
+    state = SMOKE_GONE if dead else (SMOKE_IN if not missing else "waiting")
+    return {
+        "state": state,
+        "action": bands.get(
+            state, "the pod is still generating — poll again, and watch the PROCESS, not this file"
+        ),
+        "units": [
+            {"unit_id": one, "reply": rows.get(one)}
+            for one in want
+        ],
+        "errors": [
+            {"id": row.get("id"), "exception": row.get("exception"), "error": row.get("error")}
+            for row in dead
+        ],
+        "missing": missing,
+        "replies": rel(replies),
+    }
+
+
+def render_smoke(state: dict) -> str:
+    """The three units as the runbook's heredoc printed them, plus the branch the record names."""
+    lines = []
+    for one in state["units"]:
+        row = one["reply"]
+        lines.append(
+            f"  {one['unit_id']:38s} "
+            + (
+                "MISSING"
+                if row is None
+                else f"ERROR {row.get('exception')}"
+                if row.get("error")
+                else f"{row['seconds']:6.1f}s balanced={row['balanced']} finish={row['finish_reason']}"
+            )
+        )
+    for one in state["errors"]:
+        lines.append(f"  ERROR {one['exception']} on {one['id']}: {one['error']}")
+    return "\n".join([f"\n{state['state'].upper()} — {state['action']}", *lines])
+
+
 def project(replies: Path) -> dict:
     """The smoke's own rate, and ruling 03.09 (b)'s verdict on it. $0, on a pod that is waiting.
 
@@ -1792,6 +1871,11 @@ def main(argv: list[str] | None = None) -> int:
         "--project", action="store_true", help="$0: the smoke's rate and the decision table"
     )
     parser.add_argument(
+        "--smoke",
+        action="store_true",
+        help="$0: the smoke's own units — which branch of the decision table, on a LIVE pod",
+    )
+    parser.add_argument(
         "--leak-check", action="store_true", help="$0: no string of the law is a store comment"
     )
     parser.add_argument(
@@ -1887,6 +1971,15 @@ def main(argv: list[str] | None = None) -> int:
             print(f"\nappended to {rel(MEASUREMENTS)}: {row['name']} «{row['sample']}»"
                   f" = {row['value']} s/thread (max {row['max']}, n={row['n']})")
         return 0 if state["latest"]["verdict"] == "GO" else 1
+
+    if args.smoke:
+        if args.replies is None:
+            parser.error("--smoke needs --replies: the pod's own out-file is what it reads")
+        state = smoke_state(args.replies)
+        print(render_smoke(state))
+        # $0 and it writes NOTHING: this runs while the pod is billing, and a reading that appended
+        # a gate would make a poll a verdict ([[a_flag_that_asserts_turns_a_poll_into_a_verdict]]).
+        return 0 if state["state"] == SMOKE_IN else 1
 
     if args.project:
         if args.replies is None:

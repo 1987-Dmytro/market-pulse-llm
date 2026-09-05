@@ -12,6 +12,14 @@ prompt — `market_pulse.promo_prompts`, a NEW module because `prompts.py` is pi
 the 16 C2 posts S4 left without an evidence row, under the REGISTERED `positions_text_gm4`. The
 render below reads `item["task"]`, so one pack carries both and one boot pays for both.
 
+**A unit that DIES says so where the Mac looks (ruling 05.09 (w) item 3).** One thing about the
+transport is new, and it is the only thing: an exception raised while a unit is generating is caught
+here, written into the out-file as that unit's ERROR reply, and the process exits non-zero. Iteration
+4's OOM went to the pod log alone and the out-file just stopped at two rows, so the Mac could not
+tell a dead pod from a slow one and waited out the GO deadline — $0.62 of a $0.69 run. Nothing else
+moves: the render, the prefix rule, the law handshake and the GO are byte-for-byte what iteration 3
+bought.
+
 **The GO between them is what makes the smoke affordable.** The registration prices the smoke and
 iteration 1 together; the pod answers the three smoke units, stops, and waits for the Mac to read
 the measured rate against ruling 03.09 (b)'s decision table. A runner that guessed GO would spend
@@ -146,6 +154,74 @@ def check_law(pack: dict, repo: Path) -> dict:
     return {"codebook_version": got}
 
 
+def rows_of(out: Path) -> list[dict]:
+    """Every WHOLE row this out-file carries.
+
+    `runner.whole_lines` and never `runner.already_answered`: that one REWRITES a torn last line and
+    refuses on a foreign id, and neither may happen inside the arm that is trying to describe a
+    crash ([[cleanup_in_the_except_arm_can_eat_the_cause]]). This one only reads.
+    """
+    if not out.exists():
+        return []
+    return runner.whole_lines(out.read_text(encoding="utf-8"), str(out))[0]
+
+
+def run_or_report(pack: dict, out: Path, repo: Path, loader, started: float) -> int:
+    """`runner.run`, with a unit's exception written down as that unit's ERROR reply — (w) item 3.
+
+    Iteration 4 died in `gemma4._norm` on the smoke's longest render (`@VARUS_channel:8647`, 14 281
+    chars) with 338 MiB refused at 23.19 of 23.52 GiB. The traceback went to the pod log and the
+    out-file simply STOPPED at two rows — which is byte-for-byte what a third unit still generating
+    looks like. The Mac waited out the GO deadline: $0.62 of the run's $0.69 was that wait.
+
+    So the death is written where the Mac already looks. The unit named is the FIRST unanswered one
+    and that is a derivation, not a guess: `runner.run` walks `todo` in order and flushes each row
+    before it asks the next, so the first unit with no whole row is the one that was generating.
+    `unanswered` carries the rest, because a crash after the loop names no unit at all and a row
+    that claimed one would be a false record.
+
+    `SystemExit` is deliberately NOT caught — `check_instrument`, `check_requests` and
+    `already_answered` refuse that way, and a named refusal must not come back as a unit's error.
+    """
+    try:
+        return runner.run(pack, out, repo, loader=loader)
+    except Exception as err:
+        done = {row["id"] for row in rows_of(out)}
+        left = [one["id"] for one in pack["items"] if one["id"] not in done]
+        row = {
+            "id": left[0] if left else None,
+            "error": str(err),
+            "exception": type(err).__name__,
+            "unanswered": left,
+        }
+        with out.open("a", encoding="utf-8") as handle:
+            handle.write(json.dumps(row, ensure_ascii=False) + "\n")
+        runner.say(
+            started,
+            f"ERROR {row['exception']} on {row['id']} — {len(left)} of {len(pack['items'])} unit(s)"
+            f" unanswered; the reply is written to {out} and this process exits non-zero",
+        )
+        return 1
+
+
+def refuse_to_resume_over_a_death(out: Path) -> None:
+    """An out-file carrying an ERROR reply is not resumable, and this is where that is said.
+
+    `already_answered` counts every row with an `id` as ANSWERED, so a replacement pod pointed at
+    this file would skip the very unit that killed the last one — the row above would have bought
+    silence instead of the deadline it saves. The shipped reader is a PINNED pod runner (§4) and
+    does not move, so the refusal lives HERE, in the file whose pin moves with this fix, and it runs
+    BEFORE the model is loaded rather than after ([[a_guard_that_runs_after_the_write]]).
+    """
+    dead = [row for row in rows_of(out) if row.get("error")]
+    if dead:
+        raise SystemExit(
+            f"{out} carries {len(dead)} ERROR reply/replies ({dead[0].get('exception')} on"
+            f" {dead[0].get('id')}) — the pod that wrote it died on that unit, and `already_answered`"
+            " would count the unit as answered and never re-ask it. Move the file aside and stop."
+        )
+
+
 def once(loader):
     """One model load for both `runner.run` calls — the GO sits between them, not a second boot."""
     held = {}
@@ -168,6 +244,7 @@ def main(argv: list[str] | None = None, loader=runner.load_reader, sleep=time.sl
     args = parser.parse_args(argv)
 
     started = time.monotonic()
+    refuse_to_resume_over_a_death(args.out)
     pack = json.loads(args.pack.read_text(encoding="utf-8"))
     law = check_law(pack, args.repo)
     runner.say(started, f"codebook {law['codebook_version'][:16]}… matches the pack")
@@ -181,7 +258,7 @@ def main(argv: list[str] | None = None, loader=runner.load_reader, sleep=time.sl
     if not smoke:
         raise SystemExit("the pack carries no smoke units — the rate would be measured on nothing")
 
-    code = runner.run(pack | {"items": smoke}, args.out, args.repo, loader=held)
+    code = run_or_report(pack | {"items": smoke}, args.out, args.repo, held, started)
     if code:
         return code
     runner.say(started, f"SMOKE DONE · {len(smoke)} units · waiting for {args.go}")
@@ -189,7 +266,7 @@ def main(argv: list[str] | None = None, loader=runner.load_reader, sleep=time.sl
     if str(gate.get("verdict")) != "GO":
         runner.say(started, f"no GO ({gate.get('verdict')}) — {len(pack['items']) - len(smoke)} units unasked")
         return 0
-    return runner.run(pack, args.out, args.repo, loader=held)
+    return run_or_report(pack, args.out, args.repo, held, started)
 
 
 if __name__ == "__main__":

@@ -140,6 +140,9 @@ ssh -i "$SSHK" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o Lo
    > /workspace/run/pod.log 2>&1 < /dev/null & echo $!'
 ```
 Watch the PROCESS, not a success-grep: `ssh ... 'pgrep -fa promo_dev_pod_runner; tail -5 /workspace/run/pod.log'`.
+**`pgrep` empty while the smoke is short of its three IS «the smoke did not come back»** — delete at
+once, do not sit out the GO deadline. Iteration 4's OOM cost $0.62 of exactly that wait; the runner
+now writes an ERROR reply for the unit it died on (ruling (w)3), so the fetch below is decisive too.
 
 ## 5 — the smoke, then GO. There is no band gate on this leg (ruling 05.09 (r) item 2).
 The smoke is **the holdout's OWN first three units** — its shortest, median and longest render by
@@ -150,17 +153,13 @@ The smoke is **the holdout's OWN first three units** — its shortest, median an
 landing IS the GO, and their seconds are read for the record, never for a band.
 ```bash
 scp ... root@<HOST>:/workspace/run/promo_holdout40.jsonl results/promo_holdout40.jsonl
-python3.11 -c "
-import json
-rec = json.load(open('results/prereg_promo_holdout.json'))
-want = [one['unit_id'] for one in rec['population']['leg_a']['smoke']['units']]
-rows = {one['id']: one for one in map(json.loads, open('results/promo_holdout40.jsonl'))}
-for unit in want:
-    got = rows.get(unit)
-    print(unit, 'MISSING' if got is None else
-          f\"{got['seconds']:.1f}s balanced={got['balanced']} finish={got['finish_reason']}\")
-raise SystemExit(0 if all(one in rows for one in want) else 1)"
+PYTHONPATH=src python3.11 scripts/promo_dev_pass.py --smoke --part holdout \
+  --replies results/promo_holdout40.jsonl
 ```
+It prints the branch of the registration's OWN decision table and exits 0 only on «3 replies are
+in». **An ERROR reply among them is «the smoke did not come back»** and needs no second reading —
+delete the pod at once (ruling 05.09 (w) item 3). WAITING is a poll, not a verdict: pair it with the
+`pgrep` above, and no runner alive is the same outcome as an error.
 A missing unit, or a `finish_reason` that is not the model stopping on its own, is **not** a band
 verdict: nothing is written to `promo_go`, the pod is deleted, `--close-segment` records it, the
 listing is shown, and the run is PHASE §6.5's INCOMPLETE reading — recorded under its number, never

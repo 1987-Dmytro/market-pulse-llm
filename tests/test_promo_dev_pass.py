@@ -422,3 +422,87 @@ def test_the_shipped_law_is_clean_against_every_set_it_will_be_graded_on():
     assert record["corpus"]["by_split"] == owed
     assert record["corpus"]["comments_with_text"] == sum(owed.values())
     assert record["verdict"] == "CLEAN", record["hits"]
+
+
+def test_a_dead_unit_becomes_an_error_reply_the_mac_reads_as_the_smoke_not_coming_back(
+    tmp_path, monkeypatch
+):
+    """Ruling 05.09 (w) item 3's ONE test, both directions, over BOTH halves of the transport.
+
+    Iteration 4 died in `gemma4._norm` on `@VARUS_channel:8647` — the smoke's longest render — and
+    said so only in the pod log. The out-file simply stopped at two rows, which is byte-for-byte
+    what a third unit still generating looks like, so the Mac could not tell a dead pod from a slow
+    one and waited out the GO deadline: $0.62 of the run's $0.69 was that wait. The drill is
+    therefore the REAL shape — the committed registration's own three smoke units, two answered and
+    the third killed where the OOM killed it — and the ids are read from that record, never typed
+    ([[a_number_typed_into_its_own_checker]]).
+
+    Both directions, because a reading that only ever says «gone» decides nothing
+    ([[guard_selftest_negative_control]]): answered in full, the same file must read «3 replies are
+    in» and exit 0. The artifact the POD half writes is the input the MAC half reads, so no fixture
+    is invented between them ([[the_fixture_and_the_artifact_share_anchors]]).
+
+    The last direction is the fix's own footgun, refused where it is made: `already_answered` counts
+    any row carrying an `id` as ANSWERED, so a replacement pod resumed over the ERROR file would
+    skip the very unit that killed the last one. The shipped reader is a PINNED pod runner (§4) and
+    does not move, so the refusal lives in the runner whose pin moves with this fix.
+    """
+    import promo_dev_pod_runner as pod
+
+    want = [
+        one["unit_id"]
+        for one in dev.committed_registration()["population"]["leg_a"]["smoke"]["units"]
+    ]
+    pack = {
+        "instruments": {"leg_a": {"codebook_version": promo_prompts.codebook_version()}},
+        "items": [{"id": one, "smoke": True} for one in want],
+    }
+    pack_path = tmp_path / "pack.json"
+    pack_path.write_text(json.dumps(pack), encoding="utf-8")
+
+    def answer(these, out):
+        with out.open("a", encoding="utf-8") as handle:
+            for one in these:
+                row = {"id": one, "seconds": 9.5, "balanced": True, "finish_reason": "stop"}
+                handle.write(json.dumps(row) + "\n")
+
+    def argv(out):
+        return ["--pack", str(pack_path), "--out", str(out), "--repo", str(REPO_ROOT),
+                "--go", str(tmp_path / "never"), "--go-deadline", "0"]
+
+    died = tmp_path / "died.jsonl"
+
+    def crash(one_pack, out, repo, loader):
+        answer(want[:2], out)
+        raise RuntimeError("CUDA out of memory. Tried to allocate 338.00 MiB")
+
+    monkeypatch.setattr(pod.runner, "run", crash)
+    assert pod.main(argv(died), loader=lambda p, r: object(), sleep=lambda _: None) == 1
+
+    rows = [json.loads(line) for line in died.read_text(encoding="utf-8").splitlines() if line]
+    assert [one["id"] for one in rows[:2]] == want[:2], "the answered units are left as they were"
+    error = rows[-1]
+    assert error["id"] == want[2], "the ERROR reply names the unit the loop was generating"
+    assert error["unanswered"] == [want[2]] and error["exception"] == "RuntimeError"
+    assert "out of memory" in error["error"]
+
+    gone = dev.smoke_state(died)
+    assert gone["state"] == dev.SMOKE_GONE
+    assert gone["action"] == dev.committed_registration()["decision_table"][
+        "after_the_smoke_for_40_threads"
+    ][dev.SMOKE_GONE], "the branch is the record's own prose, not a phrase beside it"
+    assert dev.main(["--smoke", "--replies", str(died)]) == 1
+
+    whole = tmp_path / "whole.jsonl"
+    answer(want, whole)
+    assert dev.smoke_state(whole)["state"] == dev.SMOKE_IN
+    assert dev.smoke_state(whole)["missing"] == []
+    assert dev.main(["--smoke", "--replies", str(whole)]) == 0
+
+    partial = tmp_path / "partial.jsonl"
+    answer(want[:2], partial)
+    assert dev.smoke_state(partial)["state"] == "waiting", "a short file is a poll, not a verdict"
+    assert dev.main(["--smoke", "--replies", str(partial)]) == 1
+
+    with pytest.raises(SystemExit, match="ERROR reply"):
+        pod.main(argv(died), loader=lambda p, r: object(), sleep=lambda _: None)
