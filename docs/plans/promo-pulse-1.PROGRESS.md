@@ -5,9 +5,10 @@ Cycle 3 **SPENT $6.2494, REMAINING $2.7506** of the **$9.00** ceiling; anchor $1
 balance **$8.2306** at 15:28:28Z. **Both closes are done:** `promo-iter4` CLOSED at **$0.694815** of
 $1.20 (settled on its run record, 2.73% off its post-run reference) and `promo-holdout` CLOSED at
 **$0.298209** of $1.10 (settled on the WALK ALONE — it never had a reference and never took one).
-**`promo-dev-loop` is the ONLY line still open** and reads $2.5702 of $2.16 — an UNBOUNDED delta
-that has swallowed every pod since 04.09 plus the volume's drip. Open by construction ((r)4); it
-carries no new run and gates nothing, and v11 is the rule that stops the next line becoming it.
+**`promo-dev-loop` is the ONLY line still open and it REFUSES** — $2.5702 of $2.16, **exit 1**
+(«an overrun aborts, it does not raise the cap»): an UNBOUNDED delta that swallowed every pod since
+04.09 plus the volume's drip. The cap cannot be raised and the line cannot be closed ((r)4), so it
+is **NEVER NAMED again** — iteration 5 reads FITS with `--step promo-iter5`. A trap, named as one.
 
 ## Done — 05.09 s28: both closes settled; the phase's money is one open line and it is inert.
 - **Team-lead files committed by path (`c90d143`)** — the (w) addendum, PHASE **v13** §6.1 (a line's
@@ -54,7 +55,6 @@ carries no new run and gates nothing, and v11 is the rule that stops the next li
 ## Named, not built (the phase file forbids adding what it did not ask for)
 - **§6.5's ONE test for the OOM fix** — the longest registered render must be proven to fit BEFORE a
   pod, at $0. Named, not written: it belongs to the transport/serving fix's own commit.
-- **`--open`/`--close-segment` still write `results/promo_dev_loop_run.json` at BATCH scale, not
-  LINE scale** (`latest` reads `OVER`, summing iterations 1–3 with iteration 4): `--expect-ms` MUST
-  come from the segment whose `created_at` is at/after the line's anchor — twice today, both agreed.
+- **`--open`/`--close-segment` write `results/promo_dev_loop_run.json` at BATCH scale, not LINE
+  scale:** `--expect-ms` MUST come from the segment at/after the line's anchor — twice today, agreed.
 - **No test for the arm selector** (§4) or the step-aware guard read ((v)3 «no new test»).
