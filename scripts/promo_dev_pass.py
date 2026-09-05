@@ -506,14 +506,24 @@ STEM = "promo_dev40"
 the holdout is ONE shot and has no iteration to number."""
 
 
-def guard_reading() -> dict:
-    """What the cycle has left, in the guard's own words. Never re-derived here.
+def guard_reading(step: str, step_cap: float) -> dict:
+    """What the cycle AND this step's OWN line have left, in the guard's words. Never re-derived.
 
     `run_promo_c2.guard_says_go`'s rule, one line further: a missing REMAINING reads as unlimited,
     so a run that cannot find the guard's own line refuses instead of pricing itself against a
-    number it invented ([[a_budget_is_not_an_elapsed]])."""
+    number it invented ([[a_budget_is_not_an_elapsed]]).
+
+    Ruling 05.09 (v) item 3 makes the STEP a parameter of the reading. Called without one, this
+    function priced iteration 4 against the CYCLE's $3.4843 while `promo-dev-loop`'s own line stood
+    at $1.8462 of the $1.20 the record named — the registration read FITS and the guard refused the
+    run it had registered. A record that names a step but prices against the cycle is a false
+    record, so the step's line is read here and a step line the guard did not print refuses exactly
+    as a missing REMAINING does. A CLOSED line prints CLOSED and carries no new run."""
     done = subprocess.run(
-        [sys.executable, str(GUARD)], check=False, capture_output=True, text=True
+        [sys.executable, str(GUARD), "--step", step, "--step-cap", f"{step_cap:.4f}"],
+        check=False,
+        capture_output=True,
+        text=True,
     )
     print(done.stdout, end="", flush=True)
     print(done.stderr, end="", file=sys.stderr, flush=True)
@@ -526,11 +536,27 @@ def guard_reading() -> dict:
             "the guard printed no 'REMAINING $…' / 'CYCLE 3 SPENT $… of $…' pair — the cycle's"
             " headroom is unreadable and an unreadable headroom is not $∞. Refuse."
         )
+    line = re.search(
+        rf"^{re.escape(step.upper())} SPENT\s+\$([0-9.]+) of \$([0-9.]+)", done.stdout, re.M
+    )
+    if not line:
+        raise SystemExit(
+            f"the guard printed no '{step.upper()} SPENT $… of $…' line — THIS step's own headroom"
+            " is unreadable, and pricing the cap against the cycle instead is the false record"
+            " ruling 05.09 (v) closed. A settled line prints CLOSED and carries no new run: open"
+            " the run its own line. Refuse."
+        )
+    step_spent, step_cap_read = float(line.group(1)), float(line.group(2))
     return {
         "remaining_usd": float(found.group(1)),
         "cycle3_spent_usd": float(cycle.group(1)),
         "cycle3_cap_usd": float(cycle.group(2)),
-        "from": "scripts/runpod_guard.py, its own printed REMAINING and CYCLE 3 lines",
+        "step_name": step,
+        "step_spent_usd": step_spent,
+        "step_cap_usd": step_cap_read,
+        "step_remaining_usd": round(step_cap_read - step_spent, 4),
+        "from": "scripts/runpod_guard.py --step <name> --step-cap <cap>, its own printed REMAINING,"
+        " CYCLE 3 and step lines",
         "at": datetime.now(UTC).isoformat(timespec="seconds"),
     }
 
@@ -840,10 +866,20 @@ def register(cap_usd: float | None = None) -> dict:
             " would claim a frozen answer key that does not exist"
             " ([[preregistration_is_a_file_not_a_constant]]). Commit the gold, then --register."
         )
-    money = guard_reading()
+    money = guard_reading(STEP, cap_usd if cap_usd is not None else STEP_CAP_USD)
     if cap_usd is None:
-        cap = round(min(STEP_CAP_USD, money["remaining_usd"] - HOLDOUT_RESERVE_USD), 4)
-        cap_rule = f"min(${STEP_CAP_USD:.2f}, REMAINING − ${HOLDOUT_RESERVE_USD:.2f})"
+        cap = round(
+            min(
+                STEP_CAP_USD,
+                money["step_remaining_usd"],
+                money["remaining_usd"] - HOLDOUT_RESERVE_USD,
+            ),
+            4,
+        )
+        cap_rule = (
+            f"min(${STEP_CAP_USD:.2f}, THIS step's own REMAINING,"
+            f" the cycle's REMAINING − ${HOLDOUT_RESERVE_USD:.2f})"
+        )
         if cap < STEP_FLOOR_USD:
             raise SystemExit(
                 f"the dev loop's cap is ${cap:.4f} — below the ${STEP_FLOOR_USD:.2f} floor plan §9"
@@ -851,16 +887,19 @@ def register(cap_usd: float | None = None) -> dict:
                 " STOP."
             )
     else:
-        cap = round(min(cap_usd, money["remaining_usd"]), 4)
+        cap = round(min(cap_usd, money["step_remaining_usd"], money["remaining_usd"]), 4)
         cap_rule = (
             f"min(${cap_usd:.4f} — the operator's own number, quoted in"
-            " docs/PHASE-promo-pulse-1.md §6.1 for this leg — , the guard's REMAINING)"
+            " docs/PHASE-promo-pulse-1.md §6.1 for this leg — , THIS step's own REMAINING, the"
+            " cycle's REMAINING) — ruling 05.09 (v) item 3"
         )
         if cap < cap_usd:
             raise SystemExit(
-                f"the cap asked for is ${cap_usd:.4f} and the guard's REMAINING is"
-                f" ${money['remaining_usd']:.4f} — a cap above what the cycle has left is a cap"
-                " nothing enforces. The operator raises the cycle or lowers the cap: STOP."
+                f"the cap asked for is ${cap_usd:.4f}; {STEP} has"
+                f" ${money['step_remaining_usd']:.4f} left of its OWN line and the cycle has"
+                f" ${money['remaining_usd']:.4f} — a cap above either is a cap nothing enforces."
+                " Ruling 05.09 (v) item 2: a paid run is bought under its own step line. The"
+                " operator opens one or lowers the cap: STOP."
             )
     threads = dev_threads()
     prep = json.loads(PREP.read_text(encoding="utf-8"))["corpus"]["threads"]
@@ -894,7 +933,13 @@ def register(cap_usd: float | None = None) -> dict:
         " bars, and re-bought under the NEXT number with the law UNMOVED and after the operator's"
         " money word. `committed_registration()` still does not re-verify `pinned_inputs`: a named"
         " debt it inherits from the dev loop.",
-        "authority": "docs/reviews/2026-08-30-plan-promo-pulse-1.md «Ruling 05.09 (u)» item 2 —"
+        "authority": "docs/reviews/2026-08-30-plan-promo-pulse-1.md «Ruling 05.09 (v)» items 2-3 —"
+        " «a paid run is its own money line: iteration 4 is bought under `promo-iter4`"
+        " (results/spend_promo_iter4.json, its own anchor, cap $1.20, closed in the SAME session);"
+        " the registration names its line and reads the guard WITH `--step <name> --step-cap <cap>`,"
+        " so FITS is judged against THAT line's own remaining and the record's `money` carries it"
+        " beside the cycle's; the old `promo-dev-loop` line stays as (r)4 left it and carries no new"
+        " run». It re-emits the record «Ruling 05.09 (u)» item 2 wrote —"
         " «the registration is re-emitted with docs/labels-promo-dev2.jsonl among `pinned_inputs`"
         " and `gold.covers` naming both arms; `--score` takes the arm as parameters and writes"
         " per-arm files; `--pack` again on the re-emitted record; commit — then the pod». It stands"
@@ -902,7 +947,7 @@ def register(cap_usd: float | None = None) -> dict:
         " «`rate_for`/`rung_0`/`--close-segment` as 3–4 → whole-run rows → `ITERATION = 4`,"
         " `--dry-run --part dev --cap 1.20` FITS on the mean → `--register` → commit → `--pack`"
         " (green) → the paid iteration 4» — and (t) item 5 is the operator's cap and the arm order;"
-        " docs/PHASE-promo-pulse-1.md §6.1 v10; docs/plans/promo-pulse-1.md §9 and §9a"
+        " docs/PHASE-promo-pulse-1.md §6.1 v11; docs/plans/promo-pulse-1.md §9 and §9a"
         if PART == "dev"
         else "docs/reviews/2026-08-30-plan-promo-pulse-1.md «Ruling 05.09 (r)» item 5 — «`register()`'s"
         " part branch (item 2) → `--register --part holdout --step promo-holdout --cap 1.10 --gold"

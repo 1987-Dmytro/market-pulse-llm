@@ -108,7 +108,11 @@ class _Done:
         self.stdout, self.returncode, self.stderr = stdout, returncode, stderr
 
 
-GUARD_SAYS = "CYCLE 3 SPENT     $3.5409 of $7.00\nREMAINING         $3.4591\n"
+GUARD_SAYS = (
+    "CYCLE 3 SPENT     $3.5409 of $7.00\n"
+    "REMAINING         $3.4591\n"
+    "PROMO-ITER4 SPENT      $0.0000 of $1.20  (anchor $8.95 from runpod_balance_at_promo-iter4_start)\n"
+)
 
 
 def test_the_smoke_is_a_rule_and_not_a_pick():
@@ -124,20 +128,23 @@ def test_the_smoke_is_a_rule_and_not_a_pick():
 
 
 def test_the_guard_line_is_read_and_an_unreadable_headroom_refuses(monkeypatch):
-    """The cycle's headroom is the guard's number. A run that cannot find the line refuses rather
-    than reading a missing prior as unlimited — the negative control is the second half."""
+    """The cycle's headroom AND the step's own are the guard's numbers. A run that cannot find
+    either line refuses rather than reading a missing prior as unlimited — ruling 05.09 (v) item 3
+    added the second half, and the negative control is the second half of each."""
     monkeypatch.setattr(dev.subprocess, "run", lambda *a, **k: _Done(GUARD_SAYS))
-    assert dev.guard_reading()["remaining_usd"] == 3.4591
+    reading = dev.guard_reading("promo-iter4", 1.20)
+    assert reading["remaining_usd"] == 3.4591
+    assert reading["step_remaining_usd"] == 1.20
 
     monkeypatch.setattr(dev.subprocess, "run", lambda *a, **k: _Done("nothing of the sort\n"))
     with pytest.raises(SystemExit, match="REMAINING"):
-        dev.guard_reading()
+        dev.guard_reading("promo-iter4", 1.20)
 
 
 def test_a_refusing_guard_stops_the_registration(monkeypatch):
     monkeypatch.setattr(dev.subprocess, "run", lambda *a, **k: _Done(GUARD_SAYS, returncode=3))
     with pytest.raises(SystemExit, match="the guard refused"):
-        dev.guard_reading()
+        dev.guard_reading("promo-iter4", 1.20)
 
 
 def test_the_price_is_the_dearer_offer_and_a_missing_card_is_a_stop(monkeypatch):

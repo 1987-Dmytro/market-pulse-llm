@@ -1,5 +1,5 @@
 {
-  "authority": "docs/reviews/2026-08-30-plan-promo-pulse-1.md «Ruling 05.09 (u)» item 2 — «the registration is re-emitted with docs/labels-promo-dev2.jsonl among `pinned_inputs` and `gold.covers` naming both arms; `--score` takes the arm as parameters and writes per-arm files; `--pack` again on the re-emitted record; commit — then the pod». It stands on «Ruling 05.09 (t)» item 6, which this record was first written under — «`rate_for`/`rung_0`/`--close-segment` as 3–4 → whole-run rows → `ITERATION = 4`, `--dry-run --part dev --cap 1.20` FITS on the mean → `--register` → commit → `--pack` (green) → the paid iteration 4» — and (t) item 5 is the operator's cap and the arm order; docs/PHASE-promo-pulse-1.md §6.1 v10; docs/plans/promo-pulse-1.md §9 and §9a",
+  "authority": "docs/reviews/2026-08-30-plan-promo-pulse-1.md «Ruling 05.09 (v)» items 2-3 — «a paid run is its own money line: iteration 4 is bought under `promo-iter4` (results/spend_promo_iter4.json, its own anchor, cap $1.20, closed in the SAME session); the registration names its line and reads the guard WITH `--step <name> --step-cap <cap>`, so FITS is judged against THAT line's own remaining and the record's `money` carries it beside the cycle's; the old `promo-dev-loop` line stays as (r)4 left it and carries no new run». It re-emits the record «Ruling 05.09 (u)» item 2 wrote — «the registration is re-emitted with docs/labels-promo-dev2.jsonl among `pinned_inputs` and `gold.covers` naming both arms; `--score` takes the arm as parameters and writes per-arm files; `--pack` again on the re-emitted record; commit — then the pod». It stands on «Ruling 05.09 (t)» item 6, which this record was first written under — «`rate_for`/`rung_0`/`--close-segment` as 3–4 → whole-run rows → `ITERATION = 4`, `--dry-run --part dev --cap 1.20` FITS on the mean → `--register` → commit → `--pack` (green) → the paid iteration 4» — and (t) item 5 is the operator's cap and the arm order; docs/PHASE-promo-pulse-1.md §6.1 v11; docs/plans/promo-pulse-1.md §9 and §9a",
   "class": "PRE-REGISTRATION. Written and committed before any pod of this step exists; git history is the only witness that it preceded the money.",
   "decision_table": {
     "after_the_smoke_for_40_threads": {
@@ -251,9 +251,9 @@
         0.74,
         0.34
       ],
-      "read_at": "2026-09-05T11:40:59+00:00",
+      "read_at": "2026-09-05T12:54:07+00:00",
       "rule": "the DEARER offer of secure/community, read on the day; the create response's own costPerHr is the price the meter bills and the price gate re-checks it",
-      "stock": "Medium",
+      "stock": "Low",
       "usd_per_hour": 0.74
     },
     "rule": "docs/PROCESS.md «Money» rung (0): price at create ≤ the registered ceiling — the ceiling is the step cap, the price is the DEAR corner",
@@ -297,19 +297,23 @@
     "threads_note": "3 smoke + 80 dev-40. The smoke's three ARE the pass's first three units, so the pod answers 40 and the registration is bought high, spent low"
   },
   "step": {
-    "cap_rule": "min($1.2000 — the operator's own number, quoted in docs/PHASE-promo-pulse-1.md §6.1 for this leg — , the guard's REMAINING)",
+    "cap_rule": "min($1.2000 — the operator's own number, quoted in docs/PHASE-promo-pulse-1.md §6.1 for this leg — , THIS step's own REMAINING, the cycle's REMAINING) — ruling 05.09 (v) item 3",
     "cap_usd": 1.2,
     "floor_rule": "none — the cap above is the operator's own number, and a floor standing OVER it would be a field of this record refusing the very run the record registers ([[a_threshold_that_lives_in_prose]]); the cap is the hard stop",
     "floor_usd": null,
-    "ledger": "results/spend_promo_dev_loop.json",
+    "ledger": "results/spend_promo_iter4.json",
     "money": {
-      "at": "2026-09-05T11:40:58+00:00",
+      "at": "2026-09-05T12:54:06+00:00",
       "cycle3_cap_usd": 9.0,
-      "cycle3_spent_usd": 5.5157,
-      "from": "scripts/runpod_guard.py, its own printed REMAINING and CYCLE 3 lines",
-      "remaining_usd": 3.4843
+      "cycle3_spent_usd": 5.5254,
+      "from": "scripts/runpod_guard.py --step <name> --step-cap <cap>, its own printed REMAINING, CYCLE 3 and step lines",
+      "remaining_usd": 3.4746,
+      "step_cap_usd": 1.2,
+      "step_name": "promo-iter4",
+      "step_remaining_usd": 1.2,
+      "step_spent_usd": 0.0
     },
-    "name": "promo-dev-loop",
+    "name": "promo-iter4",
     "no_cap_raise": "never, mid-run. Silence is KILL: nobody can be asked."
   },
   "teardown": "`runpodctl pod delete <id>`, then `runpodctl pod list -a` → [] and `runpodctl serverless list` → [] in the transcript, before every STOP and before the session ends (ruling 03.09 (c) item 2)"
