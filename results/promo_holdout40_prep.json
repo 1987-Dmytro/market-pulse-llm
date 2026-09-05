@@ -1,0 +1,428 @@
+{
+  "authority": "docs/reviews/2026-08-30-plan-promo-pulse-1.md «Ruling 03.09» — the prompt's law is re-rendered from the codebook BEFORE the first paid K8 run, and the RENDERED prompt is read at $0 before any pod exists",
+  "bound": {
+    "boot_not_included": "a boot is the endpoint's, not the leg's — the registration adds it once at the corner it is measured at",
+    "borrowed_from": {
+      "instrument": "promo-signal prompt (leg A), READER serving, thinking OFF, batch 1 — the SMOKE's three units on this pod; it replaces the borrowed pass2_r2_seconds_per_thread",
+      "max": 201.967,
+      "measured_on": "@msuaaaa:7187 11.643s, @VARUS_channel:9006 52.706s, @VARUS_channel:6009 201.967s",
+      "n": 3,
+      "name": "promo_dev40_seconds_per_thread",
+      "source": "results/promo_dev_loop_run.json",
+      "unit": "seconds",
+      "value": 88.772
+    },
+    "is_a_bound_and_not_a_price": "this instrument has no measured rate. The seconds below are BORROWED from another prompt, another pod and another transport; the smoke measures this leg's own and the registration is written against THAT",
+    "seconds_at_the_borrowed_max": 8078.7,
+    "seconds_at_the_borrowed_mean": 3550.9,
+    "threads": 40,
+    "usd_at_the_borrowed_max": 2.4777,
+    "usd_at_the_borrowed_mean": 1.089,
+    "usd_per_second": 0.00030669
+  },
+  "corpus": {
+    "chars_max": 11893,
+    "chars_total": 261283,
+    "distinct_renders": 40,
+    "threads": [
+      {
+        "channel": "@VARUS_channel",
+        "chars": 6303,
+        "extractor_version": "eb8705a1a0102b17c90efeea4bd6ae15f08adbda5156a4dc0d1066da8a719412",
+        "n_comments": 2,
+        "n_wordless": 0,
+        "stratum": "currency",
+        "thread_root": "2085"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "chars": 6504,
+        "extractor_version": "1b3a408f16c52e5272b998fa039e25f4dbc5c3caaa7b90145b60cd8394ad0be0",
+        "n_comments": 3,
+        "n_wordless": 0,
+        "stratum": "currency",
+        "thread_root": "3436"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "chars": 7209,
+        "extractor_version": "1a62b27aae5a88c1c26f042140decbcfe40766a01d766ef266769f12272c10b9",
+        "n_comments": 10,
+        "n_wordless": 0,
+        "stratum": "currency",
+        "thread_root": "4422"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "chars": 7885,
+        "extractor_version": "3559fff9832ec103b4a8b7c704bccfea3bb553ca2fb8a471ce313a4fba8c9aa7",
+        "n_comments": 20,
+        "n_wordless": 3,
+        "stratum": "currency",
+        "thread_root": "7440"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "chars": 5963,
+        "extractor_version": "9847449f39a755ff0e470423f15df750b10f9643d2b6378bbdcadf1f12693b3f",
+        "n_comments": 1,
+        "n_wordless": 0,
+        "stratum": "currency",
+        "thread_root": "7569"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "chars": 6200,
+        "extractor_version": "452199661601534451cbf4b11fb2094b66fa495be8d966ebad4350a973806b07",
+        "n_comments": 5,
+        "n_wordless": 0,
+        "stratum": "currency",
+        "thread_root": "7850"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "chars": 6805,
+        "extractor_version": "001356a58e2eb7f3f38a2f548ced86e6118804c0e2ef62fbfd9f88e773062a30",
+        "n_comments": 2,
+        "n_wordless": 0,
+        "stratum": "currency",
+        "thread_root": "8084"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "chars": 11893,
+        "extractor_version": "1cf93f98bdbb8b84f29d241811525354c709a14fcdab7f53c450e52662f1a4e7",
+        "n_comments": 39,
+        "n_wordless": 0,
+        "stratum": "currency",
+        "thread_root": "8647"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "chars": 7579,
+        "extractor_version": "f1ec1cd22b7bdefaa4eeb39d7873541104266c6cbf157248dc989810b49c814c",
+        "n_comments": 11,
+        "n_wordless": 0,
+        "stratum": "currency",
+        "thread_root": "8823"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "chars": 7848,
+        "extractor_version": "5d5ee636f839deb75802c53837dd0183e56acc64b0e0a43176e329988b2d1784",
+        "n_comments": 11,
+        "n_wordless": 0,
+        "stratum": "currency",
+        "thread_root": "9277"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "chars": 6050,
+        "extractor_version": "3d6d286bcea472c98817ee9068bc52cb0a28d980f9c20a760c64f1705d24df87",
+        "n_comments": 1,
+        "n_wordless": 0,
+        "stratum": "currency",
+        "thread_root": "9850"
+      },
+      {
+        "channel": "@matusi_ukr",
+        "chars": 8996,
+        "extractor_version": "e9e4a94f9e7191835faea1e98c9f831c275feefd59d08093f1cf132555a70736",
+        "n_comments": 24,
+        "n_wordless": 1,
+        "stratum": "currency",
+        "thread_root": "22155"
+      },
+      {
+        "channel": "@msuaaaa",
+        "chars": 6016,
+        "extractor_version": "2189efe94a02983365d3cfa36b09273a2c674d66cc2083ba4824397bf6ff1091",
+        "n_comments": 2,
+        "n_wordless": 0,
+        "stratum": "currency",
+        "thread_root": "10635"
+      },
+      {
+        "channel": "@msuaaaa",
+        "chars": 5940,
+        "extractor_version": "989898dc2f305a8de853d9b0cc93d6427e27d495bd413414e04b9b9fef07b06e",
+        "n_comments": 1,
+        "n_wordless": 0,
+        "stratum": "currency",
+        "thread_root": "7348"
+      },
+      {
+        "channel": "@msuaaaa",
+        "chars": 6216,
+        "extractor_version": "0f68adcc5a2c68a13387b6f7b910fa739800293f83a7451b584decca50450966",
+        "n_comments": 5,
+        "n_wordless": 0,
+        "stratum": "currency",
+        "thread_root": "7792"
+      },
+      {
+        "channel": "@msuaaaa",
+        "chars": 5879,
+        "extractor_version": "2f00f7f9c8141a15a3cc46ae5f7d2838830495c4ababe02be6fae8de2c68c0f3",
+        "n_comments": 1,
+        "n_wordless": 0,
+        "stratum": "currency",
+        "thread_root": "8215"
+      },
+      {
+        "channel": "@msuaaaa",
+        "chars": 5951,
+        "extractor_version": "21d80327e3851f3531869b29e7ff4a84144380234c6721ca68bf4ad80ded310d",
+        "n_comments": 2,
+        "n_wordless": 0,
+        "stratum": "currency",
+        "thread_root": "9140"
+      },
+      {
+        "channel": "@msuaaaa",
+        "chars": 6416,
+        "extractor_version": "03f3f729b614004568d9c24ed33582bb2ce49a76116e9e4d037f4d28fdd8c63e",
+        "n_comments": 12,
+        "n_wordless": 10,
+        "stratum": "currency",
+        "thread_root": "9164"
+      },
+      {
+        "channel": "@msuaaaa",
+        "chars": 5835,
+        "extractor_version": "31c752558962baf5a55afec1abadc10ddd6480a3b2d5c798f8fca9b3f4e7a75d",
+        "n_comments": 1,
+        "n_wordless": 0,
+        "stratum": "currency",
+        "thread_root": "9196"
+      },
+      {
+        "channel": "@msuaaaa",
+        "chars": 5836,
+        "extractor_version": "0dc702b60f4c137fef21f456a129ad12abf4a51aafb9f97497eec1b2031c4810",
+        "n_comments": 11,
+        "n_wordless": 10,
+        "stratum": "currency",
+        "thread_root": "9545"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "chars": 6449,
+        "extractor_version": "e304daea70c83fe0c5297f5c9f7acd5f410592bea9ec3e7900104c78b6dfb718",
+        "n_comments": 6,
+        "n_wordless": 1,
+        "stratum": "decimal_only",
+        "thread_root": "10603"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "chars": 6097,
+        "extractor_version": "ae9c7205fe52fabb4de2cfd57b6ec43f87673b823552e93b600d3f17140661f2",
+        "n_comments": 1,
+        "n_wordless": 0,
+        "stratum": "decimal_only",
+        "thread_root": "2353"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "chars": 6559,
+        "extractor_version": "3dc1f19b52defadb8ab6a5b535d387c02221f4ae58c15f633a4b9765f4ff383c",
+        "n_comments": 2,
+        "n_wordless": 0,
+        "stratum": "decimal_only",
+        "thread_root": "3054"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "chars": 7267,
+        "extractor_version": "5685649942561ca9669704e6d6ec875793c3d2154264fb3a908fadf83c9f4f30",
+        "n_comments": 10,
+        "n_wordless": 0,
+        "stratum": "decimal_only",
+        "thread_root": "3289"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "chars": 6542,
+        "extractor_version": "eb8c29f3296baca8adb23db6c111b484c9f5bbd218f31378d0be7b825bbdd747",
+        "n_comments": 3,
+        "n_wordless": 0,
+        "stratum": "decimal_only",
+        "thread_root": "8430"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "chars": 6256,
+        "extractor_version": "a669e26287fdadd2e6851e7f0b35a50b48e73f060e5988cb93d67c28bad8f9d2",
+        "n_comments": 1,
+        "n_wordless": 0,
+        "stratum": "decimal_only",
+        "thread_root": "9034"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "chars": 6065,
+        "extractor_version": "c7b784e96b38d1b371f15a5fd77eb3b5f9973ea83b5d0921d86db1c33f5c991a",
+        "n_comments": 1,
+        "n_wordless": 0,
+        "stratum": "decimal_only",
+        "thread_root": "9461"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "chars": 8281,
+        "extractor_version": "9990cad76bea0493a81d1a60f9003f1206af2545895c3c65b6ea9dbcc94946c1",
+        "n_comments": 8,
+        "n_wordless": 0,
+        "stratum": "decimal_only",
+        "thread_root": "9802"
+      },
+      {
+        "channel": "@matusi_ukr",
+        "chars": 6580,
+        "extractor_version": "56aedd7e67127e00eb0b9563994a63b5bd2f6a7fc5d92ed9cc1f830e980f2a1c",
+        "n_comments": 2,
+        "n_wordless": 0,
+        "stratum": "decimal_only",
+        "thread_root": "22304"
+      },
+      {
+        "channel": "@msuaaaa",
+        "chars": 5789,
+        "extractor_version": "bf117b6404f3834c1420ba6d988a78a24d6c6a6129d0fb113822d9230547b8de",
+        "n_comments": 1,
+        "n_wordless": 0,
+        "stratum": "decimal_only",
+        "thread_root": "4490"
+      },
+      {
+        "channel": "@msuaaaa",
+        "chars": 5952,
+        "extractor_version": "9a001da7971269b78aaec46b306c4bec9fa8e230714ab649c3715fe52bd135a4",
+        "n_comments": 20,
+        "n_wordless": 18,
+        "stratum": "decimal_only",
+        "thread_root": "5015"
+      },
+      {
+        "channel": "@msuaaaa",
+        "chars": 5810,
+        "extractor_version": "9eaa05e8095ae907111ed52eee1c17aa93cce6f6925a0fbf6dc01e2ef55c974f",
+        "n_comments": 2,
+        "n_wordless": 0,
+        "stratum": "decimal_only",
+        "thread_root": "5113"
+      },
+      {
+        "channel": "@msuaaaa",
+        "chars": 5760,
+        "extractor_version": "0896ee0e2813a3dd609e751790b2a2768f5d2d46336cc942fe2625618130f5cf",
+        "n_comments": 1,
+        "n_wordless": 0,
+        "stratum": "decimal_only",
+        "thread_root": "5255"
+      },
+      {
+        "channel": "@msuaaaa",
+        "chars": 5760,
+        "extractor_version": "2d55e4b89e45dcfcd66b0688dbf2f4ae4bb24140fa6e9acac76e8801219aedc5",
+        "n_comments": 1,
+        "n_wordless": 0,
+        "stratum": "decimal_only",
+        "thread_root": "5704"
+      },
+      {
+        "channel": "@msuaaaa",
+        "chars": 5793,
+        "extractor_version": "333cc28807931aab13a814c3e2cd4d5f404873f6f44a62e0559c43f35a32aa5c",
+        "n_comments": 1,
+        "n_wordless": 0,
+        "stratum": "decimal_only",
+        "thread_root": "7825"
+      },
+      {
+        "channel": "@msuaaaa",
+        "chars": 5811,
+        "extractor_version": "1bdc7d80a544237df4da1b4c45f024e42e6bec846f922548f7ab65a2fed25c1b",
+        "n_comments": 4,
+        "n_wordless": 2,
+        "stratum": "decimal_only",
+        "thread_root": "8412"
+      },
+      {
+        "channel": "@msuaaaa",
+        "chars": 5756,
+        "extractor_version": "efd5f7e698cfc7dbf326f8831285e4a1ec82662756ca0cdfa0e0b0c00058769f",
+        "n_comments": 1,
+        "n_wordless": 0,
+        "stratum": "decimal_only",
+        "thread_root": "8768"
+      },
+      {
+        "channel": "@msuaaaa",
+        "chars": 5812,
+        "extractor_version": "136168d1091bca73ee278b7c96b1fc2f6a2f20d4fe58f5626eacaf428b192ee4",
+        "n_comments": 21,
+        "n_wordless": 19,
+        "stratum": "decimal_only",
+        "thread_root": "9190"
+      },
+      {
+        "channel": "@msuaaaa",
+        "chars": 5810,
+        "extractor_version": "bb932eec6fb7257faa1f35ca1995d88f2742636056679763242420a7047840ef",
+        "n_comments": 29,
+        "n_wordless": 28,
+        "stratum": "decimal_only",
+        "thread_root": "9483"
+      },
+      {
+        "channel": "@msuaaaa",
+        "chars": 5810,
+        "extractor_version": "8798082038a581585b41aaa0325aa5dfcb2bbb14d363bf9f4a537f472df0db0c",
+        "n_comments": 17,
+        "n_wordless": 16,
+        "stratum": "decimal_only",
+        "thread_root": "9577"
+      }
+    ]
+  },
+  "draw": {
+    "dev_threads": 40,
+    "path": "results/promo_threads_draw.json",
+    "sha256": "6f9fa245b9d702549cdc323849146de1825a12df8048c8ba8077c42e2508a407"
+  },
+  "gold": {
+    "lines": 188,
+    "path": "docs/labels-promo-holdout.jsonl",
+    "sha256": "6fa804880d5d14dbdf2a256f057eca5cc4775591e69fd12bec523a831fb13be0"
+  },
+  "law": {
+    "codebook": "docs/CODEBOOK-promo-signals.md",
+    "codebook_sha256": "2361034627ba8012a274fa4a27aaaba8f785d7022406318c25b314cd48229042",
+    "codebook_version": "a587e0d6d50462552a483a688533cae275c28c0959cc01a9673ea860b912f7d7",
+    "vocabulary": {
+      "attribution_sources": [
+        "explicit",
+        "reply_context",
+        "post_context"
+      ],
+      "codebook_sha256": "a587e0d6d50462552a483a688533cae275c28c0959cc01a9673ea860b912f7d7",
+      "signal_types": [
+        "жалоба",
+        "похвала",
+        "спрос",
+        "привычка",
+        "цена"
+      ],
+      "subject_types": [
+        "chain",
+        "brand",
+        "sku",
+        "post"
+      ]
+    }
+  },
+  "part": "holdout",
+  "phase": "promo-pulse-1 S9 — dev-40, the $0 half: what the model reads and what it bounds"
+}

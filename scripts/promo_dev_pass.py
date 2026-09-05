@@ -52,6 +52,16 @@ MEASUREMENTS = REPO_ROOT / "results" / "measurements.jsonl"
 RATE_RECORD = REPO_ROOT / "results" / "srv2d_cost.json"
 PREP = REPO_ROOT / "results" / "promo_dev40_prep.json"
 
+PART = "dev"
+"""Which half of the frozen draw this process is about — `dev` or `holdout`, and never both.
+
+The draw (`results/promo_threads_draw.json`) named 20 + 20 of each stratum at seed 42 and froze
+them disjoint; the dev half took the bar over three iterations and the holdout is the ONE shot
+ruling 05.09 (q) prices. The two halves are the SAME instrument over different rows, so this module
+is one module with a part, not a fork of itself ([[a_moved_guard_that_left_its_copy]]).
+`use_part` rebinds the file constants below and every function reads them by name — the mechanism
+`tests/test_promo_dev_pass.py`'s own fixture already uses to redirect the run record."""
+
 BORROWED_RATE = "pass2_r2_seconds_per_thread"
 """The nearest MEASURED seconds-per-thread in the house — READER, thinking off, 75 cooled threads.
 Named, never typed: :func:`borrowed_rate` reads it out of `results/measurements.jsonl` and carries
@@ -62,10 +72,11 @@ def rel(path: Path) -> str:
     return str(path.relative_to(REPO_ROOT)) if path.is_relative_to(REPO_ROOT) else str(path)
 
 
-def dev_threads(path: Path = DRAW) -> list[dict]:
-    """The draw's dev rows, both strata, in the record's own order."""
+def dev_threads(path: Path = DRAW, part: str | None = None) -> list[dict]:
+    """The draw's rows for THIS part, both strata, in the record's own order."""
     body = json.loads(path.read_text(encoding="utf-8"))
-    return [row for stratum in sorted(body["draw"]) for row in body["draw"][stratum]["dev"]]
+    part = part or PART
+    return [row for stratum in sorted(body["draw"]) for row in body["draw"][stratum][part]]
 
 
 def thread_of(row: dict) -> tuple[str, list[dict]]:
@@ -217,10 +228,38 @@ def borrowed_rate() -> dict:
     )
 
 
-def prep() -> dict:
-    """The dev-40 corpus as the model will read it, its sizes, and the ask BOUNDED, not priced."""
-    rows = dev_threads()
-    rate = borrowed_rate()
+def own_rate() -> dict:
+    """This instrument's OWN measured seconds-per-thread, from the SLOWEST pod it has ever run on.
+
+    Ruling 04.09 (o) item 4 retires the borrow the day the instrument has a rate of its own, and
+    ruling 05.09 (q) item 3 says WHICH of its rows: the slowest, because three pods of one RTX 4090
+    ran 1.5-2.3x apart on byte-identical answers and a rate is a property of the pod, not of the
+    prompt ([[a_rate_is_a_property_of_the_pod]]). `max` picks the row, not `value`: the row's own
+    maximum is what the dear corner is priced at, and a row can carry the higher mean with the lower
+    max. Read out of the file, never typed ([[a_number_typed_into_its_own_checker]])."""
+    rows = [
+        json.loads(line)
+        for line in MEASUREMENTS.read_text(encoding="utf-8").splitlines()
+        if line.strip() and json.loads(line)["name"] == MEASURED_RATE
+    ]
+    if not rows:
+        raise SystemExit(
+            f"{MEASURED_RATE} is not in results/measurements.jsonl — the holdout is priced on this"
+            " instrument's OWN pace (ruling (o) 4) and no smoke of it has been measured yet."
+        )
+    return max(rows, key=lambda row: row["max"])
+
+
+def rate_for(part: str) -> dict:
+    """The seconds-per-thread one part is priced at. The dev loop borrowed; the holdout owns."""
+    return borrowed_rate() if part == "dev" else own_rate()
+
+
+def prep(part: str | None = None, gold: Path | None = None) -> dict:
+    """The part's corpus as the model will read it, its sizes, and the ask BOUNDED, not priced."""
+    part, gold = part or PART, gold or GOLD
+    rows = dev_threads(part=part)
+    rate = rate_for(part)
     usd_per_second = json.loads(RATE_RECORD.read_text(encoding="utf-8"))["rate"]["usd_per_second"]
     threads = []
     for row in rows:
@@ -238,6 +277,7 @@ def prep() -> dict:
         )
     seconds = rate["value"] * len(threads)
     return {
+        **({} if part == "dev" else {"part": part}),
         "phase": "promo-pulse-1 S9 — dev-40, the $0 half: what the model reads and what it bounds",
         "authority": "docs/reviews/2026-08-30-plan-promo-pulse-1.md «Ruling 03.09» — the prompt's"
         " law is re-rendered from the codebook BEFORE the first paid K8 run, and the RENDERED"
@@ -248,9 +288,17 @@ def prep() -> dict:
             "codebook_version": promo_prompts.codebook_version(),
             "vocabulary": promo_prompts.vocabulary(),
         },
-        "gold": {"path": rel(GOLD), "sha256": sha256_of(GOLD), "lines": len(
-            [one for one in GOLD.read_text(encoding="utf-8").splitlines() if one.strip()]
-        )},
+        "gold": {"path": rel(gold), "sha256": sha256_of(gold), "lines": len(
+            [one for one in gold.read_text(encoding="utf-8").splitlines() if one.strip()]
+        )} if gold.exists() else {
+            "path": rel(gold),
+            "sha256": None,
+            "lines": 0,
+            "missing": "gold missing -> no record: --register REFUSES to write a registration whose"
+            " pinned gold does not exist, because a pin over an absent file pins nothing"
+            " ([[preregistration_is_a_file_not_a_constant]]). The dry run prices the leg anyway —"
+            " the pricing is the pod's arithmetic and does not read a label.",
+        },
         "draw": {"path": rel(DRAW), "sha256": sha256_of(DRAW), "dev_threads": len(threads)},
         "corpus": {
             "threads": threads,
@@ -329,6 +377,23 @@ POST_TASK = "positions_text_gm4"
 this pod through the SHIPPED render, so nothing new is written for them."""
 
 GUARD = REPO_ROOT / "scripts" / "runpod_guard.py"
+
+HOLDOUT_FILES = {
+    "gold": REPO_ROOT / "docs" / "labels-promo-holdout.jsonl",
+    "prep": REPO_ROOT / "results" / "promo_holdout40_prep.json",
+    "prereg": REPO_ROOT / "results" / "prereg_promo_holdout.json",
+    "pack": REPO_ROOT / "results" / "promo_holdout40_pack.json",
+    "run": REPO_ROOT / "results" / "promo_holdout_run.json",
+    "step": "promo-holdout",
+    "stem": "promo_holdout40",
+}
+"""The holdout's OWN files — ruling 05.09 (q) item 5. Its own everything: the dev registration is
+committed, frozen and already spent against, and a second population in one record voids the first
+seal ([[a_second_population_in_a_shared_store_voids_the_first_seal]])."""
+
+STEM = "promo_dev40"
+"""What `--score` names its two files after. The iteration suffix is the dev loop's, not the part's:
+the holdout is ONE shot and has no iteration to number."""
 
 
 def guard_reading() -> dict:
@@ -499,13 +564,18 @@ def corner(name: str, *, n_threads, n_posts, s_thread, s_post, overhead, usd_per
     }
 
 
-def rung_0(*, cap: float, price: dict, threads: list[dict], n_posts: int) -> dict:
+def rung_0(
+    *, cap: float, price: dict, threads: list[dict], n_posts: int, part: str | None = None
+) -> dict:
     """The step at three corners, in the POD's own unit — seconds of existence × $/s.
 
     Ruling 03.09 (c) amendment 1: this prices the SMOKE plus ITERATION 1 and the 16 posts, never
     five iterations. Iterations 2–5 are re-projected at the MEASURED rate before they are bought.
     """
-    rate = borrowed_rate()
+    part = part or PART
+    rate = rate_for(part)
+    owned = rate["name"] == MEASURED_RATE
+    word, whose = ("measured", "smoke's") if owned else ("borrowed", "sibling's")
     overhead = sibling_overhead()
     text_s = float(load(PREREG_5C2)["prices"]["post_text"]["seconds_model"]["value"])
     usd_per_second = price["usd_per_hour"] / 3600.0
@@ -520,25 +590,37 @@ def rung_0(*, cap: float, price: dict, threads: list[dict], n_posts: int) -> dic
     }
     table = [
         corner(
-            "cheap — the borrowed MEAN over every leg, the sibling's measured overhead",
+            f"cheap — the {word} MEAN over every leg, the sibling's measured overhead",
             s_thread=rate["value"],
             **common,
         ),
         corner(
-            "priced — the borrowed mean plus one whole extra overhead (a second segment after a"
+            f"priced — the {word} mean plus one whole extra overhead (a second segment after a"
             " dead-man KILL, which the transport allows twice)",
             s_thread=rate["value"],
             **(common | {"overhead": overhead["seconds"] * 2}),
         ),
         corner(
-            "dear — the borrowed MAX on every thread (135.232 s was ONE of the sibling's 75) and"
-            " two overheads. Pessimistic by construction: the guard's spend is a maximum and a cap"
-            " blown after the money is spent cannot be un-spent",
+            f"dear — the {word} MAX on every thread ({rate['max']} s was ONE of the {whose}"
+            f" {rate['n']}) and two overheads. Pessimistic by construction: the guard's spend is a"
+            " maximum and a cap blown after the money is spent cannot be un-spent",
             s_thread=rate["max"],
             **(common | {"overhead": overhead["seconds"] * 2}),
         ),
     ]
-    dear = table[-1]
+    cheap, dear = table[0], table[-1]
+    read, issued = dear, "dear"
+    ruling = "docs/PROCESS.md «Money» rung (0) — the registered corner is the DEAR one"
+    if part != "dev" and not dear["fits"]:
+        read, issued = cheap, "mean"
+        ruling = (
+            f"ruling 05.09 (q) item 3 — the dear corner ${dear['usd']:.4f} is OVER the"
+            f" ${cap:.4f} cap and the holdout is issued FITS on the MEAN corner"
+            f" ${cheap['usd']:.4f}, with the cap as the HARD STOP: `--terminate-after` is derived"
+            " from it and the meter cannot pass it. The dear corner stays in this table and in"
+            " `dear_usd`, priced and named, so nothing over the cap is hidden"
+            " ([[a_bound_the_meter_cannot_reach]])"
+        )
     return {
         "rule": "docs/PROCESS.md «Money» rung (0): price at create ≤ the registered ceiling — the"
         " ceiling is the step cap, the price is the DEAR corner",
@@ -550,12 +632,19 @@ def rung_0(*, cap: float, price: dict, threads: list[dict], n_posts: int) -> dic
         "posts": n_posts,
         "cap_usd": round(cap, 4),
         "price": price,
-        "borrowed_rate": {k: rate[k] for k in ("name", "value", "max", "n", "instrument", "source")},
+        **{
+            ("measured_rate" if owned else "borrowed_rate"): {
+                k: rate[k] for k in ("name", "value", "max", "n", "instrument", "source")
+            }
+        },
         "overhead": overhead,
         "seconds_per_post_from": "results/prereg_5c2_run.json :: prices.post_text.seconds_model",
         "table": table,
         "dear_usd": dear["usd"],
-        "fits": dear["fits"],
+        "dear_fits": dear["fits"],
+        "issued_on": issued,
+        "issued_rule": ruling,
+        "fits": read["fits"],
         "hard_stop_seconds": round(cap / usd_per_second, 1),
     }
 
@@ -575,9 +664,12 @@ def render_rung_0(verdict: dict) -> str:
             f"  {'yes' if row['fits'] else 'NO':<4} ({row['over_cap_by']:+.1%})"
         )
     lines.append(
-        f"verdict: {'FITS' if verdict['fits'] else 'DOES NOT FIT'} at the dear corner"
+        f"verdict: {'FITS' if verdict['fits'] else 'DOES NOT FIT'} at the"
+        f" {verdict.get('issued_on', 'dear')} corner"
         f" · hard stop {verdict['hard_stop_seconds']:.0f} s of pod existence"
     )
+    if verdict.get("issued_on") == "mean":
+        lines.append(f"  {verdict['issued_rule']}")
     return "\n".join(lines)
 
 
@@ -609,23 +701,51 @@ def leg_b_posts() -> dict:
     }
 
 
-def register() -> dict:
-    """Rung 0 before anything exists — plan §9, ruling 03.09 (c) amendments 1 and 5."""
-    money = guard_reading()
-    cap = round(min(STEP_CAP_USD, money["remaining_usd"] - HOLDOUT_RESERVE_USD), 4)
-    if cap < STEP_FLOOR_USD:
+def register(cap_usd: float | None = None) -> dict:
+    """Rung 0 before anything exists — plan §9, ruling 03.09 (c) amendments 1 and 5.
+
+    `--cap` is the holdout's, and it is an OPERATOR's number (ruling 05.09 (q) item 3), never this
+    script's: the $0.30 the plan fenced was an estimate over a rate that has since been retired, and
+    PHASE v7 §6.1 makes a fence for a later step an estimate re-priced at that step's registration
+    ([[a_cap_set_from_one_legs_price]]). The dev loop's own rule is untouched and still the default.
+    """
+    if not GOLD.exists():
         raise SystemExit(
-            f"the dev loop's cap is ${cap:.4f} — below the ${STEP_FLOOR_USD:.2f} floor plan §9"
-            " names. Ruling 02.09 (b) §4 makes that the operator's word, not this script's: STOP."
+            f"{rel(GOLD)} is missing — gold missing -> no record. The registration PINS the gold by"
+            " sha256 and a pin over an absent file pins nothing, so nothing is written: the record"
+            " would claim a frozen answer key that does not exist"
+            " ([[preregistration_is_a_file_not_a_constant]]). Commit the gold, then --register."
         )
+    money = guard_reading()
+    if cap_usd is None:
+        cap = round(min(STEP_CAP_USD, money["remaining_usd"] - HOLDOUT_RESERVE_USD), 4)
+        cap_rule = f"min(${STEP_CAP_USD:.2f}, REMAINING − ${HOLDOUT_RESERVE_USD:.2f})"
+        if cap < STEP_FLOOR_USD:
+            raise SystemExit(
+                f"the dev loop's cap is ${cap:.4f} — below the ${STEP_FLOOR_USD:.2f} floor plan §9"
+                " names. Ruling 02.09 (b) §4 makes that the operator's word, not this script's:"
+                " STOP."
+            )
+    else:
+        cap = round(min(cap_usd, money["remaining_usd"]), 4)
+        cap_rule = f"min(${cap_usd:.4f} — the operator's word, ruling 05.09 (q) 3 — , REMAINING)"
+        if cap < cap_usd:
+            raise SystemExit(
+                f"the cap asked for is ${cap_usd:.4f} and the guard's REMAINING is"
+                f" ${money['remaining_usd']:.4f} — a cap above what the cycle has left is a cap"
+                " nothing enforces. The operator raises the cycle or lowers the cap: STOP."
+            )
     threads = dev_threads()
     prep = json.loads(PREP.read_text(encoding="utf-8"))["corpus"]["threads"]
     smoke = smoke_units([dict(one) for one in prep])
-    left_over = leg_b_posts()
+    left_over = leg_b_posts() if PART == "dev" else {"task": None, "by_channel": {}, "posts": 0}
     price = offered_price()
     verdict = rung_0(cap=cap, price=price, threads=threads, n_posts=0)
     return {
-        "phase": f"promo-pulse-1 S9 — the dev loop's PAID instrument, iteration {ITERATION}",
+        "part": PART,
+        "phase": f"promo-pulse-1 S9 — the dev loop's PAID instrument, iteration {ITERATION}"
+        if PART == "dev"
+        else "promo-pulse-1 S9 — the FROZEN holdout-40, the ONE shot (ruling 05.09 (q))",
         "class": "PRE-REGISTRATION. Written and committed before any pod of this step exists; git"
         " history is the only witness that it preceded the money.",
         "re_emission": "ruling 04.09 (m) item 5 and (n) item 2 — iterations 1 and 2 are kept by"
@@ -641,13 +761,17 @@ def register() -> dict:
         " error table → teardown»; docs/plans/promo-pulse-1.md §9 and §9a",
         "question": "does the promo-signal instrument, under CODEBOOK"
         f" {promo_prompts.codebook_version()[:16]}…, clear subject ≥ 0.80 and signal ≥ 0.75 on"
-        " dev-40 within at most 5 dev runs?",
+        " dev-40 within at most 5 dev runs?"
+        if PART == "dev"
+        else "does the instrument that took the dev bar — the SAME four pins, byte for byte"
+        " (ruling 05.09 (q) item 2) — clear subject ≥ 0.80 and signal ≥ 0.75 on the frozen"
+        " holdout-40, in ONE shot?",
         "step": {
             "name": STEP,
             "ledger": rel(REPO_ROOT / "results" / f"spend_{STEP.replace('-', '_')}.json"),
             "cap_usd": cap,
-            "cap_rule": f"min(${STEP_CAP_USD:.2f}, REMAINING − ${HOLDOUT_RESERVE_USD:.2f})",
-            "floor_usd": STEP_FLOOR_USD,
+            "cap_rule": cap_rule,
+            "floor_usd": STEP_FLOOR_USD if PART == "dev" else None,
             "money": money,
             "no_cap_raise": "never, mid-run. Silence is KILL: nobody can be asked.",
         },
@@ -659,12 +783,24 @@ def register() -> dict:
             "template_rule": "ruling 04.09 (g) item 3 — the sha of the TEMPLATE with its examples"
             " block, so a render-only change is visible in the record; `codebook_version` alone"
             " compares the law and would read two instruments as one.",
-            "baseline": "iterations 1 and 2 are bought and priced on disk (ruling 03.09 (c)"
-            " item 3; 04.09 (m) item 1 — signal 0.8854 HOLDS, subject 0.7500 RED). Iteration 3"
-            " moves ONE thing and nothing else: the answer's TRANSPORT — `balanced_prefix` reads"
-            " the fence off before it dispatches on the shape, and a bare array is read as the"
-            " rows it is (`f872a53`, ruling 04.09 (m) item 2). The law (v1.2), the TEMPLATE, the"
-            " gold (v1.1), the decoding and the token ceiling are untouched.",
+            "baseline": (
+                "iterations 1 and 2 are bought and priced on disk (ruling 03.09 (c) item 3;"
+                " 04.09 (m) item 1 — signal 0.8854 HOLDS, subject 0.7500 RED). Iteration 3 moves"
+                " ONE thing and nothing else: the answer's TRANSPORT — `balanced_prefix` reads the"
+                " fence off before it dispatches on the shape, and a bare array is read as the rows"
+                " it is (`f872a53`, ruling 04.09 (m) item 2). The law (v1.2), the TEMPLATE, the"
+                " gold (v1.1), the decoding and the token ceiling are untouched."
+                if PART == "dev"
+                else "iteration 3 took BOTH dev bars on a complete reading (subject 0.8714, signal"
+                " 0.9104; `results/grade_promo_dev40_iter3.json`) and ruling 05.09 (q) item 1"
+                " accepted it. NOTHING moves for this shot: item 2 freezes the instrument as that"
+                " iteration bought it, so `codebook_version`, `template_sha256`,"
+                " `scripts/promo_dev_pod_runner.py` and `src/market_pulse/promo_prompts.py` are the"
+                " dev-bar registration's own, byte for byte, and the near-quote and codebook-doc"
+                " sync queue BEHIND this run. What changes is the POPULATION and nothing else — the"
+                " frozen holdout arm of the same seed-42 draw, disjoint from dev-40 and never"
+                " scored."
+            ),
             "vocabulary": promo_prompts.vocabulary(),
         },
         "pinned_inputs": {
@@ -726,7 +862,12 @@ def register() -> dict:
         " session ends (ruling 03.09 (c) item 2)",
         "out_of_scope": "no training; no holdout spend; no new sources; no cap raise. Leg B's"
         " answers land on disk as evidence for the store, and the ingest into data/derived_w2 is"
-        " NOT in this session's sequence.",
+        " NOT in this session's sequence."
+        if PART == "dev"
+        else "no training; no new sources; no cap raise; no second shot — §8 (e) spends the"
+        " holdout ONCE. Leg B does not exist here: ruling 05.09 (q) item 5 buys leg A only. A run"
+        " that comes back incomplete is recorded under §6.5 and re-bought under the next number"
+        " with the law UNMOVED; it is not a second reading of the same shot.",
     }
 
 
@@ -938,7 +1079,7 @@ def score(replies: Path, iteration: int) -> dict:
         ]
 
     gold = k8.rows(GOLD)
-    strata = k8.strata_of(DRAW)
+    strata = k8.strata_of(DRAW, PART)
     graded = k8.grade(gold, rows, strata)
     said_rows = {(k8.thread_key(one), str(one["msg_id"])): one for one in rows if one.get("msg_id")}
     misses = []
@@ -1192,8 +1333,35 @@ def close_segment(*, deleted_at: str, billed_seconds: float, outcome: str) -> di
     )
 
 
+def use_part(part: str, *, gold: Path | None = None, step: str | None = None) -> None:
+    """Point this module's file constants at ONE half of the draw. `dev` is what they already are.
+
+    Called once, from `main`, before any branch reads them — so a process is about the dev loop or
+    about the holdout and never about both. `--gold` and `--step` override afterwards, because §4
+    makes a re-used producer take its paths as parameters and the holdout's gold is a pin the paid
+    session names on the command line."""
+    global PART, GOLD, PREP, PREREG, PACK, RUN_RECORD, STEP, STEM
+    if part not in ("dev", "holdout"):
+        raise SystemExit(f"--part {part}: the draw has two halves, dev and holdout, and no third")
+    if part != "dev":
+        PART, STEM = part, HOLDOUT_FILES["stem"]
+        GOLD, PREP = HOLDOUT_FILES["gold"], HOLDOUT_FILES["prep"]
+        PREREG, PACK = HOLDOUT_FILES["prereg"], HOLDOUT_FILES["pack"]
+        RUN_RECORD, STEP = HOLDOUT_FILES["run"], HOLDOUT_FILES["step"]
+    if gold is not None:
+        GOLD = gold
+    if step is not None:
+        STEP = step
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--part", default="dev", choices=("dev", "holdout"), help="which half of the frozen draw"
+    )
+    parser.add_argument("--gold", type=Path, help="the part's answer key; the registration pins it")
+    parser.add_argument("--step", help="the money step this part spends under, and its own ledger")
+    parser.add_argument("--cap", type=float, help="the step's cap in USD — the operator's number")
     parser.add_argument("--render", metavar="THREAD_ROOT")
     parser.add_argument("--channel", default=None, help="disambiguate a root two channels share")
     parser.add_argument("--dry-run", action="store_true", help="$0: the corpus, its sizes, the bound")
@@ -1228,20 +1396,24 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--billed-seconds", type=float)
     parser.add_argument("--card")
     parser.add_argument("--outcome")
-    parser.add_argument("--out", type=Path, default=PREP)
+    parser.add_argument("--out", type=Path, default=None)
     args = parser.parse_args(argv)
+    use_part(args.part, gold=args.gold, step=args.step)
 
     if args.register:
-        record = register()
-        out = PREREG if args.out == PREP else args.out
+        record = register(args.cap)
+        out = args.out or PREREG
         out.write_text(
             json.dumps(record, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
             encoding="utf-8",
         )
         print(f"\nwrote {rel(out)}")
+        floor = record["step"]["floor_usd"]
         print(
             f"  step          {record['step']['name']} · cap ${record['step']['cap_usd']:.4f}"
-            f" = {record['step']['cap_rule']} · floor ${record['step']['floor_usd']:.2f}"
+            f" = {record['step']['cap_rule']} · floor "
+            + (f"${floor:.2f}" if floor is not None else "none — the ONE shot has no floor to"
+               " refuse below; the cap is the hard stop (ruling 05.09 (q) 3)")
         )
         print(
             f"  population    leg A {record['population']['leg_a']['threads']} threads"
@@ -1315,17 +1487,18 @@ def main(argv: list[str] | None = None) -> int:
         return 0 if record["verdict"] == "CLEAN" else 1
 
     if args.score:
-        for name in ("replies", "iteration"):
+        for name in ("replies", "iteration") if PART == "dev" else ("replies",):
             if getattr(args, name) is None:
                 parser.error(f"--score needs --{name}")
         table = score(args.replies, args.iteration)
         rows = table.pop("rows")
-        out = REPO_ROOT / "results" / f"promo_dev40_predicted_iter{args.iteration}{args.suffix}.jsonl"
+        tag = f"_iter{args.iteration}" if PART == "dev" else ""
+        out = REPO_ROOT / "results" / f"{STEM}_predicted{tag}{args.suffix}.jsonl"
         out.write_text(
             "".join(json.dumps(one, ensure_ascii=False, sort_keys=True) + "\n" for one in rows),
             encoding="utf-8",
         )
-        errors = REPO_ROOT / "results" / f"promo_dev40_errors_iter{args.iteration}{args.suffix}.json"
+        errors = REPO_ROOT / "results" / f"{STEM}_errors{tag}{args.suffix}.json"
         errors.write_text(
             json.dumps(table, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
             encoding="utf-8",
@@ -1358,20 +1531,30 @@ def main(argv: list[str] | None = None) -> int:
 
     if args.dry_run:
         record = prep()
-        args.out.write_text(
+        out = args.out or PREP
+        out.write_text(
             json.dumps(record, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
             encoding="utf-8",
         )
         bound, corpus = record["bound"], record["corpus"]
-        print(f"wrote {rel(args.out)}")
+        own = bound["borrowed_from"]["name"] == MEASURED_RATE
+        print(f"wrote {rel(out)}")
         print(f"  law           {record['law']['codebook']} sha {record['law']['codebook_sha256'][:16]}…")
-        print(f"  corpus        {bound['threads']} dev threads · {corpus['chars_total']} chars ·"
+        print(f"  corpus        {bound['threads']} {PART} threads · {corpus['chars_total']} chars ·"
               f" longest {corpus['chars_max']} · {corpus['distinct_renders']} distinct renders")
-        print(f"  BORROWED rate {bound['borrowed_from']['name']} ="
+        print(f"  gold          {record['gold']['path']} — "
+              + (f"sha {record['gold']['sha256'][:16]}… · {record['gold']['lines']} rows"
+                 if record["gold"]["sha256"] else "gold missing -> no record"))
+        print(f"  {'MEASURED' if own else 'BORROWED'} rate {bound['borrowed_from']['name']} ="
               f" {bound['borrowed_from']['value']} s/thread (n={bound['borrowed_from']['n']},"
-              f" max {bound['borrowed_from']['max']}) — another prompt, pod and transport")
+              f" max {bound['borrowed_from']['max']}) — "
+              + ("this instrument's OWN, on the slowest pod it has run on"
+                 if own else "another prompt, pod and transport"))
         print(f"  bound         ${bound['usd_at_the_borrowed_mean']} at its mean ·"
               f" ${bound['usd_at_the_borrowed_max']} at its max, boot excluded — NOT a price")
+        print(f"  priced at     ${bound['usd_per_second'] * 3600:.4f}/h from {rel(RATE_RECORD)} —"
+              " NOT the cap's rate and NOT a gate: rung 0 at --register prices the pod at the"
+              " day's own offer, and that is the number a cap is read against")
         return 0
 
     if not args.render:

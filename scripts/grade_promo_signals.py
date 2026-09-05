@@ -81,15 +81,20 @@ def thread_key(row: dict) -> tuple:
     return (row.get("channel") or "", str(row.get("thread_root") or ""))
 
 
-def strata_of(draw_path: Path) -> dict:
-    """(channel, thread_root) → stratum, from the draw record. Absent file = no split, said so."""
+def strata_of(draw_path: Path, part: str = "dev") -> dict:
+    """(channel, thread_root) → stratum, from the draw record. Absent file = no split, said so.
+
+    ONE arm of the draw, never both: the dev half and the frozen holdout are disjoint populations
+    and a map carrying both would give a dev run a stratum for a thread it never scored
+    ([[a_second_population_in_a_shared_store_voids_the_first_seal]]). `dev` stays the default, so
+    every reading taken before ruling 05.09 (q) means what it meant."""
     if not draw_path.exists():
         return {}
     body = json.loads(draw_path.read_text(encoding="utf-8"))
     return {
         (row["channel"], str(row["thread_root"])): stratum
         for stratum, block in body.get("draw", {}).items()
-        for row in block.get("dev", [])
+        for row in block.get(part, [])
     }
 
 
@@ -167,6 +172,9 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--gold", type=Path, default=REPO_ROOT / "docs" / "labels-promo-dev.jsonl")
     parser.add_argument("--predicted", type=Path, required=True)
     parser.add_argument("--draw", type=Path, default=DRAW)
+    parser.add_argument(
+        "--part", default="dev", choices=("dev", "holdout"), help="which arm of the draw it scores"
+    )
     parser.add_argument("--out", type=Path, default=OUT)
     args = parser.parse_args(argv)
 
@@ -174,7 +182,8 @@ def main(argv: list[str] | None = None) -> int:
         "contract": "docs/plans/promo-pulse-1.md K8 — the S2 grader ($0)",
         "gold": str(args.gold),
         "predicted": str(args.predicted),
-        **grade(rows(args.gold), rows(args.predicted), strata_of(args.draw)),
+        "part": args.part,
+        **grade(rows(args.gold), rows(args.predicted), strata_of(args.draw, args.part)),
     }
     args.out.write_text(
         json.dumps(record, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8"
