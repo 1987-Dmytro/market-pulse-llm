@@ -305,12 +305,42 @@
       "segment": 5,
       "spent_all_segments_usd": 1.242994,
       "verdict": "GO"
+    },
+    {
+      "at": "2026-09-05T13:21:22+00:00",
+      "backstop_fits": true,
+      "cap_usd": 1.2,
+      "card": "NVIDIA GeForce RTX 4090",
+      "hard_stop_seconds": 5837.8,
+      "kind": "price",
+      "pod_id": "kzcnhe01mgdwvk",
+      "registered_card": "NVIDIA GeForce RTX 4090",
+      "registered_usd_per_hour": 0.74,
+      "rule": "rung 1: the create response's costPerHr ≤ the registered price, and the card is the registered card. Delete on KILL — the cap was computed against the other number",
+      "segment": 6,
+      "terminate_after_minutes": 90,
+      "usd_at_the_backstop": 1.11,
+      "usd_per_hour": 0.74,
+      "verdict": "GO"
+    },
+    {
+      "at": "2026-09-05T14:17:38+00:00",
+      "billed_seconds": 3364.0,
+      "billed_usd": 0.691489,
+      "cap_usd": 1.2,
+      "kind": "close",
+      "left_usd": -0.734483,
+      "outcome": "INCOMPLETE (PHASE 6.5): CUDA OOM on the smoke third unit @VARUS_channel:8647 (14281 chars, the longest render) — 23.19 of 23.52 GiB in use, 338 MiB refused. 2 of 3 smoke units answered (shortest 6.4s, median 9.5s, both balanced, finish stop); NO GO was written, so none of the 80 was bought. Boot off the warm volume, no second boot.",
+      "pod_id": "kzcnhe01mgdwvk",
+      "segment": 6,
+      "spent_all_segments_usd": 1.934483,
+      "verdict": "OVER"
     }
   ],
   "latest": {
-    "at": "2026-09-04T18:40:17+00:00",
+    "at": "2026-09-05T14:17:38+00:00",
     "kind": "close",
-    "verdict": "GO"
+    "verdict": "OVER"
   },
   "phase": "promo-dev-loop",
   "segments": [
@@ -362,6 +392,16 @@
       "deleted_at": "2026-09-04T18:39:55Z",
       "outcome": "iteration 3 ran whole: 40 of 40 leg-A units answered (leg B closed by (m)4), every reply balanced, finish stop; boot 210.7 s off the warm volume, 266.3 s of smoke and 1163.4 s of the remaining 37, no second boot across the GO",
       "pod_id": "cd918wet7sea5b",
+      "usd_per_hour": 0.74
+    },
+    {
+      "billed_seconds": 3364.0,
+      "billed_usd": 0.691489,
+      "card": "NVIDIA GeForce RTX 4090",
+      "created_at": "2026-09-05T13:21:09Z",
+      "deleted_at": "2026-09-05T14:17:13Z",
+      "outcome": "INCOMPLETE (PHASE 6.5): CUDA OOM on the smoke third unit @VARUS_channel:8647 (14281 chars, the longest render) — 23.19 of 23.52 GiB in use, 338 MiB refused. 2 of 3 smoke units answered (shortest 6.4s, median 9.5s, both balanced, finish stop); NO GO was written, so none of the 80 was bought. Boot off the warm volume, no second boot.",
+      "pod_id": "kzcnhe01mgdwvk",
       "usd_per_hour": 0.74
     }
   ]
