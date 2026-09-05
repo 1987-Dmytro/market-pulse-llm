@@ -1,60 +1,60 @@
 # PROGRESS — promo-pulse-1 (ruling 03.09 (e): the executor's one file — done / next / open stop, ≤60 lines; §8 of the phase file stays the DONE list)
 
 ## The money, live — read BY HAND from the guard today, never carried from a record
-Cycle 3 **SPENT $5.5157, REMAINING $3.4843** of the **$9.00** ceiling of ruling (s) addendum 8; anchor
-$14.4800 and every session line UNMOVED, balance $8.96 (the $0.0098 since s24 is the volume's drip).
-**s25 spent $0 and created no pod — no ledger line.** Iteration 4 is
-REGISTERED at cap **$1.20** and re-prices on the day to **$0.8705**, so the line after it — holdout-2
-≤$0.90 + c3 ≤$0.50 + the drip — still fits. `promo-holdout` $0.296617, ledger OPEN; `promo-dev-loop`
-open by (r)4.
+Cycle 3 **SPENT $5.5254, REMAINING $3.4746** of the **$9.00** ceiling of ruling (s) addendum 8; anchor
+$14.4800 and every session line UNMOVED, balance $8.95. The CYCLE line is not what refused — the
+**STEP** line did: `promo-dev-loop` stands at **$1.8462** against the $1.20 the registration names.
+**s26 spent $0, created no pod and took NO ledger line** — no `--note` run, because nothing exists to
+anchor. `promo-holdout` $0.296617, ledger OPEN; `promo-dev-loop` OPEN by (r)4, anchored 03.09 at $10.80.
 
-## Done — 05.09 s25, (u) item 2, ONE item, two commits, $0 — ACCEPTED by the (u) addendum 14:20.
-- **The arm is a parameter, and the reading's key is PINNED (`705e2d1`).** The debt this file named
-  is paid BEFORE the pod. `--score` read ONE gold over the WHOLE leg: dev-40's 140-row key against
-  80 answered units, dev-2's own 188-row key never opened. Now `DEV_ARMS` names the leg's two arms
-  by LABEL (`dev40`, `dev2`), each carrying its part of the FIRST draw, its file stem and its own
-  key, and `DEV_FILES["arms"]` is DERIVED from it so one population is never listed twice. The label
-  space and the draw's part space collide on the word «holdout» — dev-2 IS the spent holdout-40 — so
-  `use_arm` REFUSES any arm outside `--part dev`, and it binds the SCORER alone: binding the gold on
-  a `--register` run would pin a reading arm's key as the leg's BAR key. `score()` grades ONE arm —
-  its own units of the pack, its own gold, `strata_of` on its own part — and the record now names
-  the arm and the key it read. `--score` with no `--arm` REFUSES on a leg of two arms; the holdout
-  leg is one arm and its runbook line is untouched. `leg_golds()` is the ONE list the registration
-  pins: `pinned_inputs` gains `docs/labels-promo-dev2.jsonl 4b60ab99…`; `gold.covers` names both arms.
-- **Driven at $0 on replies that already exist** (`--suffix _armdrive`, outputs deleted), and it
-  proves the PLUMBING and no performance — both reply files predate codebook v1.2: `--arm dev40` on
-  `promo_dev40_iter3.jsonl` → **40 of 40** units, gold 140 rows, subject **0.8714** / signal
-  **0.9104**, iteration 3's own numbers re-derived; `--arm dev2` on `promo_holdout40.jsonl` → **40 of
-  40**, gold 188 rows, subject **0.7394** / signal **0.7833**, per-stratum 20+20 threads — NOT a
-  dev-2 reading under v1.2, only the old replies against the RE-READ key (0.7181/0.7958 was the old
-  key; a corrected gold moves the denominator). The arms' thread sets are DISJOINT.
-- **Rung 0 re-priced on the day and UNMOVED:** cheap $0.8705 yes · priced $0.9279 yes · dear $4.9984
-  NO → FITS on the MEAN corner against the $1.2000 cap, hard stop 5838 s.
-- **The pack (`0bb62fb`):** only `registration.sha256` moves, 037267dc… → 9ded3a79…; the 80 units are byte-identical.
-- **`make check` GREEN.** ruff clean · pytest in four slices 656 + 1092 + 2152 + 421 = **4321 passed,
-  0 failed, 2 skipped** (floor 4266) — unchanged from s24, and no test was added or deleted.
+## Done — 05.09 s26: the start ritual, then ONE item — the money gate BEFORE the create. $0, no pod.
+- **The two modified team-lead files committed by path, unread and unedited (`c4d6c1c`)**: STATUS at
+  14:20 and the (u) addendum 5. The hooks' s25 checkpoint (`knowledge/**` + this file) went in as
+  `1bb5f2c`. Tree clean before any paid step; `pod list -a` and `serverless list` both `[]`.
+- **The gate the runbook takes BEFORE the create REFUSES, and it is not a near miss:**
+  `python3.11 scripts/runpod_guard.py --step promo-dev-loop --step-cap 1.20` → **exit 1**, «REFUSED:
+  promo-dev-loop's $1.20 cap is reached ($1.8462 spent)». `results/spend_promo_dev_loop.json` is
+  anchored **2026-09-03T20:17:16Z at $10.8008** and carries iterations 1–3, so the operator's per-LEG
+  $1.20 was written into a STEP line that already stands above it.
+- **The old number does not fund it either.** At the ledger's own `promo-dev-loop_gpu_cap_usd` **$2.50**
+  the guard exits 0 and leaves **$0.6538** — under iteration 4's registered MEAN corner **$0.8705**,
+  let alone its $1.20 hard stop. Neither number the operator has named buys this run.
+- **What the enforced figure is made of** (the guard's own decomposition): balance delta **$1.8462** =
+  pods **$1.4573** + network-volume **$0.3792** + serverless $0.0000; «step resources» $1.4573. The
+  volume drip is INSIDE the enforced figure, so this OPEN line grows ≈$0.24/day with no pod running —
+  a number named on it erodes by itself ([[a_step_meter_on_a_balance_delta_never_stops]]).
+- **Why the registration reads FITS anyway — a CAUSE, named and NOT fixed:** `guard_reading()`
+  (`scripts/promo_dev_pass.py:515`) runs the guard with **no `--step`**, so `--register`'s `cap_rule`
+  min($1.20, REMAINING) read CYCLE 3's $3.4843 and never the step's own $1.8462-of-$1.20 — which is
+  why `step.money` in the record holds the cycle line alone. Passing `--step` there decides the stop.
 
-## Next — the PAID iteration 4, and the (u) addendum item 5 puts it in the NEXT session, (u)4 unchanged.
-`--terminate-after` from `results/prereg_promo_dev_loop.json :: step.cap_usd` $1.20 → 5838 s; the registered backstop is 90 min =
-5400 s and bites FIRST, with room for ≈107 threads at the mean rate. Sequence ((u)4): pre-create check → create → `--open` →
-smoke (3) → **GO on the three replies, no band gate** → the 80 → delete → `--close-segment --replies
-results/promo_dev40_iter4.jsonl` → listings `[]` → `--score --arm dev40 --gold docs/labels-promo-dev.jsonl` (the BAR, 0.80/0.75)
-and K8 → `grade_promo_dev40_iter4.json` · `--score --arm dev2 --gold docs/labels-promo-dev2.jsonl` (the READING) and K8 →
-`grade_promo_dev2_iter4.json` → END at the readings. Then holdout-2's gold (team lead) and its ≤$0.90 shot.
+## Next — the PAID iteration 4 ((u)4), unchanged, and BLOCKED by the stop below and by nothing else.
+`--terminate-after` from `step.cap_usd` $1.20 → 5838 s; the registered 90-min backstop 5400 s bites FIRST.
+The sequence is ruling (u) item 4's, verbatim and unmoved: create → `--open` → smoke (3) → GO on the three
+replies → the 80 → delete → `--close-segment --replies …iter4.jsonl` → `--score --arm dev40` (the BAR
+0.80/0.75) and `--arm dev2` (the READING), each with its own `--gold` and K8 → END at the readings.
 
-## Open stop — NONE. The tree is clean, three commits this session, $0 spent, no pod, no red test.
+## Open stop — the STEP ledger refuses iteration 4 at BOTH numbers, and the line is not mine to choose
+**Stop-point.** PHASE §6.1's money gate, taken before the create as the runbook's §0 orders, refuses:
+`--step promo-dev-loop --step-cap 1.20` → exit 1, $1.8462 spent of $1.20. At $2.50 it passes and leaves
+$0.6538, under the registered mean $0.8705. `promo-dev-loop` is ONE OPEN line whose anchor (03.09,
+$10.80) is iteration 1's, so iterations 1–3 sit inside every number named on it.
+**Question.** Under what LINE is iteration 4 bought? (a) a NEW step with its own name, anchor and ledger
+at the operator's $1.20 — the `promo-holdout` precedent, where a new authorisation opened a new budget
+line instead of a bigger number in an old one; or (b) a number named on the open `promo-dev-loop` line
+covering iterations 1–3 plus this run — $1.8462 + the cap, eroding at the volume's ≈$0.24/day for as
+long as the line stays open. Both move a registered threshold, so neither is mine: I have created no
+ledger, invented no step name and re-registered nothing.
+**Tree.** Clean at HEAD; two commits this session, both $0. No pod was created and no ledger line taken;
+`runpodctl pod list -a` and `serverless list` both `[]` in the transcript; no red test.
 
 ## Named, not built (the phase file forbids adding what it did not ask for)
-- **No test was added for the arm selector** — s24's precedent and §4: both refusals were driven in
-  the transcript instead (no `--arm` on a two-arm leg; `--arm dev2` under `--part holdout`). The test
-  worth asking for pins «one arm → one gold, one unit set, one stratum map», with the empty stratum
-  map of the WRONG part as its negative control.
-- **The pack's order is not strictly dev-40-then-dev-2** (accepted by (u)3): the smoke is a RULE over the leg's corpus and two
-  of its units are dev-2 renders promoted to the front, so on the pack the pod is given, **dev-40 completes at unit 42 of 80** —
-  far inside the 5400 s backstop, and the other 38 are the tail a stop would cut.
-- **dev-2's units ARE holdout-40's**, so the dev order accepts `promo_holdout40.jsonl` and would write a plausible dev row from
-  it: the out-file given to `--close-segment` is not checked against the pod. The run's out-file is
-  `results/promo_dev40_iter4.jsonl` and nothing else ((u)3).
-- `decision_table.after_the_smoke_for_40_threads` keeps its key because `project()` reads it by name · `gates.terminate_after_minutes`
-  is v5b's borrowed 5400 s · `prep()` calls its count `draw.dev_threads` · `pod.main` never lifts
-  `close_arrays_too` · ⛔ `1925810730`.
+- **No test for the arm selector** (s24's precedent, §4): the one worth asking for pins «one arm → one
+  gold, one unit set, one stratum map», with the WRONG part's empty stratum map as its negative control.
+- **`scripts/runbook_promo_dev_1.md` is the HOLDOUT's**, and says «the dev loop is CLOSED» — stale since (s).
+- **The pack's order is not strictly dev-40-then-dev-2** ((u)3): dev-40 completes at unit 42 of 80.
+- **dev-2's units ARE holdout-40's**: the out-file handed to `--close-segment` is unchecked against the
+  pod; the run's out-file is `results/promo_dev40_iter4.jsonl` and nothing else ((u)3).
+- `decision_table.after_the_smoke_for_40_threads` keeps its key because `project()` reads it by name ·
+  `gates.terminate_after_minutes` is v5b's borrowed 5400 s · `prep()` calls its count `draw.dev_threads` ·
+  `pod.main` never lifts `close_arrays_too` · ⛔ `1925810730`.
