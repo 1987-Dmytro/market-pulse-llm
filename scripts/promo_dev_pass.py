@@ -65,6 +65,15 @@ is one module with a part, not a fork of itself ([[a_moved_guard_that_left_its_c
 `use_part` rebinds the file constants below and every function reads them by name — the mechanism
 `tests/test_promo_dev_pass.py`'s own fixture already uses to redirect the run record."""
 
+CONTRACT = "promo-pulse-1-s9"
+"""What every measurement row of THIS instrument is written under — the dev loop's and the
+holdout's alike, because ruling 05.09 (q) item 2 froze one instrument across both legs."""
+
+WHOLE_RUN = "whole run"
+"""The `sample` field that separates a row a leg may be PRICED on from a row that is history.
+Ruling 05.09 (t) item 4: n is the run's own units, never a smoke of three. A field and not a size —
+`n == 3` would misread the day a run of three units is bought ([[a_default_is_a_marker_when_nothing_takes_it]])."""
+
 BORROWED_RATE = "pass2_r2_seconds_per_thread"
 """The nearest MEASURED seconds-per-thread in the house — READER, thinking off, 75 cooled threads.
 Named, never typed: :func:`borrowed_rate` reads it out of `results/measurements.jsonl` and carries
@@ -231,11 +240,24 @@ def load(path: Path) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+def measurement_rows() -> list[dict]:
+    """Every row of `results/measurements.jsonl`, read once and never retyped."""
+    return [
+        json.loads(line)
+        for line in MEASUREMENTS.read_text(encoding="utf-8").splitlines()
+        if line.strip()
+    ]
+
+
 def borrowed_rate() -> dict:
     """The named measurement row, or a refusal. A projection with no named rate projects nothing —
-    `scripts/project_think_zero_shot.py:107`'s rule, applied to an instrument that has none yet."""
-    for line in MEASUREMENTS.read_text(encoding="utf-8").splitlines():
-        if line.strip() and (row := json.loads(line))["name"] == BORROWED_RATE:
+    `scripts/project_think_zero_shot.py:107`'s rule, applied to an instrument that has none yet.
+
+    Ruling 05.09 (t) item 4 retires the borrow as a PRICE on every leg; this stays because
+    `sibling_overhead` reads it to undo the sibling's own generation from the sibling's own bill.
+    """
+    for row in measurement_rows():
+        if row["name"] == BORROWED_RATE:
             return row
     raise SystemExit(
         f"{BORROWED_RATE} is not in results/measurements.jsonl — this leg has no rate of its own"
@@ -244,38 +266,60 @@ def borrowed_rate() -> dict:
 
 
 def own_rate() -> dict:
-    """This instrument's OWN measured seconds-per-thread, from the SLOWEST pod it has ever run on.
+    """This instrument's OWN seconds-per-thread over WHOLE RUNS — ruling 05.09 (t) item 4.
 
-    Ruling 04.09 (o) item 4 retires the borrow the day the instrument has a rate of its own, and
-    ruling 05.09 (q) item 3 says WHICH of its rows: the slowest, because three pods of one RTX 4090
-    ran 1.5-2.3x apart on byte-identical answers and a rate is a property of the pod, not of the
-    prompt ([[a_rate_is_a_property_of_the_pod]]). `max` picks the row, not `value`: the row's own
-    maximum is what the dear corner is priced at, and a row can carry the higher mean with the lower
-    max. Read out of the file, never typed ([[a_number_typed_into_its_own_checker]]).
+    A smoke of three built to hold the LONGEST thread is a maximum, not a mean. The three smoke
+    rows this file already carries priced iteration 4 at 88.772 s/thread — three times anything the
+    instrument has ever actually run at — and no corner fitted. They stay as history and price
+    nothing ([[a_smoke_drawn_from_the_exam_is_not_a_rate_sample]]). What prices is the whole run:
+    n is the run's own units, mean and max over all of them.
 
-    It READS the dev loop's rows while the holdout's own smoke WRITES under `promo_holdout40_…` —
-    two names on purpose. The INSTRUMENT is one: (q) item 2 freezes it byte for byte, so the dev
-    loop's three rows are this prompt's own history and are exactly what (q) item 3 prices the shot
-    at. The POPULATIONS are not: the holdout's threads are the longer half of the draw, and a row of
-    one landing under the other's name is how a second population gets inside a first one's reading
-    ([[a_second_population_in_a_shared_store_voids_the_first_seal]], [[id_spaces_that_look_comparable]]).
+    The pool is the INSTRUMENT's, not one leg's. Ruling 05.09 (q) item 2 froze the instrument byte
+    for byte across the dev loop and the holdout, and a pace is a property of the pod
+    ([[a_rate_is_a_property_of_the_pod]]) — which is why (t) item 4 prices iteration 4 off
+    iteration 3's 47.7 while naming the holdout's 25.8 and iteration 2's 17.7 as the fast hosts.
+    The per-part NAMES stay, so every row says which population it was timed over; what they may
+    not do is decide which rows a POD's pace is chosen from. The rule
+    [[a_second_population_in_a_shared_store_voids_the_first_seal]] guards a GRADED population, and
+    nothing here is graded.
+
+    The two corners are read off two rows on purpose: the MEAN corner takes the slowest pod's
+    whole-run mean, the DEAR corner the largest max any pod produced. Today one row carries both,
+    and a rule that holds only because two maxima coincide is a rule that holds for the wrong
+    reason ([[an_inequality_that_holds_for_the_wrong_reason]]).
     """
     rows = [
-        json.loads(line)
-        for line in MEASUREMENTS.read_text(encoding="utf-8").splitlines()
-        if line.strip() and json.loads(line)["name"] == MEASURED_RATE
+        row
+        for row in measurement_rows()
+        if row.get("contract") == CONTRACT and row.get("sample") == WHOLE_RUN
     ]
     if not rows:
         raise SystemExit(
-            f"{MEASURED_RATE} is not in results/measurements.jsonl — the holdout is priced on this"
-            " instrument's OWN pace (ruling (o) 4) and no smoke of it has been measured yet."
+            f"no «{WHOLE_RUN}» row of contract {CONTRACT} is in results/measurements.jsonl — ruling"
+            " 05.09 (t) item 4 prices every leg on a whole run's own mean, and a smoke of three"
+            " prices nothing. `--measure-run --replies <the pod's out-file> --pod-id <id>` writes"
+            " the row from the run record; then price."
         )
-    return max(rows, key=lambda row: row["max"])
+    slowest = max(rows, key=lambda row: row["value"])
+    dearest = max(rows, key=lambda row: row["max"])
+    return slowest | {
+        "max": dearest["max"],
+        "value_from": f"{slowest['name']} — {slowest['measured_on']}",
+        "max_from": f"{dearest['name']} — {dearest['measured_on']}",
+        "pool": sorted(f"{row['name']} {row['value']}/{row['max']} n={row['n']}" for row in rows),
+    }
 
 
 def rate_for(part: str) -> dict:
-    """The seconds-per-thread one part is priced at. The dev loop borrowed; the holdout owns."""
-    return borrowed_rate() if part == "dev" else own_rate()
+    """The seconds-per-thread a leg is priced at — `own_rate()`, on EVERY leg (ruling 05.09 (t) 3).
+
+    Ruling 04.09 (o) item 4 retired the borrow and this function did not: it asked `own_rate()` on
+    the holdout and went on handing the dev loop another prompt's pod, which is how iteration 4 came
+    to be priced at 23.760 s/thread months after the instrument had a pace of its own
+    ([[the_hardening_did_not_reach_the_sibling_reader]]). `part` stays in the signature because the
+    caller has one and the record says which leg was priced.
+    """
+    return own_rate()
 
 
 def prep(part: str | None = None, gold: Path | None = None) -> dict:
@@ -330,11 +374,19 @@ def prep(part: str | None = None, gold: Path | None = None) -> dict:
             "distinct_renders": len({one["extractor_version"] for one in threads}),
         },
         "bound": {
-            "is_a_bound_and_not_a_price": "this instrument has no measured rate. The seconds below"
-            " are BORROWED from another prompt, another pod and another transport; the smoke"
-            " measures this leg's own and the registration is written against THAT",
-            "borrowed_from": {
+            "is_a_bound_and_not_a_price": (
+                "the seconds below are this instrument's OWN, over a WHOLE run of the slowest pod"
+                " it has run on (ruling 05.09 (t) item 4). They are still a BOUND and not a price:"
+                " no overhead is in them and no offer of the day — rung 0 at --register adds both"
+                " and THAT is the number a cap is read against"
+                if rate.get("sample") == WHOLE_RUN
+                else "this instrument has no measured rate. The seconds below are BORROWED from"
+                " another prompt, another pod and another transport; the smoke measures this leg's"
+                " own and the registration is written against THAT"
+            ),
+            "priced_from": {
                 "name": rate["name"],
+                "sample": rate.get("sample"),
                 "value": rate["value"],
                 "unit": rate["unit"],
                 "n": rate["n"],
@@ -344,11 +396,11 @@ def prep(part: str | None = None, gold: Path | None = None) -> dict:
                 "source": rate["source"],
             },
             "threads": len(threads),
-            "seconds_at_the_borrowed_mean": round(seconds, 1),
-            "seconds_at_the_borrowed_max": round(rate["max"] * len(threads), 1),
+            "seconds_at_the_mean": round(seconds, 1),
+            "seconds_at_the_max": round(rate["max"] * len(threads), 1),
             "usd_per_second": usd_per_second,
-            "usd_at_the_borrowed_mean": round(seconds * usd_per_second, 4),
-            "usd_at_the_borrowed_max": round(rate["max"] * len(threads) * usd_per_second, 4),
+            "usd_at_the_mean": round(seconds * usd_per_second, 4),
+            "usd_at_the_max": round(rate["max"] * len(threads) * usd_per_second, 4),
             "boot_not_included": "a boot is the endpoint's, not the leg's — the registration adds"
             " it once at the corner it is measured at",
         },
@@ -597,8 +649,8 @@ def rung_0(
     """
     part = part or PART
     rate = rate_for(part)
-    owned = rate["name"] == MEASURED_RATE
-    word, whose = ("measured", "smoke's") if owned else ("borrowed", "sibling's")
+    owned = rate.get("sample") == WHOLE_RUN
+    word = "measured" if owned else "borrowed"
     overhead = sibling_overhead()
     text_s = float(load(PREREG_5C2)["prices"]["post_text"]["seconds_model"]["value"])
     usd_per_second = price["usd_per_hour"] / 3600.0
@@ -624,9 +676,10 @@ def rung_0(
             **(common | {"overhead": overhead["seconds"] * 2}),
         ),
         corner(
-            f"dear — the {word} MAX on every thread ({rate['max']} s was ONE of the {whose}"
-            f" {rate['n']}) and two overheads. Pessimistic by construction: the guard's spend is a"
-            " maximum and a cap blown after the money is spent cannot be un-spent",
+            f"dear — the {word} MAX on every thread ({rate['max']} s, one unit of"
+            f" «{rate.get('max_from', rate['name'])}») and two overheads. Pessimistic by"
+            " construction: the guard's spend is a maximum and a cap blown after the money is"
+            " spent cannot be un-spent",
             s_thread=rate["max"],
             **(common | {"overhead": overhead["seconds"] * 2}),
         ),
@@ -634,16 +687,19 @@ def rung_0(
     cheap, dear = table[0], table[-1]
     read, issued = dear, "dear"
     ruling = "docs/PROCESS.md «Money» rung (0) — the registered corner is the DEAR one"
-    if part != "dev" and not dear["fits"]:
+    if not dear["fits"]:
         read, issued = cheap, "mean"
         ruling = (
-            f"ruling 05.09 (q) item 3 — the dear corner ${dear['usd']:.4f} is OVER the"
-            f" ${cap:.4f} cap and the holdout is issued FITS on the MEAN corner"
-            f" ${cheap['usd']:.4f}, with the cap as the HARD STOP: `--terminate-after` is derived"
-            " from it and the meter cannot pass it. The dear corner stays in this table and in"
-            " `dear_usd`, priced and named, so nothing over the cap is hidden"
-            " ([[a_bound_the_meter_cannot_reach]]). Ruling 05.09 (r) item 2 makes this pair — FITS"
-            " here plus the hard stop — the leg's ONLY money gate: the band gate is not run"
+            f"PHASE v10 §6.1, ruling 05.09 (t) item 3 — on EVERY leg, dev as holdout: the dear"
+            f" corner ${dear['usd']:.4f} is OVER the ${cap:.4f} cap, so the leg is issued FITS on"
+            f" the MEAN corner ${cheap['usd']:.4f} with the cap as the HARD STOP:"
+            " `--terminate-after` is derived from it and the meter cannot pass it. The mean is the"
+            " WHOLE-RUN mean of the slowest pod seen, never a smoke of three (item 4). The dear"
+            " corner stays in this table and in `dear_usd`, priced and named, so nothing over the"
+            " cap is hidden ([[a_bound_the_meter_cannot_reach]]). Ruling 05.09 (r) item 2 makes"
+            " this pair — FITS here plus the hard stop — the leg's ONLY money gate: the band gate"
+            " is not run. The `part != \"dev\"` condition this branch used to carry is what left"
+            " iteration 4 unregisterable under a cap the operator had already named"
         )
     return {
         "rule": "docs/PROCESS.md «Money» rung (0): price at create ≤ the registered ceiling — the"
@@ -662,7 +718,12 @@ def rung_0(
         "price": price,
         **{
             ("measured_rate" if owned else "borrowed_rate"): {
-                k: rate[k] for k in ("name", "value", "max", "n", "instrument", "source")
+                k: rate[k]
+                for k in (
+                    "name", "sample", "value", "max", "n", "instrument", "source",
+                    "value_from", "max_from", "pool",
+                )
+                if k in rate
             }
         },
         "overhead": overhead,
@@ -756,7 +817,10 @@ def register(cap_usd: float | None = None) -> dict:
             )
     else:
         cap = round(min(cap_usd, money["remaining_usd"]), 4)
-        cap_rule = f"min(${cap_usd:.4f} — the operator's word, ruling 05.09 (r) 3 — , REMAINING)"
+        cap_rule = (
+            f"min(${cap_usd:.4f} — the operator's own number, quoted in"
+            " docs/PHASE-promo-pulse-1.md §6.1 for this leg — , the guard's REMAINING)"
+        )
         if cap < cap_usd:
             raise SystemExit(
                 f"the cap asked for is ${cap_usd:.4f} and the guard's REMAINING is"
@@ -815,7 +879,13 @@ def register(cap_usd: float | None = None) -> dict:
             "ledger": rel(REPO_ROOT / "results" / f"spend_{STEP.replace('-', '_')}.json"),
             "cap_usd": cap,
             "cap_rule": cap_rule,
-            "floor_usd": STEP_FLOOR_USD if PART == "dev" else None,
+            "floor_usd": STEP_FLOOR_USD if (PART == "dev" and cap_usd is None) else None,
+            "floor_rule": f"plan §9's ${STEP_FLOOR_USD:.2f} floor guards the DERIVED cap"
+            " min($2.50, REMAINING − $0.30) and nothing else"
+            if (PART == "dev" and cap_usd is None)
+            else "none — the cap above is the operator's own number, and a floor standing OVER it"
+            " would be a field of this record refusing the very run the record registers"
+            " ([[a_threshold_that_lives_in_prose]]); the cap is the hard stop",
             "money": money,
             "no_cap_raise": "never, mid-run. Silence is KILL: nobody can be asked.",
         },
@@ -873,12 +943,14 @@ def register(cap_usd: float | None = None) -> dict:
                     ],
                     "prefix": "these three are the pass's FIRST three units; the pod answers them,"
                     " the Mac reads the rate, and the decision table of ruling 03.09 (b) decides"
-                    " whether the remaining 37 are bought at all"
-                    if PART == "dev"
+                    f" whether the remaining {len(threads) - SMOKE_N} are bought at all"
+                    if verdict["issued_on"] == "dear"
                     else "these three are the pass's FIRST three units; the pod answers them and"
-                    " their arrival IS the GO (ruling 05.09 (r) item 2). Their seconds are read off"
-                    " the pod log for the record, not for a gate: no band decides whether the"
-                    " remaining 37 are bought — the cap as `--terminate-after` bounds them",
+                    " their arrival IS the GO (ruling 05.09 (r) item 2, widened to every leg by"
+                    " (t) item 3). Their seconds are read off the pod log for the record, not for a"
+                    f" gate: no band decides whether the remaining {len(threads) - SMOKE_N} are"
+                    " bought — this leg is issued on the MEAN corner and the cap as"
+                    " `--terminate-after` is what bounds them",
                 },
             },
             "leg_b": {
@@ -902,37 +974,43 @@ def register(cap_usd: float | None = None) -> dict:
             "1_liveness": "the ssh dead-man above; never two pods, checked BEFORE `pod create`",
             "3_hard_stop": f"{verdict['hard_stop_seconds']:.1f} s of pod existence at the"
             " registered price — the platform-side backstop is terminate_after"
-            if PART == "dev"
+            if verdict["issued_on"] == "dear"
             else f"{verdict['hard_stop_seconds']:.1f} s of pod existence at the registered price."
-            " On this leg it is not a backstop BEHIND a band gate: ruling 05.09 (r) item 2 does not"
-            " run §5's band gate at all, so the cap as `--terminate-after` is the ONE thing that"
-            " bounds the money after rung 0 has issued FITS",
+            " On a leg issued on the MEAN corner it is not a backstop BEHIND a band gate: ruling"
+            " 05.09 (r) item 2, widened by (t) item 3, does not run §5's band gate at all, so the"
+            " cap as `--terminate-after` is the ONE thing that bounds the money after rung 0 has"
+            " issued FITS",
         },
         "decision_table": {
-            "authority": "ruling 03.09 (b), quoted and not moved",
+            "authority": "ruling 03.09 (b), quoted and not moved — this leg is issued on the DEAR"
+            " corner, and PHASE v10 §6.1 gives the dear corner the bands",
             "after_the_smoke_for_40_threads": {
                 "<= 0.80": "run iteration 1 now",
                 "0.80 - 1.20": "run it, then STOP with the error table",
                 "> 1.20": "STOP before buying; pod torn down, listing shown",
             },
         }
-        if PART == "dev"
+        if verdict["issued_on"] == "dear"
         else {
-            "authority": "ruling 05.09 (r) item 2, quoted and not moved: «the holdout's money gate"
-            " is rung 0 FITS on the measured MEAN corner ($0.8420 ≤ cap) plus the cap as the"
-            " platform's hard stop (`--terminate-after`); §5's band gate is NOT run on this shot —"
-            " GO is written the moment the smoke's three replies are in (their seconds stay in the"
-            " pod log); `project()` and its literals stay untouched»",
+            "authority": "ruling 05.09 (r) item 2 as PHASE v10 §6.1 widens it to EVERY leg (ruling"
+            " 05.09 (t) item 3): the money gate is rung 0 FITS on the measured MEAN corner"
+            f" (${verdict['table'][0]['usd']:.4f} ≤ ${verdict['cap_usd']:.4f}) plus the cap as the"
+            " platform's hard stop (`--terminate-after`); §5's band gate is NOT run — GO is written"
+            " the moment the smoke's three replies are in (their seconds stay in the pod log);"
+            " `project()` and its literals stay untouched",
             "why_not_the_dev_bands": "the dev loop's bands are absolute dollars ($0.80 / $1.20) with"
-            " KILL on the MAX corner over the cap. The holdout's max corner is over the cap BY"
+            " KILL on the MAX corner over the cap. This leg's max corner is over the cap BY"
             " CONSTRUCTION — rung 0 above prices it at"
-            f" ${verdict['dear_usd']:.4f} and issues FITS on the mean anyway ((q) item 3) — so the"
-            " dev gate would KILL a run this very record registered as FITS. Two thresholds for one"
-            " decision; ruling (r) item 2 keeps the one that was priced.",
+            f" ${verdict['dear_usd']:.4f} and issues FITS on the mean anyway — so the band gate"
+            " would KILL a run this very record registers as FITS. Two thresholds for one decision"
+            " ([[two_gates_on_one_spend_read_different_corners]]); the corner that was priced keeps"
+            " the decision.",
             "after_the_smoke_for_40_threads": {
-                "3 replies are in": "write GO. The pod answers the remaining 37 under the hard stop.",
+                "3 replies are in": "write GO. The pod answers the rest under the hard stop.",
                 "the smoke did not come back": "no GO is written; the pod is deleted, the segment"
                 " closed, the listing shown, and the run is PHASE §6.5's incomplete reading.",
+                "the key name": "kept as it stands because `project()` reads it by name; the leg's"
+                f" own size is `population.leg_a.threads` = {len(threads)}",
             },
         },
         "teardown": "`runpodctl pod delete <id>`, then `runpodctl pod list -a` → [] and"
@@ -1297,10 +1375,9 @@ def open_segment(*, pod_id: str, created_at: str, usd_per_hour: float, card: str
     return append_gate(state, "price", gate)
 
 
-MEASURED_RATE = "promo_dev40_seconds_per_thread"
-"""This instrument's OWN name in `results/measurements.jsonl`. The borrow
-(`pass2_r2_seconds_per_thread`, another prompt and another pod) is never reused after the smoke —
-plan §9, and [[the_smokes_rate_carries_the_smokes_transport]]."""
+"""`MEASURED_RATE` stood here and is orphaned by ruling 05.09 (t) item 4: a rate is no longer
+chosen by NAME. `own_rate()` selects on `contract` + `sample`, so both legs' rows are one
+instrument's history and the per-part names stay provenance instead of a filter."""
 
 
 def project(replies: Path) -> dict:
@@ -1369,23 +1446,86 @@ def project(replies: Path) -> dict:
     }
 
 
-def write_measurement(gate: dict) -> dict:
-    """The smoke's rate into `results/measurements.jsonl`, under its OWN name and never the borrow's."""
-    row = {
-        "contract": "promo-pulse-1-s9",
-        "name": f"{STEM}_seconds_per_thread",
-        "instrument": "promo-signal prompt (leg A), READER serving, thinking OFF, batch 1 — the"
-        f" SMOKE's three units on this pod; it replaces the borrowed {BORROWED_RATE}",
-        "measured_on": ", ".join(f"{unit} {seconds}s" for unit, seconds in gate["measured"]["seconds"].items()),
-        "n": gate["measured"]["n"],
-        "unit": "seconds",
-        "value": gate["measured"]["value"],
-        "max": gate["measured"]["max"],
-        "source": rel(RUN_RECORD),
-    }
+def append_measurement(row: dict) -> dict:
+    """One row onto `results/measurements.jsonl`. The file is append-only: a rate is history."""
     with MEASUREMENTS.open("a", encoding="utf-8") as handle:
         handle.write(json.dumps(row, ensure_ascii=False, sort_keys=True) + "\n")
     return row
+
+
+def write_measurement(gate: dict) -> dict:
+    """The smoke's rate into `results/measurements.jsonl`, under its OWN name and never the borrow's.
+
+    It is marked `sample: smoke of three` and ruling 05.09 (t) item 4 prices NOTHING on it: three
+    units chosen as shortest / median / LONGEST are a maximum wearing a mean's clothes.
+    """
+    return append_measurement(
+        {
+            "contract": CONTRACT,
+            "name": f"{STEM}_seconds_per_thread",
+            "sample": "smoke of three",
+            "instrument": "promo-signal prompt (leg A), READER serving, thinking OFF, batch 1 — the"
+            f" SMOKE's three units on this pod; it replaces the borrowed {BORROWED_RATE}",
+            "measured_on": ", ".join(
+                f"{unit} {seconds}s" for unit, seconds in gate["measured"]["seconds"].items()
+            ),
+            "n": gate["measured"]["n"],
+            "unit": "seconds",
+            "value": gate["measured"]["value"],
+            "max": gate["measured"]["max"],
+            "source": rel(RUN_RECORD),
+        }
+    )
+
+
+def whole_run_row(replies: Path, pod_id: str) -> dict:
+    """One pod's WHOLE-RUN seconds-per-thread — ruling 05.09 (t) item 4, the row a leg is priced on.
+
+    The units are the committed registration's `population.leg_a.order` and not «every line of the
+    out-file»: leg B rides the same file and a post answered in 0.8 s is not a thread
+    ([[a_second_population_in_a_shared_store_voids_the_first_seal]]). The POD is named and checked
+    against the run record's own segments — a rate is a property of the pod
+    ([[a_rate_is_a_property_of_the_pod]]), and a row whose pod the ledger never billed prices
+    nothing. `n` is what the run answered, so an incomplete run measures the units it did.
+    """
+    units = set(committed_registration()["population"]["leg_a"]["order"])
+    seconds = [
+        float(row["seconds"])
+        for line in replies.read_text(encoding="utf-8").splitlines()
+        if line.strip()
+        for row in [json.loads(line)]
+        if row["id"] in units
+    ]
+    if not seconds:
+        raise SystemExit(
+            f"{rel(replies)} answers no registered leg-A unit of {rel(PREREG)} — there is no whole"
+            " run here to measure, and a rate over nothing prices nothing."
+        )
+    segments = [one for one in run_state()["segments"] if one.get("pod_id") == pod_id]
+    if len(segments) != 1:
+        raise SystemExit(
+            f"{rel(RUN_RECORD)} carries {len(segments)} segments for pod {pod_id} — the row names"
+            " the pod it was measured on, and a pod the ledger never billed is a pod nothing paid"
+            " for."
+        )
+    segment = segments[0]
+    return {
+        "contract": CONTRACT,
+        "name": f"{STEM}_seconds_per_thread",
+        "sample": WHOLE_RUN,
+        "instrument": "promo-signal prompt (leg A), READER serving, thinking OFF, batch 1 — the"
+        f" WHOLE run of pod {pod_id}: every registered leg-A unit it answered, not a sample of"
+        " them. Ruling 05.09 (t) item 4 makes this the row a leg is priced on.",
+        "measured_on": f"pod {pod_id}, {len(seconds)} leg-A threads on {segment['card']} at"
+        f" ${segment['usd_per_hour']}/h, {rel(PREREG)}'s population",
+        "n": len(seconds),
+        "unit": "seconds",
+        "value": round(sum(seconds) / len(seconds), 4),
+        "max": round(max(seconds), 4),
+        "source": rel(replies),
+        "pod_id": pod_id,
+        "run_record": rel(RUN_RECORD),
+    }
 
 
 def close_segment(*, deleted_at: str, billed_seconds: float, outcome: str) -> dict:
@@ -1470,6 +1610,11 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--open", action="store_true", help="$0: rung 1 at the create response")
     parser.add_argument("--close-segment", action="store_true", help="$0: the segment's own bill")
     parser.add_argument(
+        "--measure-run",
+        action="store_true",
+        help="$0: one pod's WHOLE-RUN seconds-per-thread into results/measurements.jsonl",
+    )
+    parser.add_argument(
         "--score", action="store_true", help="$0: the pod's replies → K8's rows and the error table"
     )
     parser.add_argument(
@@ -1537,16 +1682,40 @@ def main(argv: list[str] | None = None) -> int:
         print(json.dumps(state["gates"][-1], ensure_ascii=False, indent=1))
         return 0 if state["latest"]["verdict"] == "GO" else 1
 
+    if args.measure_run:
+        for name in ("replies", "pod_id"):
+            if getattr(args, name) is None:
+                parser.error(
+                    f"--measure-run needs --{name.replace('_', '-')}: a whole-run rate is a"
+                    " property of ONE pod and is read off the units that pod answered"
+                )
+        row = append_measurement(whole_run_row(args.replies, args.pod_id))
+        print(f"appended to {rel(MEASUREMENTS)}: {row['name']} «{row['sample']}»"
+              f" = {row['value']} s/thread (max {row['max']}, n={row['n']}) — {row['measured_on']}")
+        return 0
+
     if args.close_segment:
         for name in ("deleted_at", "billed_seconds", "outcome"):
             if getattr(args, name) is None:
                 parser.error(f"--close-segment needs --{name.replace('_', '-')}")
+        pod_id = (run_state()["segments"] or [{}])[-1].get("pod_id")
         state = close_segment(
             deleted_at=args.deleted_at,
             billed_seconds=args.billed_seconds,
             outcome=args.outcome,
         )
         print(json.dumps(state["gates"][-1], ensure_ascii=False, indent=1))
+        # ruling 05.09 (t) item 4 — the whole-run row is written HERE, at the close, so the next
+        # leg is priced on what this pod actually ran. A segment with no out-file (a dead-man that
+        # launched nothing) has no run to measure and says so instead of writing a row over nothing.
+        if args.replies is None:
+            print("\nno --replies: NO whole-run rate row was written for this segment. Ruling"
+                  " 05.09 (t) item 4 prices every later leg on such a row — pass the pod's own"
+                  " out-file unless this segment answered nothing.")
+        else:
+            row = append_measurement(whole_run_row(args.replies, pod_id))
+            print(f"\nappended to {rel(MEASUREMENTS)}: {row['name']} «{row['sample']}»"
+                  f" = {row['value']} s/thread (max {row['max']}, n={row['n']})")
         return 0 if state["latest"]["verdict"] == "GO" else 1
 
     if args.project:
@@ -1634,7 +1803,7 @@ def main(argv: list[str] | None = None) -> int:
             encoding="utf-8",
         )
         bound, corpus = record["bound"], record["corpus"]
-        own = bound["borrowed_from"]["name"] == MEASURED_RATE
+        own = bound["priced_from"]["sample"] == WHOLE_RUN
         print(f"wrote {rel(out)}")
         print(f"  law           {record['law']['codebook']} sha {record['law']['codebook_sha256'][:16]}…")
         print(f"  corpus        {bound['threads']} {PART} threads · {corpus['chars_total']} chars ·"
@@ -1642,13 +1811,13 @@ def main(argv: list[str] | None = None) -> int:
         print(f"  gold          {record['gold']['path']} — "
               + (f"sha {record['gold']['sha256'][:16]}… · {record['gold']['lines']} rows"
                  if record["gold"]["sha256"] else "gold missing -> no record"))
-        print(f"  {'MEASURED' if own else 'BORROWED'} rate {bound['borrowed_from']['name']} ="
-              f" {bound['borrowed_from']['value']} s/thread (n={bound['borrowed_from']['n']},"
-              f" max {bound['borrowed_from']['max']}) — "
-              + ("this instrument's OWN, on the slowest pod it has run on"
+        print(f"  {'MEASURED' if own else 'BORROWED'} rate {bound['priced_from']['name']} ="
+              f" {bound['priced_from']['value']} s/thread (n={bound['priced_from']['n']},"
+              f" max {bound['priced_from']['max']}) — "
+              + ("this instrument's OWN, the WHOLE run of the slowest pod it has run on"
                  if own else "another prompt, pod and transport"))
-        print(f"  bound         ${bound['usd_at_the_borrowed_mean']} at its mean ·"
-              f" ${bound['usd_at_the_borrowed_max']} at its max, boot excluded — NOT a price")
+        print(f"  bound         ${bound['usd_at_the_mean']} at its mean ·"
+              f" ${bound['usd_at_the_max']} at its max, boot excluded — NOT a price")
         print(f"  priced at     ${bound['usd_per_second'] * 3600:.4f}/h from {rel(RATE_RECORD)} —"
               " NOT the cap's rate and NOT a gate: rung 0 at --register prices the pod at the"
               " day's own offer, and that is the number a cap is read against")

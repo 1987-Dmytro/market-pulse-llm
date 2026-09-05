@@ -61,13 +61,18 @@ def test_the_dry_run_writes_the_record_and_every_number_in_it_is_derived(tmp_pat
     assert record["draw"]["dev_threads"] == len(dev.dev_threads()) == 40
 
     bound = record["bound"]
-    borrowed = bound["borrowed_from"]
-    assert bound["seconds_at_the_borrowed_mean"] == round(borrowed["value"] * bound["threads"], 1)
-    assert bound["usd_at_the_borrowed_max"] == round(
-        borrowed["max"] * bound["threads"] * bound["usd_per_second"], 4
+    priced = bound["priced_from"]
+    assert bound["seconds_at_the_mean"] == round(priced["value"] * bound["threads"], 1)
+    assert bound["usd_at_the_max"] == round(
+        priced["max"] * bound["threads"] * bound["usd_per_second"], 4
     )
-    assert borrowed["source"] != "results/promo_dev40_prep.json", "a bound may not cite itself"
-    assert "BORROWED" in bound["is_a_bound_and_not_a_price"].upper()
+    assert priced["source"] != "results/promo_dev40_prep.json", "a bound may not cite itself"
+    # ruling 05.09 (t) item 4 retired the borrow on this leg, so the record's own sentence has to
+    # follow the rate it actually used: it stays a BOUND either way, and it says BORROWED only
+    # while a borrow is what priced it ([[identity_field_stops_covering_the_change]]).
+    said = bound["is_a_bound_and_not_a_price"].upper()
+    assert "BOUND" in said and "NOT A PRICE" in said
+    assert ("BORROWED" in said) is (priced["sample"] != dev.WHOLE_RUN)
 
     corpus = record["corpus"]
     assert corpus["distinct_renders"] == bound["threads"], "40 threads, 40 different prompts"
@@ -191,19 +196,33 @@ def test_the_transport_gates_are_read_from_the_frozen_record_and_not_typed(tmp_p
 
 
 def test_rung_zero_fits_at_the_dear_corner_and_refuses_when_the_cap_shrinks():
-    """The gate's own inequality, both directions. A rung-0 that can only say yes is not a rung
-    ([[guard_selftest_negative_control]]): the same table against a cap of ten cents does not fit,
-    and the verdict is the DEAR corner's, never the cheap one's."""
+    """The gate's own inequality, all three directions. A rung-0 that can only say yes is not a rung
+    ([[guard_selftest_negative_control]]): a cap of ten cents does not fit at any corner, and a cap
+    the DEAR corner clears is issued on the dear corner and never on the cheap one.
+
+    The wide cap is $5.00 and not iteration 3's $2.50 because ruling 05.09 (t) item 4 retired the
+    borrow here: the dear rate went 135.232 -> 286.248 s/thread, so $2.50 no longer reaches the dear
+    corner and the dear-issuing leg would have stopped being reachable at all
+    ([[an_absolute_bar_needs_a_reachability_state]]). The claim did not move, its literal did.
+    """
     price = {"card": dev.CARD, "datacenter": "EU-RO-1", "stock": "Medium", "usd_per_hour": 0.74}
     threads = [{"channel": "@c", "thread_root": str(i)} for i in range(40)]
-    wide = dev.rung_0(cap=2.50, price=price, threads=threads, n_posts=16)
-    assert wide["fits"] and wide["dear_usd"] < 2.50
+    wide = dev.rung_0(cap=5.00, price=price, threads=threads, n_posts=16)
+    assert wide["fits"] and wide["dear_usd"] < 5.00 and wide["issued_on"] == "dear"
     assert wide["threads"] == dev.SMOKE_N + 40
 
     narrow = dev.rung_0(cap=0.10, price=price, threads=threads, n_posts=16)
     assert not narrow["fits"]
     assert narrow["table"][0]["fits"] is False
     assert "FITS" in dev.render_rung_0(wide) and "DOES NOT FIT" in dev.render_rung_0(narrow)
+
+    # ruling 05.09 (t) item 3 — the middle case, and the one iteration 4 is registered under: the
+    # dear corner is over the cap, the MEAN corner is not, and the leg is issued FITS on the mean
+    # with the cap as the hard stop. The `part != "dev"` condition that used to guard this branch
+    # is exactly what made iteration 4 unregisterable under a cap the operator had already named.
+    middle = dev.rung_0(cap=1.20, price=price, threads=threads, n_posts=0, part="dev")
+    assert middle["issued_on"] == "mean" and middle["fits"] and not middle["dear_fits"]
+    assert middle["table"][0]["usd"] <= 1.20 < middle["dear_usd"]
 
 
 def test_the_bill_is_not_the_generation():
