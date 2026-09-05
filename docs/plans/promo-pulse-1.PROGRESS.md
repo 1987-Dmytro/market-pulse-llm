@@ -48,7 +48,7 @@ Next. `promo-dev-loop` $1.8462, carries no new run; `promo-holdout` $0.296617, O
    `re_emission`; `extractor_version` UNCHANGED. Sequence as (v)4. Last of the registered five.
 
 ## Open stop — NONE. The OOM stop is answered by ruling (w); today's blocker is a billing lag.
-**Tree.** Clean; seven commits this session, $0 spent, no pod, no red test, no test added.
+**Tree.** Clean at HEAD; $0 spent this session, no pod, no red test, no test or pin added.
 
 ## Named, not built (the phase file forbids adding what it did not ask for)
 - **§6.5's ONE test for the OOM fix** — the longest registered render must be proven to fit BEFORE a
