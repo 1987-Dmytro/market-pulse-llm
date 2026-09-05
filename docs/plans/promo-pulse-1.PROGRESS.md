@@ -30,10 +30,10 @@ Next. `promo-dev-loop` $1.8462, carries no new run; `promo-holdout` $0.296617, O
 ## Next — the close is owed on a CLOCK, not on a decision. Then the transport fix, then iteration 5.
 1. **`--close` the `promo-iter4` line, unchanged from (w)1** — the one command the item still owes:
    `python scripts/runpod_guard.py --step promo-iter4 --step-cap 1.20 --close --note "<why>"
-   --expect-ms 3364000 --tolerance 0.05`. It refuses TODAY because the billing walk over the line's
-   window covered **1 647 152 ms of 3 364 000 (49%)** at 14:47Z — `complete()` calls a PARTIAL walk a
-   third state and will not settle on it (Dv488). The pod was deleted 14:17:13Z and the walk was
-   climbing ~9%/6 min, so the gate opens ~15:20Z; `lora-c` needed until the NEXT DAY. Re-check with
+   --expect-ms 3364000 --tolerance 0.05`. It refuses TODAY: the walk over the line's window covered
+   **1 942 692 ms of 3 364 000 (57.7%)** at 14:57Z — `complete()` calls a PARTIAL walk a third state
+   and will not settle on it (Dv488). It climbed ~9%/6 min from the 14:17:13Z delete (gate ~15:25Z);
+   the OPERATOR ended the session here rather than sit it out, as `lora-c` did overnight. Re-check with
    the read-only walk first, never by firing the close at it. The reference $0.7143 and the settled
    ~$0.691489 sit 3.19% apart; past $0.72788 the 5% band would have closed for good, so the reading's
    timing was the whole of it and it is taken.
@@ -48,7 +48,7 @@ Next. `promo-dev-loop` $1.8462, carries no new run; `promo-holdout` $0.296617, O
    `re_emission`; `extractor_version` UNCHANGED. Sequence as (v)4. Last of the registered five.
 
 ## Open stop — NONE. The OOM stop is answered by ruling (w); today's blocker is a billing lag.
-**Tree.** Clean; six commits this session, $0 spent, no pod, no red test, no test added.
+**Tree.** Clean; seven commits this session, $0 spent, no pod, no red test, no test added.
 
 ## Named, not built (the phase file forbids adding what it did not ask for)
 - **§6.5's ONE test for the OOM fix** — the longest registered render must be proven to fit BEFORE a
