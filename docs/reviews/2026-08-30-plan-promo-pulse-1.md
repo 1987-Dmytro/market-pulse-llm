@@ -1049,3 +1049,26 @@ The «needs named» list stays in PROGRESS as debts; none blocks iteration 2.
    a step but prices against the cycle is a false record — the same class as (r)2's decision table. No new test (§7): the refusal was seen at both numbers.
 4. Then the purchase in the same session, (u)4 unchanged: create → `--open` → smoke → GO on the three replies → the 80 → delete → `--close-segment --replies
    results/promo_dev40_iter4.jsonl` → `--close` the step → listings `[]` → `--score --arm dev40` (BAR 0.80 / 0.75) · `--score --arm dev2` (READING) → END.
+
+## Ruling 05.09 (w) — iteration 4 is an INCOMPLETE reading (CUDA OOM on the longest render at the smoke): the instrument does not move, the SERVING does — a card ≥ 32 GB, `expandable_segments`, the runner reports a failed unit at once; re-bought as iteration 5 on its own line `promo-iter5`, cap $1.40 (operator's word); `promo-iter4` closes on its run record
+
+1. Accepted: `3930fa0` `d964fbd` `3e2c538` `badbc8d` — the registration on its own line (guard read WITH `--step`; the negative control refused), the pack re-pinned,
+   the pod `kzcnhe01mgdwvk` (rung 1 GO), the smoke's third unit `@VARUS_channel:8647` (14 281 chars, the longest render — the smoke rule chose it on purpose and it
+   paid for itself) died in `gemma4._norm` with 338 MiB refused at 23.19 of 23.52 GiB; no GO, none of the 80 bought; $0.691489 (3364 s). **§6.5: an incomplete
+   reading — recorded under iteration 4, compared to nothing.** `promo-iter4` CLOSES now on its run record (`--close --expect-ms 3364000 --tolerance 0.05`): one line,
+   one run, the run happened.
+2. **The instrument is untouched.** Law v1.2, template, render, the 4000-token ceiling, NF4/bf16, greedy decoding, runner and parser stay byte-for-byte — none of
+   them is the remedy. What moves is the SERVING ENVIRONMENT, which the registration prices but does not pin as the instrument: (a) a card with **≥ 32 GB** VRAM
+   in EU-RO-1 (the volume's datacenter) — RTX PRO 4500 32 GB first (ruling 22.08 (о) precedent, ~$0.72/h), else A6000 / L40S 48 GB — at the day's dearer offer
+   **≤ $0.90/h**; the 4090 is not bought again for this prompt; (b) `PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True` in the pod's launch line — allocator
+   hygiene, no effect on what the model computes. Both are disclosed in the record's `re_emission`; `extractor_version` is unchanged; hosts have differed before
+   and the outputs stayed byte-identical on 122 rows, so a different card is not a different instrument — a divergence, if any, is named at the reading.
+3. **The crash cost $0.62 of waiting, not computing** — the runner died at 164 s and the Mac waited for a third reply until the deadline. A caught TRANSPORT defect
+   (§4, one test both directions, in the fix's commit): the runner catches a unit's exception, writes an ERROR reply for that unit (`error`, the exception's name,
+   the unit) and exits non-zero; the Mac treats an error reply among the smoke's three as «the smoke did not come back» and deletes AT ONCE. The runner's pin
+   moves with the fix — the re-emission carries it.
+4. **Iteration 5 = the re-buy, the NEXT number by §6.5 and the LAST of the registered five**; same `extractor_version`, same pins but the runner's, the card and
+   the price as in 2; line **`promo-iter5`**, cap **$1.40** (operator 05.09 16:35), FITS on the mean corner at the day's price (the dry run quotes it), the hard
+   stop from the cap, the 90-min backstop lifted to the cap's own minutes if it bites first (the registration says which). Sequence as (v)4. If iteration 5 reads
+   RED on dev-40, the registered question closes red and the operator decides; GREEN → holdout-2's gold and its shot on `promo-holdout2`.
+5. Money after it: cycle 3 REMAINING $2.81 → ≥ $1.41 → holdout-2 ≤ $0.90 → c3 needs the ceiling raised (the account holds $8.29) — the operator's word then.

@@ -1,4 +1,4 @@
-# PHASE — `promo-pulse-1` (stage 1 whole: C2–C5 of `docs/SPEC-v2-promo-pulse.md` §8) — v11 05.09: §6.1 one paid run = one step line, the registration reads the guard with the step it names; v10: every leg prices on the slowest WHOLE run and issues on the mean when the dear corner refuses, a cap is quoted from the dry run; v9: §2 S2 holdout-40 read RED on subject → codebook v1.2, dev-2, holdout-2 (in-domain population), K8 v2; §4 «asked for once» + a re-used producer's record branches every decision field, §6.5 validity of a paid reading, §6.6 a test that reads the record, §6.1–6.2 a fence is an estimate and the frozen-set instrument is byte-for-byte
+# PHASE — `promo-pulse-1` (stage 1 whole: C2–C5 of `docs/SPEC-v2-promo-pulse.md` §8) — v12 05.09: §6.5 a serving failure moves the serving, never the instrument, and surfaces at once; v11: §6.1 one paid run = one step line, the registration reads the guard with the step it names; v10: every leg prices on the slowest WHOLE run and issues on the mean when the dear corner refuses, a cap is quoted from the dry run; v9: §2 S2 holdout-40 read RED on subject → codebook v1.2, dev-2, holdout-2 (in-domain population), K8 v2; §4 «asked for once» + a re-used producer's record branches every decision field, §6.5 validity of a paid reading, §6.6 a test that reads the record, §6.1–6.2 a fence is an estimate and the frozen-set instrument is byte-for-byte
 
 Team-lead file. Executor: read this, then run `/plan-phase promo-pulse-1` and STOP for the plan
 review. Mechanics named below are CONSTRAINTS; the goal is the question and the checks.
@@ -94,11 +94,8 @@ scanning the 81 unscanned census candidates.
 
 ## 6. Stop-points (ask BEFORE, never report after)
 
-1. Any pod/serverless create (paid): smoke first, project at measured rates; estimate table —
-   C2 vision backfill ≈ $0.4 · C3 dev loop (3–5 iterations × 40 threads × ~24 s) ≈ $1.1–1.7,
-   cap $2.5 · holdout shot ≈ $0.3. **Cycle-2 remainder is $2.44** (guard, 30.08; the volume drips
-   $0.2333/day): the programme already exceeds it, so the operator decides cycle-3 / narrowing / a pod
-   runner AT S3's STOP on the census (K3) and the projection range (K4) — never trim scope silently.
+1. Any pod/serverless create (paid): smoke first, project at measured rates; the 30.08 estimate table (C2 ≈ $0.4 · dev loop
+   ≈ $1.1–1.7 · holdout ≈ $0.3) and the cycle-2 remainder are history — cycle 3 (ceiling $9.00, operator 05.09) governs; never trim scope silently.
    **A fence for a LATER paid step is an estimate, never a cap (v7, ruling (q)):** it is re-priced at that
    step's registration on the instrument's OWN measured pace of the SLOWEST pod seen (hosts of one card ran
    1.5–2.3× apart on identical outputs), the cap becoming the hard stop; the holdout's cap was **$1.10**
@@ -123,6 +120,10 @@ scanning the 81 unscanned census candidates.
    inside the step's cap and the 5-run ceiling — NOT a stop, the diff named in the error table. Before
    the first purchase of a new instrument, the runner and the parser are drilled at $0 on every answer shape
    the prompt permits (object · array · fenced · unfenced); a shape the model produces later joins the drill once.
+   **v12 (ruling (w)): a SERVING failure (OOM, a crash, a dead process) is a transport defect of this class — the instrument
+   (law, render, ceiling, dtype, decoding, parser) never moves for it; the serving environment does (a larger card in the
+   volume's datacenter at the day's price, allocator settings), disclosed in the re-emission; the runner reports a failed unit
+   as an ERROR reply and exits non-zero so the Mac never waits out a deadline; the re-buy takes the next number on its own line.**
 6. **A test that pinned a literal of the record (v6, 04.09, ruling (o)):** when a ruling moves the registered record (a population,
    a leg, a pin) and a test's INVARIANT still passes while only literals of that record diverge, the executor rewrites the test to read
    the committed record — the claim stated in both directions — in the same commit and shows the diff: NOT a stop. Weakening an
