@@ -1005,3 +1005,23 @@ The «needs named» list stays in PROGRESS as debts; none blocks iteration 2.
 6. Next session = the unblocked item: `rate_for`/`rung_0`/`--close-segment` as 3–4 → whole-run rows → `ITERATION = 4`, `--dry-run --part dev --cap 1.20` FITS on
    the mean → `--register` → commit → `--pack` (green) → the paid iteration 4 in the SAME session if the smoke is alive, else the next: smoke → GO → K8 v2 on dev-40
    (bars 0.80 / 0.75) and dev-2 (reading) → error tables → END at the reading. Standing prompt unchanged.
+
+## Ruling 05.09 (u) — s24 ACCEPTED ($0): iteration 4 is registered on the MEAN corner ($0.8705 of $1.20) with the borrow dead on every leg; before the pod the registration gains dev-2's gold pin and `--score` takes the ARM as parameters; then the purchase
+
+1. Accepted: `1ebc321` (`own_rate()` on `sample == "whole run"` rows — mean from the slowest pod, dear from the largest max; `part != "dev"` gone from
+   `rung_0`; table, smoke prefix and gate 3 follow the corner; the three whole-run rows backfilled at $0 — iteration 2 17.71/88.24, iteration 3 47.66/286.25,
+   holdout 25.83/149.05, n=40 each — the team lead's own log arithmetic (17.7 · 47.7 · 25.8) agrees), `426a7d7` (the dev leg = two arms of the first draw,
+   dev-40 at order[0:40], dev-2 at [40:80]; `ITERATION = 4`; every dev-branch prose field says iteration 4), `1ee15f4` (rung 0 at the day's offer: cheap
+   $0.8705 FITS · priced $0.9279 · dear $4.9984 NO → issued on the MEAN, hard stop 5838 s, the 90-min backstop bites first at 5400 s; 83 units; law pins moved
+   to v1.2 — codebook doc `86ed01a4…` with (д), `codebook_version 0bbb665a…`, template `32fa6c42…`, `promo_prompts.py da60348d…`; runner `102fa524…` unchanged;
+   dev-40 gold `2303ea43…`), `a6a5b1c` (the pack; the named red green by name; `make check` 4321 passed, 0 failed). All 7 pins re-derived by the team lead.
+2. **The executor named it, and the answer is the word it asked for:** a reading needs its reference pinned as much as a bar does (§9). Before the pod, at $0:
+   the registration is re-emitted with `docs/labels-promo-dev2.jsonl` (`4b60ab99a21045e6…`, HEAD) among `pinned_inputs` and `gold.covers` naming both arms;
+   `--score` takes the arm as parameters (`--arm dev40 --gold docs/labels-promo-dev.jsonl` · `--arm dev2 --gold docs/labels-promo-dev2.jsonl`, strata from the
+   arm's own part of the draw) and writes per-arm files — `grade_promo_dev40_iter4.json` / `promo_dev40_errors_iter4.json` (the BAR) and
+   `grade_promo_dev2_iter4.json` / `promo_dev2_errors_iter4.json` (the READING); `--pack` again on the re-emitted record; commit — then the pod. A small fix
+   and the paid run it unblocks share the session (§5).
+3. The smoke rule promoting two dev-2 renders to the front is accepted as named: dev-40 completes at unit 45 of 83, deep inside the backstop. The out-file
+   handed to `--close-segment` being unchecked against the pod stays named; the run's out-file is `results/promo_dev40_iter4.jsonl` and nothing else.
+4. Sequence unchanged from (t)6: create → `--open` → smoke (3) → GO on the three replies, no band gate → the 80 → delete → `--close-segment --replies …iter4.jsonl`
+   (the whole-run row for this pod) → listings `[]` → `--score --arm dev40` (bars 0.80 / 0.75) and `--score --arm dev2` (reading) → END at the readings.
