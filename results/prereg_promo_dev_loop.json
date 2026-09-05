@@ -1,17 +1,18 @@
 {
-  "authority": "docs/reviews/2026-08-30-plan-promo-pulse-1.md «Ruling 03.09 (c)» — «the flags and their stub tests at $0 … --register shown with fits at the dear corner → then, in the same session if the registration fits, the pod: smoke → the table → iteration 1 → K8 → error table → teardown»; docs/plans/promo-pulse-1.md §9 and §9a",
+  "authority": "docs/reviews/2026-08-30-plan-promo-pulse-1.md «Ruling 05.09 (t)» item 6 — «`rate_for`/`rung_0`/`--close-segment` as 3–4 → whole-run rows → `ITERATION = 4`, `--dry-run --part dev --cap 1.20` FITS on the mean → `--register` → commit → `--pack` (green) → the paid iteration 4»; item 5 is the operator's cap and the arm order; docs/PHASE-promo-pulse-1.md §6.1 v10; docs/plans/promo-pulse-1.md §9 and §9a",
   "class": "PRE-REGISTRATION. Written and committed before any pod of this step exists; git history is the only witness that it preceded the money.",
   "decision_table": {
     "after_the_smoke_for_40_threads": {
-      "0.80 - 1.20": "run it, then STOP with the error table",
-      "<= 0.80": "run iteration 1 now",
-      "> 1.20": "STOP before buying; pod torn down, listing shown"
+      "3 replies are in": "write GO. The pod answers the rest under the hard stop.",
+      "the key name": "kept as it stands because `project()` reads it by name; the leg's own size is `population.leg_a.threads` = 80",
+      "the smoke did not come back": "no GO is written; the pod is deleted, the segment closed, the listing shown, and the run is PHASE §6.5's incomplete reading."
     },
-    "authority": "ruling 03.09 (b), quoted and not moved"
+    "authority": "ruling 05.09 (r) item 2 as PHASE v10 §6.1 widens it to EVERY leg (ruling 05.09 (t) item 3): the money gate is rung 0 FITS on the measured MEAN corner ($0.8705 ≤ $1.2000) plus the cap as the platform's hard stop (`--terminate-after`); §5's band gate is NOT run — GO is written the moment the smoke's three replies are in (their seconds stay in the pod log); `project()` and its literals stay untouched",
+    "why_not_the_dev_bands": "the dev loop's bands are absolute dollars ($0.80 / $1.20) with KILL on the MAX corner over the cap. This leg's max corner is over the cap BY CONSTRUCTION — rung 0 above prices it at $4.9984 and issues FITS on the mean anyway — so the band gate would KILL a run this very record registers as FITS. Two thresholds for one decision ([[two_gates_on_one_spend_read_different_corners]]); the corner that was priced keeps the decision."
   },
   "gates": {
     "1_liveness": "the ssh dead-man above; never two pods, checked BEFORE `pod create`",
-    "3_hard_stop": "10526.6 s of pod existence at the registered price — the platform-side backstop is terminate_after",
+    "3_hard_stop": "5837.8 s of pod existence at the registered price. On a leg issued on the MEAN corner it is not a backstop BEHIND a band gate: ruling 05.09 (r) item 2, widened by (t) item 3, does not run §5's band gate at all, so the cap as `--terminate-after` is the ONE thing that bounds the money after rung 0 has issued FITS",
     "boot_kill_seconds": 720.0,
     "delete_margin_seconds": 60.0,
     "from": "results/prereg_reader_probe_v5b.json — frozen; boot_kill_seconds, delete_margin_seconds and max_recreates only",
@@ -22,19 +23,19 @@
     "terminate_after_minutes": 90
   },
   "law": {
-    "baseline": "iterations 1 and 2 are bought and priced on disk (ruling 03.09 (c) item 3; 04.09 (m) item 1 — signal 0.8854 HOLDS, subject 0.7500 RED). Iteration 3 moves ONE thing and nothing else: the answer's TRANSPORT — `balanced_prefix` reads the fence off before it dispatches on the shape, and a bare array is read as the rows it is (`f872a53`, ruling 04.09 (m) item 2). The law (v1.2), the TEMPLATE, the gold (v1.1), the decoding and the token ceiling are untouched.",
+    "baseline": "iterations 1-3 are bought and priced on disk; iteration 3 took BOTH dev bars on a complete reading (subject 0.8714, signal 0.9104, `results/grade_promo_dev40_iter3.json`) and ruling 05.09 (q) item 1 accepted it. Then the holdout came back subject 0.7181 RED under that same law (`results/grade_promo_holdout40.json`), and ruling 05.09 (s) turned the shot into dev-2 and sent the codebook back. So iteration 4 moves TWO things and names both: the LAW (codebook v1.2 — partners to `chain`, rule 11 for an off-domain thread, three product forms in rule 4, price-as-quality; `--leak-check` CLEAN over all three sets) and the POPULATION (dev-40 + dev-2, 80 threads). The transport, the decoding and the token ceiling are untouched — this is not a transport iteration.",
     "codebook": "docs/CODEBOOK-promo-signals.md",
-    "codebook_sha256": "2361034627ba8012a274fa4a27aaaba8f785d7022406318c25b314cd48229042",
-    "codebook_version": "a587e0d6d50462552a483a688533cae275c28c0959cc01a9673ea860b912f7d7",
+    "codebook_sha256": "86ed01a484611fd5cca20f087f3479a7a1ff28370282ef556b9f80cbd65ca7c4",
+    "codebook_version": "0bbb665a2beb3d4d08af96e1b81a761e8b6a4a4f5000587fffcc1ff7d7706e62",
     "template_rule": "ruling 04.09 (g) item 3 — the sha of the TEMPLATE with its examples block, so a render-only change is visible in the record; `codebook_version` alone compares the law and would read two instruments as one.",
-    "template_sha256": "57dd9d25dd54a1d58dfa2efe1980cdfbb0a97c9e0c27d7f3101131945f42e79a",
+    "template_sha256": "32fa6c42bf12bae7d91e7a8586610b622495ad9ff9ef99d3ccbc96bf012348b3",
     "vocabulary": {
       "attribution_sources": [
         "explicit",
         "reply_context",
         "post_context"
       ],
-      "codebook_sha256": "a587e0d6d50462552a483a688533cae275c28c0959cc01a9673ea860b912f7d7",
+      "codebook_sha256": "0bbb665a2beb3d4d08af96e1b81a761e8b6a4a4f5000587fffcc1ff7d7706e62",
       "signal_types": [
         "жалоба",
         "похвала",
@@ -51,19 +52,20 @@
     }
   },
   "out_of_scope": "no training; no holdout spend; no new sources; no cap raise. Leg B's answers land on disk as evidence for the store, and the ingest into data/derived_w2 is NOT in this session's sequence.",
-  "phase": "promo-pulse-1 S9 — the dev loop's PAID instrument, iteration 3",
+  "part": "dev",
+  "phase": "promo-pulse-1 S9 — the dev loop's PAID instrument, iteration 4",
   "pinned_inputs": {
-    "docs/CODEBOOK-promo-signals.md": "2361034627ba8012a274fa4a27aaaba8f785d7022406318c25b314cd48229042",
+    "docs/CODEBOOK-promo-signals.md": "86ed01a484611fd5cca20f087f3479a7a1ff28370282ef556b9f80cbd65ca7c4",
     "docs/labels-promo-dev.jsonl": "2303ea4319dbf784d022c3935fb0fea7f14f8af471dc1bba391f2addc1d239c0",
     "results/prereg_5c2_run.json": "d5d3afd5e6d7e966233a7e449546b2001f9c2a08646cab207e87531f5df4cbc8",
-    "results/promo_dev40_prep.json": "5510dd2b3098cdd3c0a3998ff7d62b8998743da757f64c7c8f114b31dfae6e61",
+    "results/promo_dev40_prep.json": "6689273fa46bb6efec9b76566e648c12cdbb64a42d691d000635cdb7a7c96d21",
     "results/promo_threads_draw.json": "6f9fa245b9d702549cdc323849146de1825a12df8048c8ba8077c42e2508a407",
     "scripts/promo_dev_pod_runner.py": "102fa524b74276769862156cd2e1ed88a0c4b3cbef1777cfc0ced7ef9525637b",
-    "src/market_pulse/promo_prompts.py": "dd260cb53c0b7b395908fb8599e4f85a033436841255ae94398363fff5225f1c"
+    "src/market_pulse/promo_prompts.py": "da60348d75472ac0fd0273c2e0e284fbf636f19093ec62db66853bdcaf5f34a2"
   },
   "population": {
     "leg_a": {
-      "digest": "89e193dace806a6a7e4648f9e69d110cab80d053dbbd0ef324a72e86b49aaea0",
+      "digest": "0f34cdc295ad34ab16b95e3348688ea463954f507215fd890a5b4db27927f513",
       "digest_rule": "sha256 over `channel:thread_root` per thread, in the draw's order",
       "order": [
         "@VARUS_channel:2537",
@@ -105,31 +107,71 @@
         "@msuaaaa:4173",
         "@msuaaaa:6523",
         "@msuaaaa:7187",
-        "@msuaaaa:8788"
+        "@msuaaaa:8788",
+        "@VARUS_channel:2085",
+        "@VARUS_channel:3436",
+        "@VARUS_channel:4422",
+        "@VARUS_channel:7440",
+        "@VARUS_channel:7569",
+        "@VARUS_channel:7850",
+        "@VARUS_channel:8084",
+        "@VARUS_channel:8647",
+        "@VARUS_channel:8823",
+        "@VARUS_channel:9277",
+        "@VARUS_channel:9850",
+        "@matusi_ukr:22155",
+        "@msuaaaa:10635",
+        "@msuaaaa:7348",
+        "@msuaaaa:7792",
+        "@msuaaaa:8215",
+        "@msuaaaa:9140",
+        "@msuaaaa:9164",
+        "@msuaaaa:9196",
+        "@msuaaaa:9545",
+        "@VARUS_channel:10603",
+        "@VARUS_channel:2353",
+        "@VARUS_channel:3054",
+        "@VARUS_channel:3289",
+        "@VARUS_channel:8430",
+        "@VARUS_channel:9034",
+        "@VARUS_channel:9461",
+        "@VARUS_channel:9802",
+        "@matusi_ukr:22304",
+        "@msuaaaa:4490",
+        "@msuaaaa:5015",
+        "@msuaaaa:5113",
+        "@msuaaaa:5255",
+        "@msuaaaa:5704",
+        "@msuaaaa:7825",
+        "@msuaaaa:8412",
+        "@msuaaaa:8768",
+        "@msuaaaa:9190",
+        "@msuaaaa:9483",
+        "@msuaaaa:9577"
       ],
       "smoke": {
         "n": 3,
-        "prefix": "these three are the pass's FIRST three units; the pod answers them, the Mac reads the rate, and the decision table of ruling 03.09 (b) decides whether the remaining 37 are bought at all",
-        "rule": "shortest, median and longest render by promo_dev40_prep.json's own chars — a rule, not a pick",
+        "prefix": "these three are the pass's FIRST three units; the pod answers them and their arrival IS the GO (ruling 05.09 (r) item 2, widened to every leg by (t) item 3). Their seconds are read off the pod log for the record, not for a gate: no band decides whether the remaining 77 are bought — this leg is issued on the MEAN corner and the cap as `--terminate-after` is what bounds them",
+        "rule": "shortest, median and longest render by results/promo_dev40_prep.json's own chars — a rule, not a pick",
         "units": [
           {
-            "chars": 5751,
+            "chars": 8139,
             "role": "shortest",
             "unit_id": "@msuaaaa:7187"
           },
           {
-            "chars": 6063,
+            "chars": 8453,
             "role": "median",
-            "unit_id": "@VARUS_channel:9006"
+            "unit_id": "@VARUS_channel:9461"
           },
           {
-            "chars": 9023,
+            "chars": 14281,
             "role": "longest",
-            "unit_id": "@VARUS_channel:6009"
+            "unit_id": "@VARUS_channel:8647"
           }
         ]
       },
-      "threads": 40
+      "threads": 80
     },
     "leg_b": {
       "by_channel": {},
@@ -166,22 +208,33 @@
       "posts": 0
     }
   },
-  "question": "does the promo-signal instrument, under CODEBOOK a587e0d6d5046255…, clear subject ≥ 0.80 and signal ≥ 0.75 on dev-40 within at most 5 dev runs?",
-  "re_emission": "ruling 04.09 (m) item 5 and (n) item 2 — iterations 1 and 2 are kept by git history; THIS record is the one iteration 3 is bought under. The law, the TEMPLATE and the gold do NOT move: what moves is the answer's transport, and `extractor_version` = sha256(rendered prompt) cannot see it — so `scripts/promo_dev_pod_runner.py` and `src/market_pulse/promo_prompts.py` are pinned beside the law, half the repair in each and `check_law` covering neither. `committed_registration()` still does not re-verify `pinned_inputs`: a named debt.",
+  "question": "does the promo-signal instrument, under CODEBOOK 0bbb665a2beb3d4d…, clear subject ≥ 0.80 and signal ≥ 0.75 on dev-40 within at most 5 dev runs — and what does the SAME law read on dev-2, the spent holdout-40 whose 0.7181 subject sent the codebook back for v1.2? dev-40 carries the bars; dev-2 is a reading beside them and no bar of this record.",
+  "re_emission": "ruling 04.09 (m) item 5 and (n) item 2 — iterations 1-3 are kept by git history; THIS record is the one iteration 4 is bought under. What moves since iteration 3 is the LAW (codebook v1.2, ruling 05.09 (s) item 2: partners, the off-domain thread, three product forms, price-as-quality) and the POPULATION (dev-2, the spent holdout-40 relabelled by (s) item 3, riding beside dev-40 as a reading). The transport does not move, so `scripts/promo_dev_pod_runner.py` and `src/market_pulse/promo_prompts.py` stay pinned beside the law — `check_law` compares only `codebook_version` and covers neither the template nor the runner. `committed_registration()` still does not re-verify `pinned_inputs`: a named debt.",
   "rung_0": {
     "amendment": "ruling 03.09 (c) item 1 — smoke + iteration 1 + the 16 posts, not five iterations: the borrowed max over five would refuse a loop the smoke may prove cheap",
-    "borrowed_rate": {
-      "instrument": "READER (enable_thinking false) — the BEFORE column's own rate",
-      "max": 135.232,
-      "n": 75,
-      "name": "pass2_r2_seconds_per_thread",
-      "source": "results/pass2_signals_r2_v1.jsonl",
-      "value": 23.76
-    },
-    "cap_usd": 2.1638,
-    "dear_usd": 1.31,
+    "cap_usd": 1.2,
+    "dear_fits": false,
+    "dear_usd": 4.9984,
     "fits": true,
-    "hard_stop_seconds": 10526.6,
+    "hard_stop_seconds": 5837.8,
+    "issued_on": "mean",
+    "issued_rule": "PHASE v10 §6.1, ruling 05.09 (t) item 3 — on EVERY leg, dev as holdout: the dear corner $4.9984 is OVER the $1.2000 cap, so the leg is issued FITS on the MEAN corner $0.8705 with the cap as the HARD STOP: `--terminate-after` is derived from it and the meter cannot pass it. The mean is the WHOLE-RUN mean of the slowest pod seen, never a smoke of three (item 4). The dear corner stays in this table and in `dear_usd`, priced and named, so nothing over the cap is hidden ([[a_bound_the_meter_cannot_reach]]). Ruling 05.09 (r) item 2 makes this pair — FITS here plus the hard stop — the leg's ONLY money gate: the band gate is not run. The `part != \"dev\"` condition this branch used to carry is what left iteration 4 unregisterable under a cap the operator had already named",
+    "measured_rate": {
+      "instrument": "promo-signal prompt (leg A), READER serving, thinking OFF, batch 1 — the WHOLE run of pod cd918wet7sea5b: every registered leg-A unit it answered, not a sample of them. Ruling 05.09 (t) item 4 makes this the row a leg is priced on.",
+      "max": 286.248,
+      "max_from": "promo_dev40_seconds_per_thread — pod cd918wet7sea5b, 40 leg-A threads on NVIDIA GeForce RTX 4090 at $0.74/h, results/prereg_promo_dev_loop.json's population",
+      "n": 40,
+      "name": "promo_dev40_seconds_per_thread",
+      "pool": [
+        "promo_dev40_seconds_per_thread 17.7118/88.237 n=40",
+        "promo_dev40_seconds_per_thread 47.6615/286.248 n=40",
+        "promo_holdout40_seconds_per_thread 25.8263/149.054 n=40"
+      ],
+      "sample": "whole run",
+      "source": "results/promo_dev40_iter3.jsonl",
+      "value": 47.6615,
+      "value_from": "promo_dev40_seconds_per_thread — pod cd918wet7sea5b, 40 leg-A threads on NVIDIA GeForce RTX 4090 at $0.74/h, results/prereg_promo_dev_loop.json's population"
+    },
     "overhead": {
       "from": "results/pass2_signals_r2_run.json :: pods[0].billed_seconds 2061.0 and results/measurements.jsonl :: pass2_r2_seconds_per_thread × 75",
       "rule": "the sibling's BILLED seconds less its generation at the same borrowed rate over its own 75 threads — boot, the 31B load, scp up and back, the polls and the delete",
@@ -197,62 +250,63 @@
         0.74,
         0.34
       ],
-      "read_at": "2026-09-04T16:35:54+00:00",
+      "read_at": "2026-09-05T11:01:04+00:00",
       "rule": "the DEARER offer of secure/community, read on the day; the create response's own costPerHr is the price the meter bills and the price gate re-checks it",
-      "stock": "Low",
+      "stock": "Medium",
       "usd_per_hour": 0.74
     },
     "rule": "docs/PROCESS.md «Money» rung (0): price at create ≤ the registered ceiling — the ceiling is the step cap, the price is the DEAR corner",
     "seconds_per_post_from": "results/prereg_5c2_run.json :: prices.post_text.seconds_model",
     "table": [
       {
-        "billable_seconds": 1300.7,
-        "cap_usd": 2.1638,
+        "billable_seconds": 4234.9,
+        "cap_usd": 1.2,
         "fits": true,
-        "name": "cheap — the borrowed MEAN over every leg, the sibling's measured overhead",
-        "over_cap_by": -0.8764,
+        "name": "cheap — the measured MEAN over every leg, the sibling's measured overhead",
+        "over_cap_by": -0.2746,
         "overhead_seconds": 279.0,
         "seconds_per_post": 2.813,
-        "seconds_per_thread": 23.76,
-        "usd": 0.2674
+        "seconds_per_thread": 47.661,
+        "usd": 0.8705
       },
       {
-        "billable_seconds": 1579.7,
-        "cap_usd": 2.1638,
+        "billable_seconds": 4513.9,
+        "cap_usd": 1.2,
         "fits": true,
-        "name": "priced — the borrowed mean plus one whole extra overhead (a second segment after a dead-man KILL, which the transport allows twice)",
-        "over_cap_by": -0.8499,
+        "name": "priced — the measured mean plus one whole extra overhead (a second segment after a dead-man KILL, which the transport allows twice)",
+        "over_cap_by": -0.2268,
         "overhead_seconds": 558.0,
         "seconds_per_post": 2.813,
-        "seconds_per_thread": 23.76,
-        "usd": 0.3247
+        "seconds_per_thread": 47.661,
+        "usd": 0.9279
       },
       {
-        "billable_seconds": 6373.0,
-        "cap_usd": 2.1638,
-        "fits": true,
-        "name": "dear — the borrowed MAX on every thread (135.232 s was ONE of the sibling's 75) and two overheads. Pessimistic by construction: the guard's spend is a maximum and a cap blown after the money is spent cannot be un-spent",
-        "over_cap_by": -0.3946,
+        "billable_seconds": 24316.6,
+        "cap_usd": 1.2,
+        "fits": false,
+        "name": "dear — the measured MAX on every thread (286.248 s, one unit of «promo_dev40_seconds_per_thread — pod cd918wet7sea5b, 40 leg-A threads on NVIDIA GeForce RTX 4090 at $0.74/h, results/prereg_promo_dev_loop.json's population») and two overheads. Pessimistic by construction: the guard's spend is a maximum and a cap blown after the money is spent cannot be un-spent",
+        "over_cap_by": 3.1653,
         "overhead_seconds": 558.0,
         "seconds_per_post": 2.813,
-        "seconds_per_thread": 135.232,
-        "usd": 1.31
+        "seconds_per_thread": 286.248,
+        "usd": 4.9984
       }
     ],
-    "threads": 43,
-    "threads_note": "3 smoke + 40 dev-40. The smoke's three ARE the pass's first three units, so the pod answers 40 and the registration is bought high, spent low"
+    "threads": 83,
+    "threads_note": "3 smoke + 80 dev-40. The smoke's three ARE the pass's first three units, so the pod answers 40 and the registration is bought high, spent low"
   },
   "step": {
-    "cap_rule": "min($2.50, REMAINING − $0.30)",
-    "cap_usd": 2.1638,
-    "floor_usd": 2.0,
+    "cap_rule": "min($1.2000 — the operator's own number, quoted in docs/PHASE-promo-pulse-1.md §6.1 for this leg — , the guard's REMAINING)",
+    "cap_usd": 1.2,
+    "floor_rule": "none — the cap above is the operator's own number, and a floor standing OVER it would be a field of this record refusing the very run the record registers ([[a_threshold_that_lives_in_prose]]); the cap is the hard stop",
+    "floor_usd": null,
     "ledger": "results/spend_promo_dev_loop.json",
     "money": {
-      "at": "2026-09-04T16:35:54+00:00",
-      "cycle3_cap_usd": 7.0,
-      "cycle3_spent_usd": 4.5362,
+      "at": "2026-09-05T11:01:04+00:00",
+      "cycle3_cap_usd": 9.0,
+      "cycle3_spent_usd": 5.5059,
       "from": "scripts/runpod_guard.py, its own printed REMAINING and CYCLE 3 lines",
-      "remaining_usd": 2.4638
+      "remaining_usd": 3.4941
     },
     "name": "promo-dev-loop",
     "no_cap_raise": "never, mid-run. Silence is KILL: nobody can be asked."

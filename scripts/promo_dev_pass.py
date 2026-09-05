@@ -1694,8 +1694,7 @@ def main(argv: list[str] | None = None) -> int:
         print(
             f"  step          {record['step']['name']} · cap ${record['step']['cap_usd']:.4f}"
             f" = {record['step']['cap_rule']} · floor "
-            + (f"${floor:.2f}" if floor is not None else "none — the ONE shot has no floor to"
-               " refuse below; the cap is the hard stop (ruling 05.09 (q) 3)")
+            + (f"${floor:.2f}" if floor is not None else record["step"]["floor_rule"])
         )
         print(
             f"  population    leg A {record['population']['leg_a']['threads']} threads"
