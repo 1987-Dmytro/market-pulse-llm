@@ -1,60 +1,60 @@
 # PROGRESS — promo-pulse-1 (ruling 03.09 (e): the executor's one file — done / next / open stop, ≤60 lines; §8 of the phase file stays the DONE list)
 
 ## The money, live — read BY HAND from the guard today, never carried from a record
-Cycle 3 **SPENT $5.4962, REMAINING $1.5038** of $7.00 (`scripts/runpod_guard.py`, 09:05). **`promo-holdout`
-is BOUGHT: $0.296617** — `results/promo_holdout_run.json :: gates[1].spent_all_segments_usd`, equal to
-`segments[0].billed_usd`: 1443 s at the registered $0.74/h, against a $1.10 cap and under even the cheap
-corner $0.8420. The guard reads balance-delta $0.3177 and a billing walk of $0.2130, still landing.
-**The ledger is OPEN, twice refused, never forced (below).** Next money: c3 ≤ min($0.50, REMAINING), then
-`mp-srv2` is deleted. `promo-dev-loop` also stays open by construction ((r)4), at $1.153372.
+Cycle 3 **SPENT $5.5059, REMAINING $3.4941** of the **$9.00** ceiling of ruling (s) addendum 8; the anchor
+$14.4800, `anchored_at` and every session line are UNMOVED — the raise lifts a fence, not the balance ($8.97
+on the account). **s23 spent $0; no pod was created.** `promo-holdout` $0.296617, ledger OPEN; `promo-dev-loop` open by (r)4.
 
-## Done — 05.09 s22, the ONE item of ruling (r) item 5, carried to the reading
-- **The part branch (`0726665`).** (r) names FOUR decision-bearing fields; the audit of the built record
-  found **seven** (each named in that commit), plus `step.cap_rule` and `threads_note`. `make check`
-  **4320 passed, 2 skipped** pre-pod AND after the run (three disjoint slices + `ruff`), nothing changed.
-- **§0a at $0, committed before any pod existed** (`50959b5` prereg, `582a655` pack, `26d4373` ledger at
-  $0.0000). Rung 0: cheap $0.8420 · priced $0.8993 · dear $1.8999 (named, not hidden) → **FITS on the
-  mean, hard stop 5351.4 s = 89.2 min** = (r)3's «≈89 min». Instrument byte-identical to the dev-bar
-  registration's pins ((q)2); gold `6fa804880d5d14db…`; prep re-derived byte-identical before the pin.
-- **The shot** (`ea1c615`, `5174f2b`). Pod `pcu2fqc7ebwfcw` 07:52:12Z → 08:16:15Z, **1443 s**. Rung 1 GO
-  (price and card both registered); dead-man port in ~57 s of 500; pod HEAD == Mac HEAD; `/workspace/hf`
-  59 GB warm. §5 ran the liveness/shape check and **never `--project`**: the smoke answered 8.8 / 5.3 /
-  149.1 s, all balanced, all `finish=stop`, and their arrival WAS the GO (08:00:01Z). The pod ran **3.4×
-  faster than its registered rate** (mean 25.826 against 88.772, max 149.054 against 201.967). Out-file
-  AND pod log fetched BEFORE the delete; both listings `[]` in the transcript.
-- **THE READING** (`6c6b37f`) — `--score`, then the grader itself as the judge of record:
-  **signal_type_agreement 0.7958 against 0.75 — HOLDS · subject_agreement 0.7181 against 0.80 — RED.**
-  Strata (no bar): currency 0.6786 / 0.8283 · decimal_only 0.8333 / 0.7633. **COMPLETE by §6.5, so it
-  COUNTS:** 188 rows from **40 of 40** registered units, **0 unparsed**, every
-  `finish_reason` `stop`, none unbalanced, the id set equal to the registration's order with no duplicate
-  and no extra — checked by ID SET, because `wc -l == 40` also passes a duplicate plus a miss. Against
-  the dev bar the same frozen instrument took (0.8714 / 0.9104), subject falls **0.1533**, signal 0.1146
-  on the disjoint half of one seed-42 draw. Of 53 subject misses the visible cluster is **chain vs brand
-  on the partner-bank thread `@VARUS_channel:4422`** (`izibank`, `OTP банк`). The cause is the lead's.
+## Done — 05.09 s23 «v1.2-prep», ruling (s) item 5 (b), four commits, all $0
+- **The ritual's money edit** (`a6868e5`): `CYCLE3_CAP_USD = 9.00` with the ruling in its docstring, the
+  ledger's cap and its APPENDED note, `read_cycle3`'s stale «(now $7.00)» replaced by the constant's own
+  name. No test moved: the tripwire fixtures carry their own 4.8 and `GUARD_SAYS` is a canned stdout.
+- **holdout-2 is drawn** (`4a03307`) by PARAMETERS on the same producer (§4), not a fork:
+  `--arms holdout=20 --exclude-drawn results/promo_threads_draw.json --drop-paused`. The two exclusions
+  OVERLAP — the two `@matusi_ukr` threads of holdout-40 are in both — so the population is
+  `eligible − union`: 12 eligible in paused channels + 80 drawn = **90 removed, 398 left** (137 / 261).
+  **Draw 1 replays BYTE-IDENTICAL** (`cmp` clean, `6f9fa245b9d70254…`), draw 2 as itself (K7). Sets **40 /
+  40 / 40**, 20/20 per stratum, all three intersections **0**, `@matusi_ukr` (21 of the 53 misses) out.
+- **K8 v2** (`0224167`) — ONE pairwise `subjects_agree()` that the grade AND the error table call, so one
+  record cannot disagree with itself: exact first, then token-Jaccard ≥ 0.5 for `sku`/`brand` only, and
+  `k8_version` is IN the record. **Measured, not promised:** on holdout-40's frozen gold the alias buys
+  **0 rows** and K8 v2 **1 of 188** (0.7181 → 0.7234, the v1 record untouched) — the rest of the form
+  misses are single-token pairs a Jaccard cannot overlap.
+- **The law re-rendered from codebook v1.2** (`4be406e`): partner → `chain` (never `brand`), new rule 11
+  for an off-domain thread, rule 4's three product forms, the «а X де?» pair and the argument jab, (д)
+  price-as-quality → `цена` alone, the near-quote «Шикарно…» out, three synthetic EXAMPLES, and
+  `chain_aliases.yaml :: silpo` gains «Сильпо» (a NAME form under (j)1). Every literal is a PARAPHRASE — the
+  codebook may quote gold, the law may not. **`--leak-check` CLEAN over all three sets: 440 comments (140
+  dev-40 + 188 dev-2 + 112 holdout-2)**, 30 + 10 literals, 0 hits. Law pins MOVED as ordered: codebook
+  `a587e0d6…` → **`0bbb665a…`**, template `57dd9d25…` → **`32fa6c42…`**; the corpus test reads 140/188 off the committed records now (§6.6).
 
-## Next — by (r)5 the reading ENDS the shot either way; a red bar answers S2, it does not move the gate.
-The team lead's call on a RED subject bar, then «c3» ((l)2–4), then the volume; nothing was re-scored, re-run or re-bought, and the near-quote and codebook-doc sync are unblocked.
+## Next — the iteration-4 registration and its pack, BLOCKED by the stop below; nothing else is.
+On the answer: leg-A arms (dev-40 first, dev-2 after), `ITERATION = 4`, `--dry-run` → `--register` → commit → `--pack` (it greens the red test) → iteration 4.
 
-## Open stop — NONE. The reading answers the question; what follows S2 red is the team lead's.
-**The ledger is OPEN and named, not forced.** `--close` with `--expect-ms 1443000` and `--tolerance 0.05`
-REFUSED: «the billing walk … answered "no billing rows yet" and covered 0 ms against the run record's
-1443000 … a PARTIAL walk is a third state». Without `--expect-ms`, `complete()` returns True on any
-readable walk and the step freezes cheap. **A retry at 09:05, past the billing lag, ALSO did not close**
-(no `closing_entry`; its walk read $0.2130 against $0.296617). **Both refusals wrote NOTHING** —
-`gpu_sessions` holds exactly ONE entry, §0's. Carried open as (r)4 carries `promo-dev-loop`.
-**Tree state:** every path committed, `git status` clean, no pod exists, both listings `[]`.
+## Open stop — $0.60 and rung 0 cannot both hold: iteration 4 is unregisterable as ruled
+**Shown, to scratch, the committed registration untouched:** `--register --part dev --cap 0.60` REFUSES —
+43 units, dear corner **$1.3100 vs $0.6000, +118.3 %** — and the dev leg has no mean-corner fallback
+(`rung_0` jumps dear→mean only when `part != "dev"`), so that is a refusal, not a reading. Priced for the
+real iteration-4 population (3 smoke + 80, RTX 4090 $0.74/h, overhead 279 s) — cheap · priced · dear:
+  borrowed `pass2_r2` 23.760/135.232 (what `rate_for("dev")` returns) → 0.4627 · 0.5201 · **2.4219**
+  own `promo_dev40` 88.772/201.967 (the ONLY row in `measurements.jsonl`) → **1.5719 · 1.6292 · 3.5605**
+  the holdout pod's 25.826/149.054 (never written, below) → 0.4980 · 0.5553 · **2.6577**
+**(1)** PHASE v9 §6.1 calls iteration 4's only money gate «rung 0 FITS + the hard stop (ruling (r))» — is
+that (r)2's pair on THIS leg, i.e. issued on the MEAN corner? At the dear corner NO rate fits $0.60.
+**(2)** At which rate? `own_rate()` answers 88.772, where no corner fits and the 2919 s hard stop CUTS the
+run (7647 s needed); the 25.826 this instrument measured never reached `measurements.jsonl`. May that row
+be written from the run record at $0 — or does the cap move? **(3)** The dev decision table's bands
+($0.80 / $1.20) all sit ABOVE a $0.60 cap; §4 v8 says such a field branches or the emitter refuses.
+**Tree:** four commits, `git status` clean, no pod, no spend, one red test named below.
 
 ## Named, not built (the phase file forbids adding what it did not ask for)
-- **The holdout's measured rate never reaches `measurements.jsonl`.** `write_measurement()` is called
-  ONLY from the `--project` branch (`promo_dev_pass.py:1538`) and (r)2 does not run `--project`, so
-  `own_rate()`'s promise that «the holdout's own smoke WRITES under `promo_holdout40_…`» is orphaned.
-  Nothing reads it today (the pace survives in the replies' `seconds` and the pod log), but a future leg
-  priced on `own_rate()` still reads the DEV row — 88.772 s where this pod measured 25.826.
-- **`gates.terminate_after_minutes` is v5b's borrowed 5400 s, 49 s ABOVE this record's own 5351.4 s**
-  (`usd_at_the_backstop` $1.11, a cent over the cap). §1's `STOP_AT` takes the `min()`. Not a KILL.
-- **A field added to the record later is unbranched until someone notices** — seven is what today's
-  audit found, not a closed list; §4 v8's «or the emitter refuses» half is unbuilt.
-- Holdout branches carry no test (§4 forbids one) · `prep()` still calls its count `draw.dev_threads`
-  (that key IS pinned, `tests/test_promo_dev_pass.py:61`; `threads_note` never was) · `pod.main` never
-  lifts `close_arrays_too` · `committed_registration()` ignores `pinned_inputs` · `check_law` compares
-  `codebook_version` only · **gold covers 140 of 208** · `1925810730`.
+- **ONE RED TEST, and it is the stop's:** `test_the_pack_pins_exactly_what_the_pod_re_derives` — the pack
+  on disk is iteration 3's and this checkout renders the law the lead ordered re-rendered. It greens when
+  the pack is rebuilt at iteration 4's registration; §8 (j) forbids touching the test, so it stays red and
+  named. `make check`: ruff clean · pytest in three slices (1000 + 2027 + 1293) → **4320 passed, 1 failed, 2 skipped** — §8 (j)'s floor is 4266.
+- **The holdout's measured rate still never reaches `measurements.jsonl`** — `write_measurement()` is
+  called ONLY from `--project` and (r)2 does not run it. Now load-bearing: it is half of question (2).
+- `gates.terminate_after_minutes` is v5b's borrowed 5400 s · a later field is unbranched until noticed ·
+  holdout branches carry no test (§4 forbids one) · `prep()` calls its count `draw.dev_threads` · `pod.main`
+  never lifts `close_arrays_too` · `committed_registration()` ignores `pinned_inputs` · `check_law` compares
+  `codebook_version` ONLY, so the moved TEMPLATE passes the pod handshake · gold 140/208 · `1925810730`.
