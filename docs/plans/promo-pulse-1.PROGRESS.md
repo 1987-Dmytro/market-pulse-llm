@@ -29,14 +29,14 @@ Next. `promo-dev-loop` $1.8462, carries no new run; `promo-holdout` $0.296617, O
 
 ## Next — the close is owed on a CLOCK, not on a decision. Then the transport fix, then iteration 5.
 1. **`--close` the `promo-iter4` line, unchanged from (w)1** — the one command the item still owes:
-   `python scripts/runpod_guard.py --step promo-iter4 --step-cap 1.20 --close --note "<why>"
-   --expect-ms 3364000 --tolerance 0.05`. It refuses TODAY: the walk over the line's window covered
+   `python scripts/runpod_guard.py --step promo-iter4 --step-cap 1.20 --close --expect-ms 3364000
+   --tolerance 0.05 --note "promo-iter4 settled on its run record: 3364 billed s, INCOMPLETE per
+   §6.5 (CUDA OOM), ruling (w)1"`. It refuses TODAY: the walk over the line's window covered
    **1 942 692 ms of 3 364 000 (57.7%)** at 14:57Z — `complete()` calls a PARTIAL walk a third state
    and will not settle on it (Dv488). It climbed ~9%/6 min from the 14:17:13Z delete (gate ~15:25Z);
-   the OPERATOR ended the session here rather than sit it out, as `lora-c` did overnight. Re-check with
-   the read-only walk first, never by firing the close at it. The reference $0.7143 and the settled
-   ~$0.691489 sit 3.19% apart; past $0.72788 the 5% band would have closed for good, so the reading's
-   timing was the whole of it and it is taken.
+   the OPERATOR ended the session here rather than sit it out, as `lora-c` did overnight. Re-check
+   with the read-only walk first, never by firing the close at it. Reference $0.7143 vs settled
+   ~$0.691489 = 3.19% apart; past $0.72788 the 5% band shuts for good — the reading's timing was all.
 2. **Then the transport defect, §4 (ruling (w)3), at $0:** the runner catches a unit's exception,
    writes an ERROR reply for that unit (`error`, the exception's name, the unit) and exits non-zero;
    the Mac reads an error reply among the smoke's three as «the smoke did not come back» and deletes
