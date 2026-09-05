@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-09-05 11:42:33 (every SessionStart)
+**Auto-refreshed:** 2026-09-05 12:41:05 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
-f2a596a docs(progress): the close refused TWICE and wrote nothing; the quotable figure's real path
-4ff787a knowledge: s22 — the holdout is shot and read, signal HOLDS and subject is RED
-84c7b2e docs(progress): the shot is bought and READ — signal HOLDS 0.7958, subject RED 0.7181
-6c6b37f s22(holdout): the reading — signal 0.7958 HOLDS, subject 0.7181 RED, and it is COMPLETE
-5174f2b s22(holdout): the ONE shot is bought and the pod is gone — 40 of 40, $0.296617
+da92e7c docs(progress): the stop's two rate lines are rung_0's OWN verdict, and (2) is a code question
+81fe34d docs(progress): s23 is done at $0 and ONE stop is open — iteration 4 cannot be registered at $0.60
+4be406e s23(law): the law re-rendered from codebook v1.2, and the leak check over all THREE sets
+0224167 s23(K8 v2): sku/brand agree on the product's identity, not its spelling
+4a03307 s23(draw-2): the holdout-2 draw — the product's population, 20/20, disjoint from both spent arms
 ```
 
 ## 📋 Recent decisions
@@ -29,34 +29,35 @@ f2a596a docs(progress): the close refused TWICE and wrote nothing; the quotable 
 
 <!-- AUTO-GEN END (everything below preserved across refreshes) -->
 # Hot Cache — curated
-**Last update:** 2026-09-05 (s23, «v1.2-prep»). Этап 1 `SPEC-v2`, карта `STATUS.md`, цикл v3, фаза **v9**. Руками, ≤40 строк.
+**Last update:** 2026-09-05 12:27 (s23 checkpoint, «v1.2-prep»). Этап 1 `SPEC-v2`, карта `STATUS.md`, цикл v3, фаза **v9**. Руками, ≤40 строк.
 
 ## 🔥 What's Hot
 **s23 сделана целиком за $0, и стоит ОДИН вопрос — деньги итерации 4.** Кодбук v1.2 приехал в ЗАКОН
-(`promo_prompts.CODEBOOK`): партнёр акции → `chain`, новое правило 11 для внедоменного треда, три формы
-товара в правиле 4, пара «а X де?» → спрос+цена, (д) цена-как-качество → только `цена`; near-quote
-«Шикарно…» убран, три синтетических примера. **`--leak-check` ЧИСТ по ВСЕМ ТРЁМ наборам: 440 комментов
-(140 dev-40 + 188 dev-2 + 112 holdout-2).** Пины закона сдвинулись: codebook `a587e0d6…` → **`0bbb665a…`**,
-template `57dd9d25…` → **`32fa6c42…`**. **holdout-2 вытянут** (`promo_threads_draw_2.json`): популяция
-продукта, 40/40/40, пересечения 0, `@matusi_ukr` (21 из 53 промахов) вне. Дро 1 переигрывается ПОБАЙТНО.
-**K8 v2** — одна парная `subjects_agree()`, её зовут и грейд, и таблица ошибок; `k8_version` в записи.
-**Измерено, а не обещано: алиас «Сильпо» даёт 0 строк, K8 v2 — ровно 1 из 188 (0.7181 → 0.7234).**
-Потолок цикла-3 поднят до **$9.00** (рулинг (s) доб. 8): SPENT $5.5059, **REMAINING $3.4941**.
+(`promo_prompts.CODEBOOK`): партнёр → `chain`, правило 11 для внедоменного треда, три формы товара в
+правиле 4, пара «а X де?» → спрос+цена, (д) цена-как-качество → только `цена`; near-quote «Шикарно…»
+убран, три синтетических примера. **`--leak-check` ЧИСТ по ВСЕМ ТРЁМ наборам: 440 комментов (140 dev-40
++ 188 dev-2 + 112 holdout-2).** Пины закона: codebook `a587e0d6…` → **`0bbb665a…`**, template `57dd9d25…`
+→ **`32fa6c42…`**. **holdout-2 вытянут** (`promo_threads_draw_2.json`): популяция продукта, 40/40/40,
+пересечения 0, `@matusi_ukr` (21 из 53 промахов) вне; дро 1 переигрывается ПОБАЙТНО. **K8 v2** — одна
+парная `subjects_agree()`, её зовут и грейд, и таблица ошибок. **Измерено: алиас «Сильпо» даёт 0 строк,
+K8 v2 — ровно 1 из 188 (0.7181 → 0.7234).** Потолок цикла-3 → **$9.00**: SPENT $5.5059, REMAINING $3.4941.
 
 ## ⏭️ Next
-1. **СТОП: итерация 4 не регистрируется под кап $0.60.** `--register --part dev --cap 0.60` ОТКАЗАЛ:
-   dear $1.3100 против $0.6000 (+118.3%), у dev-ноги нет отката на средний угол. На 83 юнитах: боррow
-   0.4627/0.5201/**2.4219** · own 88.772 → **1.5719/1.6292/3.5605 (не влезает НИГДЕ)** · темп холдаута
-   25.826 → 0.4980/0.5553/**2.6577**. Вопрос тимлиду — в `docs/plans/promo-pulse-1.PROGRESS.md`.
-2. После ответа: ноги leg A (dev-40 первым, dev-2 после), `ITERATION = 4`, регистрация → `--pack` →
-   итерация 4 (платно) → эталон holdout-2 (тимлид) → выстрел holdout-2 ≤$0.90. c3 — после.
+1. **СТОП: итерация 4 не регистрируется под кап $0.60.** Прогон САМОГО `rung_0` на настоящей ноге
+   (3 смока + 80): `rate_for("dev")` = borrowed 23.760/135.232 → 0.4627/0.5201/**2.4219**, issued dear,
+   FITS=False · `own_rate()` = 88.772/201.967 → **1.5719/1.6292/3.5605**, issued mean, FITS=**False**.
+   Вопрос (2) — к КОДУ: `rate_for("dev")` не спрашивает `own_rate()` вообще, а темп 25.826 не попал в
+   `measurements.jsonl`. Три части вопроса — в `docs/plans/promo-pulse-1.PROGRESS.md` (стоп, 15 строк).
+2. После ответа: ноги leg A (dev-40 первым, dev-2 после), `ITERATION = 4`, регистрация → `--pack` → итерация 4 (платно) → эталон holdout-2 (тимлид) → выстрел holdout-2 ≤$0.90. c3 — после.
 
 ## 🚧 Blockers / долги (названы, не построены)
 **ОДИН КРАСНЫЙ ТЕСТ, и он часть стопа:** `test_the_pack_pins_exactly_what_the_pod_re_derives` — пак на
 диске итерации 3, а чекаут рендерит новый закон; зеленеет при пересборке пака на регистрации итерации 4.
 `make check`: ruff чист · pytest тремя срезами (1000+2027+1293) → **4320 passed, 1 failed, 2 skipped**. · **Ставка холдаута
 ВСЁ ЕЩЁ не попала в `measurements.jsonl`** (`write_measurement()` зовётся только из `--project`) — теперь
-это половина вопроса (2). · Леджеры `promo-holdout` и `promo-dev-loop` открыты. · Остальное — в PROGRESS.
+это половина вопроса (2). · **Второй красный назван заранее:** `test_promo_dev_pass.py:61` (`== 40`) и
+`:202` (`SMOKE_N + 40`) покраснеют при `dev_threads()` == 80 — две переписки §6.6, не стоп. · Леджеры
+`promo-holdout` и `promo-dev-loop` открыты. · Остальное — в PROGRESS.
 **⚠️ `make check` НЕ в платной сессии · ⚠️ ТОЛЬКО ОТЦЕПЛЁННЫМ (`os.setsid`) · ⚠️ K4 НЕ ПЕРЕЗАПУСКАТЬ · ⛔ `1925810730` · ⛔ `aggregates.py` и `open`**.
 
 ## 🔫 Footguns этого файла
