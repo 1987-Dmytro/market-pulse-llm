@@ -102,10 +102,14 @@ projection's `fits: false` is a true sentence about $6.1690 remaining on 2026-08
 tests that read it pin the cap that was IN FORCE at its write moment — `repair_phase4_ledger
 .CAP_IN_FORCE_USD` is the same pattern, one cap earlier."""
 
-CYCLE3_CAP_USD = 7.00
+CYCLE3_CAP_USD = 9.00
 """Cycle 3, operator ruling 2026-09-01 («Цикл-3 = весь баланс, потолок $4.8»), RAISED to $7.00 by
 the operator's later word the same evening — «Потолок $7.00, резерв не трогаем» — after he topped
-the account up by $10 (docs/reviews/2026-08-30-plan-promo-pulse-1.md, ruling «01.09 (later)»).
+the account up by $10 (docs/reviews/2026-08-30-plan-promo-pulse-1.md, ruling «01.09 (later)»), and
+RAISED AGAIN to $9.00 on 2026-09-05 — «на счету есть деньги» (same file, ruling 05.09 (s) addendum
+8). The second raise moves no money either: the account held $8.98 that morning against a $14.4800
+anchor and $5.50 spent, so the $7.00 was a fence and not the balance. It buys the line the ruling
+priced — iteration 4 ≤ $0.60, holdout-2 ≤ $0.90, c3 ≤ $0.50 and the volume's drip — inside $3.50.
 
 Not a mid-run raise and not a cap raised to finish a run: no cycle-3 leg has been bought
 ($0.2139 spent, all of it the network volume's drip). The raise is the operator's, on new money,
@@ -421,7 +425,7 @@ def read_cycle3(balance_now: float) -> dict:
 
     Same one-shot as :func:`read_cycle2`, for the same reason: regenerate this file and the
     counter silently restarts at today's balance, so the line would never reach its cap and the
-    ceiling (now $7.00) would stop meaning anything.
+    ceiling (`CYCLE3_CAP_USD`) would stop meaning anything.
     """
     path = cycle3_path()
     if path.exists():
