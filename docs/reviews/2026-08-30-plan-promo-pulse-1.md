@@ -908,3 +908,26 @@ The «needs named» list stays in PROGRESS as debts; none blocks iteration 2.
    40 threads are `@matusi_ukr` (off-domain, 25 rows) — the frozen population's own truth, labelled as `post`/named institution as `chain`. The executor
    commits the file by path at its start ritual; the registration pins it. `.git/index.lock` (empty, 05:12 UTC, left by the team lead's `git status` on the
    mount) must be removed by the operator before the next executor session.
+
+## Ruling 05.09 (r) — s20 «holdout-prep» ACCEPTED ($0); s21's stop was RIGHT: the holdout's money gate is rung 0 FITS + the cap as the hard stop, the record's decision table branches on the part, `project()` is not run on this shot; the dev ledger stays open by construction; cap $1.10 (operator's word); the shot is bought next
+
+1. Accepted: `f879bf9` `7a7d90c` `858ead0` `31f9461` — `--part {dev,holdout} --gold --step --cap`, `use_part()` binds both halves (the `use_part("dev")` no-op
+   caught and fixed at $0), `own_rate()` reads the instrument's own smoke rows (mean 88.772 s · max 201.967 s), `--register` REFUSES without the gold, the dev
+   prep record byte-identical (`0a553add…`), no test/guard/pin/ledger added, `make check` 4320 at `858ead0`; the gold pinned (`6fa80488…`, 188 lines) in
+   `results/promo_holdout40_prep.json`; the runbook carries no `_iter3`. Verified by a fresh reader. Named, not moved: the prep record's `phase`/`draw.dev_threads`/
+   `bound…BORROWED` prose still reads dev — display strings of the $0 record; the registration is the record.
+2. **s21's stop (a) was right and was PREVENTABLE by (q)5** — my miss: I parameterised the population and left the record's decision-bearing fields (`decision_table`,
+   `authority`) on the dev leg, so `--register --part holdout` would have sealed a false record. **Ruled (ii):** the holdout's money gate is rung 0 FITS on the
+   measured MEAN corner ($0.8420 ≤ cap) plus the cap as the platform's hard stop (`--terminate-after`); §5's band gate is NOT run on this shot — GO is written the
+   moment the smoke's three replies are in (their seconds stay in the pod log); `project()` and its literals stay untouched. `register()` branches `decision_table`
+   on the part; the holdout's table names THIS ruling as its authority and says exactly that; a run the hard stop cuts is an incomplete reading under §6.5.
+3. **Operator's word 05.09: cap $1.10** (the instrument's own mean corner is $0.8420 — the team lead's $0.37–0.58 of (q)3 was a per-thread realised estimate and is
+   superseded by the registered pricing; realistic $0.64–0.72 on a slow host); `--terminate-after` derives from $1.10 (≈ 89 min); c3 after it at min($0.50, REMAINING).
+4. **Stop (b): `promo-dev-loop` stays OPEN by construction, no guard moves.** The close gate's right-hand side is a balance delta taken BEFORE the last pod, which a
+   multi-pod, multi-day step (1.7 days of volume drip ≈ $0.4) can never meet within 5 %. The step's number of record is the run record's five segments,
+   $1.153372 (`results/promo_dev_loop_run.json`), cross-checked by the guard's own settlement $1.159076 (0.49 % off, printed at the refusal). The RHS of `--close`
+   for multi-pod steps (the run record, never the last note) is a harness debt for the retro — not this phase's code.
+5. **Next executor session = the shot, ONE item:** `register()`'s part branch (item 2) → `--register --part holdout --step promo-holdout --cap 1.10 --gold
+   docs/labels-promo-holdout.jsonl` → commit → §1–§4 → smoke → GO → §6–§7: K8 (`--part holdout`) → the error table naming the holdout misses. A complete reading
+   closes S2's question green or red; an incomplete one is recorded and re-bought under the next number only after the operator's money word. END at the reading.
+   Then «c3» (l)2–4, then the volume deleted (the listing shown).

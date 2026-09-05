@@ -1,4 +1,4 @@
-# PHASE — `promo-pulse-1` (stage 1 whole: C2–C5 of `docs/SPEC-v2-promo-pulse.md` §8) — v7 05.09: §4 «asked for once», §6.5 validity of a paid reading, §6.6 a test that reads the record, §6.1–6.2 a fence is an estimate and the frozen-set instrument is byte-for-byte
+# PHASE — `promo-pulse-1` (stage 1 whole: C2–C5 of `docs/SPEC-v2-promo-pulse.md` §8) — v8 05.09: §4 «asked for once» + a re-used producer's record branches every decision field, §6.5 validity of a paid reading, §6.6 a test that reads the record, §6.1–6.2 a fence is an estimate and the frozen-set instrument is byte-for-byte
 
 Team-lead file. Executor: read this, then run `/plan-phase promo-pulse-1` and STOP for the plan
 review. Mechanics named below are CONSTRAINTS; the goal is the question and the checks.
@@ -75,7 +75,9 @@ Growth of a PINNED structure enters through its declared side file (`config/chan
 `config/chain_aliases.yaml`, `config/registry_extra.yaml` for a new channel), read by the one reader that
 reads the pinned file; a second instance of anything (window, channel, carrier) keeps ONE id per entity across
 sources and the screen renders all instances (`--window all`). Producers a new leg re-uses take their paths
-as parameters (`--out --channels --anchor --prereg --step --cap`); a seal pins results, never a code path.
+as parameters (`--out --channels --anchor --prereg --step --cap`); a seal pins results, never a code path. **And every
+field of the record such a producer WRITES that states a decision — bands, authority, out-of-scope, phase — branches on the
+leg or the emitter refuses to write (v8, ruling (r)): a population parameterised under another leg's decision table is a false record.**
 
 ## 5. Out of scope
 
@@ -92,8 +94,8 @@ scanning the 81 unscanned census candidates.
    runner AT S3's STOP on the census (K3) and the projection range (K4) — never trim scope silently.
    **A fence for a LATER paid step is an estimate, never a cap (v7, ruling (q)):** it is re-priced at that
    step's registration on the instrument's OWN measured pace of the SLOWEST pod seen (hosts of one card ran
-   1.5–2.3× apart on identical outputs), the cap becoming the hard stop; the holdout's cap is **$0.90**
-   (operator 05.09). The volume `mp-srv2` is deleted after the phase's last paid run (operator 05.09).
+   1.5–2.3× apart on identical outputs), the cap becoming the hard stop; the holdout's cap is **$1.10**
+   (operator 05.09, raised from $0.90 at the instrument's own mean corner $0.8420); its only money gate is rung 0 FITS + the hard stop (ruling (r)). The volume `mp-srv2` is deleted after the phase's last paid run (operator 05.09).
 2. The ONE holdout attempt: pre-register (readings + the two bars), tell the operator it is being
    spent. **The instrument on the frozen set is the one that took the dev bar, byte for byte** — every pin
    of the dev-bar registration unchanged; cosmetic law moves queue behind the attempt (v7, ruling (q)).
