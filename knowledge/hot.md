@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-09-05 16:31:50 (every SessionStart)
+**Auto-refreshed:** 2026-09-05 17:17:29 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
-b088f2e docs(progress): iteration 4 is bought and INCOMPLETE — the OOM fix is the open stop
-badbc8d s26(iteration 4): INCOMPLETE by PHASE §6.5 — CUDA OOM on the smoke's longest render, no GO written
-3e2c538 s26(ledger): the session's ONE line on promo-iter4 — taken before a pod that was then refused
-d483c57 docs(progress): s26 — the (v) stop is answered, the $0 half is committed, the CREATE is blocked
-92e5bf9 knowledge: the hooks' checkpoint before the pod — HEAD is what the bundle carries
+89f775a docs(progress): the handoff command carries a real --note, not the placeholder <why>
+b1256fe docs(progress): the tree line stops counting commits it cannot count
+2dd8044 knowledge: the Stop hook's own stamps from s27 — the tree PROGRESS calls clean
+0fd03fb docs(progress): the operator's word closes s27 — the close is carried to the next session, named
+d1ec125 docs(progress): PROGRESS is 60 lines, and the tree line stops claiming a stale hash
 ```
 
 ## 📋 Recent decisions
