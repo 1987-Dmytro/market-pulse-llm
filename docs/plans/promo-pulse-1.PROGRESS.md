@@ -48,13 +48,12 @@ Next. `promo-dev-loop` $1.8462, carries no new run; `promo-holdout` $0.296617, O
    `re_emission`; `extractor_version` UNCHANGED. Sequence as (v)4. Last of the registered five.
 
 ## Open stop — NONE. The OOM stop is answered by ruling (w); today's blocker is a billing lag.
-A refusal on `complete()` is the guard working — refusing is recoverable, a wrong settlement is not.
-**Tree.** Clean at `e75342b`; four commits, $0 spent this session, no pod, no red test.
+**Tree.** Clean; six commits this session, $0 spent, no pod, no red test, no test added.
 
 ## Named, not built (the phase file forbids adding what it did not ask for)
 - **§6.5's ONE test for the OOM fix** — the longest registered render must be proven to fit BEFORE a
   pod, at $0. Named, not written: it belongs to the transport/serving fix's own commit.
-- **`--open`/`--close-segment` still write `results/promo_dev_loop_run.json` at PARTY scale, not
+- **`--open`/`--close-segment` still write `results/promo_dev_loop_run.json` at BATCH scale, not
   LINE scale:** its `latest` verdict is `OVER` because it sums iterations 1–3 with this one, while
   the line reads $0.7143 of $1.20. `--expect-ms` MUST be taken from the segment whose `created_at`
   is at or after the line's anchor — verified again today: exactly ONE such segment, 3364 s.
