@@ -5,9 +5,9 @@ Cycle 3 **SPENT $6.2494, REMAINING $2.7506** of the **$9.00** ceiling; anchor $1
 balance **$8.2306** at 15:28:28Z. **Both closes are done:** `promo-iter4` CLOSED at **$0.694815** of
 $1.20 (settled on its run record, 2.73% off its post-run reference) and `promo-holdout` CLOSED at
 **$0.298209** of $1.10 (settled on the WALK ALONE — it never had a reference and never took one).
-**`promo-dev-loop` is the ONLY line still open and it REFUSES** — $2.5702 of $2.16, **exit 1**: an
-UNBOUNDED delta over every pod since 04.09. Cap unraisable, line unclosable ((r)4), so it is **NEVER
-NAMED again** — iteration 5 reads FITS with `--step promo-iter5`. A trap, named as one.
+**`promo-dev-loop` is the ONLY line still open and it REFUSES** — **$2.5799 of its OWN $2.50** (the
+ledger's cap; the $2.16 I first read it at was typed, not read), exit 1: an UNBOUNDED delta over
+every pod since 04.09. Unraisable, unclosable ((r)4) — NEVER NAMED; iteration 5 uses `promo-iter5`.
 
 ## Done — 05.09 s28: both closes settled, and (w)3's transport defect is fixed at $0.
 - **Team-lead files committed by path (`c90d143`)** — the (w) addendum, PHASE **v13** §6.1 (a line's
