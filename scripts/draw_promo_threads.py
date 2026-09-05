@@ -63,6 +63,10 @@ SEED = 42
 PER_STRATUM = {"dev": 20, "holdout": 20}
 """The operator's «дро 20/20 по типу»: 20 from each stratum into dev-40 and 20 into holdout-40."""
 
+ARMS_2 = {"holdout": 20}
+"""Draw 2 (ruling 05.09 (s) item 3 (b)) has ONE arm and no dev half: dev-40 and dev-2 are already
+drawn, labelled and frozen, so the second draw owes only the new holdout — 20 of each stratum."""
+
 CURRENCY_BRANCHES = ("грн", "₴", "grn")
 """The branches that are a real currency marker. `decimal` is the fourth and is the other stratum."""
 
@@ -128,13 +132,14 @@ def threads() -> list[dict]:
     return [found[key] for key in sorted(found)]
 
 
-def draw(pool: list[dict], stratum: str) -> dict:
-    """One stratum's 40, seeded with the stratum in the seed, split 20 dev / 20 holdout.
+def draw(pool: list[dict], stratum: str, arms: dict[str, int] | None = None) -> dict:
+    """One stratum's quota, seeded with the stratum in the seed, split across the arms in order.
 
     Refuses rather than under-fills: a quota that cannot be met is a fact about the population and
     the team lead has to see it, not a shorter list that reads like a complete one.
     """
-    owed = PER_STRATUM["dev"] + PER_STRATUM["holdout"]
+    arms = arms or PER_STRATUM
+    owed = sum(arms.values())
     if len(pool) < owed:
         raise SystemExit(
             f"stratum {stratum!r} has {len(pool)} eligible threads and the draw owes {owed}"
@@ -142,14 +147,16 @@ def draw(pool: list[dict], stratum: str) -> dict:
         )
     ranked = {(row["store_file"], row["thread_root"]): i for i, row in enumerate(pool)}
     picked = random.Random(f"{SEED}:{stratum}").sample(pool, owed)
-    dev, holdout = picked[: PER_STRATUM["dev"]], picked[PER_STRATUM["dev"] :]
-    return {
-        "eligible": len(pool),
-        "dev": sorted(dev, key=lambda row: (row["store_file"], row["thread_root"])),
-        "holdout": sorted(holdout, key=lambda row: (row["store_file"], row["thread_root"])),
-        "dev_ranks": sorted(ranked[(r["store_file"], r["thread_root"])] for r in dev),
-        "holdout_ranks": sorted(ranked[(r["store_file"], r["thread_root"])] for r in holdout),
-    }
+    block: dict = {"eligible": len(pool)}
+    taken = 0
+    for arm, n in arms.items():
+        rows_ = picked[taken : taken + n]
+        taken += n
+        block[arm] = sorted(rows_, key=lambda row: (row["store_file"], row["thread_root"]))
+        block[f"{arm}_ranks"] = sorted(
+            ranked[(r["store_file"], r["thread_root"])] for r in rows_
+        )
+    return block
 
 
 def _sha256(path: Path) -> str:
@@ -162,7 +169,26 @@ def ids_sha256(rows_: list[dict]) -> str:
     return hashlib.sha256(blob.encode("utf-8")).hexdigest()
 
 
-def build() -> dict:
+def drawn_ids(path: Path) -> set[tuple[str, str]]:
+    """Every (store_file, thread_root) an earlier draw already spent, from that draw's own record."""
+    body = json.loads(path.read_text(encoding="utf-8"))
+    return {
+        (row["store_file"], row["thread_root"])
+        for block in body["draw"].values()
+        for arm, rows_ in block.items()
+        if isinstance(rows_, list) and not arm.endswith("_ranks")
+        for row in rows_
+    }
+
+
+def build(
+    arms: dict[str, int] | None = None,
+    *,
+    exclude_drawn: Path | None = None,
+    drop_paused: bool = False,
+) -> dict:
+    """The draw record. With no exclusions and the default arms this is draw 1, byte for byte."""
+    arms = arms or PER_STRATUM
     population = threads()
     registry = load_registry(REGISTRY)
     not_collected = {
@@ -178,14 +204,69 @@ def build() -> dict:
     silent = [row for row in population if row["n_comments"] == row["n_wordless"]]
     eligible = [row for row in population if row["n_comments"] > row["n_wordless"]]
 
+    already = drawn_ids(exclude_drawn) if exclude_drawn else set()
+    kept = [
+        row
+        for row in eligible
+        if not (drop_paused and row["from_a_channel_r2_stopped_collecting"])
+        and (row["store_file"], row["thread_root"]) not in already
+    ]
+    exclusions = (
+        {
+            "authority": "ruling 05.09 (s) item 3 (b) — holdout-2 is drawn from the PRODUCT's"
+            " population, not from «все 678»: the frozen v1 population carried threads of channels"
+            " revision r2 had already stopped collecting, and 21 of holdout-40's 53 subject misses"
+            " were ONE of them (@matusi_ukr, a moms' channel with no retailer and no product)",
+            "paused_channels": {
+                "rule": "a thread whose channel carries `collect: false` in config/registry.yaml"
+                " (revision r2) leaves the population — the product does not read it, so it may not"
+                " grade the instrument that serves the product",
+                "channels": sorted(
+                    {
+                        row["channel"]
+                        for row in eligible
+                        if row["from_a_channel_r2_stopped_collecting"]
+                    }
+                ),
+                "eligible_threads_in_them": len(
+                    [row for row in eligible if row["from_a_channel_r2_stopped_collecting"]]
+                ),
+            },
+            "already_drawn": {
+                "rule": "every thread the FIRST draw spent — dev-40 and the burned holdout-40, now"
+                " dev-2 — leaves the population: the new holdout must be disjoint from both",
+                "from": str(exclude_drawn.relative_to(REPO_ROOT))
+                if exclude_drawn and exclude_drawn.is_relative_to(REPO_ROOT)
+                else str(exclude_drawn),
+                "sha256": _sha256(exclude_drawn) if exclude_drawn else None,
+                "threads": len(already),
+                "eligible_threads_in_them": len(
+                    [row for row in eligible if (row["store_file"], row["thread_root"]) in already]
+                ),
+            },
+            "union_removed": len(eligible) - len(kept),
+            "union_rule": "the two exclusions OVERLAP — the two @matusi_ukr threads of holdout-40"
+            " are in both — so the population is `eligible − union`, never `eligible − a − b`",
+            "eligible_after": len(kept),
+            "eligible_after_ids_sha256": ids_sha256(kept),
+        }
+        if (drop_paused or exclude_drawn)
+        else None
+    )
+
     strata = {}
     for stratum in ("currency", "decimal_only"):
-        strata[stratum] = draw([r for r in eligible if r["stratum"] == stratum], stratum)
+        strata[stratum] = draw([r for r in kept if r["stratum"] == stratum], stratum, arms)
 
     return {
+        **({"exclusions": exclusions} if exclusions else {}),
         "contract": "docs/PHASE-promo-pulse-1.md S2 · docs/plans/promo-pulse-1.md S7 (K7)",
         "ruling": "operator 2026-08-30: «Все 678, дро 20/20 по типу» —"
-        " docs/reviews/2026-08-30-plan-promo-pulse-1.md, SP-0 q3",
+        " docs/reviews/2026-08-30-plan-promo-pulse-1.md, SP-0 q3"
+        if exclusions is None
+        else "operator 2026-09-05, ruling (s) item 3 (b) — «seed 42 over the frozen 678 MINUS"
+        " channels with `collect: false` in registry r2 MINUS the 80 drawn, 20/20, a NEW draw file"
+        " (`promo_threads_draw_2.json`; the old stays frozen)»; PHASE-promo-pulse-1.md §2 v9",
         "predicate": {
             "name": "retail_census.PRICE_BRANCHES",
             "branches": {name: pattern.pattern for name, pattern in sorted(PRICE_BRANCHES.items())},
@@ -202,7 +283,7 @@ def build() -> dict:
         "seed": SEED,
         "seeded_per_stratum": f"random.Random(f'{SEED}:<stratum>') —"
         " .claude/rules/registrations-and-draws.md",
-        "quotas": PER_STRATUM,
+        "quotas": arms,
         "population": {
             "threads": len(population),
             "ids_sha256": ids_sha256(population),
@@ -244,18 +325,52 @@ def build() -> dict:
             "channels_outside_the_two_that_carry_the_population": "the draw is stratified by"
             " BRANCH, not by channel: 98% of the population is @msuaaaa and @VARUS_channel, and"
             " channel quotas would have put zero threads in seven channels across both draws."
-            " Channel is a recorded field on every drawn thread instead.",
+            " Channel is a recorded field on every drawn thread instead."
+            if exclusions is None
+            else "the draw is stratified by BRANCH, not by channel, and after the exclusions above"
+            " what is left is almost entirely @msuaaaa and @VARUS_channel — the two channels the"
+            " product actually collects. Channel is a recorded field on every drawn thread instead.",
             "threads_with_nothing_but_wordless_comments": len(silent),
         },
     }
 
 
+def parse_arms(text: str) -> dict[str, int]:
+    """`dev=20,holdout=20` → the quota per stratum per arm, in the order the arms are written."""
+    arms = {}
+    for one in text.split(","):
+        name, _, count = one.partition("=")
+        if not name.strip() or not count.strip().isdigit():
+            raise SystemExit(f"--arms {text!r}: each arm is `name=N`, comma separated")
+        arms[name.strip()] = int(count)
+    return arms
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--out", type=Path, default=OUT)
+    parser.add_argument(
+        "--arms",
+        default="dev=20,holdout=20",
+        help="the arms this draw owes and each one's quota PER STRATUM, in order",
+    )
+    parser.add_argument(
+        "--exclude-drawn",
+        type=Path,
+        help="an earlier draw record whose threads are already spent and leave the population",
+    )
+    parser.add_argument(
+        "--drop-paused",
+        action="store_true",
+        help="threads of channels with `collect: false` in registry r2 leave the population",
+    )
     args = parser.parse_args(argv)
 
-    record = build()
+    record = build(
+        parse_arms(args.arms),
+        exclude_drawn=args.exclude_drawn,
+        drop_paused=args.drop_paused,
+    )
     args.out.write_text(
         json.dumps(record, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8"
     )
@@ -267,8 +382,16 @@ def main(argv: list[str] | None = None) -> int:
         f" {record['queue_rule']['threads_with_nothing_but_wordless_comments']} threads dropped,"
         f" {record['queue_rule']['eligible_threads']} eligible"
     )
+    if "exclusions" in record:
+        gone = record["exclusions"]
+        print(
+            f"exclusions: {gone['paused_channels']['eligible_threads_in_them']} eligible in paused"
+            f" channels + {gone['already_drawn']['eligible_threads_in_them']} already drawn ="
+            f" {gone['union_removed']} removed (they overlap), {gone['eligible_after']} left"
+        )
     for stratum, block in sorted(record["draw"].items()):
-        print(f"  {stratum:<13} eligible {block['eligible']:>4} → dev 20 · holdout 20")
+        owed = " · ".join(f"{arm} {n}" for arm, n in record["quotas"].items())
+        print(f"  {stratum:<13} eligible {block['eligible']:>4} → {owed}")
     where = args.out.relative_to(REPO_ROOT) if args.out.is_relative_to(REPO_ROOT) else args.out
     print(f"wrote {where}")
     return 0
