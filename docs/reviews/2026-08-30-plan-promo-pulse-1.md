@@ -931,3 +931,54 @@ The «needs named» list stays in PROGRESS as debts; none blocks iteration 2.
    docs/labels-promo-holdout.jsonl` → commit → §1–§4 → smoke → GO → §6–§7: K8 (`--part holdout`) → the error table naming the holdout misses. A complete reading
    closes S2's question green or red; an incomplete one is recorded and re-bought under the next number only after the operator's money word. END at the reading.
    Then «c3» (l)2–4, then the volume deleted (the listing shown).
+
+## Ruling 05.09 (s) — the holdout shot is READ: signal 0.7958 HOLDS, subject 0.7181 RED on a COMPLETE reading; the registered question is closed with that number; operator's word: rework the codebook NOW and draw a new holdout; c3 deferred behind it; money needs a top-up
+
+1. Accepted: `50959b5` `582a655` `26d4373` `ea1c615` `5174f2b` `6c6b37f` (+ `0726665` the part branch — SEVEN decision fields branched, named). Complete by §6.5: 40/40,
+   `parse_failures` 0, 188 rows; K8 re-run by the team lead and a fresh verifier, byte-identical: **signal 0.7958 ≥ 0.75 HOLDS · subject 0.7181 < 0.80 RED**
+   (`results/grade_promo_holdout40.json`; currency 95/140, decimal 40/48). Registration `50959b5` (07:47Z) precedes the pod (07:52Z); the four law pins are the
+   dev-bar instrument's; the gold pinned; cap $1.10, FITS on the mean, hard stop 5351 s; spend **$0.296617** (1443 s, a fast host: 25.8 s/thread). The ledger
+   `promo-holdout` twice refused to close on a PARTIAL billing walk (lag) — retried once at the next session's start, $0; if still partial, carried open like (r)4,
+   number of record $0.296617 (`promo_holdout_run.json`). **The registered question is closed by this number: instrument v1.2 carries meaning across threads
+   (signal) and does NOT carry attribution at 0.80. The reading stands as measured; nothing is re-scored.**
+2. The 53 misses, read whole (`promo_holdout40_errors.json` + the team lead's full diff): **21** in ONE off-domain thread `@matusi_ukr:22155` (a moms' channel the
+   r2 registry PAUSES — the frozen v1 population never excluded it; the codebook has no type for a kindergarten: gold `post`/`chain`, model `sku`); **11** partner
+   services (`izibank`/`OTP` ×8, `Укрпошта` ×3: gold `chain`, model `brand` — the codebook never defined a promo partner); **7** same type, another surface form
+   («морожено»/«морозиво» ×3, «ескімо Varto»/«мороженое», «Pilsner»/«… від ТМ MOVA», «Рошен»/«msuaaaa», «Сильпо»/«VARUS»); **14** in-domain attribution
+   (argument replies `post`→`chain` ×4, promo praise sku↔chain, brand↔sku). Post-hoc READING, not a bar: without the two `@matusi_ukr` threads 131/163 = 0.8037.
+   Signal misses cluster on the pair «коли буде знижка на X → спрос+цена» (the model gives спрос alone) and 1-comment threads (Jaccard 0.5).
+3. **Operator's word 05.09: rework the codebook NOW, then a NEW holdout.** The line: (a) team lead — codebook **v1.2** (promo partners → `chain` named as in the
+   post; terms of a joint promo → the channel's chain; an off-domain thread (no retailer, no product) → every row `post`; a product not in the post → Ukrainian
+   nominative of the type; a product in the post → the post's bullet trimmed of «ТМ/від/торгова марка», volume and percent; the спрос+цена pair and argument-reply
+   examples as synthetic template examples; the near-quote «Шикарно…» replaced; the doc synced) and the re-read of BOTH gold files by the convention diff — the
+   used holdout-40 becomes **dev-2** (a reading, never a bar again); (b) executor, $0: law re-rendered from v1.2, `--leak-check`, **holdout-2 draw** — seed 42
+   over the frozen 678 MINUS channels with `collect: false` in registry r2 MINUS the 80 drawn, 20/20, a NEW draw file (`promo_threads_draw_2.json`; the old stays
+   frozen), the registration of **iteration 4** (dev-40 bar + dev-2 as a reading in ONE pod, cap $0.60); (c) executor, paid: iteration 4; (d) team lead:
+   holdout-2 gold, blind; (e) executor: the ONE holdout-2 shot, cap $0.90 on the measured pace. **K8 v2 (proposed, enters iteration 4's registration unless the
+   operator objects before it):** `sku`/`brand` subjects match on normalised exact OR token-Jaccard ≥ 0.5 — the product's identity, not its spelling; `chain`
+   folds as today; `post` exact. The holdout-40 number above stays under K8 v1.
+4. **Money (operator's decision, table given):** cycle 3 REMAINING $1.50 (guard 09:05); iteration 4 ≤ $0.60 + holdout-2 ≤ $0.90 + the volume's drip ≈ $0.24/day
+   exceed it → a top-up is needed before iteration 4 (≈ $3 covers the line, c3 and two days of drip); **c3 is deferred behind holdout-2**; the volume `mp-srv2`
+   STAYS until the holdout-2 shot (pods are coming) and is deleted after it. STATUS moves the gate to 10–11.09.
+5. Next executor session = (b) above, ONE item at $0, after the codebook doc lands (the team lead says when): check shown — `--leak-check` CLEAN over dev-40 +
+   dev-2 + holdout-2 texts, the draw's three sets disjoint and sized 40/40/40, the registration `--dry-run --part dev` FITS with `iteration: 4` and the law pins
+   moved (codebook_version, template) and the transport pins unchanged; `make check` green. Standing prompt unchanged.
+6. **(s) addendum, 05.09 12:20 — codebook v1.2 LANDED** (`docs/CODEBOOK-promo-signals.md`, sha `7b70caf75feeb3b3…`, §9 carries the convention diff: partners →
+   `chain`; off-domain thread → `post`; product form (post's words without ТМ/об'єм/%; Ukrainian nominative of the type off-post; brand-as-product → `brand`);
+   the спрос+цена pair and the argument-reply examples; the near-quote replaced by a synthetic sarcasm line). Gold re-read: dev-40 — 0 rows;
+   holdout-40 → **`docs/labels-promo-dev2.jsonl`** (188 rows, 14 re-read, validator 0 errors, sha `20f496d8ca62a8ae…`); `labels-promo-holdout.jsonl` untouched
+   (pinned by the shot's record). The executor's «v1.2-prep» ($0, one item, (s)5) also: the law's rule 4 and the sarcasm examples re-rendered from §3/§7,
+   three synthetic template examples (partner · off-domain · «а X де?» → спрос+цена), `config/chain_aliases.yaml :: silpo` gains the chain's own Russian
+   spelling «Сильпо» (a NAME form under (j)1, not a harvested synonym); the iteration-4 pack orders dev-40 FIRST and dev-2 after it, the registration saying
+   that the bar needs dev-40 complete and dev-2 is a reading the hard stop may cut; cap $0.60; K8 v2's token-Jaccard is over whitespace tokens after
+   `promo_key`, one two-direction test as a caught grader defect (§4). Then the paid iteration 4.
+7. **(s) addendum, 05.09 12:40 — operator's product reading:** «Ковбаса за 19 це опасно» is a judgement on price as a quality indicator — `цена` only, not a
+   complaint. Codebook v1.2 §5 gains rule (д) (sha now `86ed01a484611fd5…`); dev-2 row `@msuaaaa:9577:11108` → [цена] (sha `4b60ab99a21045e6…`); every other
+   цена+жалоба row in dev-40/dev-2 is a claim against a price (too high, wrong, unfair) and stays. The frozen holdout-40 gold and its number do not move.
+   The law re-render in «v1.2-prep» carries (д) as one line of the signal rules.
+8. **(s) addendum, 05.09 12:55 — money: the operator's word «на счету есть деньги» → the cycle-3 CEILING rises to $9.00**, the anchor unchanged. The
+   account holds $8.98 (console, 05.09 11:37) = the $14.48 anchor − $5.50 spent: the money was there, the $7.00 ceiling was the fence. Executor, in the START
+   RITUAL of «v1.2-prep», ONE edit under this word (as the 01.09 raise from $4.80 to $7.00): `scripts/runpod_guard.py :: CYCLE3_CAP_USD = 9.00` (docstring names
+   this ruling), `results/spend_cycle3.json :: cycle3_cap_usd = 9.0`, `note` APPENDED «CEILING RAISED 2026-09-05 to $9.00 on the operator's word (ruling 05.09 (s)
+   addendum 8); anchor and anchored_at unchanged»; run the guard and SHOW `CYCLE 3 SPENT ≈ $5.50 of $9.00, REMAINING ≈ $3.50`; commit by path. No test moves
+   (the tripwire fixtures carry their own cap). The line then fits: iteration 4 ≤ $0.60, holdout-2 ≤ $0.90, c3 ≤ $0.50, the drip — inside $3.50. No top-up.

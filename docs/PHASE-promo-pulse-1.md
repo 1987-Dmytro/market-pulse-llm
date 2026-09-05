@@ -1,4 +1,4 @@
-# PHASE — `promo-pulse-1` (stage 1 whole: C2–C5 of `docs/SPEC-v2-promo-pulse.md` §8) — v8 05.09: §4 «asked for once» + a re-used producer's record branches every decision field, §6.5 validity of a paid reading, §6.6 a test that reads the record, §6.1–6.2 a fence is an estimate and the frozen-set instrument is byte-for-byte
+# PHASE — `promo-pulse-1` (stage 1 whole: C2–C5 of `docs/SPEC-v2-promo-pulse.md` §8) — v9 05.09: §2 S2 holdout-40 read RED on subject → codebook v1.2, dev-2, holdout-2 (in-domain population), K8 v2; §4 «asked for once» + a re-used producer's record branches every decision field, §6.5 validity of a paid reading, §6.6 a test that reads the record, §6.1–6.2 a fence is an estimate and the frozen-set instrument is byte-for-byte
 
 Team-lead file. Executor: read this, then run `/plan-phase promo-pulse-1` and STOP for the plan
 review. Mechanics named below are CONSTRAINTS; the goal is the question and the checks.
@@ -29,7 +29,14 @@ chain and brand as a WINDOW AGGREGATE only (SPEC 3.22 (1)), price trend per SKU,
   source ∈ explicit|reply_context|post_context)` and thread signals `{жалоба|похвала|спрос|привычка|
   цена}` with quote + msg_id. Bars on dev-40: subject agreement ≥ 0.80 · signal-type agreement
   ≥ 0.75. Holdout-40 (disjoint, frozen at the draw): ONE pre-registered attempt when the dev loop
-  plateaus (two iterations without gain).
+  plateaus (two iterations without gain). **v9 (05.09, ruling (s)): holdout-40 was SPENT under law v1.2/K8 v1 —
+  signal 0.7958 HOLDS, subject 0.7181 RED (`results/grade_promo_holdout40.json`, complete reading); it is now
+  `dev-2`, a reading, never a bar again. The line continues: codebook v1.2 (team lead) → law re-rendered → iteration 4
+  on dev-40 (the same two bars; dev-2 read beside it, no bar; ≤ 5 dev runs in total still) → the ONE `holdout-2` shot.
+  `holdout-2`: seed 42 over the frozen 678 price threads MINUS channels with `collect: false` in registry r2 (the
+  product's population) MINUS the 80 already drawn, 20/20 by stratum, a NEW draw file — the old draw stays frozen.
+  K8 v2 for that line: `sku`/`brand` match on normalised exact OR token-Jaccard ≥ 0.5, `chain` folds as today, `post`
+  exact — registered before iteration 4; the holdout-40 number stays under K8 v1.**
 - **S3 trends.** SQL only, no LLM: price per SKU per week per chain; discount depth per chain and
   brand; test: recompute from `positions` twice → identical; a week with no data renders as absent,
   never as zero.
@@ -94,8 +101,10 @@ scanning the 81 unscanned census candidates.
    runner AT S3's STOP on the census (K3) and the projection range (K4) — never trim scope silently.
    **A fence for a LATER paid step is an estimate, never a cap (v7, ruling (q)):** it is re-priced at that
    step's registration on the instrument's OWN measured pace of the SLOWEST pod seen (hosts of one card ran
-   1.5–2.3× apart on identical outputs), the cap becoming the hard stop; the holdout's cap is **$1.10**
-   (operator 05.09, raised from $0.90 at the instrument's own mean corner $0.8420); its only money gate is rung 0 FITS + the hard stop (ruling (r)). The volume `mp-srv2` is deleted after the phase's last paid run (operator 05.09).
+   1.5–2.3× apart on identical outputs), the cap becoming the hard stop; the holdout's cap was **$1.10**
+   (operator 05.09; spent $0.2966 on a fast host); iteration 4 ≤ $0.60 (dev-40 + dev-2 in one pod), holdout-2 ≤ $0.90 on the measured pace,
+   each with rung 0 FITS + the hard stop as its only money gate (ruling (r)); the cycle-3 ceiling is $9.00 from 05.09 (operator's word, ruling (s) addendum 8; anchor unchanged); c3 is deferred behind holdout-2.
+   The volume `mp-srv2` is deleted after the phase's last paid run — now the holdout-2 shot (operator 05.09).
 2. The ONE holdout attempt: pre-register (readings + the two bars), tell the operator it is being
    spent. **The instrument on the frozen set is the one that took the dev bar, byte for byte** — every pin
    of the dev-bar registration unchanged; cosmetic law moves queue behind the attempt (v7, ruling (q)).
