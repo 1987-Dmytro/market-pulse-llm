@@ -1,17 +1,17 @@
 # PROGRESS — promo-pulse-1 (ruling 03.09 (e): the executor's one file — done / next / open stop, ≤60 lines; §8 of the phase file stays the DONE list)
 
 ## The money, live — read BY HAND from the guard today, never carried from a record
-Cycle 3 **SPENT $5.4531, REMAINING $1.5469** of $7.00 (`scripts/runpod_guard.py`, at the close attempt).
-**`promo-holdout` is BOUGHT: $0.296617** — `results/promo_holdout_run.json :: spent_all_segments_usd`,
-1443 s at the registered $0.74/h, against a $1.10 cap and under even the cheap corner $0.8420 (the
-guard's delta reads $0.2745, a LOWER BOUND while billing has not posted). **The ledger is OPEN — the
-close REFUSED and was not forced (below).** Next money: c3 at ≤ min($0.50, REMAINING), then
+Cycle 3 **SPENT $5.4962, REMAINING $1.5038** of $7.00 (`scripts/runpod_guard.py`, 09:05). **`promo-holdout`
+is BOUGHT: $0.296617** — `results/promo_holdout_run.json :: gates[1].spent_all_segments_usd`, equal to
+`segments[0].billed_usd`: 1443 s at the registered $0.74/h, against a $1.10 cap and under even the cheap
+corner $0.8420. The guard reads balance-delta $0.3177 and a billing walk of $0.2130, still landing.
+**The ledger is OPEN, twice refused, never forced (below).** Next money: c3 ≤ min($0.50, REMAINING), then
 `mp-srv2` is deleted. `promo-dev-loop` also stays open by construction ((r)4), at $1.153372.
 
 ## Done — 05.09 s22, the ONE item of ruling (r) item 5, carried to the reading
 - **The part branch (`0726665`).** (r) names FOUR decision-bearing fields; the audit of the built record
   found **seven** (each named in that commit), plus `step.cap_rule` and `threads_note`. `make check`
-  **4320 passed, 2 skipped, exit 0** pre-pod, nothing added or changed, `project()` untouched.
+  **4320 passed, 2 skipped** pre-pod AND after the run (three disjoint slices + `ruff`), nothing changed.
 - **§0a at $0, committed before any pod existed** (`50959b5` prereg, `582a655` pack, `26d4373` ledger at
   $0.0000). Rung 0: cheap $0.8420 · priced $0.8993 · dear $1.8999 (named, not hidden) → **FITS on the
   mean, hard stop 5351.4 s = 89.2 min** = (r)3's «≈89 min». Instrument byte-identical to the dev-bar
@@ -38,10 +38,10 @@ The team lead's call on a RED subject bar, then «c3» ((l)2–4), then the volu
 ## Open stop — NONE. The reading answers the question; what follows S2 red is the team lead's.
 **The ledger is OPEN and named, not forced.** `--close` with `--expect-ms 1443000` and `--tolerance 0.05`
 REFUSED: «the billing walk … answered "no billing rows yet" and covered 0 ms against the run record's
-1443000 … a PARTIAL walk is a third state». That is what `--expect-ms` exists for — without it
-`complete()` returns True on any readable walk and the step freezes cheap. **The refusal wrote NOTHING**:
-the session's one ledger line is still §0's. A retry past the 30–40 min billing lag is running; if it
-also refuses the quotable figure is $0.296617, carried open as (r)4 carries `promo-dev-loop`.
+1443000 … a PARTIAL walk is a third state». Without `--expect-ms`, `complete()` returns True on any
+readable walk and the step freezes cheap. **A retry at 09:05, past the billing lag, ALSO did not close**
+(no `closing_entry`; its walk read $0.2130 against $0.296617). **Both refusals wrote NOTHING** —
+`gpu_sessions` holds exactly ONE entry, §0's. Carried open as (r)4 carries `promo-dev-loop`.
 **Tree state:** every path committed, `git status` clean, no pod exists, both listings `[]`.
 
 ## Named, not built (the phase file forbids adding what it did not ask for)
