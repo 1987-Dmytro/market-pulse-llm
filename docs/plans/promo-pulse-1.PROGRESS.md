@@ -17,17 +17,15 @@ Next. `promo-dev-loop` $1.8462, carries no new run; `promo-holdout` $0.296617, O
   pod, so that value was **$0.0097** — a settled ~$0.6915 against it is ~**7000%** off, refused
   every time it is run, not once. This is the class the dev-loop line already hit at 33.7% in s21.
 - **Every step ledger that has ever closed carries a POST-RUN reading as its last open entry and
-  settles against it:** `lora-c` 0.7338 → 0.764952 (4.2%, tol 0.07) · `promo-pulse-1` 3.0335 →
-  2.986741 (3.15%, tol 0.05) · `srv2b` 0.9999 → 0.939957 · `srv2d` 1.2332 → 1.163191. So the reading
-  is the guard's designed path, not a way around it.
+  settles against it** — `lora-c` 0.7338 → 0.764952 (4.2%) · `promo-pulse-1` 3.0335 → 2.986741
+  (3.15%, tol 0.05) · `srv2b` · `srv2d` — so the reading is the guard's path, not a way around it.
 - **The reading is taken and committed (`e75342b`): $0.7143 at 14:40:49Z, balance 8.2403244051** —
   this session's ONE ledger line, `--note` only. It is a BALANCE DELTA and the close's figure is a
   BILLING WALK, so the gate still compares two instruments; the gap it will read (~3.2%) is the
   always-on volume's drip inside the step's wall-clock — exactly what `promo-pulse-1`'s own close
   named at 3.15%. Both writes committed by path: the step ledger and cycle 3's witness line.
-- **`--expect-ms 3364000` is READ, not typed:** `results/promo_dev_loop_run.json` segment 6 is
-  `billed_seconds: 3364.0`, pod `kzcnhe01mgdwvk`, 13:21:09Z → 14:17:13Z, `billed_usd 0.691489`.
-- **No test, pin, guard or ledger was added.** No pod exists; nothing paid ran this session.
+- **`--expect-ms 3364000` is READ, not typed:** `promo_dev_loop_run.json` segment 6 — 3364.0 s,
+  `kzcnhe01mgdwvk`, `billed_usd 0.691489`. No test, pin, guard or ledger added; nothing paid ran.
 
 ## Next — the close is owed on a CLOCK, not on a decision. Then the transport fix, then iteration 5.
 1. **`--close` the `promo-iter4` line, unchanged from (w)1** — the one command the item still owes:
@@ -36,10 +34,9 @@ Next. `promo-dev-loop` $1.8462, carries no new run; `promo-holdout` $0.296617, O
    window covered **1 647 152 ms of 3 364 000 (49%)** at 14:47Z — `complete()` calls a PARTIAL walk a
    third state and will not settle on it (Dv488). The pod was deleted 14:17:13Z and the walk was
    climbing ~9%/6 min, so the gate opens ~15:20Z; `lora-c` needed until the NEXT DAY. Re-check with
-   the read-only walk first, never by firing the close at it.
-   **Watch the drift:** the reference is fixed at $0.7143 and the settled figure will be ~$0.691489,
-   3.19% apart. Had the reading been taken later the volume's drip would have widened it; past
-   **$0.72788** the 5% band closes for good. It is taken, so this is now a fact, not a risk.
+   the read-only walk first, never by firing the close at it. The reference $0.7143 and the settled
+   ~$0.691489 sit 3.19% apart; past $0.72788 the 5% band would have closed for good, so the reading's
+   timing was the whole of it and it is taken.
 2. **Then the transport defect, §4 (ruling (w)3), at $0:** the runner catches a unit's exception,
    writes an ERROR reply for that unit (`error`, the exception's name, the unit) and exits non-zero;
    the Mac reads an error reply among the smoke's three as «the smoke did not come back» and deletes
@@ -51,8 +48,7 @@ Next. `promo-dev-loop` $1.8462, carries no new run; `promo-holdout` $0.296617, O
    `re_emission`; `extractor_version` UNCHANGED. Sequence as (v)4. Last of the registered five.
 
 ## Open stop — NONE. The OOM stop is answered by ruling (w); today's blocker is a billing lag.
-A refusal on `complete()` is the guard working: it is recoverable, and a wrong settlement is the one
-outcome that is not. Nothing here needs the operator except the session time to sit out the lag.
+A refusal on `complete()` is the guard working — refusing is recoverable, a wrong settlement is not.
 **Tree.** Clean at `e75342b`; four commits, $0 spent this session, no pod, no red test.
 
 ## Named, not built (the phase file forbids adding what it did not ask for)
@@ -62,6 +58,4 @@ outcome that is not. Nothing here needs the operator except the session time to 
   LINE scale:** its `latest` verdict is `OVER` because it sums iterations 1–3 with this one, while
   the line reads $0.7143 of $1.20. `--expect-ms` MUST be taken from the segment whose `created_at`
   is at or after the line's anchor — verified again today: exactly ONE such segment, 3364 s.
-- **A step ledger's FIRST reading is the tolerance gate's reference,** so a line whose only entry
-  predates its pod cannot be closed at all. Named as a defect of the ritual, not patched here.
 - **No test for the arm selector** (§4) or the step-aware guard read ((v)3 «no new test»).
