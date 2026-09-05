@@ -37,8 +37,7 @@ guard's settlement $1.159076 (0.49% off) — not a debt of this session and no g
   which is (r)3's «≈ 89 min» derived and not typed.
 
 ## Next — §0's ledger line, then §1–§4, the smoke, GO, §6–§7. END at the reading ((r)5).
-The registration is committed BEFORE any pod exists, so git history is the witness; §5 runs the
-liveness/shape check and never `--project` — the three replies landing IS the GO.
+Registration committed BEFORE any pod exists (git history is the witness); §5 runs the liveness/shape check, never `--project` — the three replies landing IS the GO.
 
 ## Open stop — NONE. Both of s21's stops are settled by ruling (r) and nothing new is open.
 **Tree state at this line:** `582a655`, every path committed, `git status` clean, no pod has ever
