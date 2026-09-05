@@ -627,15 +627,20 @@ def rung_0(
             f" ${cheap['usd']:.4f}, with the cap as the HARD STOP: `--terminate-after` is derived"
             " from it and the meter cannot pass it. The dear corner stays in this table and in"
             " `dear_usd`, priced and named, so nothing over the cap is hidden"
-            " ([[a_bound_the_meter_cannot_reach]])"
+            " ([[a_bound_the_meter_cannot_reach]]). Ruling 05.09 (r) item 2 makes this pair — FITS"
+            " here plus the hard stop — the leg's ONLY money gate: the band gate is not run"
         )
     return {
         "rule": "docs/PROCESS.md «Money» rung (0): price at create ≤ the registered ceiling — the"
         " ceiling is the step cap, the price is the DEAR corner",
         "amendment": "ruling 03.09 (c) item 1 — smoke + iteration 1 + the 16 posts, not five"
-        " iterations: the borrowed max over five would refuse a loop the smoke may prove cheap",
+        " iterations: the borrowed max over five would refuse a loop the smoke may prove cheap"
+        if part == "dev"
+        else "ruling 05.09 (q) item 5 and (r) item 5 — smoke + the ONE shot over the holdout's 40"
+        " threads, no posts and no second reading: §8 (e) spends the holdout once, so there is no"
+        " later iteration this corner is priced short for",
         "threads": n_threads,
-        "threads_note": f"{SMOKE_N} smoke + {len(threads)} dev-40. The smoke's three ARE the pass's"
+        "threads_note": f"{SMOKE_N} smoke + {len(threads)} {part}-40. The smoke's three ARE the pass's"
         " first three units, so the pod answers 40 and the registration is bought high, spent low",
         "posts": n_posts,
         "cap_usd": round(cap, 4),
@@ -736,7 +741,7 @@ def register(cap_usd: float | None = None) -> dict:
             )
     else:
         cap = round(min(cap_usd, money["remaining_usd"]), 4)
-        cap_rule = f"min(${cap_usd:.4f} — the operator's word, ruling 05.09 (q) 3 — , REMAINING)"
+        cap_rule = f"min(${cap_usd:.4f} — the operator's word, ruling 05.09 (r) 3 — , REMAINING)"
         if cap < cap_usd:
             raise SystemExit(
                 f"the cap asked for is ${cap_usd:.4f} and the guard's REMAINING is"
@@ -762,11 +767,27 @@ def register(cap_usd: float | None = None) -> dict:
         " = sha256(rendered prompt) cannot see it — so `scripts/promo_dev_pod_runner.py` and"
         " `src/market_pulse/promo_prompts.py` are pinned beside the law, half the repair in each"
         " and `check_law` covering neither. `committed_registration()` still does not re-verify"
-        " `pinned_inputs`: a named debt.",
+        " `pinned_inputs`: a named debt."
+        if PART == "dev"
+        else "there is no re-emission of THIS record: §8 (e) spends the holdout ONCE and ruling"
+        " 05.09 (q) item 2 freezes the instrument as iteration 3 bought it, so nothing about it can"
+        " move to justify a second number. The ONE case that writes another record is PHASE §6.5 —"
+        " a reading that comes back incomplete is recorded under its number, never compared to the"
+        " bars, and re-bought under the NEXT number with the law UNMOVED and after the operator's"
+        " money word. `committed_registration()` still does not re-verify `pinned_inputs`: a named"
+        " debt it inherits from the dev loop.",
         "authority": "docs/reviews/2026-08-30-plan-promo-pulse-1.md «Ruling 03.09 (c)» — «the flags"
         " and their stub tests at $0 … --register shown with fits at the dear corner → then, in the"
         " same session if the registration fits, the pod: smoke → the table → iteration 1 → K8 →"
-        " error table → teardown»; docs/plans/promo-pulse-1.md §9 and §9a",
+        " error table → teardown»; docs/plans/promo-pulse-1.md §9 and §9a"
+        if PART == "dev"
+        else "docs/reviews/2026-08-30-plan-promo-pulse-1.md «Ruling 05.09 (r)» item 5 — «`register()`'s"
+        " part branch (item 2) → `--register --part holdout --step promo-holdout --cap 1.10 --gold"
+        " docs/labels-promo-holdout.jsonl` → commit → §1–§4 → smoke → GO → §6–§7: K8 (`--part"
+        " holdout`) → the error table naming the holdout misses. A complete reading closes S2's"
+        " question green or red; an incomplete one is recorded and re-bought under the next number"
+        " only after the operator's money word. END at the reading.»; the cap is item 3's operator"
+        " word of 05.09; docs/PHASE-promo-pulse-1.md §6.1–6.2 v8",
         "question": "does the promo-signal instrument, under CODEBOOK"
         f" {promo_prompts.codebook_version()[:16]}…, clear subject ≥ 0.80 and signal ≥ 0.75 on"
         " dev-40 within at most 5 dev runs?"
@@ -825,7 +846,7 @@ def register(cap_usd: float | None = None) -> dict:
                 "digest_rule": "sha256 over `channel:thread_root` per thread, in the draw's order",
                 "smoke": {
                     "n": SMOKE_N,
-                    "rule": "shortest, median and longest render by promo_dev40_prep.json's own"
+                    "rule": f"shortest, median and longest render by {rel(PREP)}'s own"
                     " chars — a rule, not a pick",
                     "units": [
                         {
@@ -837,7 +858,12 @@ def register(cap_usd: float | None = None) -> dict:
                     ],
                     "prefix": "these three are the pass's FIRST three units; the pod answers them,"
                     " the Mac reads the rate, and the decision table of ruling 03.09 (b) decides"
-                    " whether the remaining 37 are bought at all",
+                    " whether the remaining 37 are bought at all"
+                    if PART == "dev"
+                    else "these three are the pass's FIRST three units; the pod answers them and"
+                    " their arrival IS the GO (ruling 05.09 (r) item 2). Their seconds are read off"
+                    " the pod log for the record, not for a gate: no band decides whether the"
+                    " remaining 37 are bought — the cap as `--terminate-after` bounds them",
                 },
             },
             "leg_b": {
@@ -846,7 +872,12 @@ def register(cap_usd: float | None = None) -> dict:
                 "closed": "ruling 04.09 (m) item 4 — 16 of 16 posts answered `[]` under BOTH"
                 " iteration 1 and iteration 2: two identical readings. Iteration 3 buys leg A"
                 " only. `build_pack` iterates `by_channel`, so the empty map is what actually"
-                " keeps them off the pod; `not_bought` keeps them NAMED, not deleted.",
+                " keeps them off the pod; `not_bought` keeps them NAMED, not deleted."
+                if PART == "dev"
+                else "ruling 05.09 (q) item 5 — leg B does not exist on this leg at all: the"
+                " holdout is the frozen draw's THREADS and the 16 posts were the dev loop's, closed"
+                " there by two identical `[]` readings. The empty map is what keeps them off the"
+                " pod; nothing of leg B is bought or re-bought under the holdout's cap.",
                 "not_bought": left_over,
             },
         },
@@ -855,7 +886,12 @@ def register(cap_usd: float | None = None) -> dict:
         | {
             "1_liveness": "the ssh dead-man above; never two pods, checked BEFORE `pod create`",
             "3_hard_stop": f"{verdict['hard_stop_seconds']:.1f} s of pod existence at the"
-            " registered price — the platform-side backstop is terminate_after",
+            " registered price — the platform-side backstop is terminate_after"
+            if PART == "dev"
+            else f"{verdict['hard_stop_seconds']:.1f} s of pod existence at the registered price."
+            " On this leg it is not a backstop BEHIND a band gate: ruling 05.09 (r) item 2 does not"
+            " run §5's band gate at all, so the cap as `--terminate-after` is the ONE thing that"
+            " bounds the money after rung 0 has issued FITS",
         },
         "decision_table": {
             "authority": "ruling 03.09 (b), quoted and not moved",
@@ -863,6 +899,25 @@ def register(cap_usd: float | None = None) -> dict:
                 "<= 0.80": "run iteration 1 now",
                 "0.80 - 1.20": "run it, then STOP with the error table",
                 "> 1.20": "STOP before buying; pod torn down, listing shown",
+            },
+        }
+        if PART == "dev"
+        else {
+            "authority": "ruling 05.09 (r) item 2, quoted and not moved: «the holdout's money gate"
+            " is rung 0 FITS on the measured MEAN corner ($0.8420 ≤ cap) plus the cap as the"
+            " platform's hard stop (`--terminate-after`); §5's band gate is NOT run on this shot —"
+            " GO is written the moment the smoke's three replies are in (their seconds stay in the"
+            " pod log); `project()` and its literals stay untouched»",
+            "why_not_the_dev_bands": "the dev loop's bands are absolute dollars ($0.80 / $1.20) with"
+            " KILL on the MAX corner over the cap. The holdout's max corner is over the cap BY"
+            " CONSTRUCTION — rung 0 above prices it at"
+            f" ${verdict['dear_usd']:.4f} and issues FITS on the mean anyway ((q) item 3) — so the"
+            " dev gate would KILL a run this very record registered as FITS. Two thresholds for one"
+            " decision; ruling (r) item 2 keeps the one that was priced.",
+            "after_the_smoke_for_40_threads": {
+                "3 replies are in": "write GO. The pod answers the remaining 37 under the hard stop.",
+                "the smoke did not come back": "no GO is written; the pod is deleted, the segment"
+                " closed, the listing shown, and the run is PHASE §6.5's incomplete reading.",
             },
         },
         "teardown": "`runpodctl pod delete <id>`, then `runpodctl pod list -a` → [] and"

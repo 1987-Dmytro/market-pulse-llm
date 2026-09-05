@@ -1,7 +1,7 @@
 # Runbook — `promo-holdout`, the ONE shot, one pod, ONE leg
 
-Authority: rulings 03.09 (c), (d), (e), 04.09 (m), (n), (o) and **05.09 (q)**; `docs/PHASE-promo-pulse-1.md`
-§6.1–6.2 v7. The dev loop is CLOSED — iteration 3 took both bars (subject 0.8714, signal 0.9104) on a
+Authority: rulings 03.09 (c), (d), (e), 04.09 (m), (n), (o), 05.09 (q) and **05.09 (r)**; `docs/PHASE-promo-pulse-1.md`
+§6.1–6.2 v8. The dev loop is CLOSED — iteration 3 took both bars (subject 0.8714, signal 0.9104) on a
 complete reading and ruling (q) item 1 accepted it. What follows spends §8 (e)'s ONE holdout attempt.
 **The instrument does not move.** (q) item 2 freezes it as iteration 3 bought it: the holdout's
 registration pins `docs/CODEBOOK-promo-signals.md`, `promo_prompts.template_version()`,
@@ -11,7 +11,8 @@ codebook-document sync queue BEHIND this run ((k)2 as (q)2 amends it).
 **Nothing below runs until `make check` is green at the HEAD the bundle is cut from.**
 
 Money, the numbers written down BEFORE the smoke can return one:
-cap **$0.90** — the OPERATOR's word of 05.09 ((q) item 3) and not this script's. The $0.30 fence of
+cap **$1.10** — the OPERATOR's word of 05.09 ((r) item 3, raised from (q) item 3's $0.90 at the
+instrument's own mean corner $0.8420) and not this script's. The $0.30 fence of
 plan §6.1 was an ESTIMATE over the borrowed 23.76 s/thread that (c)5 retired; PHASE v7 §6.1 makes a
 fence for a later step an estimate re-priced at that step's registration, on the instrument's OWN
 measured pace of the SLOWEST pod it has run on. That row is
@@ -28,7 +29,7 @@ registration) and rung 3 (the platform's `--terminate-after`), plus ONE ledger l
 ```bash
 PYTHONPATH=src python3.11 scripts/promo_dev_pass.py --dry-run --part holdout
 PYTHONPATH=src python3.11 scripts/promo_dev_pass.py --register --part holdout \
-  --step promo-holdout --cap 0.90 --gold docs/labels-promo-holdout.jsonl
+  --step promo-holdout --cap 1.10 --gold docs/labels-promo-holdout.jsonl
 PYTHONPATH=src python3.11 scripts/promo_dev_pass.py --pack --part holdout
 git add results/promo_holdout40_prep.json results/prereg_promo_holdout.json \
         results/promo_holdout40_pack.json && git commit …
@@ -40,18 +41,19 @@ registration is committed FIRST and the pack second — git history is the only 
 preceded the money. `--register` is run HERE and not a day earlier: its cap rule re-reads the
 guard's REMAINING and its price the day's own offer, and both drift ([[a_reading_that_outlived_its_state]]).
 
-The rung-0 table this produced on a $0 dry contact of 05.09, at REMAINING $1.8312 and $0.74/h:
-`cheap` (measured mean, one overhead) **$0.8420, −6.4%** · `priced` (mean, TWO overheads — one
-dead-man recreate) **$0.8993, −0.1%** · `dear` (measured max on all 43) **$1.8999, +111%**, over the
-cap and issued FITS on the mean by (q)3. **The `priced` corner is a knife edge: ONE recreate after a
-dead-man leaves $0.0007 of headroom.** A second pod is therefore not a free retry here — if §2's
-dead-man fires, re-read rung 0 before the recreate rather than assuming §1's runway.
+The rung-0 table this produced on a $0 dry contact of 05.09 s22, at REMAINING $1.8214, $0.74/h and
+the cap of (r)3: `cheap` (measured mean, one overhead) **$0.8420, −23.4%** · `priced` (mean, TWO
+overheads — one dead-man recreate) **$0.8993, −18.2%** · `dear` (measured max on all 43) **$1.8999,
++72.7%**, over the cap and issued FITS on the mean by (q)3 — which (r)2 makes this leg's ONLY money
+gate. Hard stop **5351 s** (89 min) of pod existence at that price. At the old $0.90 the `priced`
+corner left $0.0007; at $1.10 it leaves **$0.2007**, which buys ONE dead-man recreate and nothing
+more. Re-read rung 0 before any recreate rather than assuming §1's runway.
 
 ## 0 — before the create
 ```bash
 runpodctl pod list -a && runpodctl serverless list      # both [] or STOP
 runpodctl gpu list | grep -A3 '"RTX 4090"'              # the price, read on the day
-python3.11 scripts/runpod_guard.py --step promo-holdout --step-cap 0.90 \
+python3.11 scripts/runpod_guard.py --step promo-holdout --step-cap 1.10 \
   --note 'promo-holdout, the one shot — pod about to be created'
 ```
 The `--note` line is the session's ledger line and it is taken BEFORE the pod exists, so the step's
@@ -139,25 +141,38 @@ ssh -i "$SSHK" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o Lo
 ```
 Watch the PROCESS, not a success-grep: `ssh ... 'pgrep -fa promo_dev_pod_runner; tail -5 /workspace/run/pod.log'`.
 
-## 5 — the smoke, then the decision table
+## 5 — the smoke, then GO. There is no band gate on this leg (ruling 05.09 (r) item 2).
 The smoke is **the holdout's OWN first three units** — its shortest, median and longest render by
 `results/promo_holdout40_prep.json :: corpus.threads[].chars`, named in the registration's
 `population.leg_a.smoke` and shipped first by `build_pack`. They are not the dev loop's three.
+**The money gate already fired**: rung 0 issued FITS on the mean corner and the cap rides as
+`--terminate-after`. So the smoke is a LIVENESS and SHAPE check, not a decision — the three replies
+landing IS the GO, and their seconds are read for the record, never for a band.
 ```bash
 scp ... root@<HOST>:/workspace/run/promo_holdout40.jsonl results/promo_holdout40.jsonl
-PYTHONPATH=src python3.11 scripts/promo_dev_pass.py --project --part holdout \
-  --replies results/promo_holdout40.jsonl
+python3.11 -c "
+import json
+rec = json.load(open('results/prereg_promo_holdout.json'))
+want = [one['unit_id'] for one in rec['population']['leg_a']['smoke']['units']]
+rows = {one['id']: one for one in map(json.loads, open('results/promo_holdout40.jsonl'))}
+for unit in want:
+    got = rows.get(unit)
+    print(unit, 'MISSING' if got is None else
+          f\"{got['seconds']:.1f}s balanced={got['balanced']} finish={got['finish_reason']}\")
+raise SystemExit(0 if all(one in rows for one in want) else 1)"
 ```
-**⛔ The bands `--project` reads are the DEV loop's (`GO ≤ $0.80 · GO-THEN-STOP ≤ $1.20 · NO-GO
-above`, ruling 03.09 (b)) and its KILL is «the MAX corner over the cap».** Against a $0.90 cap a
-$1.20 NO-GO edge is above the cap, and the holdout's max corner is over the cap BY CONSTRUCTION —
-(q)3 already accepts that at rung 0 and issues FITS on the mean with the cap as the hard stop.
-Applied unchanged, `--project` returns **KILL** on a run rung 0 registered as FITS. **This is the
-open stop in `docs/plans/promo-pulse-1.PROGRESS.md`: the team lead names the holdout's decision
-table before this line is run.** Do not run §5's gate under the dev bands.
+A missing unit, or a `finish_reason` that is not the model stopping on its own, is **not** a band
+verdict: nothing is written to `promo_go`, the pod is deleted, `--close-segment` records it, the
+listing is shown, and the run is PHASE §6.5's INCOMPLETE reading — recorded under its number, never
+compared to the bars, re-bought under the next number only after the operator's money word.
 ```bash
 echo '{"verdict": "GO"}' > /tmp/promo_go && scp ... /tmp/promo_go root@<HOST>:/workspace/run/promo_go
 ```
+**Why `--project` is not run here.** Its bands are the DEV loop's absolute dollars (`GO ≤ $0.80 ·
+GO-THEN-STOP ≤ $1.20 · NO-GO above`, ruling 03.09 (b)) and its KILL is «the MAX corner over the
+cap» — and the holdout's max corner is over the cap BY CONSTRUCTION, which rung 0 already accepts.
+Applied unchanged it returns KILL on a run this very registration issued as FITS. Ruling (r)2 keeps
+the gate that was priced and leaves `project()` and its literals untouched: do not run that line.
 
 ## 6 — close: fetch, delete, settle
 The pod appends to the SAME out-file, so the fetch overwrites the smoke-only copy with all 40 units.
@@ -176,7 +191,7 @@ run = json.load(open('results/promo_holdout_run.json'))
 anchor = d.datetime.fromisoformat('<the §0 anchor stamp>'.replace('Z', '+00:00'))
 print(int(1000 * sum(float(one['billed_seconds']) for one in run['segments']
     if d.datetime.fromisoformat(one['created_at'].replace('Z', '+00:00')) >= anchor)))")
-python3.11 scripts/runpod_guard.py --step promo-holdout --step-cap 0.90 \
+python3.11 scripts/runpod_guard.py --step promo-holdout --step-cap 1.10 \
   --note 'promo-holdout, pod deleted' --close --tolerance 0.05 --expect-ms "$EXPECT_MS"
 ```
 **The `--close` line runs here because the holdout is ONE shot and this pod is its last** — a
