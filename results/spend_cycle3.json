@@ -63,6 +63,16 @@
       "billing_since_usd": 4.536229,
       "billing_read": "read",
       "note": "promo-dev-loop iteration 3 — pod about to be created"
+    },
+    {
+      "at": "2026-09-05T07:50:50+00:00",
+      "balance": 9.3014037715,
+      "spent_usd": 5.1786,
+      "remaining_usd": 1.8214,
+      "balance_delta_usd": 5.1786,
+      "billing_since_usd": 5.168841,
+      "billing_read": "read",
+      "note": "promo-holdout, the one shot — pod about to be created"
     }
   ]
 }
