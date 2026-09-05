@@ -1,0 +1,49 @@
+{
+  "bars": {
+    "signal_type_agreement": {
+      "bar": 0.75,
+      "held": true,
+      "value": 0.7958
+    },
+    "subject_agreement": {
+      "bar": 0.8,
+      "held": false,
+      "value": 0.7181
+    }
+  },
+  "by_stratum": {
+    "currency": {
+      "signal_type_agreement": 0.8283,
+      "signal_type_threads": 20,
+      "subject_agreed": 95,
+      "subject_agreement": 0.6786,
+      "subject_comments": 140
+    },
+    "decimal_only": {
+      "signal_type_agreement": 0.7633,
+      "signal_type_threads": 20,
+      "subject_agreed": 40,
+      "subject_agreement": 0.8333,
+      "subject_comments": 48
+    }
+  },
+  "contract": "docs/plans/promo-pulse-1.md K8 — the S2 grader ($0)",
+  "definitions": {
+    "signal_type_agreement": "per THREAD: Jaccard over the SET of signal types, averaged; a thread where both sides say nothing scores 1.0 rather than dividing by zero",
+    "subject_agreement": "per COMMENT: (subject_type, subject) after aggregates.promo_key, with `chain` names folded to the chain id by aggregates.chain_key (ruling 04.09 (j) item 1) on gold and prediction alike; denominator = gold comments; a comment the model said nothing about is a miss"
+  },
+  "gold": "docs/labels-promo-holdout.jsonl",
+  "part": "holdout",
+  "predicted": "results/promo_holdout40_predicted.jsonl",
+  "readings": {
+    "note": "an abstention is an answer: `unsure` rows stay in the denominator and are counted here, never dropped from it",
+    "unsure_rows": 0
+  },
+  "whole_40": {
+    "signal_type_agreement": 0.7958,
+    "signal_type_threads": 40,
+    "subject_agreed": 135,
+    "subject_agreement": 0.7181,
+    "subject_comments": 188
+  }
+}
