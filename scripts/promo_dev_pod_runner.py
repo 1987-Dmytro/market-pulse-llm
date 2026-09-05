@@ -218,7 +218,9 @@ def refuse_to_resume_over_a_death(out: Path) -> None:
         raise SystemExit(
             f"{out} carries {len(dead)} ERROR reply/replies ({dead[0].get('exception')} on"
             f" {dead[0].get('id')}) — the pod that wrote it died on that unit, and `already_answered`"
-            " would count the unit as answered and never re-ask it. Move the file aside and stop."
+            " would count the unit as answered and never re-ask it. The answered rows are NOT lost:"
+            " keep this file and give --out a NEW name, or move it aside. Never delete it — its"
+            " replies are the only record of what this pod was paid for."
         )
 
 

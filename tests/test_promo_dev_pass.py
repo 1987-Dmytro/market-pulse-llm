@@ -449,6 +449,11 @@ def test_a_dead_unit_becomes_an_error_reply_the_mac_reads_as_the_smoke_not_comin
     """
     import promo_dev_pod_runner as pod
 
+    # the PART is stated, never inherited: `smoke_state` reads whichever registration `use_part`
+    # last set, and the dev and holdout records share these three ids only by the accident of one
+    # draw — holdout-2 is a NEW draw ((s) item 3) and would read three units nobody asked for
+    dev.use_part("dev")
+    assert dev.rel(dev.PREREG) == "results/prereg_promo_dev_loop.json"
     want = [
         one["unit_id"]
         for one in dev.committed_registration()["population"]["leg_a"]["smoke"]["units"]
@@ -491,18 +496,18 @@ def test_a_dead_unit_becomes_an_error_reply_the_mac_reads_as_the_smoke_not_comin
     assert gone["action"] == dev.committed_registration()["decision_table"][
         "after_the_smoke_for_40_threads"
     ][dev.SMOKE_GONE], "the branch is the record's own prose, not a phrase beside it"
-    assert dev.main(["--smoke", "--replies", str(died)]) == 1
+    assert dev.main(["--smoke", "--part", "dev", "--replies", str(died)]) == 1
 
     whole = tmp_path / "whole.jsonl"
     answer(want, whole)
     assert dev.smoke_state(whole)["state"] == dev.SMOKE_IN
     assert dev.smoke_state(whole)["missing"] == []
-    assert dev.main(["--smoke", "--replies", str(whole)]) == 0
+    assert dev.main(["--smoke", "--part", "dev", "--replies", str(whole)]) == 0
 
     partial = tmp_path / "partial.jsonl"
     answer(want[:2], partial)
     assert dev.smoke_state(partial)["state"] == "waiting", "a short file is a poll, not a verdict"
-    assert dev.main(["--smoke", "--replies", str(partial)]) == 1
+    assert dev.main(["--smoke", "--part", "dev", "--replies", str(partial)]) == 1
 
-    with pytest.raises(SystemExit, match="ERROR reply"):
+    with pytest.raises(SystemExit, match="give --out a NEW name"):
         pod.main(argv(died), loader=lambda p, r: object(), sleep=lambda _: None)
