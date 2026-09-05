@@ -8,6 +8,9 @@
 # The rule that built every line: the spellings come from the chain's own NAME (and, for a Latin
 # form of a Cyrillic name, from its official handle in the registry) — NEVER a synonym harvested
 # from a model's miss. `varus`, `silpo`, `atb` and `mcdonalds` are ruling (j)'s own four, verbatim.
+# `Сильпо` (2026-09-05, ruling (s) item 6) is the same rule and not an exception: it is the chain's
+# own name in Russian, the way `Варус` and `Макдональдс` already are — a NAME form under (j) item 1,
+# not a spelling read off a miss.
 #
 # Matching happens AFTER `promo_key` (NFC, lower, whitespace-collapsed), so case is already folded
 # and a case variant here is redundant; the ruling's four keep the lead's own spelling anyway.
@@ -18,7 +21,7 @@
 # ruling names it, and a chain the aggregator posts about is a chain the dashboard counts.
 
 varus: [VARUS, Varus, Варус]
-silpo: [Сільпо, Silpo]
+silpo: [Сільпо, Silpo, Сильпо]
 atb: [АТБ, ATB]
 mcdonalds: [McDonald’s, McDonald's, Макдональдс]
 

@@ -46,6 +46,9 @@ import draw_promo_threads as draw  # noqa: E402
 from market_pulse import promo_prompts  # noqa: E402
 
 DRAW = REPO_ROOT / "results" / "promo_threads_draw.json"
+DRAW2 = REPO_ROOT / "results" / "promo_threads_draw_2.json"
+"""The second draw — holdout-2 alone, ruling 05.09 (s) item 3 (b). Its own file, because the first
+draw is frozen and pinned by every registration already spent against it."""
 CODEBOOK = REPO_ROOT / "docs" / "CODEBOOK-promo-signals.md"
 GOLD = REPO_ROOT / "docs" / "labels-promo-dev.jsonl"
 MEASUREMENTS = REPO_ROOT / "results" / "measurements.jsonl"
@@ -111,13 +114,20 @@ def quoted(text: str) -> list[str]:
     return [" ".join(one.split()) for one in re.findall(r"«([^»]+)»", text)]
 
 
-def store_texts(path: Path = DRAW) -> list[dict]:
-    """Every dev-40 AND holdout-40 comment with text, from the frozen archive the draw read.
+CORPUS = (
+    ("dev-40", DRAW, "dev"),
+    ("dev-2", DRAW, "holdout"),
+    ("holdout-2", DRAW2, "holdout"),
+)
+"""Every set the law may not have read, and the draw arm each one is. Ruling 05.09 (s) item 5 asks
+for the check over all three: dev-40 is the bar, dev-2 is the burned holdout-40 relabelled, and
+holdout-2 is the exam that has not been sat. The list is INDEPENDENT of `--part` — a leak is the
+instrument having seen its own exam, and which leg is being registered does not change what it read
+([[the_instruments_examples_came_from_the_exam]])."""
 
-    Both splits, because the leak the check looks for is the instrument having seen its own exam,
-    and the holdout is the exam that has not been sat yet ([[the_instruments_examples_came_from_the_exam]]).
-    """
-    body = json.loads(path.read_text(encoding="utf-8"))
+
+def store_texts(corpus=CORPUS) -> list[dict]:
+    """Every comment with text of every set in `corpus`, from the frozen archive the draws read."""
     return [
         {
             "split": split,
@@ -126,9 +136,10 @@ def store_texts(path: Path = DRAW) -> list[dict]:
             "msg_id": str(one["msg_id"]),
             "text": " ".join((one.get("text") or "").split()),
         }
-        for split in ("dev", "holdout")
+        for split, path, arm in corpus
+        for body in [json.loads(path.read_text(encoding="utf-8"))]
         for stratum in sorted(body["draw"])
-        for row in body["draw"][stratum][split]
+        for row in body["draw"][stratum][arm]
         for one in thread_of(row)[1]
         if (one.get("text") or "").strip()
     ]
@@ -160,14 +171,18 @@ def leak_check(texts: list[dict]) -> dict:
     ]
     return {
         "contract": "docs/reviews/2026-08-30-plan-promo-pulse-1.md «Ruling 04.09 (j)» item 2 — no"
-        " string of the rendered law is a substring of a dev-40 or holdout-40 comment",
+        " string of the rendered law is a substring of a comment of ANY set the law will be graded"
+        " on; ruling 05.09 (s) item 5 names the three: dev-40, dev-2 and holdout-2",
         "codebook_version": promo_prompts.codebook_version(),
         "template_version": promo_prompts.template_version(),
         "corpus": {
             "comments_with_text": len(texts),
-            "dev": sum(1 for one in texts if one["split"] == "dev"),
-            "holdout": sum(1 for one in texts if one["split"] == "holdout"),
-            "from": rel(DRAW) + " + the frozen v1 archive data/raw",
+            "by_split": {
+                split: sum(1 for one in texts if one["split"] == split)
+                for split in dict.fromkeys(one["split"] for one in texts)
+            },
+            "from": ", ".join(sorted({rel(path) for _, path, _ in CORPUS}))
+            + " + the frozen v1 archive data/raw",
         },
         "populations": {
             "codebook": {
@@ -1150,7 +1165,10 @@ def score(replies: Path, iteration: int) -> dict:
         if not one.get("msg_id"):
             continue
         found = said_rows.get((k8.thread_key(one), str(one["msg_id"])))
-        if found is not None and k8.subject(found) == k8.subject(one):
+        # the grade's OWN predicate, never a second copy of it: a miss table built on a different
+        # comparison would name rows the bar above counted as hits
+        # ([[two_gates_on_one_spend_read_different_corners]])
+        if found is not None and k8.subjects_agree(one, found):
             continue
         misses.append(
             {
@@ -1195,6 +1213,7 @@ def score(replies: Path, iteration: int) -> dict:
         },
         "grade": {
             "from": "scripts/grade_promo_signals.py — its own functions, never re-derived here",
+            "k8_version": graded["k8_version"],
             "bars": graded["bars"],
             "whole_40": graded["whole_40"],
             "by_stratum": graded["by_stratum"],
@@ -1552,8 +1571,9 @@ def main(argv: list[str] | None = None) -> int:
             encoding="utf-8",
         )
         print(f"wrote {rel(LEAK_CHECK)}")
-        print(f"  corpus     {record['corpus']['comments_with_text']} comments with text"
-              f" ({record['corpus']['dev']} dev + {record['corpus']['holdout']} holdout)")
+        print(f"  corpus     {record['corpus']['comments_with_text']} comments with text ("
+              + " + ".join(f"{n} {split}" for split, n in record["corpus"]["by_split"].items())
+              + ")")
         for name, block in sorted(record["populations"].items()):
             print(f"  {name:<10} {block['literals']} literals — {block['rule']}")
         for hit in record["hits"]:

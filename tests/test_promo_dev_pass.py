@@ -354,12 +354,34 @@ def test_the_leak_check_finds_a_planted_quote_and_clears_a_corpus_that_has_none(
     assert {one["split"] for one in planted["hits"]} == {"dev", "holdout"}
 
 
-def test_the_shipped_law_is_clean_against_the_frozen_dev_and_holdout_threads():
-    """The real run of the check above — the one ruling 04.09 (j) item 2 asks for. It reads
-    `data/raw`, which is not in the repository, so on a machine without the frozen archive it says
-    so instead of passing silently ([[a_checker_whose_failure_is_silence]])."""
+def test_the_shipped_law_is_clean_against_every_set_it_will_be_graded_on():
+    """The real run of the check above — the one ruling 04.09 (j) item 2 asks for, over the THREE
+    sets ruling 05.09 (s) item 5 names. It reads `data/raw`, which is not in the repository, so on a
+    machine without the frozen archive it says so instead of passing silently
+    ([[a_checker_whose_failure_is_silence]]).
+
+    The sizes are READ from the committed records rather than typed (PHASE §6.6): each labelled set
+    must carry one row per comment with text (codebook §8), and the unlabelled holdout-2 is counted
+    off its own draw's `n_comments − n_wordless`. A literal here would have gone on asserting 140 +
+    188 the day a third set joined the corpus ([[a_number_typed_into_its_own_checker]]).
+    """
     if not (REPO_ROOT / "data" / "raw" / "comments").is_dir():
         pytest.skip("the frozen v1 archive data/raw is not on this machine — nothing was checked")
+
+    def gold_rows(path):
+        return sum(1 for line in path.read_text(encoding="utf-8").splitlines() if line.strip())
+
+    draw2 = json.loads(dev.DRAW2.read_text(encoding="utf-8"))
+    owed = {
+        "dev-40": gold_rows(REPO_ROOT / "docs" / "labels-promo-dev.jsonl"),
+        "dev-2": gold_rows(REPO_ROOT / "docs" / "labels-promo-dev2.jsonl"),
+        "holdout-2": sum(
+            row["n_comments"] - row["n_wordless"]
+            for block in draw2["draw"].values()
+            for row in block["holdout"]
+        ),
+    }
     record = dev.leak_check(dev.store_texts())
-    assert record["corpus"]["dev"] == 140 and record["corpus"]["holdout"] == 188
+    assert record["corpus"]["by_split"] == owed
+    assert record["corpus"]["comments_with_text"] == sum(owed.values())
     assert record["verdict"] == "CLEAN", record["hits"]

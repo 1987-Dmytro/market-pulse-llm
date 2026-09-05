@@ -1,23 +1,26 @@
 {
-  "codebook_version": "a587e0d6d50462552a483a688533cae275c28c0959cc01a9673ea860b912f7d7",
-  "contract": "docs/reviews/2026-08-30-plan-promo-pulse-1.md «Ruling 04.09 (j)» item 2 — no string of the rendered law is a substring of a dev-40 or holdout-40 comment",
+  "codebook_version": "0bbb665a2beb3d4d08af96e1b81a761e8b6a4a4f5000587fffcc1ff7d7706e62",
+  "contract": "docs/reviews/2026-08-30-plan-promo-pulse-1.md «Ruling 04.09 (j)» item 2 — no string of the rendered law is a substring of a comment of ANY set the law will be graded on; ruling 05.09 (s) item 5 names the three: dev-40, dev-2 and holdout-2",
   "corpus": {
-    "comments_with_text": 328,
-    "dev": 140,
-    "from": "results/promo_threads_draw.json + the frozen v1 archive data/raw",
-    "holdout": 188
+    "by_split": {
+      "dev-2": 188,
+      "dev-40": 140,
+      "holdout-2": 112
+    },
+    "comments_with_text": 440,
+    "from": "results/promo_threads_draw.json, results/promo_threads_draw_2.json + the frozen v1 archive data/raw"
   },
   "hits": [],
   "populations": {
     "codebook": {
-      "literals": 27,
+      "literals": 30,
       "rule": "«…» literals of promo_prompts.CODEBOOK, >= 8 chars"
     },
     "examples": {
-      "literals": 8,
+      "literals": 10,
       "rule": "«…» literals of promo_prompts.EXAMPLES, no floor — every one of them"
     }
   },
-  "template_version": "57dd9d25dd54a1d58dfa2efe1980cdfbb0a97c9e0c27d7f3101131945f42e79a",
+  "template_version": "32fa6c42bf12bae7d91e7a8586610b622495ad9ff9ef99d3ccbc96bf012348b3",
   "verdict": "CLEAN"
 }
