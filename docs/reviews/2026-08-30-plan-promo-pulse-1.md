@@ -871,3 +871,40 @@ The «needs named» list stays in PROGRESS as debts; none blocks iteration 2.
 2. Next session = the paid item alone, as PROGRESS «Next» writes it: runbook §0–§6, the three numbers already declared ($1.4146 · KILL by
    hand · 90 min = $1.1100), `--score --iteration 3`, K8, the error table naming the diff against iteration 2; subject ≥ 0.80 → the holdout
    NOTICE, END; RED → the table, END. `items[:3] == pack["smoke_ids"]` stays as it is — named, not moved.
+
+## Ruling 05.09 (q) — iteration 3 ACCEPTED on a COMPLETE reading, both bars HOLD, the dev loop is DONE at 3 of 5; the law is FROZEN as bought; the holdout is ONE shot at cap $0.90 and goes before c3; the volume is deleted after the phase's last paid run
+
+1. Accepted: `b93c997` (+ `ca0dfdb`, `0aa3dd8`, `0b4211c`). Complete by §6.5: 40/40 units, `parse_failures` 0, 140 gold-shaped rows. K8 re-run by the
+   team lead AND a fresh verifier (`python3 scripts/grade_promo_signals.py --gold docs/labels-promo-dev.jsonl --predicted results/promo_dev40_predicted_iter3.jsonl
+   --draw results/promo_threads_draw.json`), bars byte-identical to `grade_promo_dev40_iter3.json`: **subject 0.8714 ≥ 0.80 HOLDS · signal 0.9104 ≥ 0.75 HOLDS**;
+   currency 48/61 = 0.7869, decimal_only 74/79 = 0.9367 (readings). The diff is the transport repair and nothing else: 122 rows unchanged, +18 (all
+   `@VARUS_channel:6216`), 0 moved; all 7 pins re-derived; the registration `48537b9` precedes the purchase. The hand-read KILL is accepted — the mean corner fit and
+   the 90-min hard stop bounded the spend at $1.11, (o)4's own branch. Spend $0.493744 = 2402 billed s at $0.74/h: this pod ran 1.5–2.3× slower than iteration 2's
+   on IDENTICAL outputs (6009: 88.2 → 202.0 s) — host variance, not the repair. The dev loop is DONE (3 of 5, plateau moot). `make check` after `b93c997` was not
+   shown — the next session shows it first. Of the 18 misses 13 are currency; 13 of 18 carry the gold's signal types — the residue is attribution (post ↔ chain ↔ sku), 3 irony.
+2. **The law is FROZEN as iteration 3 bought it** — `codebook_version a587e0d6…`, `template_sha256 57dd9d25…`, `scripts/promo_dev_pod_runner.py 102fa524…`,
+   `src/market_pulse/promo_prompts.py dd260cb5…` — the holdout's registration pins these four UNCHANGED, so the holdout measures the instrument that took the dev
+   bar, byte for byte. (k)2 is amended: the near-quote «Шикарно…» and the codebook-doc sync move AFTER the holdout (packaging), disclosed in STATUS — the one
+   near-quoted dev comment, `@msuaaaa:3454:1217`, is among iteration 3's misses.
+3. **Operator's word 05.09 (money):** the holdout's cap is **$0.90** — the $0.30 fence was §6.1's estimate on the borrowed 23.76 s/thread that (c)5 retired;
+   `--terminate-after` derives from $0.90; rung 0 is priced by (o)4 on the instrument's OWN measured pace, the slowest pod: iteration 3's segment, 2402 billed s
+   for 140 text rows — the holdout carries 188 text rows in 296 comments, longest thread 39 (`draw.<stratum>.holdout`), so $0.37–0.58 expected; a dear corner over
+   the cap is issued FITS on the mean corner with the cap as the hard stop, in one line. §6.5 governs an incomplete run: recorded, re-bought under the next number,
+   the law not moving — the ONE shot is one VALID reading.
+4. **Order:** holdout → «c3» as (l)2–4 at cap $0.50 → the volume `mp-srv2` DELETED after c3 (operator's word 05.09; the empty volume listing shown in the transcript);
+   C6's first pod loads the model cold, ≈ +10–15 min a boot, named in the C6 design.
+5. **Next executor session = «holdout-prep», ONE item at $0, one check:** `scripts/promo_dev_pass.py` takes the holdout as parameters (PHASE §4: `--part holdout`
+   → population `draw.<stratum>.holdout`, 40 threads, leg A only; `--gold docs/labels-promo-holdout.jsonl` among the pins — the emitter REFUSES to write the record
+   while that file does not exist and says so; `--step promo-holdout --cap 0.90` with its own ledger; rung 0 as item 3); `grade_promo_signals.py` takes `--part`;
+   the runbook is off every `_iter3` path onto `_holdout` (smoke = the holdout's first three units); `promo-dev-loop` closed with `--close` (the last iteration,
+   one-way). Check shown: `--dry-run --part holdout` prints 40 threads, the pricing and «gold missing → no record»; `grep -n _iter3 scripts/runbook_promo_dev_1.md`
+   → nothing; `make check` green. The paid session after the gold is committed: `--register` (gold pin) → smoke → buy → K8 → the error table — END at the reading
+   either way (a failed bar closes S2's question); then c3.
+6. Team lead today: holdout-40 gold `docs/labels-promo-holdout.jsonl` under the codebook doc as pinned (`2361…`), written blind — no holdout prediction exists;
+   then positions-50 (46 pages). STATUS carries the dates.
+7. **(q) addendum, 05.09 08:40 — the holdout gold LANDED:** `docs/labels-promo-holdout.jsonl`, 188 rows = every text comment of the 40 holdout threads
+   (296 − 108 wordless; validator 0 errors; 4 `unsure`), written blind under the codebook doc as pinned (`2361…`), audited by a fresh reader against the
+   codebook's letter (15 rows corrected: own-channel post = chain §3, noise source §4, signals per row subject §3/§5). sha256 `6fa804880d5d14db…`. Two of the
+   40 threads are `@matusi_ukr` (off-domain, 25 rows) — the frozen population's own truth, labelled as `post`/named institution as `chain`. The executor
+   commits the file by path at its start ritual; the registration pins it. `.git/index.lock` (empty, 05:12 UTC, left by the team lead's `git status` on the
+   mount) must be removed by the operator before the next executor session.
