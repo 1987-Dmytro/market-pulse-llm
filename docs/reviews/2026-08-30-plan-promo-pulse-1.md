@@ -1025,3 +1025,8 @@ The «needs named» list stays in PROGRESS as debts; none blocks iteration 2.
    handed to `--close-segment` being unchecked against the pod stays named; the run's out-file is `results/promo_dev40_iter4.jsonl` and nothing else.
 4. Sequence unchanged from (t)6: create → `--open` → smoke (3) → GO on the three replies, no band gate → the 80 → delete → `--close-segment --replies …iter4.jsonl`
    (the whole-run row for this pod) → listings `[]` → `--score --arm dev40` (bars 0.80 / 0.75) and `--score --arm dev2` (reading) → END at the readings.
+5. **(u) addendum, 05.09 14:20 — s25 ACCEPTED ($0):** `705e2d1` `0bb62fb` — `--score` takes the arm (`dev40` · `dev2`, each its own units, gold and strata;
+   refuses without `--arm` on a two-arm leg and refuses an arm under the wrong part), `pinned_inputs` gains `docs/labels-promo-dev2.jsonl 4b60ab99…` (all 8
+   pins re-derived by the team lead), the pack re-pins the registration (`9ded3a79…`, units byte-identical), rung 0 unmoved ($0.8705 mean, cap $1.20), `make
+   check` 4321/0. The $0 arm drive on OLD replies reproduces iteration 3 exactly (0.8714 / 0.9104) and reads holdout-40's old replies against the re-read
+   key at 0.7394 / 0.7833 — plumbing, not a v1.2 reading. Next session = the purchase, (u)4 unchanged; the arm-selector test stays named, not asked for.
