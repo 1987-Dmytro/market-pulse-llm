@@ -48,8 +48,8 @@ NAMED again** — iteration 5 reads FITS with `--step promo-iter5`. A trap, name
    `pinned_inputs` from disk, so the runner's new sha lands there by construction.
 
 ## Open stop — NONE. Nothing waits on the operator or the team lead; the next item is $0 and mine.
-**Tree.** Clean at HEAD; $0 spent, no pod, no red test. ONE test added — §4's, for a caught
-product defect, in its fix's commit — and the runner's pin moved, both authorised by (w)3.
+**Tree.** Clean; `make check` **4322 passed, 2 skipped, exit 0** over a CLEAN tree at `54c0cc5`
+(§8 (j) wants ≥ 4266); $0 spent, no pod. ONE test added — §4's, in its fix's commit — pin moved (w)3.
 
 ## Named, not built (the phase file forbids adding what it did not ask for)
 - **§6.5's fit proof is STILL not built** — the longest registered render proven to fit BEFORE a
