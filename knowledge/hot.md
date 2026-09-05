@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-09-04 19:40:10 (every SessionStart)
+**Auto-refreshed:** 2026-09-05 07:19:03 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
-4133f17 knowledge: s18's boot state — no stop is open, make check is 4320/0, next is the paid session
-cb84bfa docs(progress): the stop is closed by (o) — the test reads the record, and next is the purchase
-2f2b62c test(promo-dev): the pack test reads the population from the registration, both directions
-ec16e82 docs(lead): ruling 04.09 (o) + PHASE v6 §6.6 + the day's fifth stop, committed by path
-e18ce58 docs(progress): the stop names the WHOLE repair — the docstring's «56» and the leg-B test beside it
+0b4211c docs(progress): back under the file's own 60-line cap
+0aa3dd8 docs(progress): the gate's reason is exact — ten files NAME docs/STATUS.md, four READ it
+01a6916 knowledge: s19's boot state — iteration 3 is BOUGHT, the open stop is the holdout notice
+ca0dfdb docs(progress): iteration 3 is bought and BOTH bars hold — the open stop is the holdout notice
+b93c997 s19(promo-dev): iteration 3 bought and scored — subject 0.7500 RED -> 0.8714 HOLDS, signal 0.9104
 ```
 
 ## 📋 Recent decisions
@@ -23,42 +23,42 @@ e18ce58 docs(progress): the stop names the WHOLE repair — the docstring's «56
 
 ## 📅 Recent daily logs
 
+- `2026-09-05.md`
 - `2026-09-04.md`
 - `2026-09-03.md`
-- `2026-09-02.md`
 
 <!-- AUTO-GEN END (everything below preserved across refreshes) -->
 # Hot Cache — curated
-**Last update:** 2026-09-04 (s19). Этап 1 `SPEC-v2`, карта `STATUS.md`, цикл `PROCESS.md` v3, фаза **PHASE v6**. Руками, ≤40 строк.
+**Last update:** 2026-09-05 (s20). Этап 1 `SPEC-v2`, карта `STATUS.md`, цикл `PROCESS.md` v3, фаза **v7**. Руками, ≤40 строк.
 
 ## 🔥 What's Hot
-**⛔ ИТЕРАЦИЯ 3 УЖЕ КУПЛЕНА (s19, `b93c997`, $0.493744) — НЕ ПОКУПАТЬ ЕЁ СНОВА.** Под
-`cd918wet7sea5b` удалён, сегмент 5 закрыт, `pod list -a` и `serverless list` = `[]`. **ОБА БАРА
-ДЕРЖАТ: субъект 0.8714 ≥ 0.80** (было 0.7500 RED) **· сигнал 0.9104 ≥ 0.75.** 40 из 40 юнитов, все
-ответы balanced/finish stop, **0 parse failures**, 140 gold-строк. `make check` ЗЕЛЁНЫЙ **4320
-passed, 2 skipped, exit 0** на `ca0dfdb` (пол §8 (j) — 4266).
-**Дифф против итерации 2 — ровно транспортная починка:** 122 строки итерации 2 стоят НЕИЗМЕННЫМИ,
-добавилось 18; 0 сдвинулось, 0 пропало. Страта currency идентична построчно (48/61, субъект 0.7869),
-весь прирост в decimal_only **57/79 → 74/79**. Все 40 ответов в ФЕНСЕ, `unfence` прочёл объект.
+**⛔ ИТЕРАЦИЯ 3 КУПЛЕНА И ПРИНЯТА (q) — DEV-ПЕТЛЯ ЗАКРЫТА, не покупать её снова.** Субъект **0.8714**,
+сигнал **0.9104**, полное чтение (40/40, 0 parse failures). Эталон холдаута ПРИШЁЛ 05.09:
+`docs/labels-promo-holdout.jsonl`, 188 строк, sha `6fa804880d5d14db…`.
+**s20 сделал holdout-prep за $0** (`f879bf9`, `31f9461`): эмиттер и грейдер берут холдаут
+ПАРАМЕТРАМИ (`--part {dev,holdout} --gold --step --cap`), `use_part()` перецеливает файловые
+константы на входе, `own_rate()` СНЯЛ борроу на свои **88.772 / 201.967 s** (самый медленный под),
+`--register` ОТКАЗЫВАЕТ без пина эталона; dev-нога побайтно та же (`5510dd2b3098cdd3…`).
 
-## ⏭️ Next — СТОП: НОТИС ХОЛДАУТА, решение оператора, ничего не писать вперёд
-§8 (e): холдаут — ОДИН выстрел, предрегистрация в закоммиченной записи + STOP-нотис, потом трата.
-(m)5 и (o)5 обе кончают сессию на «субъект ≥ 0.80 → НОТИС, END». Заморозка закона (near-quote,
-кодбук v1.2) и holdout-40 — зависимость ТИМЛИДА (§7), не моя. Потом «c3» (l) 2–4. Плато 0 из 2.
-**💰 После s19:** шаг **$1.242994 из $2.1638**, осталось **$0.920806**; цикл 3 **$5.0299/$7.00**;
-холдаут $0.30 нетронут, кап c3 $0.50. `--close` НЕ звать (`closing_entry` односторонний).
-REMAINING дрейфует вниз на ~$0.24/день — читать РУКАМИ в §0, не носить из записи.
+## ⏭️ Next — ДВА ОТКРЫТЫХ СТОПА, платный выстрел ЗАБЛОКИРОВАН, ничего не писать вперёд
+**(a) НЕ ЗВАТЬ `--project` на холдауте.** Полосы — dev-петли (край $1.20 ВЫШЕ капа $0.90), KILL —
+«max-угол над капом», который у холдаута ПО ПОСТРОЕНИЮ ($1.8999 против $0.90) и который (q)3 уже
+принял на рунге 0: `--register` скажет FITS, `--project` через минуту KILL. Полосы называет ТИМЛИД.
+**(b) `--close` на `promo-dev-loop` ОТКАЗАЛ, не форсирован:** settles $1.159076 против записанного
+$0.866700 — **33.7%**, вне 5%; правая часть `recorded_reading()` — последний `--note`, ВСЕГДА снятый
+ДО последнего пода, так что многоподовый шаг не закроется в 5% никогда. Леджер ОТКРЫТ и назван.
+**💰 05.09 РУКАМИ:** цикл 3 REMAINING **$1.8312**/$7.00 · `promo-holdout` — НОВЫЙ шаг, кап **$0.90**
+((q)3), потрачено $0.00, свой леджер · c3 ≤$0.50 · том удаляется ПОСЛЕ c3. Рунг 0 холдаута: cheap
+**$0.8420 (−6.4%)** · priced **$0.8993 (−0.1%!)** · dear **$1.8999 (+111%)**.
 
 ## 🚧 Blockers / долги (названы, не построены)
-**Замена заимствованных 135.232 s ИЗМЕРЕНА И БОЛЬШЕ: смок итерации 3 дал max 201.967 s** (mean
-88.772, n=3) — выше и 178.298 s из (o)4, и заимствования в `rung_0`. По (o)4 борроу уходит ПЕРЕД
-переизданием итерации 4 на СОБСТВЕННОМ максимуме; на нём dear-угол НЕ влезает в остаток → ветка
-(o)4 «средний угол, кап как жёсткий стоп». `rung_0` в s19 не тронут. · **Страта currency 0.7869 не
-сдвинулась НИ НА СТРОКУ** — бара на ней нет, но currency-тяжёлый холдаут ляжет у черты. ·
-`project()` меряет KILL против ВСЕГО капа: s19 читал руками, max-угол $1.8425 > остатка $1.4048, и
-это НЕ KILL — `terminate-after` держит под на $1.1098 (разбор в PROGRESS). · `items[:3] ==
-pack["smoke_ids"]` — пак против пака · `pod.main` не снимает патч с `reader_v5` ·
-`committed_registration()` не смотрит `pinned_inputs` (s19 сверил все 7 РУКАМИ до create) · `resolvable()` с `+` (l)1 · голд 140 из 208 · «Шикарно…» ((k)2).
+**Ожидание (q)3 в $0.37–0.58 НИЖЕ собственного темпа:** средний угол $0.8420, а реальные $0.493744
+итерации 3 по текстовым строкам (140 → 188) ≈$0.64. Не KILL (кап — жёсткий стоп), но **угол `priced`
+(ОДНО пересоздание после dead-man) оставляет $0.0007**: второй под не бесплатен. · **Ветки холдаута в
+`rung_0`/`register`/`use_part` без теста** (§4 запрещает), проверка одна — сухой контакт за $0. ·
+`prep()` зовёт свой счёт `draw.dev_threads` и на холдауте (ключ пиннит `test_promo_dev_pass.py:61`) ·
+остальные долги — списком в `docs/plans/promo-pulse-1.PROGRESS.md` («named, not built»), этот файл —
+кэш, а не журнал.
 **⚠️ `make check` НЕ в платной сессии · ⚠️ ТОЛЬКО ОТЦЕПЛЁННЫМ (`os.setsid`) · ⚠️ K4 НЕ ПЕРЕЗАПУСКАТЬ · ⛔ `1925810730` · ⛔ `aggregates.py` и `open`**.
 
 ## 🔫 Footguns этого файла

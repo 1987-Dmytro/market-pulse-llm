@@ -236,7 +236,15 @@ def own_rate() -> dict:
     ran 1.5-2.3x apart on byte-identical answers and a rate is a property of the pod, not of the
     prompt ([[a_rate_is_a_property_of_the_pod]]). `max` picks the row, not `value`: the row's own
     maximum is what the dear corner is priced at, and a row can carry the higher mean with the lower
-    max. Read out of the file, never typed ([[a_number_typed_into_its_own_checker]])."""
+    max. Read out of the file, never typed ([[a_number_typed_into_its_own_checker]]).
+
+    It READS the dev loop's rows while the holdout's own smoke WRITES under `promo_holdout40_…` —
+    two names on purpose. The INSTRUMENT is one: (q) item 2 freezes it byte for byte, so the dev
+    loop's three rows are this prompt's own history and are exactly what (q) item 3 prices the shot
+    at. The POPULATIONS are not: the holdout's threads are the longer half of the draw, and a row of
+    one landing under the other's name is how a second population gets inside a first one's reading
+    ([[a_second_population_in_a_shared_store_voids_the_first_seal]], [[id_spaces_that_look_comparable]]).
+    """
     rows = [
         json.loads(line)
         for line in MEASUREMENTS.read_text(encoding="utf-8").splitlines()
@@ -1276,7 +1284,7 @@ def project(replies: Path) -> dict:
         "usd_at_the_measured_max": worst["usd"],
         "corners": [mean, worst],
         "measured": {
-            "name": MEASURED_RATE,
+            "name": f"{STEM}_seconds_per_thread",
             "seconds": {one["unit_id"]: rows[one["unit_id"]]["seconds"] for one in smoke},
             "value": round(sum(seconds) / len(seconds), 3),
             "max": round(max(seconds), 3),
@@ -1291,7 +1299,7 @@ def write_measurement(gate: dict) -> dict:
     """The smoke's rate into `results/measurements.jsonl`, under its OWN name and never the borrow's."""
     row = {
         "contract": "promo-pulse-1-s9",
-        "name": MEASURED_RATE,
+        "name": f"{STEM}_seconds_per_thread",
         "instrument": "promo-signal prompt (leg A), READER serving, thinking OFF, batch 1 — the"
         f" SMOKE's three units on this pod; it replaces the borrowed {BORROWED_RATE}",
         "measured_on": ", ".join(f"{unit} {seconds}s" for unit, seconds in gate["measured"]["seconds"].items()),
