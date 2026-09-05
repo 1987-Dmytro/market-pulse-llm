@@ -982,3 +982,26 @@ The «needs named» list stays in PROGRESS as debts; none blocks iteration 2.
    this ruling), `results/spend_cycle3.json :: cycle3_cap_usd = 9.0`, `note` APPENDED «CEILING RAISED 2026-09-05 to $9.00 on the operator's word (ruling 05.09 (s)
    addendum 8); anchor and anchored_at unchanged»; run the guard and SHOW `CYCLE 3 SPENT ≈ $5.50 of $9.00, REMAINING ≈ $3.50`; commit by path. No test moves
    (the tripwire fixtures carry their own cap). The line then fits: iteration 4 ≤ $0.60, holdout-2 ≤ $0.90, c3 ≤ $0.50, the drip — inside $3.50. No top-up.
+
+## Ruling 05.09 (t) — s23 «v1.2-prep» ACCEPTED ($0); the stop was RIGHT and PREVENTABLE by (s): the cap was typed, not priced; the borrow died on one leg only. Every leg now issues on the MEAN corner of the slowest WHOLE run with the cap as the hard stop; cap $1.20 (operator's word); dev-40 first, dev-2 after
+
+1. Accepted: `a6868e5` (ceiling $9.00, guard shown), `4a03307` (holdout-2: the product's population 398 = 678 − 12 paused − 80 drawn, 20/20, three sets 40/40/40
+   disjoint, draw 1 replays byte-identical), `0224167` (K8 v2: one `subjects_agree()` shared by grade and error table; measured on the frozen holdout gold it buys
+   1 row of 188, the alias 0 — the relaxation is small and now known), `4be406e` (law from codebook v1.2 incl. (д); `--leak-check` CLEAN over 440 comments;
+   pins moved: codebook `0bbb665a…`, template `32fa6c42…`; transport pins unchanged). The red `test_the_pack_pins…` is the OLD pack against the NEW law — it greens
+   at `--pack` inside this item, §6.6's class, not a stop; the two `== 40` literals read the record in the same commit (§6.6).
+2. **The stop was right, and mine:** (s)5 typed «cap $0.60» without the dry run that prices it (§9: the command, not the number), and (o)4's borrow retirement was
+   accepted with `rate_for("dev")` still reading `pass2_r2` — the verifier's line said so and I let the dev leg go «done». Two rules enter (§10, PHASE v10, skill).
+3. **The corner, every leg (answer 1):** `rung_0` issues on the DEAR corner when it fits, else on the MEAN corner with the cap as the platform's hard stop — for
+   `dev` as for `holdout`; the `part != "dev"` condition goes. The decision table follows the corner: dear → the bands; mean → (r)2's table (GO on the smoke's
+   three replies, no band gate, `--project` not run). That is the answer to (3) as well.
+4. **The rate (answer 2):** the borrow is retired on EVERY leg — `rate_for(part)` = `own_rate()`. A smoke of three, built to hold the longest thread, is a MAXIMUM,
+   not a mean: `own_rate()` prices the mean corner on the WHOLE-RUN mean of the SLOWEST pod seen (n = 40: iteration 3 **47.7 s/thread**, max 286.2; the fast hosts
+   17.7 and 25.8) and keeps the dear corner from the largest max. Whole-run rows are written from the run record by `--close-segment`, one per pod under
+   `<part>_seconds_per_thread` (n, mean, max, source = the pod log) — iteration 2, iteration 3 and the holdout get theirs now at $0 (`4a03307`'s producer, same
+   file, no new ledger); smoke rows stay as history and price nothing. Numbers to expect at `--dry-run`: 83 units × 47.7 s + overhead ≈ $0.87 mean corner.
+5. **Operator's word 05.09 13:05: cap $1.20**, pack dev-40 FIRST, dev-2 after (the bar needs dev-40 complete; dev-2 is a reading the stop may cut); hard stop
+   ≈ 97 min. Money after it: holdout-2 ≤ $0.90, c3 ≤ $0.50, the drip — inside REMAINING $3.49; an iteration 5 would need the operator's word on the ceiling.
+6. Next session = the unblocked item: `rate_for`/`rung_0`/`--close-segment` as 3–4 → whole-run rows → `ITERATION = 4`, `--dry-run --part dev --cap 1.20` FITS on
+   the mean → `--register` → commit → `--pack` (green) → the paid iteration 4 in the SAME session if the smoke is alive, else the next: smoke → GO → K8 v2 on dev-40
+   (bars 0.80 / 0.75) and dev-2 (reading) → error tables → END at the reading. Standing prompt unchanged.

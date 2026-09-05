@@ -1,4 +1,4 @@
-# PHASE — `promo-pulse-1` (stage 1 whole: C2–C5 of `docs/SPEC-v2-promo-pulse.md` §8) — v9 05.09: §2 S2 holdout-40 read RED on subject → codebook v1.2, dev-2, holdout-2 (in-domain population), K8 v2; §4 «asked for once» + a re-used producer's record branches every decision field, §6.5 validity of a paid reading, §6.6 a test that reads the record, §6.1–6.2 a fence is an estimate and the frozen-set instrument is byte-for-byte
+# PHASE — `promo-pulse-1` (stage 1 whole: C2–C5 of `docs/SPEC-v2-promo-pulse.md` §8) — v10 05.09: §6.1 every leg prices on the slowest WHOLE run and issues on the mean when the dear corner refuses, a cap is quoted from the dry run; v9: §2 S2 holdout-40 read RED on subject → codebook v1.2, dev-2, holdout-2 (in-domain population), K8 v2; §4 «asked for once» + a re-used producer's record branches every decision field, §6.5 validity of a paid reading, §6.6 a test that reads the record, §6.1–6.2 a fence is an estimate and the frozen-set instrument is byte-for-byte
 
 Team-lead file. Executor: read this, then run `/plan-phase promo-pulse-1` and STOP for the plan
 review. Mechanics named below are CONSTRAINTS; the goal is the question and the checks.
@@ -102,8 +102,11 @@ scanning the 81 unscanned census candidates.
    **A fence for a LATER paid step is an estimate, never a cap (v7, ruling (q)):** it is re-priced at that
    step's registration on the instrument's OWN measured pace of the SLOWEST pod seen (hosts of one card ran
    1.5–2.3× apart on identical outputs), the cap becoming the hard stop; the holdout's cap was **$1.10**
-   (operator 05.09; spent $0.2966 on a fast host); iteration 4 ≤ $0.60 (dev-40 + dev-2 in one pod), holdout-2 ≤ $0.90 on the measured pace,
-   each with rung 0 FITS + the hard stop as its only money gate (ruling (r)); the cycle-3 ceiling is $9.00 from 05.09 (operator's word, ruling (s) addendum 8; anchor unchanged); c3 is deferred behind holdout-2.
+   (operator 05.09; spent $0.2966 on a fast host); iteration 4 ≤ $1.20 (dev-40 first, dev-2 after, in one pod — operator 05.09 13:05), holdout-2 ≤ $0.90 on the measured pace,
+   each with rung 0 FITS + the hard stop as its only money gate (ruling (r)). **v10 (ruling (t)):** on EVERY leg `rung_0` issues on the dear
+   corner when it fits, else on the MEAN corner with the cap as the hard stop and the (r)2 table (no band gate); the mean is the WHOLE-RUN
+   mean of the slowest pod seen (n = the run's units, never a smoke of three), written from the run record per pod; a cap named in a ruling is
+   quoted from the `--dry-run` that priced it, never typed; the cycle-3 ceiling is $9.00 from 05.09 (operator's word, ruling (s) addendum 8; anchor unchanged); c3 is deferred behind holdout-2.
    The volume `mp-srv2` is deleted after the phase's last paid run — now the holdout-2 shot (operator 05.09).
 2. The ONE holdout attempt: pre-register (readings + the two bars), tell the operator it is being
    spent. **The instrument on the frozen set is the one that took the dev bar, byte for byte** — every pin
