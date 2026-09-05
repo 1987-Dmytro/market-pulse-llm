@@ -1030,3 +1030,22 @@ The «needs named» list stays in PROGRESS as debts; none blocks iteration 2.
    pins re-derived by the team lead), the pack re-pins the registration (`9ded3a79…`, units byte-identical), rung 0 unmoved ($0.8705 mean, cap $1.20), `make
    check` 4321/0. The $0 arm drive on OLD replies reproduces iteration 3 exactly (0.8714 / 0.9104) and reads holdout-40's old replies against the re-read
    key at 0.7394 / 0.7833 — plumbing, not a v1.2 reading. Next session = the purchase, (u)4 unchanged; the arm-selector test stays named, not asked for.
+
+## Ruling 05.09 (v) — s26's stop was RIGHT and PREVENTABLE by the team lead: a paid run is bought under ITS OWN step line — `promo-iter4`, own anchor, own ledger, cap $1.20; the old `promo-dev-loop` line stays as (r)4 left it; the registration reads the guard WITH the step it names
+
+1. The stop (`6408e94`, $0, no pod): `--step promo-dev-loop --step-cap 1.20` refuses at $1.8462 spent (pods $1.4573 + the volume's $0.3792 since the 03.09
+   anchor); at the ledger's own $2.50 it leaves $0.6538, under the registered mean $0.8705. The registration read FITS because `guard_reading()`
+   (`promo_dev_pass.py:515`) calls the guard WITHOUT `--step`, so `cap_rule min($1.20, REMAINING)` saw the CYCLE's $3.48 and never the step's own line.
+   The team lead accepted (u)1 and (u) addendum 5 «guard read before the write» without asking WHICH guard — the miss is mine, twice.
+2. **(a): a paid run is its own money line.** Iteration 4 is bought under **`promo-iter4`** — `results/spend_promo_iter4.json`, anchored at this session's
+   own `--note` before the pod, cap **$1.20** (the operator's word, unmoved), the hard stop derived from it as registered (5838 s; the 90-min backstop bites
+   first), closed in the SAME session after the pod with `--close --expect-ms <the segment's billed ms> --tolerance 0.05` — one pod, one hour: the gate
+   S4 closed under. The `promo-holdout` precedent is the rule from here: **`promo-iter<N>` · `promo-holdout2` · `promo-c3` — one line per paid run**, opened
+   by its `--note`, closed by its run record; the cycle-3 ceiling ($9.00) governs the sum. `promo-dev-loop` stays as (r)4 left it — open by construction,
+   number of record $1.153372 — and carries no new run.
+3. **The registration names its line and reads its guard ($0, before the pod, then `--pack`):** `step.name = promo-iter4`, `step.ledger` its file,
+   `cap_rule = min($1.20, THIS step's REMAINING)`; `guard_reading()` runs the guard WITH `--step <name> --step-cap <cap>` and the record's `money` carries
+   the step's own line (a new line: spent $0.00, REMAINING $1.20) beside the cycle's; rung 0 unmoved ($0.8705 FITS on the mean). A registration that names
+   a step but prices against the cycle is a false record — the same class as (r)2's decision table. No new test (§7): the refusal was seen at both numbers.
+4. Then the purchase in the same session, (u)4 unchanged: create → `--open` → smoke → GO on the three replies → the 80 → delete → `--close-segment --replies
+   results/promo_dev40_iter4.jsonl` → `--close` the step → listings `[]` → `--score --arm dev40` (BAR 0.80 / 0.75) · `--score --arm dev2` (READING) → END.
