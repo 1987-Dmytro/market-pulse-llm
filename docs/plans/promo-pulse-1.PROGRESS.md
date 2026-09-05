@@ -10,12 +10,9 @@ REMAINING); the volume `mp-srv2` is deleted after c3. `promo-dev-loop` stays OPE
 guard's settlement $1.159076 (0.49% off) — not a debt of this session and no guard moves for it.
 
 ## Done
-- **05.09 s20 (`f879bf9` `7a7d90c` `858ead0` code · `31f9461` runbook):** «holdout-prep» at $0 —
-  emitter and grader take the holdout as PARAMETERS, `use_part()` binds BOTH halves, `own_rate()`
-  retired the borrow onto its own 88.772 s mean / 201.967 s max, `--register` REFUSES without the
-  gold. ACCEPTED by ruling (r) item 1.
-- **05.09 s21 ($0, no pod):** stopped at the FIRST command of the paid session and was RIGHT to —
-  ruling (r) item 2 upholds it and calls it preventable by (q)5. Ruled **(ii)**.
+- **05.09 s20 («holdout-prep», $0):** the emitter and grader take the holdout as PARAMETERS,
+  `own_rate()` retired the borrow onto its own 88.772 s mean / 201.967 s max. ACCEPTED by (r)1.
+  **s21 ($0, no pod):** stopped at the FIRST command and was RIGHT to — (r)2 upholds it, rules (ii).
 - **05.09 s22 — the ONE item, ruling (r) item 5. `455cf57` lead files by path; `0726665` the part
   branch + runbook; `50959b5` the pre-registration; `582a655` the pack. `make check` 4320 passed,
   2 skipped, exit 0 (floor 4266) — no test added, none changed, `project()` untouched.**
@@ -23,7 +20,7 @@ guard's settlement $1.159076 (0.49% off) — not a debt of this session and no g
   `decision_table` (the dev bands → (r)2 quoted, plus `why_not_the_dev_bands` pricing the dev gate's
   KILL against this record's own dear corner), `authority` (03.09 (c) → (r)5), `re_emission`,
   `gates.3_hard_stop`, `rung_0.amendment`, `smoke.rule`/`smoke.prefix`, `leg_b.closed`; plus
-  `step.cap_rule` (q)3→(r)3 and `threads_note`'s `dev-40` → the part's own name.
+  `step.cap_rule` (q)3→(r)3 and `threads_note`'s `dev-40` → the part's name.
 - **Checks, all $0, shown in the transcript.** (1) `register()` built IN MEMORY at cap $1.10 first,
   nothing written. (2) The record then grepped for dev-leg strings: every survivor is history by
   intent. (3) §5's new smoke check run VERBATIM on the dev leg's committed files — 11.6 / 52.7 /
@@ -33,20 +30,19 @@ guard's settlement $1.159076 (0.49% off) — not a debt of this session and no g
   `2361034627ba8012…`, runner `102fa524b7427676…`, `promo_prompts` `dd260cb53c0b7b39…`,
   `codebook_version` `a587e0d6d5046255…`, template `57dd9d25dd54a1d5…`, vocabulary identical.
   (6) The pack's first three cross-checked against the REGISTRATION (not pack-vs-pack): they ARE
-  `@msuaaaa:8768` · `@VARUS_channel:2353` · `@VARUS_channel:8647`, and its 40 ids are the
-  registration's order. (7) Board empty (`pod list -a` and `serverless list` both `[]`), gold
-  `6fa804880d5d14db…` / 188 rows.
+  `@msuaaaa:8768` · `@VARUS_channel:2353` · `@VARUS_channel:8647`, its 40 ids the registration's
+  order. (7) Board empty (both listings `[]`), gold `6fa804880d5d14db…` / 188 rows.
   Rung 0 at $0.74/h EU-RO-1: cheap **$0.8420** (−23.4%) · priced **$0.8993** (−18.2%) · dear
   **$1.8999** (+72.7%, named and not hidden) → **FITS on the mean, hard stop 5351.4 s = 89.2 min**,
   which is (r)3's «≈ 89 min» derived and not typed.
 
 ## Next — §0's ledger line, then §1–§4, the smoke, GO, §6–§7. END at the reading ((r)5).
-The registration is committed BEFORE any pod exists, so git history is the witness. §5 runs the
-liveness/shape check, never `--project`: the three replies landing IS the GO.
+The registration is committed BEFORE any pod exists, so git history is the witness; §5 runs the
+liveness/shape check and never `--project` — the three replies landing IS the GO.
 
 ## Open stop — NONE. Both of s21's stops are settled by ruling (r) and nothing new is open.
-- **Tree state at this line:** `582a655`, every path committed, `git status` clean, no pod has ever
-  existed for this step, every RunPod call so far a $0 read.
+**Tree state at this line:** `582a655`, every path committed, `git status` clean, no pod has ever
+existed for this step, every RunPod call so far a $0 read.
 
 ## Named, not built (the phase file forbids adding what it did not ask for)
 - **`gates.terminate_after_minutes` is v5b's borrowed 90 min = 5400 s, 49 s ABOVE this record's own
@@ -56,11 +52,10 @@ liveness/shape check, never `--project`: the three replies landing IS the GO.
   segments, the record does not. Two numbers for one decision, named.
 - **A field added to the record later is unbranched until someone notices** — seven fields is what
   today's audit found, not a closed list; §4 v8's «or the emitter refuses» half is unbuilt.
-- **`--close` for a multi-pod step compares the platform against a note taken before the last pod**
-  — (r)4 makes that a harness debt for the retro, not this phase's code.
-- The holdout branches carry no test (§4 forbids adding one; the $0 contacts are their only
-  exercise) · `prep()` still calls its count `draw.dev_threads` (that key IS pinned, by
-  `tests/test_promo_dev_pass.py:61`; `threads_note` never was — s21's note conflated the two) ·
-  `pod.main` never lifts `close_arrays_too` from `reader_v5` · `committed_registration()` ignores
-  `pinned_inputs` · `check_law` compares `codebook_version` only · **gold covers 140 of 208** ·
-  `1925810730` unaddressable.
+- **`--close` on a multi-pod step reads a note taken before the last pod** — (r)4 makes that a
+  harness debt for the retro, not this phase's code.
+- Holdout branches carry no test (§4 forbids adding one; the $0 contacts are their only exercise) ·
+  `prep()` still calls its count `draw.dev_threads` (that key IS pinned, `tests/test_promo_dev_pass.py:61`;
+  `threads_note` never was — s21's note conflated the two) · `pod.main` never lifts
+  `close_arrays_too` from `reader_v5` · `committed_registration()` ignores `pinned_inputs` ·
+  `check_law` compares `codebook_version` only · **gold covers 140 of 208** · `1925810730`.
