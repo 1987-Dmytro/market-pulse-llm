@@ -8,7 +8,7 @@ REGISTERED at cap **$1.20** and re-prices on the day to **$0.8705**, so the line
 ≤$0.90 + c3 ≤$0.50 + the drip — still fits. `promo-holdout` $0.296617, ledger OPEN; `promo-dev-loop`
 open by (r)4.
 
-## Done — 05.09 s25, ruling (u) item 2, ONE item, two commits, $0. s24 was ACCEPTED by (u) item 1.
+## Done — 05.09 s25, (u) item 2, ONE item, two commits, $0 — ACCEPTED by the (u) addendum 14:20.
 - **The arm is a parameter, and the reading's key is PINNED (`705e2d1`).** The debt this file named
   is paid BEFORE the pod. `--score` read ONE gold over the WHOLE leg: dev-40's 140-row key against
   80 answered units, dev-2's own 188-row key never opened. Now `DEV_ARMS` names the leg's two arms
@@ -34,7 +34,7 @@ open by (r)4.
 - **`make check` GREEN.** ruff clean · pytest in four slices 656 + 1092 + 2152 + 421 = **4321 passed,
   0 failed, 2 skipped** (floor 4266) — unchanged from s24, and no test was added or deleted.
 
-## Next — the PAID iteration 4. Nothing blocks it; (u)2 lets the fix and the run it unblocks share a session.
+## Next — the PAID iteration 4, and the (u) addendum item 5 puts it in the NEXT session, (u)4 unchanged.
 `--terminate-after` from `results/prereg_promo_dev_loop.json :: step.cap_usd` $1.20 → 5838 s; the registered backstop is 90 min =
 5400 s and bites FIRST, with room for ≈107 threads at the mean rate. Sequence ((u)4): pre-create check → create → `--open` →
 smoke (3) → **GO on the three replies, no band gate** → the 80 → delete → `--close-segment --replies
