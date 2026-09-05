@@ -3,9 +3,9 @@
 ## The money, live — read BY HAND from the guard today, never carried from a record
 Cycle 3 **REMAINING $1.8214** of $7.00 (`scripts/runpod_guard.py`, printed at s22's `--register`) —
 $0.0098 under s21's $1.8312, the volume's own drip. `promo-holdout` is REGISTERED at cap **$1.10**
-((r)3, the operator's word of 05.09), own ledger `results/spend_promo_holdout.json`, **$0.00 spent at
-the moment this line was written**; the pod of §1 is what moves it. c3 follows at ≤ min($0.50,
-REMAINING); the volume `mp-srv2` is deleted after c3. `promo-dev-loop` stays OPEN **by construction**
+((r)3, operator 05.09), own ledger `results/spend_promo_holdout.json`, **$0.00 spent when this line
+was written**; the pod of §1 moves it. c3 follows at ≤ min($0.50, REMAINING), then the volume
+`mp-srv2` is deleted. `promo-dev-loop` stays OPEN **by construction**
 ((r)4): its number of record is the run record's five segments, **$1.153372**, cross-checked by the
 guard's settlement $1.159076 (0.49% off) — not a debt of this session and no guard moves for it.
 
