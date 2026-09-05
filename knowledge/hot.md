@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-09-05 14:19:30 (every SessionStart)
+**Auto-refreshed:** 2026-09-05 16:31:50 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
-11f0029 docs(progress): s25 done — the reading arm is pinned, --score takes the arm, no stop is open
-0bb62fb s25(pack): the pack re-pins the re-emitted registration — the 80 units are byte-identical
-705e2d1 s25(register): the reading arm's key is PINNED and --score takes the arm — ruling 05.09 (u) item 2
-ee15c55 docs(team-lead): ruling 05.09 (u) — s24 accepted; dev-2's gold pin and --score by arm come before the pod
-0a18c92 docs(progress): the s23 stop is answered and CLOSED — iteration 4 registered and packed at $0
+b088f2e docs(progress): iteration 4 is bought and INCOMPLETE — the OOM fix is the open stop
+badbc8d s26(iteration 4): INCOMPLETE by PHASE §6.5 — CUDA OOM on the smoke's longest render, no GO written
+3e2c538 s26(ledger): the session's ONE line on promo-iter4 — taken before a pod that was then refused
+d483c57 docs(progress): s26 — the (v) stop is answered, the $0 half is committed, the CREATE is blocked
+92e5bf9 knowledge: the hooks' checkpoint before the pod — HEAD is what the bundle carries
 ```
 
 ## 📋 Recent decisions
@@ -30,37 +30,38 @@ ee15c55 docs(team-lead): ruling 05.09 (u) — s24 accepted; dev-2's gold pin and
 <!-- AUTO-GEN END (everything below preserved across refreshes) -->
 
 # Hot Cache — curated
-**Last update:** 2026-09-05 14:14 (s25 checkpoint, рука стала параметром, платная итерация 4 разблокирована). Этап 1 `SPEC-v2`, карта `STATUS.md`, цикл v3, фаза **v10**. Руками, ≤40 строк.
+**Last update:** 2026-09-05 (закрытие дня; итерация 4 НЕПОЛНА — OOM, рулинг (w) уже ответил). Этап 1 `SPEC-v2`, карта `STATUS.md`, цикл v3, фаза **v12**. Руками, ≤40 строк.
 
 ## 🔥 What's Hot
-**(u) item 2 сделан за $0 и ПРИНЯТ (аддендум (u)5, 14:20) — предусловие пода закрыто.**
-`--score` читал ОДИН эталон по ВСЕЙ ноге: ключ dev-40 (140 строк) против 80 отвеченных юнитов, ключ
-dev-2 (188 строк) не открывался. Теперь `DEV_ARMS` — обе руки по МЕТКЕ (`dev40` → часть дро `dev`;
-`dev2` → часть `holdout`), `DEV_FILES["arms"]` ВЫВОДИТСЯ из неё; `use_arm` отказывает любой руке вне
-`--part dev` и связывает ТОЛЬКО скорер; `score()` судит ОДНУ руку — свои юниты пака, свой эталон,
-свой `strata_of`; `--score` без `--arm` ОТКАЗЫВАЕТ на ноге из двух рук; `leg_golds()` — единственный список пинов, и `pinned_inputs` получил `docs/labels-promo-dev2.jsonl 4b60ab99…`.
-**Прогон $0** (`--suffix _armdrive`, выходы удалены): dev40 на
-`promo_dev40_iter3.jsonl` → 40/40, subject 0.8714 / signal 0.9104; dev2 на `promo_holdout40.jsonl` →
-40/40, subject 0.7394 / signal 0.7833. Это ПРОВОДКА, не производительность — оба файла старше v1.2.
-**Рунг 0 переоценён на день и НЕ сдвинулся:** cheap $0.8705 · priced $0.9279 · dear $4.9984 → FITS на
-MEAN-угле, кап $1.20, жёсткий стоп 5838 с; в паке сдвинулся только `registration.sha256`.
-`make check`: 656+1092+2152+421 = **4321 passed, 0 failed, 2 skipped**. Цикл-3: SPENT $5.5157,
-REMAINING $3.4843 из $9.00.
+**Итерация 4 КУПЛЕНА и НЕПОЛНА (§6.5).** Под `kzcnhe01mgdwvk`, 3364 с, **$0.691489**, рунг 1 GO.
+**Смок не вернулся целиком:** третий юнит `@VARUS_channel:8647` (**14281 симв., самый длинный
+рендер**) умер на `torch.OutOfMemoryError` — 338 MiB при 23.19 из 23.52 GiB. **GO НЕ записан**, ни
+один из 80 не куплен; смок-правило «кратчайший/медиана/длиннейший» окупило себя. **(v)+v11:** один
+платный ран = одна линия шага, гард читается С `--step`. **(w)+v12:** сбой ОБСЛУЖИВАНИЯ двигает
+обслуживание, не инструмент. `promo-iter4` $0.6690/$1.20, закрыть завтра; цикл-3 REMAINING **$2.8057**.
 
 ## ⏭️ Next
-1. **ПЛАТНАЯ итерация 4 — по (u)5 это СЛЕДУЮЩАЯ сессия и ничего кроме неё.** Кап $1.20
-   даёт `--terminate-after` 5838 с, но бэкстоп 90 мин = 5400 с кусает ПЕРВЫМ. Смок 3 → **GO по трём ответам,
-   полосного гейта НЕТ** → 80 → delete → `--close-segment --replies results/promo_dev40_iter4.jsonl`
-   → `--score --arm dev40` (БАР 0.80/0.75) и `--arm dev2` (ЧТЕНИЕ), каждый со своим `--gold`, плюс K8 на каждую → КОНЕЦ на чтениях.
-2. Потом эталон holdout-2 (тимлид) → выстрел holdout-2 ≤$0.90 → c3.
+**Стоп по OOM ЗАКРЫТ рулингом (w) — завтра ПОКУПКА, итерация 5, и ничего кроме неё.**
+1. Сначала за $0: **`--close` линии `promo-iter4`** (`--expect-ms 3364000 --tolerance 0.05`). Затем
+   **транспортный дефект по §4**: раннер ловит исключение юнита, пишет ERROR-ответ (`error`, имя
+   исключения, юнит) и выходит ненулём; Мак считает ERROR среди трёх смок-ответов за «смок не
+   вернулся» и удаляет СРАЗУ. ОДИН тест в обе стороны, тем же коммитом; пин раннера едет с фиксом.
+2. **Инструмент НЕ движется** (закон v1.2, шаблон, рендер, потолок 4000, NF4/bf16, greedy, парсер).
+   Движется ОБСЛУЖИВАНИЕ: карта **≥32 GB** в EU-RO-1 (RTX PRO 4500 32 GB ~$0.72/ч, иначе A6000 / L40S)
+   по дорогому предложению дня **≤$0.90/ч** — 4090 под этот промпт НЕ покупается; плюс
+   `PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True`. Оба — в `re_emission`, `extractor_version` тот же.
+3. **Итерация 5 — линия `promo-iter5`, кап $1.40** (оператор 16:35), FITS на mean по цене дня,
+   жёсткий стоп из капа, бэкстоп поднимается до минут капа, если кусает первым. Последовательность
+   (v)4. Это ПЯТАЯ и последняя из зарегистрированных: RED → вопрос закрывается красным и решает
+   оператор; GREEN → эталон holdout-2 и выстрел на `promo-holdout2` ≤$0.90, потом c3.
 
 ## 🚧 Blockers / долги (названы, не построены)
-**КРАСНЫХ ТЕСТОВ НЕТ. Долг `--score` ЗАКРЫТ.** · **Тест на селектор руки НЕ добавлен** (§4, прецедент
-s24): оба отказа прогнаны в транскрипте; заказать «одна рука → один эталон, один набор юнитов, одна
-карта стратумов», негативный контроль — пустая карта на ЧУЖОЙ части дро. · **Срез `make check` обязан
-быть ЗАКРЫТЫМ списком:** `ls tests/test_*.py` = **229** файлов; раскрой до 200 дал ЗЕЛЁНЫЕ 3900
-вместо 4321, и ничего не упало. · **Порядок пака не строго dev-40→dev-2:** dev-40 закрывается на
-юните **42 из 80**. · Леджеры `promo-holdout` и `promo-dev-loop` открыты. · Остальное — в PROGRESS.
+**КРАСНЫХ ТЕСТОВ НЕТ** (прогон 4320/1 — красный был порядок «коммит → пак», позеленел по имени). ·
+**`--open`/`--close-segment` пишут `results/promo_dev_loop_run.json` в масштабе ПАРТИИ, не ЛИНИИ:**
+$1.9345 против $0.6690, «OVER» на здоровом закрытии; `--expect-ms` ОБЯЗАН фильтровать по
+`created_at >=` якоря линии (проверено: ровно ОДИН сегмент, 3364000 мс). · **Ставки целого рана у
+этого пода НЕТ**, у холдаута тоже. · **Срез `make check` — ЗАКРЫТЫЙ список:** `ls tests/test_*.py` =
+**229**; сюита ~12 мин. · Леджеры `promo-iter4` (закрыть завтра), `promo-holdout`, `promo-dev-loop` открыты.
 **⚠️ `make check` НЕ в платной сессии · ⚠️ ТОЛЬКО ОТЦЕПЛЁННЫМ (`os.setsid`) · ⚠️ K4 НЕ ПЕРЕЗАПУСКАТЬ · ⛔ `1925810730` · ⛔ `aggregates.py` и `open`**.
 ## 🔫 Footguns этого файла
 **⛔ ЭТОТ ФАЙЛ ГРЕПАЕТСЯ КАК ВХОД — ДВА ЛИТЕРАЛА.** `scripts/volume_calc_5c1.py :: quoted()` берёт обе строки ниже посимвольно; пропажа любой роняет девять `tests/test_volume_calc_5c1.py`.
