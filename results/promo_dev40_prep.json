@@ -758,7 +758,7 @@
     "sha256": "6f9fa245b9d702549cdc323849146de1825a12df8048c8ba8077c42e2508a407"
   },
   "gold": {
-    "covers": "the BAR arm of this leg. A leg of two arms has two answer keys and this record names one: dev-2's is docs/labels-promo-dev2.jsonl and no record pins it yet — named, not built ([[a_named_defect_is_not_a_fixed_defect]]).",
+    "covers": "the BAR arm of this leg, dev-40. A leg of two arms has two answer keys and BOTH are pinned: the reading arm dev-2's is docs/labels-promo-dev2.jsonl and the registration carries it among `pinned_inputs` beside this one (ruling 05.09 (u) item 2 — a reading needs its reference pinned as much as a bar does). `--score --arm dev40` and `--score --arm dev2` grade each arm against its own key, over its own units, in its own part of the draw.",
     "lines": 140,
     "path": "docs/labels-promo-dev.jsonl",
     "sha256": "2303ea4319dbf784d022c3935fb0fea7f14f8af471dc1bba391f2addc1d239c0"

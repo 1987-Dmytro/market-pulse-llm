@@ -70,6 +70,12 @@ ARMS: tuple[str, ...] = ("dev",)
 `use_part` from `DEV_FILES`/`HOLDOUT_FILES` — a part is a leg, and a leg may be more than one arm
 since ruling 05.09 (s) item 3 relabelled the spent holdout-40 as `dev-2`."""
 
+ARM: str | None = None
+"""Which arm of this leg the SCORER is grading, or None on a leg of one arm. Bound by `use_arm`
+from `DEV_ARMS` — the label (`dev40`, `dev2`) and the draw's part name (`dev`, `holdout`) are two
+namespaces that happen to overlap on one word, so the arm is named by its label everywhere and the
+draw part is read out of the map ([[id_spaces_that_look_comparable]])."""
+
 CONTRACT = "promo-pulse-1-s9"
 """What every measurement row of THIS instrument is written under — the dev loop's and the
 holdout's alike, because ruling 05.09 (q) item 2 froze one instrument across both legs."""
@@ -372,9 +378,12 @@ def prep(part: str | None = None, gold: Path | None = None) -> dict:
         },
         "gold": {"path": rel(gold), "sha256": sha256_of(gold), "lines": len(
             [one for one in gold.read_text(encoding="utf-8").splitlines() if one.strip()]
-        ), "covers": "the BAR arm of this leg. A leg of two arms has two answer keys and this"
-        " record names one: dev-2's is docs/labels-promo-dev2.jsonl and no record pins it yet —"
-        " named, not built ([[a_named_defect_is_not_a_fixed_defect]])."
+        ), "covers": "the BAR arm of this leg, dev-40. A leg of two arms has two answer keys"
+        " and BOTH are pinned: the reading arm dev-2's is docs/labels-promo-dev2.jsonl and the"
+        " registration carries it among `pinned_inputs` beside this one (ruling 05.09 (u) item 2 —"
+        " a reading needs its reference pinned as much as a bar does). `--score --arm dev40` and"
+        " `--score --arm dev2` grade each arm against its own key, over its own units, in its own"
+        " part of the draw."
         if len(ARMS) > 1 else "this leg's only arm"} if gold.exists() else {
             "path": rel(gold),
             "sha256": None,
@@ -873,8 +882,10 @@ def register(cap_usd: float | None = None) -> dict:
         " holdout-40 relabelled by (s) item 3, riding beside dev-40 as a reading). The transport"
         " does not move, so `scripts/promo_dev_pod_runner.py` and `src/market_pulse/promo_prompts.py`"
         " stay pinned beside the law — `check_law` compares only `codebook_version` and covers"
-        " neither the template nor the runner. `committed_registration()` still does not re-verify"
-        " `pinned_inputs`: a named debt."
+        " neither the template nor the runner. Ruling 05.09 (u) item 2 adds the reading arm's own"
+        " answer key, docs/labels-promo-dev2.jsonl, to `pinned_inputs`: dev-2 carries no bar of this"
+        " record, and a reading still needs its reference pinned as much as a bar does."
+        " `committed_registration()` still does not re-verify `pinned_inputs`: a named debt."
         if PART == "dev"
         else "there is no re-emission of THIS record: §8 (e) spends the holdout ONCE and ruling"
         " 05.09 (q) item 2 freezes the instrument as iteration 3 bought it, so nothing about it can"
@@ -883,10 +894,14 @@ def register(cap_usd: float | None = None) -> dict:
         " bars, and re-bought under the NEXT number with the law UNMOVED and after the operator's"
         " money word. `committed_registration()` still does not re-verify `pinned_inputs`: a named"
         " debt it inherits from the dev loop.",
-        "authority": "docs/reviews/2026-08-30-plan-promo-pulse-1.md «Ruling 05.09 (t)» item 6 —"
+        "authority": "docs/reviews/2026-08-30-plan-promo-pulse-1.md «Ruling 05.09 (u)» item 2 —"
+        " «the registration is re-emitted with docs/labels-promo-dev2.jsonl among `pinned_inputs`"
+        " and `gold.covers` naming both arms; `--score` takes the arm as parameters and writes"
+        " per-arm files; `--pack` again on the re-emitted record; commit — then the pod». It stands"
+        " on «Ruling 05.09 (t)» item 6, which this record was first written under —"
         " «`rate_for`/`rung_0`/`--close-segment` as 3–4 → whole-run rows → `ITERATION = 4`,"
         " `--dry-run --part dev --cap 1.20` FITS on the mean → `--register` → commit → `--pack`"
-        " (green) → the paid iteration 4»; item 5 is the operator's cap and the arm order;"
+        " (green) → the paid iteration 4» — and (t) item 5 is the operator's cap and the arm order;"
         " docs/PHASE-promo-pulse-1.md §6.1 v10; docs/plans/promo-pulse-1.md §9 and §9a"
         if PART == "dev"
         else "docs/reviews/2026-08-30-plan-promo-pulse-1.md «Ruling 05.09 (r)» item 5 — «`register()`'s"
@@ -954,7 +969,7 @@ def register(cap_usd: float | None = None) -> dict:
         },
         "pinned_inputs": {
             rel(path): sha256_of(path)
-            for path in (CODEBOOK, GOLD, DRAW, PREP, PREREG_5C2, RUNNER, PROMO_PROMPTS)
+            for path in (CODEBOOK, *leg_golds(), DRAW, PREP, PREREG_5C2, RUNNER, PROMO_PROMPTS)
         },
         "population": {
             "leg_a": {
@@ -1219,10 +1234,21 @@ def score(replies: Path, iteration: int) -> dict:
 
     Iteration 1 is the BASELINE, so an unparseable answer is COUNTED and never repaired: answer
     repair is a knob ruling 03.09 (c) item 3 gives iterations 2–5, each a new extractor_version.
+
+    From iteration 4 the leg is TWO arms in ONE out-file, and `ARM` grades ONE of them: its own
+    units of the pack, its own gold, its own part of the draw. Scoring both at once would read 80
+    answered units against a key covering 40 and call the result the leg's
+    ([[measure_on_the_rows_the_gate_scores]]).
     """
     import grade_promo_signals as k8
 
-    units = {item["id"]: item for item in load(PACK)["items"] if item["leg"] == "a"}
+    arm = DEV_ARMS[ARM] if ARM else None
+    own = {unit_id(one) for one in dev_threads(arms=(arm["draw_part"],))} if arm else None
+    units = {
+        item["id"]: item
+        for item in load(PACK)["items"]
+        if item["leg"] == "a" and (own is None or item["id"] in own)
+    }
     rows: list[dict] = []
     failures: list[dict] = []
     answered: list[str] = []
@@ -1270,7 +1296,7 @@ def score(replies: Path, iteration: int) -> dict:
         ]
 
     gold = k8.rows(GOLD)
-    strata = k8.strata_of(DRAW, PART)
+    strata = k8.strata_of(DRAW, arm["draw_part"] if arm else PART)
     graded = k8.grade(gold, rows, strata)
     said_rows = {(k8.thread_key(one), str(one["msg_id"])): one for one in rows if one.get("msg_id")}
     misses = []
@@ -1308,8 +1334,14 @@ def score(replies: Path, iteration: int) -> dict:
     for one in failures:
         causes[str(one["cause"]).split(":")[0]] = causes.get(str(one["cause"]).split(":")[0], 0) + 1
     return {
-        "contract": f"docs/plans/promo-pulse-1.md §9 — the error table of iteration {iteration}",
+        "contract": f"docs/plans/promo-pulse-1.md §9 — the error table of iteration {iteration}"
+        + (f", arm {ARM}" if ARM else ""),
         "iteration": iteration,
+        # which arm and which key, IN the record: two arms write two files of the same shape, and a
+        # file that cannot name its own reference is a file a reader has to guess about
+        # ([[provenance_cannot_name_itself]])
+        "arm": ARM,
+        "gold": {"path": rel(GOLD), "sha256": sha256_of(GOLD)},
         "replies": rel(replies),
         "rows": rows,
         "answers": {
@@ -1590,6 +1622,26 @@ def close_segment(*, deleted_at: str, billed_seconds: float, outcome: str) -> di
     )
 
 
+DEV_ARMS = {
+    "dev40": {
+        "draw_part": "dev",
+        "stem": "promo_dev40",
+        "gold": REPO_ROOT / "docs" / "labels-promo-dev.jsonl",
+    },
+    "dev2": {
+        "draw_part": "holdout",
+        "stem": "promo_dev2",
+        "gold": REPO_ROOT / "docs" / "labels-promo-dev2.jsonl",
+    },
+}
+"""The dev leg's arms, in the order the pod answers them — the BAR arm dev-40 FIRST, the reading
+arm dev-2 after (ruling 05.09 (t) item 5). Each names three things that must agree: the part of the
+FIRST draw its units were drawn in, the stem `--score` names its files after, and its own answer
+key. They are the dev leg's and no other leg's: `draw_part` «holdout» here is dev-2, the SPENT
+holdout-40 that ruling 05.09 (s) item 3 relabelled, and it is not the holdout LEG — the same word in
+two id spaces, which is why `use_arm` refuses any arm outside `--part dev`
+([[id_spaces_that_look_comparable]])."""
+
 DEV_FILES = {
     "gold": GOLD,
     "prep": PREP,
@@ -1598,16 +1650,45 @@ DEV_FILES = {
     "run": RUN_RECORD,
     "step": STEP,
     "stem": STEM,
-    "arms": ("dev", "holdout"),
+    "arms": tuple(one["draw_part"] for one in DEV_ARMS.values()),
 }
 """The dev loop's own files, captured here so `use_part` binds BOTH halves and neither is «what the
 constants already are». A selector with a leg that quietly does nothing reads as a selector that
 worked ([[a_moved_guard_that_left_its_copy]]).
 
 `arms` is the dev leg's population from iteration 4 on: dev-40 FIRST, then dev-2 — the SAME first
-draw's two arms, because ruling 05.09 (s) item 3 relabelled the spent holdout-40 as a reading. The
-holdout leg still names the first draw's holdout arm; holdout-2 lives in `DRAW2` and nothing reads
-it yet outside `CORPUS`."""
+draw's two arms, because ruling 05.09 (s) item 3 relabelled the spent holdout-40 as a reading. It is
+DERIVED from `DEV_ARMS` above and never listed twice: two lists of one population drift, and the
+pack's order is the one the scorer must slice back apart. The holdout leg still names the first
+draw's holdout arm; holdout-2 lives in `DRAW2` and nothing reads it yet outside `CORPUS`."""
+
+
+def leg_golds() -> list[Path]:
+    """Every answer key this leg is graded on, the BAR arm's FIRST — what a registration pins.
+
+    A leg of two arms has two, and ruling 05.09 (u) item 2 pins both: dev-2 carries no bar, and a
+    reading needs its reference pinned as much as a bar does. `--gold` overrides the BAR arm's key
+    (the holdout names its own on the command line, §4), and the reading arms keep their own file —
+    so an override replaces a pin instead of leaving a second, stale one beside it."""
+    if PART != "dev":
+        return [GOLD]
+    return [GOLD] + [one["gold"] for one in list(DEV_ARMS.values())[1:]]
+
+
+def use_arm(arm: str, *, gold: Path | None = None) -> None:
+    """Point the SCORER at ONE arm of this leg — never at the registration, which pins them all.
+
+    Called from the `--score` branch alone, because binding `GOLD` here on a `--register` run would
+    pin a reading arm's key as the leg's bar key. `--gold` still wins over the arm's own file."""
+    global ARM, STEM, GOLD
+    files = DEV_ARMS.get(arm) if PART == "dev" else None
+    if files is None:
+        raise SystemExit(
+            f"--arm {arm}: the arms are {', '.join(DEV_ARMS)} and they are the DEV leg's — this"
+            f" run is --part {PART}. The holdout leg is ONE arm and chooses none."
+        )
+    ARM, STEM = arm, files["stem"]
+    GOLD = gold or files["gold"]
 
 
 def use_part(part: str, *, gold: Path | None = None, step: str | None = None) -> None:
@@ -1637,6 +1718,10 @@ def main(argv: list[str] | None = None) -> int:
         "--part", default="dev", choices=("dev", "holdout"), help="which half of the frozen draw"
     )
     parser.add_argument("--gold", type=Path, help="the part's answer key; the registration pins it")
+    parser.add_argument(
+        "--arm",
+        help="which arm of the leg --score grades: its units, its answer key, its part of the draw",
+    )
     parser.add_argument("--step", help="the money step this part spends under, and its own ledger")
     parser.add_argument("--cap", type=float, help="the step's cap in USD — the operator's number")
     parser.add_argument("--render", metavar="THREAD_ROOT")
@@ -1796,6 +1881,15 @@ def main(argv: list[str] | None = None) -> int:
         for name in ("replies", "iteration") if PART == "dev" else ("replies",):
             if getattr(args, name) is None:
                 parser.error(f"--score needs --{name}")
+        if args.arm is None and len(ARMS) > 1:
+            parser.error(
+                "--score needs --arm on a leg of two arms: one grade over the leg's answered units"
+                " against a key that covers one arm of them is a grade of neither"
+                " ([[measure_on_the_rows_the_gate_scores]]). Name it — "
+                + " or ".join(f"--arm {one}" for one in DEV_ARMS)
+            )
+        if args.arm is not None:
+            use_arm(args.arm, gold=args.gold)
         table = score(args.replies, args.iteration)
         rows = table.pop("rows")
         tag = f"_iter{args.iteration}" if PART == "dev" else ""

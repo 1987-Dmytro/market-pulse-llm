@@ -1,5 +1,5 @@
 {
-  "authority": "docs/reviews/2026-08-30-plan-promo-pulse-1.md «Ruling 05.09 (t)» item 6 — «`rate_for`/`rung_0`/`--close-segment` as 3–4 → whole-run rows → `ITERATION = 4`, `--dry-run --part dev --cap 1.20` FITS on the mean → `--register` → commit → `--pack` (green) → the paid iteration 4»; item 5 is the operator's cap and the arm order; docs/PHASE-promo-pulse-1.md §6.1 v10; docs/plans/promo-pulse-1.md §9 and §9a",
+  "authority": "docs/reviews/2026-08-30-plan-promo-pulse-1.md «Ruling 05.09 (u)» item 2 — «the registration is re-emitted with docs/labels-promo-dev2.jsonl among `pinned_inputs` and `gold.covers` naming both arms; `--score` takes the arm as parameters and writes per-arm files; `--pack` again on the re-emitted record; commit — then the pod». It stands on «Ruling 05.09 (t)» item 6, which this record was first written under — «`rate_for`/`rung_0`/`--close-segment` as 3–4 → whole-run rows → `ITERATION = 4`, `--dry-run --part dev --cap 1.20` FITS on the mean → `--register` → commit → `--pack` (green) → the paid iteration 4» — and (t) item 5 is the operator's cap and the arm order; docs/PHASE-promo-pulse-1.md §6.1 v10; docs/plans/promo-pulse-1.md §9 and §9a",
   "class": "PRE-REGISTRATION. Written and committed before any pod of this step exists; git history is the only witness that it preceded the money.",
   "decision_table": {
     "after_the_smoke_for_40_threads": {
@@ -57,8 +57,9 @@
   "pinned_inputs": {
     "docs/CODEBOOK-promo-signals.md": "86ed01a484611fd5cca20f087f3479a7a1ff28370282ef556b9f80cbd65ca7c4",
     "docs/labels-promo-dev.jsonl": "2303ea4319dbf784d022c3935fb0fea7f14f8af471dc1bba391f2addc1d239c0",
+    "docs/labels-promo-dev2.jsonl": "4b60ab99a21045e6f22f612556b4026ac2d6d06090c85c62f370f58c1d5bab9f",
     "results/prereg_5c2_run.json": "d5d3afd5e6d7e966233a7e449546b2001f9c2a08646cab207e87531f5df4cbc8",
-    "results/promo_dev40_prep.json": "6689273fa46bb6efec9b76566e648c12cdbb64a42d691d000635cdb7a7c96d21",
+    "results/promo_dev40_prep.json": "82a8c9d4c7ba360885058e456fbdfcefcb4de2c4f7f75ed019e2e7ecf73003cd",
     "results/promo_threads_draw.json": "6f9fa245b9d702549cdc323849146de1825a12df8048c8ba8077c42e2508a407",
     "scripts/promo_dev_pod_runner.py": "102fa524b74276769862156cd2e1ed88a0c4b3cbef1777cfc0ced7ef9525637b",
     "src/market_pulse/promo_prompts.py": "da60348d75472ac0fd0273c2e0e284fbf636f19093ec62db66853bdcaf5f34a2"
@@ -209,7 +210,7 @@
     }
   },
   "question": "does the promo-signal instrument, under CODEBOOK 0bbb665a2beb3d4d…, clear subject ≥ 0.80 and signal ≥ 0.75 on dev-40 within at most 5 dev runs — and what does the SAME law read on dev-2, the spent holdout-40 whose 0.7181 subject sent the codebook back for v1.2? dev-40 carries the bars; dev-2 is a reading beside them and no bar of this record.",
-  "re_emission": "ruling 04.09 (m) item 5 and (n) item 2 — iterations 1-3 are kept by git history; THIS record is the one iteration 4 is bought under. What moves since iteration 3 is the LAW (codebook v1.2, ruling 05.09 (s) item 2: partners, the off-domain thread, three product forms, price-as-quality) and the POPULATION (dev-2, the spent holdout-40 relabelled by (s) item 3, riding beside dev-40 as a reading). The transport does not move, so `scripts/promo_dev_pod_runner.py` and `src/market_pulse/promo_prompts.py` stay pinned beside the law — `check_law` compares only `codebook_version` and covers neither the template nor the runner. `committed_registration()` still does not re-verify `pinned_inputs`: a named debt.",
+  "re_emission": "ruling 04.09 (m) item 5 and (n) item 2 — iterations 1-3 are kept by git history; THIS record is the one iteration 4 is bought under. What moves since iteration 3 is the LAW (codebook v1.2, ruling 05.09 (s) item 2: partners, the off-domain thread, three product forms, price-as-quality) and the POPULATION (dev-2, the spent holdout-40 relabelled by (s) item 3, riding beside dev-40 as a reading). The transport does not move, so `scripts/promo_dev_pod_runner.py` and `src/market_pulse/promo_prompts.py` stay pinned beside the law — `check_law` compares only `codebook_version` and covers neither the template nor the runner. Ruling 05.09 (u) item 2 adds the reading arm's own answer key, docs/labels-promo-dev2.jsonl, to `pinned_inputs`: dev-2 carries no bar of this record, and a reading still needs its reference pinned as much as a bar does. `committed_registration()` still does not re-verify `pinned_inputs`: a named debt.",
   "rung_0": {
     "amendment": "ruling 03.09 (c) item 1 — smoke + iteration 1 + the 16 posts, not five iterations: the borrowed max over five would refuse a loop the smoke may prove cheap",
     "cap_usd": 1.2,
@@ -250,7 +251,7 @@
         0.74,
         0.34
       ],
-      "read_at": "2026-09-05T11:01:04+00:00",
+      "read_at": "2026-09-05T11:40:59+00:00",
       "rule": "the DEARER offer of secure/community, read on the day; the create response's own costPerHr is the price the meter bills and the price gate re-checks it",
       "stock": "Medium",
       "usd_per_hour": 0.74
@@ -302,11 +303,11 @@
     "floor_usd": null,
     "ledger": "results/spend_promo_dev_loop.json",
     "money": {
-      "at": "2026-09-05T11:01:04+00:00",
+      "at": "2026-09-05T11:40:58+00:00",
       "cycle3_cap_usd": 9.0,
-      "cycle3_spent_usd": 5.5059,
+      "cycle3_spent_usd": 5.5157,
       "from": "scripts/runpod_guard.py, its own printed REMAINING and CYCLE 3 lines",
-      "remaining_usd": 3.4941
+      "remaining_usd": 3.4843
     },
     "name": "promo-dev-loop",
     "no_cap_raise": "never, mid-run. Silence is KILL: nobody can be asked."
