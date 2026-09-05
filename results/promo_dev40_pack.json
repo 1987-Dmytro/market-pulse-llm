@@ -3664,11 +3664,11 @@
     }
   ],
   "iteration": 4,
-  "phase": "promo-dev-loop",
+  "phase": "promo-iter4",
   "reading": "the pod renders each item ITSELF and refuses unless its sha equals the one pinned here; the rendered string never travels",
   "registration": {
     "record": "results/prereg_promo_dev_loop.json",
-    "sha256": "9ded3a7981a43dd1570d954852e450a7a83e7ddc105d9604097eac8e78fb7354"
+    "sha256": "208b227a36898aa1d1f56b63012c2f8d41c9a7486bbf722af808044fc79869c0"
   },
   "serving": {
     "adapter": null,
