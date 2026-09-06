@@ -133,6 +133,16 @@
       "billing_since_usd": 6.6594,
       "billing_read": "read",
       "note": "promo-iter5 POST-RUN reading, the reference the close settles against: pod xt4c5osyr36ew0 2026-09-06T11:20:39Z -> 2026-09-06T12:38:57Z, 4698 billed s, 80/80 units answered, all finish=stop"
+    },
+    {
+      "at": "2026-09-06T14:21:40+00:00",
+      "balance": 7.0620289393,
+      "spent_usd": 7.4179,
+      "remaining_usd": 2.5821,
+      "balance_delta_usd": 7.4179,
+      "billing_since_usd": 7.408215,
+      "billing_read": "read",
+      "note": "promo-iter5 CLOSED at $0.9450 — promo-iter5 settled"
     }
   ]
 }
