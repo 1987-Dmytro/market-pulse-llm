@@ -1,4 +1,4 @@
-# PHASE — `promo-pulse-1` (stage 1 whole: C2–C5 of `docs/SPEC-v2-promo-pulse.md` §8) — v14 06.09: §6.1 the registration OPENS its line, so it runs in the PAID session minutes before the create (the team lead reads the dry run + HEAD before the purchase, the registration at acceptance); v13 05.09: §6.1 a step line's close settles against its POST-RUN reading (taken before any next pod); a line without one closes on the walk alone and never takes a late reading; §2 iteration 5 is the dev-40 read; v12 05.09: §6.5 a serving failure moves the serving, never the instrument, and surfaces at once; v11: §6.1 one paid run = one step line, the registration reads the guard with the step it names; v10: every leg prices on the slowest WHOLE run and issues on the mean when the dear corner refuses, a cap is quoted from the dry run; v9: §2 S2 holdout-40 read RED on subject → codebook v1.2, dev-2, holdout-2 (in-domain population), K8 v2; §4 «asked for once» + a re-used producer's record branches every decision field, §6.5 validity of a paid reading, §6.6 a test that reads the record, §6.1–6.2 a fence is an estimate and the frozen-set instrument is byte-for-byte
+# PHASE — `promo-pulse-1` (stage 1 whole: C2–C5 of `docs/SPEC-v2-promo-pulse.md` §8) — v15 06.09: §2 iteration 5 GREEN under law v1.2 (ruling (z)) — the frozen instrument for the holdout-2 shot is the four pins of `d598573`; §6.1 the cycle-3 ceiling is $10.00 (operator 06.09 15:55, anchor unchanged); v14 06.09: §6.1 the registration OPENS its line, so it runs in the PAID session minutes before the create (the team lead reads the dry run + HEAD before the purchase, the registration at acceptance); v13 05.09: §6.1 a step line's close settles against its POST-RUN reading (taken before any next pod); a line without one closes on the walk alone and never takes a late reading; §2 iteration 5 is the dev-40 read; v12 05.09: §6.5 a serving failure moves the serving, never the instrument, and surfaces at once; v11: §6.1 one paid run = one step line, the registration reads the guard with the step it names; v10: every leg prices on the slowest WHOLE run and issues on the mean when the dear corner refuses, a cap is quoted from the dry run; v9: §2 S2 holdout-40 read RED on subject → codebook v1.2, dev-2, holdout-2 (in-domain population), K8 v2; §4 «asked for once» + a re-used producer's record branches every decision field, §6.5 validity of a paid reading, §6.6 a test that reads the record, §6.1–6.2 a fence is an estimate and the frozen-set instrument is byte-for-byte
 
 Team-lead file. Executor: read this, then run `/plan-phase promo-pulse-1` and STOP for the plan
 review. Mechanics named below are CONSTRAINTS; the goal is the question and the checks.
@@ -32,7 +32,7 @@ chain and brand as a WINDOW AGGREGATE only (SPEC 3.22 (1)), price trend per SKU,
   plateaus (two iterations without gain). **v9 (05.09, ruling (s)): holdout-40 was SPENT under law v1.2/K8 v1 —
   signal 0.7958 HOLDS, subject 0.7181 RED (`results/grade_promo_holdout40.json`, complete reading); it is now
   `dev-2`, a reading, never a bar again. The line continues: codebook v1.2 (team lead) → law re-rendered → iteration 4 (INCOMPLETE, OOM — v12) → iteration 5
-  on dev-40 (the same two bars; dev-2 read beside it, no bar; the LAST of the 5 dev runs) → the ONE `holdout-2` shot.
+  on dev-40 (**GREEN 06.09, ruling (z): subject 0.8857 · signal 0.8667, complete 40/40; dev-2 read 0.8883/0.8296 beside it, no bar; the LAST of the 5 dev runs; the four pins of `d598573` are the frozen instrument**) → the ONE `holdout-2` shot.
   `holdout-2`: seed 42 over the frozen 678 price threads MINUS channels with `collect: false` in registry r2 (the
   product's population) MINUS the 80 already drawn, 20/20 by stratum, a NEW draw file — the old draw stays frozen.
   K8 v2 for that line: `sku`/`brand` match on normalised exact OR token-Jaccard ≥ 0.5, `chain` folds as today, `post`
@@ -94,8 +94,8 @@ scanning the 81 unscanned census candidates.
 
 ## 6. Stop-points (ask BEFORE, never report after)
 
-1. Any pod/serverless create (paid): smoke first, project at measured rates; cycle 3 governs (ceiling **$9.00**, operator 05.09, ruling (s)
-   addendum 8, anchor unchanged) — the 30.08 estimate table and the cycle-2 remainder are history; never trim scope silently.
+1. Any pod/serverless create (paid): smoke first, project at measured rates; cycle 3 governs (ceiling **$10.00**, operator 06.09, ruling (z)
+   addendum; $9.00 was (s) addendum 8; anchor unchanged) — the 30.08 estimate table and the cycle-2 remainder are history; never trim scope silently.
    **A fence for a LATER paid step is an estimate, never a cap (v7, ruling (q)):** it is re-priced at that step's registration on the
    instrument's OWN measured pace of the SLOWEST pod seen (hosts of one card ran 1.5–2.3× apart on identical outputs), the cap becoming
    the hard stop — holdout $1.10 (spent $0.2966), iteration 4 $1.20 (spent $0.6915, INCOMPLETE — v12), **iteration 5 $1.40 on a ≥ 32 GB

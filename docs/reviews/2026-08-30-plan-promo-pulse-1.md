@@ -1130,3 +1130,28 @@ The «needs named» list stays in PROGRESS as debts; none blocks iteration 2.
 whose coverage and floor are COMMANDS — re-run by me: 229 test files, slices 60 + 85 + 84 COVER, `ruff` clean, `results/` clean against HEAD (the committed record is still
 iteration 4's, as it must be until §0a re-emits it). Docs-only diff, no test/pin/guard/ledger added; the `hot.md` contradiction corrected under PROCESS v2.1 without a stop.
 **Next session = «iteration 5», PAID, ≤ $1.40, nothing in front of §0a.** GREEN on dev-40 → holdout-2 gold (team lead, blind) → the shot; RED → the question closes red, the operator's word.
+
+## Ruling 06.09 (z) — iteration 5 ACCEPTED on a COMPLETE reading: both dev-40 bars HOLD under law v1.2 (subject 0.8857 · signal 0.8667); the dev loop is DONE at 5 of 5; the instrument is FROZEN as bought (`d598573`); `promo-iter5` closes at the next start; next, in parallel: the team lead's holdout-2 gold (blind) and the executor's «holdout-2 prep» ($0, ends at the DRY RUN) → the shot
+
+1. Accepted by files and my own runs: `results/promo_dev40_iter5.jsonl` 80 rows / 80 ids / 0 ERROR rows; both error tables 40/40, `parse_failures 0`, dead []; K8 v2 re-run by me on both
+   arms — dev-40 **0.8857 / 0.8667 HOLD** (identical to `grade_promo_dev40_iter5.json`), dev-2 0.8883 / 0.8296 (a READING: dev-2 is the spent holdout-40 whose misses v1.2 was written on);
+   stratum readings dev-40 currency 0.7869 · decimal 0.962. Ruling (w) answered: the SERVING was the cause — the 14 281-char render answered in 313.9 s on 32 GB, `finish stop`, no OOM.
+2. Money by files: registration `d598573` FITS at the mean $0.8470 (= my arithmetic of 06.09), card/price/backstop as fields (116 min, the cap live), anchor 11:06:19Z; pod `xt4c5osyr36ew0`
+   11:20:39Z → 12:38:57Z, 4698 s = **$0.9396**; post-run reading **$0.9495 of $1.40** (drift 1.04 % — (y)'s same-session rule, measured); cycle 3 **$7.3933 of $9.00, REMAINING $1.6067**;
+   `pod list -a` []. `--close` refused on a PARTIAL walk (1 072 748 of 4 698 000 ms) — a delay, not a decision: retried read-only at the next session's start (expected ≈ 1 % off).
+   New whole-run row **53.6254 s/thread (max 313.867, n = 80)** prices holdout-2. The `close_segment` `OVER` is the false field (y)4 named — it fired as predicted and gates nothing.
+3. **The instrument is FROZEN as bought (§6.2):** codebook `86ed01a4…` · template `32fa6c42…` · `promo_prompts.py da60348d…` · runner `87072444…` — the four pins the holdout-2
+   registration carries byte for byte. Verifier risks 2–3 are fixed on the MAC side only (`promo_dev_pass.py`: `"exception" in row`; `close_segment` filtered by `anchored_at`), inside
+   (w)3's ONE test extended — the runner does not move. A pin that moves before the shot is a stop.
+4. **Next, in parallel:** the team lead labels holdout-2 BLIND (112 comments, `results/promo_threads_draw_2.json`); the executor's ONE $0 item **«holdout-2 prep»**: the holdout-2 leg as
+   a PART of the emitter (`--part holdout2`: draw-2's holdout arm, gold `docs/labels-promo-holdout2.jsonl`, step `promo-holdout2`, own stem/files; every decision field of the record
+   branches on the leg — §4), item 3's two fixes, the runbook re-pointed to the shot (§0a inside the paid session, (y)), `--dry-run --part holdout2` shown (mean corner on 53.6254 ≈ $0.52,
+   dear ≈ $2.81 → issued on the mean; cap $0.90 = hard stop 4500 s), `promo-iter5` closed at start; it ENDS at the committed dry run — no `--register`. Then the fresh verifier → my reading
+   → the shot in the session after the gold is committed (the registration pins it); §6.2's notice to the operator = the dry run's figure, before that session.
+5. Ceiling: $1.6067 − ≈ $0.24/day holds the shot under $9.00 for ≈ 2.5 days; c3 ($0.50) does not fit behind it → the operator's word (keep $9.00 · $10.00 · $10.50), not blocking the shot.
+   Stop class: planned read (§6.2 notice) — nothing preventable. The day: 3 executor sessions, 1 stop (s29, mine), 1 planned read.
+
+**(z) addendum, 06.09 15:55 — the operator's money word: cycle-3 ceiling $10.00** (from $9.00; the anchor $14.4799665639 of 01.09 does NOT move — a ceiling is a line, not a balance;
+no top-up). Applied by the executor at the next session's start exactly as (s) addendum 8 was: `CYCLE3_CAP_USD = 10.00` in `scripts/runpod_guard.py`, one commit by path, shown by the
+guard's own line `CYCLE 3 SPENT $… of $10.00` on the `promo-iter5` close retry (REMAINING at the 12:39Z reading becomes $2.6067). What it buys: the holdout-2 shot (≤ $0.90) + c3
+(≤ $0.50) + the volume's drip for ≈ 4 days. The operator is asked again only if a sixth reading is ever needed.
