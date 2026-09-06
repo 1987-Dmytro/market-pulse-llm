@@ -21,6 +21,12 @@ from market_pulse import promo_prompts  # noqa: E402
 
 ROW = {"channel": "@c", "thread_root": "1"}
 
+CARD = "NVIDIA RTX PRO 4500 Blackwell"
+"""One card's gpu-id, for the tests that are about the PRICE gate and not about the card list.
+It stopped being `dev.CARD` when ruling 05.09 (x) item 3 made the card a parameter read off
+`runpodctl gpu list`: a test that reaches for the module's own choice cannot notice the day that
+choice changes ([[a_number_typed_into_its_own_checker]] read the other way)."""
+
 
 def test_the_join_is_per_comment_and_a_silent_comment_is_not_invented():
     """Gold is one row per comment with a LIST of types; the model answers `about` + free-standing
@@ -147,25 +153,85 @@ def test_a_refusing_guard_stops_the_registration(monkeypatch):
         dev.guard_reading("promo-iter4", 1.20)
 
 
+def _gpu(name, gpu_id, gb, secure, community=None, stock="High", dc="EU-RO-1"):
+    return {
+        "displayName": name,
+        "gpuId": gpu_id,
+        "memoryInGb": gb,
+        "securePricePerHr": secure,
+        "communityPricePerHr": community,
+        "dataCenterAvailability": [{"dataCenterId": dc, "stockStatus": stock}],
+    }
+
+
 def test_the_price_is_the_dearer_offer_and_a_missing_card_is_a_stop(monkeypatch):
     """The create response's `costPerHr` is what bills; a registration written at the cheaper of two
     offers would be a ceiling the run can exceed with no gate firing. And a card the datacenter does
-    not have today is the operator's word, not a substitution this script may make."""
-    offered = [
-        {
-            "displayName": "RTX 4090",
-            "securePricePerHr": 0.74,
-            "communityPricePerHr": 0.34,
-            "dataCenterAvailability": [{"dataCenterId": "EU-RO-1", "stockStatus": "Medium"}],
-        }
-    ]
-    monkeypatch.setattr(dev.subprocess, "run", lambda *a, **k: _Done(json.dumps(offered)))
-    assert dev.offered_price()["usd_per_hour"] == 0.74
+    not have today is the operator's word, not a substitution this script may make.
 
-    elsewhere = [dict(offered[0], dataCenterAvailability=[{"dataCenterId": "US-KS-2"}])]
-    monkeypatch.setattr(dev.subprocess, "run", lambda *a, **k: _Done(json.dumps(elsewhere)))
-    with pytest.raises(SystemExit, match="not offered in EU-RO-1"):
-        dev.offered_price()
+    Ruling 05.09 (x) item 3 added the walk itself to what this test is about. The card is a
+    PARAMETER now, so every condition that makes one candidate lose to the next needs a direction:
+    the 24 GB that OOM'd, a card the cloud has no stock of, one over the operator's $0.90/h — and
+    the EXACT name, because the listing carries `RTX PRO 4500 SE` at the same price and it is a
+    different row in a different cloud ([[an_exclusion_by_id_is_not_an_exclusion_by_text]]).
+    """
+    listing = [
+        _gpu("RTX PRO 4500", "NVIDIA RTX PRO 4500 Blackwell", 32, 0.72),
+        _gpu("RTX PRO 4500 SE", "NVIDIA RTX PRO 4500 Blackwell SE", 32, 0.72, dc="EUR-IS-1"),
+        _gpu("RTX A6000", "NVIDIA RTX A6000", 48, 0.53, 0.33, stock="none"),
+        _gpu("L40S", "NVIDIA L40S", 48, 1.09, 0.79, dc="US-KS-2"),
+        _gpu("RTX 4090", "NVIDIA GeForce RTX 4090", 24, 0.74, 0.34),
+    ]
+    monkeypatch.setattr(dev.subprocess, "run", lambda *a, **k: _Done(json.dumps(listing)))
+
+    # (w) item 2's own order, and the first name that clears every condition wins
+    price = dev.offered_price()
+    assert price["display_name"] == "RTX PRO 4500", "the SE row is a different card, not this one"
+    assert price["card"] == "NVIDIA RTX PRO 4500 Blackwell", "the gpu-id is what `pod create` takes"
+    assert price["usd_per_hour"] == 0.72 and price["vram_gb"] >= dev.MIN_VRAM_GB
+
+    # the DEARER of two offers, never the cheaper: a 48 GB card at 0.53/0.33 registers 0.53
+    plenty = [_gpu("RTX A6000", "NVIDIA RTX A6000", 48, 0.53, 0.33)]
+    monkeypatch.setattr(dev.subprocess, "run", lambda *a, **k: _Done(json.dumps(plenty)))
+    assert dev.offered_price(("RTX A6000",))["usd_per_hour"] == 0.53
+
+    # every direction of the walk, one at a time — each candidate loses for its OWN reason
+    for row, why in (
+        (_gpu("RTX A6000", "id", 24, 0.53), "24 GB"),
+        (_gpu("RTX A6000", "id", 48, 0.53, stock="none"), "no stock"),
+        (_gpu("RTX A6000", "id", 48, 0.53, dc="US-KS-2"), "no stock"),
+        (_gpu("RTX A6000", "id", 48, 0.95), r"\$0.95/h"),
+    ):
+        monkeypatch.setattr(dev.subprocess, "run", lambda *a, **k: _Done(json.dumps([row])))
+        with pytest.raises(SystemExit, match=why):
+            dev.offered_price(("RTX A6000",))
+
+    monkeypatch.setattr(dev.subprocess, "run", lambda *a, **k: _Done(json.dumps(listing)))
+    with pytest.raises(SystemExit, match="no matching row at all"):
+        dev.offered_price(("A CARD NOBODY OFFERS",))
+
+
+def test_the_backstop_is_the_caps_own_minutes_and_never_a_borrowed_ninety():
+    """Ruling 05.09 (x) item 3. `--terminate-after` used to be v5b's 90 minutes, and at iteration 5's
+    $1.40 cap on a $0.72/h card the cap pays for 116 — so the borrowed number would have killed a
+    run this record prices as FITS, at $1.08 ([[a_ceiling_derived_from_one_span_measured_over_another]]).
+
+    Both directions, because a bound that only ever grows is not a bound: with a cap SMALLER than the
+    borrowed 90 minutes the backstop shrinks with it, and `terminate_after_minutes * 60` stays at or
+    under `hard_stop_seconds` — the inequality `open_segment` publishes as `backstop_fits` and the
+    one thing «the cap is the hard stop» actually means ([[a_bound_the_meter_cannot_reach]]).
+    """
+    wide = 1.40 / 0.72 * 3600  # 7000 s — the cap's own seconds at the registered price
+    grown = dev.backstop(90, wide)
+    assert grown["terminate_after_minutes"] == 116
+    assert grown["terminate_after_borrowed_minutes"] == 90
+    assert "FIRST" in grown["terminate_after_rule"], "90 min bites before the cap's 116"
+    assert grown["terminate_after_minutes"] * 60 <= wide
+
+    narrow = dev.backstop(90, 0.50 / 0.72 * 3600)  # 2500 s: the cap bites long before the borrow
+    assert narrow["terminate_after_minutes"] == 41
+    assert narrow["terminate_after_minutes"] * 60 <= 0.50 / 0.72 * 3600
+    assert "LAST" in narrow["terminate_after_rule"]
 
 
 def test_the_transport_gates_are_read_from_the_frozen_record_and_not_typed(tmp_path, monkeypatch):
@@ -223,7 +289,7 @@ def test_rung_zero_fits_at_the_dear_corner_and_refuses_when_the_cap_shrinks():
     corner and the dear-issuing leg would have stopped being reachable at all
     ([[an_absolute_bar_needs_a_reachability_state]]). The claim did not move, its literal did.
     """
-    price = {"card": dev.CARD, "datacenter": "EU-RO-1", "stock": "Medium", "usd_per_hour": 0.74}
+    price = {"card": CARD, "datacenter": "EU-RO-1", "stock": "Medium", "usd_per_hour": 0.74}
     threads = [{"channel": "@c", "thread_root": str(i)} for i in range(40)]
     wide = dev.rung_0(cap=5.00, price=price, threads=threads, n_posts=16)
     assert wide["fits"] and wide["dear_usd"] < 5.00 and wide["issued_on"] == "dear"
@@ -263,7 +329,7 @@ def test_leg_b_pins_ids_and_not_a_count():
 
 REGISTERED = {
     "step": {"cap_usd": 2.5},
-    "rung_0": {"price": {"usd_per_hour": 0.74, "card": dev.CARD}, "hard_stop_seconds": 12162.0},
+    "rung_0": {"price": {"usd_per_hour": 0.74, "card": CARD}, "hard_stop_seconds": 12162.0},
     "gates": {"terminate_after_minutes": 90},
 }
 
@@ -280,7 +346,7 @@ def test_rung_one_kills_a_pod_dearer_than_the_registration(staged):
     response says. A pod that came back dearer is a different pod's price, and the cap was computed
     against the other number — so the gate has to be able to say KILL, not only GO."""
     ok = dev.open_segment(
-        pod_id="a1", created_at="2026-09-03T18:00:00Z", usd_per_hour=0.74, card=dev.CARD
+        pod_id="a1", created_at="2026-09-03T18:00:00Z", usd_per_hour=0.74, card=CARD
     )
     assert ok["latest"]["verdict"] == "GO"
     assert ok["gates"][-1]["backstop_fits"] is True
@@ -288,7 +354,7 @@ def test_rung_one_kills_a_pod_dearer_than_the_registration(staged):
 
     dev.close_segment(deleted_at="2026-09-03T18:10:00Z", billed_seconds=600, outcome="test")
     dear = dev.open_segment(
-        pod_id="a2", created_at="2026-09-03T18:20:00Z", usd_per_hour=1.19, card=dev.CARD
+        pod_id="a2", created_at="2026-09-03T18:20:00Z", usd_per_hour=1.19, card=CARD
     )
     assert dear["latest"]["verdict"] == "KILL"
 
@@ -297,11 +363,11 @@ def test_never_two_pods_is_checked_before_the_second_create(staged):
     """The ban's goal is that two meters never run at once, so it is a check BEFORE `pod create`
     and not a refusal after the second one has started billing."""
     dev.open_segment(
-        pod_id="a1", created_at="2026-09-03T18:00:00Z", usd_per_hour=0.74, card=dev.CARD
+        pod_id="a1", created_at="2026-09-03T18:00:00Z", usd_per_hour=0.74, card=CARD
     )
     with pytest.raises(SystemExit, match="still OPEN"):
         dev.open_segment(
-            pod_id="a2", created_at="2026-09-03T18:01:00Z", usd_per_hour=0.74, card=dev.CARD
+            pod_id="a2", created_at="2026-09-03T18:01:00Z", usd_per_hour=0.74, card=CARD
         )
 
 
@@ -309,7 +375,7 @@ def test_the_bill_is_the_segments_own_price_and_the_gates_append(staged):
     """Never a balance delta — that prices the account, not the leg
     ([[a_balance_delta_is_not_a_per_leg_cost]]). And no snapshot is overwritten."""
     dev.open_segment(
-        pod_id="a1", created_at="2026-09-03T18:00:00Z", usd_per_hour=0.74, card=dev.CARD
+        pod_id="a1", created_at="2026-09-03T18:00:00Z", usd_per_hour=0.74, card=CARD
     )
     state = dev.close_segment(
         deleted_at="2026-09-03T18:34:21Z", billed_seconds=2061.0, outcome="56 of 56 answered"
@@ -511,3 +577,88 @@ def test_a_dead_unit_becomes_an_error_reply_the_mac_reads_as_the_smoke_not_comin
 
     with pytest.raises(SystemExit, match="give --out a NEW name"):
         pod.main(argv(died), loader=lambda p, r: object(), sleep=lambda _: None)
+
+    # --- ruling 05.09 (x) item 4: the Mac reads an ERROR reply EVERYWHERE it reads replies -------
+
+    # (a) the file is copied off a LIVE pod, so its last line can be half written. That is the scp
+    # race and it reads as WAITING — a traceback here lands on the one command that decides whether
+    # a billing pod is deleted, which is where iteration 4's $0.62 was lost in the first place.
+    torn = tmp_path / "torn.jsonl"
+    answer(want[:2], torn)
+    with torn.open("a", encoding="utf-8") as handle:
+        handle.write(json.dumps({"id": want[2], "seconds": 9.5})[:-6])
+    assert dev.smoke_state(torn)["state"] == "waiting"
+    assert dev.smoke_state(torn)["missing"] == [want[2]]
+    assert dev.main(["--smoke", "--part", "dev", "--replies", str(torn)]) == 1
+
+    # (b) a crash AFTER the loop names no unit and writes `id: null` — still a death, and the row
+    # that says so must not be keyed away by the id it deliberately does not have
+    headless = tmp_path / "headless.jsonl"
+    answer(want, headless)
+    with headless.open("a", encoding="utf-8") as handle:
+        handle.write(json.dumps({"id": None, "error": "boom", "exception": "RuntimeError"}) + "\n")
+    assert dev.smoke_state(headless)["state"] == dev.SMOKE_GONE
+
+    # (c) the whole-run rate row counts a dead unit as UNANSWERED instead of dying on the `seconds`
+    # an error reply never had. `--close-segment` appends its money gate BEFORE this row is written,
+    # so a KeyError here keeps the bill and loses the measurement the next leg is priced on.
+    order = dev.committed_registration()["population"]["leg_a"]["order"]
+    assert set(want) <= set(order), "the smoke's three are registered leg-A units"
+    monkeypatch.setattr(dev, "RUN_RECORD", tmp_path / "run.json")
+    (tmp_path / "run.json").write_text(
+        json.dumps(
+            {
+                "phase": "promo-iter5",
+                "segments": [{"pod_id": "a1", "card": CARD, "usd_per_hour": 0.72}],
+                "gates": [],
+            }
+        ),
+        encoding="utf-8",
+    )
+    row = dev.whole_run_row(died, "a1")
+    assert row["n"] == 2, "two units answered, the third died — a rate over three would be invented"
+    assert row["dead_units"] == [want[2]] and row["value"] == 9.5
+
+    # (d) and the grader counts it the same way, without calling it a parse failure: a unit that
+    # died has no answer to parse, and blaming the instrument for the serving is the wrong class
+    pack = tmp_path / "scored_pack.json"
+    pack.write_text(
+        json.dumps(
+            {
+                "items": [
+                    {
+                        "id": one,
+                        "leg": "a",
+                        "channel": one.split(":")[0],
+                        "post_id": one.split(":")[1],
+                    }
+                    for one in want
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(dev, "PACK", pack)
+    scored = tmp_path / "scored.jsonl"
+    with scored.open("w", encoding="utf-8") as handle:
+        for one in want[:2]:
+            handle.write(
+                json.dumps(
+                    {
+                        "id": one,
+                        "seconds": 9.5,
+                        "reply": '{"about": [], "signal": [], "unsure": []}',
+                        "rendering_sha256": "deadbeef",
+                    }
+                )
+                + "\n"
+            )
+        handle.write(
+            json.dumps({"id": want[2], "error": "CUDA out of memory", "exception": "RuntimeError"})
+            + "\n"
+        )
+    table = dev.score(scored, 5)
+    assert table["answers"]["leg_a_units_answered"] == 2
+    assert table["answers"]["leg_a_units_registered"] == 3
+    assert table["answers"]["leg_a_units_dead"] == [want[2]]
+    assert table["answers"]["parse_failures"] == 0, "a death is not an answer that failed to parse"

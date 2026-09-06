@@ -42,6 +42,7 @@ sys.path.insert(0, str(REPO_ROOT / "scripts"))
 sys.path.insert(0, str(REPO_ROOT / "src"))
 
 import draw_promo_threads as draw  # noqa: E402
+import reader_v5_pod_runner as pod_runner  # noqa: E402
 
 from market_pulse import promo_prompts  # noqa: E402
 
@@ -253,6 +254,51 @@ def predicted_rows(row: dict, answer: dict) -> list[dict]:
     ]
 
 
+def reply_rows(replies: Path) -> list[dict]:
+    """Every WHOLE row an out-file carries, under the POD's own rule and not a second spelling of it.
+
+    Ruling 05.09 (x) item 4, the first half. `smoke_state` runs while the pod is billing, on a file
+    `scp` copied WHILE the pod was still appending to it, so its final line can be half written —
+    and `json.loads` on it raised, which read as «the tool is broken» at the one moment a reading
+    decides whether to delete a live pod ([[a_crash_must_write_into_the_file_its_reader_opens]]).
+    `reader_v5_pod_runner.whole_lines` is the shipped rule — forgive the LAST line, refuse a torn one
+    anywhere else, because that is a damaged file and not the mid-write race — and it is IMPORTED
+    rather than restated: `promo_dev_pod_runner.rows_of` already reads its crash file through it, and
+    two spellings of one rule drift ([[a_moved_guard_that_left_its_copy]]). A dropped last line simply
+    leaves its unit unanswered, which every reader below already has a word for.
+    """
+    return pod_runner.whole_lines(replies.read_text(encoding="utf-8"), str(replies))[0]
+
+
+def answered_rows(replies: Path) -> dict[str, dict]:
+    """The out-file's ANSWERED rows by unit id — the ERROR replies left out, never dying on them.
+
+    Ruling 05.09 (x) item 4, the second half. A unit that died carries `id`, `error`, `exception` and
+    `unanswered` and no `seconds` and no `reply` (ruling (w) item 3, the pod half), so every reader
+    that joins on the id has to say what such a row MEANS. It means UNANSWERED: the rate row must not
+    average a unit nothing measured, the grader must not parse an answer nobody gave, and neither may
+    raise a `KeyError` on the field the dead row does not have — `--close-segment` writes its money
+    gate BEFORE the rate row, so a traceback there loses the measurement and keeps the bill
+    ([[a_guard_that_runs_after_the_write]]).
+
+    `smoke_state` is the one reader that does NOT use this: an error reply is the whole point there,
+    and it reads `reply_rows` directly.
+    """
+    return {
+        row["id"]: row
+        for row in reply_rows(replies)
+        if row.get("id") is not None and not row.get("error")
+    }
+
+
+def dead_units(replies: Path) -> list[str]:
+    """The ids of the units an out-file records as DEAD — reported wherever they are skipped.
+
+    A skip nobody counts is a silence, and a silence reads as «there was nothing there»
+    ([[a_checker_whose_failure_is_silence]])."""
+    return [str(row.get("id")) for row in reply_rows(replies) if row.get("error")]
+
+
 def sha256_of(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
@@ -441,13 +487,14 @@ def prep(part: str | None = None, gold: Path | None = None) -> dict:
 
 # --- the PAID half: the dev loop's own step, its rungs, its registration ---------------------------
 
-ITERATION = 4
+ITERATION = 5
 """The dev-loop iteration the registration and the pack are emitted for — ruling 04.09 (m) item 5.
 Iterations 1-3 are bought, priced and on disk; the transport repair of `f872a53` was a NEW
 `extractor_version` by ruling 03.09 (c) item 3's own letter, so it was bought under the NEXT number
-and never re-bought under iteration 2's. Iteration 4 is the codebook-v1.2 law over BOTH arms of the
-first draw (ruling 05.09 (s) item 3, (t) item 5): dev-40 keeps the bars, dev-2 rides beside it as a
-reading. Four of the five runs §2 allows are now spent."""
+and never re-bought under iteration 2's. Iteration 4 was the codebook-v1.2 law over BOTH arms of the
+first draw and came back INCOMPLETE (PHASE §6.5 — CUDA OOM on the smoke's longest render at 24 GB),
+so ruling 05.09 (w) re-buys it as iteration 5 with the INSTRUMENT unmoved and the SERVING changed.
+Iteration 5 is the LAST of the five runs §2 allows: a red bar closes S2's question with a number."""
 
 STEP = "promo-dev-loop"
 """Its OWN step and its own ledger (plan §9). S4's `promo-pulse-1` is CLOSED at $2.9867 and a closed
@@ -476,10 +523,23 @@ BORROWED_GATES = REPO_ROOT / "results" / "prereg_reader_probe_v5b.json"
 SIBLING_PREREG = REPO_ROOT / "results" / "prereg_pass2_signals_r2.json"
 PREREG_5C2 = REPO_ROOT / "results" / "prereg_5c2_run.json"
 
-CARD = "NVIDIA GeForce RTX 4090"
 DATACENTER = "EU-RO-1"
-"""The volume decides the datacenter (`qw4nwleanc`, `mp-srv2`), and the card is the sibling's — the
-same RTX 4090 `pass2-signals-r2` measured the borrowed rate on."""
+"""The volume decides the datacenter (`qw4nwleanc`, `mp-srv2`) and nothing else may move it."""
+
+CARDS = ("RTX PRO 4500", "RTX A6000", "L40S")
+MIN_VRAM_GB = 32
+PRICE_CEILING_USD_PER_HOUR = 0.90
+"""The serving, as ruling 05.09 (w) item 2 moved it and (x) item 3 made it a PARAMETER of this record.
+
+Iteration 4 died of 24 GB: `CARD = "NVIDIA GeForce RTX 4090"` stood here as a constant and
+`offered_price` matched it by hand, so «the card is ≥ 32 GB now» was a ruling no line of code could
+obey ([[a_shifted_constant_has_physical_consumers]]). These three are (w)2's own order, tried in it,
+and BOTH names come out of the same `runpodctl gpu list` row: `displayName` is what is matched here
+and `gpuId` is what `pod create --gpu-id` and `--open --card` are given.
+
+The match is EXACT for a reason — the listing carries `RTX PRO 4500` and `RTX PRO 4500 SE` at one
+price, and only the first is offered in EU-RO-1 today. A prefix match would register the twin's row
+and rung 1 would then KILL the pod the operator actually created."""
 
 POST_TASK = "positions_text_gm4"
 """Leg B's task, and it is a REGISTERED prompt of `src/market_pulse/prompts.py`: the 16 posts ride
@@ -561,46 +621,73 @@ def guard_reading(step: str, step_cap: float) -> dict:
     }
 
 
-def offered_price() -> dict:
-    """The card's price in this datacenter, READ ON THE DAY — v5b's `money.meter.price_rule`.
+def offered_price(cards: tuple[str, ...] = CARDS) -> dict:
+    """The FIRST card of `cards` this datacenter has in stock today, and its price — read ON THE DAY.
 
     The DEARER of the two clouds is registered: the create response's `costPerHr` is the price that
     is actually billed, and a registration written at the cheaper offer would be a ceiling the run
     can exceed without a single gate firing ([[a_ceiling_derived_from_one_span_measured_over_another]]).
+
+    Ruling 05.09 (x) item 3 makes the card a parameter and gives the walk three conditions beyond the
+    name, because (w)2 asked for a SERVING and not for a spelling: at least `MIN_VRAM_GB` — the 24 GB
+    that OOM'd is what this leg is moving away from and a card is not «the next one» if it repeats
+    it; offered in `DATACENTER` with stock, since the volume pins the cloud and «else A6000 / L40S»
+    means «when the first is not there»; and a dearer offer at or under `PRICE_CEILING_USD_PER_HOUR`,
+    which is the operator's own ≤ $0.90/h. A card that fails one of them is SKIPPED and the next name
+    is tried; nothing is substituted silently and the refusal below names every candidate it saw.
     """
     done = subprocess.run(
         ["runpodctl", "gpu", "list"], check=False, capture_output=True, text=True
     )
     if done.returncode != 0:
         raise SystemExit(f"runpodctl gpu list failed: {done.stderr.strip()[:200]}")
-    for gpu in json.loads(done.stdout):
-        if gpu.get("displayName") not in ("RTX 4090",):
-            continue
-        here = [
-            one
-            for one in (gpu.get("dataCenterAvailability") or [])
-            if one.get("dataCenterId") == DATACENTER
-        ]
-        prices = [
-            float(one)
-            for one in (gpu.get("securePricePerHr"), gpu.get("communityPricePerHr"))
-            if one
-        ]
-        if not here or not prices:
-            continue
-        return {
-            "card": CARD,
-            "datacenter": DATACENTER,
-            "stock": here[0].get("stockStatus"),
-            "usd_per_hour": max(prices),
-            "offers_usd_per_hour": prices,
-            "rule": "the DEARER offer of secure/community, read on the day; the create response's"
-            " own costPerHr is the price the meter bills and the price gate re-checks it",
-            "read_at": datetime.now(UTC).isoformat(timespec="seconds"),
-        }
+    listing = json.loads(done.stdout)
+    seen = []
+    for want in cards:
+        # EXACT, never a prefix: `RTX PRO 4500 SE` is another row at the same price and another cloud
+        for gpu in [one for one in listing if one.get("displayName") == want]:
+            here = [
+                one
+                for one in (gpu.get("dataCenterAvailability") or [])
+                if one.get("dataCenterId") == DATACENTER
+                and str(one.get("stockStatus") or "none").lower() != "none"
+            ]
+            prices = [
+                float(one)
+                for one in (gpu.get("securePricePerHr"), gpu.get("communityPricePerHr"))
+                if one
+            ]
+            vram = gpu.get("memoryInGb") or 0
+            why = (
+                f"{vram} GB < {MIN_VRAM_GB}" if vram < MIN_VRAM_GB
+                else f"no stock in {DATACENTER}" if not here
+                else "no offer" if not prices
+                else f"${max(prices)}/h > ${PRICE_CEILING_USD_PER_HOUR}/h"
+                if max(prices) > PRICE_CEILING_USD_PER_HOUR
+                else None
+            )
+            seen.append(f"{want} ({why})" if why else want)
+            if why:
+                continue
+            return {
+                "card": gpu["gpuId"],
+                "display_name": want,
+                "vram_gb": vram,
+                "datacenter": DATACENTER,
+                "stock": here[0].get("stockStatus"),
+                "usd_per_hour": max(prices),
+                "offers_usd_per_hour": prices,
+                "considered": list(cards),
+                "rule": f"the FIRST of {list(cards)} with ≥ {MIN_VRAM_GB} GB, stock in {DATACENTER}"
+                f" and a dearer offer ≤ ${PRICE_CEILING_USD_PER_HOUR}/h; the price is the DEARER"
+                " offer of secure/community, read on the day; the create response's own costPerHr is"
+                " the price the meter bills and the price gate re-checks it",
+                "read_at": datetime.now(UTC).isoformat(timespec="seconds"),
+            }
     raise SystemExit(
-        f"{CARD} is not offered in {DATACENTER} today — the volume pins the datacenter, so this is"
-        " a STOP for the operator's word, not a card to substitute"
+        f"none of {list(cards)} is offered in {DATACENTER} today at ≥ {MIN_VRAM_GB} GB and"
+        f" ≤ ${PRICE_CEILING_USD_PER_HOUR}/h — saw {seen or 'no matching row at all'}. The volume"
+        " pins the datacenter, so this is a STOP for the operator's word, not a card to substitute"
     )
 
 
@@ -647,6 +734,36 @@ def borrowed_gates() -> dict:
         "boot_kill_seconds": float(money["boot_kill_seconds"]),
         "delete_margin_seconds": margin,
         "terminate_after_minutes": int(v5b["go_no_go"]["backstop"]["terminate_after_minutes"]),
+    }
+
+
+def backstop(borrowed_minutes: int, hard_stop_seconds: float) -> dict:
+    """`--terminate-after`, in whole minutes, from the CAP — ruling 05.09 (w) item 4, (x) item 3.
+
+    v5b's 90 minutes is a BORROWED constant and it was the live bound by accident. Iteration 5's cap
+    is $1.40 and the card is ≈ $0.72/h, so the cap pays for 116 minutes and the borrowed 90 would
+    have killed the pod at $1.08 — a run this record prices as FITS, ended by a number from another
+    step's transport ([[a_ceiling_derived_from_one_span_measured_over_another]]). The mean corner is
+    ≈ 71 minutes at that price, so 90 leaves a slower card no room at all.
+
+    So the CAP is the bound, always: `hard_stop_seconds` is the cap divided by the registered price,
+    and the floor to whole minutes keeps `terminate_after_minutes * 60 <= hard_stop_seconds` — the
+    inequality `open_segment` checks as `backstop_fits`. Taking the borrowed number whenever it were
+    the larger of the two would let the meter run past the cap, which is the one thing
+    «the cap is the hard stop» forbids ([[a_bound_the_meter_cannot_reach]]). Both numbers are in the
+    record and it says which one is live, so nothing is dropped silently.
+    """
+    minutes = int(hard_stop_seconds // 60)
+    return {
+        "terminate_after_minutes": minutes,
+        "terminate_after_borrowed_minutes": borrowed_minutes,
+        "terminate_after_live_bound": "the cap",
+        "terminate_after_rule": f"the CAP's own minutes at the registered price —"
+        f" floor({hard_stop_seconds:.1f} s / 60) = {minutes} min, against the"
+        f" {borrowed_minutes} min this leg used to borrow from"
+        f" {rel(BORROWED_GATES)} :: go_no_go.backstop, which would have bitten"
+        + (" FIRST" if borrowed_minutes < minutes else " LAST")
+        + ". Ruling 05.09 (x) item 3: the cap is the hard stop and nothing else bounds the money.",
     }
 
 
@@ -907,6 +1024,8 @@ def register(cap_usd: float | None = None) -> dict:
     left_over = leg_b_posts() if PART == "dev" else {"task": None, "by_channel": {}, "posts": 0}
     price = offered_price()
     verdict = rung_0(cap=cap, price=price, threads=threads, n_posts=0)
+    gates = borrowed_gates()
+    gates |= backstop(int(gates["terminate_after_minutes"]), verdict["hard_stop_seconds"])
     return {
         "part": PART,
         "phase": f"promo-pulse-1 S9 — the dev loop's PAID instrument, iteration {ITERATION}"
@@ -919,6 +1038,21 @@ def register(cap_usd: float | None = None) -> dict:
         " iteration 3 is the LAW (codebook v1.2, ruling 05.09 (s) item 2: partners, the off-domain"
         " thread, three product forms, price-as-quality) and the POPULATION (dev-2, the spent"
         " holdout-40 relabelled by (s) item 3, riding beside dev-40 as a reading)."
+        " Iteration 4 was bought under exactly that law and came back INCOMPLETE (PHASE v12 §6.5 —"
+        " CUDA OOM in `gemma4._norm` on the smoke's LONGEST render, 338 MiB refused at 23.19 of"
+        " 23.52 GiB), so ruling 05.09 (w) item 2 re-buys it as iteration 5 with the INSTRUMENT"
+        " unmoved and the SERVING changed, and item 3 of (x) makes that serving a field of this"
+        f" record rather than a constant: `rung_0.price` names the card this run is registered on"
+        f" ({price['display_name']}, {price['vram_gb']} GB, gpu-id «{price['card']}»,"
+        f" ${price['usd_per_hour']}/h in {DATACENTER}) — chosen by"
+        f" `offered_price` from {list(CARDS)} in ruling 05.09 (w) item 2's own order, at"
+        f" ≥ {MIN_VRAM_GB} GB and ≤ ${PRICE_CEILING_USD_PER_HOUR}/h. The 24 GB the OOM happened on"
+        " cannot be registered again by construction. The pod is launched with"
+        " `PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True` ((w) item 2, the allocator half): it is"
+        " an ENVIRONMENT of the launch line and touches no pinned byte, and it is disclosed here"
+        " because a serving nobody wrote down is a serving the next reading cannot be compared"
+        " against ([[provenance_cannot_name_itself]]). `gates.terminate_after_minutes` is the CAP's"
+        " own minutes at that price and no longer the 90 borrowed from v5b ((x) item 3)."
         " `src/market_pulse/promo_prompts.py` stays pinned beside the law and"
         " `scripts/promo_dev_pod_runner.py` MOVES by ruling 05.09 (w) item 3: the runner catches a"
         " unit's exception, writes it down as that unit's ERROR reply and exits non-zero, so the Mac"
@@ -1069,7 +1203,7 @@ def register(cap_usd: float | None = None) -> dict:
             },
         },
         "rung_0": verdict,
-        "gates": borrowed_gates()
+        "gates": gates
         | {
             "1_liveness": "the ssh dead-man above; never two pods, checked BEFORE `pod create`",
             "3_hard_stop": f"{verdict['hard_stop_seconds']:.1f} s of pod existence at the"
@@ -1303,13 +1437,17 @@ def score(replies: Path, iteration: int) -> dict:
     failures: list[dict] = []
     answered: list[str] = []
     fenced = 0
-    for line in replies.read_text(encoding="utf-8").splitlines():
-        if not line.strip():
-            continue
-        reply = json.loads(line)
-        item = units.get(reply["id"])
+    dead = [one for one in dead_units(replies) if one in units]
+    for reply in reply_rows(replies):
+        item = units.get(reply.get("id"))
         if item is None:
             continue  # leg B rides the same out-file and is not leg A's gold
+        if reply.get("error"):
+            # ruling 05.09 (x) item 4 — a unit that DIED is UNANSWERED, not an answer that failed to
+            # parse: it has no `reply` to parse and counting it among the parse failures would blame
+            # the instrument for the serving ([[empty_class_eats_the_parse_failures]]). It is named
+            # in `dead_units` above and it stays out of `leg_a_units_answered`.
+            continue
         answered.append(reply["id"])
         answer = promo_prompts.parse(reply["reply"])
         fenced += 1 if answer.get("fenced") else 0
@@ -1397,6 +1535,7 @@ def score(replies: Path, iteration: int) -> dict:
         "answers": {
             "leg_a_units_answered": len(answered),
             "leg_a_units_registered": len(units),
+            "leg_a_units_dead": dead,
             "gold_shaped_rows": len(rows),
             "parse_failures": len(failures),
             "fenced_answers": fenced,
@@ -1517,6 +1656,11 @@ def smoke_state(replies: Path) -> dict:
     (`pgrep -fa promo_dev_pod_runner`) — so WAITING with no runner alive is the same outcome, read by
     the operator's own eyes ([[long_run_watch_the_process]]). An error reply needs neither.
 
+    Ruling 05.09 (x) item 4 gives the rows one more reading: the file is copied off a LIVE pod, so
+    its last line can be half written, and `reply_rows` forgives exactly that one. A torn last line
+    leaves its unit unanswered, which is WAITING — never a traceback on the command that decides
+    whether the pod is deleted.
+
     The units and the branch prose are READ from the committed registration, never typed here: a
     literal would pin ONE record's smoke, which a ruling moves ([[a_number_typed_into_its_own_checker]]).
     The presence rule is the one the runbook's heredoc already enforced; the `finish_reason` of each
@@ -1525,12 +1669,12 @@ def smoke_state(replies: Path) -> dict:
     record = committed_registration()
     bands = record["decision_table"]["after_the_smoke_for_40_threads"]
     want = [one["unit_id"] for one in record["population"]["leg_a"]["smoke"]["units"]]
-    rows = {}
-    for line in replies.read_text(encoding="utf-8").splitlines():
-        if line.strip():
-            row = json.loads(line)
-            rows[row["id"]] = row
-    dead = [row for row in rows.values() if row.get("error")]
+    read = reply_rows(replies)
+    rows = {row["id"]: row for row in read if row.get("id") is not None}
+    # off `read` and not off `rows`: a crash AFTER the loop names no unit at all and writes
+    # `id: null` (the runner's own «a row that claimed one would be a false record»). It is still a
+    # death, and keying it away would lose the only row that says so
+    dead = [row for row in read if row.get("error")]
     missing = [one for one in want if one not in rows]
     state = SMOKE_GONE if dead else (SMOKE_IN if not missing else "waiting")
     return {
@@ -1587,17 +1731,15 @@ def project(replies: Path) -> dict:
     """
     record = committed_registration()
     smoke = record["population"]["leg_a"]["smoke"]["units"]
-    rows = {}
-    for line in replies.read_text(encoding="utf-8").splitlines():
-        if line.strip():
-            row = json.loads(line)
-            rows[row["id"]] = row
+    # a DEAD unit is not a sample: `answered_rows` leaves it out, so it reads as MISSING and this
+    # refusal fires instead of a KeyError on the `seconds` an error reply has never had
+    rows = answered_rows(replies)
     missing = [one["unit_id"] for one in smoke if one["unit_id"] not in rows]
     if missing:
         raise SystemExit(
             f"{rel(replies)} carries no reply for {missing} — the smoke's own units are the rate's"
             " only sample, and a projection over a partial smoke prices a population nothing"
-            " measured. Wait for the three, or STOP."
+            f" measured. Wait for the three, or STOP. (dead units: {dead_units(replies) or 'none'})"
         )
     seconds = [float(rows[one["unit_id"]]["seconds"]) for one in smoke]
     price = record["rung_0"]["price"]
@@ -1677,20 +1819,20 @@ def whole_run_row(replies: Path, pod_id: str) -> dict:
     ([[a_second_population_in_a_shared_store_voids_the_first_seal]]). The POD is named and checked
     against the run record's own segments — a rate is a property of the pod
     ([[a_rate_is_a_property_of_the_pod]]), and a row whose pod the ledger never billed prices
-    nothing. `n` is what the run answered, so an incomplete run measures the units it did.
+    nothing. `n` is what the run answered, so an incomplete run measures the units it did — and
+    ruling 05.09 (x) item 4 makes a DEAD unit one of those it did not: an error reply has no
+    `seconds`, this row is written at `--close-segment` AFTER the money gate has landed, and a
+    `KeyError` there would keep the bill and lose the measurement the next leg is priced on.
     """
     units = set(committed_registration()["population"]["leg_a"]["order"])
-    seconds = [
-        float(row["seconds"])
-        for line in replies.read_text(encoding="utf-8").splitlines()
-        if line.strip()
-        for row in [json.loads(line)]
-        if row["id"] in units
-    ]
+    answered = answered_rows(replies)
+    seconds = [float(row["seconds"]) for unit, row in answered.items() if unit in units]
+    dead = [one for one in dead_units(replies) if one in units]
     if not seconds:
         raise SystemExit(
             f"{rel(replies)} answers no registered leg-A unit of {rel(PREREG)} — there is no whole"
-            " run here to measure, and a rate over nothing prices nothing."
+            f" run here to measure, and a rate over nothing prices nothing. (dead units:"
+            f" {dead or 'none'})"
         )
     segments = [one for one in run_state()["segments"] if one.get("pod_id") == pod_id]
     if len(segments) != 1:
@@ -1708,8 +1850,10 @@ def whole_run_row(replies: Path, pod_id: str) -> dict:
         f" WHOLE run of pod {pod_id}: every registered leg-A unit it answered, not a sample of"
         " them. Ruling 05.09 (t) item 4 makes this the row a leg is priced on.",
         "measured_on": f"pod {pod_id}, {len(seconds)} leg-A threads on {segment['card']} at"
-        f" ${segment['usd_per_hour']}/h, {rel(PREREG)}'s population",
+        f" ${segment['usd_per_hour']}/h, {rel(PREREG)}'s population"
+        + (f"; {len(dead)} unit(s) DEAD and counted unanswered: {dead}" if dead else ""),
         "n": len(seconds),
+        "dead_units": dead,
         "unit": "seconds",
         "value": round(sum(seconds) / len(seconds), 4),
         "max": round(max(seconds), 4),
@@ -2044,7 +2188,9 @@ def main(argv: list[str] | None = None) -> int:
         answers = table["answers"]
         print(f"wrote {rel(out)} — {len(rows)} rows from {answers['leg_a_units_answered']} of"
               f" {answers['leg_a_units_registered']} leg-A units"
-              f" · {answers['parse_failures']} unparsed {answers['parse_failures_by_cause'] or ''}")
+              f" · {answers['parse_failures']} unparsed {answers['parse_failures_by_cause'] or ''}"
+              + (f" · {len(answers['leg_a_units_dead'])} DEAD (unanswered):"
+                 f" {answers['leg_a_units_dead']}" if answers["leg_a_units_dead"] else ""))
         print(f"wrote {rel(errors)} — {table['subject_misses_total']} subject misses, top 10 named")
         for name, block in sorted(table["grade"]["bars"].items()):
             print(f"  {name:<24} {block['value']} against {block['bar']}"
