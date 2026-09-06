@@ -101,26 +101,46 @@ One-sentence contracts (`docs/PROMPT-*.md`) remain for fixes and debts whose dif
   one row per measurement with `source`, `n`, `max`. A rate is a property of the pod it was
   measured on; a remembered number is not a prior (the 97 s/thread error, 26.08).
 
-## Money (rented GPUs; console empty between sessions)
-- A PAID run is a whole session (03.09, the seventh STOP): create → settlement in one session, no $0 work in
-  front of it and no second create behind it; the runbook for the run is written and reviewed in the session
-  BEFORE. A session that cannot finish a run does not start it — the money is bounded by `--terminate-after`,
-  the evidence is not. Rulings name the command whose output is the number, never the number itself.
-- Readings come from the guard (`results/spend_cycle2.json`), pod hours are the quotable number,
-  the billing walk lags 30–40 min. Cap = 2× the registry estimate; one paid run per prompt.
-- Four rungs on every paid contract: (0) price at create ≤ the registered ceiling; (1) liveness —
-  deadline from the LAST log line or reply, never from create; (2) projection after the smoke and
-  after every stage at the MEASURED rate — over cap by ≤20 % → ASK (hold ≤10 min for the
-  operator's typed word, quoted verbatim in the report; silence = KILL), over by more → KILL;
-  (3) platform hard stop from the cap at the observed price.
-- Smoke first, stages in VALUE order, each completed stage a usable number. Never two billing
-  resources concurrently; a probe that creates billable resources is not a probe. Teardown is
-  proven by a listing from the team-lead side, positive-controlled on a known-live sibling.
-  Every paid contract names its recovery clause (what may be re-created within the same cap).
-- Pre-registration: readings-not-bars where the operator decides on a table; bars with kill
-  criteria where a claim is made; one attempt; an aborted measurement resolves to its default;
-  a program pre-registers its stop rule. Stop-rules that bind the team lead: one-pass reader
-  (17.08), line B (20.08), lora-c (26.08).
+## Money (rented GPUs; console empty between sessions) — v2, 05.09: the mechanics rulings (q)…(x) fixed; `docs/PHASE-*.md` §6.1 is the phase's instance of this section
+- **A PAID run is a whole session** (03.09): create → settlement in one session, no $0 work in front of it and no
+  second create behind it; its runbook is written the session BEFORE and re-pointed to THAT run (part, file names,
+  step line, card, launch line) so the paid session pastes and transposes nothing. Rulings name the command whose
+  output is the number, never the number itself; a cap named in a ruling is quoted from the `--dry-run` that priced it.
+- **One paid run = ONE step line** (`promo-iter<N>` · `promo-holdout2` · `promo-c3`): opened BEFORE the pod by
+  `python scripts/runpod_guard.py --step <line> --step-cap <cap> --note "<line> — pod about to be created"` (its own
+  ledger `results/spend_<line>.json`, anchor = the balance then). The registration reads the guard WITH `--step <line>`
+  (`--register --part <part> --step <line> --cap <cap>`); the emitter's default step is the open multi-run line
+  `promo-dev-loop` — its guard refuses (unbounded delta since 03.09) and the line is never named again.
+- **Pricing:** the rate is the WHOLE-RUN mean of the slowest pod seen (`results/measurements.jsonl`, `sample: whole run`,
+  n = the run's units) — never a smoke of three, never a borrowed sibling; the dear corner (the run's max on every unit)
+  is priced and shown; when it does not fit, the leg issues FITS on the MEAN corner with the cap as the hard stop and
+  no band gate (rulings (r)(t)). The card and its price are FIELDS of the record read at $0 from `runpodctl gpu list`:
+  the gpu-id (typed at `pod create` and `--open --card`, checked by rung 1) and the `displayName` (EXACT, for the dearer
+  of secure/community) — never constants of the emitter; the card is chosen in the ruling's order when one is out of stock.
+- **Bounds:** `--terminate-after` = the cap's minutes at the registered price — the hard stop; a borrowed minute-constant
+  (the 90-min backstop) that would bite first bounds the READING, not the money: the record says which bound is live.
+  Rungs today: (0) price at create ≤ registered; (1) liveness — the ssh dead-man from the sibling's production record;
+  (2) the band gate is NOT run on a leg issued on the mean corner; (3) the platform hard stop. Never two billing
+  resources at once; the always-on volume drips ≈ $0.24/day into every open window; teardown proven by
+  `runpodctl pod list -a` → `[]` before every STOP and before the session ends.
+- **The smoke** = the run's shortest, median and LONGEST render, first — a card too small fails on three units, not
+  eighty. The runner writes a failed unit's ERROR reply (`id`, `error`, `exception`, `unanswered`) and exits non-zero;
+  the Mac reads `--smoke --part <part> --replies <file>`: «3 replies are in» → GO · «the smoke did not come back» →
+  delete AT ONCE · waiting → a poll, paired with `pgrep` (no runner alive = the same outcome). Every reader of the
+  reply file (`--smoke`, `--close-segment`, `--score`) reads whole lines and counts an error row as unanswered.
+- **Closing a line (PHASE v13):** after `pod delete` and BEFORE any next pod — the post-run `--note` on the line (the
+  gate's reference is the line's LAST open reading; a pre-pod one refuses the close for ever), then `--close
+  --expect-ms <the segment's billed ms, from results/promo_dev_loop_run.json at/after the line's anchor> --until <after
+  the pod> --tolerance 0.05`. Billing lags 30–60 min: a PARTIAL walk is refused and retried at the next session's start,
+  read-only walk first. A line whose readings all predate its pod closes on the walk alone and never takes a late
+  reading — it would carry the next run's money. `--close-segment --replies <file>` writes the run record first.
+- **Validity (PHASE §6.5):** a reading counts only when every registered unit is answered and parsed; a serving failure
+  (OOM, a crash) moves the SERVING (a card ≥ the footprint, the allocator env in the launch line), never the
+  instrument; the re-buy takes the next number on its own line inside the 5-run ceiling.
+- Cycle ceiling = `CYCLE3_CAP_USD` in the guard (the operator's word; the anchor is never regenerated). Pre-registration:
+  readings-not-bars where the operator decides on a table; bars with kill criteria where a claim is made; one attempt
+  on a frozen set; a spent set is demoted to a reading. Stop-rules that bind the team lead: one-pass reader (17.08),
+  line B (20.08), lora-c (26.08).
 
 ## Executor conventions
 - `implementation-notes.md` keeps a Deviations section; every Dv ends with a cause tag from the
