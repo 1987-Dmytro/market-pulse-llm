@@ -1,60 +1,54 @@
 # PROGRESS — promo-pulse-1 (ruling 03.09 (e): the executor's one file — done / next / open stop, ≤60 lines; §8 of the phase file stays the DONE list)
 
-## Done — 06.09 s31, the PAID iteration 5, runbook §0a→§7. **GREEN.**
-**S2's dev loop is answered on its fifth and last run (PHASE §2).** `--score --arm dev40`, the BAR:
-**subject 0.8857 ≥ 0.80 · signal 0.8667 ≥ 0.75**, 139 rows from **40 of 40** leg-A units, **0
-unparsed**; `grade_promo_signals.py` re-derives both from the file. `--arm dev2`, the READING beside
-it: subject 0.8883 · signal 0.8296 (188 rows, 40/40, 0 unparsed). Files at `15313fb`:
-`results/grade_promo_dev40_iter5.json` + `promo_dev{40,2}_{predicted,errors}_iter5.*`.
-**Ruling (w) is answered and it was the SERVING:** the instrument never moved and
-`@VARUS_channel:8647` — the 14 281-char render that OOM'd iteration 4 — came back in **313.9 s,
-balanced, `finish stop`** on the 32 GB card with `PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True`.
-**80/80 answered**, so this is NOT PHASE §6.5's incomplete reading.
+## Done — 06.09 s32, «holdout-2 prep» ($0, ruling (z) item 4 + addendum 2). It ENDS at the committed dry run — no `--register`.
+**Start ritual.** (z) + PHASE v15 + STATUS committed by path (`0896ba3`); s31's knowledge leftovers (`312ec89`). **Ceiling
+$10.00** ((z) addendum): `CYCLE3_CAP_USD = 10.00`, `spend_cycle3.json` note appended, anchor unchanged (`6fa0a7e`).
+**`promo-iter5` CLOSED at $0.9450** (`ac22645`): read-only walk FIRST (pods $0.9450 · volume $0.0097 · serverless $0), then
+`--close --tolerance 0.05 --expect-ms 4698000 --until 2026-09-06T12:45:00Z` — **0.47 % off** the post-run $0.9495; the
+session's ONE ledger line. The guard's own line: **CYCLE 3 SPENT $7.4179 of $10.00 · REMAINING $2.5821** (14:21Z).
+**The gold landed mid-session** ((z) addendum 2, PHASE v16 — committed by path `1e89ff3`): `docs/labels-promo-holdout2.jsonl`
+**112 rows / 40 threads, sha `5525ddf1…`**, committed by path with the shasum shown (`2bb9da7`), never edited.
+**The item, code (`42dfd97`):** `--part holdout2` = `HOLDOUT2_FILES` (draw-2's `holdout` arm, the gold, line `promo-holdout2`,
+stem `promo_holdout2`, own prep/prereg/pack/run); `use_part` binds the DRAW and `dev_threads` reads it at the call (a default
+argument had frozen the first draw at import); `by_part(part, **texts)` writes every decision field per leg BY NAME and refuses
+a leg without text (PHASE §4 v8); a holdout leg without `--cap` refuses before the guard is read (the verifier's bite). (y)4
+risk 2: `died(row)` = `"exception" in row or truthy error`, the ONE spelling in all five readers. (y)4 risk 3: `close_segment`
+sums the segments at/after the line's anchor, read from the ledger the record names (`line_anchor`); `spent_all_segments_usd`
+→ `spent_this_line_usd` + `line`, `line_anchored_at`, `segments_of_this_line`; no ledger, or a closing segment stamped before
+its own anchor → refuse. (w)3's ONE test extended: (e) the silent death in every reader, (f) both directions of the filter +
+its two refusals, (g) the `--cap` refusal; the `staged` fixture's stub record carries the ledger field every real record has.
+**The dry run (`b05bd12`):** `--dry-run --part holdout2` → `results/promo_holdout2_prep.json`: 40 threads, 40 distinct renders,
+longest **10 529** chars (< iteration 5's 14 281 on this card), gold pinned `5525ddf1…` 112 rows, MEASURED **53.6254 s/thread**
+(whole run, n=80, max 313.867). **Rung 0 read-only at today's offer** ($0.72/h RTX PRO 4500, EU-RO-1 High), cap $0.90, 43
+threads: cheap **$0.5170 (−42.6 %)** · priced $0.5728 · dear **$2.8109 (+212 %)** → **FITS on the MEAN**, hard stop **4500 s =
+75 min** — PHASE §6.2's notice figure. No `--register`, no line opened, no pod this session.
+**Runbook re-pointed (`d4bc013`)** to `promo_holdout2_*`: §0a inside the paid session, the four pins of `d598573` compared to
+the new record by a command (dry-tested HOLD; the three files on disk still equal `d598573`'s shas), liveness by PID.
+**Verification:** a fresh 6-lens adversarial workflow (42 agents, 2 refuters per finding) over the diff — 18 findings, **5
+confirmed** (4 defects + 1 nit), all fixed before the commits: the `--cap` hole; the runbook's unterminated quote and a wrong
+«without --part» sentence; the prep written 4 min BEFORE the gold landed → re-run after the gold commit; a false docstring
+example. Of the 13 refuted, the cheap ones were taken too (two non-verbatim quotes, the test's typed 1.46, v15 → v16).
+**`make check` at `d4bc013`:** ruff clean, SLICES COVER (229 files), 1000 + 2030 + 1293 = **4323 passed / 2 skipped ≥ 4266**
+(the ONE test was extended, not added — the count did not move); §8 (l) porcelain empty.
 
-## The money — the pod is gone, the line is OPEN pending billing
-Pod `xt4c5osyr36ew0`, RTX PRO 4500 Blackwell 32 GB, $0.72/h, **11:20:39Z → 12:38:57Z = 4698 s =
-$0.9396** of the **$1.40** cap. Guard's post-run reading: **`PROMO-ITER5 SPENT $0.9495 of $1.40`**.
-Cycle 3 **SPENT $7.3933, REMAINING $1.6067** of $9.00. New whole-run rate for the next leg:
-**53.6254 s/thread (max 313.867, n=80)** in `results/measurements.jsonl`.
-**(y)'s same-session rule paid off:** anchor 11:06:19Z → post-run `--note` 12:39Z is **H = 1.55 h**, so
-the drip is `0.0079·1.55/(0.9396 + 0.0079·1.55)` = **1.29 %** — iteration 4's 2.73 % was that term at
-a larger `H`.
+## Next — the fresh verifier, the team lead's reading, then the PAID shot
+The team lead reads `results/promo_holdout2_prep.json` + HEAD `d4bc013`; §6.2's STOP notice to the operator is the figure above.
+Then the paid session «holdout-2», nothing in front of runbook §0a: `--register --part holdout2 --step promo-holdout2
+--cap 0.90` (FITS shown, the four pins compared) → commit → `--pack --part holdout2` → commit → `ruff` + the three slices →
+§0–§7 → `--score --part holdout2` (both bars, ONE arm) → the close. Then c3 ($0.50), then the volume `mp-srv2` ((z)5).
 
-## The gates, each demonstrated
-`--dry-run` → the listing read READ-ONLY **before** `--register` ($0, creates nothing), so a card
-that had moved would refuse before the anchor, not after it; it matched the record exactly.
-`--register --step promo-iter5 --cap 1.40`: **FITS at the mean $0.8470 (−39.5 %)**, dear $4.8633 over
-the cap and named. Record verified BEFORE the commit: cap 1.4 · `terminate_after_minutes` **116** ·
-the Blackwell · «iteration 5». **Commit 1 registration (`d598573`), commit 2 pack (`782bb7f`)** —
-`build_pack()` passed `committed_registration()` because s30's order was followed: the fix held in a
-live paid run. §1 `STOP_AT` 13:16:14Z (the registered 116 min binds, not the $1.6067 remaining);
-gpu-id READ from the record; rung 1 **GO**, backstop $1.392 ≤ cap. §2 dead-man 500 s from the record,
-port at **27 s**. §3 pod HEAD == Mac HEAD, volume warm. §5 `--smoke` **exit 0**. §6 fetch 80, delete,
-both listings `[]`. **`make check` at BOTH HEADs: ruff clean, SLICES COVER, 1000+2030+1293 = 4323 passed / 2 skipped ≥ 4266; §8 (l) empty at `15313fb`.**
-**Next session's start ritual, read-only walk FIRST:** repeat `--close --tolerance 0.05
---expect-ms 4698000 --until '2026-09-06T12:45:00Z'`. Then holdout-2, once stop 2 below is answered.
-
-## Open stop — TWO, for the team lead / operator; tree clean, nothing in flight
-1. **`promo-iter5` did NOT settle and that is a DELAY, not a decision.** `--close` REFUSED: the walk
-   covered **1 072 748 ms of 4 698 000** and a PARTIAL walk is a third state. RunPod posts 30–40 min
-   late (billing had $0.2156 of the $0.9495 delta). Nothing is owed — retried at each session's start.
-2. **GREEN ⇒ the holdout-2 attempt is due, and the executor cannot start it alone.**
-   **Question:** the team lead owes the holdout-2 reference drawn **blind** from the PRODUCT
-   population (channels r2, PHASE v9 §2), and PHASE §6.2 makes the holdout attempt a STOP notice to
-   the operator before it is spent. The $0.90 of §6.1 is a FENCE, re-priced at that step's own
-   `--register` on the pace measured today (**53.6254 s/thread**) and the day's own offer.
-   **Tree:** clean, `make check` 4323/2, no pod. REMAINING $1.6067 is the BALANCE delta and ALREADY
-   carries this run; it leaves $0.21 over holdout-2 $0.90 + c3 $0.50, before the drip — tight.
+## Open stop — NONE for the executor: the next paid step is a planned read (§6.2), the operator's notice precedes it
+Tree clean, no pod, no line opened. Headroom: $2.5821 − $0.90 (the fence) − $0.50 (c3) = $1.18 before the ≈ $0.24/day drip.
 
 ## Named, not built (the phase file forbids adding what it did not ask for)
-- **(y)4 risk 3 FIRED, exactly as predicted:** `--close-segment` printed `verdict OVER`,
-  `spent_all_segments_usd 2.874083` — ALL SEVEN segments since iteration 1 summed against this
-  line's $1.40. A false field nothing gates on (the money is the guard's line, $0.9495); fix = filter
-  by `anchored_at`. **With (y)4 risk 2** (`"exception" in row` + (w)3's test) **the first $0 items.**
-- **Contradiction, named per PROCESS v2.1 (the standing law wins, no stop):** the runbook takes three
-  guard `--note`s while the operator's line is «one ledger line per session». PHASE **v13 §6.1**
-  mandates the post-run reading and `--close` writes the settlement — §0's note is the session's
-  ledger line; the other two are the close's own machinery.
-- **Watcher note, no repo change:** `pgrep -f promo_dev_pod_runner.py` also matches the probe's own
-  shell and the wrapper, so it never reads 0; liveness was pinned to the runner's PID instead.
-**No test, pin, guard or ledger was added this session.**
+- **A cross-leg `--step`:** `--step promo-holdout2` typed WITHOUT `--part holdout2` is the DEV leg (80 threads) under the
+  holdout-2 line — `--register` would anchor `spend_promo_holdout2.json` and overwrite the frozen iteration-5 record before
+  `committed_registration()` refuses the pack ($0, a live anchor, a `git checkout`). A refusal on a `--step` that is another
+  leg's own line is ~3 lines and not asked for; the runbook names `--part holdout2` as the load-bearing flag instead.
+- **A naive `--created-at`** (no `Z`/offset) is accepted at `--open` and dies with a TypeError at `--close-segment`
+  (unreachable from every real record: all eight stamps carry `Z`).
+- **Import-time `ARMS = ("dev",)`** differs from `DEV_FILES`' two arms until `use_part` runs (pre-existing; harmless via `main`).
+- **The dear-corner decision table on a holdout leg refuses by construction** (`by_part(dev=…)` alone): no ruling wrote that
+  table for a holdout, and it is unreachable today ($2.81 ≫ $0.90). A design fork only if a holdout's dear corner ever fits.
+- `results/promo_holdout2_prep.json :: phase` still reads «dev-40» — a display string of the $0 record ((r)1 accepted it so).
+**No test file, pin, guard or ledger was added this session; every new refusal is a fix's own consequence or §4 v8's clause.**
