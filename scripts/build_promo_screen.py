@@ -4,15 +4,22 @@
     make tick && make promo-screen        # the end-to-end of phase spec §2, on a clean clone
     PYTHONPATH=src python3.11 scripts/build_promo_screen.py --export /tmp/x.json --out /tmp/x.html
 
-**One source, named.** `results/promo_screen_data.json`, which `make tick` writes. Not the database,
-not the raw store, not the registry: a clean clone has none of those (`data/` is gitignored) and the
-phase's end-to-end check is exactly that the screen still renders there. Every figure on the page
-comes from that file; this script computes no aggregate of its own.
+**One source for the market, named.** `results/promo_screen_data.json`, which `make tick` writes.
+Not the database, not the raw store, not the registry: a clean clone has none of those (`data/` is
+gitignored) and the phase's end-to-end check is exactly that the screen still renders there. Every
+figure about the market comes from that file; this script computes no aggregate of its own.
 
-**A missing source is a NAMED, non-zero exit.** Both kinds: the file itself, and any of
-:data:`REQUIRED` inside it. A screen that renders a blank panel over a missing input is worse than
-one that refuses — the blank reads as «no promo this week», which is a claim about the market
-([[the_empty_row_is_the_answer]]). That is K12's negative control and it is what `--check` runs.
+**Three sources for the instrument's own grade, named.** The S2 block (ruling 06.09 (cc) addendum:
+«ship as measured» — both numbers with their files on the screen) prints the holdout readings of
+the comment reader straight from the graders' records, :data:`S2_SOURCES`: holdout-2 with P1 and
+raw, holdout-40 raw, each value beside its bar and the file's own `held` flag, and the tie count
+the P1 record carries. Committed result files, so a clean clone has them; no number here is typed.
+
+**A missing source is a NAMED, non-zero exit.** All three kinds: the export itself, any of
+:data:`REQUIRED` inside it, and any of the S2 files or the block read from it. A screen that
+renders a blank panel over a missing input is worse than one that refuses — the blank reads as «no
+promo this week», which is a claim about the market ([[the_empty_row_is_the_answer]]). That is
+K12's negative control and it is what `--check` runs.
 
 **What the row may say, and what it may not.** brand · product · volume · promo price · printed
 `−N%`. The extracted old price is NOT on this page (SPEC 3.21 (4), 3.18 (1)) and neither is the
@@ -41,6 +48,83 @@ OUT = REPO_ROOT / "dashboard" / "promo.html"
 REQUIRED = ("positions", "depth_by_chain_and_brand", "weeks", "rollup", "feed", "table_rows")
 """Every block the page renders. Named as a closed list so a source that stops being exported is a
 refusal here rather than an empty section nobody notices."""
+
+RESULTS = REPO_ROOT / "results"
+S2_SOURCES = (
+    ("holdout-2 · with P1", "grade_promo_p1_readings.json", ("sets", "dev3")),
+    ("holdout-2 · raw", "grade_promo_holdout2.json", ()),
+    ("holdout-40 · raw", "grade_promo_holdout40.json", ()),
+)
+"""label · file under `results/` · the path to the block inside it. The P1 record keeps a set's
+reading under `sets.<name>` with `after` / `bars_after` / `misses_after`; a grader's record keeps
+its one reading at the top under `whole_40` / `bars`. Closed like REQUIRED: a missing file or block
+is a refusal, never a blank row."""
+
+
+def s2_readings(results: Path = RESULTS) -> list[dict]:
+    """The S2 rows the screen and the README print — value, bar and `held` as the files say them.
+
+    One reader for both surfaces, so they cannot disagree. Refuses a missing file, and a file that
+    lacks the block it is read for, by name.
+    """
+    rows = []
+    for label, filename, inside in S2_SOURCES:
+        path = results / filename
+        if not path.exists():
+            raise SystemExit(
+                f"promo-screen REFUSED: missing S2 source {path} — the S2 block reads"
+                f" {', '.join(name for _, name, _ in S2_SOURCES)} and prints no number it did not read"
+            )
+        block = json.loads(path.read_text(encoding="utf-8"))
+        try:
+            for key in inside:
+                block = block[key]
+            reading = block["after"] if inside else block["whole_40"]
+            rows.append(
+                {
+                    "label": label,
+                    "file": f"results/{filename}",
+                    "block": ".".join((*inside, "after")) if inside else "whole_40",
+                    "bars": block["bars_after"] if inside else block["bars"],
+                    "agreed": reading["subject_agreed"],
+                    "comments": reading["subject_comments"],
+                    "misses": block["misses_after"] if inside else None,
+                }
+            )
+        except KeyError as error:
+            raise SystemExit(
+                f"promo-screen REFUSED: {path} carries no {error} under"
+                f" {'.'.join(inside) or 'its top level'} — the S2 block will not print a blank"
+            ) from error
+    return rows
+
+
+def s2_table(rows: list[dict]) -> str:
+    """Reader agreement on the frozen holdouts — subject per comment, signal per thread — each
+    beside its bar and the grader's own verdict, and the tie count the P1 record carries."""
+    body = "".join(
+        "<tr>"
+        f"<td>{html.escape(row['label'])}</td>"
+        f"<td class='num'>{sub['value']:.4f} ({row['agreed']}/{row['comments']})"
+        f" {'✅' if sub['held'] else '❌'} bar {sub['bar']:.2f}</td>"
+        f"<td class='num'>{sig['value']:.4f} {'✅' if sig['held'] else '❌'} bar {sig['bar']:.2f}</td>"
+        f"<td><code>{html.escape(row['file'])}</code> :: {html.escape(row['block'])}</td>"
+        "</tr>"
+        for row in rows
+        for sub, sig in ((row["bars"]["subject_agreement"], row["bars"]["signal_type_agreement"]),)
+    )
+    ties = "".join(
+        f"<p>Of the {row['misses']['total']} comments still missed with P1, "
+        f"{row['misses']['gold_unsure']} are rows the gold itself marked <code>unsure</code> — "
+        "the codebook allows two readings there (a store-stock complaint: the chain or the product;"
+        " a post in the chain's own channel: the chain or the post).</p>"
+        for row in rows
+        if row["misses"]
+    )
+    return (
+        "<table><tr><th>reading</th><th>subject — what the comment is about (per comment)</th>"
+        "<th>signal — what it says (per thread)</th><th>file</th></tr>" + body + "</table>" + ties
+    )
 
 CSS = """
 body{font:14px/1.45 -apple-system,Segoe UI,Roboto,sans-serif;margin:0;background:#faf9f7;color:#1c1b19}
@@ -161,7 +245,7 @@ def feed_table(rows: list[dict]) -> str:
     )
 
 
-def render(document: dict) -> str:
+def render(document: dict, s2: list[dict]) -> str:
     screen = document["screen"]
     weeks = screen["weeks"]
     counts = "".join(
@@ -181,6 +265,8 @@ def render(document: dict) -> str:
         "<h2>Глибина знижки — per chain and brand (window aggregate)</h2>"
         + depth_table(screen["depth_by_chain_and_brand"]) +
         "<h2>Реакція покупців</h2>" + feed_table(screen["feed"]) +
+        "<h2>S2 — the reader's grade on the frozen holdouts (shipped as measured)</h2>"
+        + s2_table(s2) +
         "</main></html>\n"
     )
 
@@ -189,16 +275,24 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--export", type=Path, default=EXPORT)
     parser.add_argument("--out", type=Path, default=OUT)
-    parser.add_argument("--check", action="store_true", help="load the source and render nothing")
+    parser.add_argument(
+        "--results", type=Path, default=RESULTS,
+        help="the directory the S2 sources are read from (default: results/)",
+    )
+    parser.add_argument("--check", action="store_true", help="load the sources and render nothing")
     args = parser.parse_args(argv)
 
     document = load(args.export)
+    s2 = s2_readings(args.results)
     if args.check:
-        print(f"promo-screen: {args.export} is complete — {', '.join(REQUIRED)} all present")
+        print(
+            f"promo-screen: {args.export} is complete — {', '.join(REQUIRED)} all present;"
+            f" S2 sources {', '.join(name for _, name, _ in S2_SOURCES)} read from {args.results}"
+        )
         return 0
     args.out.parent.mkdir(parents=True, exist_ok=True)
-    args.out.write_text(render(document), encoding="utf-8")
-    print(f"wrote {args.out} from {args.export}")
+    args.out.write_text(render(document, s2), encoding="utf-8")
+    print(f"wrote {args.out} from {args.export} + {len(s2)} S2 readings under {args.results}")
     return 0
 
 
