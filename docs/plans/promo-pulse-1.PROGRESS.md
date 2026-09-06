@@ -21,7 +21,7 @@ the clean-clone (h) still stands.
 **(4) The correction (`5ffe09b`, docstrings and one Makefile comment — no code).** My own docstring claimed the loop hands P1 «the shape the reading
 graded». It does not, and the gap is measured: see the open stop. Makefile's «reads … NOTHING else» became false with (3) and now names the four files.
 **`make check` at `d6e4ce9`:** ruff clean; pytest **4326 passed / 2 skipped in 712 s ≥ 4266**; HEAD and porcelain stamped on both sides, unmoved.
-Re-run at the final HEAD `MAKE_CHECK_HEAD`: **MAKE_CHECK_TAIL**.
+Re-run over the FINAL tree at `4d5e351` (this file's own commit): ruff clean; **4326 passed / 2 skipped in 702 s**; stamped `[]` porcelain, HEAD unmoved, 20:34→20:46Z.
 
 ## Next — «c3-prep» ($0), AFTER the ruling on the stop below: the c3 leg per ruling (l) 2–4 on its own line `promo-c3`, cap ≤ $0.50 priced at its dry
 run; the create permission PROVEN at $0 (PROCESS v2.3: the allow rule + the `--help` proof in runbook §0); the runbook re-pointed → the fresh verifier
@@ -37,7 +37,7 @@ LOOP reproduces **83/112 = 0.7411** where the screen and the README publish the 
 Question: (a) the C3 record carries the raw answer's signal types beside the kept rows, and the loop then reproduces the published number — a change to
 a record whose producer does not exist yet, which is «c3-prep»'s to write and the team lead's to order; (b) the published «with P1» number is disclosed
 as the READING's, with the loop's own 0.7411 named beside it; or (c) something else. The executor changed no number and widened no record.
-Tree: HEAD `HEAD_SHORT`, porcelain empty but the operator's untracked `Claude outputs/`; NO pod; cycle 3 REMAINING $2.1178; draw-3 frozen, unlabelled.
+Tree: HEAD `4d5e351` + this line's commit, porcelain empty but the operator's untracked `Claude outputs/`; NO pod; cycle 3 REMAINING $2.1178; draw-3 frozen, unlabelled.
 
 ## For the team lead's reading (a definition, not a stop)
 **The tie count reads 16 of 28, the ruling's hand count is 15** (raw 18 of 33). The file's rule is «a miss whose gold row carries `unsure`»; of the 16,
