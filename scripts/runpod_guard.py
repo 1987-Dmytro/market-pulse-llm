@@ -102,7 +102,7 @@ projection's `fits: false` is a true sentence about $6.1690 remaining on 2026-08
 tests that read it pin the cap that was IN FORCE at its write moment — `repair_phase4_ledger
 .CAP_IN_FORCE_USD` is the same pattern, one cap earlier."""
 
-CYCLE3_CAP_USD = 9.00
+CYCLE3_CAP_USD = 10.00
 """Cycle 3, operator ruling 2026-09-01 («Цикл-3 = весь баланс, потолок $4.8»), RAISED to $7.00 by
 the operator's later word the same evening — «Потолок $7.00, резерв не трогаем» — after he topped
 the account up by $10 (docs/reviews/2026-08-30-plan-promo-pulse-1.md, ruling «01.09 (later)»), and
@@ -110,6 +110,12 @@ RAISED AGAIN to $9.00 on 2026-09-05 — «на счету есть деньги�
 8). The second raise moves no money either: the account held $8.98 that morning against a $14.4800
 anchor and $5.50 spent, so the $7.00 was a fence and not the balance. It buys the line the ruling
 priced — iteration 4 ≤ $0.60, holdout-2 ≤ $0.90, c3 ≤ $0.50 and the volume's drip — inside $3.50.
+RAISED A THIRD TIME to $10.00 on 2026-09-06 15:55 — the operator's money word, ruling 06.09 (z)
+addendum (same file). Iteration 5 had settled at $0.9396 and the $9.00 line left $1.6067, which the
+holdout-2 shot (≤ $0.90) and c3 (≤ $0.50) would eat down to $0.21 before the volume's ≈ $0.24/day
+drip. No money moves and no run is finished by it: the raise lands at a session start with no pod
+alive, the anchor ($14.4799665639 of 01.09, re-anchored 02.09) does NOT move — «a ceiling is a
+line, not a balance; no top-up» — and REMAINING at the 12:39Z reading becomes $2.6067.
 
 Not a mid-run raise and not a cap raised to finish a run: no cycle-3 leg has been bought
 ($0.2139 spent, all of it the network volume's drip). The raise is the operator's, on new money,
