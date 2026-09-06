@@ -35,6 +35,9 @@ The record is sorted, carries no clock and no git block, so two runs are byte-id
 the check (K7) and the reason the team lead can label from it.
 
     python3.11 scripts/draw_promo_threads.py
+    python3.11 scripts/draw_promo_threads.py --arms holdout=20 --drop-paused \\
+        --exclude-drawn results/promo_threads_draw.json \\
+        --exclude-drawn results/promo_threads_draw_2.json --out results/promo_threads_draw_3.json
 """
 
 from __future__ import annotations
@@ -66,6 +69,40 @@ PER_STRATUM = {"dev": 20, "holdout": 20}
 ARMS_2 = {"holdout": 20}
 """Draw 2 (ruling 05.09 (s) item 3 (b)) has ONE arm and no dev half: dev-40 and dev-2 are already
 drawn, labelled and frozen, so the second draw owes only the new holdout — 20 of each stratum."""
+
+LEGS = {
+    1: {
+        "authority": "ruling 05.09 (s) item 3 (b) — holdout-2 is drawn from the PRODUCT's"
+        " population, not from «все 678»: the frozen v1 population carried threads of channels"
+        " revision r2 had already stopped collecting, and 21 of holdout-40's 53 subject misses were"
+        " ONE of them (@matusi_ukr, a moms' channel with no retailer and no product)",
+        "ruling": "operator 2026-09-05, ruling (s) item 3 (b) — «seed 42 over the frozen 678 MINUS"
+        " channels with `collect: false` in registry r2 MINUS the 80 drawn, 20/20, a NEW draw file"
+        " (`promo_threads_draw_2.json`; the old stays frozen)»; PHASE-promo-pulse-1.md §2 v9",
+        "already_drawn": "every thread the FIRST draw spent — dev-40 and the burned holdout-40,"
+        " now dev-2 — leaves the population: the new holdout must be disjoint from both",
+    },
+    2: {
+        "authority": "ruling 06.09 (bb) addendum (b), PHASE v18 §6.2 — holdout-2 read RED on subject"
+        " (0.7054) and is spent, now dev-3; holdout-3 is drawn from what the product's population has"
+        " LEFT: draw-2's `eligible_after` (398) minus holdout-2's 40 threads, seed 42, 20/20 by"
+        " stratum, disjoint from all 120 drawn; its gold is the team lead's, BLIND, and the shot is"
+        " bought ONCE and only if P1's dev-3 reading clears the bar",
+        "ruling": "operator 2026-09-06 20:05, ruling (bb) addendum (b) — «holdout-3 DRAW at $0: seed 42"
+        " over draw-2's eligible_after (398) MINUS holdout-2's 40 threads (= 358), 20/20 by stratum,"
+        " disjoint from all 120 drawn, the draw producer re-used with its paths as PARAMETERS»;"
+        " PHASE-promo-pulse-1.md §6.2 v18",
+        "already_drawn": "every thread the first TWO draws spent — dev-40 and dev-2 (the first draw's"
+        " 80) and holdout-2, now dev-3 (the second draw's 40) — leaves the population: holdout-3"
+        " must be disjoint from all three",
+    },
+}
+"""The record's decision fields, per LEG — the leg being how many earlier draws it excludes (one:
+draw 2, holdout-2; two: draw 3, holdout-3). PHASE §4 v8: a field that states a decision branches
+on the leg or the emitter refuses to write; a count with no entry here is refused, never handed a
+neighbour's authority. Draw 1 excludes nothing and carries the 30.08 ruling in `build` itself.
+Leg 1's three strings are the frozen draw-2 record's, byte for byte — it is pinned by the holdout-2
+registration and this script must still reproduce it."""
 
 CURRENCY_BRANCHES = ("грн", "₴", "grn")
 """The branches that are a real currency marker. `decimal` is the fourth and is the other stratum."""
@@ -153,9 +190,7 @@ def draw(pool: list[dict], stratum: str, arms: dict[str, int] | None = None) -> 
         rows_ = picked[taken : taken + n]
         taken += n
         block[arm] = sorted(rows_, key=lambda row: (row["store_file"], row["thread_root"]))
-        block[f"{arm}_ranks"] = sorted(
-            ranked[(r["store_file"], r["thread_root"])] for r in rows_
-        )
+        block[f"{arm}_ranks"] = sorted(ranked[(r["store_file"], r["thread_root"])] for r in rows_)
     return block
 
 
@@ -169,22 +204,35 @@ def ids_sha256(rows_: list[dict]) -> str:
     return hashlib.sha256(blob.encode("utf-8")).hexdigest()
 
 
-def drawn_ids(path: Path) -> set[tuple[str, str]]:
-    """Every (store_file, thread_root) an earlier draw already spent, from that draw's own record."""
-    body = json.loads(path.read_text(encoding="utf-8"))
-    return {
-        (row["store_file"], row["thread_root"])
-        for block in body["draw"].values()
-        for arm, rows_ in block.items()
-        if isinstance(rows_, list) and not arm.endswith("_ranks")
-        for row in rows_
-    }
+def drawn_ids(paths: list[Path]) -> set[tuple[str, str]]:
+    """Every (store_file, thread_root) the earlier draws already spent, from their own records."""
+    found: set[tuple[str, str]] = set()
+    for path in paths:
+        body = json.loads(path.read_text(encoding="utf-8"))
+        found |= {
+            (row["store_file"], row["thread_root"])
+            for block in body["draw"].values()
+            for arm, rows_ in block.items()
+            if isinstance(rows_, list) and not arm.endswith("_ranks")
+            for row in rows_
+        }
+    return found
+
+
+def _relative(path: Path) -> str:
+    return str(path.relative_to(REPO_ROOT)) if path.is_relative_to(REPO_ROOT) else str(path)
+
+
+def _one_or_all(values: list):
+    """One earlier draw is named as a STRING — draw 2's frozen record, pinned by a registration's
+    sha, has that shape and must stay reproducible; two or more are named as a list."""
+    return values[0] if len(values) == 1 else (values or None)
 
 
 def build(
     arms: dict[str, int] | None = None,
     *,
-    exclude_drawn: Path | None = None,
+    exclude_drawn: list[Path] | None = None,
     drop_paused: bool = False,
 ) -> dict:
     """The draw record. With no exclusions and the default arms this is draw 1, byte for byte."""
@@ -211,12 +259,16 @@ def build(
         if not (drop_paused and row["from_a_channel_r2_stopped_collecting"])
         and (row["store_file"], row["thread_root"]) not in already
     ]
+    leg = LEGS.get(len(exclude_drawn or []))
+    if (drop_paused or exclude_drawn) and leg is None:
+        raise SystemExit(
+            f"{len(exclude_drawn or [])} earlier draw(s) excluded and no leg of LEGS carries the"
+            " record's decision fields for that count — refused, never a neighbour's authority"
+            " (PHASE §4 v8)"
+        )
     exclusions = (
         {
-            "authority": "ruling 05.09 (s) item 3 (b) — holdout-2 is drawn from the PRODUCT's"
-            " population, not from «все 678»: the frozen v1 population carried threads of channels"
-            " revision r2 had already stopped collecting, and 21 of holdout-40's 53 subject misses"
-            " were ONE of them (@matusi_ukr, a moms' channel with no retailer and no product)",
+            "authority": leg["authority"],
             "paused_channels": {
                 "rule": "a thread whose channel carries `collect: false` in config/registry.yaml"
                 " (revision r2) leaves the population — the product does not read it, so it may not"
@@ -233,12 +285,9 @@ def build(
                 ),
             },
             "already_drawn": {
-                "rule": "every thread the FIRST draw spent — dev-40 and the burned holdout-40, now"
-                " dev-2 — leaves the population: the new holdout must be disjoint from both",
-                "from": str(exclude_drawn.relative_to(REPO_ROOT))
-                if exclude_drawn and exclude_drawn.is_relative_to(REPO_ROOT)
-                else str(exclude_drawn),
-                "sha256": _sha256(exclude_drawn) if exclude_drawn else None,
+                "rule": leg["already_drawn"],
+                "from": _one_or_all([_relative(path) for path in exclude_drawn or []]),
+                "sha256": _one_or_all([_sha256(path) for path in exclude_drawn or []]),
                 "threads": len(already),
                 "eligible_threads_in_them": len(
                     [row for row in eligible if (row["store_file"], row["thread_root"]) in already]
@@ -264,9 +313,7 @@ def build(
         "ruling": "operator 2026-08-30: «Все 678, дро 20/20 по типу» —"
         " docs/reviews/2026-08-30-plan-promo-pulse-1.md, SP-0 q3"
         if exclusions is None
-        else "operator 2026-09-05, ruling (s) item 3 (b) — «seed 42 over the frozen 678 MINUS"
-        " channels with `collect: false` in registry r2 MINUS the 80 drawn, 20/20, a NEW draw file"
-        " (`promo_threads_draw_2.json`; the old stays frozen)»; PHASE-promo-pulse-1.md §2 v9",
+        else leg["ruling"],
         "predicate": {
             "name": "retail_census.PRICE_BRANCHES",
             "branches": {name: pattern.pattern for name, pattern in sorted(PRICE_BRANCHES.items())},
@@ -357,7 +404,9 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "--exclude-drawn",
         type=Path,
-        help="an earlier draw record whose threads are already spent and leave the population",
+        action="append",
+        help="an earlier draw record whose threads are already spent and leave the population;"
+        " repeated once per earlier draw (draw 3 names both)",
     )
     parser.add_argument(
         "--drop-paused",

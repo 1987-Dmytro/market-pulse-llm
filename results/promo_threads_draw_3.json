@@ -1,0 +1,681 @@
+{
+  "contract": "docs/PHASE-promo-pulse-1.md S2 · docs/plans/promo-pulse-1.md S7 (K7)",
+  "could_not_reach": {
+    "channels_outside_the_two_that_carry_the_population": "the draw is stratified by BRANCH, not by channel, and after the exclusions above what is left is almost entirely @msuaaaa and @VARUS_channel — the two channels the product actually collects. Channel is a recorded field on every drawn thread instead.",
+    "threads_with_nothing_but_wordless_comments": 190
+  },
+  "draw": {
+    "currency": {
+      "eligible": 117,
+      "holdout": [
+        {
+          "branches": [
+            "decimal",
+            "грн"
+          ],
+          "channel": "@VARUS_channel",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 11,
+          "n_wordless": 0,
+          "post_date": "2025-04-15",
+          "store_file": "VARUS_channel",
+          "stratum": "currency",
+          "thread_root": "1854"
+        },
+        {
+          "branches": [
+            "грн"
+          ],
+          "channel": "@VARUS_channel",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 4,
+          "n_wordless": 0,
+          "post_date": "2025-08-19",
+          "store_file": "VARUS_channel",
+          "stratum": "currency",
+          "thread_root": "3698"
+        },
+        {
+          "branches": [
+            "decimal",
+            "грн"
+          ],
+          "channel": "@VARUS_channel",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 4,
+          "n_wordless": 0,
+          "post_date": "2026-04-22",
+          "store_file": "VARUS_channel",
+          "stratum": "currency",
+          "thread_root": "8576"
+        },
+        {
+          "branches": [
+            "грн"
+          ],
+          "channel": "@VARUS_channel",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 1,
+          "n_wordless": 0,
+          "post_date": "2026-05-17",
+          "store_file": "VARUS_channel",
+          "stratum": "currency",
+          "thread_root": "9143"
+        },
+        {
+          "branches": [
+            "грн"
+          ],
+          "channel": "@VARUS_channel",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 2,
+          "n_wordless": 0,
+          "post_date": "2026-06-19",
+          "store_file": "VARUS_channel",
+          "stratum": "currency",
+          "thread_root": "9924"
+        },
+        {
+          "branches": [
+            "decimal",
+            "грн"
+          ],
+          "channel": "@msuaaaa",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 9,
+          "n_wordless": 3,
+          "post_date": "2026-05-27",
+          "store_file": "msuaaaa",
+          "stratum": "currency",
+          "thread_root": "10047"
+        },
+        {
+          "branches": [
+            "грн"
+          ],
+          "channel": "@msuaaaa",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 4,
+          "n_wordless": 1,
+          "post_date": "2026-06-02",
+          "store_file": "msuaaaa",
+          "stratum": "currency",
+          "thread_root": "10119"
+        },
+        {
+          "branches": [
+            "decimal",
+            "грн"
+          ],
+          "channel": "@msuaaaa",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 11,
+          "n_wordless": 8,
+          "post_date": "2025-07-07",
+          "store_file": "msuaaaa",
+          "stratum": "currency",
+          "thread_root": "5623"
+        },
+        {
+          "branches": [
+            "decimal",
+            "грн"
+          ],
+          "channel": "@msuaaaa",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 13,
+          "n_wordless": 10,
+          "post_date": "2025-07-28",
+          "store_file": "msuaaaa",
+          "stratum": "currency",
+          "thread_root": "6010"
+        },
+        {
+          "branches": [
+            "decimal",
+            "грн"
+          ],
+          "channel": "@msuaaaa",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 14,
+          "n_wordless": 9,
+          "post_date": "2025-09-01",
+          "store_file": "msuaaaa",
+          "stratum": "currency",
+          "thread_root": "6584"
+        },
+        {
+          "branches": [
+            "грн"
+          ],
+          "channel": "@msuaaaa",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 2,
+          "n_wordless": 0,
+          "post_date": "2025-11-25",
+          "store_file": "msuaaaa",
+          "stratum": "currency",
+          "thread_root": "7915"
+        },
+        {
+          "branches": [
+            "decimal",
+            "грн"
+          ],
+          "channel": "@msuaaaa",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 6,
+          "n_wordless": 0,
+          "post_date": "2025-12-05",
+          "store_file": "msuaaaa",
+          "stratum": "currency",
+          "thread_root": "8092"
+        },
+        {
+          "branches": [
+            "decimal",
+            "грн"
+          ],
+          "channel": "@msuaaaa",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 2,
+          "n_wordless": 0,
+          "post_date": "2025-12-16",
+          "store_file": "msuaaaa",
+          "stratum": "currency",
+          "thread_root": "8222"
+        },
+        {
+          "branches": [
+            "грн"
+          ],
+          "channel": "@msuaaaa",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 4,
+          "n_wordless": 0,
+          "post_date": "2025-12-18",
+          "store_file": "msuaaaa",
+          "stratum": "currency",
+          "thread_root": "8293"
+        },
+        {
+          "branches": [
+            "грн"
+          ],
+          "channel": "@msuaaaa",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 1,
+          "n_wordless": 0,
+          "post_date": "2026-01-01",
+          "store_file": "msuaaaa",
+          "stratum": "currency",
+          "thread_root": "8432"
+        },
+        {
+          "branches": [
+            "грн"
+          ],
+          "channel": "@msuaaaa",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 6,
+          "n_wordless": 4,
+          "post_date": "2026-02-05",
+          "store_file": "msuaaaa",
+          "stratum": "currency",
+          "thread_root": "8843"
+        },
+        {
+          "branches": [
+            "грн"
+          ],
+          "channel": "@msuaaaa",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 1,
+          "n_wordless": 0,
+          "post_date": "2026-02-11",
+          "store_file": "msuaaaa",
+          "stratum": "currency",
+          "thread_root": "8946"
+        },
+        {
+          "branches": [
+            "грн"
+          ],
+          "channel": "@msuaaaa",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 3,
+          "n_wordless": 2,
+          "post_date": "2026-02-12",
+          "store_file": "msuaaaa",
+          "stratum": "currency",
+          "thread_root": "8989"
+        },
+        {
+          "branches": [
+            "грн"
+          ],
+          "channel": "@msuaaaa",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 6,
+          "n_wordless": 3,
+          "post_date": "2026-02-14",
+          "store_file": "msuaaaa",
+          "stratum": "currency",
+          "thread_root": "9010"
+        },
+        {
+          "branches": [
+            "decimal",
+            "грн"
+          ],
+          "channel": "@msuaaaa",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 1,
+          "n_wordless": 0,
+          "post_date": "2026-04-18",
+          "store_file": "msuaaaa",
+          "stratum": "currency",
+          "thread_root": "9675"
+        }
+      ],
+      "holdout_ranks": [
+        5,
+        12,
+        31,
+        36,
+        40,
+        43,
+        45,
+        56,
+        58,
+        59,
+        73,
+        77,
+        79,
+        80,
+        85,
+        97,
+        100,
+        102,
+        103,
+        110
+      ]
+    },
+    "decimal_only": {
+      "eligible": 241,
+      "holdout": [
+        {
+          "branches": [
+            "decimal"
+          ],
+          "channel": "@VARUS_channel",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 2,
+          "n_wordless": 0,
+          "post_date": "2025-04-07",
+          "store_file": "VARUS_channel",
+          "stratum": "decimal_only",
+          "thread_root": "1814"
+        },
+        {
+          "branches": [
+            "decimal"
+          ],
+          "channel": "@VARUS_channel",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 2,
+          "n_wordless": 0,
+          "post_date": "2025-07-21",
+          "store_file": "VARUS_channel",
+          "stratum": "decimal_only",
+          "thread_root": "2989"
+        },
+        {
+          "branches": [
+            "decimal"
+          ],
+          "channel": "@VARUS_channel",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 5,
+          "n_wordless": 0,
+          "post_date": "2025-10-03",
+          "store_file": "VARUS_channel",
+          "stratum": "decimal_only",
+          "thread_root": "4846"
+        },
+        {
+          "branches": [
+            "decimal"
+          ],
+          "channel": "@VARUS_channel",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 1,
+          "n_wordless": 0,
+          "post_date": "2025-10-10",
+          "store_file": "VARUS_channel",
+          "stratum": "decimal_only",
+          "thread_root": "4956"
+        },
+        {
+          "branches": [
+            "decimal"
+          ],
+          "channel": "@VARUS_channel",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 1,
+          "n_wordless": 0,
+          "post_date": "2026-01-27",
+          "store_file": "VARUS_channel",
+          "stratum": "decimal_only",
+          "thread_root": "6727"
+        },
+        {
+          "branches": [
+            "decimal"
+          ],
+          "channel": "@VARUS_channel",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 7,
+          "n_wordless": 0,
+          "post_date": "2026-01-30",
+          "store_file": "VARUS_channel",
+          "stratum": "decimal_only",
+          "thread_root": "6803"
+        },
+        {
+          "branches": [
+            "decimal"
+          ],
+          "channel": "@VARUS_channel",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 3,
+          "n_wordless": 0,
+          "post_date": "2026-03-13",
+          "store_file": "VARUS_channel",
+          "stratum": "decimal_only",
+          "thread_root": "7699"
+        },
+        {
+          "branches": [
+            "decimal"
+          ],
+          "channel": "@VARUS_channel",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 4,
+          "n_wordless": 0,
+          "post_date": "2026-05-05",
+          "store_file": "VARUS_channel",
+          "stratum": "decimal_only",
+          "thread_root": "8869"
+        },
+        {
+          "branches": [
+            "decimal"
+          ],
+          "channel": "@VARUS_channel",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 16,
+          "n_wordless": 0,
+          "post_date": "2026-06-12",
+          "store_file": "VARUS_channel",
+          "stratum": "decimal_only",
+          "thread_root": "9798"
+        },
+        {
+          "branches": [
+            "decimal"
+          ],
+          "channel": "@msuaaaa",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 7,
+          "n_wordless": 0,
+          "post_date": "2026-06-01",
+          "store_file": "msuaaaa",
+          "stratum": "decimal_only",
+          "thread_root": "10097"
+        },
+        {
+          "branches": [
+            "decimal"
+          ],
+          "channel": "@msuaaaa",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 1,
+          "n_wordless": 0,
+          "post_date": "2025-03-28",
+          "store_file": "msuaaaa",
+          "stratum": "decimal_only",
+          "thread_root": "3604"
+        },
+        {
+          "branches": [
+            "decimal"
+          ],
+          "channel": "@msuaaaa",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 2,
+          "n_wordless": 0,
+          "post_date": "2025-04-07",
+          "store_file": "msuaaaa",
+          "stratum": "decimal_only",
+          "thread_root": "3821"
+        },
+        {
+          "branches": [
+            "decimal"
+          ],
+          "channel": "@msuaaaa",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 4,
+          "n_wordless": 0,
+          "post_date": "2025-05-13",
+          "store_file": "msuaaaa",
+          "stratum": "decimal_only",
+          "thread_root": "4480"
+        },
+        {
+          "branches": [
+            "decimal"
+          ],
+          "channel": "@msuaaaa",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 1,
+          "n_wordless": 0,
+          "post_date": "2025-06-18",
+          "store_file": "msuaaaa",
+          "stratum": "decimal_only",
+          "thread_root": "5285"
+        },
+        {
+          "branches": [
+            "decimal"
+          ],
+          "channel": "@msuaaaa",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 1,
+          "n_wordless": 0,
+          "post_date": "2025-09-30",
+          "store_file": "msuaaaa",
+          "stratum": "decimal_only",
+          "thread_root": "7053"
+        },
+        {
+          "branches": [
+            "decimal"
+          ],
+          "channel": "@msuaaaa",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 1,
+          "n_wordless": 0,
+          "post_date": "2025-11-18",
+          "store_file": "msuaaaa",
+          "stratum": "decimal_only",
+          "thread_root": "7814"
+        },
+        {
+          "branches": [
+            "decimal"
+          ],
+          "channel": "@msuaaaa",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 10,
+          "n_wordless": 9,
+          "post_date": "2026-02-19",
+          "store_file": "msuaaaa",
+          "stratum": "decimal_only",
+          "thread_root": "9056"
+        },
+        {
+          "branches": [
+            "decimal"
+          ],
+          "channel": "@msuaaaa",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 10,
+          "n_wordless": 8,
+          "post_date": "2026-02-24",
+          "store_file": "msuaaaa",
+          "stratum": "decimal_only",
+          "thread_root": "9130"
+        },
+        {
+          "branches": [
+            "decimal"
+          ],
+          "channel": "@msuaaaa",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 5,
+          "n_wordless": 0,
+          "post_date": "2026-04-17",
+          "store_file": "msuaaaa",
+          "stratum": "decimal_only",
+          "thread_root": "9664"
+        },
+        {
+          "branches": [
+            "decimal"
+          ],
+          "channel": "@msuaaaa",
+          "from_a_channel_r2_stopped_collecting": false,
+          "n_comments": 19,
+          "n_wordless": 17,
+          "post_date": "2026-05-05",
+          "store_file": "msuaaaa",
+          "stratum": "decimal_only",
+          "thread_root": "9855"
+        }
+      ],
+      "holdout_ranks": [
+        6,
+        22,
+        38,
+        39,
+        65,
+        66,
+        90,
+        102,
+        119,
+        123,
+        154,
+        158,
+        165,
+        174,
+        190,
+        202,
+        221,
+        224,
+        232,
+        239
+      ]
+    }
+  },
+  "exclusions": {
+    "already_drawn": {
+      "eligible_threads_in_them": 120,
+      "from": [
+        "results/promo_threads_draw.json",
+        "results/promo_threads_draw_2.json"
+      ],
+      "rule": "every thread the first TWO draws spent — dev-40 and dev-2 (the first draw's 80) and holdout-2, now dev-3 (the second draw's 40) — leaves the population: holdout-3 must be disjoint from all three",
+      "sha256": [
+        "6f9fa245b9d702549cdc323849146de1825a12df8048c8ba8077c42e2508a407",
+        "567cb2360bf51f8018147ba367cce99911e5f0cfa3faa3bff073d7bcc7fc4ea2"
+      ],
+      "threads": 120
+    },
+    "authority": "ruling 06.09 (bb) addendum (b), PHASE v18 §6.2 — holdout-2 read RED on subject (0.7054) and is spent, now dev-3; holdout-3 is drawn from what the product's population has LEFT: draw-2's `eligible_after` (398) minus holdout-2's 40 threads, seed 42, 20/20 by stratum, disjoint from all 120 drawn; its gold is the team lead's, BLIND, and the shot is bought ONCE and only if P1's dev-3 reading clears the bar",
+    "eligible_after": 358,
+    "eligible_after_ids_sha256": "aa29a13df183f8a701327d12baf40f32fd9b314a258ba43b82ad09eea0bc5b66",
+    "paused_channels": {
+      "channels": [
+        "@HealthPsycholog",
+        "@kkondr_fit",
+        "@mandziak",
+        "@matusi_ukr",
+        "@sashafitnesslife",
+        "@ya_Nenka"
+      ],
+      "eligible_threads_in_them": 12,
+      "rule": "a thread whose channel carries `collect: false` in config/registry.yaml (revision r2) leaves the population — the product does not read it, so it may not grade the instrument that serves the product"
+    },
+    "union_removed": 130,
+    "union_rule": "the two exclusions OVERLAP — the two @matusi_ukr threads of holdout-40 are in both — so the population is `eligible − union`, never `eligible − a − b`"
+  },
+  "population": {
+    "by_channel": {
+      "@HealthPsycholog": 3,
+      "@VARUS_channel": 218,
+      "@kkondr_fit": 1,
+      "@kopiyochka1": 1,
+      "@mandziak": 2,
+      "@matusi_ukr": 4,
+      "@msuaaaa": 447,
+      "@sashafitnesslife": 1,
+      "@ya_Nenka": 1
+    },
+    "by_stratum": {
+      "currency": 229,
+      "decimal_only": 449
+    },
+    "from_channels_r2_stopped_collecting": 12,
+    "ids_sha256": "16de3355a4e06e00f7b01730c6ad761c57014e1e3a7d827d4530752e9ba4a28e",
+    "provenance": {
+      "means": "the six pinned store files were the bytes this draw read; the baseline is the only durable proof, because `data/` is gitignored",
+      "raw_v1_baseline.sha256": "ed28be9a0774eaf61d0b5a72b879fc1550e95c9baf1c85fe56d926f2e7c393bf",
+      "verify": "shasum -c results/raw_v1_baseline.sha256 — six files, all OK"
+    },
+    "root": "data/raw — the FROZEN v1 archive, read v1-only on purpose",
+    "threads": 678,
+    "why_not_the_union": "SP-4 ruling (a) makes `data/raw_r2/` the live root and every other reader takes v1 ∪ r2. This one does not: the holdout is frozen at the draw and its population has to be frozen too, so a top-up landing between two runs cannot move 678/488 under it (plan §5.14)."
+  },
+  "predicate": {
+    "branches": {
+      "decimal": "\\d+[,.]\\d\\d",
+      "grn": "\\bgrn\\b",
+      "грн": "грн",
+      "₴": "₴"
+    },
+    "join": "comment.parent_msg_id == post.msg_id, both as strings",
+    "name": "retail_census.PRICE_BRANCHES",
+    "same_instrument_as": "scripts/promo_comment_yield.py"
+  },
+  "queue_rule": {
+    "comments": 4718,
+    "eligible_ids_sha256": "a6a54dae42a06a5d77a70a0568898e40b2033e42ac3af7df40aa4589eafeb6bd",
+    "eligible_threads": 488,
+    "spec": "SPEC 3.19 — a text-less comment leaves the INFERENCE QUEUE from the next paid cycle. A queue rule, never a deletion: «the volume of wordless reactions is itself a signal», so the count is printed beside every distribution over comments.",
+    "threads_with_nothing_but_wordless_comments": 190,
+    "wordless_comments": 2808
+  },
+  "quotas": {
+    "holdout": 20
+  },
+  "ruling": "operator 2026-09-06 20:05, ruling (bb) addendum (b) — «holdout-3 DRAW at $0: seed 42 over draw-2's eligible_after (398) MINUS holdout-2's 40 threads (= 358), 20/20 by stratum, disjoint from all 120 drawn, the draw producer re-used with its paths as PARAMETERS»; PHASE-promo-pulse-1.md §6.2 v18",
+  "seed": 42,
+  "seeded_per_stratum": "random.Random(f'42:<stratum>') — .claude/rules/registrations-and-draws.md",
+  "strata": {
+    "currency": "the post's text matches any of грн, ₴, grn",
+    "decimal_only": "it matches the `decimal` branch and none of the currency ones",
+    "why": "two thirds of the population match on `decimal` alone, which also fires on a DATE. The ruling keeps the whole population and makes the split a stratum, so per-stratum agreement is a reading beside the bars instead of a cut nobody can see."
+  }
+}
