@@ -14,6 +14,26 @@
       "balance": 6.6319213395,
       "step_spent_usd": 0.4107,
       "note": "promo-holdout2 POST-RUN reading, the reference the close settles against: pod p3krn2lwhhcyyi 2026-09-06T16:45:21Z -> 2026-09-06T17:20:37Z, 2116 billed s, 40 of 40 units answered"
+    },
+    {
+      "at": "2026-09-06T18:21:27+00:00",
+      "closed": true,
+      "balance": 6.5977969173,
+      "window_start": "2026-09-06T16:19:45+00:00",
+      "window_end": "2026-09-06T17:30:00Z",
+      "walk_ms": 2116299,
+      "expected_ms": 2116000,
+      "balance_delta_usd": 0.444788,
+      "billing_since_usd": 0.435065,
+      "billing_by_kind": {
+        "pods": 0.425343,
+        "network-volume": 0.009722,
+        "serverless": 0.0
+      },
+      "note": "promo-holdout2 settled",
+      "settled_usd": 0.425343,
+      "recorded_reading_usd": 0.4107,
+      "tolerance": 0.05
     }
   ],
   "gpu_note": "RunPod account balance read before the first pod of promo-holdout2. Step spend = the pessimistic maximum of this anchor minus the balance now and the billing walk since `anchored_at` (SPEC 3.23 (4), Dv411), enforced against $0.90. The SPEC amendment 3.4 (4) phase cap is enforced separately, against results/spend_phase4.json, and neither anchor may be regenerated."

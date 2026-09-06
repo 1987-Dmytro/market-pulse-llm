@@ -163,6 +163,16 @@
       "billing_since_usd": 7.437382,
       "billing_read": "read",
       "note": "promo-holdout2 POST-RUN reading, the reference the close settles against: pod p3krn2lwhhcyyi 2026-09-06T16:45:21Z -> 2026-09-06T17:20:37Z, 2116 billed s, 40 of 40 units answered"
+    },
+    {
+      "at": "2026-09-06T18:21:27+00:00",
+      "balance": 6.5977969173,
+      "spent_usd": 7.8822,
+      "remaining_usd": 2.1178,
+      "balance_delta_usd": 7.8822,
+      "billing_since_usd": 7.872447,
+      "billing_read": "read",
+      "note": "promo-holdout2 CLOSED at $0.4253 — promo-holdout2 settled"
     }
   ]
 }
