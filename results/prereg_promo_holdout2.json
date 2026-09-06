@@ -1,0 +1,265 @@
+{
+  "authority": "docs/reviews/2026-08-30-plan-promo-pulse-1.md «Ruling 06.09 (z)» items 3-4 — «The instrument is FROZEN as bought (§6.2)» … «the four pins the holdout-2 registration carries byte for byte» … «A pin that moves before the shot is a stop»; «the holdout-2 leg as a PART of the emitter (`--part holdout2`: draw-2's holdout arm, gold `docs/labels-promo-holdout2.jsonl`, step `promo-holdout2`, own stem/files; every decision field of the record branches on the leg — §4)»; the population is «Ruling 05.09 (s)» item 3 (b)'s second draw, results/promo_threads_draw_2.json — seed 42 over the PRODUCT's population, disjoint from the 80 the first draw spent; the cap is the operator's fence of docs/PHASE-promo-pulse-1.md §6.1 v16 («holdout-2 ≤ $0.90 on the measured pace»), an ESTIMATE re-priced at THIS registration on the whole-run mean of the slowest pod seen, with the cap as the hard stop (rulings (r) 2, (t) 3); §6.2's STOP notice to the operator precedes the paid session; the shot is bought once",
+  "class": "PRE-REGISTRATION. Written and committed before any pod of this step exists; git history is the only witness that it preceded the money.",
+  "decision_table": {
+    "after_the_smoke_for_40_threads": {
+      "3 replies are in": "write GO. The pod answers the rest under the hard stop.",
+      "the key name": "kept as it stands because `project()` reads it by name; the leg's own size is `population.leg_a.threads` = 40",
+      "the smoke did not come back": "no GO is written; the pod is deleted, the segment closed, the listing shown, and the run is PHASE §6.5's incomplete reading."
+    },
+    "authority": "ruling 05.09 (r) item 2 as PHASE v10 §6.1 widens it to EVERY leg (ruling 05.09 (t) item 3): the money gate is rung 0 FITS on the measured MEAN corner ($0.5170 ≤ $0.9000) plus the cap as the platform's hard stop (`--terminate-after`); §5's band gate is NOT run — GO is written the moment the smoke's three replies are in (their seconds stay in the pod log); `project()` and its literals stay untouched",
+    "why_not_the_dev_bands": "the dev loop's bands are absolute dollars ($0.80 / $1.20) with KILL on the MAX corner over the cap. This leg's max corner is over the cap BY CONSTRUCTION — rung 0 above prices it at $2.8109 and issues FITS on the mean anyway — so the band gate would KILL a run this very record registers as FITS. Two thresholds for one decision ([[two_gates_on_one_spend_read_different_corners]]); the corner that was priced keeps the decision."
+  },
+  "gates": {
+    "1_liveness": "the ssh dead-man above; never two pods, checked BEFORE `pod create`",
+    "3_hard_stop": "4500.0 s of pod existence at the registered price. On a leg issued on the MEAN corner it is not a backstop BEHIND a band gate: ruling 05.09 (r) item 2, widened by (t) item 3, does not run §5's band gate at all, so the cap as `--terminate-after` is the ONE thing that bounds the money after rung 0 has issued FITS",
+    "boot_kill_seconds": 720.0,
+    "delete_margin_seconds": 60.0,
+    "from": "results/prereg_reader_probe_v5b.json — frozen; boot_kill_seconds, delete_margin_seconds and max_recreates only",
+    "max_recreates": 2,
+    "ssh_deadman_from": "results/prereg_pass2_signals_r2.json :: kill_clock[rung 2].deadline_seconds",
+    "ssh_deadman_rule": "ruling 03.09 (e) item 1, read and not typed: the PRODUCTION sibling's deadline on the same card and datacenter — «the ssh endpoint has to answer inside this pod's create-elapsed deadline or KILL. Unmoved: six readings run 14.5 → 262.5 and two pods of 2026-08-20 were still unreachable past 230 s»",
+    "ssh_deadman_seconds": 500.0,
+    "terminate_after_borrowed_minutes": 90,
+    "terminate_after_live_bound": "the cap",
+    "terminate_after_minutes": 75,
+    "terminate_after_rule": "the CAP's own minutes at the registered price — floor(4500.0 s / 60) = 75 min, against the 90 min this leg used to borrow from results/prereg_reader_probe_v5b.json :: go_no_go.backstop, which would have bitten LAST. Ruling 05.09 (x) item 3: the cap is the hard stop and nothing else bounds the money."
+  },
+  "law": {
+    "baseline": "iteration 5 took BOTH dev bars on a complete reading — 80 of 80 units, 0 unparsed; subject 0.8857, signal 0.8667 (`results/grade_promo_dev40_iter5.json`) — and ruling 06.09 (z) item 1 accepted it, with dev-2 read beside it (0.8883 / 0.8296, a reading and no bar). NOTHING moves for this shot: (z) item 3 freezes the instrument as that iteration bought it, so `codebook_version`, `template_sha256`, `scripts/promo_dev_pod_runner.py` and `src/market_pulse/promo_prompts.py` are `d598573`'s own, byte for byte. What changes is the POPULATION and nothing else — the holdout arm of the SECOND draw (ruling 05.09 (s) item 3 (b): seed 42 over the product's population, the paused channels and the 80 already drawn taken out), never scored and never read by the law (`--leak-check` CLEAN over all three sets).",
+    "codebook": "docs/CODEBOOK-promo-signals.md",
+    "codebook_sha256": "86ed01a484611fd5cca20f087f3479a7a1ff28370282ef556b9f80cbd65ca7c4",
+    "codebook_version": "0bbb665a2beb3d4d08af96e1b81a761e8b6a4a4f5000587fffcc1ff7d7706e62",
+    "template_rule": "ruling 04.09 (g) item 3 — the sha of the TEMPLATE with its examples block, so a render-only change is visible in the record; `codebook_version` alone compares the law and would read two instruments as one.",
+    "template_sha256": "32fa6c42bf12bae7d91e7a8586610b622495ad9ff9ef99d3ccbc96bf012348b3",
+    "vocabulary": {
+      "attribution_sources": [
+        "explicit",
+        "reply_context",
+        "post_context"
+      ],
+      "codebook_sha256": "0bbb665a2beb3d4d08af96e1b81a761e8b6a4a4f5000587fffcc1ff7d7706e62",
+      "signal_types": [
+        "жалоба",
+        "похвала",
+        "спрос",
+        "привычка",
+        "цена"
+      ],
+      "subject_types": [
+        "chain",
+        "brand",
+        "sku",
+        "post"
+      ]
+    }
+  },
+  "out_of_scope": "no training; no new sources; no cap raise; no second shot — §8 (e) spends the holdout ONCE. Leg B does not exist here (ruling 06.09 (z) item 4). A run that comes back incomplete is recorded under §6.5 and re-bought under the next number with the law UNMOVED, after the operator's money word; it is not a second reading of the same shot. c3 comes after this shot and the volume `mp-srv2` after c3 ((z) item 5).",
+  "part": "holdout2",
+  "phase": "promo-pulse-1 S9 — holdout-2, the ONE shot on the instrument FROZEN as iteration 5 bought it (rulings 06.09 (z) item 3, 05.09 (s) item 3 (b))",
+  "pinned_inputs": {
+    "docs/CODEBOOK-promo-signals.md": "86ed01a484611fd5cca20f087f3479a7a1ff28370282ef556b9f80cbd65ca7c4",
+    "docs/labels-promo-holdout2.jsonl": "5525ddf1e16390dfec65934627e2bdf481ad4547966e537373e969dd431a9a48",
+    "results/prereg_5c2_run.json": "d5d3afd5e6d7e966233a7e449546b2001f9c2a08646cab207e87531f5df4cbc8",
+    "results/promo_holdout2_prep.json": "dbbf6b496226ba9e4b58b736744f3fe190864854a1d88a0f3e7038044aaef31a",
+    "results/promo_threads_draw_2.json": "567cb2360bf51f8018147ba367cce99911e5f0cfa3faa3bff073d7bcc7fc4ea2",
+    "scripts/promo_dev_pod_runner.py": "87072444501d76dc46b353d088cbc0fffa614ab30dbefe89846d7580a2af8665",
+    "src/market_pulse/promo_prompts.py": "da60348d75472ac0fd0273c2e0e284fbf636f19093ec62db66853bdcaf5f34a2"
+  },
+  "population": {
+    "leg_a": {
+      "digest": "75c068dc6e659aba616fcc41cbe4bead654ae1ae92954b44f2ea7b8fc142b14c",
+      "digest_rule": "sha256 over `channel:thread_root` per thread, in the draw's order",
+      "order": [
+        "@VARUS_channel:3342",
+        "@VARUS_channel:4340",
+        "@VARUS_channel:6006",
+        "@VARUS_channel:8364",
+        "@VARUS_channel:9112",
+        "@msuaaaa:10021",
+        "@msuaaaa:10459",
+        "@msuaaaa:10651",
+        "@msuaaaa:4599",
+        "@msuaaaa:7202",
+        "@msuaaaa:7333",
+        "@msuaaaa:7402",
+        "@msuaaaa:7627",
+        "@msuaaaa:7636",
+        "@msuaaaa:7907",
+        "@msuaaaa:8020",
+        "@msuaaaa:8762",
+        "@msuaaaa:8883",
+        "@msuaaaa:8905",
+        "@msuaaaa:9618",
+        "@VARUS_channel:10360",
+        "@VARUS_channel:2053",
+        "@VARUS_channel:4129",
+        "@VARUS_channel:4449",
+        "@VARUS_channel:5119",
+        "@VARUS_channel:5854",
+        "@VARUS_channel:5994",
+        "@VARUS_channel:6951",
+        "@VARUS_channel:6973",
+        "@VARUS_channel:9462",
+        "@VARUS_channel:9912",
+        "@VARUS_channel:9926",
+        "@msuaaaa:2455",
+        "@msuaaaa:3053",
+        "@msuaaaa:4588",
+        "@msuaaaa:5046",
+        "@msuaaaa:6502",
+        "@msuaaaa:6691",
+        "@msuaaaa:9041",
+        "@msuaaaa:9354"
+      ],
+      "smoke": {
+        "n": 3,
+        "prefix": "these three are the pass's FIRST three units; the pod answers them and their arrival IS the GO (ruling 05.09 (r) item 2, widened to every leg by (t) item 3). Their seconds are read off the pod log for the record, not for a gate: no band decides whether the remaining 37 are bought — this leg is issued on the MEAN corner and the cap as `--terminate-after` is what bounds them",
+        "rule": "shortest, median and longest render by results/promo_holdout2_prep.json's own chars — a rule, not a pick",
+        "units": [
+          {
+            "chars": 8129,
+            "role": "shortest",
+            "unit_id": "@msuaaaa:9041"
+          },
+          {
+            "chars": 8454,
+            "role": "median",
+            "unit_id": "@VARUS_channel:8364"
+          },
+          {
+            "chars": 10529,
+            "role": "longest",
+            "unit_id": "@VARUS_channel:5119"
+          }
+        ]
+      },
+      "threads": 40
+    },
+    "leg_b": {
+      "by_channel": {},
+      "closed": "ruling 06.09 (z) item 4 — leg B does not exist on this leg: holdout-2 is the SECOND draw's THREADS and the 16 posts were the dev loop's, closed there by two identical `[]` readings. The empty map is what keeps them off the pod; nothing of leg B is bought under this shot's cap.",
+      "not_bought": {
+        "by_channel": {},
+        "posts": 0,
+        "task": null
+      },
+      "posts": 0
+    }
+  },
+  "question": "does the instrument that took the dev bar on iteration 5 — the SAME four pins of `d598573`, byte for byte (ruling 06.09 (z) item 3) — clear subject ≥ 0.80 and signal ≥ 0.75 on holdout-2, the second draw's 40 threads of the product's own population, in ONE shot?",
+  "re_emission": "there is no re-emission of THIS record: §8 (e) spends the holdout ONCE and ruling 06.09 (z) item 3 freezes the instrument as iteration 5 bought it — the four pins of `d598573` (`results/prereg_promo_dev_loop.json` at that commit: the codebook, `src/market_pulse/promo_prompts.py`, `scripts/promo_dev_pod_runner.py` and the template it renders), re-read from disk into `pinned_inputs` at this call and equal to that record's byte for byte, or the shot is a STOP («A pin that moves before the shot is a stop»). The serving is iteration 5's and is disclosed as fields, not constants: `rung_0.price` names the card (RTX PRO 4500, 32 GB, gpu-id «NVIDIA RTX PRO 4500 Blackwell», $0.72/h in EU-RO-1) chosen by `offered_price` from ['RTX PRO 4500', 'RTX A6000', 'L40S'] in ruling 05.09 (w) item 2's order at ≥ 32 GB and ≤ $0.9/h, and the launch line carries `PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True` — the allocator half of (w) item 2, an ENVIRONMENT that touches no pinned byte. `gates.terminate_after_minutes` is the CAP's own minutes at that price ((x) item 3). The ONE case that writes another record is PHASE §6.5 — a reading that comes back incomplete is recorded under its number, never compared to the bars, and re-bought under the NEXT number with the law UNMOVED and after the operator's money word. `committed_registration()` still does not re-verify `pinned_inputs`: a named debt it inherits from the dev loop.",
+  "rung_0": {
+    "amendment": "ruling 06.09 (z) item 4 and 05.09 (r) item 5 — smoke + the ONE shot over holdout-2's 40 threads, no posts and no second reading: §8 (e) spends the holdout once, so there is no later iteration this corner is priced short for. Priced on the whole-run mean of the slowest pod seen (`measured_rate` beside this names it), the cap as the hard stop",
+    "cap_usd": 0.9,
+    "dear_fits": false,
+    "dear_usd": 2.8109,
+    "fits": true,
+    "hard_stop_seconds": 4500.0,
+    "issued_on": "mean",
+    "issued_rule": "PHASE v10 §6.1, ruling 05.09 (t) item 3 — on EVERY leg, dev as holdout: the dear corner $2.8109 is OVER the $0.9000 cap, so the leg is issued FITS on the MEAN corner $0.5170 with the cap as the HARD STOP: `--terminate-after` is derived from it and the meter cannot pass it. The mean is the WHOLE-RUN mean of the slowest pod seen, never a smoke of three (item 4). The dear corner stays in this table and in `dear_usd`, priced and named, so nothing over the cap is hidden ([[a_bound_the_meter_cannot_reach]]). Ruling 05.09 (r) item 2 makes this pair — FITS here plus the hard stop — the leg's ONLY money gate: the band gate is not run. The `part != \"dev\"` condition this branch used to carry is what left iteration 4 unregisterable under a cap the operator had already named",
+    "measured_rate": {
+      "instrument": "promo-signal prompt (leg A), READER serving, thinking OFF, batch 1 — the WHOLE run of pod xt4c5osyr36ew0: every registered leg-A unit it answered, not a sample of them. Ruling 05.09 (t) item 4 makes this the row a leg is priced on.",
+      "max": 313.867,
+      "max_from": "promo_dev40_seconds_per_thread — pod xt4c5osyr36ew0, 80 leg-A threads on NVIDIA RTX PRO 4500 Blackwell at $0.72/h, results/prereg_promo_dev_loop.json's population",
+      "n": 80,
+      "name": "promo_dev40_seconds_per_thread",
+      "pool": [
+        "promo_dev40_seconds_per_thread 17.7118/88.237 n=40",
+        "promo_dev40_seconds_per_thread 47.6615/286.248 n=40",
+        "promo_dev40_seconds_per_thread 53.6254/313.867 n=80",
+        "promo_holdout40_seconds_per_thread 25.8263/149.054 n=40"
+      ],
+      "sample": "whole run",
+      "source": "results/promo_dev40_iter5.jsonl",
+      "value": 53.6254,
+      "value_from": "promo_dev40_seconds_per_thread — pod xt4c5osyr36ew0, 80 leg-A threads on NVIDIA RTX PRO 4500 Blackwell at $0.72/h, results/prereg_promo_dev_loop.json's population"
+    },
+    "overhead": {
+      "from": "results/pass2_signals_r2_run.json :: pods[0].billed_seconds 2061.0 and results/measurements.jsonl :: pass2_r2_seconds_per_thread × 75",
+      "rule": "the sibling's BILLED seconds less its generation at the same borrowed rate over its own 75 threads — boot, the 31B load, scp up and back, the polls and the delete",
+      "seconds": 279.0,
+      "sibling_billed_usd": 0.42365,
+      "sibling_usd_per_hour": 0.74
+    },
+    "posts": 0,
+    "price": {
+      "card": "NVIDIA RTX PRO 4500 Blackwell",
+      "considered": [
+        "RTX PRO 4500",
+        "RTX A6000",
+        "L40S"
+      ],
+      "datacenter": "EU-RO-1",
+      "display_name": "RTX PRO 4500",
+      "offers_usd_per_hour": [
+        0.72
+      ],
+      "read_at": "2026-09-06T16:19:48+00:00",
+      "rule": "the FIRST of ['RTX PRO 4500', 'RTX A6000', 'L40S'] with ≥ 32 GB, stock in EU-RO-1 and a dearer offer ≤ $0.9/h; the price is the DEARER offer of secure/community, read on the day; the create response's own costPerHr is the price the meter bills and the price gate re-checks it",
+      "stock": "High",
+      "usd_per_hour": 0.72,
+      "vram_gb": 32
+    },
+    "rule": "docs/PROCESS.md «Money» rung (0): price at create ≤ the registered ceiling — the ceiling is the step cap, the price is the DEAR corner",
+    "seconds_per_post_from": "results/prereg_5c2_run.json :: prices.post_text.seconds_model",
+    "table": [
+      {
+        "billable_seconds": 2584.9,
+        "cap_usd": 0.9,
+        "fits": true,
+        "name": "cheap — the measured MEAN over every leg, the sibling's measured overhead",
+        "over_cap_by": -0.4256,
+        "overhead_seconds": 279.0,
+        "seconds_per_post": 2.813,
+        "seconds_per_thread": 53.625,
+        "usd": 0.517
+      },
+      {
+        "billable_seconds": 2863.9,
+        "cap_usd": 0.9,
+        "fits": true,
+        "name": "priced — the measured mean plus one whole extra overhead (a second segment after a dead-man KILL, which the transport allows twice)",
+        "over_cap_by": -0.3636,
+        "overhead_seconds": 558.0,
+        "seconds_per_post": 2.813,
+        "seconds_per_thread": 53.625,
+        "usd": 0.5728
+      },
+      {
+        "billable_seconds": 14054.3,
+        "cap_usd": 0.9,
+        "fits": false,
+        "name": "dear — the measured MAX on every thread (313.867 s, one unit of «promo_dev40_seconds_per_thread — pod xt4c5osyr36ew0, 80 leg-A threads on NVIDIA RTX PRO 4500 Blackwell at $0.72/h, results/prereg_promo_dev_loop.json's population») and two overheads. Pessimistic by construction: the guard's spend is a maximum and a cap blown after the money is spent cannot be un-spent",
+        "over_cap_by": 2.1232,
+        "overhead_seconds": 558.0,
+        "seconds_per_post": 2.813,
+        "seconds_per_thread": 313.867,
+        "usd": 2.8109
+      }
+    ],
+    "threads": 43,
+    "threads_note": "3 smoke + 40 holdout2-40. The smoke's three ARE the pass's first three units, so the pod answers 40 and the registration is bought high, spent low"
+  },
+  "step": {
+    "cap_rule": "min($0.9000 — the operator's own number, quoted in docs/PHASE-promo-pulse-1.md §6.1 for this leg — , THIS step's own REMAINING, the cycle's REMAINING) — ruling 05.09 (v) item 3",
+    "cap_usd": 0.9,
+    "floor_rule": "none — the cap above is the operator's own number, and a floor standing OVER it would be a field of this record refusing the very run the record registers ([[a_threshold_that_lives_in_prose]]); the cap is the hard stop",
+    "floor_usd": null,
+    "ledger": "results/spend_promo_holdout2.json",
+    "money": {
+      "at": "2026-09-06T16:19:47+00:00",
+      "cycle3_cap_usd": 10.0,
+      "cycle3_spent_usd": 7.4374,
+      "from": "scripts/runpod_guard.py --step <name> --step-cap <cap>, its own printed REMAINING, CYCLE 3 and step lines",
+      "remaining_usd": 2.5626,
+      "step_cap_usd": 0.9,
+      "step_name": "promo-holdout2",
+      "step_remaining_usd": 0.9,
+      "step_spent_usd": 0.0
+    },
+    "name": "promo-holdout2",
+    "no_cap_raise": "never, mid-run. Silence is KILL: nobody can be asked."
+  },
+  "teardown": "`runpodctl pod delete <id>`, then `runpodctl pod list -a` → [] and `runpodctl serverless list` → [] in the transcript, before every STOP and before the session ends (ruling 03.09 (c) item 2)"
+}
