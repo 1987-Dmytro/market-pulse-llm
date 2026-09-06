@@ -10,9 +10,8 @@ NEXT session's own `--register`, minutes before the create (ruling (y), PROCESS 
 
 ## Done — 06.09 s29 (accepted by (y)) and s30 (this session, $0)
 - **s29, accepted at `31a6bc5`:** ruling (x)'s prep whole — the card and the backstop as FIELDS of the
-  record (`offered_price` over `CARDS`, ≥ `MIN_VRAM_GB`, EU-RO-1 stock, dear offer ≤ $0.90/h;
-  `terminate_after_minutes` = the CAP's own **116**, not v5b's borrowed 90), the ERROR reply read
-  everywhere replies are read ((x)4), `ITERATION = 5`, the runbook re-pointed onto iteration 5.
+  record (`terminate_after_minutes` = the CAP's own **116**, not v5b's borrowed 90), the ERROR reply
+  read everywhere replies are read ((x)4), `ITERATION = 5`, the runbook re-pointed onto iteration 5.
 - **s30, team-lead files by path (`c5a22f3`):** PHASE **v14** §6.1, PROCESS «Money» **v2.1**, STATUS,
   ruling **(y)** and its stop-pattern row.
 - **s30, the ONE item — (y) items 2–3, the runbook's §0a (`65d1285`), five sites.** Authority (+ (y),
@@ -20,8 +19,8 @@ NEXT session's own `--register`, minutes before the create (ruling (y), PROCESS 
   first minutes, and (x)2 is withdrawn in the text · **the verifier's bite:** `--pack` sat BETWEEN
   `--register` and the commit, where `build_pack()` → `committed_registration()` refuses on the file
   `--register` has just rewritten — now **TWO commits**, the registration first, the pack second ·
-  `make check` at that HEAD written out as `ruff` + three slices with an **OPEN-ENDED tail** (the
-  suite is over one call's ceiling and a stall there happens with the anchor already live) · §6's
+  `make check` at that HEAD as `ruff` + three slices whose coverage is ASSERTED and whose floor is
+  COMPUTED — s25 summed 3900 of 4321 by eye; tail OPEN-ENDED (`'146,$p'`) · §6's
   «if the registration and the pod are not the same session» named a branch that can no longer fire.
 - **Checks — the refusal is DEMONSTRATED, not asserted.** The prereg made dirty exactly as
   `--register` leaves it → `build_pack()` **exit 1**, «differs from HEAD … Commit it before the pack»;
@@ -29,7 +28,8 @@ NEXT session's own `--register`, minutes before the create (ruling (y), PROCESS 
   `tests/` reads the runbook (`grep -rln` empty), so a doc edit cannot red the suite; the **12** test
   files that read any doc this session changed: **318 passed**. Full suite over the CLOSED slice list
   **60 + 85 + 84 = 229** files: **1000 + 2030 + 1293 = 4323 passed, 2 skipped**, `ruff` clean (§8 (j)
-  wants ≥ 4266). **No test, pin, guard or ledger was added.**
+  wants ≥ 4266); §0a's two new gates run for real (COVER, 4323, FLOOR HOLDS) with the negative
+  control `'146,200p'` → «SLICES DO NOT COVER THE LIST — STOP». **No test, pin, guard or ledger added.**
 
 ## Next — «iteration 5», PAID, cap $1.40, the whole session, nothing in front of §0a
 `scripts/runbook_promo_dev_1.md` is paste-able end to end: §0a `--dry-run` → `--register --part dev
@@ -44,8 +44,8 @@ and the listing's output, before any create. No top-up before the run.
 ≤ $0.90, then c3. RED → the question closes red and the next word is the operator's.
 
 ## Open stop — NONE. The 06.09 stop is answered by ruling (y): option **(ii)**.
-`--register` moves INTO the paid session; (i) was rejected as a rule on the operator's clock, (iii)
-because a ledger is never deleted. Tree clean at `65d1285`; $0 spent, no pod, no guard call.
+`--register` moves INTO the paid session ((i) and (iii) rejected in (y)2). Tree clean; $0 spent,
+no pod, no guard call, no ledger line.
 
 ## Named, not built (the phase file forbids adding what it did not ask for)
 - **(y)4 risk 2 — an exception with an EMPTY message reads as ANSWERED:** the readers key on a truthy

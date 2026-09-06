@@ -75,15 +75,23 @@ and `pinned_inputs` from disk (so the runner's new sha lands there by constructi
 ([[a_reading_that_outlived_its_state]]).
 Then **`make check` at THAT HEAD** ((y)3: its tests read the committed record; it is also the HEAD
 §3 cuts the bundle from). The suite is ~12 min — over one call's ceiling — so it runs as `ruff` plus
-disjoint slices whose list is CLOSED by an open-ended tail, never by an enumeration:
+three slices, each its own command. **Neither the coverage nor the floor is judged by eye**: on
+2026-09-05 three green `passed` lines summed to 3900 of 4321 because the slices had stopped covering
+the list, and nothing said so. Both are commands here, and the arithmetic is never the operator's:
 ```bash
-ruff check . && ls tests/test_*.py | wc -l                 # the whole list, for the record
-pytest -q $(ls tests/test_*.py | sed -n '1,60p')
-pytest -q $(ls tests/test_*.py | sed -n '61,145p')
-pytest -q $(ls tests/test_*.py | sed -n '146,$p')          # open-ended — the tail is never dropped
+ruff check .
+test "$(ls tests/test_*.py | wc -l)" -eq "$(for R in '1,60p' '61,145p' '146,$p'; do \
+  ls tests/test_*.py | sed -n "$R" | wc -l; done | paste -sd+ - | bc)" \
+  && echo 'SLICES COVER THE LIST' || echo 'SLICES DO NOT COVER THE LIST — STOP'
+PYTHONPATH=src python3.11 -m pytest -q $(ls tests/test_*.py | sed -n '1,60p')   | tail -1 | tee /tmp/s1
+PYTHONPATH=src python3.11 -m pytest -q $(ls tests/test_*.py | sed -n '61,145p') | tail -1 | tee /tmp/s2
+PYTHONPATH=src python3.11 -m pytest -q $(ls tests/test_*.py | sed -n '146,$p')  | tail -1 | tee /tmp/s3
+S=$(cat /tmp/s1 /tmp/s2 /tmp/s3 | sed -n 's/^\([0-9]*\) passed.*/\1/p' | paste -sd+ - | bc); echo "$S"
+[ "$S" -ge 4266 ] && echo 'FLOOR HOLDS' || echo 'BELOW §8 (j) — STOP before the create'
 ```
-The three `passed` lines sum to **≥ 4266** (§8 (j)) or nothing below runs. A red here costs $0 and
-the pod does not exist yet; a red after the create costs the pod.
+The tail slice is OPEN-ENDED (`'146,$p'`), so a grown `tests/` moves the boundary and never drops off
+the end. A red or a STOP here costs $0 and the pod does not exist yet — after the create it costs the
+pod, and the anchor is already live either way.
 
 ## 0 — before the create
 ```bash
