@@ -1,14 +1,16 @@
 # Runbook — iteration 5, the LAST of the five, one pod, ONE leg of two arms
 
 Authority: rulings 03.09 (c), (d), (e), 04.09 (m), (n), (o), 05.09 (q), (r), (s), (t), (u), (v),
-**(w)** and **(x)**; `docs/PHASE-promo-pulse-1.md` §6.1 v13 and §6.5 v12. Iteration 4 was bought on
+**(w)**, **(x)** and **(y)**; `docs/PHASE-promo-pulse-1.md` §6.1 **v14** and §6.5 v12,
+`docs/PROCESS.md` «Money» **v2.1**. Iteration 4 was bought on
 2026-09-05 and came back INCOMPLETE: **CUDA OOM in `gemma4._norm` on the smoke's LONGEST render**
 (`@VARUS_channel:8647`, 14 281 chars — 338 MiB refused at 23.19 of 23.52 GiB), no GO, none of the 80
 threads read, $0.6948 of which $0.62 was the Mac waiting out a GO deadline for a pod that was
 already dead. Ruling (w): **the instrument does not move, the SERVING does.**
 **§2 allows five dev runs and this is the fifth.** A red bar closes S2's question with a number and
 the next word is the operator's.
-**Nothing below runs until `make check` is green at the HEAD the bundle is cut from.**
+**Nothing below §0a runs until `make check` is green at the HEAD the bundle is cut from — that
+HEAD is §0a's second commit, and §0a is where the suite is run.**
 
 What (w) and (x) moved, and it is all serving:
 * **the card — a PARAMETER of the record now, not a constant.** `promo_dev_pass.CARDS` is
@@ -43,24 +45,45 @@ recreate) **$0.9028, −35.5 %** · `dear` (max on all 83) **$4.8633, +247 %**, 
 Rungs 1 and 2 stay LIFTED (03.09 (e) item 2): what bounds the money is rung 0 and rung 3
 (`--terminate-after`), plus **ONE ledger line per session**.
 
-## 0a — the $0 half, COMMITTED before any pod exists
+## 0a — the line's OPENING, the first minutes of THIS paid session
+Ruling **(y)** and PROCESS «Money» v2.1: `--register` reads the guard WITH `--step`, and that
+reading CREATES and anchors `results/spend_promo_iter5.json` — **the registration IS the opening of
+the line**, so it runs here, minutes before the create, and never a session earlier. (x)2's «prep
+ends at the committed registration» is WITHDRAWN: the close settles on `own_resources` while its
+reference is a balance delta with the volume's drip IN, so the anchor's AGE is the drift and the
+5 % band shuts at ≈ 4 h of age (§6). In front of these commands only the start ritual — no
+development, and the runbook itself was fixed the session before.
 ```bash
 PYTHONPATH=src python3.11 scripts/promo_dev_pass.py --dry-run --part dev
 PYTHONPATH=src python3.11 scripts/promo_dev_pass.py --register --part dev \
-  --step promo-iter5 --cap 1.40
-PYTHONPATH=src python3.11 scripts/promo_dev_pass.py --pack --part dev
+  --step promo-iter5 --cap 1.40                          # FITS shown; this ANCHORS the line
 git add results/promo_dev40_prep.json results/prereg_promo_dev_loop.json \
-        results/promo_dev40_pack.json results/spend_promo_iter5.json && git commit …
+        results/spend_promo_iter5.json && git commit …    # the registration FIRST
+PYTHONPATH=src python3.11 scripts/promo_dev_pass.py --pack --part dev
+git add results/promo_dev40_pack.json && git commit …     # the pack SECOND, and it is its own commit
 ```
+**Two commits, in that order, and it is not a style.** `build_pack()` opens the record through
+`committed_registration()`, which runs `git ls-files --error-unmatch` and `git diff HEAD --quiet`
+on `results/prereg_promo_dev_loop.json` and raises `SystemExit` on either — so a `--pack` placed
+between `--register` and its commit REFUSES on the file `--register` has just rewritten (the
+verifier's bite of 06.09, at $0 but with the anchor already live). Git history is the only witness
+that both preceded the money.
 **`--step promo-iter5` is not optional.** Without it the emitter falls back to `STEP` =
 `promo-dev-loop`, whose guard refuses — a loud failure, not a silent mis-pricing, but the command is
-written with the step every time. `--register` also ANCHORS `results/spend_promo_iter5.json` at the
-balance it reads: **the anchor's age is a term in this line's close (see §6), so the pod follows the
-registration in hours, not days.** The pack refuses while the registration is uncommitted or dirty
-(`committed_registration()`), so the registration is committed FIRST and the pack second — git
-history is the only witness that both preceded the money. `--register` re-reads the guard's
-REMAINING, the day's own offer and `pinned_inputs` from disk (so the runner's new sha lands there by
-construction); all three drift ([[a_reading_that_outlived_its_state]]).
+written with the step every time. `--register` re-reads the guard's REMAINING, the day's own offer
+and `pinned_inputs` from disk (so the runner's new sha lands there by construction); all three drift
+([[a_reading_that_outlived_its_state]]).
+Then **`make check` at THAT HEAD** ((y)3: its tests read the committed record; it is also the HEAD
+§3 cuts the bundle from). The suite is ~12 min — over one call's ceiling — so it runs as `ruff` plus
+disjoint slices whose list is CLOSED by an open-ended tail, never by an enumeration:
+```bash
+ruff check . && ls tests/test_*.py | wc -l                 # the whole list, for the record
+pytest -q $(ls tests/test_*.py | sed -n '1,60p')
+pytest -q $(ls tests/test_*.py | sed -n '61,145p')
+pytest -q $(ls tests/test_*.py | sed -n '146,$p')          # open-ended — the tail is never dropped
+```
+The three `passed` lines sum to **≥ 4266** (§8 (j)) or nothing below runs. A red here costs $0 and
+the pod does not exist yet; a red after the create costs the pod.
 
 ## 0 — before the create
 ```bash
@@ -249,7 +272,8 @@ always-on kinds out (`own_resources`) while the `--note` reference is a balance 
 them, so the network volume's ≈ $0.0079/h drips into the reference and not into the settlement.
 Iteration 4's whole 2.73 % drift was exactly that. The drift is `drip·H / (pods + drip·H)` where `H`
 is the hours from the §0a anchor to the post-run `--note` — at $0.85 of pod it passes 5 % at about
-six hours. **Read that ruling before §0a if the registration and the pod are not the same session.**
+six hours. **Under (y) they are ALWAYS the same session** (§0a): `H` is the minutes from the
+registration to this `--note`, so the drip is a rounding error here and never a term.
 
 ## 7 — the join, K8 and the error table, all $0 and after the pod is gone
 The leg is TWO arms in ONE out-file since iteration 4 ((s)3, (t)5, (u)2): **dev-40 carries the bars,
