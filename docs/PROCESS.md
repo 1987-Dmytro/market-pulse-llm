@@ -168,6 +168,11 @@ One-sentence contracts (`docs/PROMPT-*.md`) remain for fixes and debts whose dif
   report carries the top rows that answer the question (D2: 64 lines; C1: 361 lines — the rule's cause).
 - A contract states, before its mechanics, the ONE question the operator will answer from the
   deliverable; a deliverable that measures everything and answers nothing is not accepted.
+- **The paid session's irreversible command is pre-authorised in the harness and PROVEN at $0 in the prep session** (06.09,
+  s33: the auto-mode classifier denied `runpodctl pod create` twice with the line already anchored — ≈ 16 min of anchor age,
+  lifted by the operator's word): the allow rule for `runpodctl pod create …` lives in `.claude/settings.json`, and the prep
+  session runs a call of the same shape that cannot create (`runpodctl pod create --help`) and shows it passed the harness;
+  runbook §0 names the proof. A permission prompt inside a paid session is a stop, and the team lead's.
 - `make check` is the verifier (ruff + pytest); `make check-stamped` for a HOLDS reading at a HEAD;
   `scripts/preflight_serving_guards.py` renders the real chat template offline (zero cost) — run it
   before any pod that changes a template or serving config.
