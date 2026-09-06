@@ -22,8 +22,7 @@ re-read today — no guard command was run, see the stop). `promo-iter4` CLOSED 
   runner's own `whole_lines`, so a torn LAST line (the scp race off a LIVE pod) is **WAITING**, not a
   traceback on the command that decides whether a billing pod is deleted. `answered_rows` drops a
   dead unit and `--close-segment`'s rate row, `--project` and `--score` count it **UNANSWERED** — the
-  money gate is appended BEFORE that row is written. A death is not a parse failure: `dead_units`
-  names it and all three print it.
+  money gate is appended BEFORE that row is written. A death is not a parse failure: it is named.
 - **`ITERATION = 5`; `re_emission` discloses** the card, its gpu-id, its price and
   `PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True`. **The runbook is re-pointed** off every
   `_holdout` path onto iteration 5: part dev, `_iter5` files, `promo-iter5` $1.40, the gpu-id, the allocator in the launch line, `--smoke` + `pgrep`, two-arm `--score`, the v13 close.
@@ -32,8 +31,7 @@ re-read today — no guard command was run, see the stop). `promo-iter4` CLOSED 
   **Rung 0 priced at $0, writing nothing:** mean **$0.8470** (−39.5 %) · priced $0.9028 ·
   dear $4.8633 → **FITS on the mean**, hard stop **7000 s**. `ruff` clean; `pytest` **4323 passed,
   2 skipped, exit 0** over both slices (§8 (j) wants ≥ 4266). **ONE test added** — (x)3's backstop,
-  both directions; (w)3's ONE test **extended** with (x)4's four readings (torn last line ·
-  `id: null` death · the rate row · the grader's count).
+  both directions; (w)3's ONE test **extended** with (x)4's four readings.
 
 ## Open stop — the registration ANCHORS the line, and the anchor's age decides the close
 **Stop-point.** `--register --step promo-iter5` calls the guard, which CREATES
@@ -48,7 +46,7 @@ the volume over 2.45 h. At $0.0079/h and this leg's $0.85 of pod, **5 % is reach
 cheaper pod sooner. Register tonight, buy tomorrow → the close **REFUSES** and `promo-iter5` joins
 `promo-dev-loop`. **`--since` cannot help:** `recorded_reading()` is the note's own `step_spent_usd`.
 **The question (yours — money, and a fourth spelling of the close rule).** Which:
-(i) the pod follows the registration inside ~6 h — the operator's word on timing, nothing else moves;
+(i) the pod follows the registration inside ~6 h — but that budget SHRINKS with a cheaper pod;
 (ii) `--register` moves INTO the paid session (PROCESS v2's own order), prep ends at `--dry-run`;
 (iii) the never-used `spend_promo_iter5.json` is deleted before the paid session anchors it.
 **Tree.** Clean; `make check` 4323/2 exit 0 at `39022ac`; $0 spent, no pod, no guard call, no ledger line.
@@ -57,4 +55,6 @@ cheaper pod sooner. Register tonight, buy tomorrow → the close **REFUSES** and
 - **§6.5's $0 fit proof** — the smoke's longest unit stands in for it at minutes' cost.
 - **`--open`/`--close-segment` write the run record at BATCH scale** — `--expect-ms` and `STOP_AT`
   filter segments to `created_at >=` the line's anchor; now written into the runbook's own code.
+- **A torn line that is NOT the last refuses the whole file by name** («damaged, move it aside») —
+  reachable only if the row WRITE itself failed and the ERROR reply then landed behind it. Named.
 - **No test for the arm selector** (§4) or the step-aware guard read ((v)3 «no new test»).

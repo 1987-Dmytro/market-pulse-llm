@@ -93,15 +93,20 @@ seconds = min(seconds, 60.0 * float(rec['gates']['terminate_after_minutes']))  #
 print((d.datetime.now(d.timezone.utc) + d.timedelta(seconds=seconds))
       .strftime('%Y-%m-%dT%H:%M:%SZ'))")
 echo "$STOP_AT"                                          # empty is a STOP, never a create
+CARD=$(python3.11 -c "import json;print(json.load(open('results/prereg_promo_dev_loop.json'))['rung_0']['price']['card'])")
+echo "$CARD"    # the gpu-id THIS record was written on — rung 1 compares the create against it
 runpodctl pod create --name mp-promo-iter5 \
-  --gpu-id 'NVIDIA RTX PRO 4500 Blackwell' --gpu-count 1 \
+  --gpu-id "$CARD" --gpu-count 1 \
   --network-volume-id qw4nwleanc --data-center-ids EU-RO-1 --cloud-type SECURE \
   --image runpod/pytorch:1.0.2-cu1281-torch280-ubuntu2404 --container-disk-in-gb 30 \
   --ports '22/tcp' --ssh --terminate-after "$STOP_AT"
 PYTHONPATH=src python3.11 scripts/promo_dev_pass.py --open --part dev --pod-id <ID> \
-  --created-at '<the create stamp, UTC ISO8601>' --usd-per-hour <costPerHr> \
-  --card 'NVIDIA RTX PRO 4500 Blackwell'
+  --created-at '<the create stamp, UTC ISO8601>' --usd-per-hour <costPerHr> --card "$CARD"
 ```
+**The gpu-id is READ from the committed record, never typed from this page.** `offered_price` picks
+the card on the day and rung 1 KILLs a pod whose card is not `rung_0.price.card` — so a registration
+re-emitted when `RTX PRO 4500` is out of stock names A6000 instead, and a literal here would KILL a
+correctly created pod. Same class as the constant (x)3 removed ([[a_shifted_constant_has_physical_consumers]]).
 The `spent` above sums only the segments created at or after **this line's** anchor: the run record
 is written at BATCH scale and carries every dev-loop pod since iteration 1, so an unfiltered sum
 prices iteration 5 against four runs it did not buy.
@@ -184,7 +189,9 @@ It prints the branch of the registration's OWN decision table and exits 0 only o
 in». **An ERROR reply among them is «the smoke did not come back»** and needs no second reading —
 delete the pod at once ((w)3). WAITING is a poll, not a verdict: pair it with the `pgrep` above, and
 no runner alive is the same outcome as an error. A torn last line is the scp race and also reads
-WAITING — re-fetch and read again ((x)4).
+WAITING — re-fetch and read again ((x)4). A torn line that is NOT the last one is a DAMAGED file and
+refuses by name («move it aside and stop»): re-fetch once, and if it stands, the pod is deleted on
+the `pgrep` reading like any other death.
 A missing unit, or a `finish_reason` that is not the model stopping on its own, is **not** a band
 verdict: nothing is written to `promo_go`, the pod is deleted, `--close-segment` records it, the
 listing is shown, and the run is PHASE §6.5's INCOMPLETE reading — recorded under its number, never
