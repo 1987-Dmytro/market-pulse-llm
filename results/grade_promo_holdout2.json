@@ -1,0 +1,50 @@
+{
+  "bars": {
+    "signal_type_agreement": {
+      "bar": 0.75,
+      "held": true,
+      "value": 0.8021
+    },
+    "subject_agreement": {
+      "bar": 0.8,
+      "held": false,
+      "value": 0.7054
+    }
+  },
+  "by_stratum": {
+    "currency": {
+      "signal_type_agreement": 0.7125,
+      "signal_type_threads": 20,
+      "subject_agreed": 36,
+      "subject_agreement": 0.766,
+      "subject_comments": 47
+    },
+    "decimal_only": {
+      "signal_type_agreement": 0.8917,
+      "signal_type_threads": 20,
+      "subject_agreed": 43,
+      "subject_agreement": 0.6615,
+      "subject_comments": 65
+    }
+  },
+  "contract": "docs/plans/promo-pulse-1.md K8 — the S2 grader ($0)",
+  "definitions": {
+    "signal_type_agreement": "per THREAD: Jaccard over the SET of signal types, averaged; a thread where both sides say nothing scores 1.0 rather than dividing by zero",
+    "subject_agreement": "per COMMENT: (subject_type, subject) after aggregates.promo_key, with `chain` names folded to the chain id by aggregates.chain_key (ruling 04.09 (j) item 1) on gold and prediction alike; denominator = gold comments; a comment the model said nothing about is a miss. K8 v2 (ruling 05.09 (s) item 3): a `sku` or `brand` also agrees when the token-Jaccard of the two normalised names is >= 0.5 — the product's identity, not its spelling. `chain` and `post` are unchanged"
+  },
+  "gold": "docs/labels-promo-holdout2.jsonl",
+  "k8_version": "v2",
+  "part": "holdout",
+  "predicted": "results/promo_holdout2_predicted.jsonl",
+  "readings": {
+    "note": "an abstention is an answer: `unsure` rows stay in the denominator and are counted here, never dropped from it",
+    "unsure_rows": 0
+  },
+  "whole_40": {
+    "signal_type_agreement": 0.8021,
+    "signal_type_threads": 40,
+    "subject_agreed": 79,
+    "subject_agreement": 0.7054,
+    "subject_comments": 112
+  }
+}

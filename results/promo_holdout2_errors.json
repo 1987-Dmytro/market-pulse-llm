@@ -1,0 +1,301 @@
+{
+  "answers": {
+    "fenced_answers": 40,
+    "fenced_note": "the codebook asks for JSON and never forbids a markdown fence; the object inside it is read as it stands and nothing in it is repaired (promo_prompts.unfence)",
+    "gold_shaped_rows": 112,
+    "leg_a_units_answered": 40,
+    "leg_a_units_dead": [],
+    "leg_a_units_registered": 40,
+    "parse_failures": 0,
+    "parse_failures_by_cause": {},
+    "unparsed": []
+  },
+  "arm": null,
+  "contract": "docs/plans/promo-pulse-1.md §9 — the error table of iteration None",
+  "gold": {
+    "path": "docs/labels-promo-holdout2.jsonl",
+    "sha256": "5525ddf1e16390dfec65934627e2bdf481ad4547966e537373e969dd431a9a48"
+  },
+  "grade": {
+    "bars": {
+      "signal_type_agreement": {
+        "bar": 0.75,
+        "held": true,
+        "value": 0.8021
+      },
+      "subject_agreement": {
+        "bar": 0.8,
+        "held": false,
+        "value": 0.7054
+      }
+    },
+    "by_stratum": {
+      "currency": {
+        "signal_type_agreement": 0.7125,
+        "signal_type_threads": 20,
+        "subject_agreed": 36,
+        "subject_agreement": 0.766,
+        "subject_comments": 47
+      },
+      "decimal_only": {
+        "signal_type_agreement": 0.8917,
+        "signal_type_threads": 20,
+        "subject_agreed": 43,
+        "subject_agreement": 0.6615,
+        "subject_comments": 65
+      }
+    },
+    "from": "scripts/grade_promo_signals.py — its own functions, never re-derived here",
+    "k8_version": "v2",
+    "readings": {
+      "note": "an abstention is an answer: `unsure` rows stay in the denominator and are counted here, never dropped from it",
+      "unsure_rows": 0
+    },
+    "whole_40": {
+      "signal_type_agreement": 0.8021,
+      "signal_type_threads": 40,
+      "subject_agreed": 79,
+      "subject_agreement": 0.7054,
+      "subject_comments": 112
+    }
+  },
+  "iteration": null,
+  "replies": "results/promo_holdout2.jsonl",
+  "signal_jaccard_per_thread": {
+    "@VARUS_channel:10360": 1.0,
+    "@VARUS_channel:2053": 0.5,
+    "@VARUS_channel:3342": 1.0,
+    "@VARUS_channel:4129": 1.0,
+    "@VARUS_channel:4340": 1.0,
+    "@VARUS_channel:4449": 1.0,
+    "@VARUS_channel:5119": 1.0,
+    "@VARUS_channel:5854": 1.0,
+    "@VARUS_channel:5994": 1.0,
+    "@VARUS_channel:6006": 0.5,
+    "@VARUS_channel:6951": 1.0,
+    "@VARUS_channel:6973": 1.0,
+    "@VARUS_channel:8364": 1.0,
+    "@VARUS_channel:9112": 0.6667,
+    "@VARUS_channel:9462": 1.0,
+    "@VARUS_channel:9912": 0.6667,
+    "@VARUS_channel:9926": 0.5,
+    "@msuaaaa:10021": 1.0,
+    "@msuaaaa:10459": 0.6667,
+    "@msuaaaa:10651": 0.0,
+    "@msuaaaa:2455": 1.0,
+    "@msuaaaa:3053": 1.0,
+    "@msuaaaa:4588": 1.0,
+    "@msuaaaa:4599": 0.0,
+    "@msuaaaa:5046": 1.0,
+    "@msuaaaa:6502": 1.0,
+    "@msuaaaa:6691": 0.5,
+    "@msuaaaa:7202": 0.25,
+    "@msuaaaa:7333": 1.0,
+    "@msuaaaa:7402": 1.0,
+    "@msuaaaa:7627": 0.5,
+    "@msuaaaa:7636": 1.0,
+    "@msuaaaa:7907": 0.6667,
+    "@msuaaaa:8020": 1.0,
+    "@msuaaaa:8762": 1.0,
+    "@msuaaaa:8883": 0.0,
+    "@msuaaaa:8905": 1.0,
+    "@msuaaaa:9041": 1.0,
+    "@msuaaaa:9354": 0.6667,
+    "@msuaaaa:9618": 1.0
+  },
+  "subject_misses": [
+    {
+      "channel": "@VARUS_channel",
+      "gold": {
+        "signal_types": [
+          "жалоба"
+        ],
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      "model": {
+        "signal_types": [
+          "спрос"
+        ],
+        "subject": "Bitget",
+        "subject_type": "chain",
+        "unsure": null
+      },
+      "msg_id": "7887",
+      "thread_root": "6006"
+    },
+    {
+      "channel": "@VARUS_channel",
+      "gold": {
+        "signal_types": [
+          "жалоба"
+        ],
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      "model": {
+        "signal_types": [],
+        "subject": "6006",
+        "subject_type": "post",
+        "unsure": null
+      },
+      "msg_id": "7892",
+      "thread_root": "6006"
+    },
+    {
+      "channel": "@VARUS_channel",
+      "gold": {
+        "signal_types": [
+          "жалоба"
+        ],
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      "model": {
+        "signal_types": [
+          "жалоба",
+          "спрос"
+        ],
+        "subject": "Сир кисломолочний Varto",
+        "subject_type": "sku",
+        "unsure": null
+      },
+      "msg_id": "16819",
+      "thread_root": "9112"
+    },
+    {
+      "channel": "@msuaaaa",
+      "gold": {
+        "signal_types": [],
+        "subject": "KFC",
+        "subject_type": "chain"
+      },
+      "model": {
+        "signal_types": [],
+        "subject": "Морозиво Міньйон",
+        "subject_type": "sku",
+        "unsure": null
+      },
+      "msg_id": "13583",
+      "thread_root": "10651"
+    },
+    {
+      "channel": "@msuaaaa",
+      "gold": {
+        "signal_types": [
+          "спрос"
+        ],
+        "subject": "морозиво",
+        "subject_type": "sku"
+      },
+      "model": {
+        "signal_types": [
+          "похвала"
+        ],
+        "subject": "Морозиво Пряне печиво Міньйон",
+        "subject_type": "sku",
+        "unsure": null
+      },
+      "msg_id": "13584",
+      "thread_root": "10651"
+    },
+    {
+      "channel": "@msuaaaa",
+      "gold": {
+        "signal_types": [],
+        "subject": "KFC",
+        "subject_type": "chain"
+      },
+      "model": {
+        "signal_types": [
+          "жалоба"
+        ],
+        "subject": "Морозиво Пряне печиво Міньйон",
+        "subject_type": "sku",
+        "unsure": null
+      },
+      "msg_id": "13585",
+      "thread_root": "10651"
+    },
+    {
+      "channel": "@msuaaaa",
+      "gold": {
+        "signal_types": [],
+        "subject": "4599",
+        "subject_type": "post"
+      },
+      "model": {
+        "signal_types": [
+          "спрос"
+        ],
+        "subject": "McDonald’s",
+        "subject_type": "chain",
+        "unsure": null
+      },
+      "msg_id": "2517",
+      "thread_root": "4599"
+    },
+    {
+      "channel": "@msuaaaa",
+      "gold": {
+        "signal_types": [
+          "жалоба"
+        ],
+        "subject": "Аврора",
+        "subject_type": "chain"
+      },
+      "model": {
+        "signal_types": [
+          "спрос"
+        ],
+        "subject": "кондиціонер для прання",
+        "subject_type": "sku",
+        "unsure": null
+      },
+      "msg_id": "7134",
+      "thread_root": "7627"
+    },
+    {
+      "channel": "@msuaaaa",
+      "gold": {
+        "signal_types": [
+          "спрос"
+        ],
+        "subject": "Happy Meal Friends",
+        "subject_type": "sku"
+      },
+      "model": {
+        "signal_types": [
+          "спрос"
+        ],
+        "subject": "McDonald’s",
+        "subject_type": "chain",
+        "unsure": null
+      },
+      "msg_id": "7631",
+      "thread_root": "7907"
+    },
+    {
+      "channel": "@msuaaaa",
+      "gold": {
+        "signal_types": [
+          "спрос"
+        ],
+        "subject": "McDonald’s",
+        "subject_type": "chain"
+      },
+      "model": {
+        "signal_types": [
+          "спрос"
+        ],
+        "subject": "Glovo",
+        "subject_type": "chain",
+        "unsure": null
+      },
+      "msg_id": "7913",
+      "thread_root": "8020"
+    }
+  ],
+  "subject_misses_rule": "the first ten in the GOLD file's own order — a rule, not a pick; the total stands beside them",
+  "subject_misses_total": 33
+}
