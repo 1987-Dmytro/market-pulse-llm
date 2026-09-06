@@ -1,0 +1,433 @@
+{
+  "authority": "docs/reviews/2026-08-30-plan-promo-pulse-1.md «Ruling 03.09» — the prompt's law is re-rendered from the codebook BEFORE the first paid K8 run, and the RENDERED prompt is read at $0 before any pod exists",
+  "bound": {
+    "boot_not_included": "a boot is the endpoint's, not the leg's — the registration adds it once at the corner it is measured at",
+    "is_a_bound_and_not_a_price": "the seconds below are this instrument's OWN, over a WHOLE run of the slowest pod it has run on (ruling 05.09 (t) item 4). They are still a BOUND and not a price: no overhead is in them and no offer of the day — rung 0 at --register adds both and THAT is the number a cap is read against",
+    "priced_from": {
+      "instrument": "promo-signal prompt (leg A), READER serving, thinking OFF, batch 1 — the WHOLE run of pod xt4c5osyr36ew0: every registered leg-A unit it answered, not a sample of them. Ruling 05.09 (t) item 4 makes this the row a leg is priced on.",
+      "max": 313.867,
+      "measured_on": "pod xt4c5osyr36ew0, 80 leg-A threads on NVIDIA RTX PRO 4500 Blackwell at $0.72/h, results/prereg_promo_dev_loop.json's population",
+      "n": 80,
+      "name": "promo_dev40_seconds_per_thread",
+      "sample": "whole run",
+      "source": "results/promo_dev40_iter5.jsonl",
+      "unit": "seconds",
+      "value": 53.6254
+    },
+    "seconds_at_the_max": 12554.7,
+    "seconds_at_the_mean": 2145.0,
+    "threads": 40,
+    "usd_at_the_max": 3.8504,
+    "usd_at_the_mean": 0.6579,
+    "usd_per_second": 0.00030669
+  },
+  "corpus": {
+    "chars_max": 10529,
+    "chars_total": 342262,
+    "distinct_renders": 40,
+    "threads": [
+      {
+        "channel": "@VARUS_channel",
+        "chars": 9305,
+        "extractor_version": "068c3546b15897d7cad9745302a6693c1b9104136c5edc8e7d94a45831a89fd8",
+        "n_comments": 2,
+        "n_wordless": 0,
+        "stratum": "currency",
+        "thread_root": "3342"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "chars": 8658,
+        "extractor_version": "16c334ed58ce43700cff33b7c30b1963039df641df2f7e252368b415fb61253c",
+        "n_comments": 1,
+        "n_wordless": 0,
+        "stratum": "currency",
+        "thread_root": "4340"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "chars": 9259,
+        "extractor_version": "68877d3f4ffff28741426372fc5bfdbff5da2a7cb174c71fbb7feeddfa5c50dd",
+        "n_comments": 5,
+        "n_wordless": 0,
+        "stratum": "currency",
+        "thread_root": "6006"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "chars": 8454,
+        "extractor_version": "c79c821f20cffa0d003803fb1c101fa8fbfcf4980ac2c8c220ca05dacd3624fa",
+        "n_comments": 2,
+        "n_wordless": 0,
+        "stratum": "currency",
+        "thread_root": "8364"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "chars": 8761,
+        "extractor_version": "096c08266a5cfed5d76a5c3a69af0d92645a72e042927477d747b2de8ce2c826",
+        "n_comments": 3,
+        "n_wordless": 0,
+        "stratum": "currency",
+        "thread_root": "9112"
+      },
+      {
+        "channel": "@msuaaaa",
+        "chars": 8259,
+        "extractor_version": "f5dd5f213ac2a1a0e52d2fc905c40f6f58fb1d38c3a0c246e977647d9130a12a",
+        "n_comments": 1,
+        "n_wordless": 0,
+        "stratum": "currency",
+        "thread_root": "10021"
+      },
+      {
+        "channel": "@msuaaaa",
+        "chars": 8294,
+        "extractor_version": "a6029d6a93b8802b35d9d4d7e28025d4b51443123f5fb3ebc7f81581bca12559",
+        "n_comments": 12,
+        "n_wordless": 10,
+        "stratum": "currency",
+        "thread_root": "10459"
+      },
+      {
+        "channel": "@msuaaaa",
+        "chars": 8487,
+        "extractor_version": "a97c9f43521c9f102d8bf0a866902b2cc51672b6403243066336671c394bedc9",
+        "n_comments": 3,
+        "n_wordless": 0,
+        "stratum": "currency",
+        "thread_root": "10651"
+      },
+      {
+        "channel": "@msuaaaa",
+        "chars": 8261,
+        "extractor_version": "25604fc583096430a18c36698cfb0975b71242f9451f31a4d932a66561ffe2ac",
+        "n_comments": 2,
+        "n_wordless": 0,
+        "stratum": "currency",
+        "thread_root": "4599"
+      },
+      {
+        "channel": "@msuaaaa",
+        "chars": 8304,
+        "extractor_version": "3c7f1a03aac7b19738f8dc583e51e7482b3ab8041753813d9cbbc77d65b68660",
+        "n_comments": 4,
+        "n_wordless": 0,
+        "stratum": "currency",
+        "thread_root": "7202"
+      },
+      {
+        "channel": "@msuaaaa",
+        "chars": 8278,
+        "extractor_version": "ecd4761c3c0e6c6acf3e2254866cd37567d1ff2de7d94775f8a029d0dd5ca654",
+        "n_comments": 1,
+        "n_wordless": 0,
+        "stratum": "currency",
+        "thread_root": "7333"
+      },
+      {
+        "channel": "@msuaaaa",
+        "chars": 8278,
+        "extractor_version": "836072ae96ed31fd2c06179eea29d8722bc8feb57104c91c4504b6a6aca0b4d8",
+        "n_comments": 11,
+        "n_wordless": 10,
+        "stratum": "currency",
+        "thread_root": "7402"
+      },
+      {
+        "channel": "@msuaaaa",
+        "chars": 8464,
+        "extractor_version": "cdbfd2c0dd47273651b6101dd0711295951e98b2496eb33fa6d672af2de82340",
+        "n_comments": 7,
+        "n_wordless": 2,
+        "stratum": "currency",
+        "thread_root": "7627"
+      },
+      {
+        "channel": "@msuaaaa",
+        "chars": 8330,
+        "extractor_version": "f02fc15e0b5bd68fb1990ec77c41099e9dc2d0f04cca19f3359d0c0ec15bdb97",
+        "n_comments": 1,
+        "n_wordless": 0,
+        "stratum": "currency",
+        "thread_root": "7636"
+      },
+      {
+        "channel": "@msuaaaa",
+        "chars": 8598,
+        "extractor_version": "b9889ba531720af6981cdaead591cee2349acfbbf787e8fb8825571cb8ad01b9",
+        "n_comments": 7,
+        "n_wordless": 2,
+        "stratum": "currency",
+        "thread_root": "7907"
+      },
+      {
+        "channel": "@msuaaaa",
+        "chars": 8910,
+        "extractor_version": "ea51d46d5a22d58115389b52c7dfa3ab562f3c9e441b5cd3c483aaea1743c3fb",
+        "n_comments": 16,
+        "n_wordless": 12,
+        "stratum": "currency",
+        "thread_root": "8020"
+      },
+      {
+        "channel": "@msuaaaa",
+        "chars": 8280,
+        "extractor_version": "932dd426874edb9881a29252c02cddfed1caac601370938b11a0025b618dd62b",
+        "n_comments": 14,
+        "n_wordless": 13,
+        "stratum": "currency",
+        "thread_root": "8762"
+      },
+      {
+        "channel": "@msuaaaa",
+        "chars": 8267,
+        "extractor_version": "b1e7db40ebc0e130621382d45f4ab84591351fbac2c80f9259a3349371dfce73",
+        "n_comments": 1,
+        "n_wordless": 0,
+        "stratum": "currency",
+        "thread_root": "8883"
+      },
+      {
+        "channel": "@msuaaaa",
+        "chars": 8228,
+        "extractor_version": "cc6abef62a1e035650b5beedbe0a4fed9bf71be054c70c4b407498ded676def3",
+        "n_comments": 2,
+        "n_wordless": 0,
+        "stratum": "currency",
+        "thread_root": "8905"
+      },
+      {
+        "channel": "@msuaaaa",
+        "chars": 8281,
+        "extractor_version": "332523951cd1ac5b1ca91db2f6983bdd63087a4c826950b4a4521f021a2790d9",
+        "n_comments": 1,
+        "n_wordless": 0,
+        "stratum": "currency",
+        "thread_root": "9618"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "chars": 8572,
+        "extractor_version": "d940c458f3050a44101fcedb1feee8745efa61ccaec5f9700fc3abfe8549a1eb",
+        "n_comments": 2,
+        "n_wordless": 0,
+        "stratum": "decimal_only",
+        "thread_root": "10360"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "chars": 8743,
+        "extractor_version": "b1f40d16fed6e478f9c3f16915712621b826f197c8711ab902ab3380cade7a46",
+        "n_comments": 2,
+        "n_wordless": 0,
+        "stratum": "decimal_only",
+        "thread_root": "2053"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "chars": 8923,
+        "extractor_version": "858a004bb2fcfbc2befb252a1b8abeb427b70100973ecdaaa1c7b753419e7058",
+        "n_comments": 8,
+        "n_wordless": 1,
+        "stratum": "decimal_only",
+        "thread_root": "4129"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "chars": 8650,
+        "extractor_version": "c5b33cfbb55aa9e9ff0f7d46cb266baabd0c9d3e5cb5f430ced4b49afbe27dcb",
+        "n_comments": 2,
+        "n_wordless": 0,
+        "stratum": "decimal_only",
+        "thread_root": "4449"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "chars": 10529,
+        "extractor_version": "fec5fbbf1702e8a87ce127b173a14a465e6074495148d9c78c5ece80e6422414",
+        "n_comments": 19,
+        "n_wordless": 1,
+        "stratum": "decimal_only",
+        "thread_root": "5119"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "chars": 8485,
+        "extractor_version": "4cc8c6baa8877fbc69c64cd6aa41af691cfa14b2ad8dbc0336e055dd4e63bf8d",
+        "n_comments": 3,
+        "n_wordless": 0,
+        "stratum": "decimal_only",
+        "thread_root": "5854"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "chars": 8751,
+        "extractor_version": "f94430babf91cfd73be1a662efe56c1dce1d7f1ad9f3361966499e9929b34211",
+        "n_comments": 3,
+        "n_wordless": 0,
+        "stratum": "decimal_only",
+        "thread_root": "5994"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "chars": 8578,
+        "extractor_version": "cfe9742a6a0e19e7d9095ec380173f7d7b334503ce786b1f390cfcd0a23d1045",
+        "n_comments": 2,
+        "n_wordless": 0,
+        "stratum": "decimal_only",
+        "thread_root": "6951"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "chars": 8471,
+        "extractor_version": "f90d2b320e78ffc83b1f1621083a1e3738c1e45a83fc1222e8b7516369156469",
+        "n_comments": 1,
+        "n_wordless": 0,
+        "stratum": "decimal_only",
+        "thread_root": "6973"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "chars": 8449,
+        "extractor_version": "950f0e36e95756e52559bf2fdfdfddda24324fbb9752127c7a52c1341155e8ef",
+        "n_comments": 2,
+        "n_wordless": 1,
+        "stratum": "decimal_only",
+        "thread_root": "9462"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "chars": 9078,
+        "extractor_version": "79d29edf0f222223e339ffd3949c96e642dd5a326112af87d2fadbe72542de0d",
+        "n_comments": 5,
+        "n_wordless": 0,
+        "stratum": "decimal_only",
+        "thread_root": "9912"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "chars": 9408,
+        "extractor_version": "49d9a2804f1fa9ac2c73872628ea2fd853ed7965ce529ab1525303c8d3014e2b",
+        "n_comments": 5,
+        "n_wordless": 1,
+        "stratum": "decimal_only",
+        "thread_root": "9926"
+      },
+      {
+        "channel": "@msuaaaa",
+        "chars": 8193,
+        "extractor_version": "9e8128e9e22e1acbc278f442881a0307aaa591d2728ec7636c593f7749c1895e",
+        "n_comments": 2,
+        "n_wordless": 0,
+        "stratum": "decimal_only",
+        "thread_root": "2455"
+      },
+      {
+        "channel": "@msuaaaa",
+        "chars": 8200,
+        "extractor_version": "95571ed1d56c93d6c573fc3a45f4579cad7f3642ddb3c9f945dc3f47c59bc578",
+        "n_comments": 2,
+        "n_wordless": 0,
+        "stratum": "decimal_only",
+        "thread_root": "3053"
+      },
+      {
+        "channel": "@msuaaaa",
+        "chars": 8236,
+        "extractor_version": "fb7f04ebe8ac5d27fa4a511c16b877db9e5f4ebb50150391e757c404c9954510",
+        "n_comments": 1,
+        "n_wordless": 0,
+        "stratum": "decimal_only",
+        "thread_root": "4588"
+      },
+      {
+        "channel": "@msuaaaa",
+        "chars": 8187,
+        "extractor_version": "6663a593b334d7544285a3bfed9316e83681c1c57f1c4d71652d6cff1d4c9c17",
+        "n_comments": 2,
+        "n_wordless": 0,
+        "stratum": "decimal_only",
+        "thread_root": "5046"
+      },
+      {
+        "channel": "@msuaaaa",
+        "chars": 8175,
+        "extractor_version": "abf65d8dc36dee23f2e594783dfc884a26527d920657c07c9cd5eda010d94250",
+        "n_comments": 2,
+        "n_wordless": 1,
+        "stratum": "decimal_only",
+        "thread_root": "6502"
+      },
+      {
+        "channel": "@msuaaaa",
+        "chars": 8186,
+        "extractor_version": "6ec158660bb9cd056c963537cb62f728db4d6a0aad6818153a5aed71931be926",
+        "n_comments": 1,
+        "n_wordless": 0,
+        "stratum": "decimal_only",
+        "thread_root": "6691"
+      },
+      {
+        "channel": "@msuaaaa",
+        "chars": 8129,
+        "extractor_version": "f8f2e19d85d09791fed1002635526a4037a304ac64771f9abc0ed6b6c4282abc",
+        "n_comments": 1,
+        "n_wordless": 0,
+        "stratum": "decimal_only",
+        "thread_root": "9041"
+      },
+      {
+        "channel": "@msuaaaa",
+        "chars": 8363,
+        "extractor_version": "06989094aabf89fc750e65ec28fab76cc4a9d8f08b37c9a861c176bfec936752",
+        "n_comments": 16,
+        "n_wordless": 11,
+        "stratum": "decimal_only",
+        "thread_root": "9354"
+      }
+    ]
+  },
+  "draw": {
+    "arms": [
+      "holdout"
+    ],
+    "dev_threads": 40,
+    "path": "results/promo_threads_draw_2.json",
+    "sha256": "567cb2360bf51f8018147ba367cce99911e5f0cfa3faa3bff073d7bcc7fc4ea2"
+  },
+  "gold": {
+    "covers": "this leg's only arm",
+    "lines": 112,
+    "path": "docs/labels-promo-holdout2.jsonl",
+    "sha256": "5525ddf1e16390dfec65934627e2bdf481ad4547966e537373e969dd431a9a48"
+  },
+  "law": {
+    "codebook": "docs/CODEBOOK-promo-signals.md",
+    "codebook_sha256": "86ed01a484611fd5cca20f087f3479a7a1ff28370282ef556b9f80cbd65ca7c4",
+    "codebook_version": "0bbb665a2beb3d4d08af96e1b81a761e8b6a4a4f5000587fffcc1ff7d7706e62",
+    "vocabulary": {
+      "attribution_sources": [
+        "explicit",
+        "reply_context",
+        "post_context"
+      ],
+      "codebook_sha256": "0bbb665a2beb3d4d08af96e1b81a761e8b6a4a4f5000587fffcc1ff7d7706e62",
+      "signal_types": [
+        "жалоба",
+        "похвала",
+        "спрос",
+        "привычка",
+        "цена"
+      ],
+      "subject_types": [
+        "chain",
+        "brand",
+        "sku",
+        "post"
+      ]
+    }
+  },
+  "part": "holdout2",
+  "phase": "promo-pulse-1 S9 — dev-40, the $0 half: what the model reads and what it bounds"
+}
