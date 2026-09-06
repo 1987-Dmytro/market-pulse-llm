@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-09-06 19:50:01 (every SessionStart)
+**Auto-refreshed:** 2026-09-06 21:48:14 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
-69b7db1 docs(progress): s33 — holdout-2 bought once and READ COMPLETE: signal 0.8021 HOLDS, subject 0.7054 RED; $0.4232 of $0.90; the close waits for billing; no open stop — the next word is the operator's
-0c5f488 s33(holdout-2): the ONE shot READ — 40/40 units, 0 unparsed; signal 0.8021 HOLDS, subject 0.7054 RED (79/112) under the instrument frozen at d598573; pod p3krn2lwhhcyyi 2116 s = $0.4232, rate 40.8653 s/thread (n=40); the post-run reading $0.4107; the close REFUSED on «no billing rows yet» — retried next session
-c4e4827 money(ledger): promo-holdout2 — the session's ledger line, the pre-pod --note at 16:33:53Z ($0.0000 of $0.90; cycle 3 REMAINING $2.5626)
-18eca34 docs(progress): s33 — the holdout-2 line is OPENED (registration, pack, make check green at d519ad4, the pre-pod note); OPEN STOP: the harness denied the pod create — the operator runs runbook §1 or allows it
-d519ad4 s33(holdout-2): the pack of the committed registration — 40 units of draw-2's holdout arm, the smoke first; the pack SECOND, its own commit
+ab29a60 docs(progress): s34 — «p1-prep» DONE at the $0 table: promo-holdout2 CLOSED $0.4253, holdout-3 drawn (358 → 20/20, blind), P1 + its ONE test, dev-3 0.7054 → 0.7500 (dev-40 0.8857 =, dev-2 0.8883 → 0.9043), make check 4326/2 at 9b8a2de; OPEN STOP: the pre-registered decision table RETURNS the fork to the operator at $0 — dev-3 < 0.80, the holdout-3 shot is NOT bought
+9b8a2de s34(p1-prep): P1 measured at $0 on the three dev sets, K8 v2 before → after — dev-40 0.8857 → 0.8857 (0 rows) · dev-2 0.8883 → 0.9043 (5 rows: R1 4, R2 1) · dev-3 0.7054 → 0.7500 (5 rows: R1 2, R3 3; 84 of 112); signals unmoved on all three, zero hit→miss; leak check: holdout-3's 40 threads share none of the 120 this reading opened; the DECISION TABLE of PHASE v18 §6.2 reads RETURN to the operator at $0 (dev-3 0.7500 < 0.80; dev-40 and dev-2 hold) — results/grade_promo_p1_readings.json (two runs byte-identical, edacb611…), results/promo_p1_predicted_{dev40,dev2,dev3}.jsonl, scripts/promo_p1_apply.py
+4a27940 s34(p1-prep): P1 — src/market_pulse/promo_post.py, the deterministic layer over the frozen reader's rows: R1 post ⇒ subject = root · R2 own channel: post with signals ⇒ chain = the owner · R3 sku/brand with жалоба on the store-stock lexicon ⇒ chain = the thread's retailer (own channel → owner; aggregator → the ONE registry chain the post names, else the row stays) — nothing else; pure, rows copied never edited; the lexicon is the addendum's verbatim, matched at a word start as a prefix; its ONE test, both directions per rule, against the real registry and alias table (3 passed)
+7a2bf3d s34(p1-prep): the holdout-3 DRAW — results/promo_threads_draw_3.json, seed 42 over draw-2's 398 MINUS holdout-2's 40 = 358, 20/20 by stratum, disjoint from all 120 drawn; the producer takes N earlier draws as parameters and its record's decision fields branch on the leg (LEGS) or refuse; draw 2 still rebuilds byte for byte (567cb236…); K7 two runs identical (76435461…); no gold yet — the team lead labels it BLIND
+1a0d503 money(ledger): promo-holdout2 CLOSED at $0.4253 — the walk covered the run record's 2116 s, 3.6 % off the post-run reading $0.4107
 ```
 
 ## 📋 Recent decisions
