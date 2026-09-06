@@ -1155,3 +1155,11 @@ iteration 4's, as it must be until §0a re-emits it). Docs-only diff, no test/pi
 no top-up). Applied by the executor at the next session's start exactly as (s) addendum 8 was: `CYCLE3_CAP_USD = 10.00` in `scripts/runpod_guard.py`, one commit by path, shown by the
 guard's own line `CYCLE 3 SPENT $… of $10.00` on the `promo-iter5` close retry (REMAINING at the 12:39Z reading becomes $2.6067). What it buys: the holdout-2 shot (≤ $0.90) + c3
 (≤ $0.50) + the volume's drip for ≈ 4 days. The operator is asked again only if a sixth reading is ever needed.
+
+**(z) addendum 2, 06.09 16:50 — the holdout-2 gold is on the mount, labelled BLIND:** `docs/labels-promo-holdout2.jsonl` — **112 rows** (47 currency + 65 decimal_only)
+over the 40 threads of `results/promo_threads_draw_2.json :: draw.*.holdout`, sha256 **`5525ddf1e16390dfec65934627e2bdf481ad4547966e537373e969dd431a9a48`**, written by the
+team lead under codebook v1.2 (`86ed01a4…`) without opening any iteration-5 prediction file; self-checked by the team lead's validator (every quote a substring, 40/40
+threads covered, 0 rows on wordless comments, disjoint from dev-40 / dev-2 / holdout-40); 36 rows carry `unsure` (the tie named; the row stays in the denominator).
+Executor: it is an UNTRACKED team-lead file — commit it by path in the start ritual (`git add docs/labels-promo-holdout2.jsonl`, one commit, `shasum -a 256` shown), never
+edit it; the holdout-2 registration pins it as the leg's gold (§4 (c)); `--dry-run --part holdout2` now has its gold. Nothing else in (z)4 moves: «holdout-2 prep» ends at the
+committed dry run, no `--register`; then the fresh verifier → the team lead's reading → the shot. PHASE v16 §2 names the file. Class: no stop — a planned team-lead deliverable.
