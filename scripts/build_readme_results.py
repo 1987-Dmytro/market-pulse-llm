@@ -30,10 +30,17 @@ END = "<!-- /S2 READINGS -->"
 
 
 def block(rows: list[dict]) -> str:
-    """The markdown the markers enclose: one row per reading, then the tie count the P1 record carries."""
+    """The markdown the markers enclose: one row per reading, then the tie count the P1 record carries.
+
+    The two bars in the opening sentence are READ off the first reading's record like every other
+    number here — typing «0.80» would put a threshold in prose, where no file can move it
+    ([[a_threshold_that_lives_in_prose]]); each row's own cell still carries its own file's bar.
+    """
+    bars = rows[0]["bars"]
     lines = [
         "**S2 — reactions under promo posts, graded on the frozen holdouts.** Per comment: what it"
-        " is about (subject, bar 0.80); per thread: what it says (signal types, bar 0.75). Shipped as"
+        f" is about (subject, bar {bars['subject_agreement']['bar']:.2f}); per thread: what it says"
+        f" (signal types, bar {bars['signal_type_agreement']['bar']:.2f}). Shipped as"
         " measured (ruling 06.09 (cc)); every number below is the named file's.",
         "",
         "| reading | subject | signal | file |",
