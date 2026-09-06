@@ -101,16 +101,22 @@ One-sentence contracts (`docs/PROMPT-*.md`) remain for fixes and debts whose dif
   one row per measurement with `source`, `n`, `max`. A rate is a property of the pod it was
   measured on; a remembered number is not a prior (the 97 s/thread error, 26.08).
 
-## Money (rented GPUs; console empty between sessions) — v2, 05.09: the mechanics rulings (q)…(x) fixed; `docs/PHASE-*.md` §6.1 is the phase's instance of this section
-- **A PAID run is a whole session** (03.09): create → settlement in one session, no $0 work in front of it and no
-  second create behind it; its runbook is written the session BEFORE and re-pointed to THAT run (part, file names,
-  step line, card, launch line) so the paid session pastes and transposes nothing. Rulings name the command whose
-  output is the number, never the number itself; a cap named in a ruling is quoted from the `--dry-run` that priced it.
-- **One paid run = ONE step line** (`promo-iter<N>` · `promo-holdout2` · `promo-c3`): opened BEFORE the pod by
-  `python scripts/runpod_guard.py --step <line> --step-cap <cap> --note "<line> — pod about to be created"` (its own
-  ledger `results/spend_<line>.json`, anchor = the balance then). The registration reads the guard WITH `--step <line>`
-  (`--register --part <part> --step <line> --cap <cap>`); the emitter's default step is the open multi-run line
-  `promo-dev-loop` — its guard refuses (unbounded delta since 03.09) and the line is never named again.
+## Money (rented GPUs; console empty between sessions) — v2.1, 06.09 (ruling (y): the registration OPENS the line → it runs in the paid session); v2, 05.09: the mechanics rulings (q)…(x) fixed; `docs/PHASE-*.md` §6.1 is the phase's instance of this section
+- **A PAID run is a whole session** (03.09): create → settlement in one session; in front of the create ONLY the line's
+  opening (§0a of the runbook: `--dry-run` → `--register` → commit → `--pack` → commit → `make check`, minutes, no
+  development) and no second create behind it; its runbook is written the session BEFORE and re-pointed to THAT run
+  (part, file names, step line, card, launch line) so the paid session pastes and transposes nothing. Rulings name the
+  command whose output is the number, never the number itself; a cap named in a ruling is quoted from the `--dry-run`.
+- **One paid run = ONE step line** (`promo-iter<N>` · `promo-holdout2` · `promo-c3`), OPENED BY THE REGISTRATION ITSELF:
+  `--register --part <part> --step <line> --cap <cap>` reads the guard WITH `--step <line>`, and that reading creates
+  `results/spend_<line>.json` and anchors it at the balance then — so the registration runs in the PAID session, minutes
+  before the create, NEVER a session earlier (ruling (y): the close's right-hand side is a balance delta with the volume's
+  drip IN, the settled figure keeps it OUT — iter4's whole 2.73 % was the volume over 2.45 h; the 5 % band shuts at ≈ 4 h
+  of anchor age). The pre-pod `--note "<line> — pod about to be created"` follows it as the session's ledger line. The team
+  lead reads the dry run (`results/promo_dev40_prep.json`) + the code at HEAD BEFORE the purchase and the registration at
+  acceptance, against the dry run (same pins, bound, card, backstop — only the anchor is new). The emitter's default step
+  is the open multi-run line `promo-dev-loop` — its guard refuses (unbounded delta since 03.09); the line is never named again.
+  **Where a ruling and this section disagree on a mechanic, this section wins: follow it, name the contradiction in PROGRESS, no stop.**
 - **Pricing:** the rate is the WHOLE-RUN mean of the slowest pod seen (`results/measurements.jsonl`, `sample: whole run`,
   n = the run's units) — never a smoke of three, never a borrowed sibling; the dear corner (the run's max on every unit)
   is priced and shown; when it does not fit, the leg issues FITS on the MEAN corner with the cap as the hard stop and

@@ -1,4 +1,4 @@
-# PHASE — `promo-pulse-1` (stage 1 whole: C2–C5 of `docs/SPEC-v2-promo-pulse.md` §8) — v13 05.09: §6.1 a step line's close settles against its POST-RUN reading (taken before any next pod); a line without one closes on the walk alone and never takes a late reading; §2 iteration 5 is the dev-40 read; v12 05.09: §6.5 a serving failure moves the serving, never the instrument, and surfaces at once; v11: §6.1 one paid run = one step line, the registration reads the guard with the step it names; v10: every leg prices on the slowest WHOLE run and issues on the mean when the dear corner refuses, a cap is quoted from the dry run; v9: §2 S2 holdout-40 read RED on subject → codebook v1.2, dev-2, holdout-2 (in-domain population), K8 v2; §4 «asked for once» + a re-used producer's record branches every decision field, §6.5 validity of a paid reading, §6.6 a test that reads the record, §6.1–6.2 a fence is an estimate and the frozen-set instrument is byte-for-byte
+# PHASE — `promo-pulse-1` (stage 1 whole: C2–C5 of `docs/SPEC-v2-promo-pulse.md` §8) — v14 06.09: §6.1 the registration OPENS its line, so it runs in the PAID session minutes before the create (the team lead reads the dry run + HEAD before the purchase, the registration at acceptance); v13 05.09: §6.1 a step line's close settles against its POST-RUN reading (taken before any next pod); a line without one closes on the walk alone and never takes a late reading; §2 iteration 5 is the dev-40 read; v12 05.09: §6.5 a serving failure moves the serving, never the instrument, and surfaces at once; v11: §6.1 one paid run = one step line, the registration reads the guard with the step it names; v10: every leg prices on the slowest WHOLE run and issues on the mean when the dear corner refuses, a cap is quoted from the dry run; v9: §2 S2 holdout-40 read RED on subject → codebook v1.2, dev-2, holdout-2 (in-domain population), K8 v2; §4 «asked for once» + a re-used producer's record branches every decision field, §6.5 validity of a paid reading, §6.6 a test that reads the record, §6.1–6.2 a fence is an estimate and the frozen-set instrument is byte-for-byte
 
 Team-lead file. Executor: read this, then run `/plan-phase promo-pulse-1` and STOP for the plan
 review. Mechanics named below are CONSTRAINTS; the goal is the question and the checks.
@@ -103,14 +103,14 @@ scanning the 81 unscanned census candidates.
    (ruling (r)). **v10 (ruling (t)):** on EVERY leg `rung_0` issues on the dear corner when it fits, else on the MEAN corner with the cap as
    the hard stop and the (r)2 table (no band gate); the mean is the WHOLE-RUN mean of the slowest pod seen (n = the run's units, never a
    smoke of three), written from the run record per pod; a cap named in a ruling is quoted from the `--dry-run` that priced it, never typed.
-   **v11 (ruling (v)): one paid run = ONE step line** (`promo-iter<N>`, `promo-holdout2`, `promo-c3`) — opened by its own `--note` before
-   the pod, capped at the run's cap, closed by its run record; an open multi-run line carries no new run; the registration names its line
-   and reads the guard WITH `--step`, so FITS is judged against that line's own remaining. **v13 (ruling (w) addendum): a line's close
-   settles against its POST-RUN reading** — one more `--note` on the line after its pod is deleted and before ANY next pod (the guard's
-   right-hand side is the line's LAST open reading; a pre-pod one refuses the close for ever, 7000 % off); the close then waits at $0 for
-   the walk to cover the run record's billed span (`--expect-ms`, a PARTIAL walk is a third state), retried at each session's start; a line
-   whose readings all predate its pod (last reading 0 / absent) closes on the walk alone and NEVER takes a late reading — it would carry
-   the next run's money. c3 is deferred behind holdout-2; the volume `mp-srv2` is deleted after the phase's last paid run — the holdout-2 shot.
+   **v11 (ruling (v)): one paid run = ONE step line** (`promo-iter<N>`, `promo-holdout2`, `promo-c3`), capped at the run's cap, closed by its run
+   record; an open multi-run line carries no new run; the registration names its line and reads the guard WITH `--step` (FITS against that line's
+   own remaining) — **and that reading OPENS the line (v14, ruling (y)): the registration runs in the PAID session, minutes before the create,
+   never a session earlier** (an aged anchor drinks the volume's drip into the close's reference; the 5 % band shuts at ≈ 4 h); the team lead reads
+   the dry run + HEAD before the purchase, the registration at acceptance. **v13 ((w) addendum): a line's close settles against its POST-RUN
+   reading** — one more `--note` after its pod is deleted, before ANY next pod (the guard's RHS is the line's LAST open reading; a pre-pod one
+   refuses for ever); the close waits at $0 for a COMPLETE walk over the run record's span (`--expect-ms`), retried at each session's start; a line
+   whose readings all predate its pod closes on the walk alone, never takes a late reading. c3 after holdout-2; the volume `mp-srv2` goes after it.
 2. The ONE holdout attempt: pre-register (readings + the two bars), tell the operator it is being
    spent. **The instrument on the frozen set is the one that took the dev bar, byte for byte** — every pin
    of the dev-bar registration unchanged; cosmetic law moves queue behind the attempt (v7, ruling (q)).

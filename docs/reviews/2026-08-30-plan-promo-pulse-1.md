@@ -1102,3 +1102,25 @@ The «needs named» list stays in PROGRESS as debts; none blocks iteration 2.
    smoke's longest unit is the fit proof at minutes' cost. Then `--pack`, commit, END; the purchase is the NEXT session after my reading of the record — sequence (v)4, close as v13
    (post-run `--note` before any next pod, `--until` after the pod), `--score --arm dev40` (BAR) · `--arm dev2` (READING). The ceiling for holdout-2/c3 is the operator's word (table
    in the team-lead message). Skill v3.9: a fresh verifier reads every money path BEFORE a purchase, not after a stop.
+
+## Ruling 06.09 (y) — s29 «iteration 5 prep» ACCEPTED ($0); the stop was RIGHT and PREVENTABLE by the team lead (the fifth money miss): the registration OPENS the line, so it runs in the PAID session, minutes before the create — (x)2's «prep ends at the committed registration» is withdrawn; my pre-purchase reading is the dry run + HEAD, done today; the purchase is the NEXT session
+
+1. Accepted by diff and my own readings at `31a6bc5`: (x)3 card and backstop as FIELDS (`offered_price`, `backstop`; `runpodctl gpu list` today: `RTX PRO 4500` 32 GB,
+   gpu-id `NVIDIA RTX PRO 4500 Blackwell`, $0.72/h secure, EU-RO-1 High; A6000 none; L40S absent) · (x)4 the ERROR row read in `reply_rows` / `answered_rows` /
+   `whole_run_row` / `--score`, the close gate appended BEFORE the rate row · runbook on `_iter5` · ONE test both directions (90 vs 7000 s → 116 live; 90 vs 2500 s → 41).
+   Bound at source: `results/measurements.jsonl` whole-run **47.6615 s/thread** (pod `cd918wet7sea5b`, n = 40, the slowest) → rung 0 by my own arithmetic
+   (279 + 83 × 47.6615) s × $0.72/h = **$0.8470 FITS** of $1.40 on the mean corner, dear $4.8633 named; hard stop 7000 s = 116 min, the cap live. No pod alive;
+   `results/spend_promo_iter5.json` ABSENT. A fresh verifier (read-only, HEAD `31a6bc5`) CONFIRMED seven readings and found one bite + two risks (items 3–4).
+2. **The stop's answer is (ii).** `--register` reads the guard WITH `--step`, and that reading CREATES and anchors the line; the close's right-hand side is a balance delta
+   with the volume's drip IN while the settled figure keeps it OUT, so the anchor's AGE is the drift (iter4: $0.019444 = the volume line exactly, 2.73 % over 2.45 h;
+   the 5 % band shuts at ≈ 4 h of age before the pod). PROCESS «Money» v2's order stands; (x)2 sat the anchor a session early. (i) rejected — a rule on the operator's
+   clock; (iii) rejected — a ledger is never deleted. Fix the runbook's §0a FIRST (verifier bite 1): `--pack` before the commit refuses on `committed_registration()`.
+3. **«iteration 5» (paid, cap $1.40) is the NEXT session, §0a inside it:** `--dry-run --part dev` → `--register --part dev --step promo-iter5 --cap 1.40` (FITS shown) →
+   commit `results/promo_dev40_prep.json` + `results/prereg_promo_dev_loop.json` + `results/spend_promo_iter5.json` → `--pack --part dev` → commit the pack → `make check`
+   at that HEAD (its tests read the committed record) → §0 → §1 create → smoke → the 80 → delete → `--close-segment --replies` → post-run `--note` on `promo-iter5` →
+   `--close --expect-ms <segment ms> --until <after the pod> --tolerance 0.05` → `--score --arm dev40` (BAR 0.80/0.75) · `--arm dev2` (READING) → END. A refusal at
+   `--register` (price moved, no card in stock, FITS lost) ENDS the turn with the guard's and the listing's output — before any create. No top-up before the run.
+4. Named, not built (PROGRESS): risk 2 — readers key on a truthy `error`, an exception with an EMPTY message reads as answered (`pgrep` still deletes the pod; fix
+   `"exception" in row` + (w)3's test, first $0 item after iteration 5); risk 3 — `close_segment` sums ALL segments of the batch-scale run record against the cap, so its
+   `OVER` is a false field nothing gates on (the money is the guard's line) — filter by `anchored_at`, same item. The ceiling word waits for iteration 5's settlement.
+5. Team lead: PHASE **v14** §6.1, PROCESS «Money» **v2.1**, patterns 06.09, STATUS; skill v3.11 — «registration ≠ opening», «the standing law beats a ruling on a mechanic».
