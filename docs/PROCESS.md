@@ -116,6 +116,14 @@ One-sentence contracts (`docs/PROMPT-*.md`) remain for fixes and debts whose dif
   lead reads the dry run (`results/promo_dev40_prep.json`) + the code at HEAD BEFORE the purchase and the registration at
   acceptance, against the dry run (same pins, bound, card, backstop — only the anchor is new). The emitter's default step
   is the open multi-run line `promo-dev-loop` — its guard refuses (unbounded delta since 03.09); the line is never named again.
+  **v2.2 (06.09, ruling (aa), the verifier's finding before the holdout-2 purchase): a registration is NEVER repeated on an
+  anchored line** — once the line has swallowed any cent (the volume's drip across an hour boundary, a rung-1-killed pod) a
+  second `--register` at the full cap refuses (`cap = min(cap, step_remaining, remaining)`); a re-registration (a price move
+  in §0, a STOP retried an hour later) goes under a NEW line (`--step <line>-r2`, its own ledger) or with `--cap` = the guard's
+  printed remaining of the line, the operator's word. **A runbook gate is a command that can fail the session** (exit ≠ 0, the
+  next command chained with `&&`), placed BEFORE the step it guards — the four-pin check runs on the disk files before
+  `--register`; a printed «STOP» with exit 0 is a note, not a gate. When the hard stop fires (spent == cap) the post-run
+  `--note` refuses — it is not retried; `--close` settles on the walk alone (PHASE v13).
   **Where a ruling and this section disagree on a mechanic, this section wins: follow it, name the contradiction in PROGRESS, no stop.**
 - **Pricing:** the rate is the WHOLE-RUN mean of the slowest pod seen (`results/measurements.jsonl`, `sample: whole run`,
   n = the run's units) — never a smoke of three, never a borrowed sibling; the dear corner (the run's max on every unit)
