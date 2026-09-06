@@ -2,6 +2,13 @@
   "runpod_balance_at_promo-holdout2_start": 7.0425844949,
   "anchored_at": "2026-09-06T16:19:45+00:00",
   "promo-holdout2_gpu_cap_usd": 0.9,
-  "gpu_sessions": [],
+  "gpu_sessions": [
+    {
+      "at": "2026-09-06T16:33:53+00:00",
+      "balance": 7.0425844949,
+      "step_spent_usd": 0.0,
+      "note": "promo-holdout2, the one shot — pod about to be created"
+    }
+  ],
   "gpu_note": "RunPod account balance read before the first pod of promo-holdout2. Step spend = the pessimistic maximum of this anchor minus the balance now and the billing walk since `anchored_at` (SPEC 3.23 (4), Dv411), enforced against $0.90. The SPEC amendment 3.4 (4) phase cap is enforced separately, against results/spend_phase4.json, and neither anchor may be regenerated."
 }

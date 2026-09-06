@@ -143,6 +143,16 @@
       "billing_since_usd": 7.408215,
       "billing_read": "read",
       "note": "promo-iter5 CLOSED at $0.9450 — promo-iter5 settled"
+    },
+    {
+      "at": "2026-09-06T16:33:53+00:00",
+      "balance": 7.0425844949,
+      "spent_usd": 7.4374,
+      "remaining_usd": 2.5626,
+      "balance_delta_usd": 7.4374,
+      "billing_since_usd": 7.42766,
+      "billing_read": "read",
+      "note": "promo-holdout2, the one shot — pod about to be created"
     }
   ]
 }
