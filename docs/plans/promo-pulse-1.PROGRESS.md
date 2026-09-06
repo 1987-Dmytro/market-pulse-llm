@@ -43,8 +43,8 @@ both listings `[]`. **`make check` at BOTH HEADs: ruff clean, SLICES COVER, 1000
    population (channels r2, PHASE v9 §2), and PHASE §6.2 makes the holdout attempt a STOP notice to
    the operator before it is spent. The $0.90 of §6.1 is a FENCE, re-priced at that step's own
    `--register` on the pace measured today (**53.6254 s/thread**) and the day's own offer.
-   **Tree state:** clean at `0bba811`, `make check` 4323/2, no pod, no serverless, `promo-iter5` open
-   at $0.9495/$1.40 pending billing; cycle 3 REMAINING $1.6067 — enough for holdout-2 and c3 ($0.50).
+   **Tree:** clean, `make check` 4323/2, no pod. REMAINING $1.6067 is the BALANCE delta and ALREADY
+   carries this run; it leaves $0.21 over holdout-2 $0.90 + c3 $0.50, before the drip — tight.
 
 ## Named, not built (the phase file forbids adding what it did not ask for)
 - **(y)4 risk 3 FIRED, exactly as predicted:** `--close-segment` printed `verdict OVER`,
