@@ -1,0 +1,291 @@
+{
+  "answers": {
+    "fenced_answers": 40,
+    "fenced_note": "the codebook asks for JSON and never forbids a markdown fence; the object inside it is read as it stands and nothing in it is repaired (promo_prompts.unfence)",
+    "gold_shaped_rows": 188,
+    "leg_a_units_answered": 40,
+    "leg_a_units_dead": [],
+    "leg_a_units_registered": 40,
+    "parse_failures": 0,
+    "parse_failures_by_cause": {},
+    "unparsed": []
+  },
+  "arm": "dev2",
+  "contract": "docs/plans/promo-pulse-1.md §9 — the error table of iteration 5, arm dev2",
+  "gold": {
+    "path": "docs/labels-promo-dev2.jsonl",
+    "sha256": "4b60ab99a21045e6f22f612556b4026ac2d6d06090c85c62f370f58c1d5bab9f"
+  },
+  "grade": {
+    "bars": {
+      "signal_type_agreement": {
+        "bar": 0.75,
+        "held": true,
+        "value": 0.8296
+      },
+      "subject_agreement": {
+        "bar": 0.8,
+        "held": true,
+        "value": 0.8883
+      }
+    },
+    "by_stratum": {
+      "currency": {
+        "signal_type_agreement": 0.8358,
+        "signal_type_threads": 20,
+        "subject_agreed": 124,
+        "subject_agreement": 0.8857,
+        "subject_comments": 140
+      },
+      "decimal_only": {
+        "signal_type_agreement": 0.8233,
+        "signal_type_threads": 20,
+        "subject_agreed": 43,
+        "subject_agreement": 0.8958,
+        "subject_comments": 48
+      }
+    },
+    "from": "scripts/grade_promo_signals.py — its own functions, never re-derived here",
+    "k8_version": "v2",
+    "readings": {
+      "note": "an abstention is an answer: `unsure` rows stay in the denominator and are counted here, never dropped from it",
+      "unsure_rows": 0
+    },
+    "whole_40": {
+      "signal_type_agreement": 0.8296,
+      "signal_type_threads": 40,
+      "subject_agreed": 167,
+      "subject_agreement": 0.8883,
+      "subject_comments": 188
+    }
+  },
+  "iteration": 5,
+  "replies": "results/promo_dev40_iter5.jsonl",
+  "signal_jaccard_per_thread": {
+    "@VARUS_channel:10603": 1.0,
+    "@VARUS_channel:2085": 1.0,
+    "@VARUS_channel:2353": 1.0,
+    "@VARUS_channel:3054": 1.0,
+    "@VARUS_channel:3289": 0.8,
+    "@VARUS_channel:3436": 0.6667,
+    "@VARUS_channel:4422": 0.3333,
+    "@VARUS_channel:7440": 0.8,
+    "@VARUS_channel:7569": 1.0,
+    "@VARUS_channel:7850": 1.0,
+    "@VARUS_channel:8084": 1.0,
+    "@VARUS_channel:8430": 1.0,
+    "@VARUS_channel:8647": 0.6667,
+    "@VARUS_channel:8823": 1.0,
+    "@VARUS_channel:9034": 1.0,
+    "@VARUS_channel:9277": 0.75,
+    "@VARUS_channel:9461": 0.5,
+    "@VARUS_channel:9802": 1.0,
+    "@VARUS_channel:9850": 1.0,
+    "@matusi_ukr:22155": 1.0,
+    "@matusi_ukr:22304": 1.0,
+    "@msuaaaa:10635": 1.0,
+    "@msuaaaa:4490": 1.0,
+    "@msuaaaa:5015": 0.0,
+    "@msuaaaa:5113": 0.5,
+    "@msuaaaa:5255": 1.0,
+    "@msuaaaa:5704": 0.5,
+    "@msuaaaa:7348": 1.0,
+    "@msuaaaa:7792": 1.0,
+    "@msuaaaa:7825": 1.0,
+    "@msuaaaa:8215": 0.0,
+    "@msuaaaa:8412": 0.6667,
+    "@msuaaaa:8768": 1.0,
+    "@msuaaaa:9140": 1.0,
+    "@msuaaaa:9164": 1.0,
+    "@msuaaaa:9190": 1.0,
+    "@msuaaaa:9196": 1.0,
+    "@msuaaaa:9483": 1.0,
+    "@msuaaaa:9545": 0.5,
+    "@msuaaaa:9577": 0.5
+  },
+  "subject_misses": [
+    {
+      "channel": "@VARUS_channel",
+      "gold": {
+        "signal_types": [
+          "жалоба"
+        ],
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      "model": {
+        "signal_types": [
+          "спрос"
+        ],
+        "subject": "морозиво ескімо Varto",
+        "subject_type": "sku",
+        "unsure": null
+      },
+      "msg_id": "3178",
+      "thread_root": "3436"
+    },
+    {
+      "channel": "@VARUS_channel",
+      "gold": {
+        "signal_types": [
+          "жалоба"
+        ],
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      "model": {
+        "signal_types": [],
+        "subject": "izibank",
+        "subject_type": "chain",
+        "unsure": null
+      },
+      "msg_id": "4809",
+      "thread_root": "4422"
+    },
+    {
+      "channel": "@VARUS_channel",
+      "gold": {
+        "signal_types": [],
+        "subject": "izibank",
+        "subject_type": "chain"
+      },
+      "model": {
+        "signal_types": [],
+        "subject": "4816",
+        "subject_type": "post",
+        "unsure": null
+      },
+      "msg_id": "4820",
+      "thread_root": "4422"
+    },
+    {
+      "channel": "@VARUS_channel",
+      "gold": {
+        "signal_types": [
+          "жалоба"
+        ],
+        "subject": "izibank",
+        "subject_type": "chain"
+      },
+      "model": {
+        "signal_types": [],
+        "subject": "4816",
+        "subject_type": "post",
+        "unsure": null
+      },
+      "msg_id": "4841",
+      "thread_root": "4422"
+    },
+    {
+      "channel": "@VARUS_channel",
+      "gold": {
+        "signal_types": [
+          "спрос",
+          "цена"
+        ],
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      "model": {
+        "signal_types": [],
+        "subject": "OTP банк",
+        "subject_type": "chain",
+        "unsure": null
+      },
+      "msg_id": "4843",
+      "thread_root": "4422"
+    },
+    {
+      "channel": "@VARUS_channel",
+      "gold": {
+        "signal_types": [
+          "жалоба"
+        ],
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      "model": {
+        "signal_types": [
+          "жалоба"
+        ],
+        "subject": "OTP банк",
+        "subject_type": "chain",
+        "unsure": null
+      },
+      "msg_id": "4942",
+      "thread_root": "4422"
+    },
+    {
+      "channel": "@VARUS_channel",
+      "gold": {
+        "signal_types": [],
+        "subject": "7440",
+        "subject_type": "post"
+      },
+      "model": {
+        "signal_types": [],
+        "subject": "12749",
+        "subject_type": "post",
+        "unsure": null
+      },
+      "msg_id": "12750",
+      "thread_root": "7440"
+    },
+    {
+      "channel": "@VARUS_channel",
+      "gold": {
+        "signal_types": [],
+        "subject": "7440",
+        "subject_type": "post"
+      },
+      "model": {
+        "signal_types": [],
+        "subject": "12763",
+        "subject_type": "post",
+        "unsure": null
+      },
+      "msg_id": "12816",
+      "thread_root": "7440"
+    },
+    {
+      "channel": "@VARUS_channel",
+      "gold": {
+        "signal_types": [
+          "жалоба"
+        ],
+        "subject": "морозиво",
+        "subject_type": "sku"
+      },
+      "model": {
+        "signal_types": [
+          "жалоба"
+        ],
+        "subject": "белоруская тм",
+        "subject_type": "brand",
+        "unsure": null
+      },
+      "msg_id": "13794",
+      "thread_root": "7850"
+    },
+    {
+      "channel": "@VARUS_channel",
+      "gold": {
+        "signal_types": [
+          "жалоба"
+        ],
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      "model": {
+        "signal_types": [],
+        "subject": "8647",
+        "subject_type": "post",
+        "unsure": null
+      },
+      "msg_id": "15587",
+      "thread_root": "8647"
+    }
+  ],
+  "subject_misses_rule": "the first ten in the GOLD file's own order — a rule, not a pick; the total stands beside them",
+  "subject_misses_total": 21
+}

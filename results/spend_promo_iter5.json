@@ -2,6 +2,19 @@
   "runpod_balance_at_promo-iter5_start": 8.0361577389,
   "anchored_at": "2026-09-06T11:06:19+00:00",
   "promo-iter5_gpu_cap_usd": 1.4,
-  "gpu_sessions": [],
+  "gpu_sessions": [
+    {
+      "at": "2026-09-06T11:20:03+00:00",
+      "balance": 8.0361577389,
+      "step_spent_usd": 0.0,
+      "note": "promo-iter5, iteration 5 — pod about to be created"
+    },
+    {
+      "at": "2026-09-06T12:39:25+00:00",
+      "balance": 7.0866737837,
+      "step_spent_usd": 0.9495,
+      "note": "promo-iter5 POST-RUN reading, the reference the close settles against: pod xt4c5osyr36ew0 2026-09-06T11:20:39Z -> 2026-09-06T12:38:57Z, 4698 billed s, 80/80 units answered, all finish=stop"
+    }
+  ],
   "gpu_note": "RunPod account balance read before the first pod of promo-iter5. Step spend = the pessimistic maximum of this anchor minus the balance now and the billing walk since `anchored_at` (SPEC 3.23 (4), Dv411), enforced against $1.40. The SPEC amendment 3.4 (4) phase cap is enforced separately, against results/spend_phase4.json, and neither anchor may be regenerated."
 }
