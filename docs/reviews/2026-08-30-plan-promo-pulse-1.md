@@ -1084,3 +1084,21 @@ The «needs named» list stays in PROGRESS as debts; none blocks iteration 2.
    closes on the walk alone and never takes a late reading.** That line is `promo-holdout` today: its one entry reads 0.0 (pre-pod) and the guard
    skips the tolerance on a 0/None reading, so it closes at $0 on `--expect-ms 1443000 --until <any instant between its last billing row and
    13:21:09Z> --tolerance 0.05` (unbounded, the walk swallows iteration 4's pod); a `--note` on it NOW would read ≈ $1.06 and shut it for good. Order: both closes → (w)3 → (w)4.
+
+## Ruling 05.09 (x) — s28 ACCEPTED (both closes, (w)3 at $0, report (k) sessions 9–28); a fresh verifier read the runner fix and the money paths BEFORE the purchase and found five latent bites — iteration 5 goes in TWO sessions: «iteration 5 prep» ($0, ends at the committed registration) → my reading of the record → «iteration 5» (paid, cap $1.40)
+
+1. Accepted by diff and my own readings: `promo-iter4` CLOSED $0.694815 (walk 3 363 287 / 3 364 000 ms, 2.73 % off its post-run $0.7143) · `promo-holdout` CLOSED $0.298209 on the walk
+   alone (`window_end` 08:20Z, recorded 0.0) · cycle 3 **$6.2494 of $9.00, REMAINING $2.7506** · (w)3 `acfe360`+`54c0cc5` with its resume refusal (the fix's consequence, not a new guard)
+   and ONE test both directions, `--part dev` asserted · `make check` 4322/2 at `54c0cc5`, docs-only after it · report (k) 21 lines, every number re-read in its file. No stop, $0.
+2. **«iteration 5 prep» = ONE $0 item** (check: `make check` green + `--dry-run` FITS shown): `ITERATION = 5`; `--register --part dev --step promo-iter5 --cap 1.40` — the emitter's
+   default `STEP` is `promo-dev-loop`, whose guard now REFUSES (exit 1): the guard is never called without `--step`; `re_emission` discloses the card and `expandable_segments`.
+3. **The card is a PARAMETER of the emitter, not a new constant** — two names read at $0 from `runpodctl gpu list`: the gpu-id (typed at `--open --card`, rung 1) and the `displayName`
+   (`offered_price`, EXACT — «RTX PRO 4500», not «… SE»), in (w)2's order: `NVIDIA RTX PRO 4500 Blackwell` 32 GB ($0.72/h secure on 24.08, no community offer), else A6000 / L40S;
+   price = the day's dearer offer ≤ $0.90/h. **Backstop ((w)4):** `terminate_after_minutes` = the cap's minutes at the registered price when the borrowed 90 would bite first (the mean
+   corner at $0.72/h is ≈ 71 min; a slower card needs the room); the record says which bound is live — the cap is the hard stop, nothing else bounds the money.
+4. **The Mac reads an ERROR reply everywhere it reads replies:** `smoke_state` through `whole_lines` (a torn line is «waiting», not a traceback); `--close-segment`'s rate row and `--score`
+   count an error row as unanswered instead of dying after the gate — inside (w)3's ONE test, extended. The runbook is re-pointed to iteration 5 in this item (part dev, `_iter5` files,
+   `promo-iter5` $1.40, the card's gpu-id, the allocator env in the launch line, `--smoke` + `pgrep`) so the paid session pastes. The $0 fit proof stays a named debt: with (w)3 the
+   smoke's longest unit is the fit proof at minutes' cost. Then `--pack`, commit, END; the purchase is the NEXT session after my reading of the record — sequence (v)4, close as v13
+   (post-run `--note` before any next pod, `--until` after the pod), `--score --arm dev40` (BAR) · `--arm dev2` (READING). The ceiling for holdout-2/c3 is the operator's word (table
+   in the team-lead message). Skill v3.9: a fresh verifier reads every money path BEFORE a purchase, not after a stop.
