@@ -1124,3 +1124,9 @@ The «needs named» list stays in PROGRESS as debts; none blocks iteration 2.
    `"exception" in row` + (w)3's test, first $0 item after iteration 5); risk 3 — `close_segment` sums ALL segments of the batch-scale run record against the cap, so its
    `OVER` is a false field nothing gates on (the money is the guard's line) — filter by `anchored_at`, same item. The ceiling word waits for iteration 5's settlement.
 5. Team lead: PHASE **v14** §6.1, PROCESS «Money» **v2.1**, patterns 06.09, STATUS; skill v3.11 — «registration ≠ opening», «the standing law beats a ruling on a mechanic».
+
+**(y) addendum, 06.09 13:55 — s30 ACCEPTED ($0, no stop).** Runbook §0a at `4b996af` read in full: the registration FIRST and its own commit, the pack SECOND and its own commit
+(the verifier's bite closed; the refusal was DEMONSTRATED by the executor and its mechanism re-read by me in `committed_registration()`), then `ruff` + three pytest slices
+whose coverage and floor are COMMANDS — re-run by me: 229 test files, slices 60 + 85 + 84 COVER, `ruff` clean, `results/` clean against HEAD (the committed record is still
+iteration 4's, as it must be until §0a re-emits it). Docs-only diff, no test/pin/guard/ledger added; the `hot.md` contradiction corrected under PROCESS v2.1 without a stop.
+**Next session = «iteration 5», PAID, ≤ $1.40, nothing in front of §0a.** GREEN on dev-40 → holdout-2 gold (team lead, blind) → the shot; RED → the question closes red, the operator's word.
