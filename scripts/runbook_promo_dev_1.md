@@ -1,7 +1,7 @@
 # Runbook — holdout-2, the ONE shot on the instrument FROZEN as iteration 5 bought it; one pod, ONE leg of ONE arm
 
-Authority: rulings 05.09 (q), (r), (s) item 3 (b), (t), (v), (w), (x), 06.09 (y) and **(z)**;
-`docs/PHASE-promo-pulse-1.md` §2 and §6.1–6.2 **v16** and §6.5 v12, `docs/PROCESS.md` «Money» **v2.1**.
+Authority: rulings 05.09 (q), (r), (s) item 3 (b), (t), (v), (w), (x), 06.09 (y), **(z)** and **(aa)**;
+`docs/PHASE-promo-pulse-1.md` §2 and §6.1–6.2 **v17** and §6.5 v12, `docs/PROCESS.md` «Money» **v2.2**.
 Iteration 5 was bought on 2026-09-06 and came back **GREEN on a COMPLETE reading** — 80/80 units,
 0 unparsed, dev-40 subject **0.8857** · signal **0.8667** (`results/grade_promo_dev40_iter5.json`),
 dev-2 0.8883 / 0.8296 read beside it. Ruling (z) item 3: **the instrument is FROZEN as bought** — the
@@ -67,23 +67,27 @@ is absent — a pin over an absent file pins nothing.
 git ls-files --error-unmatch docs/labels-promo-holdout2.jsonl && git diff HEAD --quiet -- docs/labels-promo-holdout2.jsonl \
   && echo 'GOLD COMMITTED' || echo 'GOLD NOT COMMITTED — STOP: a team-lead file the executor never edits'
 PYTHONPATH=src python3.11 scripts/promo_dev_pass.py --dry-run --part holdout2
-PYTHONPATH=src python3.11 scripts/promo_dev_pass.py --register --part holdout2 \
-  --step promo-holdout2 --cap 0.90                       # FITS shown; this ANCHORS the line
-python3.11 -c "
-import json, subprocess
-new = json.load(open('results/prereg_promo_holdout2.json'))
+PYTHONPATH=src python3.11 -c "
+import hashlib, json, subprocess, sys
+from market_pulse import promo_prompts
 old = json.loads(subprocess.check_output(['git', 'show', 'd598573:results/prereg_promo_dev_loop.json']))
 pins = ['docs/CODEBOOK-promo-signals.md', 'src/market_pulse/promo_prompts.py', 'scripts/promo_dev_pod_runner.py']
-moved = [p for p in pins if new['pinned_inputs'][p] != old['pinned_inputs'][p]]
-moved += ['template'] if new['law']['template_sha256'] != old['law']['template_sha256'] else []
-print('THE FOUR PINS HOLD — the instrument is d598573, byte for byte' if not moved else f'PIN MOVED — STOP: {moved}')"
-git add results/promo_holdout2_prep.json results/prereg_promo_holdout2.json \
-        results/spend_promo_holdout2.json && git commit …  # the registration FIRST
+moved = [p for p in pins if hashlib.sha256(open(p, 'rb').read()).hexdigest() != old['pinned_inputs'][p]]
+moved += ['template'] if promo_prompts.template_version() != old['law']['template_sha256'] else []
+if moved: sys.exit(f'PIN MOVED — STOP: {moved}')
+print('THE FOUR PINS HOLD — the instrument is d598573, byte for byte')" \
+  && PYTHONPATH=src python3.11 scripts/promo_dev_pass.py --register --part holdout2 \
+       --step promo-holdout2 --cap 0.90 \
+  && git add results/promo_holdout2_prep.json results/prereg_promo_holdout2.json \
+        results/spend_promo_holdout2.json && git commit …
+# ONE chain: the GATE first (exit 1 on a moved pin, on the DISK files) → --register (FITS shown; this ANCHORS
+# the line) → the registration's commit FIRST; a refused gate or registration reaches nothing behind it
 PYTHONPATH=src python3.11 scripts/promo_dev_pass.py --pack --part holdout2
 git add results/promo_holdout2_pack.json && git commit …  # the pack SECOND, and it is its own commit
 ```
-**The pin check is the §6.2 clause as a command**: the four instrument pins of THIS record equal
-those of the dev-bar registration at `d598573` or the shot is a STOP before any anchor is spent.
+**The pin check is the §6.2 clause as a GATE** (PROCESS «Money» v2.2): the four instrument pins ON DISK — what
+this record will pin — equal those of the dev-bar registration at `d598573`, or it exits 1 and the `&&` never
+reaches `--register`: a STOP before any anchor exists, never a printed note after one.
 **Two commits, in that order, and it is not a style.** `build_pack()` opens the record through
 `committed_registration()`, which runs `git ls-files --error-unmatch` and `git diff HEAD --quiet`
 on `results/prereg_promo_holdout2.json` and raises `SystemExit` on either — so a `--pack` placed
@@ -129,7 +133,11 @@ python3.11 scripts/runpod_guard.py --step promo-holdout2 --step-cap 0.90 \
 The `--note` line is the session's ledger line and it is taken BEFORE the pod exists. The listing is
 read for the same two names the registration used: the **`displayName`** it matched on and the
 **`gpuId`** §1 types. A card whose price moved above the registered one is a KILL at rung 1 — re-read
-rung 0 with `--register` rather than creating against the old number.
+rung 0 rather than creating against the old number, and NEVER by a second `--register` at the FULL cap on the
+anchored line (PROCESS «Money» v2.2, ruling (aa)): a re-registration goes under a NEW line (`--step
+promo-holdout2-r2`, its own ledger — a STOP: this session ENDS and the runbook is re-pointed to that line, its
+ledger name and every `--step` below, before any create) or with `--cap` = the guard's printed remaining of
+`promo-holdout2` — the operator's word either way.
 
 ## 1 — create, then open the segment
 The volume `qw4nwleanc` lives in EU-RO-1 and the registration priced that cloud. **The volume
@@ -281,6 +289,8 @@ python3.11 scripts/runpod_guard.py --step promo-holdout2 --step-cap 0.90 \
 its verdict is the line's (GO under $0.90) — the false `OVER` of iteration 5 cannot recur. It carries
 `--replies` so the whole-run rate row `promo_holdout2_seconds_per_thread` is written for the next
 leg; without it the command says so and writes none.
+**If the hard stop fired (spent == cap) this `--note` REFUSES — it is not retried; `--close` below then settles
+on the walk alone (PHASE v13 / v17, PROCESS v2.2).**
 **PHASE v13 §6.1 — the `--note` above is the gate's reference and its moment is load-bearing.** It
 is taken AFTER the pod is deleted and **BEFORE any next pod**: `recorded_reading()` takes the line's
 LAST OPEN reading as the right-hand side of the tolerance gate, so a reading taken before the pod
