@@ -1,55 +1,57 @@
 # PROGRESS — promo-pulse-1 (ruling 03.09 (e): the executor's one file — done / next / open stop, ≤60 lines; §8 of the phase file stays the DONE list)
 
-## Done — 06.09 s34 «p1-prep» ($0, ruling (bb) addendum (b)): the close, the holdout-3 draw, P1 + its ONE test, the $0 table — and the table says RETURN
-**Start ritual.** (bb) + addendum, PHASE v18, PROCESS «the paid command is pre-authorised and proven at $0», stop-patterns §5, STATUS 20:15 committed by
-path (`5d724d7`); s33's knowledge checkpoint by path (`556bcac`). **`promo-holdout2` CLOSED (`1a0d503`):** read-only walk FIRST (`--until
-2026-09-06T17:30:00Z`: pods $0.4009 at the walk), then `--close --tolerance 0.05 --expect-ms 2116000` → **settled $0.4253** (pods; 3.6 % off the
-post-run reading $0.4107, the walk complete over the 2116 s) — the session's ONE ledger line. Guard: **CYCLE 3 SPENT $7.8822 of $10.00** (balance
-delta; billing $7.8724), **REMAINING $2.1178**; `pod list -a` [].
-**(2) Holdout-3 DRAW (`7a2bf3d`):** `results/promo_threads_draw_3.json` — seed 42 over draw-2's `eligible_after` 398 MINUS holdout-2's 40 = **358**
-(re-derived in the transcript: draw-2's `eligible_after_ids_sha256` reproduces, draw-3's is that set minus the 40), 20/20 by stratum (pools 117 / 241),
-disjoint from all 120 drawn, no paused channel, ranks spread (5–110, 6–239); K7 two runs byte-identical, sha `76435461…`. The producer: `--exclude-drawn`
-repeats once per earlier draw; the record's `authority` / `ruling` / `already_drawn.rule` branch on the leg (`LEGS`, keyed by how many draws it excludes)
-or the emitter REFUSES (§4 v8); draw 2 still rebuilds **byte for byte** (`567cb236…`, the sha the holdout-2 registration pins); the 7 draw tests green.
-No gold — the team lead labels it BLIND; no reader opened its threads.
-**(3) P1 (`4a27940`):** `src/market_pulse/promo_post.py :: apply(rows, thread, registry)` — pure, rows copied; exactly R1 / R2 / R3 of the addendum in
-that order, a rewritten row carries `p1: [rules]`. Owner = the `official_retail` source listing the channel (`Varus`); an aggregator's retailer = the ONE
-alias-table chain the POST names (1-/2-grams through `registry.chain_spellings()`, edge punctuation stripped). Lexicon = the addendum's 11 phrases
-verbatim, matched at a word start as a PREFIX (`прострочен` → «прострочений», `нема` → «немає») after `promo_key`. ONE test, both directions per rule,
-on the real registry + aliases: **3 passed**.
-**(4) The $0 table (`9b8a2de`; `results/grade_promo_p1_readings.json`, two runs byte-identical; `results/promo_p1_predicted_{dev40,dev2,dev3}.jsonl`;
-`scripts/promo_p1_apply.py`), K8 v2 before → after over the SAME gold, draw arm and grader functions:**
-| set | rows | subject before → after | signal | R1 · R2 · R3 | rewritten | hit-flips (the grader's own predicate) |
-|---|---|---|---|---|---|---|
-| dev-40 | 139 | **0.8857 → 0.8857** | 0.8667 = | 0 · 0 · 0 | 0 | none: no `post` ≠ root, no own-channel `post` with signals; 9 sku/brand + `жалоба`, none on the lexicon |
-| dev-2 | 188 | **0.8883 → 0.9043** | 0.8296 = | 4 · 1 · 0 | 5 | 3 miss→hit; 2 miss→miss (gold `chain/izibank`, a partner row R1 cannot reach); 0 hit→miss |
-| dev-3 | 112 | **0.7054 → 0.7500** (84/112) | 0.8021 = | 2 · 0 · 3 | 5 | 5 miss→hit, 0 hit→miss; currency 0.766 → 0.7872 · decimal_only 0.6615 → 0.7231 |
-Signals unmoved on all three (the script refuses if they move). Leak check, in the record: holdout-3's 40 threads ∩ the 120 threads this reading opened
-= ∅; the lexicon's sources — the codebook and the three DEV error tables — are sha'd there.
-**Of the addendum's 8 reachable dev-3 misses P1 reached 5** (2 format + 3 store-stock). The 3 store-stock misses it did NOT reach, by the law as written:
-`@msuaaaa:7627/7134` «В Чернівцях немає(» — `спрос` only, no `жалоба`, and the post names Аврора, not a registry chain; `@VARUS_channel:5119/5988`
-«в нашем Варусе его … нет пока» — «нет пока» is not in the lexicon; `@msuaaaa:4588/2509` «термін придатності закінчується» — the lexicon phrase in
-the other word order, and the post «Акції одного дня в 🥲😊» names its chain by an emoji. Not extended: a word enters the lexicon by a ruling.
-**DECISION TABLE (PHASE v18 §6.2), evaluated in the record: `holdout3_shot: false` — dev-3 0.7500 < 0.80; dev-40 and dev-2 hold their bars →
-«RETURN to the operator at $0».** `make check` at `9b8a2de`: ruff clean; pytest **4326 passed / 2 skipped in 698 s ≥ 4266** (4323 + the ONE test's 3), HEAD unmoved under the run.
+## Done — 06.09 s35 «p1-ship» ($0, ruling (cc) addendum, the operator's word (a) SHIP AS MEASURED): P1 in the loop, the S2 block on the screen and in the README from result files, the tie count given a producer
+**Start ritual.** (cc) + addendum, PHASE v19, stop-patterns §6, STATUS 21:50 committed by path (`e3ea77a`); s34's knowledge checkpoint (`8ea0eb1`). No STOP
+file — (cc) answered s34's stop, so «p1-ship» is the item. $0: no pod, no registration, no ledger line, `runpodctl` never called; cycle 3 REMAINING $2.1178 stands.
+**(1) P1 in the loop (`ba81a37`).** `scripts/tick.py :: promote` runs `promo_post.apply` over EVERY reader row — `about` AND `signal`, each handed its
+comment's signal types — BEFORE a subject becomes an id; the thread (post text, comment texts) comes from the `RawStore`, both roots; a thread the store
+carries no post for is counted and printed, not refused. Fired counts print and land in `results/promo_tick.json :: p1`. K10 holds: 8 tick tests green,
+unchanged. Scratchpad tick over an own-channel thread: `R1 2 · R2 2 · R3 2 over 4 reader rows`, both row kinds → `chain:Varus`, evidence joins 2 of 2,
+two ticks → 0 new rows, export sha identical. The REAL store: `0 reader rows in 0 threads` (C3 unbought; 2290 cooled threads queued), export unmoved (`78d674d3…`).
+**(2) The tie count's producer (`b60560d`).** PHASE v19 wants the tie analysis «from result files»; no file held it. `promo_p1_apply.py :: misses` now
+writes `misses_before` / `misses_after` per set — the grader's own `subjects_agree` over the gold denominator, REFUSED if ≠ `comments − agreed`, plus
+`gold_unsure`. The six accepted numbers unchanged (diff vs `ab29a60` = the two new blocks only); two runs byte-identical (`8b616de7…`). dev-3 33 → 28
+misses, gold-unsure 18 → 16; dev-2 21 → 18 (0 → 0); dev-40 16 → 16 (3 → 3).
+**(3) The S2 block (`d6e4ce9`).** `build_promo_screen.py :: S2_SOURCES` — three named files beside the export; `s2_readings()` refuses a missing file or
+block BY NAME (shown: `--results` at an empty dir → exit 1, the file named; `--check` loads all four). Rows «holdout-2 · with P1» **0.7500 (84/112) ❌
+bar 0.80 · 0.8021 ✅ bar 0.75**, «holdout-2 · raw» 0.7054 (79/112) / 0.8021, «holdout-40 · raw» 0.7181 (135/188) / 0.7958 — value, bar and `held` all the
+file's. `README.md` «Results» carries the same rows between markers, written by `scripts/build_readme_results.py` through the SAME reader (twice → one
+sha `3cd8c502…`). `dashboard/promo.html` re-rendered. 17 screen/draw tests green, none changed; the three sources and both config files are tracked, so
+the clean-clone (h) still stands.
+**(4) The correction (`5ffe09b`, docstrings and one Makefile comment — no code).** My own docstring claimed the loop hands P1 «the shape the reading
+graded». It does not, and the gap is measured: see the open stop. Makefile's «reads … NOTHING else» became false with (3) and now names the four files.
+**`make check` at `d6e4ce9`:** ruff clean; pytest **4326 passed / 2 skipped in 712 s ≥ 4266**; HEAD and porcelain stamped on both sides, unmoved.
+Re-run at the final HEAD `MAKE_CHECK_HEAD`: **MAKE_CHECK_TAIL**.
 
-## Next — the operator's word on the fork; no holdout-3 registration, no pod, nothing paid
-The item ENDS at the table. A ruling that widens the lexicon or its matching (the three unreached misses are the evidence) is a ≤ 5-line change to
-`STORE_STOCK_LEXICON` and a re-run of `PYTHONPATH=src python3.11 scripts/promo_p1_apply.py` (minutes, $0); the holdout-3 gold stays BLIND either way.
-Then c3 (≤ $0.50, ruling (l) 2–4), the volume `mp-srv2` after the phase's last paid run.
+## Next — «c3-prep» ($0), after the ruling on the stop below: the c3 leg per ruling (l) 2–4 on its own line `promo-c3`, cap ≤ $0.50 priced at its dry
+run; the create permission PROVEN at $0 (PROCESS v2.3: the allow rule in `.claude/settings.json` + the `--help` proof in runbook §0); the runbook
+re-pointed → the fresh verifier → «c3» (paid) → the volume `mp-srv2` → clean-clone e2e + `draw_truth_20` → the operator's gate 12–13.09.
 
-## Open stop — the pre-registered fork RETURNS to the operator at $0 (PHASE v18 §6.2, the addendum's own rule)
-Stop-point: the decision table says the holdout-3 shot is NOT bought — P1's dev-3 subject 0.7500 < 0.80 (dev-40 0.8857 / dev-2 0.9043 hold).
-Question: which branch — (a) ship as measured: S2 red on subject (0.7500 with P1), green on signals; (b) codebook v1.3 + a new dev loop (a new money
-cycle); or (c) a ruling on P1's lexicon / matching, re-read at $0 first? The executor takes none of them without the word.
-Tree: HEAD `9b8a2de`, porcelain empty but the operator's untracked `Claude outputs/`; NO pod; `promo-holdout2` CLOSED $0.4253; cycle 3 REMAINING
-$2.1178; holdout-3 drawn (`76435461…`), unlabelled, unregistered, its emitter leg not built.
+## Open stop — the loop's P1 is fed a different input than the reading's P1, and one holdout row moves
+Stop-point: the reading fed P1 the rows `promo_dev_pass.predicted_rows` built from the model's RAW answer; a `results/promo_signals/*.json` record is
+the answer AFTER `promo_hooks.screen`, so a signal row that failed a hook is gone and its type never reaches P1. Replayed read-only over both packs:
+3 hook failures on holdout-2, 4 on dev-40, every one `quote_is_a_substring`, and exactly ONE P1 outcome moves — `@VARUS_channel:5119/5987`, whose only
+`жалоба` row quotes its comment with a lower-cased first letter («на жаль» vs «На жаль»), so R3 cannot fire and the row stays `sku`. On that set the
+LOOP reproduces **83/112 = 0.7411** where the screen and the README publish the measured **84/112 = 0.7500**; dev-40 is unchanged (124/140).
+Question: (a) the C3 record carries the raw answer's signal types beside the kept rows, and the loop then reproduces the published number — a change to
+a record whose producer does not exist yet, which is «c3-prep»'s to write and the team lead's to order; (b) the published «with P1» number is disclosed
+as the READING's, with the loop's own 0.7411 named beside it; or (c) something else. The executor changed no number and widened no record.
+Tree: HEAD `HEAD_SHORT`, porcelain empty but the operator's untracked `Claude outputs/`; NO pod; cycle 3 REMAINING $2.1178; draw-3 frozen, unlabelled.
+
+## For the team lead's reading (a definition, not a stop)
+**The tie count reads 16 of 28, the ruling's hand count is 15** (raw 18 of 33). The file's rule is «a miss whose gold row carries `unsure`»; of the 16,
+six notes name a SIGNAL alternative only, ten a subject one. The screen and the README print the file's number with its definition. Whose definition
+wins is the team lead's; nothing was tuned to match.
 
 ## Named, not built (the phase file forbids adding what it did not ask for)
-- PROCESS v2.3's «the paid command is pre-authorised in the harness and PROVEN at $0 in the prep session» — the allow rule for `runpodctl pod create …`
-  in `.claude/settings.json` and the `--help` proof in runbook §0: the holdout-3 prep session's, not this item's.
-- Draw 3 has no test of its own (K7, 358, disjointness and the ranks were shown, not asserted); the holdout-3 leg is not in the emitter (`--part
-  holdout3`, its line, its files); R3's PREFIX matching is a stated choice the addendum did not spell out — an order-insensitive match is a ruling.
-- Carried from s33, unchanged: the hard-stop edge in the guard's close; `committed_registration()` does not re-verify `pinned_inputs`; `-r2` re-points
-  nothing; a cross-leg `--step`. ultracode ON (operator): every step ran by hand, no workflow was spent.
-**No pin, guard or ledger was added; the ONE test is the addendum's; the draw producer changed only to take its paths as parameters.**
+- No test asserts P1 firing INSIDE the tick, the S2 refusal, or the README writer — all three were SHOWN, none asserted; K12 stays on the export alone
+  and now reads the repo's real `results/` through the screen's default (a coupling, named).
+- `promo_post.owner()` needs the `@` spelling of a channel while `RawStore` strips it: a C3 record writing the file stem would find its thread and
+  silently never fire R2/R3. Today every pack, test and store row carries `@`. The record's contract does not name the spelling.
+- The accepted $0 record `grade_promo_p1_readings.json` was RE-EMITTED (two blocks added, numbers unchanged) — named because (cc) quoted its sha.
+- Carried: PROCESS v2.3's allow rule + `--help` proof (c3-prep's); draw 3 without its own test; the hard-stop edge in the guard's close;
+  `committed_registration()` does not re-verify `pinned_inputs`; `-r2` re-points nothing; a cross-leg `--step`.
+- ultracode ON (operator): the code by hand; ONE read-only workflow spent on the diff — 5 lenses, 17 of 57 agents finished (40 died on a model limit,
+  the `scope-vs-ruling` lens unverified), 4 findings survived: the stop above (mine to confirm, and I re-measured it myself), the `@`-spelling nit,
+  the Makefile comment, and a consumer sweep that found no broken caller and no moved pin.
+**No pin, guard, ledger or test was added; the producer changed only to write what the screen must read.**
