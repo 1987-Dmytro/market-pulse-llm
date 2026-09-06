@@ -1,60 +1,68 @@
 # PROGRESS — promo-pulse-1 (ruling 03.09 (e): the executor's one file — done / next / open stop, ≤60 lines; §8 of the phase file stays the DONE list)
 
-## The money, live — nothing spent in s29 or s30, and no line has been opened
-Cycle 3 **SPENT $6.2494, REMAINING $2.7506** of the **$9.00** ceiling (s28's reading, 15:28:28Z; NOT
-re-read since — no guard command has run). `promo-iter4` CLOSED **$0.694815**/$1.20, `promo-holdout`
-CLOSED **$0.298209**/$1.10. **`promo-dev-loop` is the only open line and it REFUSES** ($2.5799 of its
-own $2.50, unbounded by construction (r)4) — **never named again**.
-**`promo-iter5` is NOT anchored and must not be:** `results/spend_promo_iter5.json` is created by the
-NEXT session's own `--register`, minutes before the create (ruling (y), PROCESS «Money» v2.1).
+## ⚠️ IN FLIGHT — a pod is LIVE and the line `promo-iter5` is OPEN (s31, 06.09)
+Pod **`xt4c5osyr36ew0`** `mp-promo-iter5`, NVIDIA RTX PRO 4500 Blackwell, **$0.72/h**, EU-RO-1,
+created **2026-09-06T11:20:39Z**, `--terminate-after` **13:16:14Z** (6960 s = the registered 116 min).
+Line anchored **11:06:19Z**, `results/spend_promo_iter5.json`, cap **$1.40**, rung 0 FITS at the mean
+**$0.8470**. GO written 11:31:47Z. **If this session died here: delete the pod, `--close-segment`,
+take the POST-RUN `--note`, then `--close --expect-ms --until --tolerance 0.05` (§6 of the runbook).**
 
-## Done — 06.09 s29 (accepted by (y)) and s30 (this session, $0)
-- **s29, accepted at `31a6bc5`:** ruling (x)'s prep whole — the card and the backstop as FIELDS of the
-  record (`terminate_after_minutes` = the CAP's own **116**, not v5b's borrowed 90), the ERROR reply
-  read everywhere replies are read ((x)4), `ITERATION = 5`, the runbook re-pointed onto iteration 5.
-- **s30, team-lead files by path (`c5a22f3`):** PHASE **v14** §6.1, PROCESS «Money» **v2.1**, STATUS,
-  ruling **(y)** and its stop-pattern row.
-- **s30, the ONE item — (y) items 2–3, the runbook's §0a (`65d1285`), five sites.** Authority (+ (y),
-  §6.1 v14, PROCESS v2.1) · §0a is no longer «the $0 half» of a prep session but the PAID session's
-  first minutes, and (x)2 is withdrawn in the text · **the verifier's bite:** `--pack` sat BETWEEN
-  `--register` and the commit, where `build_pack()` → `committed_registration()` refuses on the file
-  `--register` has just rewritten — now **TWO commits**, the registration first, the pack second ·
-  `make check` at that HEAD as `ruff` + three slices whose coverage is ASSERTED and whose floor is
-  COMPUTED — s25 summed 3900 of 4321 by eye; tail OPEN-ENDED (`'146,$p'`) · §6's
-  «if the registration and the pod are not the same session» named a branch that can no longer fire.
-- **Checks — the refusal is DEMONSTRATED, not asserted.** The prereg made dirty exactly as
-  `--register` leaves it → `build_pack()` **exit 1**, «differs from HEAD … Commit it before the pack»;
-  restored byte-for-byte (sha `208b227a…`), `git status --porcelain results/` empty. Nothing in
-  `tests/` reads the runbook (`grep -rln` empty), so a doc edit cannot red the suite; the **12** test
-  files that read any doc this session changed: **318 passed**. Full suite over the CLOSED slice list
-  **60 + 85 + 84 = 229** files: **1000 + 2030 + 1293 = 4323 passed, 2 skipped**, `ruff` clean (§8 (j)
-  wants ≥ 4266); §0a's two new gates run for real (COVER, 4323, FLOOR HOLDS) with the negative
-  control `'146,200p'` → «SLICES DO NOT COVER THE LIST — STOP». **No test, pin, guard or ledger added.**
+## The money, live — read at 11:06Z and 11:20Z of THIS session
+Cycle 3 **SPENT $6.4438, REMAINING $2.5562** of $9.00 (fresh; s28's $2.7506 is superseded).
+`PROMO-ITER5 SPENT $0.0000 of $1.40` at the anchor. `promo-iter4` CLOSED $0.694815/$1.20,
+`promo-holdout` CLOSED $0.298209/$1.10. `promo-dev-loop` refuses and is never named again.
 
-## Next — «iteration 5», PAID, cap $1.40, the whole session, nothing in front of §0a
-`scripts/runbook_promo_dev_1.md` is paste-able end to end: §0a `--dry-run` → `--register --part dev
---step promo-iter5 --cap 1.40` (FITS shown, and it ANCHORS the line) → commit prep + registration +
-ledger → `--pack` → commit the pack → sliced `make check` at that HEAD → §0 the pre-pod `--note` (the
-session's ONE ledger line) → §1 create, gpu-id READ from the record → §2 dead-man → §3 bundle → §4
-detached launch → §5 smoke, GO → §6 delete, the POST-RUN `--note`, `--close --expect-ms --until
---tolerance 0.05` → §7 `--score --arm dev40` (BAR 0.80/0.75) and `--arm dev2` (READING).
-A refusal at `--register` (price moved, no card in stock, FITS lost) ENDS the turn with the guard's
-and the listing's output, before any create. No top-up before the run.
-**Fifth and last dev run (§2):** GREEN → the team lead draws holdout-2 blind, then `promo-holdout2`
-≤ $0.90, then c3. RED → the question closes red and the next word is the operator's.
+## Done — 06.09 s31 (this session), §0a and §0–§5 of `scripts/runbook_promo_dev_1.md`
+- **Start ritual:** team-lead files committed by path (`fd08517`), knowledge by path (`c17dbe5`).
+- **§0a, the line's opening.** `--dry-run` ($0) → the listing read READ-ONLY first (`runpodctl gpu
+  list`, $0, creates nothing) so a card that had moved would refuse BEFORE the anchor, not after it:
+  RTX PRO 4500, 32 GB, `NVIDIA RTX PRO 4500 Blackwell`, $0.72/h secure, stock **High** — the record's
+  own card. → `--register --part dev --step promo-iter5 --cap 1.40`: **FITS at the mean $0.8470
+  (−39.5 %)**, priced $0.9028, dear $4.8633 (over the cap, named, not hidden), hard stop 7000 s.
+  Record verified BEFORE the commit: `cap_usd` 1.4 · `terminate_after_minutes` **116** ·
+  `rung_0.price.card` the Blackwell · phase «iteration 5». **Commit 1 = the registration**
+  (`d598573`), **commit 2 = the pack** (`782bb7f`) — `build_pack()` passed `committed_registration()`
+  exactly because the registration was committed first (s30's fix, proven in the live run).
+- **`make check` at HEAD `782bb7f`:** `ruff` clean · SLICES COVER THE LIST · **1000 + 2030 + 1293 =
+  4323 passed, 2 skipped** · **FLOOR HOLDS** (≥ 4266, §8 (j)). Tree clean.
+- **§0:** `pod list -a` and `serverless list` both `[]` · listing re-read, card unmoved ·
+  the session's ONE ledger line taken pre-pod: «promo-iter5, iteration 5 — pod about to be created».
+- **§1:** `STOP_AT` computed from the record (cap $1.40 vs REMAINING $2.5562 → 116 min binds) ·
+  gpu-id READ from the record, never typed · create → `costPerHr` **0.72**, machine RTX PRO 4500, RO ·
+  `--open` **rung 1 GO**: price and card both the registered ones, backstop $1.392 ≤ cap.
+- **§2:** dead-man 500 s READ from `gates.ssh_deadman_seconds`; the port answered at **27 s**.
+- **§3:** bundle from `782bb7f`; the pod's clone `git rev-parse HEAD` equals it and `git status
+  --short` is empty; volume warm (59 G of weights); `/workspace/run` emptied and shown empty.
+- **§4:** detached (`setsid nohup`) with `HF_HOME`, `PYTHONPATH` and
+  `PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True`. The ssh wrapper held its channel open — the
+  PROCESS was the signal, not the wrapper's exit.
+- **§5, the answer ruling (w) was bought for:** boot 195.8 s, then all three smoke units back —
+  including **`@VARUS_channel:8647`, 14 281 chars, the render iteration 4 OOM'd on: 313.9 s, 6881
+  chars, balanced, `finish stop`**. `--smoke` printed «3 REPLIES ARE IN — write GO», **exit 0**.
+  GO written 11:31:47Z. The 32 GB card plus the allocator answered the serving defect.
+- **Liveness, corrected twice before it was trusted:** `pgrep -f promo_dev_pod_runner.py` also matches
+  the probe's own shell and the launcher wrapper, so it can never read 0 — a guard that cannot fire.
+  Pinned to the runner's own PID (`[ -d /proc/184 ]`), which was proved to be that cmdline.
 
-## Open stop — NONE. The 06.09 stop is answered by ruling (y): option **(ii)**.
-`--register` moves INTO the paid session ((i) and (iii) rejected in (y)2). Tree clean; $0 spent,
-no pod, no guard call, no ledger line.
+## Next — §6 and §7 of the runbook, in this session, at $0 once the pod is gone
+Fetch the 80 units and `pod.log` → `wc -l` = 80 → **delete the pod** → prove both listings `[]` →
+`--close-segment --deleted-at --billed-seconds --outcome --replies` → the **POST-RUN `--note`**
+(PHASE v13 §6.1: the reference the close settles against, after the delete and before any next pod) →
+`--close --tolerance 0.05 --expect-ms <filtered by anchor> --until <after this pod>` → §7
+`--score --arm dev40` (the BAR, subject ≥ 0.80 / signal ≥ 0.75) and `--arm dev2` (a READING beside
+it), then `grade_promo_signals.py`. GREEN → the team lead draws holdout-2 blind. RED → §2's fifth and
+last dev run has closed the question red and the next word is the operator's.
+
+## Open stop — NONE yet. The pod is live and inside its own gates.
 
 ## Named, not built (the phase file forbids adding what it did not ask for)
-- **(y)4 risk 2 — an exception with an EMPTY message reads as ANSWERED:** the readers key on a truthy
-  `error`; `"exception" in row` plus (w)3's own test is the fix. **First $0 item after iteration 5.**
-- **(y)4 risk 3 — `close_segment` sums ALL segments** of the batch-scale run record against the cap,
-  so its `OVER` is a false field nothing gates on (the money is the guard's line): filter by
-  `anchored_at`. Same item; the runbook's own `STOP_AT`/`--expect-ms` already filter.
-- **§6.5's $0 fit proof** — the smoke's longest unit stands in for it at minutes' cost.
-- **A torn line that is NOT the last refuses the whole file by name**, reachable only if the row WRITE
-  failed. **No test for the arm selector** (§4) or the step-aware guard read ((v)3 «no new test»).
-- **Contradiction, named per PROCESS v2.1 (the section wins, no stop):** `knowledge/hot.md` said
-  «`make check` НЕ в платной сессии»; (y)3 and v2.1 put it inside §0a, before the create. Corrected.
+- **Contradiction, named per PROCESS v2.1 (the standing law wins, no stop):** the runbook takes THREE
+  guard `--note`s (§0 pre-pod, §6 post-run, §6 close) while the operator's line is «one ledger line
+  per session». PHASE **v13 §6.1** mandates the post-run reading and `--close` writes the settlement —
+  the §0 note is the session's ledger line and the other two are the close's own machinery.
+- **(y)4 risk 2 — an exception with an EMPTY message reads as ANSWERED** (`"exception" in row` +
+  (w)3's test) and **risk 3 — `close_segment` sums ALL segments** against the cap (filter by
+  `anchored_at`). Both remain the FIRST $0 items after iteration 5.
+- **§6.5's $0 fit proof** — the smoke's longest unit stood in for it again, and this time it passed.
+- **No test for the arm selector** (§4) or the step-aware guard read ((v)3 «no new test»).
+**No test, pin, guard or ledger was added this session.**
