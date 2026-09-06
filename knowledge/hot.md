@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-09-06 16:04:01 (every SessionStart)
+**Auto-refreshed:** 2026-09-06 17:35:12 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
-4b3c649 knowledge(hot): s31 — the cache said promo-iter5 must NOT be anchored, and it is closed green
-d2bbba3 docs(progress): REMAINING is the BALANCE delta and already carries this run — the headroom is $0.21, not "enough"
-1f60bf0 knowledge: s31's day — the paid iteration 5 came back green
-811a7c3 docs(progress): s31 trimmed to the 60-line cap — lines deleted, not reflowed
-0bba811 docs(progress): s31 — iteration 5 is GREEN, and the open stop is the holdout-2 blind draw
+dec4e74 docs(progress): s32 — «holdout-2 prep» is DONE at the committed dry run; promo-iter5 closed, ceiling $10.00, the gold committed; no open stop
+d4bc013 s32(runbook): re-pointed to the holdout-2 shot — part holdout2, line promo-holdout2 at $0.90, the pin check as a command, §0a inside the paid session
+b05bd12 s32(holdout-2 prep): the DRY RUN — 40 threads of draw-2, the gold 5525ddf1… pinned, priced on 53.6254 s/thread; the item ENDS here, no --register
+42dfd97 s32(holdout-2 prep): the holdout-2 leg is a PART of the emitter, and (y)4's two Mac-side fixes inside (w)3's ONE test
+2bb9da7 docs(team-lead): the holdout-2 gold — docs/labels-promo-holdout2.jsonl, 112 rows / 40 threads, committed by path
 ```
 
 ## 📋 Recent decisions
@@ -30,7 +30,7 @@ d2bbba3 docs(progress): REMAINING is the BALANCE delta and already carries this 
 <!-- AUTO-GEN END (everything below preserved across refreshes) -->
 
 # Hot Cache — curated
-**Last update:** 2026-09-06 (s32, $0: «holdout-2 prep» ЗАКРЫТ на committed dry run; эталон holdout-2 ЕСТЬ). Этап 1
+**Last update:** 2026-09-06 17:34 (s32 checkpoint, $0: «holdout-2 prep» ЗАКРЫТ на committed dry run; эталон holdout-2 ЕСТЬ). Этап 1
 `SPEC-v2`, карта `STATUS.md`, цикл v3, фаза **v16**, процесс **Money v2.1**. Руками, ≤40 строк.
 
 ## 🔥 What's Hot
