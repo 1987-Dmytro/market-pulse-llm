@@ -1,60 +1,68 @@
 # PROGRESS — promo-pulse-1 (ruling 03.09 (e): the executor's one file — done / next / open stop, ≤60 lines; §8 of the phase file stays the DONE list)
 
-## The money, live — read BY HAND from the guard today, never carried from a record
-Cycle 3 **SPENT $6.2494, REMAINING $2.7506** of the **$9.00** ceiling; anchor $14.4800 UNMOVED,
-balance **$8.2306** at 15:28:28Z. **Both closes are done:** `promo-iter4` CLOSED at **$0.694815** of
-$1.20 (settled on its run record, 2.73% off its post-run reference) and `promo-holdout` CLOSED at
-**$0.298209** of $1.10 (settled on the WALK ALONE — it never had a reference and never took one).
-**`promo-dev-loop` is the ONLY line still open and it REFUSES** — **$2.5799 of its OWN $2.50** (the
-ledger's cap; the $2.16 I first read it at was typed, not read), exit 1: an UNBOUNDED delta over
-every pod since 04.09. Unraisable, unclosable ((r)4) — NEVER NAMED; iteration 5 uses `promo-iter5`.
+## The money, live — nothing was spent this session and no line was opened
+Cycle 3 **SPENT $6.2494, REMAINING $2.7506** of the **$9.00** ceiling (s28's guard reading, 15:28:28Z;
+NOT re-read today — no guard command was run, see the stop). `promo-iter4` CLOSED **$0.694815**/$1.20,
+`promo-holdout` CLOSED **$0.298209**/$1.10. **`promo-dev-loop` is the only open line and it REFUSES**
+($2.5799 of its own $2.50, exit 1, unbounded by construction (r)4) — **never named again**.
+**`promo-iter5` is NOT anchored: `results/spend_promo_iter5.json` does not exist.** That is the stop.
 
-## Done — 05.09 s28: both closes settled, and (w)3's transport defect is fixed at $0.
-- **Team-lead files committed by path (`c90d143`)** — the (w) addendum, PHASE **v13** §6.1 (a line's
-  gate reference is its POST-RUN `--note`), the seventh stop, STATUS 18:25; hooks (`d2d498c`).
-- **(w)1 — `promo-iter4`, read-only walk FIRST (`f5d5cea`).** COMPLETE at last: **3 363 287 ms of
-  3 364 000**, 713 ms short of a ±33 640 band, where s27 read 57.7%. Settled **$0.694815** against
-  the reference **$0.7143** — **2.73%**, inside 0.05. No `--until`: the walk's ms are POD ms.
-- **(w)+ — `promo-holdout`, on the WALK ALONE (`e0b68a1`).** Its only reading is $0.0 and PRE-pod,
-  so the tolerance is SKIPPED. **No late `--note` was taken** — one would have landed the $1.0708
-  delta as the reference and shut the line for ever. The bound came from a READ-ONLY sweep:
-  `walk_ms` saturates at **1 443 991** from 08:20Z to 13:21Z; **unbounded, 4 807 278 ms /
-  $0.993024** — iteration 4's pod, refused by `complete()`. Settled **$0.298209** of $1.10.
-- **(w)3 — the transport defect, $0 (`acfe360`).** POD: `run_or_report` catches a unit's exception,
-  appends that unit's ERROR reply (`id`, `error`, `exception`, `unanswered`) and returns non-zero.
-  The unit named is DERIVED, not guessed — the reader walks `todo` in order and flushes each row
-  before the next. `SystemExit` is NOT caught: a named refusal must not come back as a unit error.
-  MAC: `smoke_state` + `--smoke` reads the out-file into the registration's OWN decision-table
-  branch — an error reply IS «the smoke did not come back», exit 1, delete at once. WAITING stays a
-  poll (no file tells slow from dead): the runbook pairs it with `pgrep`, empty = the same outcome.
-- **The fork (w)3 does not settle, resolved inside the file whose pin moves:** `already_answered`
-  counts any row with an `id` as ANSWERED, so a resume over an ERROR file would skip the unit that
-  killed the pod. That fix belongs to a PINNED shipped runner (§4) — so `refuse_to_resume_over_a_death` refuses first.
-- **ONE test, both directions, over both halves**, on the registration's REAL three smoke units.
-  Replayed on the real artifact: the old file reads WAITING (the $0.62 ambiguity), the crash
-  replayed reads THE SMOKE DID NOT COME BACK. `re_emission`'s «the transport does not move» moved.
-- **`make preflight`: the runner is now `43646d52e12f…`, both preregs still pin `102fa524b742…` —
-  EXPECTED.** The dev record recomputes `pinned_inputs` from disk at the re-emission;
-  `prereg_promo_holdout.json` is SEALED over a run under the old bytes and is NOT re-pinned.
+## Done — 06.09 s29: ruling (x)'s $0 prep, everything except the registration.
+- **Team-lead files committed by path:** ruling **(x)** + its stop-pattern row + STATUS 19:40
+  (`d2060b9`); **PROCESS «Money» v2** (`26582d8`), which arrived mid-session and independently
+  states three of the four fixes below as general law. `knowledge/` s28 (`e61ce6b`).
+- **(x)3 the card — a FIELD of the record, not a constant (`39022ac`).** `CARD = "…RTX 4090"` was a
+  literal `offered_price` matched by hand, so «≥ 32 GB» was a ruling no code could obey. `CARDS` is
+  (w)2's order; `offered_price(cards)` takes the FIRST with ≥ `MIN_VRAM_GB`, stock in EU-RO-1 and a
+  dearer offer ≤ $0.90/h. Both names come off ONE listing row — `displayName` matched **EXACTLY**
+  (`RTX PRO 4500 SE` is another card at the same price, in another cloud) and `gpuId` for
+  `pod create` / `--open --card`. Every losing direction refuses and names why.
+- **(x)3 the backstop.** `terminate_after_minutes` = the CAP's own minutes at the registered price,
+  **116 min**, against v5b's borrowed **90** — which would have killed a FITS run at $1.08. The
+  record carries both and says which is live; `terminate*60 ≤ hard_stop` holds in both directions.
+- **(x)4 the ERROR reply, read everywhere replies are read.** `reply_rows` goes through the pod
+  runner's own `whole_lines`, so a torn LAST line (the scp race off a LIVE pod) is **WAITING**, not a
+  traceback on the command that decides whether a billing pod is deleted. `answered_rows` drops a
+  dead unit and `--close-segment`'s rate row, `--project` and `--score` count it **UNANSWERED** —
+  the money gate is appended BEFORE that row is written. A death is not a parse failure: `dead_units`
+  names it and every one of the three prints it.
+- **`ITERATION = 5`; `re_emission` discloses** the card, its gpu-id, its price and
+  `PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True`.
+- **The runbook is re-pointed** off every `_holdout` path onto iteration 5 (part dev, `_iter5` files,
+  `promo-iter5` $1.40, the gpu-id, the allocator in the launch line, `--smoke` + `pgrep`, two-arm
+  `--score`, the v13 close). §6.5's fit proof: the smoke's LONGEST render is where iteration 4 died,
+  so the smoke IS that proof at the cost of minutes — the $0 one stays a named debt.
+- **Checks. `runpodctl gpu list` read at $0:** `RTX PRO 4500`, **32 GB**, gpu-id
+  `NVIDIA RTX PRO 4500 Blackwell`, **$0.72/h** secure, EU-RO-1 stock **High** (A6000 48 GB $0.53 —
+  stock `none`; L40S — not in EU-RO-1). **Rung 0 priced at $0, writing nothing:** cheap **$0.8470**
+  (−39.5 %) · priced $0.9028 · dear $4.8633 (+247 %) → **FITS on the mean**, hard stop **7000 s**.
+  `ruff` clean; `pytest` **4323 passed, 2 skipped, exit 0** over both slices (§8 (j) wants ≥ 4266).
+- **ONE test added** — (x)3's backstop, both directions; (w)3's ONE test **extended** with (x)4's
+  four readings (torn last line · `id: null` death · the rate row · the grader's count).
 
-## Next — iteration 5, the last of the five. The $0 half first, then the pod.
-1. **Iteration 5 — the re-buy, authorised by (w)4:** line `promo-iter5`, cap **$1.40**, card
-   **≥ 32 GB** in EU-RO-1 at the day's dearer offer ≤ $0.90/h (RTX PRO 4500 32 GB first, else
-   A6000 / L40S), `PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True`, both disclosed in
-   `re_emission`; `extractor_version` UNCHANGED. Sequence as (v)4. Last of the registered five.
-   **Its close is v13 §6.1's:** the POST-RUN `--note` after the pod is deleted and BEFORE any next
-   pod, and the close carries `--until` — the iter4 window is now a trap for an unbounded walk.
-2. **The $0 half runs first and re-emits the registration** — `--register` recomputes
-   `pinned_inputs` from disk, so the runner's new sha lands there by construction.
-
-## Open stop — NONE. Nothing waits on the operator or the team lead; the next item is $0 and mine.
-**Tree.** Clean; `make check` **4322 passed, 2 skipped, exit 0** over a CLEAN tree at `54c0cc5`
-(§8 (j) wants ≥ 4266); $0 spent, no pod. ONE test added — §4's, in its fix's commit — pin moved (w)3.
+## Open stop — the registration ANCHORS the line, and the anchor's age decides the close
+**Stop-point.** `--register --step promo-iter5` calls the guard, which CREATES
+`results/spend_promo_iter5.json` and anchors it at today's balance. Ruling (x) puts that in the prep
+session and the pod in the NEXT one; PROCESS «Money» v2 opens the line «BEFORE the pod» at §0 of the
+paid session. They disagree about when the anchor exists, and the gap is money.
+**Why it matters, measured.** The close settles on `own_resources` (the pods line, always-on kinds
+OUT) while its tolerance reference is the post-run `--note`, a balance delta with them IN. So the
+drift is `drip·H / (pods + drip·H)`, H = hours from anchor to that note. It is not a model:
+`promo-iter4` settled $0.694815 against $0.7143 and $0.7143 − $0.694815 = **$0.019444 = its
+`network-volume` line, exactly** — its whole 2.73 % was the volume, over 2.45 h. At the same
+$0.0079/h and this leg's $0.85 of pod, **5 % is reached at ≈ 6 h**; a cheaper pod reaches it sooner.
+Register tonight, buy tomorrow → the close **REFUSES** and `promo-iter5` joins `promo-dev-loop`.
+**`--since` does not help:** `recorded_reading()` is the note's own `step_spent_usd` and no flag
+windows it.
+**The question (yours, it is money and a fourth spelling of the close rule).** Which:
+(i) the pod follows the registration inside ~6 h — the operator's word on timing, nothing else moves;
+(ii) `--register` moves INTO the paid session (PROCESS v2's own order), prep ends at `--dry-run`;
+(iii) the never-used `spend_promo_iter5.json` is deleted before the paid session anchors it.
+**Tree.** Clean; `make check` 4323/2 exit 0 over a CLEAN tree at `39022ac`; $0 spent, no pod, no
+guard command, no ledger line. `results/promo_dev40_prep.json` re-written by `--dry-run`, byte-identical.
 
 ## Named, not built (the phase file forbids adding what it did not ask for)
-- **§6.5's fit proof is STILL not built** — the longest registered render proven to fit BEFORE a
-  pod, at $0. (w)3 fixed the REPORTING of a crash, not its prevention; it belongs to iteration 5's
-  $0 half, where the card is chosen. Named, not written.
-- **`--open`/`--close-segment` write `results/promo_dev_loop_run.json` at BATCH scale, not LINE
-  scale:** `--expect-ms` MUST come from the segment at/after the line's anchor — twice today, agreed.
+- **§6.5's $0 fit proof** — still not built; the smoke's longest unit stands in for it at minutes' cost.
+- **`--open`/`--close-segment` write the run record at BATCH scale** — `--expect-ms` and `STOP_AT`
+  must filter segments to `created_at >=` the line's anchor. Now written into the runbook's own code.
 - **No test for the arm selector** (§4) or the step-aware guard read ((v)3 «no new test»).
