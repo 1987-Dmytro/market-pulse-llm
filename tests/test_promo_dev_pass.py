@@ -7,6 +7,7 @@ the entry point is DRIVEN here and the file it leaves behind is read back.
 
 import json
 import sys
+from datetime import datetime, timedelta
 from pathlib import Path
 
 import pytest
@@ -336,8 +337,14 @@ REGISTERED = {
 
 @pytest.fixture
 def staged(tmp_path, monkeypatch):
+    # the record names its line's ledger and `close_segment` reads the anchor out of it (ruling
+    # 06.09 (y) item 4, risk 3): anchored BEFORE every segment these tests create, so the sums
+    # below are the line's — a stub record without one is refused, never summed over the batch
+    ledger = tmp_path / "spend_test_line.json"
+    ledger.write_text(json.dumps({"anchored_at": "2026-09-03T17:00:00+00:00"}), encoding="utf-8")
+    record = {**REGISTERED, "step": {**REGISTERED["step"], "name": "test-line", "ledger": str(ledger)}}
     monkeypatch.setattr(dev, "RUN_RECORD", tmp_path / "run.json")
-    monkeypatch.setattr(dev, "committed_registration", lambda: REGISTERED)
+    monkeypatch.setattr(dev, "committed_registration", lambda: record)
     return tmp_path / "run.json"
 
 
@@ -662,3 +669,102 @@ def test_a_dead_unit_becomes_an_error_reply_the_mac_reads_as_the_smoke_not_comin
     assert table["answers"]["leg_a_units_registered"] == 3
     assert table["answers"]["leg_a_units_dead"] == [want[2]]
     assert table["answers"]["parse_failures"] == 0, "a death is not an answer that failed to parse"
+
+    # --- ruling 06.09 (y) item 4, the two risks, fixed under (z) item 3 on the Mac side only ------
+
+    # (e) risk 2: every reader keyed on a TRUTHY `error`, and `error` is `str(exc)` — a death whose
+    # exception carried an EMPTY message read as ANSWERED everywhere. `died` keys on the `exception`
+    # field the pinned runner always writes. Both directions: the silent death is dead in every
+    # reader, and a healthy row is never mistaken for one.
+    silent = {"id": want[2], "error": "", "exception": "RuntimeError"}
+    assert dev.died(silent) and dev.died({"id": None, "error": "boom", "exception": "KeyError"})
+    assert not dev.died({"id": want[0], "seconds": 9.5, "balanced": True, "finish_reason": "stop"})
+    quiet = tmp_path / "quiet.jsonl"
+    answer(want[:2], quiet)
+    with quiet.open("a", encoding="utf-8") as handle:
+        handle.write(json.dumps(silent) + "\n")
+    assert dev.smoke_state(quiet)["state"] == dev.SMOKE_GONE, "an empty message is still a death"
+    assert f"ERROR RuntimeError on {want[2]}" in dev.render_smoke(dev.smoke_state(quiet))
+    assert dev.dead_units(quiet) == [want[2]] and want[2] not in dev.answered_rows(quiet)
+    assert dev.whole_run_row(quiet, "a1")["n"] == 2
+    with pytest.raises(SystemExit, match=f"dead units: \\['{want[2]}'\\]"):
+        dev.project(quiet)
+    with scored.open("w", encoding="utf-8") as handle:
+        for one in want[:2]:
+            handle.write(json.dumps({"id": one, "seconds": 9.5, "reply": '{"about": [], "signal":'
+                                     ' [], "unsure": []}', "rendering_sha256": "deadbeef"}) + "\n")
+        handle.write(json.dumps(silent) + "\n")
+    table = dev.score(scored, 5)
+    assert table["answers"]["leg_a_units_answered"] == 2
+    assert table["answers"]["leg_a_units_dead"] == [want[2]]
+    assert table["answers"]["parse_failures"] == 0
+
+    # (f) risk 3: `--close-segment` summed EVERY segment of the batch-scale run record against this
+    # line's cap — iteration 5 printed `verdict OVER` on $2.874083 of seven pods while its line had
+    # spent $0.9396 of $1.40. The segments counted are those created at or after the line's anchor,
+    # READ from the ledger the committed registration names and never typed. Both directions: a pod
+    # created before the anchor is another line's and stays out; one created after it is this
+    # line's and is summed — over the cap, it is the OVER that is true.
+    record = dev.committed_registration()
+    cap = float(record["step"]["cap_usd"])
+    anchor = datetime.fromisoformat(dev.load(REPO_ROOT / record["step"]["ledger"])["anchored_at"])
+    before = (anchor - timedelta(hours=1)).strftime("%Y-%m-%dT%H:%M:%SZ")
+    after = (anchor + timedelta(minutes=1)).strftime("%Y-%m-%dT%H:%M:%SZ")
+
+    # the older pod's bill is the CAP itself, so «two pods over the cap» holds for any cap the
+    # record carries and never by the accident of a typed price sitting above it
+    def run_record(older_pod_created_at, live_pod_created_at=after):
+        (tmp_path / "run.json").write_text(
+            json.dumps(
+                {
+                    "phase": record["step"]["name"],
+                    "segments": [
+                        {"pod_id": "older", "created_at": older_pod_created_at, "deleted_at": before,
+                         "usd_per_hour": 0.74, "card": CARD, "billed_seconds": cap / 0.74 * 3600,
+                         "billed_usd": cap, "outcome": "another line's whole run"},
+                        {"pod_id": "a1", "created_at": live_pod_created_at, "deleted_at": None,
+                         "usd_per_hour": 0.72, "card": CARD},
+                    ],
+                    "gates": [],
+                }
+            ),
+            encoding="utf-8",
+        )
+
+    run_record(before)
+    gate = dev.close_segment(deleted_at=after, billed_seconds=3600.0, outcome="test")["gates"][-1]
+    assert gate["line"] == record["step"]["name"]
+    assert gate["line_anchored_at"] == anchor.isoformat(timespec="seconds")
+    assert gate["segments_of_this_line"] == 1 and gate["spent_this_line_usd"] == 0.72
+    assert gate["verdict"] == "GO" and gate["left_usd"] == round(cap - 0.72, 6)
+    assert "spent_all_segments_usd" not in gate, "the false field is gone, not renamed beside"
+
+    run_record(after)
+    gate = dev.close_segment(deleted_at=after, billed_seconds=3600.0, outcome="test")["gates"][-1]
+    assert gate["segments_of_this_line"] == 2 and gate["spent_this_line_usd"] == round(cap + 0.72, 6)
+    assert gate["verdict"] == "OVER", "two pods of ONE line over its cap is the OVER that is true"
+
+    # and the segment being CLOSED is inside its own line or the close refuses: a stamp before the
+    # anchor would leave the bill just written out of the sum beside a GO (the fix's consequence)
+    run_record(before, live_pod_created_at=before)
+    with pytest.raises(SystemExit, match="predates its own line's anchor"):
+        dev.close_segment(deleted_at=after, billed_seconds=1.0, outcome="test")
+
+    # and a record that names no ledger cannot tell its line from the batch: refused, never summed
+    monkeypatch.setattr(dev, "committed_registration", lambda: {"step": {"cap_usd": cap}})
+    run_record(before)
+    with pytest.raises(SystemExit, match="anchored_at"):
+        dev.close_segment(deleted_at=after, billed_seconds=1.0, outcome="test")
+
+    # (g) the verifier's bite on the holdout-2 leg (PHASE §4 v8): `register()` keyed its cap rule on
+    # `--cap` being absent, not on the leg, so `--register --part holdout2` without `--cap` would
+    # have opened the line at the DEV loop's $2.50 rule under a floor_rule calling it the operator's
+    # number. Refused BEFORE the guard is read — no subprocess, no anchor — and the dev leg keeps its
+    # derived cap: this refusal must not fire there.
+    dev.use_part("holdout2")
+    try:
+        with pytest.raises(SystemExit, match="--part holdout2 needs --cap"):
+            dev.register(None)
+    finally:
+        dev.use_part("dev")
+    assert dev.PART == "dev" and dev.rel(dev.DRAW) == "results/promo_threads_draw.json"
