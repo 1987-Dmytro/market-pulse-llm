@@ -14,11 +14,23 @@ here to guard.
 product). Every reader row a record carries — the `about` rows and the `signal` rows alike — goes
 through `market_pulse.promo_post.apply`, the deterministic layer measured at $0 in
 `results/grade_promo_p1_readings.json`, BEFORE its subject becomes an id. Each row is handed the
-comment's signal types (the shape the reading graded) and the thread as the reader saw it: the
+comment's signal types and the thread as the reader saw it: the
 post's text and the comments' texts from the raw store. A thread the store carries no post for is
 counted and printed, never refused — R1 and R2 still apply to its rows, and R3, which reads the
 comment, finds nothing to read. The layer is pure and deterministic, so the ids it feeds are the
 same on every tick and K10 below is untouched.
+
+**The loop's P1 input is not byte for byte the reading's, and the difference is measured.** The
+reading (`scripts/promo_p1_apply.py`) fed P1 the rows `promo_dev_pass.predicted_rows` built from
+the model's RAW answer; a record here is the answer AFTER `promo_hooks.screen`, so a signal row
+that failed a hook is gone and its type never reaches P1. Replayed over the two packs on disk: 3
+hook failures on holdout-2 and 4 on dev-40, all `quote_is_a_substring`, and exactly ONE row's P1
+outcome moves — `@VARUS_channel:5119/5987`, whose only `жалоба` row cites the comment with a
+lower-cased first letter, so R3 does not fire and the row stays `sku`. On that set the loop
+reproduces 83/112 = 0.7411 where the published reading is 84/112 = 0.7500; dev-40 is unchanged at
+124/140. Named in `docs/plans/promo-pulse-1.PROGRESS.md` as the open stop: whether the C3 record
+must carry the raw answer's signal types is the team lead's to rule, and the executor may not
+widen that record here.
 
 **Idempotence is the id, not a flag.** Every row's id is `uuid5` over the row's own normalised key
 (`aggregates.PROMO_KEYS`), so a second tick over an unchanged store recomputes the same ids and
@@ -271,10 +283,13 @@ def threads_of(store: RawStore, records: list[dict]) -> dict[tuple[str, str], di
 def p1_rows(record: dict, thread: dict, registry, spellings) -> tuple[list[dict], list[dict]]:
     """The record's `about` and `signal` rows through P1 — every reader row, none skipped.
 
-    Each row is handed the COMMENT's signal types, the same shape `promo_dev_pass.predicted_rows`
-    built for the reading P1 was measured on: a `signal` row of type «цена» on a comment that also
-    carries «жалоба» moves with its `about` row, so the attribution and the signal it supports
-    never name two subjects for one comment.
+    Each row is handed the COMMENT's signal types, so a `signal` row of type «цена» on a comment
+    that also carries «жалоба» moves with its `about` row: the attribution and the signal it
+    supports never name two subjects for one comment.
+
+    The types come from the record's KEPT rows, which is all a record has — and that is where this
+    differs from the reading, whose types came from the raw answer. See the module docstring: one
+    row of holdout-2 moves, and the difference is the team lead's to rule on.
     """
     kept = record.get("kept") or {}
     types: dict[str, set] = {}

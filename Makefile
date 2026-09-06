@@ -36,7 +36,9 @@ baselines:
 tick:
 	PYTHONPATH=src python3.11 scripts/tick.py
 
-# The C5 promo screen. Reads `results/promo_screen_data.json` and NOTHING else, and exits non-zero
-# with a named error when a source is missing — which is what makes it runnable on a clean clone.
+# The C5 promo screen. Reads `results/promo_screen_data.json` for the market and the three graders'
+# records of `build_promo_screen.S2_SOURCES` for the S2 block — committed result files, nothing
+# else — and exits non-zero with a named error when any of them is missing, which is what makes it
+# runnable on a clean clone.
 promo-screen:
 	PYTHONPATH=src python3.11 scripts/build_promo_screen.py
