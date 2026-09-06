@@ -10,6 +10,16 @@ those, derives the six promo tables from them, and writes the screen's fuel. It 
 opens no endpoint and touches no money — the guard is not even imported, because there is nothing
 here to guard.
 
+**P1 runs here, before the aggregates** (ruling 06.09 (cc) addendum: «ship as measured», P1 in the
+product). Every reader row a record carries — the `about` rows and the `signal` rows alike — goes
+through `market_pulse.promo_post.apply`, the deterministic layer measured at $0 in
+`results/grade_promo_p1_readings.json`, BEFORE its subject becomes an id. Each row is handed the
+comment's signal types (the shape the reading graded) and the thread as the reader saw it: the
+post's text and the comments' texts from the raw store. A thread the store carries no post for is
+counted and printed, never refused — R1 and R2 still apply to its rows, and R3, which reads the
+comment, finds nothing to read. The layer is pure and deterministic, so the ids it feeds are the
+same on every tick and K10 below is untouched.
+
 **Idempotence is the id, not a flag.** Every row's id is `uuid5` over the row's own normalised key
 (`aggregates.PROMO_KEYS`), so a second tick over an unchanged store recomputes the same ids and
 `INSERT OR IGNORE` drops all of them: zero new rows, per table, which is K10. The one row that is
@@ -45,10 +55,12 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "src"))
 
-from market_pulse import aggregates, trends  # noqa: E402
+from market_pulse import aggregates, promo_post, trends  # noqa: E402
 from market_pulse.raw_store import ARCHIVE_ROOT, RawStore  # noqa: E402
+from market_pulse.registry import chain_spellings, load_registry  # noqa: E402
 
 DB = REPO_ROOT / "data" / "derived" / "pulse.db"
+REGISTRY = REPO_ROOT / "config" / "registry.yaml"
 LIVE_ROOT = REPO_ROOT / "data" / "raw_r2"
 SCHEDULE = REPO_ROOT / "data" / "schedule.json"
 SIGNALS = REPO_ROOT / "results" / "promo_signals"
@@ -229,17 +241,80 @@ def signal_records(root: Path = SIGNALS) -> list[dict]:
     return [json.loads(path.read_text(encoding="utf-8")) for path in sorted(root.glob("*.json"))]
 
 
-def promote(conn, records: list[dict]) -> dict[str, int]:
-    """The screened answers into `attribution` / `signal` / `evidence` / `unsure`.
+def threads_of(store: RawStore, records: list[dict]) -> dict[tuple[str, str], dict]:
+    """(channel, root) → the thread as `promo_post.apply` wants it, each channel's files read once.
+
+    The post's text and msg_id → comment text, from the raw store the reader read (both roots, r2
+    winning). `post` is None when the store carries no post under that root; `promote` counts those
+    and P1 goes on without R3's evidence rather than refusing the record.
+    """
+    out: dict[tuple[str, str], dict] = {}
+    files: dict[str, tuple[list, list]] = {}
+    for record in records:
+        channel, root = record["channel"], str(record["thread_root"])
+        if channel not in files:
+            files[channel] = (store.rows("post", channel), store.rows("comment", channel))
+        posts, comments = files[channel]
+        out[(channel, root)] = {
+            "channel": channel,
+            "thread_root": root,
+            "post": next((row.get("text") for row in posts if str(row.get("msg_id")) == root), None),
+            "comments": {
+                str(row["msg_id"]): row.get("text")
+                for row in comments
+                if str(row.get("parent_msg_id")) == root
+            },
+        }
+    return out
+
+
+def p1_rows(record: dict, thread: dict, registry, spellings) -> tuple[list[dict], list[dict]]:
+    """The record's `about` and `signal` rows through P1 — every reader row, none skipped.
+
+    Each row is handed the COMMENT's signal types, the same shape `promo_dev_pass.predicted_rows`
+    built for the reading P1 was measured on: a `signal` row of type «цена» on a comment that also
+    carries «жалоба» moves with its `about` row, so the attribution and the signal it supports
+    never name two subjects for one comment.
+    """
+    kept = record.get("kept") or {}
+    types: dict[str, set] = {}
+    for row in kept.get("signal") or []:
+        types.setdefault(str(row["msg_id"]), set()).add(row["type"])
+
+    def through(rows: list[dict]) -> list[dict]:
+        return promo_post.apply(
+            [{**row, "signal_types": sorted(types.get(str(row["msg_id"]), ()))} for row in rows],
+            thread,
+            registry,
+            spellings,
+        )
+
+    return through(kept.get("about") or []), through(kept.get("signal") or [])
+
+
+def promote(
+    conn, records: list[dict], threads: dict, registry, spellings
+) -> tuple[dict[str, int], dict[str, int]]:
+    """The screened answers, through P1, into `attribution` / `signal` / `evidence` / `unsure`.
 
     `signal_id` is recomputed here, with the same key `add_promo` uses, because `evidence` is keyed
     on it: an evidence row whose `signal_id` was invented separately would point at nothing, and the
     join would be silently empty rather than loudly wrong.
+
+    Returns the new-row counts per table and P1's own reading: rows each rule rewrote, the reader
+    rows it saw, and the threads the store carries no post for.
     """
     written = dict.fromkeys(("attribution", "signal", "evidence", "unsure"), 0)
+    p1 = {"R1": 0, "R2": 0, "R3": 0, "rows": 0, "threads": len(records), "threads_without_post": 0}
     for record in records:
         channel, root = record["channel"], record["thread_root"]
-        kept = record.get("kept") or {}
+        thread = threads[(channel, str(root))]
+        p1["threads_without_post"] += thread["post"] is None
+        about, signal = p1_rows(record, thread, registry, spellings)
+        p1["rows"] += len(about) + len(signal)
+        for row in about + signal:
+            for rule in row.get("p1") or []:
+                p1[rule] += 1
         written["attribution"] += aggregates.add_promo(
             conn,
             "attribution",
@@ -254,10 +329,10 @@ def promote(conn, records: list[dict]) -> dict[str, int]:
                     "source": row["source"],
                     "confidence": row.get("confidence"),
                 }
-                for row in kept.get("about") or []
+                for row in about
             ],
         )
-        for row in kept.get("signal") or []:
+        for row in signal:
             subject = aggregates.subject_id(row["subject_type"], row["subject"])
             signal_id = aggregates.promo_id(channel, root, row["type"], subject)
             written["signal"] += aggregates.add_promo(
@@ -299,7 +374,7 @@ def promote(conn, records: list[dict]) -> dict[str, int]:
                 for row in record.get("unsure") or []
             ],
         )
-    return written
+    return written, p1
 
 
 def comments(store: RawStore) -> list[dict]:
@@ -457,16 +532,25 @@ def main(argv: list[str] | None = None) -> int:
     aggregates.ensure_promo_tables(conn)
     before = aggregates.promo_counts(conn)
 
-    written = promote(conn, signal_records(args.signals))
+    store = RawStore(args.store, archives=(args.archive,))
+    records = signal_records(args.signals)
+    written, p1 = promote(
+        conn, records, threads_of(store, records), load_registry(REGISTRY), chain_spellings()
+    )
     weeks = trends.post_weeks((args.archive / "posts", args.store / "posts"))
     written["rollup"] = aggregates.add_promo(conn, "rollup", rollups(conn, args.window, weeks))
-    digest = digests(conn, RawStore(args.store, archives=(args.archive,)), now)
+    digest = digests(conn, store, now)
     written["digest"] = digest["inserted"]
     conn.commit()
 
     after = aggregates.promo_counts(conn)
     for table in aggregates.PROMO_TABLES:
         print(f"{table:14s} {before[table]:6d} -> {after[table]:6d}   new {after[table] - before[table]}")
+    print(
+        f"p1: R1 {p1['R1']} · R2 {p1['R2']} · R3 {p1['R3']} over {p1['rows']} reader rows in"
+        f" {p1['threads']} threads · {p1['threads_without_post']} threads the store carries no"
+        " post for"
+    )
     print(
         f"digest: {digest['inserted']} inserted · {digest['updated']} updated ·"
         f" {digest['unchanged']} unchanged · {digest['queued']} cooled and not yet read ·"
@@ -480,7 +564,8 @@ def main(argv: list[str] | None = None) -> int:
     )
     args.state.write_text(
         json.dumps({"at": now.isoformat(), "new_rows": written, "table_rows": after,
-                    "digest": digest, "schedule": why}, indent=2, ensure_ascii=False) + "\n",
+                    "digest": digest, "p1": p1, "schedule": why}, indent=2, ensure_ascii=False)
+        + "\n",
         encoding="utf-8",
     )
     print(f"wrote {rel(args.out)}")
