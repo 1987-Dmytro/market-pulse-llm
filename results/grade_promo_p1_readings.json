@@ -130,6 +130,16 @@
         "path": "docs/labels-promo-dev2.jsonl",
         "sha256": "4b60ab99a21045e6f22f612556b4026ac2d6d06090c85c62f370f58c1d5bab9f"
       },
+      "misses_after": {
+        "gold_unsure": 0,
+        "rule": "a miss is a gold comment `subjects_agree` refuses, or one the reader said nothing about — the grader's own predicate; `gold_unsure` counts the misses whose GOLD row carries `unsure`: the codebook's declared ties, where two readings are defensible",
+        "total": 18
+      },
+      "misses_before": {
+        "gold_unsure": 0,
+        "rule": "a miss is a gold comment `subjects_agree` refuses, or one the reader said nothing about — the grader's own predicate; `gold_unsure` counts the misses whose GOLD row carries `unsure`: the codebook's declared ties, where two readings are defensible",
+        "total": 21
+      },
       "pack": {
         "path": "results/promo_dev40_pack.json",
         "sha256": "5360ec0f02a7ab2169bae97d01421a83f3644ee56e3bb1ca9d17405878573aed",
@@ -217,6 +227,16 @@
         "path": "docs/labels-promo-holdout2.jsonl",
         "sha256": "5525ddf1e16390dfec65934627e2bdf481ad4547966e537373e969dd431a9a48"
       },
+      "misses_after": {
+        "gold_unsure": 16,
+        "rule": "a miss is a gold comment `subjects_agree` refuses, or one the reader said nothing about — the grader's own predicate; `gold_unsure` counts the misses whose GOLD row carries `unsure`: the codebook's declared ties, where two readings are defensible",
+        "total": 28
+      },
+      "misses_before": {
+        "gold_unsure": 18,
+        "rule": "a miss is a gold comment `subjects_agree` refuses, or one the reader said nothing about — the grader's own predicate; `gold_unsure` counts the misses whose GOLD row carries `unsure`: the codebook's declared ties, where two readings are defensible",
+        "total": 33
+      },
       "pack": {
         "path": "results/promo_holdout2_pack.json",
         "sha256": "30941e5910b83ff691320cd488700dca7c2a5779119965432dfdce0151b78e50",
@@ -303,6 +323,16 @@
       "gold": {
         "path": "docs/labels-promo-dev.jsonl",
         "sha256": "2303ea4319dbf784d022c3935fb0fea7f14f8af471dc1bba391f2addc1d239c0"
+      },
+      "misses_after": {
+        "gold_unsure": 3,
+        "rule": "a miss is a gold comment `subjects_agree` refuses, or one the reader said nothing about — the grader's own predicate; `gold_unsure` counts the misses whose GOLD row carries `unsure`: the codebook's declared ties, where two readings are defensible",
+        "total": 16
+      },
+      "misses_before": {
+        "gold_unsure": 3,
+        "rule": "a miss is a gold comment `subjects_agree` refuses, or one the reader said nothing about — the grader's own predicate; `gold_unsure` counts the misses whose GOLD row carries `unsure`: the codebook's declared ties, where two readings are defensible",
+        "total": 16
       },
       "pack": {
         "path": "results/promo_dev40_pack.json",

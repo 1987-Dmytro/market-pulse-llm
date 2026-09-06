@@ -120,6 +120,32 @@ def reading(grade: dict) -> dict:
     }
 
 
+def misses(gold: list[dict], predicted: list[dict]) -> dict:
+    """The gold comments the grader scores as misses, and how many the gold itself declared a tie.
+
+    Ruling 06.09 (cc) item 2 and PHASE v19: «the numbers and the tie analysis on the screen and in
+    the README from result files» — so the count lives in this record, taken with the grader's ONE
+    predicate (`subjects_agree`) over the grader's own denominator, never re-derived by the screen.
+    A tie is the GOLD row's `unsure` field — the team lead's «either reading is defensible», written
+    blind when the gold was — and not a judgement of this script.
+    """
+    said = {(k8.thread_key(row), str(row.get("msg_id"))): row for row in predicted if row.get("msg_id")}
+    missed = []
+    for row in gold:
+        if not row.get("msg_id"):
+            continue
+        found = said.get((k8.thread_key(row), str(row["msg_id"])))
+        if found is None or not k8.subjects_agree(row, found):
+            missed.append(row)
+    return {
+        "total": len(missed),
+        "gold_unsure": sum(1 for row in missed if row.get("unsure")),
+        "rule": "a miss is a gold comment `subjects_agree` refuses, or one the reader said nothing"
+        " about — the grader's own predicate; `gold_unsure` counts the misses whose GOLD row carries"
+        " `unsure`: the codebook's declared ties, where two readings are defensible",
+    }
+
+
 def rewrite(name: str, spec: dict, registry, spellings) -> tuple[dict, set[tuple[str, str]]]:
     """One set through P1: the after-file written, both grades taken, the rules counted."""
     predicted, gold_path = REPO_ROOT / spec["predicted"], REPO_ROOT / spec["gold"]
@@ -150,6 +176,15 @@ def rewrite(name: str, spec: dict, registry, spellings) -> tuple[dict, set[tuple
             f"{name}: the signal reading moved under P1 — the layer touched a field it may not"
         )
     fired = Counter(rule for one in after_rows for rule in one.get("p1", []))
+    missed = {"before": misses(gold, rows), "after": misses(gold, after_rows)}
+    for leg, grade in (("before", before), ("after", after)):
+        whole = grade["whole_40"]
+        if missed[leg]["total"] != whole["subject_comments"] - whole["subject_agreed"]:
+            raise SystemExit(
+                f"{name}: the {leg} miss count {missed[leg]['total']} is not the grade's own"
+                f" {whole['subject_comments']} - {whole['subject_agreed']} — two readings of one"
+                " predicate disagree"
+            )
     opened = {(item["channel"], str(item["post_id"])) for item in pack["items"]}
     block = {
         "read_as": spec["read_as"],
@@ -163,6 +198,8 @@ def rewrite(name: str, spec: dict, registry, spellings) -> tuple[dict, set[tuple
         "fired": {rule: fired.get(rule, 0) for rule in ("R1", "R2", "R3")},
         "before": reading(before),
         "after": reading(after),
+        "misses_before": missed["before"],
+        "misses_after": missed["after"],
         "delta": {
             key: round(after["whole_40"][key] - before["whole_40"][key], 4)
             for key in ("subject_agreement", "signal_type_agreement")
@@ -285,6 +322,11 @@ def main(argv: list[str] | None = None) -> int:
                 f"       {stratum:<13} subject {b['by_stratum'][stratum]['subject_agreement']:.4f} →"
                 f" {a['by_stratum'][stratum]['subject_agreement']:.4f}  (reading, no bar)"
             )
+        mb, ma = block["misses_before"], block["misses_after"]
+        print(
+            f"       misses {mb['total']} → {ma['total']}, of them the gold's own ties (`unsure`)"
+            f" {mb['gold_unsure']} → {ma['gold_unsure']}"
+        )
     table = record["decision_table"]
     for name, held in table["conditions"].items():
         print(f"  [{'x' if held else ' '}] {name}")
