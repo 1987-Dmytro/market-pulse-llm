@@ -1,0 +1,465 @@
+{
+  "contract": "docs/PHASE-promo-pulse-1.md §2 v20 · ruling 08.09 (dd) item 5 — the SHIPPED number, measured at $0 on the PRODUCT's pipeline end to end (the four hooks of §2 S4, then P1) by the product's own functions; the pre-registered readings above stay the bar's record and no record of theirs is widened",
+  "k8_version": "v2",
+  "leak_check": {
+    "files_opened": [
+      "docs/labels-promo-dev.jsonl",
+      "docs/labels-promo-dev2.jsonl",
+      "docs/labels-promo-holdout2.jsonl",
+      "results/promo_dev40_iter5.jsonl",
+      "results/promo_dev40_pack.json",
+      "results/promo_holdout2.jsonl",
+      "results/promo_holdout2_pack.json",
+      "results/promo_threads_draw.json",
+      "results/promo_threads_draw_2.json"
+    ],
+    "holdout3_draw": {
+      "path": "results/promo_threads_draw_3.json",
+      "sha256": "76435461ca26ab8d9ef81259cb441d48e9d08e5123efbe86768275169fb504ba",
+      "threads": 40
+    },
+    "holdout3_threads_shared_with_them": 0,
+    "threads_opened": 120
+  },
+  "p1": {
+    "module": "src/market_pulse/promo_post.py",
+    "rules": "R1 post => subject = thread root · R2 own channel: post with signals => chain = owner · R3 sku/brand with жалоба on the store-stock lexicon => chain = the thread's retailer — nothing else",
+    "sha256": "b2c0e2b905d95b1d6faab353683df2c758b7a6f99cc247f89b49e070a5f50195"
+  },
+  "pipeline": [
+    "market_pulse.promo_prompts.parse — the raw answer of the pod out-file this set names",
+    "market_pulse.promo_hooks.screen — the four hooks of §2 S4, over the pack's comments, the registry's brand ids and promo_prompts.vocabulary()",
+    "scripts/tick.py :: p1_rows — the kept rows through market_pulse.promo_post.apply, each handed its comment's KEPT signal types, exactly as `make tick` runs it",
+    "scripts/promo_dev_pass.py :: predicted_rows — the gold shape the grader scores",
+    "scripts/grade_promo_signals.py :: grade — K8 v2, the same judge as every reading"
+  ],
+  "sets": {
+    "dev2": {
+      "after": {
+        "by_stratum": {
+          "currency": {
+            "signal_type_agreement": 0.8358,
+            "subject_agreed": 127,
+            "subject_agreement": 0.9071,
+            "subject_comments": 140
+          },
+          "decimal_only": {
+            "signal_type_agreement": 0.8233,
+            "subject_agreed": 43,
+            "subject_agreement": 0.8958,
+            "subject_comments": 48
+          }
+        },
+        "signal_type_agreement": 0.8296,
+        "subject_agreed": 170,
+        "subject_agreement": 0.9043,
+        "subject_comments": 188
+      },
+      "answers": {
+        "parse_failures": 0,
+        "units_answered": 40,
+        "units_dead": [],
+        "units_registered": 40,
+        "unsure_comments": 0,
+        "unsure_note": "an `unsure` comment is not a graded row here: the tick routes it to its own table, and the count says the class is empty rather than ignored"
+      },
+      "bars_after": {
+        "signal_type_agreement": {
+          "bar": 0.75,
+          "held": true,
+          "value": 0.8296
+        },
+        "subject_agreement": {
+          "bar": 0.8,
+          "held": true,
+          "value": 0.9043
+        }
+      },
+      "before": {
+        "by_stratum": {
+          "currency": {
+            "signal_type_agreement": 0.8358,
+            "subject_agreed": 124,
+            "subject_agreement": 0.8857,
+            "subject_comments": 140
+          },
+          "decimal_only": {
+            "signal_type_agreement": 0.8233,
+            "subject_agreed": 43,
+            "subject_agreement": 0.8958,
+            "subject_comments": 48
+          }
+        },
+        "signal_type_agreement": 0.8296,
+        "subject_agreed": 167,
+        "subject_agreement": 0.8883,
+        "subject_comments": 188
+      },
+      "delta": {
+        "signal_type_agreement": 0.0,
+        "subject_agreement": 0.016
+      },
+      "draw": {
+        "part": "holdout",
+        "path": "results/promo_threads_draw.json"
+      },
+      "gold": {
+        "path": "docs/labels-promo-dev2.jsonl",
+        "sha256": "4b60ab99a21045e6f22f612556b4026ac2d6d06090c85c62f370f58c1d5bab9f"
+      },
+      "hooks": {
+        "counts": {
+          "brand_is_resolvable": 0,
+          "msg_id_exists": 0,
+          "quote_is_a_substring": 2,
+          "schema_valid": 0
+        },
+        "dropped": [
+          {
+            "channel": "@VARUS_channel",
+            "hook": "quote_is_a_substring",
+            "kind": "signal",
+            "msg_id": "17372",
+            "thread_root": "9277"
+          },
+          {
+            "channel": "@VARUS_channel",
+            "hook": "quote_is_a_substring",
+            "kind": "signal",
+            "msg_id": "4942",
+            "thread_root": "4422"
+          }
+        ],
+        "module": "src/market_pulse/promo_hooks.py",
+        "rows_dropped": {
+          "about": 0,
+          "signal": 2
+        },
+        "rows_in": {
+          "about": 188,
+          "signal": 127
+        },
+        "rows_kept": {
+          "about": 188,
+          "signal": 125
+        },
+        "sha256": "06807d6cb18dc9e8a3e932c98783ae6a01a5c04b94d630e9f608350d9dbc6751"
+      },
+      "misses_after": {
+        "gold_unsure": 0,
+        "rule": "a miss is a gold comment `subjects_agree` refuses, or one the reader said nothing about — the grader's own predicate; `gold_unsure` counts the misses whose GOLD row carries `unsure`: the codebook's declared ties, where two readings are defensible",
+        "total": 18
+      },
+      "misses_before": {
+        "gold_unsure": 0,
+        "rule": "a miss is a gold comment `subjects_agree` refuses, or one the reader said nothing about — the grader's own predicate; `gold_unsure` counts the misses whose GOLD row carries `unsure`: the codebook's declared ties, where two readings are defensible",
+        "total": 21
+      },
+      "p1": {
+        "R1": 4,
+        "R2": 2,
+        "R3": 0,
+        "rows_rewritten": 6,
+        "rows_seen": 313
+      },
+      "pack": {
+        "path": "results/promo_dev40_pack.json",
+        "sha256": "5360ec0f02a7ab2169bae97d01421a83f3644ee56e3bb1ca9d17405878573aed",
+        "threads": 80
+      },
+      "read_as": "dev-2 — the spent holdout-40, a reading: 188 gold rows over the first draw's holdout arm",
+      "replies": {
+        "path": "results/promo_dev40_iter5.jsonl",
+        "sha256": "77b01c765c67c43a61de4713e45a437ba7d9bb92a11df03b8bac046531de22c5"
+      },
+      "rows": 188
+    },
+    "dev3": {
+      "after": {
+        "by_stratum": {
+          "currency": {
+            "signal_type_agreement": 0.6958,
+            "subject_agreed": 37,
+            "subject_agreement": 0.7872,
+            "subject_comments": 47
+          },
+          "decimal_only": {
+            "signal_type_agreement": 0.8917,
+            "subject_agreed": 46,
+            "subject_agreement": 0.7077,
+            "subject_comments": 65
+          }
+        },
+        "signal_type_agreement": 0.7937,
+        "subject_agreed": 83,
+        "subject_agreement": 0.7411,
+        "subject_comments": 112
+      },
+      "answers": {
+        "parse_failures": 0,
+        "units_answered": 40,
+        "units_dead": [],
+        "units_registered": 40,
+        "unsure_comments": 0,
+        "unsure_note": "an `unsure` comment is not a graded row here: the tick routes it to its own table, and the count says the class is empty rather than ignored"
+      },
+      "bars_after": {
+        "signal_type_agreement": {
+          "bar": 0.75,
+          "held": true,
+          "value": 0.7937
+        },
+        "subject_agreement": {
+          "bar": 0.8,
+          "held": false,
+          "value": 0.7411
+        }
+      },
+      "before": {
+        "by_stratum": {
+          "currency": {
+            "signal_type_agreement": 0.6958,
+            "subject_agreed": 36,
+            "subject_agreement": 0.766,
+            "subject_comments": 47
+          },
+          "decimal_only": {
+            "signal_type_agreement": 0.8917,
+            "subject_agreed": 43,
+            "subject_agreement": 0.6615,
+            "subject_comments": 65
+          }
+        },
+        "signal_type_agreement": 0.7937,
+        "subject_agreed": 79,
+        "subject_agreement": 0.7054,
+        "subject_comments": 112
+      },
+      "delta": {
+        "signal_type_agreement": 0.0,
+        "subject_agreement": 0.0357
+      },
+      "draw": {
+        "part": "holdout",
+        "path": "results/promo_threads_draw_2.json"
+      },
+      "gold": {
+        "path": "docs/labels-promo-holdout2.jsonl",
+        "sha256": "5525ddf1e16390dfec65934627e2bdf481ad4547966e537373e969dd431a9a48"
+      },
+      "hooks": {
+        "counts": {
+          "brand_is_resolvable": 0,
+          "msg_id_exists": 0,
+          "quote_is_a_substring": 3,
+          "schema_valid": 0
+        },
+        "dropped": [
+          {
+            "channel": "@VARUS_channel",
+            "hook": "quote_is_a_substring",
+            "kind": "signal",
+            "msg_id": "3058",
+            "thread_root": "3342"
+          },
+          {
+            "channel": "@VARUS_channel",
+            "hook": "quote_is_a_substring",
+            "kind": "signal",
+            "msg_id": "5987",
+            "thread_root": "5119"
+          },
+          {
+            "channel": "@msuaaaa",
+            "hook": "quote_is_a_substring",
+            "kind": "signal",
+            "msg_id": "13221",
+            "thread_root": "10459"
+          }
+        ],
+        "module": "src/market_pulse/promo_hooks.py",
+        "rows_dropped": {
+          "about": 0,
+          "signal": 3
+        },
+        "rows_in": {
+          "about": 112,
+          "signal": 87
+        },
+        "rows_kept": {
+          "about": 112,
+          "signal": 84
+        },
+        "sha256": "06807d6cb18dc9e8a3e932c98783ae6a01a5c04b94d630e9f608350d9dbc6751"
+      },
+      "misses_after": {
+        "gold_unsure": 16,
+        "rule": "a miss is a gold comment `subjects_agree` refuses, or one the reader said nothing about — the grader's own predicate; `gold_unsure` counts the misses whose GOLD row carries `unsure`: the codebook's declared ties, where two readings are defensible",
+        "total": 29
+      },
+      "misses_before": {
+        "gold_unsure": 18,
+        "rule": "a miss is a gold comment `subjects_agree` refuses, or one the reader said nothing about — the grader's own predicate; `gold_unsure` counts the misses whose GOLD row carries `unsure`: the codebook's declared ties, where two readings are defensible",
+        "total": 33
+      },
+      "p1": {
+        "R1": 2,
+        "R2": 0,
+        "R3": 5,
+        "rows_rewritten": 7,
+        "rows_seen": 196
+      },
+      "pack": {
+        "path": "results/promo_holdout2_pack.json",
+        "sha256": "30941e5910b83ff691320cd488700dca7c2a5779119965432dfdce0151b78e50",
+        "threads": 40
+      },
+      "read_as": "dev-3 — the spent holdout-2, the set the decision table reads: 112 gold rows over the second draw's holdout arm",
+      "replies": {
+        "path": "results/promo_holdout2.jsonl",
+        "sha256": "bd1a2c8285bf6f0b435279668f64118833e7cc3121197866c4b387272feb4cfe"
+      },
+      "rows": 112
+    },
+    "dev40": {
+      "after": {
+        "by_stratum": {
+          "currency": {
+            "signal_type_agreement": 0.8333,
+            "subject_agreed": 48,
+            "subject_agreement": 0.7869,
+            "subject_comments": 61
+          },
+          "decimal_only": {
+            "signal_type_agreement": 0.9,
+            "subject_agreed": 76,
+            "subject_agreement": 0.962,
+            "subject_comments": 79
+          }
+        },
+        "signal_type_agreement": 0.8667,
+        "subject_agreed": 124,
+        "subject_agreement": 0.8857,
+        "subject_comments": 140
+      },
+      "answers": {
+        "parse_failures": 0,
+        "units_answered": 40,
+        "units_dead": [],
+        "units_registered": 40,
+        "unsure_comments": 0,
+        "unsure_note": "an `unsure` comment is not a graded row here: the tick routes it to its own table, and the count says the class is empty rather than ignored"
+      },
+      "bars_after": {
+        "signal_type_agreement": {
+          "bar": 0.75,
+          "held": true,
+          "value": 0.8667
+        },
+        "subject_agreement": {
+          "bar": 0.8,
+          "held": true,
+          "value": 0.8857
+        }
+      },
+      "before": {
+        "by_stratum": {
+          "currency": {
+            "signal_type_agreement": 0.8333,
+            "subject_agreed": 48,
+            "subject_agreement": 0.7869,
+            "subject_comments": 61
+          },
+          "decimal_only": {
+            "signal_type_agreement": 0.9,
+            "subject_agreed": 76,
+            "subject_agreement": 0.962,
+            "subject_comments": 79
+          }
+        },
+        "signal_type_agreement": 0.8667,
+        "subject_agreed": 124,
+        "subject_agreement": 0.8857,
+        "subject_comments": 140
+      },
+      "delta": {
+        "signal_type_agreement": 0.0,
+        "subject_agreement": 0.0
+      },
+      "draw": {
+        "part": "dev",
+        "path": "results/promo_threads_draw.json"
+      },
+      "gold": {
+        "path": "docs/labels-promo-dev.jsonl",
+        "sha256": "2303ea4319dbf784d022c3935fb0fea7f14f8af471dc1bba391f2addc1d239c0"
+      },
+      "hooks": {
+        "counts": {
+          "brand_is_resolvable": 0,
+          "msg_id_exists": 0,
+          "quote_is_a_substring": 2,
+          "schema_valid": 0
+        },
+        "dropped": [
+          {
+            "channel": "@VARUS_channel",
+            "hook": "quote_is_a_substring",
+            "kind": "signal",
+            "msg_id": "6231",
+            "thread_root": "5186"
+          },
+          {
+            "channel": "@VARUS_channel",
+            "hook": "quote_is_a_substring",
+            "kind": "signal",
+            "msg_id": "8865",
+            "thread_root": "6216"
+          }
+        ],
+        "module": "src/market_pulse/promo_hooks.py",
+        "rows_dropped": {
+          "about": 0,
+          "signal": 2
+        },
+        "rows_in": {
+          "about": 139,
+          "signal": 88
+        },
+        "rows_kept": {
+          "about": 139,
+          "signal": 86
+        },
+        "sha256": "06807d6cb18dc9e8a3e932c98783ae6a01a5c04b94d630e9f608350d9dbc6751"
+      },
+      "misses_after": {
+        "gold_unsure": 3,
+        "rule": "a miss is a gold comment `subjects_agree` refuses, or one the reader said nothing about — the grader's own predicate; `gold_unsure` counts the misses whose GOLD row carries `unsure`: the codebook's declared ties, where two readings are defensible",
+        "total": 16
+      },
+      "misses_before": {
+        "gold_unsure": 3,
+        "rule": "a miss is a gold comment `subjects_agree` refuses, or one the reader said nothing about — the grader's own predicate; `gold_unsure` counts the misses whose GOLD row carries `unsure`: the codebook's declared ties, where two readings are defensible",
+        "total": 16
+      },
+      "p1": {
+        "R1": 0,
+        "R2": 0,
+        "R3": 0,
+        "rows_rewritten": 0,
+        "rows_seen": 225
+      },
+      "pack": {
+        "path": "results/promo_dev40_pack.json",
+        "sha256": "5360ec0f02a7ab2169bae97d01421a83f3644ee56e3bb1ca9d17405878573aed",
+        "threads": 80
+      },
+      "read_as": "dev-40 — iteration 5's BAR set: 139 gold rows over the first draw's dev arm",
+      "replies": {
+        "path": "results/promo_dev40_iter5.jsonl",
+        "sha256": "77b01c765c67c43a61de4713e45a437ba7d9bb92a11df03b8bac046531de22c5"
+      },
+      "rows": 139
+    }
+  }
+}

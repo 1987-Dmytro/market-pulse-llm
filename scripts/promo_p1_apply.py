@@ -19,7 +19,16 @@ What the record says beyond the six numbers:
   subject reading ≥ 0.80 AND dev-40 and dev-2 stay ≥ their bars — otherwise the fork returns to the
   operator with these numbers, at $0.
 
-The record carries no clock and no git block: two runs are byte-identical.
+**The SECOND leg, ruling 08.09 (dd) item 5: the same three sets through the PRODUCT's own
+pipeline.** Every reading above graded `promo_dev_pass.predicted_rows` built from the model's RAW
+answer, while the product screens each answer through the four hooks of §2 S4 before P1 ever sees
+it — so the number the screen ships is the product's, measured end to end by the product's own
+functions: `promo_prompts.parse` -> `promo_hooks.screen` -> a record shaped exactly as
+`tick.signal_records` reads it -> `tick.p1_rows` -> `promo_dev_pass.predicted_rows` -> K8 v2. It
+goes to `results/grade_promo_loop_readings.json`, beside the readings and never over them: the
+pre-registered readings stay the bar's record and no record of theirs is widened (PHASE v20 §6.7).
+
+Both records carry no clock and no git block: two runs are byte-identical.
 
     PYTHONPATH=src python3.11 scripts/promo_p1_apply.py
 """
@@ -38,13 +47,17 @@ sys.path.insert(0, str(REPO_ROOT / "scripts"))
 sys.path.insert(0, str(REPO_ROOT / "src"))
 
 import grade_promo_signals as k8  # noqa: E402
-from market_pulse import promo_post  # noqa: E402
+import promo_dev_pass  # noqa: E402
+import tick  # noqa: E402
+from market_pulse import promo_hooks, promo_post, promo_prompts  # noqa: E402
 from market_pulse.registry import chain_spellings, load_registry  # noqa: E402
 
 REGISTRY = REPO_ROOT / "config" / "registry.yaml"
 P1 = REPO_ROOT / "src" / "market_pulse" / "promo_post.py"
+HOOKS = REPO_ROOT / "src" / "market_pulse" / "promo_hooks.py"
 DRAW_3 = REPO_ROOT / "results" / "promo_threads_draw_3.json"
 OUT = REPO_ROOT / "results" / "grade_promo_p1_readings.json"
+LOOP_OUT = REPO_ROOT / "results" / "grade_promo_loop_readings.json"
 
 SETS = {
     "dev40": {
@@ -54,6 +67,7 @@ SETS = {
         "draw": "results/promo_threads_draw.json",
         "part": "dev",
         "pack": "results/promo_dev40_pack.json",
+        "replies": "results/promo_dev40_iter5.jsonl",
     },
     "dev2": {
         "read_as": "dev-2 — the spent holdout-40, a reading: 188 gold rows over the first draw's"
@@ -63,6 +77,7 @@ SETS = {
         "draw": "results/promo_threads_draw.json",
         "part": "holdout",
         "pack": "results/promo_dev40_pack.json",
+        "replies": "results/promo_dev40_iter5.jsonl",
     },
     "dev3": {
         "read_as": "dev-3 — the spent holdout-2, the set the decision table reads: 112 gold rows"
@@ -72,10 +87,13 @@ SETS = {
         "draw": "results/promo_threads_draw_2.json",
         "part": "holdout",
         "pack": "results/promo_holdout2_pack.json",
+        "replies": "results/promo_holdout2.jsonl",
     },
 }
 """The three sets the addendum names, each with the gold, draw arm and pack ITS reading was taken
-over — the same triple `promo_dev_pass.py --score` graded, so «before» here is the committed number."""
+over — the same triple `promo_dev_pass.py --score` graded, so «before» here is the committed number.
+`replies` is the pod out-file those predictions were parsed out of: the loop leg starts one step
+earlier than the reading did, at the RAW answer, and both legs must start from the same one."""
 
 ERROR_TABLES = (
     "results/promo_dev40_errors_iter5.json",
@@ -146,10 +164,55 @@ def misses(gold: list[dict], predicted: list[dict]) -> dict:
     }
 
 
+def graded(name: str, spec: dict, before_rows: list[dict], after_rows: list[dict]) -> dict:
+    """K8 v2 over one set's rows before and after P1 — the block BOTH legs of this script write.
+
+    One grader, one denominator, one miss predicate for the reading and for the loop alike: two
+    gates over one spend that read different corners is how a record ends up disagreeing with
+    itself ([[two_gates_on_one_spend_read_different_corners]]). `before` and `after` mean the same
+    thing in both legs — before and after P1 — and in the loop leg the hooks have already run on
+    both sides, so «the signal reading may not move» stays P1's own invariant and is refused here.
+    """
+    gold_path, draw_path = REPO_ROOT / spec["gold"], REPO_ROOT / spec["draw"]
+    gold = k8.rows(gold_path)
+    strata = k8.strata_of(draw_path, spec["part"])
+    before, after = k8.grade(gold, before_rows, strata), k8.grade(gold, after_rows, strata)
+    if after["whole_40"]["signal_type_agreement"] != before["whole_40"]["signal_type_agreement"]:
+        raise SystemExit(
+            f"{name}: the signal reading moved under P1 — the layer touched a field it may not"
+        )
+    missed = {"before": misses(gold, before_rows), "after": misses(gold, after_rows)}
+    for leg, grade in (("before", before), ("after", after)):
+        whole = grade["whole_40"]
+        if missed[leg]["total"] != whole["subject_comments"] - whole["subject_agreed"]:
+            raise SystemExit(
+                f"{name}: the {leg} miss count {missed[leg]['total']} is not the grade's own"
+                f" {whole['subject_comments']} - {whole['subject_agreed']} — two readings of one"
+                " predicate disagree"
+            )
+    return {
+        "gold": {"path": spec["gold"], "sha256": sha256(gold_path)},
+        "draw": {"path": spec["draw"], "part": spec["part"]},
+        "rows": len(before_rows),
+        "before": reading(before),
+        "after": reading(after),
+        "misses_before": missed["before"],
+        "misses_after": missed["after"],
+        "delta": {
+            key: round(after["whole_40"][key] - before["whole_40"][key], 4)
+            for key in ("subject_agreement", "signal_type_agreement")
+        },
+        "bars_after": {
+            key: {"bar": bar, "value": after["whole_40"][key], "held": after["bars"][key]["held"]}
+            for key, bar in k8.BARS.items()
+        },
+    }
+
+
 def rewrite(name: str, spec: dict, registry, spellings) -> tuple[dict, set[tuple[str, str]]]:
     """One set through P1: the after-file written, both grades taken, the rules counted."""
-    predicted, gold_path = REPO_ROOT / spec["predicted"], REPO_ROOT / spec["gold"]
-    pack_path, draw_path = REPO_ROOT / spec["pack"], REPO_ROOT / spec["draw"]
+    predicted = REPO_ROOT / spec["predicted"]
+    pack_path = REPO_ROOT / spec["pack"]
     rows = k8.rows(predicted)
     pack = json.loads(pack_path.read_text(encoding="utf-8"))
     threads = {item["id"]: thread_of(item) for item in pack["items"] if item["leg"] == "a"}
@@ -168,51 +231,140 @@ def rewrite(name: str, spec: dict, registry, spellings) -> tuple[dict, set[tuple
         encoding="utf-8",
     )
 
-    gold = k8.rows(gold_path)
-    strata = k8.strata_of(draw_path, spec["part"])
-    before, after = k8.grade(gold, rows, strata), k8.grade(gold, after_rows, strata)
-    if after["whole_40"]["signal_type_agreement"] != before["whole_40"]["signal_type_agreement"]:
-        raise SystemExit(
-            f"{name}: the signal reading moved under P1 — the layer touched a field it may not"
-        )
     fired = Counter(rule for one in after_rows for rule in one.get("p1", []))
-    missed = {"before": misses(gold, rows), "after": misses(gold, after_rows)}
-    for leg, grade in (("before", before), ("after", after)):
-        whole = grade["whole_40"]
-        if missed[leg]["total"] != whole["subject_comments"] - whole["subject_agreed"]:
-            raise SystemExit(
-                f"{name}: the {leg} miss count {missed[leg]['total']} is not the grade's own"
-                f" {whole['subject_comments']} - {whole['subject_agreed']} — two readings of one"
-                " predicate disagree"
-            )
     opened = {(item["channel"], str(item["post_id"])) for item in pack["items"]}
     block = {
         "read_as": spec["read_as"],
-        "gold": {"path": spec["gold"], "sha256": sha256(gold_path)},
-        "draw": {"path": spec["draw"], "part": spec["part"]},
         "pack": {"path": spec["pack"], "sha256": sha256(pack_path), "threads": len(opened)},
         "predicted_before": {"path": spec["predicted"], "sha256": sha256(predicted)},
         "predicted_after": {"path": str(out.relative_to(REPO_ROOT)), "sha256": sha256(out)},
-        "rows": len(rows),
         "rewritten_rows": sum(1 for one in after_rows if one.get("p1")),
         "fired": {rule: fired.get(rule, 0) for rule in ("R1", "R2", "R3")},
-        "before": reading(before),
-        "after": reading(after),
-        "misses_before": missed["before"],
-        "misses_after": missed["after"],
-        "delta": {
-            key: round(after["whole_40"][key] - before["whole_40"][key], 4)
-            for key in ("subject_agreement", "signal_type_agreement")
-        },
-        "bars_after": {
-            key: {"bar": bar, "value": after["whole_40"][key], "held": after["bars"][key]["held"]}
-            for key, bar in k8.BARS.items()
-        },
+        **graded(name, spec, rows, after_rows),
     }
     return block, opened
 
 
-def leak_check(draw_3: Path, opened: set[tuple[str, str]], files: list[str]) -> dict:
+def comments_of(item: dict) -> list[dict]:
+    """The pack's comments in the shape `promo_hooks.screen` reads — the rows the model was shown."""
+    return [{"msg_id": str(msg_id), "text": text} for msg_id, text, *_ in item["comments"]]
+
+
+def loop(name, spec, registry, spellings, brand_ids, vocabulary) -> tuple[dict, set[tuple[str, str]]]:
+    """One set through the PRODUCT's pipeline — ruling 08.09 (dd) item 5, at $0.
+
+    The reading above graded the model's RAW answer; the product screens that answer through the
+    four hooks of §2 S4 first, so a row whose quote is not a substring of its comment never reaches
+    P1 and its signal type never reaches the rows P1 reads. Every step here is the shipped function
+    CALLED — `promo_prompts.parse`, `promo_hooks.screen`, `tick.p1_rows`,
+    `promo_dev_pass.predicted_rows`, the grader — never a second spelling of it, because a second
+    spelling measures a third thing ([[a_moved_guard_that_left_its_copy]]).
+
+    The record a thread builds here is shaped exactly as `tick.signal_records` reads one: the screen
+    function's own return plus the three fields it does not know (`channel`, `thread_root`,
+    `extractor_version`). The `unsure` comments it carries are NOT graded rows — the tick writes
+    them to its own table — and they are counted so the class is visibly empty rather than silently
+    dropped ([[empty_class_eats_the_parse_failures]]).
+    """
+    pack_path, replies_path = REPO_ROOT / spec["pack"], REPO_ROOT / spec["replies"]
+    pack = json.loads(pack_path.read_text(encoding="utf-8"))
+    arm = k8.strata_of(REPO_ROOT / spec["draw"], spec["part"])
+    # the ARM, never the whole pack: one out-file carries both arms of a leg since iteration 4, and
+    # grading 80 answers against a key covering 40 would call the result the leg's
+    # ([[measure_on_the_rows_the_gate_scores]])
+    units = {
+        item["id"]: item
+        for item in pack["items"]
+        if item["leg"] == "a" and (item["channel"], str(item["post_id"])) in arm
+    }
+    counts: Counter = Counter()
+    rows_in: Counter = Counter()
+    rows_kept: Counter = Counter()
+    dropped: list[dict] = []
+    p1 = dict.fromkeys(("R1", "R2", "R3", "rows_seen", "rows_rewritten"), 0)
+    before_rows, after_rows, answered = [], [], []
+    parse_failures, unsure_comments = 0, 0
+    for reply in promo_dev_pass.reply_rows(replies_path):
+        item = units.get(reply.get("id"))
+        if item is None:
+            continue  # the other arm of this out-file, and the leg's gold does not cover it
+        if promo_dev_pass.died(reply):
+            continue  # a unit that DIED is unanswered, not an answer that failed to parse
+        answered.append(reply["id"])
+        answer = promo_prompts.parse(reply["reply"])
+        parse_failures += 1 if answer["parse_failure"] else 0
+        screened = promo_hooks.screen(answer, comments_of(item), brand_ids, vocabulary)
+        record = {
+            **screened,
+            "channel": item["channel"],
+            "thread_root": str(item["post_id"]),
+            "extractor_version": reply["rendering_sha256"],
+        }
+        unsure_comments += len(record["unsure"])
+        for kind, key in (("about", "about"), ("signal", "signals")):
+            rows_in[kind] += len(answer[key])
+            rows_kept[kind] += len(record["kept"][kind])
+        counts.update(record["counts"])
+        dropped += [
+            {
+                "channel": item["channel"],
+                "thread_root": str(item["post_id"]),
+                "msg_id": str(failure["msg_id"]),
+                "kind": failure["kind"],
+                "hook": failure["hook"],
+            }
+            for failure in record["failures"]
+        ]
+        about, signal = tick.p1_rows(record, thread_of(item), registry, spellings)
+        for row in about + signal:
+            p1["rows_seen"] += 1
+            p1["rows_rewritten"] += 1 if row.get("p1") else 0
+            for rule in row.get("p1") or []:
+                p1[rule] += 1
+        where = {"channel": item["channel"], "thread_root": item["post_id"]}
+        stamp = {"extractor_version": reply["rendering_sha256"]}
+        kept = record["kept"]
+        before_rows += [
+            one | stamp
+            for one in promo_dev_pass.predicted_rows(
+                where, {"about": kept["about"], "signals": kept["signal"]}
+            )
+        ]
+        after_rows += [
+            one | stamp
+            for one in promo_dev_pass.predicted_rows(where, {"about": about, "signals": signal})
+        ]
+
+    opened = {(item["channel"], str(item["post_id"])) for item in pack["items"]}
+    block = {
+        "read_as": spec["read_as"],
+        "replies": {"path": spec["replies"], "sha256": sha256(replies_path)},
+        "pack": {"path": spec["pack"], "sha256": sha256(pack_path), "threads": len(opened)},
+        "answers": {
+            "units_registered": len(units),
+            "units_answered": len(answered),
+            "units_dead": [one for one in promo_dev_pass.dead_units(replies_path) if one in units],
+            "parse_failures": parse_failures,
+            "unsure_comments": unsure_comments,
+            "unsure_note": "an `unsure` comment is not a graded row here: the tick routes it to its"
+            " own table, and the count says the class is empty rather than ignored",
+        },
+        "hooks": {
+            "module": str(HOOKS.relative_to(REPO_ROOT)),
+            "sha256": sha256(HOOKS),
+            "counts": {hook: counts.get(hook, 0) for hook in promo_hooks.HOOKS},
+            "rows_in": {kind: rows_in[kind] for kind in ("about", "signal")},
+            "rows_kept": {kind: rows_kept[kind] for kind in ("about", "signal")},
+            "rows_dropped": {kind: rows_in[kind] - rows_kept[kind] for kind in ("about", "signal")},
+            "dropped": sorted(dropped, key=lambda one: tuple(sorted(one.items()))),
+        },
+        "p1": p1,
+        **graded(name, spec, before_rows, after_rows),
+    }
+    return block, opened
+
+
+def holdout3_disjoint(draw_3: Path, opened: set[tuple[str, str]], files: list[str]) -> dict:
     """Holdout-3 was never opened: its threads share nothing with any file this reading read."""
     if not draw_3.exists():
         raise SystemExit(f"{draw_3} is missing — the leak check has nothing to check against")
@@ -236,13 +388,25 @@ def leak_check(draw_3: Path, opened: set[tuple[str, str]], files: list[str]) -> 
         "files_opened": sorted(files),
         "threads_opened": len(opened),
         "holdout3_threads_shared_with_them": len(shared),
+    }
+
+
+def leak_check(draw_3: Path, opened: set[tuple[str, str]], files: list[str]) -> dict:
+    """The disjointness above, plus where P1's lexicon came from — the READING leg's block.
+
+    Split from :func:`holdout3_disjoint` so the loop leg can make the same claim over its own files
+    (it opens the pod out-files the reading did not) without growing this one: the reading's record
+    is an accepted artifact whose sha ruling 06.09 (cc) quotes, and a re-emission that moved it
+    would rewrite an accepted number's provenance ([[a_frozen_record_is_a_live_input]]).
+    """
+    return holdout3_disjoint(draw_3, opened, files) | {
         "lexicon": {
             "words": list(promo_post.STORE_STOCK_LEXICON),
             "match": "at a word start, as a prefix, on the comment's text after aggregates.promo_key",
             "from": "ruling 06.09 (bb) addendum item (3), verbatim — the codebook's words (§3"
             " «наличие в магазине») and the three DEV error tables; no holdout-3 thread was read",
             "error_tables": {path: sha256(REPO_ROOT / path) for path in ERROR_TABLES},
-        },
+        }
     }
 
 
@@ -273,50 +437,41 @@ def decision_table(sets: dict) -> dict:
     }
 
 
-def main(argv: list[str] | None = None) -> int:
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--draw3", type=Path, default=DRAW_3)
-    parser.add_argument("--out", type=Path, default=OUT)
-    args = parser.parse_args(argv)
+def p1_counts(block: dict) -> tuple[dict, int]:
+    """(rules fired, rows rewritten) for one set's block, whichever leg wrote it.
 
-    registry = load_registry(REGISTRY)
-    spellings = chain_spellings()
-    sets, opened, files = {}, set(), []
-    for name, spec in SETS.items():
-        sets[name], threads = rewrite(name, spec, registry, spellings)
-        opened |= threads
-        files += [spec["predicted"], spec["gold"], spec["pack"], spec["draw"]]
-    record = {
-        "contract": "docs/PHASE-promo-pulse-1.md §6.2 v18 · ruling 06.09 (bb) addendum item (4) —"
-        " P1 measured at $0 on the three dev sets, K8 v2 before and after",
-        "k8_version": k8.K8_VERSION,
-        "p1": {
-            "module": str(P1.relative_to(REPO_ROOT)),
-            "sha256": sha256(P1),
-            "rules": "R1 post => subject = thread root · R2 own channel: post with signals => chain"
-            " = owner · R3 sku/brand with жалоба on the store-stock lexicon => chain = the thread's"
-            " retailer — nothing else",
-        },
-        "sets": sets,
-        "leak_check": leak_check(args.draw3, opened, sorted(set(files))),
-        "decision_table": decision_table(sets),
-    }
-    args.out.write_text(
-        json.dumps(record, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8"
-    )
+    The reading counts GOLD-SHAPED rows (one per comment the model placed); the loop counts the
+    READER rows the tick hands P1 — the `about` rows and the `signal` rows alike. Two denominators,
+    so they are two fields and never one word doing both jobs
+    ([[one_constant_answering_two_questions]])."""
+    if "fired" in block:
+        return block["fired"], block["rewritten_rows"]
+    return {rule: block["p1"][rule] for rule in ("R1", "R2", "R3")}, block["p1"]["rows_rewritten"]
 
+
+def print_sets(sets: dict) -> None:
+    """The per-set table — the same columns for the reading and for the loop, from the same block."""
     print(
         f"{'set':<6} {'rows':>4}  {'subject before → after':<28} {'signal':<16} R1  R2  R3  rewritten"
     )
     for name, block in sets.items():
         b, a, d = block["before"], block["after"], block["delta"]
+        fired, rewritten = p1_counts(block)
         print(
             f"{name:<6} {block['rows']:>4}  {b['subject_agreement']:.4f} → {a['subject_agreement']:.4f}"
             f" ({d['subject_agreement']:+.4f})      {b['signal_type_agreement']:.4f} → "
             f"{a['signal_type_agreement']:.4f}  "
-            + "  ".join(f"{block['fired'][rule]:>2}" for rule in ("R1", "R2", "R3"))
-            + f"  {block['rewritten_rows']:>3}"
+            + "  ".join(f"{fired[rule]:>2}" for rule in ("R1", "R2", "R3"))
+            + f"  {rewritten:>3}"
         )
+        if "hooks" in block:
+            hooks = block["hooks"]
+            caught = ", ".join(f"{hook} {n}" for hook, n in hooks["counts"].items() if n) or "none"
+            print(
+                f"       hooks dropped {hooks['rows_dropped']['about']} about /"
+                f" {hooks['rows_dropped']['signal']} signal rows of"
+                f" {hooks['rows_in']['about']} / {hooks['rows_in']['signal']} — caught by: {caught}"
+            )
         for stratum in sorted(a["by_stratum"]):
             print(
                 f"       {stratum:<13} subject {b['by_stratum'][stratum]['subject_agreement']:.4f} →"
@@ -327,6 +482,73 @@ def main(argv: list[str] | None = None) -> int:
             f"       misses {mb['total']} → {ma['total']}, of them the gold's own ties (`unsure`)"
             f" {mb['gold_unsure']} → {ma['gold_unsure']}"
         )
+
+
+def main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--draw3", type=Path, default=DRAW_3)
+    parser.add_argument("--out", type=Path, default=OUT)
+    parser.add_argument("--loop-out", type=Path, default=LOOP_OUT)
+    args = parser.parse_args(argv)
+
+    registry = load_registry(REGISTRY)
+    spellings = chain_spellings()
+    p1_module = {
+        "module": str(P1.relative_to(REPO_ROOT)),
+        "sha256": sha256(P1),
+        "rules": "R1 post => subject = thread root · R2 own channel: post with signals => chain"
+        " = owner · R3 sku/brand with жалоба on the store-stock lexicon => chain = the thread's"
+        " retailer — nothing else",
+    }
+    sets, opened, files = {}, set(), []
+    for name, spec in SETS.items():
+        sets[name], threads = rewrite(name, spec, registry, spellings)
+        opened |= threads
+        files += [spec["predicted"], spec["gold"], spec["pack"], spec["draw"]]
+    record = {
+        "contract": "docs/PHASE-promo-pulse-1.md §6.2 v18 · ruling 06.09 (bb) addendum item (4) —"
+        " P1 measured at $0 on the three dev sets, K8 v2 before and after",
+        "k8_version": k8.K8_VERSION,
+        "p1": p1_module,
+        "sets": sets,
+        "leak_check": leak_check(args.draw3, opened, sorted(set(files))),
+        "decision_table": decision_table(sets),
+    }
+
+    brand_ids = {brand.brand_id for brand in registry.watchlist}
+    vocabulary = promo_prompts.vocabulary()
+    loops, loop_opened, loop_files = {}, set(), []
+    for name, spec in SETS.items():
+        loops[name], threads = loop(name, spec, registry, spellings, brand_ids, vocabulary)
+        loop_opened |= threads
+        loop_files += [spec["replies"], spec["gold"], spec["pack"], spec["draw"]]
+    loop_record = {
+        "contract": "docs/PHASE-promo-pulse-1.md §2 v20 · ruling 08.09 (dd) item 5 — the SHIPPED"
+        " number, measured at $0 on the PRODUCT's pipeline end to end (the four hooks of §2 S4,"
+        " then P1) by the product's own functions; the pre-registered readings above stay the"
+        " bar's record and no record of theirs is widened",
+        "k8_version": k8.K8_VERSION,
+        "pipeline": [
+            "market_pulse.promo_prompts.parse — the raw answer of the pod out-file this set names",
+            "market_pulse.promo_hooks.screen — the four hooks of §2 S4, over the pack's comments,"
+            " the registry's brand ids and promo_prompts.vocabulary()",
+            "scripts/tick.py :: p1_rows — the kept rows through market_pulse.promo_post.apply, each"
+            " handed its comment's KEPT signal types, exactly as `make tick` runs it",
+            "scripts/promo_dev_pass.py :: predicted_rows — the gold shape the grader scores",
+            "scripts/grade_promo_signals.py :: grade — K8 v2, the same judge as every reading",
+        ],
+        "p1": p1_module,
+        "sets": loops,
+        "leak_check": holdout3_disjoint(args.draw3, loop_opened, sorted(set(loop_files))),
+    }
+
+    for path, body in ((args.out, record), (args.loop_out, loop_record)):
+        path.write_text(
+            json.dumps(body, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+        )
+
+    print("READING — P1 over the raw answer's rows (the bar's record, ruling (bb)/(cc)):")
+    print_sets(sets)
     table = record["decision_table"]
     for name, held in table["conditions"].items():
         print(f"  [{'x' if held else ' '}] {name}")
@@ -337,9 +559,16 @@ def main(argv: list[str] | None = None) -> int:
         f" {leak['holdout3_threads_shared_with_them']} shared with the"
         f" {leak['threads_opened']} threads this reading opened"
     )
+    print("\nLOOP — the PRODUCT's pipeline: the same raw answers through the hooks, then P1 (SHIPPED):")
+    print_sets(loops)
+    loop_leak = loop_record["leak_check"]
     print(
-        f"wrote {args.out.relative_to(REPO_ROOT) if args.out.is_relative_to(REPO_ROOT) else args.out}"
+        f"leak check: holdout-3 {loop_leak['holdout3_draw']['threads']} threads,"
+        f" {loop_leak['holdout3_threads_shared_with_them']} shared with the"
+        f" {loop_leak['threads_opened']} threads this leg opened"
     )
+    for path in (args.out, args.loop_out):
+        print(f"wrote {path.relative_to(REPO_ROOT) if path.is_relative_to(REPO_ROOT) else path}")
     return 0
 
 
