@@ -40,7 +40,9 @@ def block(rows: list[dict]) -> str:
     ([[a_threshold_that_lives_in_prose]]); each row's own cell still carries its own file's bar.
     The tie sentence follows the row `S2_SOURCES` flags, which ruling 08.09 (dd) item 6 pins to the
     P1 reading — the loop record carries a tie count of its own and printing both, unlabelled,
-    would read as one set counted twice.
+    would read as one set counted twice. It NAMES that row, for the same reason: a count printed
+    under a four-row table attaches itself to whichever row the reader was looking at
+    ([[a_published_number_has_one_reader]]).
     """
     bars = rows[0]["bars"]
     lines = [
@@ -65,7 +67,7 @@ def block(rows: list[dict]) -> str:
         if row["misses"]:
             lines += [
                 "",
-                f"Of the {row['misses']['total']} comments still missed with P1,"
+                f"Of the {row['misses']['total']} comments «{row['label']}» still misses,"
                 f" {row['misses']['gold_unsure']} are rows the gold itself marked `unsure` — the"
                 " codebook allows two readings there (a store-stock complaint: the chain or the"
                 " product; a post in the chain's own channel: the chain or the post).",

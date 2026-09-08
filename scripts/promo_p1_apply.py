@@ -437,16 +437,19 @@ def decision_table(sets: dict) -> dict:
     }
 
 
-def p1_counts(block: dict) -> tuple[dict, int]:
+def p1_counts(block: dict) -> tuple[dict, str]:
     """(rules fired, rows rewritten) for one set's block, whichever leg wrote it.
 
-    The reading counts GOLD-SHAPED rows (one per comment the model placed); the loop counts the
-    READER rows the tick hands P1 — the `about` rows and the `signal` rows alike. Two denominators,
-    so they are two fields and never one word doing both jobs
+    The reading counts GOLD-SHAPED rows (one per comment the model placed, which is the `rows`
+    column beside it); the loop counts the READER rows the tick hands P1 — the `about` rows and the
+    `signal` rows alike, which is a different and larger space. So the loop's count is printed OVER
+    its own denominator: `7` beside `112` reads as «7 of 112» and would say the layer rewrote more
+    here than in the reading, when it rewrote fewer gold rows
     ([[one_constant_answering_two_questions]])."""
     if "fired" in block:
-        return block["fired"], block["rewritten_rows"]
-    return {rule: block["p1"][rule] for rule in ("R1", "R2", "R3")}, block["p1"]["rows_rewritten"]
+        return block["fired"], str(block["rewritten_rows"])
+    fired = {rule: block["p1"][rule] for rule in ("R1", "R2", "R3")}
+    return fired, f"{block['p1']['rows_rewritten']}/{block['p1']['rows_seen']}"
 
 
 def print_sets(sets: dict) -> None:
@@ -462,7 +465,7 @@ def print_sets(sets: dict) -> None:
             f" ({d['subject_agreement']:+.4f})      {b['signal_type_agreement']:.4f} → "
             f"{a['signal_type_agreement']:.4f}  "
             + "  ".join(f"{fired[rule]:>2}" for rule in ("R1", "R2", "R3"))
-            + f"  {rewritten:>3}"
+            + f"  {rewritten:>7}"
         )
         if "hooks" in block:
             hooks = block["hooks"]

@@ -84,12 +84,20 @@ message only `--check` reaches ([[a_patch_list_closed_by_enumeration]])."""
 S2_BOUNDARY = (
     "The shipped row is the product's pipeline end to end: every answer through the four hooks of"
     " §2 S4 — a signal row whose quote is not a substring of the comment it cites is dropped — and"
-    " then P1. The readings below it graded the model's raw answer, upstream of that filter, so"
-    " they are the model's numbers and stand at or above the product's (ruling 08.09 (dd))."
+    " then P1. The «with P1» reading beside it is that same layer over the model's RAW answer, one"
+    " filter upstream, so the two differ by exactly what the hooks drop; the «raw» rows are the"
+    " reader before P1 at all. A number measured upstream of a product filter is the model's,"
+    " disclosed as such, never the product's (ruling 08.09 (dd))."
 )
 """The one sentence that says what separates the shipped row from the readings under it. Defined
 once and rendered on both surfaces, like `s2_readings` itself — a boundary explained two ways is
-two boundaries."""
+two boundaries.
+
+It names the PAIR the hooks separate and makes no claim about the order of the four numbers: only
+«with P1» is the same rows and the same layer one filter upstream, while the «raw» rows lack P1
+entirely and sit BELOW the shipped number on the subject axis in this very table. A sentence that
+generalised the pair's inequality to every row under it would be refuted by the cells it stands
+beneath ([[a_claim_no_number_can_check]])."""
 
 
 def s2_readings(results: Path = RESULTS) -> list[dict]:
@@ -145,7 +153,7 @@ def s2_table(rows: list[dict]) -> str:
         for sub, sig in ((row["bars"]["subject_agreement"], row["bars"]["signal_type_agreement"]),)
     )
     ties = "".join(
-        f"<p>Of the {row['misses']['total']} comments still missed with P1, "
+        f"<p>Of the {row['misses']['total']} comments «{html.escape(row['label'])}» still misses, "
         f"{row['misses']['gold_unsure']} are rows the gold itself marked <code>unsure</code> — "
         "the codebook allows two readings there (a store-stock complaint: the chain or the product;"
         " a post in the chain's own channel: the chain or the post).</p>"
