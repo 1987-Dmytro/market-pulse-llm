@@ -20,17 +20,18 @@ counted and printed, never refused — R1 and R2 still apply to its rows, and R3
 comment, finds nothing to read. The layer is pure and deterministic, so the ids it feeds are the
 same on every tick and K10 below is untouched.
 
-**The loop's P1 input is not byte for byte the reading's, and the difference is measured.** The
-reading (`scripts/promo_p1_apply.py`) fed P1 the rows `promo_dev_pass.predicted_rows` built from
-the model's RAW answer; a record here is the answer AFTER `promo_hooks.screen`, so a signal row
-that failed a hook is gone and its type never reaches P1. Replayed over the two packs on disk: 3
-hook failures on holdout-2 and 4 on dev-40, all `quote_is_a_substring`, and exactly ONE row's P1
-outcome moves — `@VARUS_channel:5119/5987`, whose only `жалоба` row cites the comment with a
-lower-cased first letter, so R3 does not fire and the row stays `sku`. On that set the loop
-reproduces 83/112 = 0.7411 where the published reading is 84/112 = 0.7500; dev-40 is unchanged at
-124/140. Named in `docs/plans/promo-pulse-1.PROGRESS.md` as the open stop: whether the C3 record
-must carry the raw answer's signal types is the team lead's to rule, and the executor may not
-widen that record here.
+**These kept rows ARE the product's rows, and the shipped number is measured on them** (ruled
+08.09 (dd), PHASE v20 §2). A record here is the answer AFTER `promo_hooks.screen`, so a signal row
+that failed a hook is gone and its type never reaches P1; the readings of (bb)/(cc) fed P1 the rows
+`promo_dev_pass.predicted_rows` built from the model's RAW answer, one filter upstream of this. The
+gap is a boundary and not a bug, and it is measured rather than argued:
+`results/grade_promo_loop_readings.json` puts the same three sets through THIS path with THESE
+functions, `scripts/promo_p1_apply.py`'s loop leg calling them. dev-3 reads 0.7411 / 0.7937 where
+the reading published 0.7500 / 0.8021 — 3 signal rows dropped, every one `quote_is_a_substring`,
+and `@VARUS_channel:5119/5987` cites its comment lower-cased, so R3 is unfed and the row stays
+`sku`; dev-40 and dev-2 come out identical both ways. The product's number ships FIRST on the
+screen and in the README, the pre-registered readings stay the bar's record beside it, and the C3
+record is not widened to carry a type whose evidence failed a hook.
 
 **Idempotence is the id, not a flag.** Every row's id is `uuid5` over the row's own normalised key
 (`aggregates.PROMO_KEYS`), so a second tick over an unchanged store recomputes the same ids and
@@ -288,8 +289,10 @@ def p1_rows(record: dict, thread: dict, registry, spellings) -> tuple[list[dict]
     supports never name two subjects for one comment.
 
     The types come from the record's KEPT rows, which is all a record has — and that is where this
-    differs from the reading, whose types came from the raw answer. See the module docstring: one
-    row of holdout-2 moves, and the difference is the team lead's to rule on.
+    differs from the readings of (bb)/(cc), whose types came from the raw answer. Ruled 08.09 (dd):
+    the kept rows ARE the product's rows, and its number is measured on them — the module docstring
+    above, and `results/grade_promo_loop_readings.json`, which grades exactly this function's
+    output.
     """
     kept = record.get("kept") or {}
     types: dict[str, set] = {}

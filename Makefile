@@ -36,9 +36,12 @@ baselines:
 tick:
 	PYTHONPATH=src python3.11 scripts/tick.py
 
-# The C5 promo screen. Reads `results/promo_screen_data.json` for the market and the three graders'
+# The C5 promo screen. Reads `results/promo_screen_data.json` for the market and the graders'
 # records of `build_promo_screen.S2_SOURCES` for the S2 block — committed result files, nothing
 # else — and exits non-zero with a named error when any of them is missing, which is what makes it
-# runnable on a clean clone.
+# runnable on a clean clone. The README's S2 block is written from the SAME reader in the same
+# breath (ruling 08.09 (dd) item 5 (iii)): the writer had no caller, so the block could go stale
+# against the screen beside it without anything saying so.
 promo-screen:
 	PYTHONPATH=src python3.11 scripts/build_promo_screen.py
+	PYTHONPATH=src python3.11 scripts/build_readme_results.py
