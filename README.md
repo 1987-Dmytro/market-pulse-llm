@@ -51,9 +51,12 @@ by name, when a file is missing.
 
 | reading | subject | signal | file |
 |---|---|---|---|
-| holdout-2 · with P1 | 0.7500 (84/112) ❌ bar 0.80 | 0.8021 ✅ bar 0.75 | `results/grade_promo_p1_readings.json` :: sets.dev3.after |
-| holdout-2 · raw | 0.7054 (79/112) ❌ bar 0.80 | 0.8021 ✅ bar 0.75 | `results/grade_promo_holdout2.json` :: whole_40 |
-| holdout-40 · raw | 0.7181 (135/188) ❌ bar 0.80 | 0.7958 ✅ bar 0.75 | `results/grade_promo_holdout40.json` :: whole_40 |
+| holdout-2 · loop (hooks + P1) — shipped | 0.7411 (83/112) ❌ bar 0.80 | 0.7937 ✅ bar 0.75 | `results/grade_promo_loop_readings.json` :: sets.dev3.after |
+| holdout-2 · with P1 — reading | 0.7500 (84/112) ❌ bar 0.80 | 0.8021 ✅ bar 0.75 | `results/grade_promo_p1_readings.json` :: sets.dev3.after |
+| holdout-2 · raw — reading | 0.7054 (79/112) ❌ bar 0.80 | 0.8021 ✅ bar 0.75 | `results/grade_promo_holdout2.json` :: whole_40 |
+| holdout-40 · raw — reading | 0.7181 (135/188) ❌ bar 0.80 | 0.7958 ✅ bar 0.75 | `results/grade_promo_holdout40.json` :: whole_40 |
+
+The shipped row is the product's pipeline end to end: every answer through the four hooks of §2 S4 — a signal row whose quote is not a substring of the comment it cites is dropped — and then P1. The readings below it graded the model's raw answer, upstream of that filter, so they are the model's numbers and stand at or above the product's (ruling 08.09 (dd)).
 
 Of the 28 comments still missed with P1, 16 are rows the gold itself marked `unsure` — the codebook allows two readings there (a store-stock complaint: the chain or the product; a post in the chain's own channel: the chain or the post).
 <!-- /S2 READINGS -->

@@ -9,11 +9,15 @@ Not the database, not the raw store, not the registry: a clean clone has none of
 gitignored) and the phase's end-to-end check is exactly that the screen still renders there. Every
 figure about the market comes from that file; this script computes no aggregate of its own.
 
-**Three sources for the instrument's own grade, named.** The S2 block (ruling 06.09 (cc) addendum:
-«ship as measured» — both numbers with their files on the screen) prints the holdout readings of
-the comment reader straight from the graders' records, :data:`S2_SOURCES`: holdout-2 with P1 and
-raw, holdout-40 raw, each value beside its bar and the file's own `held` flag, and the tie count
-the P1 record carries. Committed result files, so a clean clone has them; no number here is typed.
+**Four sources for the instrument's own grade, named, the SHIPPED one first.** The S2 block
+(ruling 06.09 (cc) addendum: «ship as measured» — both numbers with their files on the screen)
+prints the holdout readings of the comment reader straight from the graders' records,
+:data:`S2_SOURCES`. The first row is the product's own pipeline end to end — the four hooks of §2
+S4 and then P1, measured by the product's own functions (ruling 08.09 (dd)); the three below it
+graded the model's RAW answer, before the product's filter, and are labelled «reading» because that
+is what they are: the bar's record, never rewritten. Each value sits beside its bar and the file's
+own `held` flag, and the tie count comes from the reading the ruling pins it to. Committed result
+files, so a clean clone has them; no number here is typed.
 
 **A missing source is a NAMED, non-zero exit.** All three kinds: the export itself, any of
 :data:`REQUIRED` inside it, and any of the S2 files or the block read from it. A screen that
@@ -51,14 +55,41 @@ refusal here rather than an empty section nobody notices."""
 
 RESULTS = REPO_ROOT / "results"
 S2_SOURCES = (
-    ("holdout-2 · with P1", "grade_promo_p1_readings.json", ("sets", "dev3")),
-    ("holdout-2 · raw", "grade_promo_holdout2.json", ()),
-    ("holdout-40 · raw", "grade_promo_holdout40.json", ()),
+    (
+        "holdout-2 · loop (hooks + P1) — shipped",
+        "grade_promo_loop_readings.json",
+        ("sets", "dev3"),
+        False,
+    ),
+    ("holdout-2 · with P1 — reading", "grade_promo_p1_readings.json", ("sets", "dev3"), True),
+    ("holdout-2 · raw — reading", "grade_promo_holdout2.json", (), False),
+    ("holdout-40 · raw — reading", "grade_promo_holdout40.json", (), False),
 )
-"""label · file under `results/` · the path to the block inside it. The P1 record keeps a set's
-reading under `sets.<name>` with `after` / `bars_after` / `misses_after`; a grader's record keeps
-its one reading at the top under `whole_40` / `bars`. Closed like REQUIRED: a missing file or block
-is a refusal, never a blank row."""
+"""label · file under `results/` · the path to the block inside it · does this row carry the TIE
+sentence. A set's reading lives under `sets.<name>` with `after` / `bars_after` / `misses_after` —
+the loop record and the P1 record share that shape; a grader's record keeps its one reading at the
+top under `whole_40` / `bars`. Closed like REQUIRED: a missing file or block is a refusal, never a
+blank row.
+
+The tie flag is a FIELD and not «whichever files happen to carry `misses_after`»: two rows now do,
+their counts differ by the row the hooks drop, and two unlabelled tie paragraphs under one table
+would read as the same set counted twice. Ruling 08.09 (dd) item 6 pins the published tie count to
+the P1 reading (16 of 28), so exactly one row here is True."""
+
+S2_FILES = tuple(filename for _, filename, _, _ in S2_SOURCES)
+"""The source filenames, unpacked ONCE. Both refusals name the closed list, and the shape of a
+source row had already grown a field under two spellings of that name — one of which was in a
+message only `--check` reaches ([[a_patch_list_closed_by_enumeration]])."""
+
+S2_BOUNDARY = (
+    "The shipped row is the product's pipeline end to end: every answer through the four hooks of"
+    " §2 S4 — a signal row whose quote is not a substring of the comment it cites is dropped — and"
+    " then P1. The readings below it graded the model's raw answer, upstream of that filter, so"
+    " they are the model's numbers and stand at or above the product's (ruling 08.09 (dd))."
+)
+"""The one sentence that says what separates the shipped row from the readings under it. Defined
+once and rendered on both surfaces, like `s2_readings` itself — a boundary explained two ways is
+two boundaries."""
 
 
 def s2_readings(results: Path = RESULTS) -> list[dict]:
@@ -68,12 +99,12 @@ def s2_readings(results: Path = RESULTS) -> list[dict]:
     lacks the block it is read for, by name.
     """
     rows = []
-    for label, filename, inside in S2_SOURCES:
+    for label, filename, inside, ties in S2_SOURCES:
         path = results / filename
         if not path.exists():
             raise SystemExit(
                 f"promo-screen REFUSED: missing S2 source {path} — the S2 block reads"
-                f" {', '.join(name for _, name, _ in S2_SOURCES)} and prints no number it did not read"
+                f" {', '.join(S2_FILES)} and prints no number it did not read"
             )
         block = json.loads(path.read_text(encoding="utf-8"))
         try:
@@ -88,7 +119,7 @@ def s2_readings(results: Path = RESULTS) -> list[dict]:
                     "bars": block["bars_after"] if inside else block["bars"],
                     "agreed": reading["subject_agreed"],
                     "comments": reading["subject_comments"],
-                    "misses": block["misses_after"] if inside else None,
+                    "misses": block["misses_after"] if ties else None,
                 }
             )
         except KeyError as error:
@@ -123,7 +154,8 @@ def s2_table(rows: list[dict]) -> str:
     )
     return (
         "<table><tr><th>reading</th><th>subject — what the comment is about (per comment)</th>"
-        "<th>signal — what it says (per thread)</th><th>file</th></tr>" + body + "</table>" + ties
+        "<th>signal — what it says (per thread)</th><th>file</th></tr>" + body + "</table>"
+        + f"<p>{html.escape(S2_BOUNDARY)}</p>" + ties
     )
 
 CSS = """
@@ -287,7 +319,7 @@ def main(argv: list[str] | None = None) -> int:
     if args.check:
         print(
             f"promo-screen: {args.export} is complete — {', '.join(REQUIRED)} all present;"
-            f" S2 sources {', '.join(name for _, name, _ in S2_SOURCES)} read from {args.results}"
+            f" S2 sources {', '.join(S2_FILES)} read from {args.results}"
         )
         return 0
     args.out.parent.mkdir(parents=True, exist_ok=True)

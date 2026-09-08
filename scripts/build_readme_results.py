@@ -4,10 +4,13 @@
     PYTHONPATH=src python3.11 scripts/build_readme_results.py        # rewrites README.md between the markers
 
 Ruling 06.09 (cc) addendum, «ship as measured»: the S2 numbers go into the README with their files,
-and the README fails loudly when a file is missing. The block is the same three holdout readings
-the screen prints, read by the same function — `build_promo_screen.s2_readings` — so the README and
-the screen cannot disagree, and a missing source is that reader's own named refusal. Missing markers
-are this script's. Running it twice writes the same bytes: nothing here reads a clock.
+and the README fails loudly when a file is missing. The block is the same holdout readings the
+screen prints — the product's own pipeline first since ruling 08.09 (dd), the three raw-answer
+readings under it — read by the same function, `build_promo_screen.s2_readings`, and closed by the
+same sentence, `build_promo_screen.S2_BOUNDARY`, so the README and the screen cannot disagree about
+a number or about what separates the shipped row from the readings. A missing source is that
+reader's own named refusal; missing markers are this script's. Running it twice writes the same
+bytes: nothing here reads a clock.
 """
 
 from __future__ import annotations
@@ -30,11 +33,14 @@ END = "<!-- /S2 READINGS -->"
 
 
 def block(rows: list[dict]) -> str:
-    """The markdown the markers enclose: one row per reading, then the tie count the P1 record carries.
+    """The markdown the markers enclose: one row per reading, the boundary, then the tie count.
 
     The two bars in the opening sentence are READ off the first reading's record like every other
     number here — typing «0.80» would put a threshold in prose, where no file can move it
     ([[a_threshold_that_lives_in_prose]]); each row's own cell still carries its own file's bar.
+    The tie sentence follows the row `S2_SOURCES` flags, which ruling 08.09 (dd) item 6 pins to the
+    P1 reading — the loop record carries a tie count of its own and printing both, unlabelled,
+    would read as one set counted twice.
     """
     bars = rows[0]["bars"]
     lines = [
@@ -54,6 +60,7 @@ def block(rows: list[dict]) -> str:
             f" | {sig['value']:.4f} {'✅' if sig['held'] else '❌'} bar {sig['bar']:.2f}"
             f" | `{row['file']}` :: {row['block']} |"
         )
+    lines += ["", screen.S2_BOUNDARY]
     for row in rows:
         if row["misses"]:
             lines += [
