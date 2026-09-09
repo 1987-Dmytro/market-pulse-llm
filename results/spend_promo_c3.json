@@ -8,6 +8,26 @@
       "balance": 5.6900346133,
       "step_spent_usd": 0.2272,
       "note": "c3: 30 pages, 8 posts"
+    },
+    {
+      "at": "2026-09-09T18:57:04+00:00",
+      "closed": true,
+      "balance": 5.6401295078,
+      "window_start": "2026-09-09T16:26:09+00:00",
+      "window_end": "2026-09-09T18:57:00Z",
+      "walk_ms": 889500,
+      "expected_ms": null,
+      "balance_delta_usd": 0.277112,
+      "billing_since_usd": 0.26739,
+      "billing_by_kind": {
+        "pods": 0.030461,
+        "network-volume": 0.009722,
+        "serverless": 0.227207
+      },
+      "note": "c3 closed",
+      "settled_usd": 0.257668,
+      "recorded_reading_usd": 0.2272,
+      "tolerance": 0.05
     }
   ],
   "gpu_note": "RunPod account balance read before the first pod of promo-c3. Step spend = the pessimistic maximum of this anchor minus the balance now and the billing walk since `anchored_at` (SPEC 3.23 (4), Dv411), enforced against $0.80. The SPEC amendment 3.4 (4) phase cap is enforced separately, against results/spend_phase4.json, and neither anchor may be regenerated."
