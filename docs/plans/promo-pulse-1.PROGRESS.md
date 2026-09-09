@@ -1,10 +1,9 @@
 # PROGRESS — promo-pulse-1 (ruling 03.09 (e): the executor's one file — done / next / open stop, ≤60 lines; §8 of the phase file stays the DONE list)
 
 ## Done — 09.09 s37 «harness-fields» ($0, ruling (ee) item 3): the rituals become FIELDS of `.claude/settings.json`
-**Start ritual.** Ruling (ee), the tooling audit (`docs/reviews/2026-09-08-tooling-audit.md`), the issued harness file,
-PROCESS v2.4 and PHASE v21 with STATUS committed by path (`2e886c2`). No STOP file; PROGRESS's «next» («c3-prep») is
-superseded by (ee)3 and returns below, rewritten to v2.4. **$0**: no pod, no registration, no ledger line, `runpodctl`
-never called; cycle 3 REMAINING $2.1178 stands.
+**Start ritual.** Ruling (ee), the audit (`docs/reviews/2026-09-08-tooling-audit.md`), the issued harness file, PROCESS
+v2.4, PHASE v21 and STATUS committed by path (`2e886c2`). No STOP file; «next» («c3-prep») is superseded by (ee)3 and
+returns below on v2.4. **$0**: no pod, no registration, no ledger line, `runpodctl` never called; REMAINING $2.1178.
 **The file (`56308cd`).** `.claude/settings.json` is byte-identical to the issued
 `docs/reviews/2026-09-08-harness-fields/settings.json` — `diff` exit 0 and sha256 `0210144e…` on both sides. The fields:
 `env.CLAUDE_CODE_EFFORT_LEVEL=xhigh` and `ultracode=false` (the two things the operator used to type);
@@ -42,16 +41,20 @@ is the producer's refusal — `promo_post.owner()` needs the `@` while `RawStore
 stem would silently never fire R2/R3.
 
 ## Named, not built (the phase file forbids adding what it did not ask for)
-- **`tooling.md`'s Gotchas still say «The plugin is disabled»** of `/code-review ultra`; its rule — operator-triggered,
-  billed, an agent cannot launch it — stays true, only that premise went stale. (ee)3 said ONE line, so the sibling
-  sentence is named here, not moved.
+- **`knowledge/hot.md`'s curated block is stale and is injected BEFORE this file** at the next start: «Next» still says
+  «s2-loop», HEAD `2a51900`, and its ⛔ line still says the auto classifier blocks `pod create` unconditionally — true
+  only of a session without the flag. (ee)3 says nothing else moves, so s38's start ritual restamps it.
+- **The 12 deny rules are all spelled `Edit(<path>)`** while CLAUDE.md rests one-writer ownership on them, and s37
+  showed different tools meet different gates (Bash `cp` denied, the Write tool through). Whether `Edit(…)` also stops
+  Write is not in the audit and cannot be tested without writing to a team-lead path — the team lead's question.
+- **`tooling.md`'s Gotchas still say «The plugin is disabled»** of `/code-review ultra`; its rule (operator-triggered,
+  billed, no agent can launch it) stays true, only the premise went stale — (ee)3 said ONE line.
 - **No floor on the loop leg's arm selector.** A missing draw file makes `k8.strata_of` return `{}`, `units` empty, and
-  the leg would publish `0.0000` as the shipped number instead of refusing. The reading leg has the same hazard; a
-  floor is a guard, so it is named and not built.
+  the leg would publish `0.0000` as the shipped number instead of refusing; the reading leg has the same hazard.
 - **`graded()`'s `rows` is 139/188/112 on both legs only because no `about` row is dropped** — if a hook ever drops
   one, the loop leg's `rows` stops being the set's gold-shaped row count while the label stays the same.
 - Still no test asserts P1 firing INSIDE the tick, the S2 refusal, or the README writer — all shown, none asserted. K12
   reads the repo's real `results/` through the screen's `--results` default; `tick.REGISTRY` is a module constant.
 - Carried: draw 3 without its own test; the hard-stop edge in the guard's close; `committed_registration()` does not
-  re-verify `pinned_inputs`; `-r2` re-points nothing; a cross-leg `--step`. The tie count stands at the FILE's rule,
-  16 of 28, per (dd) item 6 — no gold edit. The v2.3 «allow rule + `--help` proof» debt is VOID: (ee)2 retired it.
+  re-verify `pinned_inputs`; `-r2` re-points nothing; a cross-leg `--step`; the tie count stands at the FILE's rule,
+  16 of 28 ((dd)6), no gold edit. VOID: the v2.3 «allow rule + `--help` proof» debt — (ee)2 retired it.
