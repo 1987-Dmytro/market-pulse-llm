@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-09-09 18:21:27 (every SessionStart)
+**Auto-refreshed:** 2026-09-09 20:40:28 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
-f439ac5 docs(team-lead): ruling 09.09 (jj) — s41 «c3-prep-4» ACCEPTED ($0) on my own runs; third verifier pass SAFE TO BUY (only fail-safe nits, no money-burning risk); the deviation unauthorised-create verified reverted at $0 → GO «c3» (paid, cap $0.80); PHASE v26, stop-patterns §5 (v3.20 validated, no new skill pattern)
-80b3f35 docs(progress): the `make check` reading names its commit (`c9cc937`) and the two commits after it
-5cdf59f knowledge(hot): s41's curated block restamped — §3's one call and §5's close without `--expect-ms`, the superseded «next», and the fence-ordinal footgun that ran §2
-ba1d94b docs(progress): s41 — «c3-prep-4» DONE at $0, no open stop; one deviation, `unauthorised-create`, closed at $0
-c9cc937 s41(c3-prep-4): §3 becomes ONE call with its own API-key export, §5 closes the way C2 really closed, and the registration derives who set the cap — $0, no pod, no registration
+eaee5d2 docs(team-lead): ruling 09.09 (kk) — s42 «c3» ACCEPTED as a COMPLETE paid leg ($0.2577 of $0.80, 30 pages + 8 posts) on my own runs; the OPEN STOP is a FALSE band refusal (5% relative tolerance cannot grade a $0.23 leg — a late-posting $0.0305 kind is 13.4%); ruling: an ABSOLUTE floor beside the band (DOLLAR_FLOOR $0.05, the MS-floor pattern) → «kk-close» ($0) adds it + a two-way test, closes $0.2577, deletes the volume; PHASE v27, stop-patterns §6
+6ae9fcb docs(progress): s42's OPEN STOP — §5 refuses on the BAND, settled $0.257668 vs a recorded $0.227200, 13.4% off a 5.0% tolerance; the reference missed a whole billed kind
+1ec4e27 docs(progress): s42's PROGRESS lands inside its 60-line cap
+fef6e0b docs(progress): the band refusal is labelled a FORECAST off a LOWER BOUND, not a measurement, and the constraint is named — a 5% relative band cannot grade a $0.23 leg
+9095d39 docs(progress): s42 — «c3» BOUGHT at $0.2272 of the $0.80 cap, record complete; §5 refused on the WALK three times (no billing rows), the line stays OPEN
 ```
 
 ## 📋 Recent decisions
