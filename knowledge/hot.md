@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-09-09 16:58:19 (every SessionStart)
+**Auto-refreshed:** 2026-09-09 18:21:27 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
-2ced05c s40(c3-prep-3): §5 reads the cap back from the registration too, and PROGRESS lands inside its 60-line cap
-b80f2f7 knowledge(hot): s40's curated block restamped — the superseded «next» replaced, the cap $0.80 and its command named, `setsid` corrected as the REMOTE runner's rule
-6065c04 docs(progress): s40 — «c3-prep-3» DONE at $0, no open stop. All six sub-items of (hh)4: §0 gains the API-key export and, after the two gates, the CAP as the last link of the same `&&` chain — min($0.80, REMAINING − $0.30) off the guard's own line, rounded down to the cent, with a floor gate at $0.15 that exits 1; run from the file's own text three ways (live $1.4664 → CAP 0.80 exit 0; a scratch tree stamped `auto` dies at gate 1; canned $0.4000 → the floor message exit 1, $0.9000 → 0.60, the room rather than the ceiling). §1 is the TAIL of that call, so §3 reads the cap back from the committed registration (`step.cap_usd` → 0.80) instead of a `$CAP` that shell state cannot carry across the creates. §3 launches DETACHED under `nohup` with the PID in a file and three short polls, `| tee` deleted with C2's own two kills as the reason; `setsid` is not on macOS and hot.md's rule is named as the remote runner's. §5 closes per PROCESS — the post-run `--note`, then `--close --expect-ms $MS --until … --tolerance 0.05`, `$MS` read from the record in WALL seconds (5 840 215 ms on C2's real record) — and the volume delete moves out of §4 to after the close, since an unreadable `billing network-volume` kind refuses the close. `register()` names what it reads: the leg from the census path, every file spelling through `rel()`, the guard line and the contract from `--step`; both controls to a scratch `--prereg` — DEFAULT flags byte-identical (delta 0 lines, stronger than the asked-for delta), c3 flags exactly seven lines, all derived spellings, no number among them; the parent's own default output was run before the control was relied on. Dry run at `--cap 0.80` reproduces 30 pages + 8 posts, `pagecount: match`, dear corner $0.1864, FITS at −76.7%. `make check` green at `474eaf0`: ruff clean, 4326 passed / 2 skipped in five foreground slices, union over the 230 files proved (overlap 0, missing 0) with a negative control that refuses at 184/230. Named, not built: RISK 1's pack-by-rows fix and the dry run's in-run room gate, the untested derived contract, §5's hand-typed `--until`, and `register()`'s inherited quotes. Next: the narrow verifier pass over this item's diff → the team lead's reading → «c3» (paid) in another fresh process
-474eaf0 s40(c3-prep-3): the runbook's cap becomes a COMMAND and its launch a DETACHED one, and the registration stops naming C2 — $0, no pod, no registration
-dcfe3a9 docs(team-lead): ruling 09.09 (hh) + the pattern pass it issues — s39 «c3-prep-2» ACCEPTED ($0); the fresh verifier read NOT SAFE (2 risks, 5 nits, all $0); cap $0.80 (the operator's word); «c3-prep-3» ($0, a FRESH process) precedes «c3»; PHASE v24, skill v3.19
+f439ac5 docs(team-lead): ruling 09.09 (jj) — s41 «c3-prep-4» ACCEPTED ($0) on my own runs; third verifier pass SAFE TO BUY (only fail-safe nits, no money-burning risk); the deviation unauthorised-create verified reverted at $0 → GO «c3» (paid, cap $0.80); PHASE v26, stop-patterns §5 (v3.20 validated, no new skill pattern)
+80b3f35 docs(progress): the `make check` reading names its commit (`c9cc937`) and the two commits after it
+5cdf59f knowledge(hot): s41's curated block restamped — §3's one call and §5's close without `--expect-ms`, the superseded «next», and the fence-ordinal footgun that ran §2
+ba1d94b docs(progress): s41 — «c3-prep-4» DONE at $0, no open stop; one deviation, `unauthorised-create`, closed at $0
+c9cc937 s41(c3-prep-4): §3 becomes ONE call with its own API-key export, §5 closes the way C2 really closed, and the registration derives who set the cap — $0, no pod, no registration
 ```
 
 ## 📋 Recent decisions
