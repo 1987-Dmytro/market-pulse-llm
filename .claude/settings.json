@@ -4,10 +4,7 @@
   },
   "ultracode": false,
   "permissions": {
-    "allow": [
-      "Bash(runpodctl pod create:*)",
-      "Bash(runpodctl pod delete:*)"
-    ],
+    "allow": [],
     "deny": [
       "Edit(/docs/STATUS.md)",
       "Edit(/docs/SPEC.md)",

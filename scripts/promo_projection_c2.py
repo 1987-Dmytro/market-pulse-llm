@@ -231,12 +231,22 @@ def exact_pages(pagecount_path: Path | None = None) -> dict | None:
     return record
 
 
+def rel(path: Path) -> str:
+    """A path as the record spells it: repo-relative when it is inside the repo.
+
+    Every file the record NAMES is derived through this from the path that was actually read —
+    a record that names a file it did not read is a moved record (ruling 09.09 (gg) item 5).
+    """
+    return str(path.relative_to(REPO_ROOT)) if path.is_relative_to(REPO_ROOT) else str(path)
+
+
 def build(census_path: Path = CENSUS, pagecount_path: Path | None = None) -> dict:
     census = read(census_path)
     run = read(RUN_5C2)
     usd_per_second = run["rate_usd_per_second"]
     leaflet = dict(census["selection"]["leaflet_page"])
-    counted = exact_pages(pagecount_path)
+    pagecount_used = PAGECOUNT if pagecount_path is None else pagecount_path
+    counted = exact_pages(pagecount_used)
     if counted:
         pages = counted["totals"]["pages"]
         leaflet["pages_floor"] = leaflet["pages_ceiling"] = pages
@@ -280,9 +290,8 @@ def build(census_path: Path = CENSUS, pagecount_path: Path | None = None) -> dic
         " ANSWERED 2026-09-01 («Цикл-3 = весь баланс, потолок $4.8»), so this is no longer a"
         " stop-point but the price of the leg, against the cycle-3 remainder read below.",
         "reads": {
-            "census": str(census_path.relative_to(REPO_ROOT))
-            if census_path.is_relative_to(REPO_ROOT)
-            else str(census_path),
+            "census": rel(census_path),
+            "pagecount": rel(pagecount_used) if counted else None,
             "census_ids_sha256": census["selection"]["ids_sha256"],
             "window": census["window"],
             "rates": "results/run_5c2_positions.json",
@@ -309,7 +318,7 @@ def build(census_path: Path = CENSUS, pagecount_path: Path | None = None) -> dic
             "pages_ceiling": leaflet["pages_ceiling"],
             "pages_known_from_a_manifest": leaflet["pages_known"],
             "pages_exact": counted["totals"]["pages"] if counted else None,
-            "pages_counted_by": "results/promo_pagecount_c2.json" if counted else None,
+            "pages_counted_by": rel(pagecount_used) if counted else None,
             "pages_state": (
                 f"COUNTED — {counted['totals']['rows_exact']} of"
                 f" {counted['totals']['pinned_media_posts']} pinned posts re-read off Telegram,"
@@ -332,7 +341,7 @@ def build(census_path: Path = CENSUS, pagecount_path: Path | None = None) -> dic
             "c2_priced_usd": c2_priced,
             "c2_priced_means": "THE one number clause (a) asks for: the C2 vision leg at the"
             f" MARGINAL rate. {leaflet['pages_ceiling']} counted pages"
-            f" (results/promo_pagecount_c2.json) at the marginal's PESSIMISTIC end"
+            f" ({rel(pagecount_used)}) at the marginal's PESSIMISTIC end"
             f" ({bound['seconds_per_page_upper']} s/page) plus ONE cold start"
             f" (${bound['one_boot_usd']}), which is what a pass this size pays. The optimistic end"
             f" is ${bound['usd_at_pages_floor'][0]}; both are readings of the same smoke, and the"

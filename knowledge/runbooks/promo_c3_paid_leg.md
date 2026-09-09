@@ -9,23 +9,21 @@ spelling resolves to no source at all (ruling 08.09 (dd) item 5).
 
 ## 0. The gates ($0) — chained with `&&`, each exits ≠ 0 before the step it guards
 
-The launch line is no longer typed: `permissions.defaultMode = "bypassPermissions"` lives in
+Nothing is typed at launch: the session is started as plain `claude` (its bypass confirmation
+dialog accepted) and the mode comes from `permissions.defaultMode = "bypassPermissions"` in
 `~/.claude/settings.json` (ruling 09.09 (ff) item 3 — from the PROJECT file that key is ignored).
 What the session actually got is stamped by a `PreToolUse(Bash)` hook, so §0 reads the stamp and
 never the intention:
 
 ```
 grep -qx bypassPermissions .claude/session_mode && echo "MODE bypass" \
-&& python3 -c 'import json,sys;s=json.load(open(".claude/settings.json"));h=[x for e in s["hooks"].values() for g in e for x in g["hooks"]];ok=s.get("env",{}).get("CLAUDE_CODE_EFFORT_LEVEL")=="xhigh" and s.get("ultracode") is False and {"Bash(runpodctl pod create:*)","Bash(runpodctl pod delete:*)"}<=set(s["permissions"].get("allow",[])) and all(x.get("timeout",600)<=60 for x in h) and len(s["hooks"]["SessionStart"][0]["hooks"])==1 and len(s["permissions"]["deny"])==12;print("HARNESS FIELDS OK" if ok else "HARNESS FIELDS MISSING");sys.exit(0 if ok else 1)' \
-&& python3 -c 'import json,sys,pathlib;a=[x[5:-3] for x in json.load(open(".claude/settings.json"))["permissions"]["allow"] if x.startswith("Bash(") and x.endswith(":*)")];c=[l.strip() for l in pathlib.Path(sys.argv[1]).read_text().splitlines() if l.strip().startswith("runpodctl") and " create" in l];bad=[one for one in c if not any(one.startswith(p) for p in a)];print("allow prefixes:",a);[print(("  COVERED   " if one not in bad else "  UNCOVERED "),one[:56]) for one in c];print("CREATE PERMISSION OK" if not bad else "CREATE PERMISSION MISSING");sys.exit(1 if bad else 0)' knowledge/runbooks/promo_c3_paid_leg.md
+&& python3 -c 'import json,sys;s=json.load(open(".claude/settings.json"));h=[x for e in s["hooks"].values() for g in e for x in g["hooks"]];ok=s.get("env",{}).get("CLAUDE_CODE_EFFORT_LEVEL")=="xhigh" and s.get("ultracode") is False and s["permissions"].get("allow",[])==[] and len(s["permissions"]["deny"])==12 and all(x.get("timeout",600)<=60 for x in h) and len(s["hooks"]["SessionStart"][0]["hooks"])==1 and any("session_mode" in x.get("command","") for x in h);print("HARNESS FIELDS OK" if ok else "HARNESS FIELDS MISSING");sys.exit(0 if ok else 1)'
 ```
 
-The third gate is the one ruling 08.09 (ee) item 4 asks for: it reads this runbook's OWN create
-lines and the allow prefixes out of `.claude/settings.json`, so neither side is typed here. It is
-NOT satisfied today — see the note under §2 — and that refusal is the gate working, at $0, before
-any anchor exists. Both directions, run 09.09: this file → `CREATE PERMISSION MISSING`, exit 1; the
-same command over a file whose create line is `runpodctl pod create …` → `CREATE PERMISSION OK`,
-exit 0.
+There is no create-permission gate any more: «Allow rules have no effect in bypassPermissions»
+(permission-modes), so a rule that could only matter in a session gate 1 already refuses is inert,
+and (ee) item 4's gate over an empty `allow` list would refuse every leg for a reason the harness
+cannot fix — ruling 09.09 (gg) item 3 retires both, and the fields check now reads `allow == []`.
 
 ## 1. The line, in the PAID session, minutes before the create (ruling 06.09 (y))
 
@@ -61,12 +59,6 @@ runpodctl serverless create --name market-pulse-promo-c3 --template-id T \
   --idle-timeout 60 --execution-timeout 900 --flash-boot
 # -> endpoint id E
 ```
-**The gap §0's third gate refuses on:** the harness's two allow rules are
-`Bash(runpodctl pod create:*)` and `Bash(runpodctl pod delete:*)`. This leg creates a TEMPLATE and a
-SERVERLESS ENDPOINT — neither is `runpodctl pod create`, so no narrow rule covers the commands this
-runbook actually runs, and in any session where the classifier is live they meet it exactly as
-`pod create` did in s33. Named for the team lead; the harness file is not the executor's to edit.
-
 ## 3. The paid run — one command; it health-checks itself (`assert_serving`)
 
 ```
@@ -87,6 +79,18 @@ runpodctl serverless list              # -> []
 runpodctl template list --type user    # -> T gone
 runpodctl network-volume list          # -> qw4nwleanc mp-srv2 EU-RO-1 100  (positive control)
 runpodctl pod list -a                  # -> []
+```
+
+**Then the volume, and ONLY then** — c3 is the phase's last paid run (ruling 05.09 (q), PHASE §6.1
+«the volume goes after c3»; the operator's word given in ruling 09.09 (gg) item 6). The condition is
+the run record, not the calendar: every page and every post ANSWERED in `results/run_promo_c3.json`.
+A run that needs a second `--run` KEEPS the volume — 100 GB is ~$0.24/day, a re-download of the
+weights is dearer. Syntax off the CLI's own help (`runpodctl network-volume delete --help`:
+`delete <volume-id>`, aliases `rm`/`remove`):
+
+```
+runpodctl network-volume delete qw4nwleanc
+runpodctl network-volume list          # -> qw4nwleanc gone  (the delete is proven by the listing)
 ```
 
 ## 5. Close the line (the billing walk lags 30–40 min; close AFTER it settles)
