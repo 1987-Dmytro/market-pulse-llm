@@ -39,12 +39,9 @@ the scoping rule in the file's own `_comment`.
 - **`gh` CLI** — all GitHub work. Preferred over a GitHub MCP: less context, saner rate limits.
 - **`code-review`** (plugin) — decided IN on 27.08 (`docs/PROCESS.md`, «MCP/plugins»): a fresh
   subagent reviews the diff before `/report` on money, secrets or guard code (team-lead skill v2.1
-  §6). **Not enabled yet** — it is installed at USER scope and `~/.claude/settings.json` disables it
-  by name, which no repo file overrides. The operator's one-line change, inside `enabledPlugins`:
-  `"code-review@claude-plugins-official": true,` (equivalently
-  `claude plugin enable code-review@claude-plugins-official`). `.claude/settings.json` here carries
-  no `enabledPlugins` block by design — the team lead's draft has none, and a repo-side override of
-  an explicit user-level `false` could not be verified from inside the session that wrote it.
+  §6). **ENABLED 08.09** (ruling (ee)3) — `~/.claude/settings.json :: enabledPlugins` now carries
+  `"code-review@claude-plugins-official": true`, at USER scope like the install; the repo's
+  `.claude/settings.json` still has no `enabledPlugins` block by design.
 - **`graphify`** (CLI + git `post-commit` hook, not an MCP) — the repo's knowledge graph; see its
   section below. Kept by the 27.08 decision together with `ref`/`context7`, `commit-commands`,
   `security-guidance`, `ponytail` and `gh`; `.mcp.json` stays empty.
