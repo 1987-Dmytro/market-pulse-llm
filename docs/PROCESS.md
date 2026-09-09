@@ -76,19 +76,46 @@ mechanics. Operator-facing digest of the same rules: `docs/STATUS.md` («Пра�
 4. Team lead accepts by diff, artifact and check; STATUS refreshed; one retro line.
 One-sentence contracts (`docs/PROMPT-*.md`) remain for fixes and debts whose diff fits in a sentence.
 
-## Models and effort (02.09; skill v2.5 §5 — named per task, never a session default)
-- Executor = **Claude Opus 5 (1M)**. Before pasting a `/goal` the operator sets **`/effort xhigh`** (session-scoped);
-  `ultracode` (xhigh + a workflow for every task, no mid-run input, up to 16 agents) is OFF for goal loops and paid
-  runs — the keyword goes into a prompt only for a fan-out the team lead names (an audit, a review sweep).
+## Models and effort (02.09; v2.4 08.09 — effort and orchestration are FIELDS of the harness, see «Harness fields»)
+- Executor = **Claude Opus 5 (1M)** until the phase gate (a model change re-issues the standing prompt — at a phase boundary,
+  never inside a paid step; Fable 5.1 is the candidate from C6). Effort `xhigh` and `ultracode` OFF come from `.claude/settings.json`
+  (v2.4); the operator types NOTHING before pasting. `ultracode` (xhigh + a workflow per task, up to 16 agents) is switched on only
+  by `/effort ultracode` in a session the team lead names for a fan-out (an audit, a review sweep) — never for an item or a paid run
+  (s35: 57 agents, 40 dead on the model limit, 22 of 26 findings unverified; s36: a 20-agent review starved `make check` of memory).
 - Fresh-context reviewer on money/guards (`/code-review`): the strongest model available (Fable when offered, else
   Opus); mechanical sweeps (file audits, migrations): Sonnet. A model change re-dials autonomy and re-issues prompts.
 
-## Hooks and guards (deterministic — "must happen every time")
-- `PreToolUse(Bash)` `scripts/hooks/refuse-sweeping-commands.sh`: refuses `git add -A|--all|.` and
-  `make fmt` / `ruff format .`; both directions asserted in `tests/test_hooks.py`.
-- `permissions.deny` on every team-lead path (list above). `SessionStart`: hot-cache refresh, `hot.md`
-  (curated block ≤40 lines), stale-check, context census. `Stop`: brain-session-end. Git `post-commit`:
-  graphify rebuild.
+## Hooks and guards (deterministic — "must happen every time"; v2.4: timeouts are SECONDS, one SessionStart hook)
+- `PreToolUse(Bash)` `scripts/hooks/refuse_sweeping_commands.py`: refuses `git add -A|--all|.` and
+  `make fmt` / `ruff format .` (exit 2 — blocks in every permission mode); both directions asserted in `tests/test_hooks.py`.
+  Its `timeout` is 30 s and generous on purpose — the docs: «a timed-out command hook doesn't block the tool call».
+- `permissions.deny` on every team-lead path (list above) — blocks in every mode, `bypassPermissions` included. `SessionStart`:
+  ONE sequential hook (hot-cache refresh → `hot.md`, curated block ≤40 lines → stale-check → context census; hooks of one event
+  run in PARALLEL, so a data dependency lives inside one command). `Stop`: brain-session-end. Git `post-commit`: graphify rebuild.
+
+## Harness fields (v2.4, 08.09 — ruling (ee); the audit: `docs/reviews/2026-09-08-tooling-audit.md`)
+- **The launch line of every executor session is `claude --dangerously-skip-permissions`** — a FIELD of this section and of every
+  paid runbook's §0, never an accident of the day: the auto-mode classifier never sees `pod create` / `pod delete` (s33's two
+  denials), while the protection that counts stays — `permissions.deny` on team-lead files («Deny rules block in every mode,
+  including bypassPermissions»), the sweep-refusing hook (exit 2 blocks in every mode), the money guard in the repo's own scripts.
+  Belt to the braces for a session started without the flag: `permissions.allow` carries exactly `Bash(runpodctl pod create:*)` and
+  `Bash(runpodctl pod delete:*)` — narrow rules resolve BEFORE the classifier, a broad `Bash(*)` is suspended by it (the docs,
+  permission-modes / auto-mode-config). No other allow rule: one that never fires is deleted at the retro.
+- **Effort and orchestration are fields, not rituals:** `.claude/settings.json` → `"env": {"CLAUDE_CODE_EFFORT_LEVEL": "xhigh"}`
+  (the highest-precedence effort setting in the docs' order) and `"ultracode": false` (the key persists; `/effort ultracode` is
+  session-only). `/effort xhigh` is no longer typed.
+- **Hook `timeout` is in SECONDS** (default 600): guard hooks get a generous one (30 s — a timed-out `PreToolUse` command hook
+  does NOT block, so a short timeout is a hole, not a safety), context hooks a short one; a dependency between hooks of one event
+  lives inside ONE command (they run in parallel).
+- **The check of the fields** — run by the executor when the file changes and by the team lead at acceptance:
+  `python3 -c 'import json,sys;s=json.load(open(".claude/settings.json"));h=[x for e in s["hooks"].values() for g in e for x in g["hooks"]];ok=s.get("env",{}).get("CLAUDE_CODE_EFFORT_LEVEL")=="xhigh" and s.get("ultracode") is False and {"Bash(runpodctl pod create:*)","Bash(runpodctl pod delete:*)"}<=set(s["permissions"].get("allow",[])) and all(x.get("timeout",600)<=60 for x in h) and len(s["hooks"]["SessionStart"][0]["hooks"])==1 and len(s["permissions"]["deny"])==12;print("HARNESS FIELDS OK" if ok else "HARNESS FIELDS MISSING");sys.exit(0 if ok else 1)'`
+  → `HARNESS FIELDS OK`, exit 0. A harness change is issued as a WHOLE file under `docs/reviews/<date>-harness-*/settings.json`,
+  copied by path by the executor and verified by the NEXT session's start (hot.md injected once, the census line) — the team lead
+  never edits the executor's harness. A paid runbook's §0 gate greps both allow rules and the `runpodctl pod create` prefix of its own
+  create line (exit ≠ 0, chained with `&&`).
+- **A harness rule is written from the platform's documentation read that day** (the mechanism quoted beside the rule), never from a
+  symptom in a transcript; its proof is deterministic — a field shown in the file, a rule shown to match — never a harmless call
+  that passed (v2.3's `--help` proof is retired: a harmless call passes the classifier without any rule).
 
 ## Pins and sealed records
 - Sealed registrations pin `src/market_pulse/prompts.py`, `scorer.py`, `brands.py`, `local_llm.py`,
@@ -168,11 +195,11 @@ One-sentence contracts (`docs/PROMPT-*.md`) remain for fixes and debts whose dif
   report carries the top rows that answer the question (D2: 64 lines; C1: 361 lines — the rule's cause).
 - A contract states, before its mechanics, the ONE question the operator will answer from the
   deliverable; a deliverable that measures everything and answers nothing is not accepted.
-- **The paid session's irreversible command is pre-authorised in the harness and PROVEN at $0 in the prep session** (06.09,
-  s33: the auto-mode classifier denied `runpodctl pod create` twice with the line already anchored — ≈ 16 min of anchor age,
-  lifted by the operator's word): the allow rule for `runpodctl pod create …` lives in `.claude/settings.json`, and the prep
-  session runs a call of the same shape that cannot create (`runpodctl pod create --help`) and shows it passed the harness;
-  runbook §0 names the proof. A permission prompt inside a paid session is a stop, and the team lead's.
+- **The paid session's irreversible command never meets a permission gate it can lose** (v2.3 06.09 after s33's two classifier
+  denials, ≈ 16 min of anchor age; **v2.4 08.09 replaces v2.3's `--help` proof, which proved nothing**): the launch line
+  `claude --dangerously-skip-permissions` and the two allow rules are FIELDS («Harness fields»); the paid runbook's §0 states the
+  launch line and its gate greps the rules and the create prefix (exit ≠ 0). A permission prompt or denial inside a paid session is
+  a stop, and the team lead's.
 - `make check` is the verifier (ruff + pytest); `make check-stamped` for a HOLDS reading at a HEAD;
   `scripts/preflight_serving_guards.py` renders the real chat template offline (zero cost) — run it
   before any pod that changes a template or serving config.
@@ -181,14 +208,18 @@ One-sentence contracts (`docs/PROMPT-*.md`) remain for fixes and debts whose dif
   artifact; post-commit hook rebuilds; `--update` after doc changes), `/save` at session end.
 - MCP/plugins (decided 27.08, inventory `knowledge/runbooks/tooling.md`): `.mcp.json` stays empty; kept —
   `context7`/`ref` (docs), `commit-commands`, `security-guidance`, `ponytail`, `graphify` CLI + hooks, `gh`;
-  enable `code-review` (fresh-subagent diff review before `/report` on money/secrets/guard code — skill v2.1
-  §6); deliberately unused here — `blockscout`, `rust-analyzer-lsp`, `serena`, `claude-in-chrome`, `drawio`,
+  `code-review` ENABLED 08.09 (a fresh-subagent diff review on money/secrets/guard code; the team lead's verifier stays
+  the gate); deliberately unused here — `blockscout`, `rust-analyzer-lsp`, `serena`, `claude-in-chrome`, `drawio`,
   account connectors. Team-lead side (Cowork): device folder access to the repo, web search for sources,
   Project docs for handoffs; it never runs the executor's tools on the repo. Its shell on the linked Mac is a VM
   that cannot delete files: never run `git status`/`git add` there (a leftover `.git/index.lock` blocks the
   executor's git — 03.09) — read-only `git --no-optional-locks status`, `git log`, `git rev-parse` only; the
   labels are written whole (`device_commit_files`), checked by the team lead's own validator against a dump of
-  the drawn threads (`data/annotation/dev40_threads.json`, gitignored), never edited in place.
+  the drawn threads (`data/annotation/dev40_threads.json`, gitignored), never edited in place. Desktop Commander runs natively on
+  the Mac (no VM): the team lead reads there, runs `git --no-optional-locks` read-only, runs its own `make check` only in the
+  background and never beside the executor's, uses `~/.pyenv/shims/python3.11` (homebrew's lacks the deps), and writes NOTHING
+  into the repo while an executor session is running (its porcelain stamp) — team-lead files are written between sessions and
+  committed by path at the next start ritual.
 
 ## Operator language
 - Conversation and `docs/STATUS.md` in Russian; code, commits, prompts, ADRs, reports in English.
