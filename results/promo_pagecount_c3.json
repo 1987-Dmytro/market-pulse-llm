@@ -1,0 +1,46 @@
+{
+  "channels": [
+    {
+      "channel": "+Ejz6ubzm21IyMTQy",
+      "kinds": {
+        "photo": 30,
+        "video": 12
+      },
+      "pages": 30,
+      "pages_exact": 30,
+      "pages_store_upper_bound": 41,
+      "pages_unreachable_bound": 0,
+      "pinned_media_posts": 29,
+      "rows_exact": 29,
+      "rows_unreachable": 0,
+      "source_id": "marketopt_private",
+      "unreachable_msg_ids": []
+    }
+  ],
+  "contract": "docs/PHASE-promo-pulse-1.md §8 clause (a) — the exact page count ($0)",
+  "method": "Telegram metadata re-read of the census's pinned ids; a page is a photo member of the post's album; an unreachable pinned post is priced at the store's gap bound",
+  "selection": {
+    "ids_sha256": "3dbbf840fc9c917c40af3cdb85219fd9b13b29fffdf9e44470b31e40d47a8fe0",
+    "posts": 29
+  },
+  "totals": {
+    "kinds": {
+      "photo": 30,
+      "video": 12
+    },
+    "pages": 30,
+    "pages_exact": 30,
+    "pages_store_upper_bound": 41,
+    "pages_unreachable_bound": 0,
+    "pinned_media_posts": 29,
+    "rows_exact": 29,
+    "rows_unreachable": 0
+  },
+  "window": {
+    "anchor": "2026-09-05",
+    "anchor_rule": "the corpus's own last day + 1, read after S2's top-up — 5c2-stop-ruling-and-cap-33 (a), plan §5.1 as corrected by the 30.08 review",
+    "days": 28,
+    "rule": "since <= date < anchor, half-open",
+    "since": "2026-08-08"
+  }
+}

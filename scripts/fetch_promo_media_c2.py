@@ -114,7 +114,10 @@ async def download(client, handle: str, message, directory: Path) -> dict:
 
 async def fetch_channel(client, handle: str, pinned: set[int], since, anchor, directory) -> dict:
     """One metadata pass over the window (the pagecount's), then the pinned albums' photos."""
-    entity = await client.get_entity(handle)
+    from collect_r2 import resolvable
+
+    # The same resolve-argument rewrite the pagecount needs, and for the same reason (449cab1).
+    entity = await client.get_entity(resolvable(handle))
     seen = []
     async for message in client.iter_messages(entity, wait_time=pagecount.REQUEST_PAUSE):
         if message.action is not None:
@@ -241,7 +244,9 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
     # One re-point before anything reads them: `write_manifest`, `run` and `on_disk` all take the
     # directory and the manifest off the module, and a leg differs only in where those two point.
-    MEDIA, MANIFEST = args.media, args.manifest
+    # Resolved: every entry records `file` as a path RELATIVE TO the repo, so a relative --media
+    # raises halfway through a download instead of at the flag.
+    MEDIA, MANIFEST = args.media.resolve(), args.manifest.resolve()
 
     census = json.loads(args.census.read_text(encoding="utf-8"))
     record = json.loads(args.pagecount.read_text(encoding="utf-8"))

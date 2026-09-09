@@ -1,0 +1,99 @@
+{
+  "channels": [
+    {
+      "audience": "retail_official",
+      "channel": "+Ejz6ubzm21IyMTQy",
+      "media_msg_ids": [
+        "5323",
+        "5324",
+        "5325",
+        "5326",
+        "5327",
+        "5329",
+        "5330",
+        "5331",
+        "5332",
+        "5333",
+        "5334",
+        "5335",
+        "5336",
+        "5338",
+        "5339",
+        "5340",
+        "5341",
+        "5342",
+        "5343",
+        "5344",
+        "5345",
+        "5347",
+        "5348",
+        "5349",
+        "5350",
+        "5351",
+        "5352",
+        "5353",
+        "5363"
+      ],
+      "media_share": 1.0,
+      "pages_ceiling": 290,
+      "pages_floor": 29,
+      "pages_known": 0,
+      "posts_in_window": 29,
+      "posts_with_media_in_window": 29,
+      "posts_with_pages_known": 0,
+      "price_share": 0.2759,
+      "source_id": "marketopt_private",
+      "source_type": "official_retail",
+      "text_price_msg_ids": [
+        "5327",
+        "5329",
+        "5333",
+        "5336",
+        "5340",
+        "5345",
+        "5347",
+        "5363"
+      ],
+      "text_price_posts_in_window": 8
+    }
+  ],
+  "contract": "docs/plans/promo-pulse-1.md S3 / K3 — the C2 census ($0)",
+  "page_bound": {
+    "images_measured": 1242,
+    "largest_album": 10,
+    "manifests": [
+      "post_media_5c1.json",
+      "post_media_45g2.json",
+      "post_media_visc.json"
+    ],
+    "note": "the ceiling is the largest album these manifests contain, measured — not the platform's documented limit, which this repo has no file for",
+    "posts_measured": 367
+  },
+  "selection": {
+    "ids_sha256": "3dbbf840fc9c917c40af3cdb85219fd9b13b29fffdf9e44470b31e40d47a8fe0",
+    "leaflet_page": {
+      "pages_ceiling": 290,
+      "pages_floor": 29,
+      "pages_known": 0,
+      "posts": 29
+    },
+    "pinned_by": "row ids, not a date range evaluated at run time — SPEC 3.18 (4)",
+    "post_text": {
+      "posts": 8
+    },
+    "rows": 37
+  },
+  "totals": {
+    "channels": 1,
+    "posts_in_window": 29,
+    "posts_with_media_in_window": 29,
+    "text_price_posts_in_window": 8
+  },
+  "window": {
+    "anchor": "2026-09-05",
+    "anchor_rule": "the corpus's own last day + 1, read after S2's top-up — 5c2-stop-ruling-and-cap-33 (a), plan §5.1 as corrected by the 30.08 review",
+    "days": 28,
+    "rule": "since <= date < anchor, half-open",
+    "since": "2026-08-08"
+  }
+}

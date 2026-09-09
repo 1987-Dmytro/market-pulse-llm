@@ -42,9 +42,10 @@
 - [[_TEMPLATE]]
 - [[INDEX]]
 
-## runbooks/ (2)
+## runbooks/ (3)
 - [[tooling]]
 - [[promo_c2_paid_leg]]
+- [[promo_c3_paid_leg]]
 
 ## templates/ (2)
 - [[daily-log]]

@@ -1,0 +1,529 @@
+{
+  "by_channel": [
+    {
+      "channel": "+Ejz6ubzm21IyMTQy",
+      "images": 30,
+      "matches_pagecount": true,
+      "pages_exact": 30,
+      "pinned_media_posts": 29,
+      "posts_fetched": 29,
+      "posts_unreachable": 0
+    }
+  ],
+  "contract": "docs/plans/promo-pulse-1.md S4 — the census's pages on disk ($0, Telegram)",
+  "entries": {
+    "+Ejz6ubzm21IyMTQy:5323": {
+      "album": false,
+      "channel": "+Ejz6ubzm21IyMTQy",
+      "date": "2026-08-08T05:12:01+00:00",
+      "images": [
+        {
+          "bytes": 145004,
+          "file": "data/annotation/promo_c3/posts_media/+Ejz6ubzm21IyMTQy_5323.jpg",
+          "msg_id": 5323,
+          "sha256": "afe9799a7f204842b304b21bebc48f282e84df0bc79349d1d1b011a84a281326"
+        }
+      ],
+      "missing": [],
+      "msg_id": 5323
+    },
+    "+Ejz6ubzm21IyMTQy:5324": {
+      "album": false,
+      "channel": "+Ejz6ubzm21IyMTQy",
+      "date": "2026-08-10T07:51:27+00:00",
+      "images": [
+        {
+          "bytes": 190230,
+          "file": "data/annotation/promo_c3/posts_media/+Ejz6ubzm21IyMTQy_5324.jpg",
+          "msg_id": 5324,
+          "sha256": "7d00a347bdd58dd5129e59f541d7d090db6275267afae45211b47d17a4b2adec"
+        }
+      ],
+      "missing": [],
+      "msg_id": 5324
+    },
+    "+Ejz6ubzm21IyMTQy:5325": {
+      "album": false,
+      "channel": "+Ejz6ubzm21IyMTQy",
+      "date": "2026-08-13T05:58:54+00:00",
+      "images": [
+        {
+          "bytes": 142025,
+          "file": "data/annotation/promo_c3/posts_media/+Ejz6ubzm21IyMTQy_5325.jpg",
+          "msg_id": 5325,
+          "sha256": "f736b3e3b6ccca738f5e7689899efbe6f132c5ab0436312e45d19b8f4e4c11b7"
+        }
+      ],
+      "missing": [],
+      "msg_id": 5325
+    },
+    "+Ejz6ubzm21IyMTQy:5326": {
+      "album": false,
+      "channel": "+Ejz6ubzm21IyMTQy",
+      "date": "2026-08-13T06:20:28+00:00",
+      "images": [
+        {
+          "bytes": 242065,
+          "file": "data/annotation/promo_c3/posts_media/+Ejz6ubzm21IyMTQy_5326.jpg",
+          "msg_id": 5326,
+          "sha256": "e7dc3f6fb7958d7794f715d26da5ef8b39a97dd5df695f10de876d07896d87c2"
+        }
+      ],
+      "missing": [],
+      "msg_id": 5326
+    },
+    "+Ejz6ubzm21IyMTQy:5327": {
+      "album": true,
+      "channel": "+Ejz6ubzm21IyMTQy",
+      "date": "2026-08-14T07:17:39+00:00",
+      "images": [
+        {
+          "bytes": 161548,
+          "file": "data/annotation/promo_c3/posts_media/+Ejz6ubzm21IyMTQy_5327.jpg",
+          "msg_id": 5327,
+          "sha256": "da53e85e4e7ca336d21f9e251d773d74aacb1db58aa778625a0bc4024b826314"
+        },
+        {
+          "bytes": 153164,
+          "file": "data/annotation/promo_c3/posts_media/+Ejz6ubzm21IyMTQy_5328.jpg",
+          "msg_id": 5328,
+          "sha256": "0882ef553f69d89e6e1f7db977e374992317e1e2a1dd1a085948a932edd9aa6c"
+        }
+      ],
+      "missing": [],
+      "msg_id": 5327
+    },
+    "+Ejz6ubzm21IyMTQy:5329": {
+      "album": false,
+      "channel": "+Ejz6ubzm21IyMTQy",
+      "date": "2026-08-14T16:04:46+00:00",
+      "images": [
+        {
+          "bytes": 200396,
+          "file": "data/annotation/promo_c3/posts_media/+Ejz6ubzm21IyMTQy_5329.jpg",
+          "msg_id": 5329,
+          "sha256": "6baf53eae2bfd4cb44cbce71a449c84b181fa46ae047f37cb918afb902d597fb"
+        }
+      ],
+      "missing": [],
+      "msg_id": 5329
+    },
+    "+Ejz6ubzm21IyMTQy:5330": {
+      "album": false,
+      "channel": "+Ejz6ubzm21IyMTQy",
+      "date": "2026-08-15T08:50:47+00:00",
+      "images": [
+        {
+          "bytes": 142025,
+          "file": "data/annotation/promo_c3/posts_media/+Ejz6ubzm21IyMTQy_5330.jpg",
+          "msg_id": 5330,
+          "sha256": "f736b3e3b6ccca738f5e7689899efbe6f132c5ab0436312e45d19b8f4e4c11b7"
+        }
+      ],
+      "missing": [],
+      "msg_id": 5330
+    },
+    "+Ejz6ubzm21IyMTQy:5331": {
+      "album": false,
+      "channel": "+Ejz6ubzm21IyMTQy",
+      "date": "2026-08-15T09:28:50+00:00",
+      "images": [],
+      "missing": [
+        {
+          "missing": "media is video",
+          "msg_id": 5331
+        }
+      ],
+      "msg_id": 5331
+    },
+    "+Ejz6ubzm21IyMTQy:5332": {
+      "album": false,
+      "channel": "+Ejz6ubzm21IyMTQy",
+      "date": "2026-08-17T12:38:01+00:00",
+      "images": [],
+      "missing": [
+        {
+          "missing": "media is video",
+          "msg_id": 5332
+        }
+      ],
+      "msg_id": 5332
+    },
+    "+Ejz6ubzm21IyMTQy:5333": {
+      "album": false,
+      "channel": "+Ejz6ubzm21IyMTQy",
+      "date": "2026-08-20T11:58:32+00:00",
+      "images": [
+        {
+          "bytes": 200396,
+          "file": "data/annotation/promo_c3/posts_media/+Ejz6ubzm21IyMTQy_5333.jpg",
+          "msg_id": 5333,
+          "sha256": "6baf53eae2bfd4cb44cbce71a449c84b181fa46ae047f37cb918afb902d597fb"
+        }
+      ],
+      "missing": [],
+      "msg_id": 5333
+    },
+    "+Ejz6ubzm21IyMTQy:5334": {
+      "album": false,
+      "channel": "+Ejz6ubzm21IyMTQy",
+      "date": "2026-08-20T17:15:13+00:00",
+      "images": [
+        {
+          "bytes": 148314,
+          "file": "data/annotation/promo_c3/posts_media/+Ejz6ubzm21IyMTQy_5334.jpg",
+          "msg_id": 5334,
+          "sha256": "04dc92faf50f87ca160f16f0a3ba9a95592c533fde9997fdbc19c87f61a9aef7"
+        }
+      ],
+      "missing": [],
+      "msg_id": 5334
+    },
+    "+Ejz6ubzm21IyMTQy:5335": {
+      "album": false,
+      "channel": "+Ejz6ubzm21IyMTQy",
+      "date": "2026-08-21T05:12:01+00:00",
+      "images": [
+        {
+          "bytes": 155445,
+          "file": "data/annotation/promo_c3/posts_media/+Ejz6ubzm21IyMTQy_5335.jpg",
+          "msg_id": 5335,
+          "sha256": "df3fb6bffd40b4d69dc24223b6e219d0166291df58b0ebd6dbe8d10b6bdeda82"
+        }
+      ],
+      "missing": [],
+      "msg_id": 5335
+    },
+    "+Ejz6ubzm21IyMTQy:5336": {
+      "album": true,
+      "channel": "+Ejz6ubzm21IyMTQy",
+      "date": "2026-08-21T08:37:06+00:00",
+      "images": [
+        {
+          "bytes": 162209,
+          "file": "data/annotation/promo_c3/posts_media/+Ejz6ubzm21IyMTQy_5336.jpg",
+          "msg_id": 5336,
+          "sha256": "5589914823beab4a6d43ac960e75f4a23fb43d2d97e76094b90edd5f629b33b6"
+        },
+        {
+          "bytes": 163675,
+          "file": "data/annotation/promo_c3/posts_media/+Ejz6ubzm21IyMTQy_5337.jpg",
+          "msg_id": 5337,
+          "sha256": "c1d7fe2109fffc52db5a339989abb65d7768aa78a575cd562104f2bbd688b66e"
+        }
+      ],
+      "missing": [],
+      "msg_id": 5336
+    },
+    "+Ejz6ubzm21IyMTQy:5338": {
+      "album": false,
+      "channel": "+Ejz6ubzm21IyMTQy",
+      "date": "2026-08-23T06:55:55+00:00",
+      "images": [],
+      "missing": [
+        {
+          "missing": "media is video",
+          "msg_id": 5338
+        }
+      ],
+      "msg_id": 5338
+    },
+    "+Ejz6ubzm21IyMTQy:5339": {
+      "album": false,
+      "channel": "+Ejz6ubzm21IyMTQy",
+      "date": "2026-08-24T11:23:28+00:00",
+      "images": [],
+      "missing": [
+        {
+          "missing": "media is video",
+          "msg_id": 5339
+        }
+      ],
+      "msg_id": 5339
+    },
+    "+Ejz6ubzm21IyMTQy:5340": {
+      "album": false,
+      "channel": "+Ejz6ubzm21IyMTQy",
+      "date": "2026-08-24T12:37:01+00:00",
+      "images": [
+        {
+          "bytes": 244748,
+          "file": "data/annotation/promo_c3/posts_media/+Ejz6ubzm21IyMTQy_5340.jpg",
+          "msg_id": 5340,
+          "sha256": "035c7c415b0a84306ad2646ec6b4a1d24ab3eabcbcc4c7960b15d0869a13f9e1"
+        }
+      ],
+      "missing": [],
+      "msg_id": 5340
+    },
+    "+Ejz6ubzm21IyMTQy:5341": {
+      "album": false,
+      "channel": "+Ejz6ubzm21IyMTQy",
+      "date": "2026-08-24T12:52:50+00:00",
+      "images": [
+        {
+          "bytes": 242065,
+          "file": "data/annotation/promo_c3/posts_media/+Ejz6ubzm21IyMTQy_5341.jpg",
+          "msg_id": 5341,
+          "sha256": "e7dc3f6fb7958d7794f715d26da5ef8b39a97dd5df695f10de876d07896d87c2"
+        }
+      ],
+      "missing": [],
+      "msg_id": 5341
+    },
+    "+Ejz6ubzm21IyMTQy:5342": {
+      "album": false,
+      "channel": "+Ejz6ubzm21IyMTQy",
+      "date": "2026-08-26T04:12:01+00:00",
+      "images": [
+        {
+          "bytes": 256567,
+          "file": "data/annotation/promo_c3/posts_media/+Ejz6ubzm21IyMTQy_5342.jpg",
+          "msg_id": 5342,
+          "sha256": "da8bcdcad0ca974503ee7e051e46dc41340f1c84391da42e99f3515157c2d3e8"
+        }
+      ],
+      "missing": [],
+      "msg_id": 5342
+    },
+    "+Ejz6ubzm21IyMTQy:5343": {
+      "album": false,
+      "channel": "+Ejz6ubzm21IyMTQy",
+      "date": "2026-08-26T06:15:40+00:00",
+      "images": [
+        {
+          "bytes": 155445,
+          "file": "data/annotation/promo_c3/posts_media/+Ejz6ubzm21IyMTQy_5343.jpg",
+          "msg_id": 5343,
+          "sha256": "df3fb6bffd40b4d69dc24223b6e219d0166291df58b0ebd6dbe8d10b6bdeda82"
+        }
+      ],
+      "missing": [],
+      "msg_id": 5343
+    },
+    "+Ejz6ubzm21IyMTQy:5344": {
+      "album": false,
+      "channel": "+Ejz6ubzm21IyMTQy",
+      "date": "2026-08-27T13:49:31+00:00",
+      "images": [],
+      "missing": [
+        {
+          "missing": "media is video",
+          "msg_id": 5344
+        }
+      ],
+      "msg_id": 5344
+    },
+    "+Ejz6ubzm21IyMTQy:5345": {
+      "album": true,
+      "channel": "+Ejz6ubzm21IyMTQy",
+      "date": "2026-08-28T08:20:17+00:00",
+      "images": [
+        {
+          "bytes": 160363,
+          "file": "data/annotation/promo_c3/posts_media/+Ejz6ubzm21IyMTQy_5345.jpg",
+          "msg_id": 5345,
+          "sha256": "687afb93b7ee35f74c0206f2eb853679005d4d34fc5dcfcc4d3fe0c6e82c3240"
+        },
+        {
+          "bytes": 156566,
+          "file": "data/annotation/promo_c3/posts_media/+Ejz6ubzm21IyMTQy_5346.jpg",
+          "msg_id": 5346,
+          "sha256": "4a169e8f988e42ffd417a9403c2d2692ab6b1916cc18bfb080899e890088060c"
+        }
+      ],
+      "missing": [],
+      "msg_id": 5345
+    },
+    "+Ejz6ubzm21IyMTQy:5347": {
+      "album": false,
+      "channel": "+Ejz6ubzm21IyMTQy",
+      "date": "2026-08-28T09:58:52+00:00",
+      "images": [
+        {
+          "bytes": 183526,
+          "file": "data/annotation/promo_c3/posts_media/+Ejz6ubzm21IyMTQy_5347.jpg",
+          "msg_id": 5347,
+          "sha256": "23c1f4057820ef2aa6292abec5cb86993367cf89f4410b189a70220d3963b76f"
+        }
+      ],
+      "missing": [],
+      "msg_id": 5347
+    },
+    "+Ejz6ubzm21IyMTQy:5348": {
+      "album": false,
+      "channel": "+Ejz6ubzm21IyMTQy",
+      "date": "2026-08-28T11:04:32+00:00",
+      "images": [
+        {
+          "bytes": 132720,
+          "file": "data/annotation/promo_c3/posts_media/+Ejz6ubzm21IyMTQy_5348.jpg",
+          "msg_id": 5348,
+          "sha256": "06aba68e016726f0083dd8a214c9e497de03afc854aad2cd7191b1a643a5fe97"
+        }
+      ],
+      "missing": [],
+      "msg_id": 5348
+    },
+    "+Ejz6ubzm21IyMTQy:5349": {
+      "album": false,
+      "channel": "+Ejz6ubzm21IyMTQy",
+      "date": "2026-08-28T11:12:01+00:00",
+      "images": [
+        {
+          "bytes": 251632,
+          "file": "data/annotation/promo_c3/posts_media/+Ejz6ubzm21IyMTQy_5349.jpg",
+          "msg_id": 5349,
+          "sha256": "1a58c877aef8f18c43e604d4b8fe39141aa43a22bd7b9c3de43b9833f7849184"
+        }
+      ],
+      "missing": [],
+      "msg_id": 5349
+    },
+    "+Ejz6ubzm21IyMTQy:5350": {
+      "album": false,
+      "channel": "+Ejz6ubzm21IyMTQy",
+      "date": "2026-08-29T10:41:15+00:00",
+      "images": [
+        {
+          "bytes": 155445,
+          "file": "data/annotation/promo_c3/posts_media/+Ejz6ubzm21IyMTQy_5350.jpg",
+          "msg_id": 5350,
+          "sha256": "df3fb6bffd40b4d69dc24223b6e219d0166291df58b0ebd6dbe8d10b6bdeda82"
+        }
+      ],
+      "missing": [],
+      "msg_id": 5350
+    },
+    "+Ejz6ubzm21IyMTQy:5351": {
+      "album": false,
+      "channel": "+Ejz6ubzm21IyMTQy",
+      "date": "2026-09-01T06:29:10+00:00",
+      "images": [
+        {
+          "bytes": 175099,
+          "file": "data/annotation/promo_c3/posts_media/+Ejz6ubzm21IyMTQy_5351.jpg",
+          "msg_id": 5351,
+          "sha256": "315a509e027ae14525badd0034d7ca05b7cdf5e4472994f538025efd1d23e8be"
+        }
+      ],
+      "missing": [],
+      "msg_id": 5351
+    },
+    "+Ejz6ubzm21IyMTQy:5352": {
+      "album": false,
+      "channel": "+Ejz6ubzm21IyMTQy",
+      "date": "2026-09-02T15:00:24+00:00",
+      "images": [],
+      "missing": [
+        {
+          "missing": "media is video",
+          "msg_id": 5352
+        }
+      ],
+      "msg_id": 5352
+    },
+    "+Ejz6ubzm21IyMTQy:5353": {
+      "album": true,
+      "channel": "+Ejz6ubzm21IyMTQy",
+      "date": "2026-09-03T12:04:35+00:00",
+      "images": [
+        {
+          "bytes": 240810,
+          "file": "data/annotation/promo_c3/posts_media/+Ejz6ubzm21IyMTQy_5353.jpg",
+          "msg_id": 5353,
+          "sha256": "67a428cb1b7b433b45f042dc67e5f17bf088d583b1af3a44ff0db6d988be8622"
+        },
+        {
+          "bytes": 68963,
+          "file": "data/annotation/promo_c3/posts_media/+Ejz6ubzm21IyMTQy_5354.jpg",
+          "msg_id": 5354,
+          "sha256": "7162824b4e6c31d1523d8ace6d3fcce544cd8f54701ba0cdd6f01d04bd750340"
+        },
+        {
+          "bytes": 135670,
+          "file": "data/annotation/promo_c3/posts_media/+Ejz6ubzm21IyMTQy_5355.jpg",
+          "msg_id": 5355,
+          "sha256": "c7366e276c46e6bbd21dc29763408b6c7fbd7d82416e11c7b46a90c15fc49094"
+        },
+        {
+          "bytes": 247167,
+          "file": "data/annotation/promo_c3/posts_media/+Ejz6ubzm21IyMTQy_5362.jpg",
+          "msg_id": 5362,
+          "sha256": "f3ddaf360ba987ae96d557a0ba3bc985b4e05d1c1ef88218044c35f355d38587"
+        }
+      ],
+      "missing": [
+        {
+          "missing": "media is video",
+          "msg_id": 5356
+        },
+        {
+          "missing": "media is video",
+          "msg_id": 5357
+        },
+        {
+          "missing": "media is video",
+          "msg_id": 5358
+        },
+        {
+          "missing": "media is video",
+          "msg_id": 5359
+        },
+        {
+          "missing": "media is video",
+          "msg_id": 5360
+        },
+        {
+          "missing": "media is video",
+          "msg_id": 5361
+        }
+      ],
+      "msg_id": 5353
+    },
+    "+Ejz6ubzm21IyMTQy:5363": {
+      "album": true,
+      "channel": "+Ejz6ubzm21IyMTQy",
+      "date": "2026-09-04T08:40:41+00:00",
+      "images": [
+        {
+          "bytes": 162839,
+          "file": "data/annotation/promo_c3/posts_media/+Ejz6ubzm21IyMTQy_5363.jpg",
+          "msg_id": 5363,
+          "sha256": "8402090aad373d47da4b6a3f37befb47e5768d5ade2d09894ca32ea5ccd251c5"
+        },
+        {
+          "bytes": 162100,
+          "file": "data/annotation/promo_c3/posts_media/+Ejz6ubzm21IyMTQy_5364.jpg",
+          "msg_id": 5364,
+          "sha256": "35c3e416503b61d22cb10aee848f30c798f34aea0a37f68c7a20f584d39b9089"
+        }
+      ],
+      "missing": [],
+      "msg_id": 5363
+    }
+  },
+  "fetched_at": "2026-09-09T10:54:03+00:00",
+  "media": "data/annotation/promo_c3/posts_media",
+  "selection": {
+    "ids_sha256": "3dbbf840fc9c917c40af3cdb85219fd9b13b29fffdf9e44470b31e40d47a8fe0",
+    "pages_expected": 30,
+    "pages_expected_from": "results/promo_pagecount_c2.json :: totals.pages_exact",
+    "posts": 29
+  },
+  "totals": {
+    "channels": 1,
+    "channels_matching_pagecount": 1,
+    "images": 30,
+    "pages_expected": 30,
+    "posts_fetched": 29,
+    "posts_unreachable": 0
+  },
+  "window": {
+    "anchor": "2026-09-05",
+    "anchor_rule": "the corpus's own last day + 1, read after S2's top-up — 5c2-stop-ruling-and-cap-33 (a), plan §5.1 as corrected by the 30.08 review",
+    "days": 28,
+    "rule": "since <= date < anchor, half-open",
+    "since": "2026-08-08"
+  }
+}

@@ -185,6 +185,7 @@ def render(priced: list[dict]) -> str:
 
 async def reread(rows: list[dict], since, anchor) -> dict[str, dict[int, dict]]:
     """One metadata pass per channel over the census's window. Serial, paced, read-only."""
+    from collect_r2 import resolvable
     from market_pulse.telegram_client import build_client
 
     client = build_client()
@@ -193,7 +194,12 @@ async def reread(rows: list[dict], since, anchor) -> dict[str, dict[int, dict]]:
     try:
         for row in rows:
             handle = row["channel"]
-            entity = await client.get_entity(handle)
+            # `collect_r2.resolvable`, not a second spelling of it: the registry's handle for a
+            # private channel IS its invite hash, and Telethon resolves `t.me/+hash` but not the
+            # bare `+hash` (449cab1). That fix reached the collector and not this reader, which is
+            # why c3's first re-read died on `Cannot find any entity corresponding to
+            # "+Ejz6ubzm21IyMTQy"`. The resolve ARGUMENT only — `handle` stays the store key.
+            entity = await client.get_entity(resolvable(handle))
             seen = []
             async for message in client.iter_messages(entity, wait_time=REQUEST_PAUSE):
                 if message.action is not None:
