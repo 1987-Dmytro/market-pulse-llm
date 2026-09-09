@@ -5,9 +5,8 @@ FRESH process, plain `claude`, «bypass permissions on»; the live hook stamped 
 gate 1 read it green. By path first: ruling (ii) + its pattern pass (`75d7e08`), the two hook files (`632c063`). **PROGRESS's «next»
 is SUPERSEDED by (ii)3** — «the narrow verifier pass» became «next: c3-prep-4», done here. **(i) §3 is ONE call:** the API-key export
 `&&` `CAP=…` (read back off the registration) `&&` `{ nohup env … & echo $! > …pid; }` `&&` `cat …pid`. The key is exported HERE — the
-producer reads it from the environment only, and §0's export is gone by now, so `--run` would exit 1 AFTER the endpoint exists.
-**BRACED**: unbraced, `&` backgrounds the whole `&&` list and `$!` is a subshell's pid. Measured — ONE pid down the chain (`env` → the
-pyenv shim → the interpreter), so `-o comm=` names a moving image and the poll carries **`-o args=`**, which named the run while ALIVE.
+producer reads it from the environment only and §0's export is gone by now, so `--run` would exit 1 AFTER the endpoint exists.
+**BRACED**: unbraced, `&` backgrounds the whole list and `$!` is a subshell's pid. ONE pid runs down the chain (`env` → the pyenv shim → the interpreter), so `-o comm=` names a moving image and the poll carries **`-o args=`**, which named the run while ALIVE.
 **(ii) §5 rebuilt from C2's OWN close (RISK B):** the post-run `--note` moves UP into §4 right after the listings — `step_spent_usd`
 is `max(delta, EVERY billed kind)` with the volume's rent IN it while the close settles on `own_resources` with the volume OUT, so
 the 5% gate's two sides differ by the drip since §1's anchor (≈$0.01/h on a $0.19 leg) and every minute spends the band. The close
@@ -19,14 +18,15 @@ replaced, `grep 'python3 '` prints nothing. **(iv) `register()`:** `cap_from` DE
 `repoint()` swaps it when `args.cap` differs from the import-time constant, read BEFORE the rebind; `go_no_go` names `{leg}`.
 **Both controls to a scratch `--prereg`, nothing under `results/` touched:** DEFAULT flags parent vs mine **byte-identical, delta 0**;
 c3 flags move **exactly those two fields** (4 diff lines), **no number**; the parent's own default output reproduces the sealed C2
-registration but for the addendum half, so the control was reachable before it was relied on. Both directions run: `--cap 0.80` → the
-runbook's command; `--cap 3.95` and no `--cap` → (b). **(v) Rehearsed at $0 with the paid session's own call boundaries:** §0 from the
+registration but for the addendum half, so the control was reachable before it was relied on. Both directions run: `--cap 0.80` → the runbook's command; `--cap 3.95` and no `--cap` → (b). **(v) Rehearsed at $0 with the paid session's own call boundaries:** §0 from the
 file's own text (`RUNPOD_API_KEY set, 50 chars` · `MODE bypass` · `HARNESS FIELDS OK` · `REMAINING $1.4470` · `CAP 0.80`, exit 0);
 §1's `--register` through the control, its guard line and §4's `--note` and §5's `--close` through the **real `parse()`** (no ledger
 written, no anchor opened) with a negative control refusing all three mis-spellings; §3 launched from the file's own text on the dry
 run, ALIVE → GONE; §4's four listings run. §2 is the PURCHASE — see the deviation. **(vi) Dry run at `--cap 0.80`:** 30 pages
-(`289b9cc9…`) + 8 posts (`9363ff8d…`), `pagecount: match`, dear **$0.1864, FITS (−76.7%)** — unmoved. **`make check` green: ruff
-clean, 4326 passed / 2 skipped.** Ends at the committed dry run; **$0**, no registration, no endpoint, no pod.
+(`289b9cc9…`) + 8 posts (`9363ff8d…`), `pagecount: match`, dear **$0.1864, FITS (−76.7%)** — unmoved. **`make check` green at
+`c9cc937`: ruff clean, 4326 passed / 2 skipped** (whole suite, 12:37); the commits after it touch PROGRESS (no test reads it) and
+hot.md, whose 14 readers + `test_volume_calc_5c1.py` are green — 410 passed at HEAD. Ends at the committed dry run; **$0**, nothing
+registered, no endpoint, no pod.
 
 ## DEVIATION `unauthorised-create` — §2 was RUN by accident, at $0, and is fully reverted
 Selecting §3's block by an **ordinal into the fence list** (`sed -n '5p'`) instead of by its own text picked **§2**, and
@@ -48,13 +48,13 @@ registration, no step line open; REMAINING **$1.4470** (15:08Z).
 ## Named, not built (the phase file forbids adding what it did not ask for)
 - **Two free findings for §2:** `serverless create` right after `template create` answered «Unable to find template», and a second
   `template create` under the same name answered «Template name must be unique» (500) — a retry of §2 re-reads the endpoint create,
-  never the template create. The team lead's line to add, not mine.
+  never the template create; the team lead's line to add, not mine.
 - **The close can still refuse on the tolerance**, the same class as RISK B: §4's recorded reading carries the volume, the settled
   figure does not, so on a $0.19 leg the band is spent in about an hour — the remedy is the ruling's own (retry at the next start,
   read-only walk first, never widen). No test asserts `cap_from`, the `{leg}` string or the `{STEP}-s4` contract — all three are runs;
-  and `cap_from`, like `STEP_CAP_USD` it is derived from, is a per-process global, so a second `main()` with a different `--cap` in
-  one process would inherit the first's sentence — no caller does. **RISK 1 stands as (hh)3 left it:** the in-run pack gate is sized
-  by TIME; `min(size, rows left)` and the dry run's in-run room gate are NAMED — $0.80 is what makes the leg pass.- `register()`'s `authority` still carries its verbatim quote. `promo_projection_c2.json` is not reproducible from its producer (live
-  guard reading + growing ledger in a sha-pinned record) — proved by its pin. `tick.py --window` stays `w2`
-  (`tests/test_draw_positions_50.py:151`), so §5 carries `--window all`. Carried unchanged from s40: `tooling.md`'s «the plugin is
-  disabled», the unfloored arm selector, `graded()`'s `rows`, P1/S2/README untested in the tick, the ties, bare-handle `get_entity`.
+  and `cap_from`, like the `STEP_CAP_USD` it derives from, is a per-process global, so a second `main()` with a different `--cap` in one process would inherit the first's sentence — no caller does.
+- **RISK 1 stands as (hh)3 left it:** the in-run pack gate is sized by TIME; `min(size, rows left)` and the dry run's exercise of the
+  in-run room gate are NAMED — $0.80 is what makes the leg pass. `register()`'s `authority` still carries its verbatim quote, and
+  `promo_projection_c2.json` is not reproducible from its producer (live guard reading + growing ledger in a sha-pinned record) —
+  proved by its pin. `tick.py --window` stays `w2` (`tests/test_draw_positions_50.py:151`), so §5 carries `--window all`. Carried from
+  s40: `tooling.md`'s «plugin disabled», the unfloored arm selector, `graded()`'s `rows`, P1/S2/README untested in the tick, the ties.
