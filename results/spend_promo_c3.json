@@ -2,6 +2,13 @@
   "runpod_balance_at_promo-c3_start": 5.9172413633,
   "anchored_at": "2026-09-09T16:26:09+00:00",
   "promo-c3_gpu_cap_usd": 0.8,
-  "gpu_sessions": [],
+  "gpu_sessions": [
+    {
+      "at": "2026-09-09T16:46:25+00:00",
+      "balance": 5.6900346133,
+      "step_spent_usd": 0.2272,
+      "note": "c3: 30 pages, 8 posts"
+    }
+  ],
   "gpu_note": "RunPod account balance read before the first pod of promo-c3. Step spend = the pessimistic maximum of this anchor minus the balance now and the billing walk since `anchored_at` (SPEC 3.23 (4), Dv411), enforced against $0.80. The SPEC amendment 3.4 (4) phase cap is enforced separately, against results/spend_phase4.json, and neither anchor may be regenerated."
 }

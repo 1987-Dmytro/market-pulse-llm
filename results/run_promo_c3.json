@@ -1,0 +1,192 @@
+{
+  "runs": [
+    {
+      "phase": "promo-pulse-1 S4 — the C3 backfill (PAID): vision for the census's pages, text for its price posts",
+      "authority": "results/prereg_promo_c3.json",
+      "endpoint": "mjnctafh13ausp",
+      "step": {
+        "cap_usd": 0.8,
+        "ledger": "results/spend_promo_c3.json",
+        "name": "promo-c3",
+        "spent_before_this_run_usd": 0.0,
+        "cap_left_usd": 0.8
+      },
+      "info": {
+        "adapter_dir": null,
+        "adapter_sha256": null,
+        "chat_template": {
+          "add_generation_prompt": true,
+          "enable_thinking": false
+        },
+        "max_new_tokens": 1200,
+        "merge_state": "base-no-adapter",
+        "merged_provenance": null,
+        "merged_sha256": null,
+        "model": "google/gemma-4-31b-it",
+        "positions_prompt_sha256": {
+          "positions_post_gm4": "ca6303c157d46e707aaf3fc52c7a05ed1450e24c26db0e7c93eefba4f6968754",
+          "positions_text_gm4": "7250b87aa1c2de407e06ab9eed565dd4d88025add7be0d2d2a87607c0d872860"
+        },
+        "quantization": {
+          "bnb_4bit_compute_dtype": "bfloat16",
+          "bnb_4bit_quant_type": "nf4",
+          "bnb_4bit_use_double_quant": true,
+          "load_in_4bit": true
+        },
+        "repo_commit": "c4e48272e6055baa4fd551228b13bb98d954b3b7",
+        "revision_requested": "842da3794eaa0b77d5f08bae87a17459d91ff475",
+        "runtime": {
+          "accelerate": "1.14.0",
+          "bitsandbytes": "0.50.0",
+          "cuda_runtime": "12.8",
+          "driver": "580.178.04",
+          "gpu": "NVIDIA GeForce RTX 4090",
+          "gpu_count": 1,
+          "gpu_memory_total": "24564 MiB",
+          "model_revision": "842da3794eaa0b77d5f08bae87a17459d91ff475",
+          "peft": "0.20.0",
+          "pod_id": "8f7itos72efemh",
+          "revision_requested": "842da3794eaa0b77d5f08bae87a17459d91ff475",
+          "runpod": "1.11.0",
+          "torch": "2.8.0+cu128",
+          "transformers": "5.14.1",
+          "weights_requested": "google/gemma-4-31b-it"
+        },
+        "serving_config": "POSITIONS",
+        "weights_dir": "google/gemma-4-31b-it"
+      },
+      "queued": {
+        "pages": 30,
+        "posts": 8
+      },
+      "go_no_go": {
+        "when": "after the two non-gold warm-up calls of SPEC 3.17 (9), before the first gold call",
+        "billed_seconds": 525.415,
+        "page_marginal_seconds": 37.74,
+        "text_marginal_seconds": 0.917,
+        "gold_calls": 8,
+        "gold_seconds": 7.336,
+        "idle_tail_seconds": 60.0,
+        "projected_usd": 0.1818,
+        "budget_usd": 0.8,
+        "refuse": false,
+        "leg": "post_text — ruling 02.09 (c) item 1: this gate prices the TEXT leg alone (n_pages = 0 by the law); the page legs gate per channel against the room, never as one step",
+        "page_warmup_seconds": 37.74,
+        "over_cap_by": -0.7728
+      },
+      "leaflet": [
+        {
+          "channel": "+Ejz6ubzm21IyMTQy",
+          "pages_queued": 30,
+          "pages_bought": 30,
+          "pages_left": 0,
+          "measured_seconds_per_page": 19.8283,
+          "measured_n": 14,
+          "remainder_pages": 16,
+          "remainder_usd_at_its_rate": 0.0973,
+          "remainder_bought": true,
+          "room_usd_before": 0.333,
+          "packs": [
+            {
+              "pack": 0,
+              "asked": 14,
+              "pages_written": 14,
+              "positions_written": 28,
+              "unreadable": 0,
+              "watermark": 5340
+            },
+            {
+              "pack": 1,
+              "asked": 16,
+              "pages_written": 16,
+              "positions_written": 29,
+              "unreadable": 0,
+              "watermark": 5364
+            }
+          ],
+          "stopped": false,
+          "room_usd_after_first_pack": 0.2464
+        }
+      ],
+      "stages": [
+        {
+          "after": "post_text",
+          "calls_done": 8,
+          "calls_total": 38,
+          "opened_seconds": 525.415,
+          "billed_seconds": 535.777,
+          "marginal_seconds_per_call": 1.2953,
+          "idle_tail_seconds": 60.0,
+          "spent_usd": 0.1643,
+          "remaining_usd": 0.0119,
+          "projected_usd": 0.1946,
+          "cap_usd": 0.8,
+          "over_cap": false,
+          "room_usd": 0.333
+        },
+        {
+          "after": "+Ejz6ubzm21IyMTQy",
+          "calls_done": 38,
+          "calls_total": 38,
+          "opened_seconds": 525.415,
+          "billed_seconds": 1115.545,
+          "marginal_seconds_per_call": 15.5297,
+          "idle_tail_seconds": 60.0,
+          "spent_usd": 0.3421,
+          "remaining_usd": 0.0,
+          "projected_usd": 0.3605,
+          "cap_usd": 0.8,
+          "over_cap": false,
+          "room_usd": 0.1552
+        }
+      ],
+      "measured": {
+        "+Ejz6ubzm21IyMTQy": 19.8283
+      },
+      "room": {
+        "rule": "ruling 02.09 (c) item 2(b): cap − step spent − one wedged job − the idle tail",
+        "cap_left_usd": 0.8,
+        "reserve_usd": 0.2843,
+        "idle_tail_usd": 0.0184,
+        "pack_pages_by_count": 14,
+        "pack_note": "the COUNT bound; bytes bind first (8 MB), so a real pack is smaller and the pre-channel check below refuses early rather than late"
+      },
+      "post_text": [
+        {
+          "channel": "+Ejz6ubzm21IyMTQy",
+          "pack": 0,
+          "asked": 8,
+          "posts_read": 8,
+          "positions_written": 0,
+          "unreadable": 0,
+          "empty": 8,
+          "watermark": 5363
+        }
+      ],
+      "unbought": {
+        "pages": {},
+        "posts": {},
+        "pages_total": 0,
+        "posts_total": 0
+      },
+      "timing": {
+        "calls": 6,
+        "rows": 40,
+        "worker_seconds": 826.551,
+        "queue_seconds": 264.096,
+        "wall_seconds": 1115.545,
+        "seconds_per_call": 137.758,
+        "wall_per_call": 185.924,
+        "wall_per_row": 27.889,
+        "seconds_per_row": 20.664,
+        "idle_share": 0.2591,
+        "worker_ids": [
+          "8f7itos72efemh"
+        ]
+      },
+      "billed_usd_at_the_rate": 0.3421,
+      "notes": [],
+      "at": "2026-09-09T16:45:44+00:00"
+    }
+  ]
+}

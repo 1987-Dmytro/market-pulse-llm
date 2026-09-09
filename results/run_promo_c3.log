@@ -1,0 +1,43 @@
+PHASE 4 CLOSED    $32.4708 of $33.00  (final reading 2026-08-16T11:09:48+00:00)
+  pods            $17.6921
+  network-volume  $3.2278   <- always on, beside the run and never inside it
+  serverless      $11.5509
+CYCLE 2 SUPERSEDED  by cycle 3 (operator, 2026-09-01) — its ledger is unchanged at $22.5098 anchored 2026-08-16T12:14:48+00:00
+anchor            $14.48 at 2026-09-01T06:34:08+00:00
+balance now       $5.92
+  balance delta   $8.5627
+  billing since   $8.5530 (read)
+    pods            $3.6642
+    network-volume  $1.9542   <- always on, beside the run and never inside it
+    serverless      $2.9347
+CYCLE 3 SPENT     $8.5627 of $10.00
+REMAINING         $1.4373
+PROMO-C3 SPENT      $0.0000 of $0.80  (anchor $5.92 from runpod_balance_at_promo-c3_start)
+  balance delta   $0.0000
+  billing since   UNAVAILABLE (no billing rows yet) — the delta stands alone as a LOWER BOUND
+step cap $0.80 − $0.0000 already spent = $0.8000 for this run
+{
+ "when": "after the two non-gold warm-up calls of SPEC 3.17 (9), before the first gold call",
+ "billed_seconds": 525.415,
+ "page_marginal_seconds": 37.74,
+ "text_marginal_seconds": 0.917,
+ "gold_calls": 8,
+ "gold_seconds": 7.336,
+ "idle_tail_seconds": 60.0,
+ "projected_usd": 0.1818,
+ "budget_usd": 0.8,
+ "refuse": false,
+ "leg": "post_text \u2014 ruling 02.09 (c) item 1: this gate prices the TEXT leg alone (n_pages = 0 by the law); the page legs gate per channel against the room, never as one step",
+ "page_warmup_seconds": 37.74,
+ "over_cap_by": -0.7728
+}
+  post +Ejz6ubzm21IyMTQy pack 00: {'asked': 8, 'posts_read': 8, 'positions_written': 0, 'unreadable': 0, 'empty': 8, 'watermark': 5363}
+  after post_text: {'calls_done': 8, 'calls_total': 38, 'opened_seconds': 525.415, 'billed_seconds': 535.777, 'marginal_seconds_per_call': 1.2953, 'idle_tail_seconds': 60.0, 'spent_usd': 0.1643, 'remaining_usd': 0.0119, 'projected_usd': 0.1946, 'cap_usd': 0.8, 'over_cap': False}
+  leaflet: 14 pages in 1 packs
+  leaflet pack 00: {'asked': 14, 'pages_written': 14, 'positions_written': 28, 'unreadable': 0, 'watermark': 5340}
+  +Ejz6ubzm21IyMTQy: measured 19.828 s/page on its first pack (n=14)
+  leaflet: 16 pages in 1 packs
+  leaflet pack 00: {'asked': 16, 'pages_written': 16, 'positions_written': 29, 'unreadable': 0, 'watermark': 5364}
+  after +Ejz6ubzm21IyMTQy: {'calls_done': 38, 'calls_total': 38, 'opened_seconds': 525.415, 'billed_seconds': 1115.545, 'marginal_seconds_per_call': 15.5297, 'idle_tail_seconds': 60.0, 'spent_usd': 0.3421, 'remaining_usd': 0.0, 'projected_usd': 0.3605, 'cap_usd': 0.8, 'over_cap': False}
+
+wrote results/run_promo_c3.json (run 1)

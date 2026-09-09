@@ -173,6 +173,16 @@
       "billing_since_usd": 7.872447,
       "billing_read": "read",
       "note": "promo-holdout2 CLOSED at $0.4253 — promo-holdout2 settled"
+    },
+    {
+      "at": "2026-09-09T16:46:25+00:00",
+      "balance": 5.6900346133,
+      "spent_usd": 8.7899,
+      "remaining_usd": 1.2101,
+      "balance_delta_usd": 8.7899,
+      "billing_since_usd": 8.553003,
+      "billing_read": "read",
+      "note": "c3: 30 pages, 8 posts"
     }
   ]
 }
