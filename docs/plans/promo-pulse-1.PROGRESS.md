@@ -1,6 +1,6 @@
 # PROGRESS — promo-pulse-1 (ruling 03.09 (e): the executor's one file — done / next / open stop, ≤60 lines; §8 of the phase file stays the DONE list)
 
-## Done — 09.09 s42 «c3» (PAID, ruling (jj) item 4): the leg is BOUGHT, $0.2272 of the $0.80 cap; the line is still OPEN
+## Done — 09.09 s42 «c3» (PAID, ruling (jj) item 4): the leg is BOUGHT, settled $0.2577 of the $0.80 cap; the line is OPEN
 FRESH process, `bypassPermissions` stamped and read by §0's gate 1. Start ritual: no team-lead file was modified; the three
 hook-touched `knowledge/` files by path (`58bb4e7`), then «next: c3» into this file by path (`b48431d`) as (jj)4 asks.
 **Pre-flight at $0 before the anchor:** the four §1 inputs on disk, the three c3 outputs absent, the cloud proven empty
@@ -21,36 +21,33 @@ the same count as s41, so the leg's new result files moved no test; the commits 
 the CAP, not the projection, bounds it; the room gate re-priced after pack 00 ($0.333 → $0.2464) and bought the 16-page
 remainder at its OWN measured rate ($0.0973).
 
-## §5 — the close is REFUSED on the WALK (the runbook's own retry), THREE times, at $0 and writing nothing
-17:18Z, 17:31Z and the read-only probes before them: `the billing walk over promo-c3's window answered «no billing rows yet»
-and covered 0 ms ... there is no settled figure to close on`. Not the band — the walk. The CYCLE-3 walk reads fine in the same
-output (`billing since $8.5627 (read)`), so billing works; RunPod has emitted no rows for the window since 16:26:09Z, 45+ min
-after §4 against the runbook's 30–40. Nothing was written: `shut` is None before the write. The line stays OPEN, the volume
-`mp-srv2` waits with it (~$0.24/day) and is NOT deleted until the close settles.
+## §5 — the close REFUSED FOUR times at $0, writing nothing: three on the WALK, then ONCE ON THE BAND
+17:18Z and 17:31Z: `the billing walk ... answered «no billing rows yet» and covered 0 ms ... no settled figure to close on` —
+the runbook's own retry, not the band. The CYCLE-3 walk read fine in the same output, so billing worked; RunPod simply emitted
+no rows for the window since 16:26:09Z until ~17:56Z, 70 min after §4 against the runbook's 30–40 — the lag itself is a finding.
+**17:56Z the walk settled and the SECOND gate refused:** `promo-c3 settles at $0.257668 against its own recorded reading of
+$0.227200 — 13.4% off, outside the registered tolerance of 5.0%. NOT closed`. `shut` is None before the write: the ledger still
+carries only its single §4 entry, the line is OPEN, and the volume is NOT deleted.
 
-## Next — retry the close (read-only walk FIRST), then the volume; then «chain-fold»
-**next: `runpod_guard.py --step promo-c3 --step-cap 0.80 --close --until "$(date -u +%Y-%m-%dT%H:%M:%SZ)" --tolerance 0.05
---note "c3 closed"`**, read-only walk first, per §5. THEN `network-volume delete qw4nwleanc` + the listing, then
-`make tick --window all` (the default is `w2`) and `make promo-screen`. Then «chain-fold» ($0) → clean-clone e2e +
-`draw_truth_20` → the gate 12.09.
+## Next — the team lead's ruling on the band (below), THEN the close, THEN the volume
+**next: the ruling.** With it: `--close --until <iso> --tolerance 0.05 --note "c3 closed"`, read-only walk first; then
+`network-volume delete qw4nwleanc` + the listing; then `make tick --window all` (the default is `w2`) and `make promo-screen`.
+Then «chain-fold» ($0) → clean-clone e2e + `draw_truth_20` → the gate 12.09.
 
-## Open stop — NOT REACHED TODAY; §5's SECOND gate is PRE-NAMED because it may need a ruling the moment the walk answers
-Nothing waits on a decision today: the walk refusal is the runbook's own retry. What follows is a FORECAST, not a measurement —
-recorded here only so the team lead's line exists before it is needed. §5 compares `off = |settled − recorded| / recorded`
-against `--tolerance 0.05`, where `recorded` is §4's **$0.2272** — a BALANCE DELTA taken 20 min after the anchor, while the
-charge was still landing. That delta kept climbing: 0.2272 → 0.2577 (17:02) → **0.2674** (17:07, 17:20, 17:31 — now stable).
-**The forecast's instrument is the wrong one and is labelled so:** `settled` is `own_resources` off billing rows THAT DO NOT
-EXIST YET, while the delta is what the guard calls a **LOWER BOUND** — different kinds, the mismatch this gate exists to catch.
-From that bound minus the volume's ≈$0.009 drip (which `own_resources` leaves out): settled ≈ $0.258, `off` ≈ 13–14%.
-**The constraint that discriminates is not the lag — it is that a 5% RELATIVE band cannot grade a $0.23 leg:** 5% of $0.2272 is
-$0.0114 and the volume's drip alone is ≈$0.01/h. C2 drifted 2.73% and 1.29% on the same absolute gap only because C2's spend was
-large enough to absorb it. §4's ordering was built against the drip, which makes `recorded` too HIGH; here the balance LAG
-dominates and makes it too LOW — the opposite sign, and a retry moves neither number.
-Every remedy is blocked: widening `--tolerance` is forbidden in the runbook's own words, and a SECOND `--note` moves the gate's
-own reference — the guard bypassed. If the walk answers and the band refuses, that is a fork the phase file does not settle.
-Tree at 17:34Z: clause (l)'s porcelain over its seven paths EMPTY (the guard's ledger writes are gated on `anchor_is_new`,
-`args.note and not args.close` and `not cycle3_path().exists()`, so the read-only probes wrote nothing); only the two
-Stop-hook `knowledge/` files are dirty, outside (l). No pod, no endpoint; step line `promo-c3` OPEN; REMAINING $1.1699 (17:31Z).
+## Open stop — §5 REFUSES ON THE BAND: settled $0.257668 against a recorded $0.227200, 13.4% off a 5.0% tolerance
+**Stop-point.** Measured at 17:56Z, no longer a forecast. The settled figure is `step resources $0.2577` = `pods $0.0305` +
+`serverless $0.2272`, the volume $0.0000 and outside it by construction. §4's recorded reading of **$0.2272 equals the
+serverless kind EXACTLY**: at 16:46 the balance had absorbed that charge and not yet the $0.0305 of `pods`, so the reference is
+not merely stale — it MISSES A WHOLE BILLED KIND, and `off` is that kind divided by the rest, 0.0305 / 0.2272 = 13.4%.
+**Question, which is not mine to answer:** a 5% RELATIVE band cannot grade a $0.23 leg — 5% is $0.0114 while one late-landing
+billing kind is $0.0305; C2 drifted 2.73% and 1.29% on comparable absolute cents only because its spend was large enough to
+absorb them. Is the ruling (a) an absolute floor beside the relative band for small legs, (b) §4's post-run reading re-taken
+AFTER the walk settles — an ordering change to PROCESS «Closing a line», and it does move the gate's own reference — or (c)
+something else? Widening `--tolerance` and appending a second `--note` are both the guard bypassed; neither is mine to do.
+**Tree at 17:57Z:** clause (l)'s porcelain over its seven paths EMPTY; `make check` green at `bc2a0f3` (4326 passed / 2
+skipped), and every commit after that reading touches only this file. No pod and no endpoint — both deleted and proven by
+listing; templates back to the two pre-existing. Step line `promo-c3` OPEN with its single §4 entry. Volume `mp-srv2`
+(`qw4nwleanc`) ALIVE and waiting on the close at ≈$0.24/day. REMAINING **$1.1699**; the leg itself cost $0.2577 of the $0.80 cap.
 ## Named, not built (the phase file forbids adding what it did not ask for)
 - **The measured/priced gap above is a finding, not a fix:** 19.828 s/page vs the registered 3.369. No threshold is introduced.
 - **(jj)3's two nits stay folded into «chain-fold»** as ruled — §3's `export …=$(…)` masking the substitution status and the
