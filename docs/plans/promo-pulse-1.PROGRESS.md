@@ -1,57 +1,59 @@
 # PROGRESS — promo-pulse-1 (ruling 03.09 (e): the executor's one file — done / next / open stop, ≤60 lines; §8 of the phase file stays the DONE list)
 
-## Done — 09.09 s42 «c3» (PAID, ruling (jj) item 4): the leg is BOUGHT, settled $0.2577 of the $0.80 cap; the line is OPEN
-FRESH process, `bypassPermissions` stamped and read by §0's gate 1. Start ritual: no team-lead file was modified; the three
-hook-touched `knowledge/` files by path (`58bb4e7`), then «next: c3» into this file by path (`b48431d`) as (jj)4 asks.
-**Pre-flight at $0 before the anchor:** the four §1 inputs on disk, the three c3 outputs absent, the cloud proven empty
-(`serverless []`, the two pre-existing templates, `pod list -a []`, volume `qw4nwleanc` as positive control). **§0** ONE chain: `MODE bypass` · `HARNESS FIELDS OK` · `REMAINING $1.4373` → **`CAP 0.80`** (room
-$1.1373, so the operator's ceiling binds, not the room). **§1** in the same call: rung 0 **FITS at the dear corner $0.1864
-(−76.7%)**, `promo-c3` anchored at $5.92 (16:26:09Z), registration + ledger committed `41406b3`.
-**§2** T `c5vsl0pz4t` → E `mjnctafh13ausp` (ADA_24, workers-max 1, idle 60, exec 900, flash-boot, `qw4nwleanc`, EU-RO-1); the
-endpoint create was gated on the TEMPLATE LISTING, so s41's propagation lag could not bite. **§3** detached, one call, pid 1903,
-`--cap 0.80` read back off the committed registration; `ps -o args=` named it ALIVE.
-**The record is COMPLETE:** `queued` 30 pages / 8 posts, `pages_bought 30`, `pages_left 0`, `unbought` 0/0, `stopped false`;
-two leaflet packs 14 + 16 = **30 pages, 57 positions (28 + 29), 0 unreadable**; the text pack 8 asked / 8 read / 0 positions /
-8 empty — in family with C2, whose text leg wrote 0 positions on 8 of its 16 channels. Wall 1115.5 s, 6 calls, one worker.
-**§4** teardown proven by listing (endpoint gone, templates back to the two, volume intact, `pod list -a []`), then the post-run
-`--note` with the counts DERIVED from the record: **`PROMO-C3 SPENT $0.2272 of $0.80`** (16:46:25Z), `REMAINING $1.2101`.
-Record + log + ledgers committed `bc2a0f3`. **`make check` GREEN at `bc2a0f3`: ruff clean, 4326 passed / 2 skipped (11:48)** —
-the same count as s41, so the leg's new result files moved no test; the commits after that reading touch only this PROGRESS file.
-**Measured, not priced:** the page leg ran **19.828 s/page** against the dear corner's 3.369 — 5.9× — and still fits because
-the CAP, not the projection, bounds it; the room gate re-priced after pack 00 ($0.333 → $0.2464) and bought the 16-page
-remainder at its OWN measured rate ($0.0973).
+## Done — 09.09 s43 «kk-close» ($0, ruling (kk) 5): the floor is in, `promo-c3` is CLOSED at $0.2577, the volume is GONE
+Start ritual: no team-lead file was modified; the three hook-touched `knowledge/` files by path (`c09404e`).
+**(i) the floor.** `DOLLAR_FLOOR = 0.05` beside `MS_FLOOR`, and `runpod_guard.py:911` (was `:897`) becomes
+`abs(settled − recorded) > max(DOLLAR_FLOOR, args.tolerance * abs(recorded))`. The refusal now names WHICH of the two
+terms the run faced (`the gate is $0.050000: the greater of the $0.05 floor and the band`). `--tolerance` stays 5%.
+**(ii) the test, four rows, both ways** (`test_the_dollar_floor_grades_a_sub_dollar_leg_the_relative_band_cannot`):
+c3's REAL pair (recorded $0.2272, settled $0.257668) CLOSES · a $0.20 gap on the same recorded reading still REFUSES ·
+a $2.99 leg CLOSES at $0.10 and REFUSES at $0.21 — the relative band decides both of those exactly as before, which is
+what makes «binds only below a dollar» checkable. Each refusing row asserts the BAND's own message, because at the
+fixture's default balance the step CAP refuses them anyway ([[an_inequality_that_holds_for_the_wrong_reason]] — found
+and fixed mid-test). **Negative control run:** with the guard change stashed, exactly one row fails, c3's own.
+`tests/test_runpod_guard.py` 57 passed; ruff clean. Commit `c5cad96`.
+**`make check` GREEN at `c5cad96`: ruff clean, 4330 passed / 2 skipped (11:51)** — 4326 + the four new rows, so the
+change moved no existing test. The two commits after that reading move only `results/spend_promo_c3.json` and
+`results/spend_cycle3.json`; the seven test files that read those three ledgers were re-run — **151 passed**.
+**The close.** Read-only walk first: `step resources $0.2577` = `pods $0.030461` + `serverless $0.227207`, the
+`network-volume $0.009722` outside by construction. Then the close: **`CLOSED spend_promo_c3.json at $0.2577 — entry
+APPENDED`**, `PROMO-C3 CLOSED $0.2577 of $0.80` (settled 18:57:04Z, window from 16:26:09Z, `walk_ms 889500`,
+`expected_ms null`). The gap $0.030468 sat under the $0.05 floor while 5% × $0.2272 = $0.0114 — **the floor graded it,
+not the band**, which is the whole ruling. One settlement, two ledger files: the step's (`d60b303`) and cycle-3's line
+reading (`b361e57`, $8.8398 of $10.00, REMAINING **$1.1602**).
+**The volume.** `network-volume delete qw4nwleanc` → `{"deleted": true}`; the listing after is **`[]`**. The ≈$0.24/day
+drip is stopped. No pod, no endpoint, no volume — the cloud is empty.
 
-## §5 — the close REFUSED FOUR times at $0, writing nothing: three on the WALK, then ONCE ON THE BAND
-17:18Z and 17:31Z: `the billing walk ... answered «no billing rows yet» and covered 0 ms ... no settled figure to close on` —
-the runbook's own retry, not the band. The CYCLE-3 walk read fine in the same output, so billing worked; RunPod simply emitted
-no rows for the window since 16:26:09Z until ~17:56Z, 70 min after §4 against the runbook's 30–40 — the lag itself is a finding.
-**17:56Z the walk settled and the SECOND gate refused:** `promo-c3 settles at $0.257668 against its own recorded reading of
-$0.227200 — 13.4% off, outside the registered tolerance of 5.0%. NOT closed`. `shut` is None before the write: the ledger still
-carries only its single §4 entry, the line is OPEN, and the volume is NOT deleted.
+## Deviation — `--window all` is NOT a window id, and the tick empties the screen without an error (cause: ruled-command)
+(kk) 5 and `knowledge/hot.md` both carried `make tick --window all`. `--window` takes a window ID; the `windows` table
+holds exactly two rows, `w1` and `w2`. `all` matches nothing, and `scripts/tick.py` wrote the shipped screen with
+**`positions` 1113 → 0** (−28 967 lines) and no non-zero exit. Nothing was committed: the artifacts were restored from
+HEAD and `make tick` was re-run on its real window `w2` — the one ruling 02.09 (d) pins. **The substitution is proven,
+not asserted:** after the restore + rebuild, `git status --porcelain results dashboard README.md` prints NOTHING, so
+the w2 rebuild reproduces HEAD byte-for-byte and the tick's own §8 (g) claim (a second run on an unchanged store writes
+zero new rows) holds — all six counters `new 0`, `rollup 401 → 401`. `make promo-screen` green, both writers.
+The hot-cache line is corrected in my own file; the runbook's and (kk) 5's are the team lead's to move.
 
-## Next — the team lead's ruling on the band (below), THEN the close, THEN the volume
-**next: the ruling.** With it: `--close --until <iso> --tolerance 0.05 --note "c3 closed"`, read-only walk first; then
-`network-volume delete qw4nwleanc` + the listing; then `make tick --window all` (the default is `w2`) and `make promo-screen`.
-Then «chain-fold» ($0) → clean-clone e2e + `draw_truth_20` → the gate 12.09.
+## Next — «chain-fold» ($0, shape (b), ruling (gg) 2 — P1 re-measured by the product's own functions)
+**next: chain-fold.** Then «launch-field» ($0) → clean-clone e2e + `draw_truth_20` → the gate **12.09** (13.09 reserve).
 
-## Open stop — §5 REFUSES ON THE BAND: settled $0.257668 against a recorded $0.227200, 13.4% off a 5.0% tolerance
-**Stop-point.** Measured at 17:56Z, no longer a forecast. The settled figure is `step resources $0.2577` = `pods $0.0305` +
-`serverless $0.2272`, the volume $0.0000 and outside it by construction. §4's recorded reading of **$0.2272 equals the
-serverless kind EXACTLY**: at 16:46 the balance had absorbed that charge and not yet the $0.0305 of `pods`, so the reference is
-not merely stale — it MISSES A WHOLE BILLED KIND, and `off` is that kind divided by the rest, 0.0305 / 0.2272 = 13.4%.
-**Question, which is not mine to answer:** a 5% RELATIVE band cannot grade a $0.23 leg — 5% is $0.0114 while one late-landing
-billing kind is $0.0305; C2 drifted 2.73% and 1.29% on comparable absolute cents only because its spend was large enough to
-absorb them. Is the ruling (a) an absolute floor beside the relative band for small legs, (b) §4's post-run reading re-taken
-AFTER the walk settles — an ordering change to PROCESS «Closing a line», and it does move the gate's own reference — or (c)
-something else? Widening `--tolerance` and appending a second `--note` are both the guard bypassed; neither is mine to do.
-**Tree at 17:57Z:** clause (l)'s porcelain over its seven paths EMPTY; `make check` green at `bc2a0f3` (4326 passed / 2
-skipped), and every commit after that reading touches only this file. No pod and no endpoint — both deleted and proven by
-listing; templates back to the two pre-existing. Step line `promo-c3` OPEN with its single §4 entry. Volume `mp-srv2`
-(`qw4nwleanc`) ALIVE and waiting on the close at ≈$0.24/day. REMAINING **$1.1699**; the leg itself cost $0.2577 of the $0.80 cap.
+## Open stop — NONE
+The band refusal s42 carried is repaired and the line it held open is closed. Nothing is waiting on a decision.
+**Tree at 19:02Z:** clause (l)'s porcelain over its seven paths EMPTY. `make check` green at `c5cad96` as above.
+Cloud empty on the listing: `serverless []`, `pod list -a []`, `network-volume list []`, templates the two pre-existing.
+`promo-c3` CLOSED at $0.2577 of its $0.80 cap; cycle-3 $8.8398 of $10.00, REMAINING $1.1602; **$0 spent this session**.
+
 ## Named, not built (the phase file forbids adding what it did not ask for)
-- **The measured/priced gap above is a finding, not a fix:** 19.828 s/page vs the registered 3.369. No threshold is introduced.
-- **(jj)3's two nits stay folded into «chain-fold»** as ruled — §3's `export …=$(…)` masking the substitution status and the
-  `--endpoint`/`-T` placeholders. I substituted both by hand from the create output and gated the endpoint create on the listing.
-- Carried unchanged from s41: `promo_projection_c2.json` is not reproducible from its producer (proved by its pin); no test
-  asserts `cap_from`, `{leg}` or the `{STEP}-s4` contract; `tick.py --window` stays `w2`; `tooling.md`'s «plugin disabled», the
-  unfloored arm selector, `graded()`'s `rows`, P1/S2/README untested in the tick, the ties.
+- **The closing record does not say which term graded it.** `spend_promo_c3.json`'s entry carries `"tolerance": 0.05`
+  while the $0.05 FLOOR is what let it close ([[a_record_must_read_the_gate_its_run_will_face]]). A `dollar_floor`
+  field is a ledger field (kk) 5 did not ask for — named here, not written.
+- **`--window all` fails silently** (above): a window id the table does not carry deserves a non-zero exit, not an
+  empty screen ([[a_checker_whose_failure_is_silence]]). A guard the phase file did not ask for.
+- **c3's 57 positions reach no window of the store.** `positions` by window is still `w1 145 · w2 1113`; c3's channel
+  has 0 rows there, and `scripts/tick.py` does not read `results/run_promo_c3.json` at all. c3's anchor is 2026-09-05
+  and w2 ends 2026-08-31, so the leg's output is on disk in its own record and in no window — §8 (c) reads on the
+  store, so this is the team lead's call, not a window I may create.
+- **The measured/priced gap stands as s42 left it:** 19.828 s/page against the registered 3.369. No threshold moved.
+- Carried unchanged: `promo_projection_c2.json` is not reproducible from its producer (its pin is the proof); no test
+  asserts `cap_from`, `{leg}` or the `{STEP}-s4` contract; `tooling.md`'s «plugin disabled», the unfloored arm
+  selector, `graded()`'s `rows`, P1/S2/README untested in the tick, the ties; (jj) 3's two nits stay in «chain-fold».
