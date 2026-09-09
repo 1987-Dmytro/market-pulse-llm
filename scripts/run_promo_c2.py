@@ -246,7 +246,7 @@ def rates() -> dict:
         "rate_usd_per_second": float(projection["rate_usd_per_second"]),
         "page_lower": float(bound["seconds_per_page_lower"]),
         "page_upper": float(bound["seconds_per_page_upper"]),
-        "page_from": "results/promo_projection_c2.json :: verdict.marginal_bound (the smoke, n=30)",
+        "page_from": f"{rel(PROJECTION)} :: verdict.marginal_bound (the smoke, n=30)",
         "page_realised_5c2": float(load(RUN_5C2)["timing"]["seconds_per_row"]),
         "page_realised_from": "results/run_5c2_positions.json :: timing.seconds_per_row"
         " (boot-inclusive, n=205 rows, 159 of them ATB leaflet pages)",
@@ -261,7 +261,7 @@ def rates() -> dict:
         "page_registered_from": "results/prereg_5c2_run.json :: prices.leaflet_page.seconds_model"
         " (skub2's last in-run gate, 108 pages) — sizes the packs, never the price",
         "boot_derived": float(bound["one_boot_seconds"]),
-        "boot_derived_from": "results/promo_projection_c2.json :: verdict.marginal_bound.one_boot_seconds",
+        "boot_derived_from": f"{rel(PROJECTION)} :: verdict.marginal_bound.one_boot_seconds",
         "boot_measured": float(load(SMOKE)["rung_0"]["boot_seconds_each"]),
         "boot_measured_from": "results/smoke_vision_c2.json :: rung_0.boot_seconds_each (srv-2c's"
         " slower boot)",
@@ -385,6 +385,7 @@ def render_rung_0(verdict: dict) -> str:
 
 
 def register() -> dict:
+    leg = CENSUS.stem.rsplit("_", 1)[-1].upper()  # promo_census_c2.json → C2, _c3 → C3
     page_queue, post_queue = pages(), posts()
     wrong = pages_match_the_pagecount(page_queue)
     if wrong:
@@ -392,8 +393,8 @@ def register() -> dict:
     n_pages = sum(len(rows) for rows in page_queue.values())
     n_posts = sum(len(rows) for rows in post_queue.values())
     record = {
-        "phase": "promo-pulse-1 S4 — the C2 backfill (PAID): vision for the census's pages, text"
-        " for its price posts",
+        "phase": f"promo-pulse-1 S4 — the {leg} backfill (PAID): vision for the census's pages,"
+        " text for its price posts",
         "authority": "docs/reviews/2026-08-30-plan-promo-pulse-1.md «Ruling 02.09 (b)» — «STEP_CAP_USD"
         " = 3.95 … the guard's step anchor with --step promo-pulse-1 --step-cap 3.95 … The text leg"
         " runs FIRST … Mid-run: no cap raise, ever» — and «Ruling 02.09 (c)»: «Per leg — yes … Per"
@@ -410,22 +411,22 @@ def register() -> dict:
                 "total": n_pages,
                 "by_channel": {handle: len(rows) for handle, rows in page_queue.items()},
                 "ids_sha256": pages_sha256(page_queue),
-                "source": "results/post_media_promo_c2.json through run_loop.pages_of — the"
-                " census's pinned media posts, one file per photo member, counted against"
-                " results/promo_pagecount_c2.json :: pages_exact per channel",
+                "source": f"{rel(MANIFEST)} through run_loop.pages_of — the census's pinned"
+                " media posts, one file per photo member, counted against"
+                f" {rel(PAGECOUNT)} :: pages_exact per channel",
             },
             "posts": {
                 "total": n_posts,
                 "by_channel": {handle: len(rows) for handle, rows in post_queue.items()},
                 "ids_sha256": posts_sha256(post_queue),
-                "source": "results/promo_census_c2.json :: channels[].text_price_msg_ids, read off"
+                "source": f"{rel(CENSUS)} :: channels[].text_price_msg_ids, read off"
                 " the live store (v1 ∪ r2)",
             },
             "order": ordered(set(page_queue) | set(post_queue)),
             "order_from": "ruling 02.09 (c) §3, the operator's «АТБ → дешёвые → малые», DERIVED:"
             " the leaflet carrier, then the channels the smoke measured (>= 2 of its 30 pages,"
             " most-measured first, results/prereg_smoke_vision_c2.json), then the rest ascending"
-            " by results/promo_pagecount_c2.json :: pages_exact",
+            f" by {rel(PAGECOUNT)} :: pages_exact",
             "stage_0": "post_text — every channel's text posts BEFORE any page (ruling 02.09 (b)),"
             " gated on its own (10)(a) projection (ruling 02.09 (c) item 1)",
         },
@@ -454,7 +455,7 @@ def register() -> dict:
         },
         "kill_rules": [
             "the dear corner of rung 0 does not fit the step cap → nothing is created (STOP)",
-            "the guard refuses --step promo-pulse-1 --step-cap 3.95 → that is the answer",
+            f"the guard refuses --step {STEP} --step-cap {STEP_CAP_USD:.2f} → that is the answer",
             "mid-run the cap is never raised: the text leg's (10)(a) gate, the per-channel room"
             " and the per-pack cap gate decide (ruling 02.09 (b) item 3, (c) item 2)",
             "a channel whose remainder does not fit the room is skipped WHOLE — never half a"
@@ -760,7 +761,7 @@ def run_the_legs(
             outcome["measured"][handle] = entry["measured_seconds_per_page"]
             measurements.append(
                 {
-                    "contract": "promo-pulse-1-s4",
+                    "contract": f"{STEP}-s4",
                     "name": f"page_seconds_{handle.lstrip('@')}",
                     "value": entry["measured_seconds_per_page"],
                     "max": entry["measured_seconds_per_page"],
