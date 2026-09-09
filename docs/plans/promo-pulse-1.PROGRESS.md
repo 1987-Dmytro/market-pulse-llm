@@ -36,9 +36,10 @@ template» — a propagation lag right after the create returned that id), and n
 the volume unchanged. **Money: `REMAINING $1.4470` — §0's own reading, taken before the create — so $0 was billed.** Every block is
 now selected by its own first and last line.
 
-## Next — the verifier's THIRD pass (§3/§5 and `cap_from`), the team lead's reading, then «c3» (PAID)
-**next: the third verifier pass over §3/§5 and `cap_from` only** ((ii)3) → the team lead's reading of the dry run + HEAD → **«c3»**
-(paid, `promo-c3`, cap by §0's own command off the guard's `REMAINING` in THAT session) in ANOTHER fresh process, §0 → §5 → «chain-fold» ($0) → clean-clone e2e + `draw_truth_20` → the gate 12.09.
+## Next — «c3», the PAID leg (ruling (jj) item 4 supersedes the line this block held: the third pass is DONE, read SAFE TO BUY)
+**next: c3** — `promo-c3`, cap **$0.80** = min($0.80, REMAINING − $0.30) taken by §0's OWN command in THAT session, never from a
+document; runbook `knowledge/runbooks/promo_c3_paid_leg.md` §0 → §5, every block selected by its own first/last line. Then
+«chain-fold» ($0, the two (jj)3 nits fold in there) → clean-clone e2e + `draw_truth_20` → the gate 12.09.
 
 ## Open stop — NONE
 Nothing waits on a decision: the deviation above is closed at $0 with the account proven back. Nothing sealed moved, no fork opened,
