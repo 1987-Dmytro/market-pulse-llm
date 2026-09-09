@@ -69,6 +69,13 @@ STEP_CAP_USD = 3.95
 весь шаг»: «`STEP_CAP_USD = 3.95` … the guard's step anchor with `--step promo-pulse-1 --step-cap
 3.95`». The team lead's number, not this file's; never raised mid-run."""
 
+STEP_CAP_FROM = "docs/reviews/2026-08-30-plan-promo-pulse-1.md «Ruling 02.09 (b)»"
+"""WHO set the cap `rung_0` is priced against — the one field of the record that answers it.
+
+It is a sentence about the number in `STEP_CAP_USD`, so it moves with it: a leg that carries its
+own `--cap` is not capped by (b) and a record that says it is names the wrong authority for the
+only number that can stop the run. `repoint` derives it from the flag; ruling 09.09 (ii) item 3(iv)."""
+
 PREREG = REPO_ROOT / "results" / "prereg_promo_c2.json"
 RECORD = REPO_ROOT / "results" / "run_promo_c2.json"
 CENSUS = REPO_ROOT / "results" / "promo_census_c2.json"
@@ -352,7 +359,7 @@ def rung_0(n_pages: int, n_posts: int, cap: float | None = None) -> dict:
         "pages": n_pages,
         "posts": n_posts,
         "cap_usd": cap,
-        "cap_from": "docs/reviews/2026-08-30-plan-promo-pulse-1.md «Ruling 02.09 (b)»",
+        "cap_from": STEP_CAP_FROM,
         "rates": r,
         "table": table,
         "realised_5c2": realised,
@@ -436,7 +443,8 @@ def register() -> dict:
         "rung_0": rung_0(n_pages, n_posts),
         "in_run_gates": {
             "go_no_go": "SPEC 3.17 (10)(a) PER LEG (ruling 02.09 (c) item 1): after two warm-ups on"
-            " REPRESENTATIVE inputs — the first queued C2 page and the first queued C2 post — the"
+            f" REPRESENTATIVE inputs — the first queued {leg} page and the first queued {leg} post"
+            " — the"
             " TEXT leg alone is projected at its own measured marginal and no gold call is made if"
             " IT exceeds what is left of the step cap; the page leg is never priced as one step",
             "per_channel": "ruling 02.09 (c) item 2: the channel's own first pack is its"
@@ -940,9 +948,15 @@ def repoint(args) -> None:
     the dispatch is the whole change; nothing re-runs C2, whose result files stay as sealed.
     """
     global PREREG, RECORD, CENSUS, PAGECOUNT, PROJECTION, MANIFEST, STEP, STEP_CAP_USD
+    global STEP_CAP_FROM
     PREREG, RECORD = args.prereg, args.record
     CENSUS, PAGECOUNT = args.census, args.pagecount
     PROJECTION, MANIFEST = args.projection, args.manifest
+    if args.cap != STEP_CAP_USD:  # read BEFORE the rebind: the import-time constant is (b)'s number
+        STEP_CAP_FROM = (
+            "the leg's runbook §0 command (`--cap`) — derived in the paid session from the guard's"
+            " own REMAINING line, never carried from a document"
+        )
     STEP, STEP_CAP_USD = args.step, args.cap
 
 

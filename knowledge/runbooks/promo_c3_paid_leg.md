@@ -16,8 +16,10 @@ What the session actually got is stamped by a `PreToolUse(Bash)` hook, so §0 re
 never the intention.
 
 The key is NOT in `.env` — `~/.runpod/config.toml` holds it, and `--run` refuses without it AFTER
-the endpoint exists (`run_promo_c2.py` :: `api_key`). Export it FIRST, in this same session; the
-value is never printed (C2's §0 line 19):
+the endpoint exists (`run_promo_c2.py` :: `api_key`). Read it here to prove the file answers and
+the length is right; the value is never printed (C2's §0 line 19). This export does NOT reach §3 —
+nothing below needs it (`--register` and the guard do not), and §3 exports it again in the same
+call as its own launch (ruling 09.09 (ii) item 3(i)):
 
 ```
 export RUNPOD_API_KEY=$(python3.11 -c "import tomllib;print(tomllib.load(open('$HOME/.runpod/config.toml','rb'))['apikey'])")
@@ -29,9 +31,9 @@ link of the chain that guards it (ruling 09.09 (hh) item 4(i)):
 
 ```
 grep -qx bypassPermissions .claude/session_mode && echo "MODE bypass" \
-&& python3 -c 'import json,sys;s=json.load(open(".claude/settings.json"));h=[x for e in s["hooks"].values() for g in e for x in g["hooks"]];ok=s.get("env",{}).get("CLAUDE_CODE_EFFORT_LEVEL")=="xhigh" and s.get("ultracode") is False and s["permissions"].get("allow",[])==[] and len(s["permissions"]["deny"])==12 and all(x.get("timeout",600)<=60 for x in h) and len(s["hooks"]["SessionStart"][0]["hooks"])==1 and any("session_mode" in x.get("command","") for x in h);print("HARNESS FIELDS OK" if ok else "HARNESS FIELDS MISSING");sys.exit(0 if ok else 1)' \
-&& GUARD=$(python3 scripts/runpod_guard.py) && echo "$GUARD" | tail -2 \
-&& CAP=$(echo "$GUARD" | python3 -c '
+&& python3.11 -c 'import json,sys;s=json.load(open(".claude/settings.json"));h=[x for e in s["hooks"].values() for g in e for x in g["hooks"]];ok=s.get("env",{}).get("CLAUDE_CODE_EFFORT_LEVEL")=="xhigh" and s.get("ultracode") is False and s["permissions"].get("allow",[])==[] and len(s["permissions"]["deny"])==12 and all(x.get("timeout",600)<=60 for x in h) and len(s["hooks"]["SessionStart"][0]["hooks"])==1 and any("session_mode" in x.get("command","") for x in h);print("HARNESS FIELDS OK" if ok else "HARNESS FIELDS MISSING");sys.exit(0 if ok else 1)' \
+&& GUARD=$(python3.11 scripts/runpod_guard.py) && echo "$GUARD" | tail -2 \
+&& CAP=$(echo "$GUARD" | python3.11 -c '
 import re, sys
 rem = float(re.search(r"^REMAINING\s+\$([0-9.]+)$", sys.stdin.read(), re.M).group(1))
 room = rem - 0.30
@@ -66,7 +68,7 @@ used in another is a number typed by hand again.
   --pagecount results/promo_pagecount_c3.json --projection results/promo_projection_c3.json \
   --manifest results/post_media_promo_c3.json --record results/run_promo_c3.json \
   --step promo-c3 --cap $CAP \
-&& python3 scripts/runpod_guard.py --step promo-c3 --step-cap $CAP \
+&& python3.11 scripts/runpod_guard.py --step promo-c3 --step-cap $CAP \
 && git add results/prereg_promo_c3.json results/spend_promo_c3.json \
 && git commit -m "money(step): promo-c3 anchored"
 ```
@@ -91,19 +93,29 @@ runpodctl serverless create --name market-pulse-promo-c3 --template-id T \
 ```
 ## 3. The paid run — DETACHED, one command; it health-checks itself (`assert_serving`)
 
-The cap comes back off the registration §1 committed — the same number by construction, and the
-one the guard's step anchor was written with:
+ONE call, `&&` all the way (ruling 09.09 (ii) item 3(i)). The API key is EXPORTED here and not
+inherited from §0: shell state does not survive between calls, and `run_promo_c2.py` reads the key
+from the environment only (`:: api_key`, no `config.toml` fallback), so the §0 export would be gone
+by now and `--run` would exit 1 AFTER the endpoint exists — the boot billed, nothing collected. The
+cap comes back off the registration §1 committed — the same number by construction, and the one the
+guard's step anchor was written with:
 
 ```
-CAP=$(python3 -c "import json;print(f\"{json.load(open('results/prereg_promo_c3.json'))['step']['cap_usd']:.2f}\")") && echo "CAP $CAP"
-
-nohup env PYTHONPATH=src python3.11 scripts/run_promo_c2.py --run --endpoint E \
+export RUNPOD_API_KEY=$(python3.11 -c "import tomllib;print(tomllib.load(open('$HOME/.runpod/config.toml','rb'))['apikey'])") \
+&& CAP=$(python3.11 -c "import json;print(f\"{json.load(open('results/prereg_promo_c3.json'))['step']['cap_usd']:.2f}\")") && echo "CAP $CAP" \
+&& { nohup env PYTHONPATH=src python3.11 scripts/run_promo_c2.py --run --endpoint E \
   --prereg results/prereg_promo_c3.json --census results/promo_census_c3.json \
   --pagecount results/promo_pagecount_c3.json --projection results/promo_projection_c3.json \
   --manifest results/post_media_promo_c3.json --record results/run_promo_c3.json \
-  --step promo-c3 --cap $CAP > results/run_promo_c3.log 2>&1 &
-echo $! > results/run_promo_c3.pid && cat results/run_promo_c3.pid
+  --step promo-c3 --cap $CAP > results/run_promo_c3.log 2>&1 & echo $! > results/run_promo_c3.pid; } \
+&& cat results/run_promo_c3.pid
 ```
+The launch is BRACED. `a && b && nohup c &` backgrounds the whole `&&` list as one subshell and
+`$!` is that subshell's pid — `kill -0` then says GONE while the run is alive. Inside `{ … & … ; }`
+the `&` binds the `nohup` alone and `$!` is its pid. Measured on this shape: ONE pid all the way
+down, because every link exec's in place — `env`, then `python3.11` (a bash script: the pyenv shim,
+which is why the guard lines spell the version and not `python3`), then the interpreter itself.
+
 **Not `| tee`.** That is the foreground form the harness killed TWICE inside C2's own leg
 (`results/run_promo_c2.log:113` «resumed after the watcher's TaskStop killed run 2a's process»,
 `:171`), and a kill bypasses `except BaseException`: the record does not land and the in-flight
@@ -114,9 +126,12 @@ Watch by SHORT polls, each ≤ 55 s, and read the RECORD, never the log:
 
 ```
 kill -0 $(cat results/run_promo_c3.pid) && echo ALIVE || echo GONE
+ps -p $(cat results/run_promo_c3.pid) -o args=   # -> …python3.11 scripts/run_promo_c2.py --run…
 tail -3 results/run_promo_c3.log
-python3 -c "import json;r=json.load(open('results/run_promo_c3.json'))['runs'][-1];print(r['at'], r['timing'])"
+python3.11 -c "import json;r=json.load(open('results/run_promo_c3.json'))['runs'][-1];print(r['at'], r['timing'])"
 ```
+`kill -0` alone cannot tell the run from a shell that inherited the number; `-o args=` names it,
+and `-o comm=` does not — the image is `env` for the first instants and the pyenv shim after that.
 The cap is never raised mid-run — the gates decide. The record lands on every exit and a second
 `--run` continues (markers on disk); a run that needed one is NOT complete for §5's volume line.
 
@@ -133,27 +148,43 @@ The volume STAYS until the line is closed — §5. The close's walk asks
 `runpodctl billing network-volume` (`runpod_guard.py:62` `ALWAYS_ON_KINDS`) and an unreadable kind
 refuses the close (`:608`), so deleting it here would cost the line its settlement.
 
-## 5. Close the line, THEN the volume (the billing walk lags 30–40 min; close AFTER it settles)
-
-PROCESS «Closing a line»: the post-run `--note` first — the gate's reference is the line's LAST
-open reading, and a pre-pod one refuses the close for ever — then the close, with the run record's
-own billed span and a walk bounded to this leg:
+Then the post-run reading, RIGHT HERE — PROCESS «Closing a line» puts it after the resource is
+released and before any next run, and this is not only an ordering rule: the reading it writes
+(`step_spent_usd`) is the right-hand side of the close's tolerance gate, and it is a `max(balance
+delta, EVERY billed kind)` — the volume's rent included — while the close's settled figure is
+`own_resources`, the volume left OUT (`runpod_guard.py:274`). The gap between them is the volume's
+drip since §1's anchor, ≈ $0.01 an hour against a leg priced at $0.19, so every minute between the
+teardown and this line spends the 5% band (ruling 09.09 (ii) item 2).
 
 ```
-CAP=$(python3 -c "import json;print(f\"{json.load(open('results/prereg_promo_c3.json'))['step']['cap_usd']:.2f}\")") && echo "CAP $CAP"
-python3 scripts/runpod_guard.py --step promo-c3 --step-cap $CAP --note "c3: <pages> pages, <posts> posts"
+CAP=$(python3.11 -c "import json;print(f\"{json.load(open('results/prereg_promo_c3.json'))['step']['cap_usd']:.2f}\")") && echo "CAP $CAP"
+python3.11 scripts/runpod_guard.py --step promo-c3 --step-cap $CAP --note "c3: <pages> pages, <posts> posts"
+```
 
-MS=$(python3 -c "import json;r=json.load(open('results/run_promo_c3.json'))['runs'];print(round(sum(x['timing']['wall_seconds'] for x in r)*1000))") && echo "expect-ms $MS"
-python3 scripts/runpod_guard.py --step promo-c3 --step-cap $CAP --close \
-  --expect-ms $MS --until <ISO-8601, just after the run> --tolerance 0.05 --note "c3 closed"
+## 5. Close the line, THEN the volume (the billing walk lags 30–40 min; close AFTER it settles)
+
+30–40 minutes after §4, in this session or the next. NO `--expect-ms`: C2's own close entry is the
+template (`results/spend_promo_pulse_1.json`, the third session — `expected_ms: null`,
+`walk_ms 9 821 341`). A serverless walk bills worker UPTIME — the creation boot, the 60 s idle tail,
+the killed runs — never the run record's wall, and on C2's own numbers `Σ wall_seconds × 1000` is
+5 840 215 ms against that walk: `complete()` (`runpod_guard.py:568`) would be False and the close
+would refuse BY CONSTRUCTION (ruling 09.09 (ii) item 2). `--until` is the clock, not a hand-typed
+stamp — it is after the run by construction and it bounds the walk (`docs/PROMPT-guard-until.md`):
+
+```
+CAP=$(python3.11 -c "import json;print(f\"{json.load(open('results/prereg_promo_c3.json'))['step']['cap_usd']:.2f}\")") && echo "CAP $CAP"
+python3.11 scripts/runpod_guard.py --step promo-c3 --step-cap $CAP --close \
+  --until "$(date -u +%Y-%m-%dT%H:%M:%SZ)" --tolerance 0.05 --note "c3 closed"
 ```
 The cap is read back from the registration again, as in §3 — §5 runs 30–40 min after the run and a
 retried close runs in ANOTHER session, where a `$CAP` from §0 is long gone and `--step` without
 `--step-cap` is a `parser.error`. `--close` on a step REFUSES without `--tolerance`
-(`runpod_guard.py:697`) and `--close` without `--note` likewise. WALL seconds, not `worker_seconds`: a worker with `workers-max 1` is charged
-between jobs too, which is why `run_5c2.billed_now` prices the line in wall seconds. A PARTIAL
-walk (outside `MS_BAND` = 1% of `--expect-ms`) is refused and RETRIED at the next session's start,
-read-only walk first — it is not settled by widening the tolerance.
+(`runpod_guard.py:697`) and `--close` without `--note` likewise. With no `--expect-ms` the
+completeness gate stands down (`complete()` returns True on `None`) and TWO refusals remain, both
+real: a walk that does not answer «read» settles nothing (`closing_record` returns None), and a
+settled figure further than `--tolerance` from §4's recorded reading is refused with both numbers
+named. Either refusal is RETRIED at the next session's start, read-only walk first — never settled
+by widening the tolerance, and the volume waits with it.
 
 **Then the volume, and ONLY then** — c3 is the phase's last paid run (ruling 05.09 (q), PHASE §6.1
 «the volume goes after c3»; the operator's word in ruling 09.09 (gg) item 6), and it goes after the
