@@ -140,14 +140,17 @@ open reading, and a pre-pod one refuses the close for ever — then the close, w
 own billed span and a walk bounded to this leg:
 
 ```
+CAP=$(python3 -c "import json;print(f\"{json.load(open('results/prereg_promo_c3.json'))['step']['cap_usd']:.2f}\")") && echo "CAP $CAP"
 python3 scripts/runpod_guard.py --step promo-c3 --step-cap $CAP --note "c3: <pages> pages, <posts> posts"
 
 MS=$(python3 -c "import json;r=json.load(open('results/run_promo_c3.json'))['runs'];print(round(sum(x['timing']['wall_seconds'] for x in r)*1000))") && echo "expect-ms $MS"
 python3 scripts/runpod_guard.py --step promo-c3 --step-cap $CAP --close \
   --expect-ms $MS --until <ISO-8601, just after the run> --tolerance 0.05 --note "c3 closed"
 ```
-`--close` on a step REFUSES without `--tolerance` (`runpod_guard.py:697`) and `--close` without
-`--note` likewise. WALL seconds, not `worker_seconds`: a worker with `workers-max 1` is charged
+The cap is read back from the registration again, as in §3 — §5 runs 30–40 min after the run and a
+retried close runs in ANOTHER session, where a `$CAP` from §0 is long gone and `--step` without
+`--step-cap` is a `parser.error`. `--close` on a step REFUSES without `--tolerance`
+(`runpod_guard.py:697`) and `--close` without `--note` likewise. WALL seconds, not `worker_seconds`: a worker with `workers-max 1` is charged
 between jobs too, which is why `run_5c2.billed_now` prices the line in wall seconds. A PARTIAL
 walk (outside `MS_BAND` = 1% of `--expect-ms`) is refused and RETRIED at the next session's start,
 read-only walk first — it is not settled by widening the tolerance.
