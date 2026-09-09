@@ -111,3 +111,4 @@ xlmr_full_run.log
 # check (l) asks `git status --porcelain results` to print nothing. The screen's fuel beside it,
 # `results/promo_screen_data.json`, has no clock and IS committed.
 results/promo_tick.json
+.claude/session_mode
