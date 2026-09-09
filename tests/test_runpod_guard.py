@@ -1299,6 +1299,76 @@ def test_the_tolerance_gate_refuses_a_settlement_that_disagrees_with_the_ledger(
     assert json.loads(path.read_text(encoding="utf-8"))["gpu_sessions"][-1]["closed"] is True
 
 
+@pytest.mark.parametrize(
+    ("recorded", "pods", "serverless", "cap", "closes"),
+    [
+        (0.227200, 0.030468, 0.227200, "0.80", True),
+        (0.227200, 0.200000, 0.227200, "0.80", False),
+        (2.990000, 0.100000, 2.990000, "4.00", True),
+        (2.990000, 0.210000, 2.990000, "4.00", False),
+    ],
+)
+def test_the_dollar_floor_grades_a_sub_dollar_leg_the_relative_band_cannot(
+    ledger, tmp_path, monkeypatch, capsys, recorded, pods, serverless, cap, closes
+):
+    """Ruling 09.09 (kk) 4: the close's band is `max(DOLLAR_FLOOR, tolerance × recorded)`.
+
+    Row 1 is `promo-c3` as it really settled — recorded $0.227200 (§4's post-run reference, taken
+    while only the `serverless` kind had posted), settled $0.257668 once the `pods` kind landed ~70
+    min later. 13.4% off a 5% band, and the leg was never over: the reference MISSED A WHOLE BILLED
+    KIND. Row 2 is the same leg with a $0.20 gap, which the floor must still refuse — a floor that
+    waves everything through below a dollar is not a gate. Rows 3–4 are a $2.99 leg: the relative
+    band ($0.1495) is the greater term there, so it decides both ways exactly as it did before this
+    constant existed, which is the claim «binds ONLY below a dollar» made checkable.
+
+    The `network-volume` line rides along in every row and stays OUTSIDE the settled figure by
+    construction (3.23 (4)), so the floor is never asked to absorb the always-on kind. The balance
+    sits $0.30 under the anchor on purpose: at the fixture's default the step's own CAP refuses
+    every row, and a refusal for the wrong reason would read as the band holding
+    ([[an_inequality_that_holds_for_the_wrong_reason]]) — so each refusing row names its message."""
+    path = step_with(
+        tmp_path,
+        anchored_at="2026-09-09T16:26:09+00:00",
+        gpu_sessions=[{"at": "2026-09-09T16:46:25+00:00", "step_spent_usd": recorded}],
+    )
+    before = path.read_text(encoding="utf-8")
+    monkeypatch.setattr(guard, "balance", lambda: 22.9784784161 - 0.30)
+    calls_of(
+        monkeypatch,
+        {
+            "pods": [{"amount": pods, "timeBilledMs": 1_115_000}],
+            "serverless": [{"amount": serverless, "timeBilledMs": 1_115_000}],
+            "network-volume": [{"amount": 0.0097, "timeBilledMs": 0}],
+        },
+    )
+    argv = [
+        "--step",
+        "probe-b",
+        "--step-cap",
+        cap,
+        "--step-ledger",
+        str(path),
+        "--close",
+        "--until",
+        "2026-09-09T17:56:00+00:00",
+        "--tolerance",
+        "0.05",
+        "--note",
+        "the floor beside the band",
+    ]
+
+    assert guard.main(argv) == (0 if closes else 1)
+    err = capsys.readouterr().err
+    if closes:
+        entry = json.loads(path.read_text(encoding="utf-8"))["gpu_sessions"][-1]
+        assert entry["closed"] is True
+        assert entry["settled_usd"] == round(pods + serverless, 6), "the volume stays outside it"
+        assert "REFUSED" not in err
+    else:
+        assert path.read_text(encoding="utf-8") == before, "and it wrote nothing"
+        assert f"settles at ${round(pods + serverless, 6):.6f}" in err, "the BAND refused it"
+
+
 def test_a_step_close_will_not_run_without_a_tolerance(ledger, tmp_path, monkeypatch):
     """`--tolerance` has NO default on purpose. The contract asked for the tolerance to be
     re-derived from the control table in `docs/reports/pass1-probe.md` §(3); the re-derivation says

@@ -87,6 +87,20 @@ MS_FLOOR = 1_000
 """The run record publishes `billed_seconds` to whole seconds, so a walk may legitimately differ by
 up to a second. Below this the band is the rounding and not a tolerance."""
 
+DOLLAR_FLOOR = 0.05
+"""`MS_FLOOR`'s pattern for the close's dollar band: below this the band is the bill's own posting
+lag and not a tolerance (ruling 09.09 (kk) 4).
+
+MEASURED on `promo-c3`: the step settled at $0.257668 while §4's post-run reference read $0.227200
+— the reference had absorbed the `serverless` kind and not the `pods` kind that posted ~70 min
+later, so it MISSED A WHOLE BILLED KIND and the relative gate read 13.4% off a 5% band and refused
+a leg that was never over. 5% of $0.2272 is $0.0114; one late-posting kind is $0.0305. C2 drifted
+2.73% and 1.29% on comparable absolute cents only because $2.99 absorbed them.
+
+$0.05 sits above that largest measured benign kind plus the close-lag volume drip, and at the
+relative band's own crossover (5% × $1.00), so it binds ONLY below a dollar and leaves every larger
+leg's gate byte-identical. The $86.49 class the gate exists to catch still refuses."""
+
 PHASE_CAP_USD = 33.00
 """SPEC amendment 3.4 (4), raised 25 → 30 by amendment 3.18 (3) and 30 → 33 by amendment 3.18 (7)(b)
 (operator, both 2026-08-13). Not a target — the line the run does not cross.
@@ -894,16 +908,20 @@ def main(argv: list[str] | None = None) -> int:
                         " settled figure to close on. A PARTIAL walk is a third state and settling"
                         " on it freezes a number that is never re-derived."
                     )
-                elif off is not None and off > args.tolerance:
+                elif off is not None and abs(settled - recorded) > (
+                    bound := max(DOLLAR_FLOOR, args.tolerance * abs(recorded))
+                ):
                     # BEFORE the write, and it is the whole reason the gate exists: the $86.49 class
                     # arrives as a plausible number, not as an error. Both figures go in the
-                    # refusal so the debt can be carried NAMED.
+                    # refusal so the debt can be carried NAMED, and the bound names WHICH of the
+                    # two — the floor or the band — the run actually faced.
                     shut = None
                     refusals.append(
                         f"{args.step} settles at ${settled:.6f} against its own recorded reading of"
                         f" ${recorded:.6f} — {off:.1%} off, outside the registered tolerance of"
-                        f" {args.tolerance:.1%}. NOT closed: a close outside the band is a refusal,"
-                        " never a rounding, and the ledger stays OPEN and named."
+                        f" {args.tolerance:.1%} (the gate is ${bound:.6f}: the greater of the"
+                        f" ${DOLLAR_FLOOR:.2f} floor and the band). NOT closed: a close outside the"
+                        " band is a refusal, never a rounding, and the ledger stays OPEN and named."
                     )
                 if shut is not None:
                     # `settled_usd` and the `step_spent_usd` of the entries above it are NOT the
