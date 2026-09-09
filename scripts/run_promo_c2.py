@@ -289,7 +289,7 @@ def corner(
     }
 
 
-def rung_0(n_pages: int, n_posts: int, cap: float = STEP_CAP_USD) -> dict:
+def rung_0(n_pages: int, n_posts: int, cap: float | None = None) -> dict:
     """The whole step at three measured corners, and the realised 5c2 rate beside them.
 
     `results/promo_projection_c2.json` priced the VISION leg at the dear end of the smoke's marginal
@@ -299,6 +299,9 @@ def rung_0(n_pages: int, n_posts: int, cap: float = STEP_CAP_USD) -> dict:
     guard's `spend()` is the pessimistic max and a cap blown after the money is spent cannot be
     un-spent.
     """
+    # The cap is read at CALL time. A default bound at import freezes the C2 number into every leg
+    # that re-points STEP_CAP_USD, and the freeze is invisible: the table still prints a verdict.
+    cap = STEP_CAP_USD if cap is None else cap
     r = rates()
     common = {"n_pages": n_pages, "n_posts": n_posts, "rate": r["rate_usd_per_second"], "cap": cap}
     table = [
@@ -927,6 +930,21 @@ def finalise(outcome: dict, note: list, client, rate: float) -> None:
     print(f"\nwrote {rel(RECORD)} (run {len(record['runs'])})")
 
 
+def repoint(args) -> None:
+    """Point this module's files, ledger line and cap at ONE leg — parameters, not siblings.
+
+    Ruling 04.09 (l) item 2: the c3 leg is this producer with `--out` / `--channels` / `--anchor` /
+    `--prereg` / `--step` / `--cap`, writing `results/*_c3.json` under its own registration and its
+    own ledger `promo-c3`. Every reader below takes these off the module, so one rebinding before
+    the dispatch is the whole change; nothing re-runs C2, whose result files stay as sealed.
+    """
+    global PREREG, RECORD, CENSUS, PAGECOUNT, PROJECTION, MANIFEST, STEP, STEP_CAP_USD
+    PREREG, RECORD = args.prereg, args.record
+    CENSUS, PAGECOUNT = args.census, args.pagecount
+    PROJECTION, MANIFEST = args.projection, args.manifest
+    STEP, STEP_CAP_USD = args.step, args.cap
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--register", action="store_true", help="$0: write the pre-registration")
@@ -938,7 +956,16 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--dry-run", action="store_true", help="$0: selections, hashes, rung 0")
     parser.add_argument("--run", action="store_true", help="the PAID leg")
     parser.add_argument("--endpoint", help=f"the serving endpoint id (or ${ENDPOINT_ENV})")
+    parser.add_argument("--prereg", type=Path, default=PREREG, help="the leg's registration")
+    parser.add_argument("--record", type=Path, default=RECORD, help="the leg's run record")
+    parser.add_argument("--census", type=Path, default=CENSUS)
+    parser.add_argument("--pagecount", type=Path, default=PAGECOUNT)
+    parser.add_argument("--projection", type=Path, default=PROJECTION)
+    parser.add_argument("--manifest", type=Path, default=MANIFEST)
+    parser.add_argument("--step", default=STEP, help="the ledger line this leg spends on")
+    parser.add_argument("--cap", type=float, default=STEP_CAP_USD, help="the step's cap, USD")
     args = parser.parse_args(argv)
+    repoint(args)
 
     if args.register:
         record = register()

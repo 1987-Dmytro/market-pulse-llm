@@ -211,7 +211,7 @@ def corners(run: dict) -> list[dict]:
 PAGECOUNT = REPO_ROOT / "results" / "promo_pagecount_c2.json"
 
 
-def exact_pages() -> dict | None:
+def exact_pages(pagecount_path: Path | None = None) -> dict | None:
     """The counted pages, once `promo_pagecount_c2.py` has read them off Telegram.
 
     While the store was the only source the page count could only be BOUNDED, and this projection
@@ -220,9 +220,10 @@ def exact_pages() -> dict | None:
     ends of the population stop being two numbers and the projection can do what clause (a) asks —
     price C2 as ONE number.
     """
-    if not PAGECOUNT.exists():
+    path = PAGECOUNT if pagecount_path is None else pagecount_path
+    if not path.exists():
         return None
-    record = read(PAGECOUNT)
+    record = read(path)
     if record["totals"]["rows_unreachable"]:
         # Not fatal, and not silent: an unreachable row is priced at the store's gap bound, so the
         # total is still an upper bound on the truth. The reader is told which it is holding.
@@ -230,12 +231,12 @@ def exact_pages() -> dict | None:
     return record
 
 
-def build(census_path: Path = CENSUS) -> dict:
+def build(census_path: Path = CENSUS, pagecount_path: Path | None = None) -> dict:
     census = read(census_path)
     run = read(RUN_5C2)
     usd_per_second = run["rate_usd_per_second"]
     leaflet = dict(census["selection"]["leaflet_page"])
-    counted = exact_pages()
+    counted = exact_pages(pagecount_path)
     if counted:
         pages = counted["totals"]["pages"]
         leaflet["pages_floor"] = leaflet["pages_ceiling"] = pages
@@ -389,9 +390,10 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--out", type=Path, default=OUT)
     parser.add_argument("--census", type=Path, default=CENSUS)
+    parser.add_argument("--pagecount", type=Path, default=PAGECOUNT)
     args = parser.parse_args(argv)
 
-    record = build(args.census)
+    record = build(args.census, args.pagecount)
     args.out.write_text(
         json.dumps(record, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8"
     )

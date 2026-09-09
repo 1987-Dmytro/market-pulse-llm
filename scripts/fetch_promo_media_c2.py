@@ -59,7 +59,10 @@ def albums(messages: list) -> dict[int, list]:
     }
 
 
-def on_disk(channel: str, directory: Path = MEDIA) -> list[Path]:
+def on_disk(channel: str, directory: Path | None = None) -> list[Path]:
+    # Read at CALL time, never frozen into the default: `--media` re-points MEDIA in main() and a
+    # default bound at import would keep pointing at the C2 directory.
+    directory = MEDIA if directory is None else directory
     return sorted(directory.glob(f"{channel.lstrip('@')}_*.jpg"))
 
 
@@ -227,13 +230,21 @@ async def run(census: dict, record: dict) -> tuple[dict, list[dict]]:
     return entries, by_channel
 
 
-def main() -> int:
+def main(argv: list[str] | None = None) -> int:
+    global MEDIA, MANIFEST
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--plan", action="store_true", help="offline: owed vs on disk")
-    args = parser.parse_args()
+    parser.add_argument("--census", type=Path, default=pagecount.CENSUS)
+    parser.add_argument("--pagecount", type=Path, default=pagecount.RECORD)
+    parser.add_argument("--media", type=Path, default=MEDIA, help="where the pages land")
+    parser.add_argument("--manifest", type=Path, default=MANIFEST)
+    args = parser.parse_args(argv)
+    # One re-point before anything reads them: `write_manifest`, `run` and `on_disk` all take the
+    # directory and the manifest off the module, and a leg differs only in where those two point.
+    MEDIA, MANIFEST = args.media, args.manifest
 
-    census = json.loads(pagecount.CENSUS.read_text(encoding="utf-8"))
-    record = json.loads(pagecount.RECORD.read_text(encoding="utf-8"))
+    census = json.loads(args.census.read_text(encoding="utf-8"))
+    record = json.loads(args.pagecount.read_text(encoding="utf-8"))
     print(
         f"population: {census['selection']['leaflet_page']['posts']} media posts,"
         f" {record['totals']['pages_exact']} pages exact · window"

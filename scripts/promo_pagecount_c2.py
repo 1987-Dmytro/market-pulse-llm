@@ -212,12 +212,15 @@ async def reread(rows: list[dict], since, anchor) -> dict[str, dict[int, dict]]:
     return out
 
 
-def main() -> int:
+def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--plan", action="store_true", help="offline: the population and the bound")
-    args = parser.parse_args()
+    parser.add_argument("--census", type=Path, default=CENSUS, help="the census to price")
+    parser.add_argument("--out", type=Path, default=RECORD, help="where the page count lands")
+    args = parser.parse_args(argv)
+    record_path = args.out
 
-    census = json.loads(CENSUS.read_text(encoding="utf-8"))
+    census = json.loads(args.census.read_text(encoding="utf-8"))
     rows = channel_rows(census)
     window = census["window"]
     print(
@@ -248,11 +251,16 @@ def main() -> int:
         "channels": sorted(priced, key=lambda one: one["channel"]),
         "totals": totals(priced),
     }
-    RECORD.write_text(
+    record_path.write_text(
         json.dumps(record, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8"
     )
     print(render(priced))
-    print(f"\n{RECORD.relative_to(REPO_ROOT)} — {record['totals']['pages']} pages")
+    where = (
+        record_path.relative_to(REPO_ROOT)
+        if record_path.is_relative_to(REPO_ROOT)
+        else record_path
+    )
+    print(f"\n{where} — {record['totals']['pages']} pages")
     return 0
 
 

@@ -151,17 +151,46 @@ def ids_sha256(selection: list[tuple[str, str, str]]) -> str:
     return hashlib.sha256(blob.encode("utf-8")).hexdigest()
 
 
-def build() -> dict:
+def selected(a1: list[tuple], channels: list[str] | None) -> list[tuple]:
+    """The A1 pairs `--channels` names, by the REGISTRY's spelling — or all of them.
+
+    The spelling is `registry.yaml :: telegram_channels`, whatever shape it has: `@marketopt_promo`
+    for a public handle, `+Ejz6ubzm21IyMTQy` for a channel joined by invite. A handle the registry
+    lacks is refused here rather than priced as an empty channel, because `promo_post.owner()`
+    matches that same list verbatim — a record written with a file stem (`marketopt_promo`) or with
+    an `@` the registry does not carry (`@marketopt_private`) resolves to no source at all and would
+    silently never fire R2/R3 (ruling 08.09 (dd) item 5).
+    """
+    if channels is None:
+        return a1
+    known = {handle for _, handle in a1}
+    unknown = [one for one in channels if one not in known]
+    if unknown:
+        raise SystemExit(
+            "not an A1 channel of config/registry.yaml: "
+            + ", ".join(unknown)
+            + " — the census prices the registry's own spelling (`telegram_channels`), never a"
+            " file stem and never a handle the registry lacks"
+        )
+    wanted = set(channels)
+    return [(source, handle) for source, handle in a1 if handle in wanted]
+
+
+def build(channels: list[str] | None = None, anchor: date | None = None) -> dict:
     registry = load_registry(REGISTRY)
-    a1 = [
-        (source, handle)
-        for source in registry.sources
-        if source.collect and bucket(source) == "A"
-        for handle in source.telegram_channels
-    ]
+    a1 = selected(
+        [
+            (source, handle)
+            for source in registry.sources
+            if source.collect and bucket(source) == "A"
+            for handle in source.telegram_channels
+        ],
+        channels,
+    )
     pages, evidence = manifests()
     ceiling = evidence["largest_album"] or 1
-    anchor = anchor_of([handle for _, handle in a1])
+    anchor_pinned = anchor is not None
+    anchor = anchor or anchor_of([handle for _, handle in a1])
     since = anchor - timedelta(days=WINDOW_DAYS)
 
     rows_ = [channel_row(handle, source, since, anchor, pages, ceiling) for source, handle in a1]
@@ -180,8 +209,12 @@ def build() -> dict:
             "since": since.isoformat(),
             "days": WINDOW_DAYS,
             "rule": "since <= date < anchor, half-open",
-            "anchor_rule": "the corpus's own last day + 1, read after S2's top-up —"
-            " 5c2-stop-ruling-and-cap-33 (a), plan §5.1 as corrected by the 30.08 review",
+            "anchor_rule": (
+                "pinned by --anchor: the registration's own date, not a reading of the store"
+                if anchor_pinned
+                else "the corpus's own last day + 1, read after S2's top-up —"
+                " 5c2-stop-ruling-and-cap-33 (a), plan §5.1 as corrected by the 30.08 review"
+            ),
         },
         "channels": rows_,
         "page_bound": evidence,
@@ -225,9 +258,22 @@ def render(record: dict) -> str:
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--out", type=Path, default=OUT)
+    parser.add_argument(
+        "--channels",
+        nargs="+",
+        metavar="HANDLE",
+        help="price only these A1 channels, by the registry's own spelling"
+        " (default: every A1 channel)",
+    )
+    parser.add_argument(
+        "--anchor",
+        type=date.fromisoformat,
+        metavar="YYYY-MM-DD",
+        help="pin the window's anchor (default: the corpus's own last day + 1)",
+    )
     args = parser.parse_args(argv)
 
-    record = build()
+    record = build(args.channels, args.anchor)
     args.out.write_text(
         json.dumps(record, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8"
     )
