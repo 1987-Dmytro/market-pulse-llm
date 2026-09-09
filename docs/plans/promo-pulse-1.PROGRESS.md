@@ -17,7 +17,7 @@ two leaflet packs 14 + 16 = **30 pages, 57 positions (28 + 29), 0 unreadable**; 
 **§4** teardown proven by listing (endpoint gone, templates back to the two, volume intact, `pod list -a []`), then the post-run
 `--note` with the counts DERIVED from the record: **`PROMO-C3 SPENT $0.2272 of $0.80`** (16:46:25Z), `REMAINING $1.2101`.
 Record + log + ledgers committed `bc2a0f3`. **`make check` GREEN at `bc2a0f3`: ruff clean, 4326 passed / 2 skipped (11:48)** —
-the same count as s41, so the leg's new result files moved no test. Clause (l)'s porcelain over its seven paths: empty.
+the same count as s41, so the leg's new result files moved no test; the commits after that reading touch only this PROGRESS file.
 **Measured, not priced:** the page leg ran **19.828 s/page** against the dear corner's 3.369 — 5.9× — and the leg still fits
 because the CAP, not the projection, bounds it; the per-channel room gate re-priced after pack 00 (`room_usd_before 0.333` →
 `room_usd_after_first_pack 0.2464`) and bought the 16-page remainder at its OWN measured rate ($0.0973).
@@ -35,19 +35,25 @@ after §4 against the runbook's 30–40. Nothing was written: `shut` is None bef
 `make tick --window all` (the default is `w2`) and `make promo-screen`. Then «chain-fold» ($0) → clean-clone e2e +
 `draw_truth_20` → the gate 12.09.
 
-## Open stop — NONE YET, but §5's SECOND gate is predicted to refuse and no remedy is mine
-The walk refusal above is the runbook's sanctioned retry, so nothing waits on a decision TODAY. Named before it happens, because
-the team lead's line may be needed the moment the walk answers: §5 compares `off = |settled − recorded| / recorded` against
-`--tolerance 0.05`, where `recorded` is §4's **$0.2272** — a BALANCE DELTA taken 20 min after the anchor, while the charge was
-still landing. The delta kept climbing after it: 0.2272 → 0.2577 (17:02) → **0.2674** (17:07, 17:20, 17:31 — now stable), of
-which ≈$0.009 is the volume's drip since the anchor, which `own_resources` leaves OUT. So settled ≈ $0.258 against a frozen
-reference of $0.2272 → `off` ≈ 13–14%, outside 5%. The runbook's §4 ordering was built against the volume drip, which makes
-`recorded` too HIGH; here the balance LAG dominates and makes it too LOW — the opposite sign, and a retry moves neither number.
+## Open stop — NOT REACHED TODAY; §5's SECOND gate is PRE-NAMED because it may need a ruling the moment the walk answers
+Nothing waits on a decision today: the walk refusal is the runbook's own retry. What follows is a FORECAST, not a measurement —
+recorded here only so the team lead's line exists before it is needed. §5 compares `off = |settled − recorded| / recorded`
+against `--tolerance 0.05`, where `recorded` is §4's **$0.2272** — a BALANCE DELTA taken 20 min after the anchor, while the
+charge was still landing. That delta kept climbing: 0.2272 → 0.2577 (17:02) → **0.2674** (17:07, 17:20, 17:31 — now stable).
+**The forecast's instrument is the wrong one and is labelled so:** `settled` is `own_resources(billing_by_kind)` off billing
+rows THAT DO NOT EXIST YET, while the delta is what the guard's own output calls a **LOWER BOUND** — different kinds, the same
+mismatch this gate exists to catch. Predicted from that lower bound minus the volume's ≈$0.009 drip since the anchor (which
+`own_resources` leaves out): settled ≈ $0.258, `off` ≈ 13–14%. A forecast, to be replaced by the walk's real pair of numbers.
+**The constraint that discriminates is not the lag — it is that a 5% RELATIVE band cannot grade a $0.23 leg:** 5% of $0.2272 is
+$0.0114 and the volume's drip alone is ≈$0.01/h. C2 drifted 2.73% and 1.29% on the same absolute gap only because C2's spend was
+large enough to absorb it. §4's ordering was built against the drip, which makes `recorded` too HIGH; here the balance LAG
+dominates and makes it too LOW — the opposite sign, and a retry moves neither number.
 Every remedy available to me is blocked: widening `--tolerance` is forbidden in the runbook's own words; a SECOND `--note` to
-re-record the reference is moving the gate's own reference, i.e. the guard bypassed; waiting makes the volume's share grow.
-This is a fork the phase file does not settle — if the walk answers and the band refuses, it is the team lead's ruling, not mine.
-Tree: everything by path, clause (l) clean; no pod, no endpoint; step line `promo-c3` OPEN; REMAINING **$1.1699** (17:31Z).
-
+re-record the reference moves the gate's own reference, i.e. the guard bypassed. If the walk answers and the band refuses, that
+is a fork the phase file does not settle — the team lead's ruling, not mine.
+Tree at 17:34Z: clause (l)'s porcelain over its seven paths EMPTY (the guard's ledger writes are gated on `anchor_is_new`,
+`args.note and not args.close` and `not cycle3_path().exists()`, so the read-only probes wrote nothing); only the two
+Stop-hook `knowledge/` files are dirty, outside (l). No pod, no endpoint; step line `promo-c3` OPEN; REMAINING $1.1699 (17:31Z).
 ## Named, not built (the phase file forbids adding what it did not ask for)
 - **The measured/priced gap above is a finding, not a fix:** 19.828 s/page vs the registered 3.369. No threshold is introduced.
 - **(jj)3's two nits stay folded into «chain-fold»** as ruled — §3's `export …=$(…)` masking the substitution status and the
