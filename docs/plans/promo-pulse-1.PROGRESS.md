@@ -13,8 +13,9 @@ fixture's default balance the step CAP refuses them anyway ([[an_inequality_that
 and fixed mid-test). **Negative control run:** with the guard change stashed, exactly one row fails, c3's own.
 `tests/test_runpod_guard.py` 57 passed; ruff clean. Commit `c5cad96`.
 **`make check` GREEN at `c5cad96`: ruff clean, 4330 passed / 2 skipped (11:51)** — 4326 + the four new rows, so the
-change moved no existing test. The two commits after that reading move only `results/spend_promo_c3.json` and
-`results/spend_cycle3.json`; the seven test files that read those three ledgers were re-run — **151 passed**.
+change moved no existing test. The three commits after it move only the two ledgers (`spend_promo_c3.json`,
+`spend_cycle3.json` — the seven test files reading them re-run, **151 passed**), this file, and `knowledge/hot.md`,
+whose two grepped literals `tests/test_volume_calc_5c1.py` reads — **10 passed** after the restamp.
 **The close.** Read-only walk first: `step resources $0.2577` = `pods $0.030461` + `serverless $0.227207`, the
 `network-volume $0.009722` outside by construction. Then the close: **`CLOSED spend_promo_c3.json at $0.2577 — entry
 APPENDED`**, `PROMO-C3 CLOSED $0.2577 of $0.80` (settled 18:57:04Z, window from 16:26:09Z, `walk_ms 889500`,
@@ -24,7 +25,7 @@ reading (`b361e57`, $8.8398 of $10.00, REMAINING **$1.1602**).
 **The volume.** `network-volume delete qw4nwleanc` → `{"deleted": true}`; the listing after is **`[]`**. The ≈$0.24/day
 drip is stopped. No pod, no endpoint, no volume — the cloud is empty.
 
-## Deviation — `--window all` is NOT a window id, and the tick empties the screen without an error (cause: ruled-command)
+## Deviation — `--window all` is NOT a window id, and the tick empties the screen without an error (cause: contract-gap)
 (kk) 5 and `knowledge/hot.md` both carried `make tick --window all`. `--window` takes a window ID; the `windows` table
 holds exactly two rows, `w1` and `w2`. `all` matches nothing, and `scripts/tick.py` wrote the shipped screen with
 **`positions` 1113 → 0** (−28 967 lines) and no non-zero exit. Nothing was committed: the artifacts were restored from
