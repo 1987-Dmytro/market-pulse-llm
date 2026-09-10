@@ -15,10 +15,11 @@ and the rows are the ones the operator can actually see rendered. Reading the ex
 database is the same choice `make promo-screen` makes: the gate must run where the screen runs.
 
 **A column with nothing in it says WHICH nothing.** The comment/signal/quote columns are filled from
-the `feed` block — the reaction leg. Until C3's paid read runs there is no feed at all, and those
-three columns print «not read» rather than an empty cell: an empty cell reads as «this position drew
-no comment», which is a claim about the market, and «unbought» is a claim about us
-([[empty_field_hides_several_states]]).
+the `feed` block — the reaction leg — and an empty one has THREE causes, not one: the thread is
+still in the queue, or it was read and said nothing of the five kinds, or the leg was never bought
+at all. The row names which, off `screen.threads` rather than off the feed's silence: an empty cell
+reads as «this position drew no comment», which is a claim about the market, and «not read» is a
+claim about us ([[empty_field_hides_several_states]]).
 
 **No old price, here either.** The row shows what the screen shows — brand · product · volume ·
 promo price · printed `−N%` — because a gate rendering a column the screen may not print would ask
@@ -62,20 +63,38 @@ def reactions(document: dict) -> dict[tuple[str, int], list[dict]]:
     return out
 
 
+def was_read(document: dict) -> set[tuple[str, int]]:
+    """The threads `results/promo_signals/` holds an answer for, as the export names them.
+
+    The FEED cannot answer this: it carries only the threads that said something the codebook names,
+    so a thread read in silence and a thread nobody has opened look identical in it. The export's
+    `screen.threads.read_threads` is the third state's evidence
+    ([[a_run_that_ends_early_adds_a_third_state_everywhere]]).
+    """
+    out = set()
+    for key in document["screen"]["threads"]["read_threads"]:
+        channel, _, root = key.rpartition("/")
+        out.add((channel, int(root)))
+    return out
+
+
 def draw(document: dict, rows: int = ROWS, seed: int = SEED) -> list[dict]:
     """`rows` positions with their reactions. A short population is a SHORT DRAW, never a refusal:
     145 positions are on disk today and the gate is meant to run on whatever the screen holds."""
     frame = population(document)
     chosen = random.Random(seed).sample(frame, min(rows, len(frame)))
     feed = reactions(document)
+    read = was_read(document)
     out = []
     for position in sorted(chosen, key=lambda row: row["row_id"]):
         item = position.get("item") or {}
         evidence = position.get("evidence") or {}
-        hits = feed.get((evidence.get("channel"), int(evidence.get("msg_id", 0))), [])
+        thread = (evidence.get("channel"), int(evidence.get("msg_id", 0)))
+        hits = feed.get(thread, [])
         out.append(
             {
                 "row_id": position["row_id"],
+                "thread_read": thread in read,
                 "carrier": position.get("carrier"),
                 "post": f"{evidence.get('channel')}/{evidence.get('msg_id')}",
                 "brand": (position.get("brand") or {}).get("display"),
@@ -94,10 +113,12 @@ def draw(document: dict, rows: int = ROWS, seed: int = SEED) -> list[dict]:
     return out
 
 
-def render(rows: list[dict]) -> str:
+def render(rows: list[dict], threads: dict) -> str:
     """The 20 rows as the operator reads them — one block per row, the five columns in §2's order."""
     out = [
         f"THE PRODUCT-TRUTH GATE — {len(rows)} rows, seed {SEED}, from results/promo_screen_data.json",
+        f"Reactions: {threads['read']} of {threads['population']} price threads read ·"
+        f" {threads['queue']} in the queue.",
         "Say in your own words what is right and wrong. Nothing here is scored.",
         "",
     ]
@@ -109,9 +130,13 @@ def render(rows: list[dict]) -> str:
             f"    position : {row['brand'] or '—'} · {row['product'] or '—'} ·"
             f" {row['volume'] or '—'} · {price} грн{printed}"
         )
-        if not row["reactions"]:
-            out.append("    reaction : not read — the C3 signal leg is unbought, so no thread has")
-            out.append("               been read; this is not «no one commented»")
+        if not row["reactions"] and row["thread_read"]:
+            out.append("    reaction : read, and nothing the codebook names was said in it —")
+            out.append("               this IS «no one said anything of the five kinds»")
+        elif not row["reactions"]:
+            out.append("    reaction : not read — this thread is one of the"
+                       f" {threads['queue']} still in the queue;")
+            out.append("               this is not «no one commented»")
         for hit in row["reactions"]:
             out.append(f"    {hit['signal']:<9}: «{hit['quote']}»  (msg {hit['msg_id']})")
         out.append("")
@@ -140,13 +165,14 @@ def main(argv: list[str] | None = None) -> int:
         "population": len(population(document)),
         "rows_drawn": len(rows),
         "read_from": rel(args.export),
+        "threads": document["screen"]["threads"],
         "rows": rows,
     }
     args.out.write_text(
         json.dumps(record, indent=2, ensure_ascii=False, sort_keys=True) + "\n", encoding="utf-8"
     )
     if not args.json:
-        print(render(rows))
+        print(render(rows, document["screen"]["threads"]))
     print(f"wrote {rel(args.out)}")
     return 0
 

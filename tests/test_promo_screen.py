@@ -52,6 +52,9 @@ EXPORT = {
             {"channel": "@atb", "thread_root": 4342, "type": "цена", "msg_id": 101,
              "quote": "дорого стало"}
         ],
+        "threads": {"population": 678, "not_collected": 12, "product_population": 666,
+                    "read": 118, "queue": 548, "read_threads": ["@atb/4342"],
+                    "from": "results/promo_threads_draw*.json :: population.by_channel"},
         "table_rows": {"attribution": 1, "signal": 1, "evidence": 1, "digest": 1, "unsure": 0,
                        "rollup": 1},
     },

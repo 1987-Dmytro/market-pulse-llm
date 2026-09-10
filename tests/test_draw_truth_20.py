@@ -2,8 +2,9 @@
 
 The gate itself is the operator's words and nothing here scores it. What a test CAN hold is that the
 draw is reproducible, that it draws from the population it names, and that an empty reaction column
-says which kind of empty it is — «unbought» is a claim about us, «no one commented» is a claim about
-the market, and a blank cell would be read as the second ([[empty_field_hides_several_states]]).
+says which kind of empty it is — «still in the queue» is a claim about us, «no one commented» is a
+claim about the market, and a blank cell would be read as the second
+([[empty_field_hides_several_states]]).
 """
 
 import json
@@ -32,6 +33,19 @@ def position(n: int) -> dict:
     }
 
 
+def threads(read: list[str]) -> dict:
+    """`screen.threads` in the shape `tick.threads_read` writes it — counts plus their evidence."""
+    return {
+        "population": 678,
+        "not_collected": 12,
+        "product_population": 666,
+        "read": len(read),
+        "queue": 666 - len(read),
+        "read_threads": read,
+        "from": "results/promo_threads_draw*.json :: population.by_channel",
+    }
+
+
 @pytest.fixture
 def export(tmp_path):
     document = {
@@ -42,6 +56,7 @@ def export(tmp_path):
                 {"channel": "@atb", "thread_root": 4003, "type": "цена", "msg_id": 900,
                  "quote": "дорого"}
             ],
+            "threads": threads(["@atb/4003"]),
         },
     }
     path = tmp_path / "promo_screen_data.json"
@@ -71,12 +86,19 @@ def test_two_draws_over_one_export_are_identical(export, tmp_path):
 
 
 def test_the_reaction_column_says_WHICH_nothing(export, tmp_path):
-    """One drawn row has a reaction and the rest do not; the rendering must distinguish «not read»
-    from «nobody commented» rather than leaving a cell blank."""
-    drawn = record(export, tmp_path, "a.json")
-    text = draw.render(drawn["rows"])
-    assert "not read" in text and "unbought" in text
-    assert "«no one commented»" in text
+    """THREE states, not two: a thread still in the queue, a thread that was read and said nothing
+    of the five kinds, and a thread with a reaction. The read thread is taken FROM the draw rather
+    than guessed — which of the 50 rows seed 42 picks is `random.sample`'s business."""
+    picked = record(export, tmp_path, "a.json")["rows"][0]["post"]
+    document = json.loads(export.read_text(encoding="utf-8"))
+    document["screen"]["feed"] = []
+    document["screen"]["threads"] = threads([picked])
+    export.write_text(json.dumps(document, ensure_ascii=False), encoding="utf-8")
+
+    again = record(export, tmp_path, "b.json")
+    text = draw.render(again["rows"], document["screen"]["threads"])
+    assert "read, and nothing the codebook names was said in it" in text, "the READ thread"
+    assert "still in the queue" in text and "«no one commented»" in text, "the other 19"
 
 
 def test_a_reaction_that_exists_is_carried_with_its_quote_and_msg_id(export, tmp_path):
@@ -99,12 +121,15 @@ def test_a_reaction_that_exists_is_carried_with_its_quote_and_msg_id(export, tmp
     hit = [row for row in again["rows"] if row["row_id"] == picked["row_id"]]
     assert hit, "the draw is seeded, so the same row comes back"
     assert hit[0]["reactions"] == [{"signal": "цена", "quote": "дорого", "msg_id": 900}]
-    assert "«дорого»" in draw.render(again["rows"])
+    assert "«дорого»" in draw.render(again["rows"], document["screen"]["threads"])
 
 
 def test_a_short_population_is_a_short_draw_never_a_refusal(tmp_path):
     """145 positions are on disk today and the gate is meant to run on whatever the screen holds."""
-    document = {"window_id": "w1", "screen": {"positions": [position(1)], "feed": []}}
+    document = {
+        "window_id": "w1",
+        "screen": {"positions": [position(1)], "feed": [], "threads": threads([])},
+    }
     path = tmp_path / "small.json"
     path.write_text(json.dumps(document, ensure_ascii=False), encoding="utf-8")
     drawn = record(path, tmp_path, "a.json")
@@ -121,4 +146,4 @@ def test_the_gate_never_renders_a_price_the_screen_may_not_print(export, tmp_pat
     number he will never see on the screen again."""
     drawn = record(export, tmp_path, "a.json")
     assert not any("price_old" in row for row in drawn["rows"])
-    assert "price_old" not in draw.render(drawn["rows"])
+    assert "price_old" not in draw.render(drawn["rows"], drawn["threads"])

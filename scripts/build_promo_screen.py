@@ -49,7 +49,9 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 EXPORT = REPO_ROOT / "results" / "promo_screen_data.json"
 OUT = REPO_ROOT / "dashboard" / "promo.html"
 
-REQUIRED = ("positions", "depth_by_chain_and_brand", "weeks", "rollup", "feed", "table_rows")
+REQUIRED = (
+    "positions", "depth_by_chain_and_brand", "weeks", "rollup", "feed", "threads", "table_rows"
+)
 """Every block the page renders. Named as a closed list so a source that stops being exported is a
 refusal here rather than an empty section nobody notices."""
 
@@ -262,12 +264,24 @@ def depth_table(rows: list[dict]) -> str:
     )
 
 
-def feed_table(rows: list[dict]) -> str:
-    """The reaction feed: signal · quote · msg_id · thread — §1's four fields, in that order."""
+def feed_table(rows: list[dict], threads: dict) -> str:
+    """The reaction feed: signal · quote · msg_id · thread — §1's four fields, in that order.
+
+    The line above the table says how much of the population has been read. It used to say «the C3
+    signal leg has not been bought», which stopped being true the moment the dev loop's threads were
+    promoted into the store: a sentence that outlives the state it describes is a wrong number the
+    screen keeps repeating ([[a_reading_that_outlived_its_state]]).
+    """
+    read = (
+        f"<p class='sub'>{threads['read']} of {threads['population']} price threads read ·"
+        f" {threads['queue']} in the queue · {threads['not_collected']} in channels the registry"
+        " has stopped collecting</p>"
+    )
     if not rows:
-        return (
-            "<p class='empty'>No reactions yet — the C3 signal leg has not been bought, so no"
-            " thread has been read.</p>"
+        return read + (
+            "<p class='empty'>No reactions yet — nothing has been read.</p>"
+            if not threads["read"]
+            else "<p class='empty'>No reactions yet — no thread that was read carries a signal.</p>"
         )
     body = "".join(
         "<tr>"
@@ -279,7 +293,8 @@ def feed_table(rows: list[dict]) -> str:
         for row in rows
     )
     return (
-        "<table><tr><th>signal</th><th>quote</th><th>msg_id</th><th>thread</th></tr>"
+        read
+        + "<table><tr><th>signal</th><th>quote</th><th>msg_id</th><th>thread</th></tr>"
         + body
         + "</table>"
     )
@@ -304,7 +319,7 @@ def render(document: dict, s2: list[dict]) -> str:
         "<h2>Промо-позиції</h2>" + rows_table(screen["positions"]) +
         "<h2>Глибина знижки — per chain and brand (window aggregate)</h2>"
         + depth_table(screen["depth_by_chain_and_brand"]) +
-        "<h2>Реакція покупців</h2>" + feed_table(screen["feed"]) +
+        "<h2>Реакція покупців</h2>" + feed_table(screen["feed"], screen["threads"]) +
         "<h2>S2 — the reader's grade on the frozen holdouts (shipped as measured)</h2>"
         + s2_table(s2) +
         "</main></html>\n"

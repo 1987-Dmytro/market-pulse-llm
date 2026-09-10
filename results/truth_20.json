@@ -12,6 +12,7 @@
       "promo_price": 58.5,
       "reactions": [],
       "row_id": "+Ejz6ubzm21IyMTQy:5351:1",
+      "thread_read": false,
       "volume": "125 г"
     },
     {
@@ -23,6 +24,7 @@
       "promo_price": 59.9,
       "reactions": [],
       "row_id": "+Ejz6ubzm21IyMTQy:5363:1",
+      "thread_read": false,
       "volume": "180 г"
     },
     {
@@ -34,6 +36,7 @@
       "promo_price": 59.9,
       "reactions": [],
       "row_id": "@ATB_FANatik:4542:1",
+      "thread_read": false,
       "volume": "135 г"
     },
     {
@@ -45,6 +48,7 @@
       "promo_price": 66.9,
       "reactions": [],
       "row_id": "@ATB_FANatik:4542:5",
+      "thread_read": false,
       "volume": "160 г"
     },
     {
@@ -56,6 +60,7 @@
       "promo_price": 47.9,
       "reactions": [],
       "row_id": "@VARUS_channel:10829:4",
+      "thread_read": false,
       "volume": "125 г"
     },
     {
@@ -67,6 +72,7 @@
       "promo_price": 10.5,
       "reactions": [],
       "row_id": "@VARUS_channel:10838:0",
+      "thread_read": false,
       "volume": "70 г"
     },
     {
@@ -78,6 +84,7 @@
       "promo_price": 10.9,
       "reactions": [],
       "row_id": "@VARUS_channel:10844:6",
+      "thread_read": false,
       "volume": "36 г"
     },
     {
@@ -89,6 +96,7 @@
       "promo_price": 59.9,
       "reactions": [],
       "row_id": "@VARUS_channel:10903:0",
+      "thread_read": false,
       "volume": "160 г"
     },
     {
@@ -100,6 +108,7 @@
       "promo_price": 113.9,
       "reactions": [],
       "row_id": "@VARUS_channel:11041:0",
+      "thread_read": false,
       "volume": "500 г"
     },
     {
@@ -111,6 +120,7 @@
       "promo_price": null,
       "reactions": [],
       "row_id": "@atb_aktsiyi:3195:3",
+      "thread_read": false,
       "volume": "45 г"
     },
     {
@@ -122,6 +132,7 @@
       "promo_price": 22.5,
       "reactions": [],
       "row_id": "@atb_aktsiyi:3207:1",
+      "thread_read": false,
       "volume": "100 г"
     },
     {
@@ -133,6 +144,7 @@
       "promo_price": 46.5,
       "reactions": [],
       "row_id": "@atb_aktsiyi:3232:7",
+      "thread_read": false,
       "volume": "300 г"
     },
     {
@@ -144,6 +156,7 @@
       "promo_price": 49.9,
       "reactions": [],
       "row_id": "@atb_aktsiyi:3272:0",
+      "thread_read": false,
       "volume": "180 г"
     },
     {
@@ -155,6 +168,7 @@
       "promo_price": 20.9,
       "reactions": [],
       "row_id": "@atb_aktsiyi:3417:2",
+      "thread_read": false,
       "volume": "155 г"
     },
     {
@@ -166,6 +180,7 @@
       "promo_price": 33.99,
       "reactions": [],
       "row_id": "@blyzenkoua:7683:1",
+      "thread_read": false,
       "volume": "500 г"
     },
     {
@@ -177,6 +192,7 @@
       "promo_price": 55.99,
       "reactions": [],
       "row_id": "@blyzenkoua:7968:3",
+      "thread_read": false,
       "volume": "150 г"
     },
     {
@@ -188,6 +204,7 @@
       "promo_price": 159.9,
       "reactions": [],
       "row_id": "@msuaaaa:10778:0",
+      "thread_read": false,
       "volume": "400 г"
     },
     {
@@ -199,6 +216,7 @@
       "promo_price": 114.9,
       "reactions": [],
       "row_id": "@msuaaaa:10841:2",
+      "thread_read": false,
       "volume": "500 г"
     },
     {
@@ -210,6 +228,7 @@
       "promo_price": 69.99,
       "reactions": [],
       "row_id": "@msuaaaa:10952:0",
+      "thread_read": false,
       "volume": "180 г"
     },
     {
@@ -221,9 +240,138 @@
       "promo_price": 22.5,
       "reactions": [],
       "row_id": "@msuaaaa:10979:1",
+      "thread_read": false,
       "volume": "100 г"
     }
   ],
   "rows_drawn": 20,
-  "seed": 42
+  "seed": 42,
+  "threads": {
+    "from": "results/promo_threads_draw*.json :: population.by_channel, less the channels config/registry.yaml has stopped collecting; `read` counts the records under results/promo_signals/",
+    "not_collected": 12,
+    "population": 678,
+    "product_population": 666,
+    "queue": 548,
+    "read": 118,
+    "read_threads": [
+      "@VARUS_channel/10187",
+      "@VARUS_channel/10360",
+      "@VARUS_channel/10603",
+      "@VARUS_channel/1901",
+      "@VARUS_channel/2053",
+      "@VARUS_channel/2085",
+      "@VARUS_channel/2353",
+      "@VARUS_channel/2537",
+      "@VARUS_channel/3054",
+      "@VARUS_channel/3163",
+      "@VARUS_channel/3289",
+      "@VARUS_channel/3342",
+      "@VARUS_channel/3436",
+      "@VARUS_channel/3621",
+      "@VARUS_channel/4129",
+      "@VARUS_channel/4202",
+      "@VARUS_channel/4340",
+      "@VARUS_channel/4422",
+      "@VARUS_channel/4449",
+      "@VARUS_channel/4871",
+      "@VARUS_channel/5119",
+      "@VARUS_channel/5186",
+      "@VARUS_channel/5589",
+      "@VARUS_channel/5854",
+      "@VARUS_channel/5994",
+      "@VARUS_channel/6006",
+      "@VARUS_channel/6009",
+      "@VARUS_channel/6216",
+      "@VARUS_channel/6278",
+      "@VARUS_channel/6951",
+      "@VARUS_channel/6973",
+      "@VARUS_channel/7440",
+      "@VARUS_channel/7569",
+      "@VARUS_channel/7850",
+      "@VARUS_channel/8084",
+      "@VARUS_channel/8308",
+      "@VARUS_channel/8364",
+      "@VARUS_channel/8430",
+      "@VARUS_channel/8647",
+      "@VARUS_channel/8823",
+      "@VARUS_channel/9006",
+      "@VARUS_channel/9034",
+      "@VARUS_channel/9046",
+      "@VARUS_channel/9112",
+      "@VARUS_channel/9277",
+      "@VARUS_channel/9461",
+      "@VARUS_channel/9462",
+      "@VARUS_channel/9802",
+      "@VARUS_channel/9850",
+      "@VARUS_channel/9853",
+      "@VARUS_channel/9912",
+      "@VARUS_channel/9926",
+      "@VARUS_channel/9999",
+      "@msuaaaa/10021",
+      "@msuaaaa/10121",
+      "@msuaaaa/10169",
+      "@msuaaaa/10219",
+      "@msuaaaa/10459",
+      "@msuaaaa/10617",
+      "@msuaaaa/10635",
+      "@msuaaaa/10651",
+      "@msuaaaa/2455",
+      "@msuaaaa/2684",
+      "@msuaaaa/3034",
+      "@msuaaaa/3053",
+      "@msuaaaa/3454",
+      "@msuaaaa/3915",
+      "@msuaaaa/4173",
+      "@msuaaaa/4490",
+      "@msuaaaa/4588",
+      "@msuaaaa/4599",
+      "@msuaaaa/5015",
+      "@msuaaaa/5046",
+      "@msuaaaa/5113",
+      "@msuaaaa/5255",
+      "@msuaaaa/5513",
+      "@msuaaaa/5704",
+      "@msuaaaa/6502",
+      "@msuaaaa/6523",
+      "@msuaaaa/6691",
+      "@msuaaaa/7187",
+      "@msuaaaa/7202",
+      "@msuaaaa/7333",
+      "@msuaaaa/7348",
+      "@msuaaaa/7402",
+      "@msuaaaa/7627",
+      "@msuaaaa/7636",
+      "@msuaaaa/7693",
+      "@msuaaaa/7792",
+      "@msuaaaa/7825",
+      "@msuaaaa/7847",
+      "@msuaaaa/7900",
+      "@msuaaaa/7907",
+      "@msuaaaa/8020",
+      "@msuaaaa/8096",
+      "@msuaaaa/8215",
+      "@msuaaaa/8412",
+      "@msuaaaa/8717",
+      "@msuaaaa/8762",
+      "@msuaaaa/8768",
+      "@msuaaaa/8788",
+      "@msuaaaa/8883",
+      "@msuaaaa/8905",
+      "@msuaaaa/8907",
+      "@msuaaaa/9013",
+      "@msuaaaa/9014",
+      "@msuaaaa/9041",
+      "@msuaaaa/9139",
+      "@msuaaaa/9140",
+      "@msuaaaa/9164",
+      "@msuaaaa/9190",
+      "@msuaaaa/9196",
+      "@msuaaaa/9354",
+      "@msuaaaa/9483",
+      "@msuaaaa/9545",
+      "@msuaaaa/9577",
+      "@msuaaaa/9618",
+      "@msuaaaa/9952"
+    ]
+  }
 }

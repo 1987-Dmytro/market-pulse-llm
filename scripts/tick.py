@@ -77,6 +77,7 @@ REGISTRY = REPO_ROOT / "config" / "registry.yaml"
 LIVE_ROOT = REPO_ROOT / "data" / "raw_r2"
 SCHEDULE = REPO_ROOT / "data" / "schedule.json"
 SIGNALS = REPO_ROOT / "results" / "promo_signals"
+DRAWS = REPO_ROOT / "results"
 EXPORT = REPO_ROOT / "results" / "promo_screen_data.json"
 STATE = REPO_ROOT / "results" / "promo_tick.json"
 
@@ -245,9 +246,10 @@ def signal_records(root: Path = SIGNALS) -> list[dict]:
     """The screened promo-signal answers on disk, oldest file first.
 
     Each file is one thread as `market_pulse.promo_hooks.screen` returned it, plus the three fields
-    the screen function does not know: `channel`, `thread_root`, `extractor_version`. The directory
-    is empty until C3's paid leg runs, and an empty directory is a legitimate state — a tick over no
-    answers writes no signal rows and says so, rather than failing.
+    the screen function does not know: `channel`, `thread_root`, `extractor_version`.
+    `scripts/promote_signals.py` writes them from the answers the paid dev loop already bought. An
+    empty directory stays a legitimate state — a tick over no answers writes no signal rows and says
+    so, rather than failing.
     """
     if not root.exists():
         return []
@@ -487,6 +489,60 @@ def not_collected(registry) -> tuple[str, ...]:
     )
 
 
+def thread_population(root: Path = DRAWS) -> dict[str, int]:
+    """The price-thread population per channel — from the draw files, never typed here.
+
+    Every draw was taken from the same frame and says so with `population.ids_sha256`, so the number
+    is read off all of them at once and a disagreement REFUSES by name: a screen that said «N of
+    678» while the files carried two frames would be naming a population no file holds
+    ([[a_number_typed_into_its_own_checker]]).
+    """
+    files = sorted(root.glob("promo_threads_draw*.json"))
+    if not files:
+        raise SystemExit(
+            f"tick: no promo_threads_draw*.json under {rel(root)} — the thread population has no"
+            " source, and «N of M threads read» may not be typed"
+        )
+    frames = [json.loads(path.read_text(encoding="utf-8"))["population"] for path in files]
+    ids = sorted({frame["ids_sha256"] for frame in frames})
+    if len(ids) != 1:
+        raise SystemExit(
+            f"tick: {[rel(path) for path in files]} carry {len(ids)} different thread populations"
+            f" ({ids}) — nothing written"
+        )
+    return frames[0]["by_channel"]
+
+
+def threads_read(population: dict[str, int], records: list[dict], excluded: tuple[str, ...]) -> dict:
+    """«N of 678 threads read · M in the queue» — the sentence's numbers, and its evidence.
+
+    `read` counts the records on disk, which is what «read» means: a thread whose answer is in
+    `results/promo_signals/` was read, whether or not it said anything the codebook names. The queue
+    is the PRODUCT's population — the price threads of channels the live registry still collects —
+    and never the tick's «cooled and not yet read» counter, which counts every thread of every
+    channel (ruling 10.09 (pp) 4). `read_threads` travels beside the counts because a row with no
+    reaction has THREE causes, and the gate must be able to say which one it is
+    ([[empty_field_hides_several_states]]).
+    """
+    read = sorted(
+        f"{record['channel']}/{record['thread_root']}"
+        for record in records
+        if record["channel"] not in excluded
+    )
+    product = sum(count for channel, count in population.items() if channel not in excluded)
+    return {
+        "population": sum(population.values()),
+        "not_collected": sum(count for channel, count in population.items() if channel in excluded),
+        "product_population": product,
+        "read": len(read),
+        "queue": product - len(read),
+        "read_threads": read,
+        "from": "results/promo_threads_draw*.json :: population.by_channel, less the channels"
+        " config/registry.yaml has stopped collecting; `read` counts the records under"
+        " results/promo_signals/",
+    }
+
+
 def on_screen(conn, window_id: str, excluded: tuple[str, ...]) -> int:
     """How many position rows the screen's own population statement returns."""
     source, params = aggregates.positions_source(window_id, excluded)
@@ -504,7 +560,7 @@ def windows_of(conn) -> list[dict]:
     ]
 
 
-def export(conn, window_id: str, counts: dict, excluded: tuple[str, ...] = ()) -> dict:
+def export(conn, window_id: str, counts: dict, threads: dict, excluded: tuple[str, ...] = ()) -> dict:
     """The screen's only fuel — a derived export in the envelope of plan §5.12a.
 
     Sorted keys, no git block and NO CLOCK: two ticks over an unchanged store write this file
@@ -536,6 +592,7 @@ def export(conn, window_id: str, counts: dict, excluded: tuple[str, ...] = ()) -
                 )
             ],
             "feed": feed(conn),
+            "threads": threads,
             "table_rows": counts,
         },
     }
@@ -624,10 +681,16 @@ def main(argv: list[str] | None = None) -> int:
         f" {digest['unchanged']} unchanged · {digest['queued']} cooled and not yet read ·"
         f" {digest['late']} late comments joined"
     )
+    threads = threads_read(thread_population(), records, excluded)
+    print(
+        f"threads: {threads['read']} of {threads['population']} read ·"
+        f" {threads['queue']} in the queue · {threads['not_collected']} in channels the registry"
+        " has stopped collecting"
+    )
     args.out.parent.mkdir(parents=True, exist_ok=True)
     args.out.write_text(
         json.dumps(
-            export(conn, args.window, after, excluded),
+            export(conn, args.window, after, threads, excluded),
             indent=2,
             ensure_ascii=False,
             sort_keys=True,
