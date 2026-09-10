@@ -29,6 +29,9 @@ nothing and both counters see it.
 union is PROVEN equal to `ls tests/test_*.py` (231 files, no gap, no overlap — the control asserts the union
 before a slice runs); 819 + 974 + 1185 + 770 + 592 = 4340 = s47's 4339 + the one new test. Porcelain over
 `src tests scripts config results docs/plans docs/reports frontend dashboard` EMPTY. **$0; cloud untouched.**
+The one commit after that reading (`4a8f2f0`) moves ONLY `tests/test_grade_positions.py` — one assert that
+pins the blind direction to `identity() is None` instead of to what the stripped fixture happens to carry;
+its 10 tests re-run green, the count and every published number unmoved.
 
 ## Next — «front-1» ($0, §2 item 6; `docs/DESIGN-ship-1.md` decides every UI fork and a fork it does not settle is NOT a stop — §4.2). Then «front-2» → «e2e-ship» (11.09) → the gate 11.09 evening.
 
