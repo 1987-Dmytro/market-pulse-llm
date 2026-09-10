@@ -20,8 +20,11 @@ additionally split into (value, unit) so «900 г» and «900г» are one thing 
 prediction matches at most one gold row and a gold row is matched at most once — a dict keyed by the
 triple would be last-wins and would quietly forgive a duplicate ([[select_one_row_refuse_ambiguity]]).
 
-Written and driven against SYNTHETIC gold before any real gold exists (`tests/test_grade_positions.py`);
-the real run needs `docs/labels-positions-50.jsonl`, which is the team lead's and lands after S5.
+Written and driven against SYNTHETIC gold before any real gold existed (`tests/test_grade_positions.py`)
+— and it read the sample, not the schema: the real `results/positions_50_predicted.jsonl` carries
+`size_value` + `size_unit` where the gold carries `volume`, and `badge_pct` where the synthetic row
+carried `discount_pct_printed`, so as shipped this grader scored 0.0 with all 205 rows unmatched
+(ruling 10.09 (rr)). Both spellings are read below; neither the match rule nor the bars moved.
 
     python3.11 scripts/grade_positions.py --gold docs/labels-positions-50.jsonl \\
         --predicted results/positions_50_predicted.jsonl
@@ -66,9 +69,36 @@ def volume_key(value) -> tuple:
     return ("qty", float(match.group(1).replace(",", ".")), promo_key(match.group(2)))
 
 
-def identity(row: dict) -> tuple:
+def volume_surface(row: dict) -> str | None:
+    """The row's volume as printed — one field with two spellings, not two fields.
+
+    The gold writes `volume` («400 г»); `positions_50_predicted.jsonl` writes `size_value` +
+    `size_unit` (400.0 · «г»), because `draw_positions_50.predicted()` reads the store's own columns.
+    A row carrying neither has no volume at all: `None` here, no identity below, matched by nothing
+    and counted — never a crash and never an empty key that two such rows share (ruling (rr) 3).
+    """
+    if row.get("volume") not in (None, ""):
+        return str(row["volume"])
+    value, unit = row.get("size_value"), row.get("size_unit")
+    if value in (None, "") or unit in (None, ""):
+        return None
+    return f"{value} {unit}"
+
+
+def identity(row: dict) -> tuple | None:
     """The triple a prediction and a gold row are matched on. One rule, one place."""
-    return (promo_key(row.get("brand") or ""), promo_key(row.get("product") or ""), volume_key(row.get("volume")))
+    volume = volume_surface(row)
+    if volume is None:
+        return None
+    return (promo_key(row.get("brand") or ""), promo_key(row.get("product") or ""), volume_key(volume))
+
+
+def printed_badge(row: dict):
+    """The printed −N% of a prediction row: `badge_pct` as the producer writes it, else the older
+    `discount_pct_printed` spelling. A reading, never a bar (review 30.08 SP-0 q1)."""
+    if row.get("badge_pct") is not None:
+        return row["badge_pct"]
+    return row.get("discount_pct_printed")
 
 
 def price(value) -> float | None:
@@ -90,7 +120,7 @@ def grade(gold: list[dict], predicted: list[dict]) -> dict:
     matched, missed = [], []
     for want in gold:
         key = identity(want)
-        hit = next((row for row in unmatched if identity(row) == key), None)
+        hit = None if key is None else next((row for row in unmatched if identity(row) == key), None)
         if hit is None:
             missed.append(want)
             continue
@@ -101,15 +131,20 @@ def grade(gold: list[dict], predicted: list[dict]) -> dict:
     right = [pair for pair in scored if price(pair[0]["price_promo"]) == price(pair[1].get("price_promo"))]
 
     badge = [
-        (want.get("badge_pct"), got.get("discount_pct_printed"))
+        (want.get("badge_pct"), printed_badge(got))
         for want, got in matched
         if want.get("badge_pct") is not None
     ]
-    old = [
-        (price(want.get("price_old")), price(got.get("price_old")))
-        for want, got in matched
-        if want.get("price_old") is not None
-    ]
+    carries_old = any(row.get("price_old") is not None for row in predicted)
+    old = (
+        [
+            (price(want.get("price_old")), price(got.get("price_old")))
+            for want, got in matched
+            if want.get("price_old") is not None
+        ]
+        if carries_old
+        else []
+    )
     return {
         "bars": {
             "completeness": {
@@ -138,7 +173,10 @@ def grade(gold: list[dict], predicted: list[dict]) -> dict:
             "price_old": {
                 "n": len(old),
                 "agree": sum(1 for want, got in old if want == got),
-                "note": "stored and flagged, never printed on the screen — SPEC 3.21 (4), 3.18 (1)",
+                "note": "stored and flagged, never printed on the screen — SPEC 3.21 (4), 3.18 (1)"
+                if carries_old
+                else "not carried — the prediction file has no price_old field; a reading with no"
+                " prediction is not a disagreement",
             },
             "predicted_rows_no_gold_row_claims": len(unmatched),
             "gold_rows_no_prediction_reached": len(missed),

@@ -116,3 +116,22 @@ def test_the_bars_are_the_phase_specs_and_the_record_prints_them(tmp_path):
     record = json.loads(out.read_text(encoding="utf-8"))
     assert record["bars"]["completeness"]["bar"] == 0.90
     assert "brand surface form" in record["match_rule"]
+
+
+def test_the_prediction_files_size_fields_are_the_same_volume_and_a_row_with_none_matches_nothing():
+    """The defect of 10.09 (rr), both ways: `results/positions_50_predicted.jsonl` writes
+    `size_value` + `size_unit` (and `badge_pct`) where the gold writes `volume` — that IS the row's
+    volume and it matches; a prediction row carrying no volume in either spelling matches nothing
+    and is counted, never a crash and never an empty key two such rows share."""
+    sized = {
+        k: v for k, v in predicted().items() if k not in ("volume", "discount_pct_printed", "price_old")
+    }
+    got = grader.grade([row()], [{**sized, "size_value": 900.0, "size_unit": "г", "badge_pct": 20}])
+    assert got["bars"]["completeness"]["value"] == 1.0
+    assert got["readings"]["printed_badge"] == {"n": 1, "agree": 1, "note": got["readings"]["printed_badge"]["note"]}
+    assert "not carried" in got["readings"]["price_old"]["note"], "no prediction carries price_old"
+
+    blind = grader.grade([row(volume=None), row()], [dict(sized)])
+    assert blind["bars"]["completeness"]["value"] == 0.0, "no volume in either spelling matches nothing"
+    assert blind["readings"]["gold_rows_no_prediction_reached"] == 2
+    assert blind["readings"]["predicted_rows_no_gold_row_claims"] == 1
