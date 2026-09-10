@@ -24,7 +24,7 @@
   "p1": {
     "module": "src/market_pulse/promo_post.py",
     "rules": "R1 post => subject = thread root · R2 own channel: post with signals => chain = owner · R3 sku/brand with жалоба on the store-stock lexicon => chain = the thread's retailer — nothing else",
-    "sha256": "b2c0e2b905d95b1d6faab353683df2c758b7a6f99cc247f89b49e070a5f50195"
+    "sha256": "74132120ff4b44e17a7991b96943d18d07604790d335eadf6c633d12e3538034"
   },
   "pipeline": [
     "market_pulse.promo_prompts.parse — the raw answer of the pod out-file this set names",

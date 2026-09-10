@@ -57,7 +57,7 @@
   "p1": {
     "module": "src/market_pulse/promo_post.py",
     "rules": "R1 post => subject = thread root · R2 own channel: post with signals => chain = owner · R3 sku/brand with жалоба on the store-stock lexicon => chain = the thread's retailer — nothing else",
-    "sha256": "b2c0e2b905d95b1d6faab353683df2c758b7a6f99cc247f89b49e070a5f50195"
+    "sha256": "74132120ff4b44e17a7991b96943d18d07604790d335eadf6c633d12e3538034"
   },
   "sets": {
     "dev2": {
@@ -147,7 +147,7 @@
       },
       "predicted_after": {
         "path": "results/promo_p1_predicted_dev2.jsonl",
-        "sha256": "fc3abbf2102d3cc9894950e9a972b2bf1ff1b36b8d96c4580be6dfd5acdbb4f4"
+        "sha256": "2bad49fda2f08369c3c5d1f81274a319e522e0f5a5dbef01652514ca8928a4e3"
       },
       "predicted_before": {
         "path": "results/promo_dev2_predicted_iter5.jsonl",
@@ -244,7 +244,7 @@
       },
       "predicted_after": {
         "path": "results/promo_p1_predicted_dev3.jsonl",
-        "sha256": "133e63f1521a1a4d78fcdfb344476900e934dd7d5abf99bff6579dee2157836d"
+        "sha256": "065131e997217b961fada152c82c73d1f350cb943576cb1000052e2da5f952c2"
       },
       "predicted_before": {
         "path": "results/promo_holdout2_predicted.jsonl",
