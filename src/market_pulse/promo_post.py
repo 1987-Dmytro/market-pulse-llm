@@ -24,15 +24,18 @@ phrase matches at a word START and as a prefix — `прострочен` covers
 «прострочена», `нема` covers «немає» — on the comment's text after the grader's own normalisation
 (NFC, lower, whitespace collapsed: `aggregates.promo_key`).
 
-`chain` subjects are written the way the grader folds them: the owner as the registry names it,
-an aggregator's chain as the post spelled it — `aggregates.chain_key` folds both to the chain id.
+`chain` subjects are written the way the grader folds them: the owner as its chain ID, an
+aggregator's chain as the post spelled it — `aggregates.chain_key` folds both to the chain id.
+The owner's ID goes through `chain_key` too (ruling 09.09 (gg) item 2, shape (b)): the registry
+gives one retailer two rows when it has two channels, and `chain_of_channel` is where the second
+says whose it is — the NAME the owner used to be written under folds nowhere.
 """
 
 from __future__ import annotations
 
 import re
 
-from market_pulse.aggregates import promo_key
+from market_pulse.aggregates import chain_key, promo_key
 from market_pulse.registry import Registry, Source, chain_spellings
 
 STORE_STOCK_LEXICON = (
@@ -112,7 +115,9 @@ def apply(
     root = str(thread["thread_root"])
     own = owner(thread["channel"], registry)
     named = chains_named(thread.get("post"), spellings)
-    retailer = own.name if own else (next(iter(named.values())) if len(named) == 1 else None)
+    retailer = (
+        chain_key(own.id) if own else (next(iter(named.values())) if len(named) == 1 else None)
+    )
     texts = {str(msg_id): text for msg_id, text in (thread.get("comments") or {}).items()}
 
     out = []
@@ -125,7 +130,7 @@ def apply(
             new["subject"] = root
             fired.append("R1")
         if kind == "post" and signals and own is not None:
-            new.update(subject_type="chain", subject=own.name)
+            new.update(subject_type="chain", subject=retailer)
             fired.append("R2")
         elif (
             kind in ("sku", "brand")

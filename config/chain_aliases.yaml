@@ -1,4 +1,5 @@
-# Chain SPELLINGS → the chain's id. The forms a chain's NAME is written in, per id.
+# Two sections. `spellings` — the forms a chain's NAME is written in, per chain id.
+# `chain_of_channel` — the own channels that belong to ANOTHER chain's id.
 #
 # Ruling 04.09 (j) item 1, option (a): a file of its own — the `channel_admins.yaml` pattern —
 # because `config/registry.yaml` is pinned by 21 sealed records and may not grow a field. Read by
@@ -17,19 +18,31 @@
 # A spelling claimed by two ids is refused, not last-wins — the loader raises.
 #
 # `marketopt_private` carries no spellings: it is the SAME chain as `marketopt_promo`, a second
-# channel of it, and one spelling may name only one id. `mcdonalds` is not a registry row — the
-# ruling names it, and a chain the aggregator posts about is a chain the dashboard counts.
+# channel of it, and one spelling may name only one id — `chain_of_channel` below is where that
+# second channel says whose it is (ruling 09.09 (gg) item 2, shape (b)). `mcdonalds` is not a
+# registry row — the ruling names it, and a chain the aggregator posts about is a chain the
+# dashboard counts.
 
-varus: [VARUS, Varus, Варус]
-silpo: [Сільпо, Silpo, Сильпо]
-atb: [АТБ, ATB]
-mcdonalds: [McDonald’s, McDonald's, Макдональдс]
+spellings:
+  varus: [VARUS, Varus, Варус]
+  silpo: [Сільпо, Silpo, Сильпо]
+  atb: [АТБ, ATB]
+  mcdonalds: [McDonald’s, McDonald's, Макдональдс]
 
-epicentrk_sale: [ЕПІЦЕНТР, Epicentr]
-marketopt_promo: [Маркетопт, Marketopt]
-forainfo: [Фора, Fora]
-ekomarket_shop: [ЕКО Маркет, Eko Market]
-blyzenko: [БЛИЗЕНЬКО, Blyzenko]
-fozzy: [Fozzy, Фоззі]
-sim23: [Сім23, Sim23, Сімі, Simi]
-rozetka: [Rozetka, Розетка]
+  epicentrk_sale: [ЕПІЦЕНТР, Epicentr]
+  marketopt_promo: [Маркетопт, Marketopt]
+  forainfo: [Фора, Fora]
+  ekomarket_shop: [ЕКО Маркет, Eko Market]
+  blyzenko: [БЛИЗЕНЬКО, Blyzenko]
+  fozzy: [Fozzy, Фоззі]
+  sim23: [Сім23, Sim23, Сімі, Simi]
+  rozetka: [Rozetka, Розетка]
+
+# The OWN CHANNEL of a chain -> the chain the screen and P1 count it as. Ruling 09.09 (gg) item 2,
+# shape (b): `marketopt_private` and `marketopt_promo` are two registry rows of ONE retailer, and a
+# spelling may name only one id, so the second channel says whose it is HERE instead. Read BEFORE
+# the spellings by the one reader `aggregates.chain_key`, which is why a channel id folds where a
+# NAME could not. Every other own channel is absent and folds to itself — this is not a list of
+# channels, it is the list of the ones that are not their own chain.
+chain_of_channel:
+  marketopt_private: marketopt_promo

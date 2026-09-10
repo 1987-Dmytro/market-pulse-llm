@@ -16,6 +16,10 @@ from market_pulse.registry import chain_spellings, load_registry  # noqa: E402
 REGISTRY = load_registry(REPO_ROOT / "config" / "registry.yaml")
 SPELLINGS = chain_spellings()
 OWN = "@VARUS_channel"  # a retailer's own channel (official_retail, owner `varus`)
+OWNER = promo_post.owner(OWN, REGISTRY).id
+"""What R2/R3 write for the own channel — the owner's chain ID, read off the registry rather
+than spelled here: ruling 09.09 (gg) item 2 (b) moved it from the registry NAME, and a chain
+whose second channel folds (`marketopt_private`) has no NAME that could fold at all."""
 AGG = "@msuaaaa"  # the aggregator: no owner, the retailer is whoever the post names
 ROOT = "4519"
 
@@ -58,7 +62,7 @@ def test_r2_fires_only_in_the_retailers_own_channel_and_only_with_signals():
     with_signal = row("102", "post", "101", "жалоба", "цена")
     noise = row("103", "post", "101")
     own = apply([with_signal, noise], thread(OWN))
-    assert (own[0]["subject_type"], own[0]["subject"]) == ("chain", "Varus")
+    assert (own[0]["subject_type"], own[0]["subject"]) == ("chain", OWNER)
     assert own[0]["p1"] == ["R1", "R2"]
     assert (own[1]["subject_type"], own[1]["subject"], own[1]["p1"]) == ("post", ROOT, ["R1"])
     agg = apply([with_signal], thread(AGG, post="Акція в АТБ"))
@@ -92,10 +96,10 @@ def test_r3_fires_on_a_store_stock_complaint_and_names_the_threads_retailer():
             },
         ),
     )
-    assert (own[0]["subject_type"], own[0]["subject"], own[0]["p1"]) == ("chain", "Varus", ["R3"])
+    assert (own[0]["subject_type"], own[0]["subject"], own[0]["p1"]) == ("chain", OWNER, ["R3"])
     assert "p1" not in own[1], "a complaint about the product itself stays a `sku`"
     assert "p1" not in own[2], "a stock QUESTION (`спрос`) is not a complaint"
-    assert (own[3]["subject_type"], own[3]["subject"]) == ("chain", "Varus"), "prefix «прострочен»"
+    assert (own[3]["subject_type"], own[3]["subject"]) == ("chain", OWNER), "prefix «прострочен»"
     assert "p1" not in own[4], "a `chain` row is not R3's"
 
     one = apply([stock], thread(AGG, post="Знижки в АТБ до −30%", **{"102": "Нема в наявності"}))

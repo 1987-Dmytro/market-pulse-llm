@@ -312,6 +312,12 @@ def _chain_ids() -> dict[str, str]:
     return found
 
 
+@functools.lru_cache(maxsize=1)
+def _chain_folds() -> dict[str, str]:
+    """own-channel id -> the chain id it belongs to, from the sidecar's `chain_of_channel`."""
+    return {promo_key(one): chain_id for one, chain_id in registry.chain_of_channel().items()}
+
+
 def chain_key(name) -> str:
     """A chain's name folded to its chain id; any other name normalised as :func:`promo_key`.
 
@@ -319,8 +325,15 @@ def chain_key(name) -> str:
     «Варус» are one chain to every reader and three ids to a store that never folded them. Applied
     to gold and prediction alike, and to `chain` rows ONLY — a `brand` called «АТБ» is not the
     retailer, which is why the fold lives here and not inside :func:`promo_key`.
+
+    The channel map is read BEFORE the spellings (ruling 09.09 (gg) item 2, shape (b)): a chain's
+    second own channel is a registry ID and no NAME of it can be a spelling, so `marketopt_private`
+    folds here or nowhere. The two tables are separate lookups and not one dict — merged, a channel
+    id a spelling also normalises to would trip the duplicate refusal below for no defect.
     """
     key = promo_key(name)
+    if key in _chain_folds():
+        return _chain_folds()[key]
     return _chain_ids().get(key, key)
 
 
@@ -1153,6 +1166,11 @@ def promo_positions(
     The brand column is a LEFT JOIN on the watchlist: 65 of window-1's rows carry a trade mark the
     registry does not resolve, and those rows keep their printed name with no id and no `own` flag —
     an unresolved mark is not evidence that the brand is a competitor.
+
+    **`chain.id` is the channel's source id folded by :func:`chain_key`** (ruling 09.09 (gg) item 2,
+    shape (b)): a retailer with two channels has two registry rows, and unfolded the screen showed
+    the operator two Маркетопт. Every other channel folds to itself, so the fold moves the rows of
+    `chain_of_channel` and nothing else.
     """
     source, params = positions_source(window_id, excluded)
     rows: list[dict] = []
@@ -1188,6 +1206,9 @@ def promo_positions(
         brand = {"display": display or brand_raw}
         if brand_id is not None:
             brand |= {"id": brand_id, "own": bool(own)}
+        # ONE fold, read by the row and by the sort key alike: the id the screen shows and the
+        # order it shows it in have to be statements about the same chain.
+        chain_id = chain_key(source_id)
         rows.append(
             {
                 "row_id": row_id,
@@ -1202,7 +1223,7 @@ def promo_positions(
                         "attribute_pct": attribute_pct,
                     }
                 ),
-                "chain": {"id": source_id, "named_by_amendment_3_20": source_id in chains},
+                "chain": {"id": chain_id, "named_by_amendment_3_20": chain_id in chains},
                 "carrier": carrier,
                 "tier": tier,
                 "evidence": {"channel": channel, "msg_id": msg_id},
@@ -1215,7 +1236,7 @@ def promo_positions(
                 }
             )
         )
-        order.append(((display or brand_raw or "").casefold(), source_id, channel, msg_id, ordinal))
+        order.append(((display or brand_raw or "").casefold(), chain_id, channel, msg_id, ordinal))
     # sorted HERE and not by the query: SQLite's NOCASE folds ASCII only, so «ПростоНаше» and
     # «Простонаше» would rank by code point and the rule would be one no reader could state.
     # `casefold` is Unicode-aware, and the key is the order the operator reads — brand first, then

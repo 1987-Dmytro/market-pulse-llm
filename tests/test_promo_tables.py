@@ -20,7 +20,7 @@ import pytest
 REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "src"))
 
-from market_pulse import aggregates, registry  # noqa: E402
+from market_pulse import aggregates, promo_post, registry  # noqa: E402
 
 WITHOUT_WINDOW = ("attribution", "signal", "evidence", "digest", "unsure")
 
@@ -235,9 +235,12 @@ def test_one_spelling_may_name_only_one_chain(tmp_path, monkeypatch):
     registry rows, `marketopt_promo` and `marketopt_private`, are one chain — which is why the
     shipped file gives the spellings to one of them and says so."""
     bad = tmp_path / "chain_aliases.yaml"
-    bad.write_text("marketopt_promo: [Маркетопт]\nmarketopt_private: [Маркетопт]\n", "utf-8")
+    bad.write_text(
+        "spellings:\n  marketopt_promo: [Маркетопт]\n  marketopt_private: [Маркетопт]\n", "utf-8"
+    )
     monkeypatch.setattr(registry, "CHAIN_ALIASES", bad)
     aggregates._chain_ids.cache_clear()
+    aggregates._chain_folds.cache_clear()
     with pytest.raises(ValueError, match="only one chain"):
         aggregates.chain_key("Маркетопт")
 
@@ -245,4 +248,47 @@ def test_one_spelling_may_name_only_one_chain(tmp_path, monkeypatch):
     # duplicate and not a loader that refuses everything ([[guard_selftest_negative_control]])
     monkeypatch.undo()
     aggregates._chain_ids.cache_clear()
+    aggregates._chain_folds.cache_clear()
     assert aggregates.chain_key("Маркетопт") == "marketopt_promo"
+
+
+def test_a_chains_second_own_channel_folds_to_its_chain_and_only_that_channel_does(
+    tmp_path, monkeypatch
+):
+    """Ruling 09.09 (gg) item 2, shape (b): `marketopt_private` and `marketopt_promo` are two
+    registry rows of ONE retailer, so the screen showed the operator two Маркетопт and P1 wrote a
+    subject that folded to neither. The map is read BEFORE the spellings, because a channel id is
+    not a NAME and no spelling of it could ever match; every other own channel is absent from the
+    map and folds to itself.
+
+    Both directions in one test: with the map the private channel IS the chain, and with the
+    section emptied — the state this item found — the same call returns the split id again."""
+    assert aggregates.chain_key("marketopt_private") == "marketopt_promo"
+    assert aggregates.chain_key("Маркетопт") == "marketopt_promo"
+    for own_channel in ("varus", "atb", "ekomarket_shop", "marketopt_promo"):
+        assert aggregates.chain_key(own_channel) == own_channel
+
+    # R2 writes the owner's chain ID through the same fold — the private channel's post lands on
+    # `marketopt_promo` and not on the registry NAME «Маркетопт (private)», which folds nowhere.
+    thread = {"channel": "+Ejz6ubzm21IyMTQy", "thread_root": "5351", "post": "", "comments": {}}
+    rows = promo_post.apply(
+        [{"subject_type": "post", "subject": "5351", "msg_id": 5351, "signal_types": ["цена"]}],
+        thread,
+        registry.load_registry(REPO_ROOT / "config" / "registry.yaml"),
+    )
+    assert [(row["subject_type"], row["subject"], row["p1"]) for row in rows] == [
+        ("chain", "marketopt_promo", ["R2"])
+    ]
+
+    # the negative control: with `chain_of_channel` empty the fold is gone and the split is back,
+    # so the assertions above are the map's doing and not something the spellings already did
+    without = tmp_path / "chain_aliases.yaml"
+    without.write_text("spellings:\n  marketopt_promo: [Маркетопт]\nchain_of_channel: {}\n", "utf-8")
+    monkeypatch.setattr(registry, "CHAIN_ALIASES", without)
+    aggregates._chain_ids.cache_clear()
+    aggregates._chain_folds.cache_clear()
+    assert aggregates.chain_key("marketopt_private") == "marketopt_private"
+    assert aggregates.chain_key("Маркетопт") == "marketopt_promo"
+    monkeypatch.undo()
+    aggregates._chain_ids.cache_clear()
+    aggregates._chain_folds.cache_clear()
