@@ -98,10 +98,22 @@ inherited from §0: shell state does not survive between calls, and `run_promo_c
 from the environment only (`:: api_key`, no `config.toml` fallback), so the §0 export would be gone
 by now and `--run` would exit 1 AFTER the endpoint exists — the boot billed, nothing collected. The
 cap comes back off the registration §1 committed — the same number by construction, and the one the
-guard's step anchor was written with:
+guard's step anchor was written with.
+
+**SUBSTITUTE BEFORE PASTING** (ruling 09.09 (jj) item 3, nit 1): `--endpoint E` is a PLACEHOLDER —
+`E` is the endpoint id §2 printed. Pasted unsubstituted the run fails `assert_serving` with no
+worker and $0, which is fail-safe and still a leg to re-launch. The `-T` of the §2 build block is
+the same kind of placeholder.
+
+**`[ -n "$RUNPOD_API_KEY" ]` is the second link** (nit 2): `export X=$(…)` takes the ASSIGNMENT's
+exit status, not the substitution's, so an unreadable `config.toml` between §0 and §3 would export
+an empty key and the `&&` chain would walk on to the create. The check is §0's length line in the
+form a chain can use, and it stops before anything is created. Rehearsed at $0 by the team lead:
+an empty key stops the chain, a good key passes.
 
 ```
 export RUNPOD_API_KEY=$(python3.11 -c "import tomllib;print(tomllib.load(open('$HOME/.runpod/config.toml','rb'))['apikey'])") \
+&& [ -n "$RUNPOD_API_KEY" ] \
 && CAP=$(python3.11 -c "import json;print(f\"{json.load(open('results/prereg_promo_c3.json'))['step']['cap_usd']:.2f}\")") && echo "CAP $CAP" \
 && { nohup env PYTHONPATH=src python3.11 scripts/run_promo_c2.py --run --endpoint E \
   --prereg results/prereg_promo_c3.json --census results/promo_census_c3.json \
