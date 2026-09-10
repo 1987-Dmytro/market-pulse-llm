@@ -52,6 +52,7 @@ with the store no longer having to hold two populations in one file. The 20 D-cu
 in BOTH windows stay in w1's root and w2 reads them from there."""
 PREREG = REPO_ROOT / "results" / "prereg_5c2_run.json"
 PREREG_C2 = REPO_ROOT / "results" / "prereg_promo_c2.json"
+PREREG_C3 = REPO_ROOT / "results" / "prereg_promo_c3.json"
 CENSUS = REPO_ROOT / "results" / "census_5c2.json"
 REGISTRY = REPO_ROOT / "config" / "registry.yaml"
 RULES = REPO_ROOT / "config" / "watchlist_rules.yaml"
@@ -72,11 +73,24 @@ WINDOW_ID_C2 = "w2"
 02.09 (d) item 1. Read from the record rather than restated here would be one indirection for a
 two-letter constant; the build ASSERTS the two agree instead ([[a_moved_constant_fails_green]])."""
 
+WINDOW_ID_C3 = "w3"
+"""The C3 window's id — ruling 10.09 (mm) 2(a), the same law one leg later."""
+
 PINNED_CENSUS = "results/census_5c2.json"
 PINNED_POSTS = "results/census_c3a_posts.json"
 PINNED_CUT = "results/postcut_c3b.json"
 PINNED_CENSUS_C2 = "results/promo_census_c2.json"
 PINNED_MANIFEST_C2 = "results/post_media_promo_c2.json"
+PINNED_CENSUS_C3 = "results/promo_census_c3.json"
+PINNED_MANIFEST_C3 = "results/post_media_promo_c3.json"
+
+PROMO_LEGS = (
+    (WINDOW_ID_C2, PREREG_C2, PINNED_CENSUS_C2, PINNED_MANIFEST_C2),
+    (WINDOW_ID_C3, PREREG_C3, PINNED_CENSUS_C3, PINNED_MANIFEST_C3),
+)
+"""Every promo leg that is its own window, each with the paths its OWN seal pins — ruling 02.09 (d)
+shape 1, extended by (mm) 2(a). A leg is four values and no code: adding one is adding a row here,
+and the loop below reads the row rather than a second spelling of the same six steps."""
 
 POPULATIONS = ("comment", "leaflet_page", "post_text")
 """The three legs `windows` stores a bought-count for, in the order `add_window` reads them."""
@@ -223,22 +237,32 @@ def selection_5c2(prereg: dict) -> dict[str, set]:
     }
 
 
-def selection_c2(prereg: dict) -> dict[str, set]:
-    """The C2 window's rows, by id, out of `results/prereg_promo_c2.json` — 3 008 pages, 405 posts.
+def selection_promo_leg(
+    prereg: dict, window_id: str, census_key: str, manifest_key: str
+) -> dict[str, set]:
+    """One promo leg's rows, by id, out of its OWN registration — C2's 3 008 pages and 405 posts,
+    C3's 30 and 8.
 
     Both halves come back through that registration's OWN pinned inputs: the media manifest for the
     pages and the census's `text_price_msg_ids` for the posts. The 20 posts 5c2's D cut had already
     answered are in BOTH windows' sets and that is the ruling's answer — one position row, two
     windows, `window_id` a key of the aggregate tables and never of the row's identity.
+
+    The paths are PARAMETERS and the refusal is labelled with the leg's own window ((mm) 2(a)): a
+    second copy of this function for C3 would be a second law about what belongs to a window, and a
+    refusal that said «w2 leaflet_page» while building w3 would name the wrong leg
+    ([[one_constant_answering_two_questions]]).
     """
-    manifest = through_the_seal(prereg, REPO_ROOT / PINNED_MANIFEST_C2, PINNED_MANIFEST_C2)
-    census = through_the_seal(prereg, REPO_ROOT / PINNED_CENSUS_C2, PINNED_CENSUS_C2)
+    manifest = through_the_seal(prereg, REPO_ROOT / manifest_key, manifest_key)
+    census = through_the_seal(prereg, REPO_ROOT / census_key, census_key)
     return {
         "leaflet_page": refuse_unless(
-            "w2 leaflet_page", manifest_pages(manifest), prereg["population"]["pages"]["total"]
+            f"{window_id} leaflet_page",
+            manifest_pages(manifest),
+            prereg["population"]["pages"]["total"],
         ),
         "post_text": refuse_unless(
-            "w2 post_text",
+            f"{window_id} post_text",
             {
                 (entry["channel"], str(one))
                 for entry in census["channels"]
@@ -257,8 +281,8 @@ def keep(rows: list[dict], ids: set | None) -> list[dict]:
     return [row for row in rows if (row["channel"], str(row["msg_id"])) in ids]
 
 
-def c2_anchor(census: dict) -> dict:
-    """The C2 census's window in the shape `windows` stores. `until` IS the anchor: the census's own
+def promo_anchor(census: dict) -> dict:
+    """A promo census's window in the shape `windows` stores. `until` IS the anchor: the census's own
     rule is «since <= date < anchor, half-open», so a second date would be a second definition."""
     window = census["window"]
     return {
@@ -283,17 +307,31 @@ def build(derived: Path, prereg_path: Path, registry_path: Path, out: Path, live
     `provenance` has to be the one the rows actually came from.
     """
     prereg = json.loads(summary.read_text_or_refuse(prereg_path))
-    prereg_c2 = json.loads(summary.read_text_or_refuse(PREREG_C2))
-    named = prereg_c2["addendum"][0]["window_id"]
-    if named != WINDOW_ID_C2:
-        raise SystemExit(
-            f"{rel(PREREG_C2)} names window {named!r} and this layer builds {WINDOW_ID_C2!r} —"
-            " the registration and the build disagree about which window was bought"
-        )
     registry = summary.registry_through_the_seal(prereg, registry_path)
-    registry_c2 = summary.registry_through_the_seal(prereg_c2, registry_path)
     census = through_the_seal(prereg, REPO_ROOT / PINNED_CENSUS, PINNED_CENSUS)
-    census_c2 = through_the_seal(prereg_c2, REPO_ROOT / PINNED_CENSUS_C2, PINNED_CENSUS_C2)
+    promo_windows = []
+    for window_id, leg_path, census_key, manifest_key in PROMO_LEGS:
+        leg = json.loads(summary.read_text_or_refuse(leg_path))
+        named = leg["addendum"][0]["window_id"]
+        if named != window_id:
+            raise SystemExit(
+                f"{rel(leg_path)} names window {named!r} and this layer builds {window_id!r} —"
+                " the registration and the build disagree about which window was bought"
+            )
+        promo_windows.append(
+            (
+                window_id,
+                leg,
+                summary.registry_through_the_seal(leg, registry_path),
+                selection_promo_leg(leg, window_id, census_key, manifest_key),
+                promo_anchor(through_the_seal(leg, REPO_ROOT / census_key, census_key)),
+                {
+                    "comment": 0,
+                    "leaflet_page": leg["population"]["pages"]["total"],
+                    "post_text": leg["population"]["posts"]["total"],
+                },
+            )
+        )
     rules = brands.load_watchlist_rules(RULES)
     # the rules file is an INPUT to the r1 table and belongs in the same block as the evidence: the
     # export's provenance answers "what bytes made this record", and a matcher revision is bytes.
@@ -334,18 +372,7 @@ def build(derived: Path, prereg_path: Path, registry_path: Path, out: Path, live
             census["anchor"],
             {kind: prereg["populations"][kind]["rows"] for kind in POPULATIONS},
         ),
-        (
-            WINDOW_ID_C2,
-            prereg_c2,
-            registry_c2,
-            selection_c2(prereg_c2),
-            c2_anchor(census_c2),
-            {
-                "comment": 0,
-                "leaflet_page": prereg_c2["population"]["pages"]["total"],
-                "post_text": prereg_c2["population"]["posts"]["total"],
-            },
-        ),
+        *promo_windows,
     ):
         del seal
         aliases = brands.watchlist_aliases(reg.watchlist)
@@ -442,7 +469,7 @@ def main(argv: list[str] | None = None) -> int:
     if args.quiet:
         return 0
 
-    for window_id in (WINDOW_ID, WINDOW_ID_C2):
+    for window_id in (WINDOW_ID, *(leg[0] for leg in PROMO_LEGS)):
         window = conn.execute(
             "SELECT anchor, days, bought, payable, text_less FROM windows WHERE window_id = ?",
             (window_id,),
