@@ -131,6 +131,7 @@ def test_the_prediction_files_size_fields_are_the_same_volume_and_a_row_with_non
     assert got["readings"]["printed_badge"] == {"n": 1, "agree": 1, "note": got["readings"]["printed_badge"]["note"]}
     assert "not carried" in got["readings"]["price_old"]["note"], "no prediction carries price_old"
 
+    assert grader.identity(dict(sized)) is None, "no volume in either spelling is no identity"
     blind = grader.grade([row(volume=None), row()], [dict(sized)])
     assert blind["bars"]["completeness"]["value"] == 0.0, "no volume in either spelling matches nothing"
     assert blind["readings"]["gold_rows_no_prediction_reached"] == 2
