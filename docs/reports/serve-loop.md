@@ -39,7 +39,7 @@ and 404s `../pyproject.toml`. `make loop` wakes, ticks, writes **one** line — 
 - `Dv3 [cause: tooling]` `make check` as five slices, not one call (~12 min > the ceiling); coverage proven by a union
   of the slice file lists, not by summing counts.
 - `Dv4 [cause: process]` PROGRESS reflowed at 118 columns to meet the ≤60-LINE cap (59 lines); nothing cut but two
-  clauses that stand in the commit messages. This report is 40 lines against the ≤30 cap — a retro metric.
+  clauses that stand in the commit messages. This report is 44 prose lines (55 total) against the ≤30 cap — a retro metric, measured, not estimated.
 
 ## Debts
 - No test covers `loop_daemon.py` (§2's test list does not name it); its «endpoint set» and «export missing» branches
