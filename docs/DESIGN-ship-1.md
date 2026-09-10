@@ -1,0 +1,82 @@
+# DESIGN — `ship-1` front end (the brief the front items read; team-lead file, v1 10.09)
+
+Every UI fork is settled here or by §10's default. The app FORMATS, FILTERS, SORTS and LINKS; it computes no figure — every number is a field of a result file, and every number can say which file (ⓘ → provenance). Language of the UI: Ukrainian first (the customer), English by toggle; code and identifiers in English.
+
+## 1. Readers and the 10-second quiz (the acceptance test)
+
+Three readers — the marketing director (T1–T4, T7, reactions), the commercial director (T5 + promo tabs), the owner (T0). The gate: each question of `docs/PRODUCT.md` is answered from ONE tab in ≤ 10 s: (1) what is said about Гармонія → T1; (2) what exactly is liked/disliked → T2; (3) the same about competitors → T4; (4) which flavours/categories → T6 (honest stub: «layer not built, 5c3»); (5) where it is said → T3; (6) a burst of negative/positive → T7 (preview: «activates with window 2»); (7) what the chains promote and at what price/depth → Промо · Позиції / Тренди (Маркетопт visible). Plus the reactions question of stage 1: «how do buyers react under promo posts» → Промо · Реакції.
+
+## 2. Stack and structure
+
+- `frontend/` — Vite 6 · React 19 · TypeScript 5 (strict) · Recharts 3 for charts · no CSS framework, no UI kit (plain CSS with custom properties; CSS modules per component) · vitest for adapters · `tsc --noEmit` as `npm run check`. All versions pinned; `package-lock.json` committed; `npm ci`. Build: `vite build --base ./` → `dashboard/app/` (index.html + assets + `data/`). The Python side copies the exports into `dashboard/app/data/` and writes `data/manifest.json` (file · sha256 · bytes · generated_at from the file's own provenance when it has one).
+- Routing: URL hash — `#/cc/t0` … `#/cc/t8`, `#/promo/positions`, `#/promo/trends`, `#/promo/reactions`, `#/promo/quality`, `#/promo/loop`; filters in the hash query (`?chain=atb&week=2026-W35&brand=…`) so a view is a link. Default route `#/cc/t0`.
+- Data layer: `src/data/` — one adapter per export (`commandCenter.ts` over `front_data.json :: command_center`, `promo.ts` over `promo_screen_data.json`, `status.ts` over `/api/status` or `front_data.json :: status`), typed with the JSON's real shapes (write the types from the files, not from memory), each adapter unit-tested against the REAL exports copied into `frontend/test/fixtures/` at build (counts, KPI values equal the file's). A missing or malformed file → the adapter throws `SourceMissing(file, field)` and the shell renders §5's SourceMissing panel — never a blank, never a zero.
+- Modes: on load the shell calls `GET /api/status` once (timeout 1 s). 200 → **served mode** (the Петля tab is editable, «Tick now» works, status is live). Anything else → **static mode**: the same tabs from `data/`, the Петля tab read-only with the note «static build — run `make serve` to control the loop». No other behaviour differs.
+- i18n: `src/i18n/uk.json` + `en.json` (UI strings) and the export's `dictionary` (metric names, definitions, how to read, traps — UA/EN already there). `t(key)` is a 20-line function, not a library. The language toggle persists in `localStorage` (try/catch) and in the hash (`?lang=en`) so a link carries it.
+- Themes: `<meta name="color-scheme" content="light dark">` + `:root { color-scheme: light dark }`; tokens as `light-dark()` pairs with the `prefers-color-scheme` fallback block; the toggle sets `data-theme` on `<html>` and updates the meta; default = the system preference; the OS change event is listened to. `prefers-reduced-motion: reduce` → no transitions, no chart animations (`isAnimationActive={false}`).
+
+## 3. Tokens (light / dark) — the validated default palette of the dataviz method; text never wears a series colour
+
+- Surfaces: `--surface-0` #fcfcfb / #1a1a19 (page) · `--surface-1` #ffffff / #222221 (card) · `--surface-2` #f0efec / #383835 (table stripe, midpoint) · `--border` #e3e1dc / #3a3a37.
+- Text: `--text-1` #0b0b0b / #ffffff · `--text-2` #52514e / #c3c2b7 · `--text-3` #8a8884 / #8f8e86 (muted). Links `--link` #1c5cab / #86b6ef.
+- Series (fixed order, never cycled; the first three validate all-pairs): 1 blue #2a78d6/#3987e5 · 2 orange #eb6834/#d95926 · 3 aqua #1baf7a/#199e70 · 4 yellow #eda100/#c98500 · 5 magenta #e87ba4/#d55181 · 6 green #008300 · 7 violet #4a3aa7/#9085e9 · 8 red #e34948/#e66767. Colour follows the ENTITY (a chain keeps its slot across tabs: assign slots to chains once, in `src/data/chains.ts`, by the registry order of the 17 A1 rows; brands likewise). A 9th series → «Other» or small multiples.
+- Sequential (magnitude, heatmaps): blue 100→700 (#cde2fb … #0d366b). Diverging (polarity: NSR, Δ vs Гармонія): blue ↔ red with the grey midpoint #f0efec/#383835.
+- Status (never for series; always icon + label): good #0ca30c · warning #fab219 · serious #ec835a · critical #d03b3b.
+- Type: system stack (`ui-sans-serif, -apple-system, "Segoe UI", Roboto, Inter, sans-serif`); sizes 12 · 13 · 14 (body) · 16 · 20 · 28 (KPI value, ≥ 24 px on mobile) · 32; numbers in `font-variant-numeric: tabular-nums`. Spacing 4-pt scale (4 · 8 · 12 · 16 · 24 · 32). Radius 8 (cards) / 4 (chips). One shadow level, or none in dark.
+
+## 4. Layout — the app shell and the page grammar (inverted pyramid: KPI → charts → rows)
+
+- Header (sticky, 56 px): product name «Market Pulse · Гармонія» · the WINDOW BANNER («вікна: w1 12.07–09.08 · w2 03.08–31.08 · w3 08.08–05.09 — 1 301 позицій, 120 тредів прочитано» from `status`) · «оновлено <generated_at>» · language UA/EN · theme toggle · a small mode chip (served / static).
+- Navigation: two tab groups under the header — **Командний центр** (T0 Огляд · T1 Тональність · T2 Аспекти · T3 Сегменти · T4 Конкуренти · T5 Промо і ціни · T6 Категорії · T7 Алерти · T8 Методологія) and **Промо-пульс** (Позиції · Тренди · Реакції · Якість · Петля). Tabs are `<a href="#/…">` in a `role="tablist"` with `aria-current`; keyboard arrows move between tabs. On ≤ 720 px the groups become a single horizontal scroll row.
+- Page grammar, every tab: (1) a one-line question the tab answers (from §1) + the window/population it reads; (2) the KPI row — `grid-template-columns: repeat(auto-fit, minmax(220px, 1fr))`, cards are `container-type: inline-size` and switch to the compact variant under 240 px; (3) charts in a 2-column grid (1 column ≤ 960 px); (4) the table/rows; (5) the footer line «джерела: file :: field, …» (the provenance of the tab, from the adapter). No tab scrolls horizontally except tables inside their own `overflow-x: auto` wrapper. Content max-width 1440 px, centred; side padding 16 px on the body.
+- Density: comfortable; one screen without scrolling at 1920×1080 for T0 and each promo tab's first two bands.
+
+## 5. Components (build each once in `src/components/`, plain HTML semantics)
+
+- **KpiCard** — label (with ⓘ), value (tabular, 28 px), context line («вікно-1 = база» · «порівняно з …» · «бар 0.80»), status badge (icon + label; colour never alone), a «→ докладніше» link to its tab/section. Under 240 px the context line wraps below the value.
+- **ChartCard** — title (the question), subtitle (unit + window), the chart, a legend (always for ≥ 2 series; direct labels for ≤ 4), a «таблиця» toggle that renders the same series as a `<table>`, the ⓘ provenance, a download-as-CSV of the shown rows (client-side, no server).
+- **DataTable** — `<table>` with `<thead>` sticky (`position: sticky; top: 0` inside the wrapper), sortable headers (`aria-sort`, a click toggles asc/desc, the sort in the hash), a filter row above (chips for chain/week/brand/carrier/signal; a text filter for brand/product), row count «показано N з M», pagination by 100 rows (no virtualisation library), a row expands to its provenance (channel/msg_id, the t.me link `https://t.me/<handle>/<msg_id>` for public handles; a private invite handle links nowhere and says so).
+- **Drawer** (drill-down, right side, 480 px, full width on mobile) — the original text beside the verdict/extraction: for a comment — the comment, the post it hangs under, the model's rows; for a position — the page/post reference and the extracted fields; opened from a table row or a chart mark; closes on Esc; focus trapped and returned.
+- **InfoPopover ⓘ** — definition (UA/EN from the dictionary), how it is computed, how to read it, traps; and the provenance line (file :: field, sha8). A `<button aria-expanded>` + a `popover` element (Baseline) — no library.
+- **SourceMissing** — a red panel naming the file and field (`results/front_data.json :: command_center.metrics.sov`) and the make target that writes it; the rest of the tab still renders.
+- **StatusBadge**, **ModeChip**, **LangToggle**, **ThemeToggle**, **ScheduleForm** (two integer inputs with the min/default rule shown, «зберегти» → `PUT /api/schedule`, the server's 422 message rendered verbatim), **TickButton** («тик зараз», disabled while running, the counters printed when done).
+
+## 6. Chart rules (the dataviz method — form by the data's job, colour last)
+
+- Comparisons across chains/brands → HORIZONTAL bars, sorted by value, direct labels at the bar end; change over weeks → lines (2 px, ≥ 8 px markers, hover crosshair + tooltip); shares → 100 % stacked horizontal bar with a 2 px surface gap between segments, never a pie; a single headline → a KpiCard, not a chart; magnitude over a grid (chain × week) → a heatmap in the sequential blue ramp with the value printed in each cell.
+- ONE y-axis per chart; two measures → two charts. Grid lines and axes in `--border`/`--text-3` (recessive). Thin marks; 4 px rounded data ends; ≥ 2 px gap between adjacent bars. Text in text tokens, a coloured swatch beside it carries identity.
+- Tooltip on every mark (name · value · unit · window); crosshair on lines; hit targets ≥ 24 px; reduced motion → no animation. Every ChartCard has the table view (the accessibility fallback and the print fallback).
+- The chains' slots are fixed (§3): АТБ 1 · Varus 2 · Сільпо 3 · Маркетопт 4 · Фора 5 · Близенько 6 · Ekomarket 7 · Епіцентр 8 — the rest fold into «інші» in charts and stay named in tables.
+
+## 7. Tab ← data map (the honest source of every screen; «rows not exported» is a legal answer, an invented row is not)
+
+| tab | reads | shows | if absent |
+|---|---|---|---|
+| T0 Огляд | `front_data.json :: command_center.metrics.{volume, nsr, negative_share_sarcasm_adjusted, sov, promo_depth, coverage}`, `command_center.conclusions[]` (the code-rule «three readings» of `build_dashboard.py`, lifted to a callable, each with its `figure` reference) | 6 KpiCards + the three conclusions, each linking to its figure's tab | SourceMissing per card |
+| T1 Тональність | `cuts.brand_by_sentiment`, `metrics.sov`, `metrics.negative_share_sarcasm_adjusted` (the sarcasm badge «N глузувань перекласифіковано») | horizontal stacked shares per brand (Гармонія first, watchlist below), SoV bars, drill-down to rows where the cut carries them | «rows not exported» in the ⓘ |
+| T2 Аспекти | `metrics.aspect_share`, the brand × aspect cut if present | shares bar, brand × aspect heatmap, «профіль негативу» | stub with the missing field named |
+| T3 Сегменти | `cuts.comment_by_segment`, `cuts.comment_by_channel`, the registry segments | 8 segment cards (volume · sentiment · top aspects · top brands · channels with links) | card says which cut is missing |
+| T4 Конкуренти | `metrics.sov`, `cuts.brand_by_sentiment`, the watchlist (`own`/private-label flags) | the watchlist table: SoV, NSR, Δ vs Гармонія (diverging colour), presence by segment; sortable | — |
+| T5 Промо і ціни | `metrics.promo_depth`, `metrics.promo_pressure`, `command_center.promo.positions_table` (w1) + a link block to the promo tabs (all windows) | depth by brand (median/spread), pressure per brand, the honesty banner «w1: АТБ-only leaflets; w2/w3: 12 chains + Маркетопт» | — |
+| T6 Категорії | `not_computable.category_layer` | the taxonomy as reference + the status sentence from the file | — |
+| T7 Алерти | `not_computable.alert_baselines` | the rule preview (threshold ±X pp, both polarities, delivery: Telegram) + «активується з вікном 2» | — |
+| T8 Методологія | `dictionary`, `provenance`, `window`, `convergence` | glossary UA/EN, the model + gates with numbers (sarcasm 23/38, macro-F1 0.9214 from `verdict_45h2.json` via `front_data.json :: model`), the window/populations, «which screen ← which file» manifest, the limits | — |
+| Промо · Позиції | `promo_screen_data.json :: screen.positions` (all windows), `windows` | DataTable: brand · product · volume · promo price · −N% · chain · carrier · window; chips; provenance + t.me | — |
+| Промо · Тренди | `screen.rollup`, `screen.weeks`, `screen.depth_by_chain_and_brand` | SKU-price-by-week lines per chain (filter), depth bars per chain/brand, priced positions per week heatmap (chain × week) | «тиждень без даних — порожньо, не нуль» |
+| Промо · Реакції | `screen.feed`, `front_data.json :: s2_readings` (the three grade files' rows as the README prints them) | the feed table (signal chip · quote · msg_id · thread → t.me), filters; the S2 block with bars and files; «N of 678 read · M in the queue» | feed empty → «читання не запущене» with the queue count |
+| Промо · Якість | `s2_readings`, `front_data.json :: s1_reading` (from `grade_positions.py`'s file when it exists) | S1/S2 numbers vs bars with status badges, ties explained, limits in plain words | S1 → «еталон тимлида ще не розмічено» |
+| Промо · Петля | `/api/status` or `front_data.json :: status`, `/api/schedule` | windows list, last tick counters, queue, money remaining (display only), the schedule form, «тик зараз» | static → read-only + note |
+
+`front_data.json` is written by `scripts/export_front_data.py` ($0): `command_center` (= `results/dashboard_data_w1.json` verbatim + `conclusions` from `build_dashboard.py`'s own function), `model` (from `results/verdict_45h2.json`), `s2_readings` (the rows `build_readme_results.py` prints, by the same function), `s1_reading` (optional), `status` (the tick file, the windows from the store when present, the last recorded remaining of `results/spend_cycle3.json` — no live balance call), `dictionary`, `generated_at`, `sources` (file · sha256). A missing REQUIRED source → exit ≠ 0 naming it; optional ones (`s1_reading`) → `null` with a reason.
+
+## 8. Accessibility and responsiveness (non-negotiable)
+
+Semantic landmarks (`header`, `nav`, `main`, `footer`); every control a real `<button>`/`<a>`/`<input>` with a visible focus ring (`:focus-visible`); touch targets ≥ 44 px on mobile; contrast ≥ 4.5:1 for text, ≥ 3:1 for UI; charts never colour-alone (legend + labels + table view); tables with `<caption>`, `scope`, `aria-sort`; the drawer is a `<dialog>`; images/screenshots with alt; `lang` attribute follows the toggle. Breakpoints by container, not device: cards compact < 240 px, chart grid 1-col < 960 px viewport, nav scroll-row ≤ 720 px. Print: the table views print, charts get their table.
+
+## 9. Delivery checks the front items show
+
+`npm run check` (tsc) clean · `npx vitest run` green (adapters against the real fixtures) · `make front` produces `dashboard/app/index.html` with `data/manifest.json` · `make serve` → every tab of §7 renders (a screenshot per tab into `docs/reports/screens/<tab>.png`, light theme, 1440 px; dark for T0 and Позиції) · the 10-second quiz of §1 answered tab by tab in PROGRESS with the figure and its file · static mode verified by opening `dashboard/app/index.html` through `python3.11 -m http.server` (no API) · no console errors.
+
+## 10. Defaults for what this brief does not say
+
+The simplest thing that keeps the number's provenance visible; native HTML over a component; a table over a chart when the form is unclear; the dictionary's wording over a new label; no new dependency without a line in PROGRESS naming why. Never a placeholder number, never a spinner without a timeout, never an empty state without a sentence that says which of «not collected · not exported · none in the data» it is.

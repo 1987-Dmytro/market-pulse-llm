@@ -10,6 +10,8 @@ mechanics. Operator-facing digest of the same rules: `docs/STATUS.md` («Пра�
   spec), `docs/PRODUCT.md`, `docs/PROCESS.md`, `docs/PHASE-*.md` (executable phase specs), `docs/PROMPT-*.md`
   (one-sentence contracts and legacy prompts), `docs/PLAN-*.md`, `docs/reviews/`, `docs/labels-*.jsonl`,
   `docs/CODEBOOK-*.md` (the annotator's law the labels follow; versioned inside the file, cited by the dev-loop report).
+  **v2.7 (10.09, ruling (nn)):** `docs/DESIGN-*.md` (the front end's brief) is a team-lead file too; `frontend/`, `dashboard/app/`, `ops/`,
+  `firebase.json` and `scripts/{serve,loop_daemon,export_front_data}.py` are the executor's.
   Executor commits them by path, never edits. Deny rules for Edit/Write on these paths live in
   `.claude/settings.json`; `/save` and `/close` carry the negative line.
 - Executor files: `src/`, `tests/`, `scripts/`, `results/`, `config/`, `knowledge/**`, `implementation-notes.md`,
