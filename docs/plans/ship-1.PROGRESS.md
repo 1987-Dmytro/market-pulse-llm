@@ -40,8 +40,11 @@ Edit-only) and nothing was written; the rest of the session used the Read tool.
 ## Named, not built (the phase file forbids adding what it did not ask for)
 - **The fold has no validation guard and §3 forbids adding one.** Nothing checks that both sides of
   a `chain_of_channel` line are ids the registry carries, or that a folded-FROM id is never also a
-  fold TARGET (a two-hop chain silently resolves one hop). One line, one reader, one caller today
-  — the need is named here ([[a_patch_list_closed_by_enumeration]]).
+  fold TARGET (a two-hop chain silently resolves one hop) ([[a_patch_list_closed_by_enumeration]]).
+- **The map is inside `chain_key`, so EVERY `chain` subject in the project folds through it** —
+  `subject_id`, the grader, both sides of it — and not only the screen and P1 that §2 names. Only a
+  row spelled with a registry channel id can move, and nothing is spelled that way today (no graded
+  number moved, no Маркетопт thread is in the 120), but the reach is wider than the item's check.
 - **The subject a store already holds is not re-folded.** `subject_id` is unchanged by the fold, so
   `INSERT OR IGNORE` keeps a row written under the old surface form («Varus») while a fresh rebuild
   writes «varus». Invisible today — `screen.feed` is empty — and «s2-promote» is the first tick that
@@ -49,12 +52,13 @@ Edit-only) and nothing was written; the rest of the session used the Read tool.
 - **`grade_promo_p1_readings.json` moved although §2 named only the loop record** — ONE producer
   writes both, and leaving it stale against a P1 it no longer describes is the worse of the two.
   No sealed record pins it (`preflight`: 0 pins) and the bar's pre-registered readings are untouched.
-- Carried from s44: **two sibling readers keep their own `WHERE p.window_id = ?`** —
-  `aggregates.promo_by_chain` and `coverage` return silently EMPTY on `all`; (oo) 3 routes them
-  through `positions_source` inside «serve-loop», so they are NOT folded here either
-  ([[the_hardening_did_not_reach_the_sibling_reader]]). · **The closing record does not say which
-  term graded it** — `spend_promo_c3.json` carries `"tolerance": 0.05` while the $0.05 FLOOR closed
-  it. · **The measured/priced gap stands as s42 left it:** 19.828 s/page against the registered 3.369.
-- Carried unchanged: `promo_projection_c2.json` not reproducible from its producer (its pin is the
-  proof); no test asserts `cap_from`, `{leg}`, `{STEP}-s4`; `tooling.md`'s «plugin disabled», the
-  unfloored arm selector, `graded()`'s `rows`, P1/S2/README untested in the tick, the ties.
+- Carried from s44, now with a SECOND defect: `aggregates.promo_by_chain` and `coverage` keep their
+  own `WHERE p.window_id = ?` (silently EMPTY on `all`) **and their `source_id` keys are unfolded**,
+  so on any window they split Маркетопт in two where `positions` on the same store shows one — two
+  readers, two chain populations. (oo) 3 routes both through `positions_source` inside «serve-loop»,
+  which inherits both ([[the_hardening_did_not_reach_the_sibling_reader]]). Nothing ships wrong
+  today: only `export_dashboard_data` reaches them and it pins w1, which has none of the 57.
+- Carried unchanged: `spend_promo_c3.json` says `"tolerance": 0.05` where the FLOOR closed it; the
+  measured/priced gap 19.828 vs 3.369 s/page; `promo_projection_c2.json` not reproducible from its
+  producer; no test asserts `cap_from`, `{leg}`, `{STEP}-s4`; the unfloored arm selector,
+  `graded()`'s `rows`, P1/S2/README untested in the tick, the ties.
