@@ -250,6 +250,51 @@ def comments_of(item: dict) -> list[dict]:
     return [{"msg_id": str(msg_id), "text": text} for msg_id, text, *_ in item["comments"]]
 
 
+def arm_units(spec: dict) -> dict:
+    """The pack items of THIS set's arm, by unit id.
+
+    The ARM, never the whole pack: one out-file carries both arms of a leg since iteration 4, and
+    grading 80 answers against a key covering 40 would call the result the leg's
+    ([[measure_on_the_rows_the_gate_scores]]).
+    """
+    pack = json.loads((REPO_ROOT / spec["pack"]).read_text(encoding="utf-8"))
+    arm = k8.strata_of(REPO_ROOT / spec["draw"], spec["part"])
+    return {
+        item["id"]: item
+        for item in pack["items"]
+        if item["leg"] == "a" and (item["channel"], str(item["post_id"])) in arm
+    }
+
+
+def screened(spec: dict, brand_ids: set, vocabulary: dict):
+    """Every answered thread of one set's arm, as `tick.signal_records` reads one.
+
+    `(item, answer, record)` per thread: the pack item the reader was served, the parsed raw answer,
+    and the record — the screen function's own return plus the three fields it does not know
+    (`channel`, `thread_root`, `extractor_version`).
+
+    Lifted out of :func:`loop` so that the producer which PROMOTES these records into
+    `results/promo_signals/` writes the very rows the loop leg grades. A second spelling of the
+    parse → screen → record path would measure a third thing
+    ([[a_moved_guard_that_left_its_copy]]).
+    """
+    units = arm_units(spec)
+    for reply in promo_dev_pass.reply_rows(REPO_ROOT / spec["replies"]):
+        item = units.get(reply.get("id"))
+        if item is None:
+            continue  # the other arm of this out-file, and the leg's gold does not cover it
+        if promo_dev_pass.died(reply):
+            continue  # a unit that DIED is unanswered, not an answer that failed to parse
+        answer = promo_prompts.parse(reply["reply"])
+        record = {
+            **promo_hooks.screen(answer, comments_of(item), brand_ids, vocabulary),
+            "channel": item["channel"],
+            "thread_root": str(item["post_id"]),
+            "extractor_version": reply["rendering_sha256"],
+        }
+        yield item, answer, record
+
+
 def loop(name, spec, registry, spellings, brand_ids, vocabulary) -> tuple[dict, set[tuple[str, str]]]:
     """One set through the PRODUCT's pipeline — ruling 08.09 (dd) item 5, at $0.
 
@@ -268,15 +313,7 @@ def loop(name, spec, registry, spellings, brand_ids, vocabulary) -> tuple[dict, 
     """
     pack_path, replies_path = REPO_ROOT / spec["pack"], REPO_ROOT / spec["replies"]
     pack = json.loads(pack_path.read_text(encoding="utf-8"))
-    arm = k8.strata_of(REPO_ROOT / spec["draw"], spec["part"])
-    # the ARM, never the whole pack: one out-file carries both arms of a leg since iteration 4, and
-    # grading 80 answers against a key covering 40 would call the result the leg's
-    # ([[measure_on_the_rows_the_gate_scores]])
-    units = {
-        item["id"]: item
-        for item in pack["items"]
-        if item["leg"] == "a" and (item["channel"], str(item["post_id"])) in arm
-    }
+    units = arm_units(spec)
     counts: Counter = Counter()
     rows_in: Counter = Counter()
     rows_kept: Counter = Counter()
@@ -284,22 +321,9 @@ def loop(name, spec, registry, spellings, brand_ids, vocabulary) -> tuple[dict, 
     p1 = dict.fromkeys(("R1", "R2", "R3", "rows_seen", "rows_rewritten"), 0)
     before_rows, after_rows, answered = [], [], []
     parse_failures, unsure_comments = 0, 0
-    for reply in promo_dev_pass.reply_rows(replies_path):
-        item = units.get(reply.get("id"))
-        if item is None:
-            continue  # the other arm of this out-file, and the leg's gold does not cover it
-        if promo_dev_pass.died(reply):
-            continue  # a unit that DIED is unanswered, not an answer that failed to parse
-        answered.append(reply["id"])
-        answer = promo_prompts.parse(reply["reply"])
+    for item, answer, record in screened(spec, brand_ids, vocabulary):
+        answered.append(item["id"])
         parse_failures += 1 if answer["parse_failure"] else 0
-        screened = promo_hooks.screen(answer, comments_of(item), brand_ids, vocabulary)
-        record = {
-            **screened,
-            "channel": item["channel"],
-            "thread_root": str(item["post_id"]),
-            "extractor_version": reply["rendering_sha256"],
-        }
         unsure_comments += len(record["unsure"])
         for kind, key in (("about", "about"), ("signal", "signals")):
             rows_in[kind] += len(answer[key])
@@ -322,7 +346,7 @@ def loop(name, spec, registry, spellings, brand_ids, vocabulary) -> tuple[dict, 
             for rule in row.get("p1") or []:
                 p1[rule] += 1
         where = {"channel": item["channel"], "thread_root": item["post_id"]}
-        stamp = {"extractor_version": reply["rendering_sha256"]}
+        stamp = {"extractor_version": record["extractor_version"]}
         kept = record["kept"]
         before_rows += [
             one | stamp
