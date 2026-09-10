@@ -1,4 +1,4 @@
-.PHONY: check check-stamped fmt preflight baselines tick promo-screen
+.PHONY: check check-stamped fmt preflight baselines tick promo-screen serve loop
 
 # The single verifier. Must be green after every commit (docs/SPEC.md §9).
 check:
@@ -45,3 +45,9 @@ tick:
 promo-screen:
 	PYTHONPATH=src python3.11 scripts/build_promo_screen.py
 	PYTHONPATH=src python3.11 scripts/build_readme_results.py
+
+# The product, locally: http://localhost:8000/ — the app at `/` (a stub until `make front` builds
+# `dashboard/app/`) and the four API routes it reads. Localhost only, no auth: the public build is
+# static and has no API. Needs the `serve` extra — `pip install -e '.[serve]'`.
+serve:
+	PYTHONPATH=src python3.11 scripts/serve.py

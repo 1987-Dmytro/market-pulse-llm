@@ -43,6 +43,16 @@ gpu = [
     "peft>=0.14",
 ]
 
+# `make serve` and `make loop` — the local product (PHASE-ship-1 §2). Pinned exactly, like every
+# front-end dependency: what the operator runs on Friday is the version this was checked against.
+# `httpx` is here rather than in `dev` because it is what `fastapi.testclient` imports — without
+# it `tests/test_serve.py` skips itself, and `make check` stays green on a checkout with no extra.
+serve = [
+    "fastapi==0.109.2",
+    "uvicorn==0.40.0",
+    "httpx==0.27.2",
+]
+
 [build-system]
 requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
