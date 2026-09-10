@@ -1250,20 +1250,43 @@ def _present(fields: dict) -> dict:
     return {name: value for name, value in fields.items() if value is not None}
 
 
+def one_window(window_id: str, reader: str) -> str:
+    """The window id these per-window readers may be asked for — `all` is a refusal, not an answer.
+
+    Their SQL is `WHERE window_id = ?` and the union's selector is not a row of `windows`, so on
+    `all` one of them returns an empty table with every chain at zero and the other unpacks a
+    missing row. Both are the silent empty screen ruling 09.09 (kk) already cost a session
+    ([[a_checker_whose_failure_is_silence]]); the refusal is by name, here, before the query.
+    """
+    if window_id == ALL_WINDOWS:
+        raise ValueError(
+            f"{reader}: {ALL_WINDOWS!r} is not a window id — this reader is a statement about ONE"
+            " window (`WHERE window_id = ?`) and would answer the union with an empty table."
+            " Ask for a window the store carries."
+        )
+    return window_id
+
+
 def promo_by_chain(conn, window_id: str, chains: tuple) -> dict:
     """Positions per chain, split by carrier — every chain the law names, present or empty.
 
     `chains` arrives from the caller and every one of them is a KEY here whether it carried a row or
     not: SPEC 3.20 (6) puts Маркетопт on the promo surface, and a surface that renders whatever the
     GROUP BY returned would drop a chain the day it goes quiet.
+
+    The key is the channel's source id folded by :func:`chain_key`, like `chain.id` on the screen
+    (ruling 09.09 (gg) item 2, shape (b)): a retailer with two channels is ONE chain here too, and
+    the two rows are SUMMED per carrier rather than the second overwriting the first.
     """
+    one_window(window_id, "promo_by_chain")
     found: dict[str, dict] = {}
     for source_id, carrier, number in conn.execute(
         "SELECT ch.source_id, p.carrier, COUNT(*) FROM positions p JOIN channels ch"
         " USING (window_id, channel) WHERE p.window_id = ? GROUP BY 1, 2 ORDER BY 1, 2",
         (window_id,),
     ):
-        found.setdefault(source_id, {})[carrier] = number
+        by_carrier = found.setdefault(chain_key(source_id), {})
+        by_carrier[carrier] = by_carrier.get(carrier, 0) + number
     return {
         source_id: {
             "position_rows": sum(found.get(source_id, {}).values()),
@@ -1280,6 +1303,7 @@ def coverage(conn, window_id: str) -> dict:
     Both denominators come from the `windows` row — the registry's own size — and not from the
     evidence, because a coverage figure whose denominator is the evidence is always 100%.
     """
+    one_window(window_id, "coverage")
     (channels,) = conn.execute(
         "SELECT registry_channels FROM windows WHERE window_id = ?", (window_id,)
     ).fetchone()

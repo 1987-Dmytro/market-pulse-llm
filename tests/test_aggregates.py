@@ -300,3 +300,52 @@ def test_the_layer_reads_nothing_and_parses_nothing(conn):
     assert builder.summary.read_rows is summary.read_rows
     assert builder.summary.comment_verdicts is summary.comment_verdicts
     assert isinstance(conn, sqlite3.Connection)
+
+
+def _two_channels_of_one_chain() -> sqlite3.Connection:
+    """The smallest store the two per-window readers read: one chain behind two channels."""
+    conn = sqlite3.connect(":memory:")
+    conn.executescript(
+        "CREATE TABLE windows (window_id TEXT, registry_channels INT);"
+        "CREATE TABLE segments (window_id TEXT, segment TEXT);"
+        "CREATE TABLE channels (window_id TEXT, channel TEXT, source_id TEXT, segment TEXT);"
+        "CREATE TABLE positions (window_id TEXT, channel TEXT, carrier TEXT);"
+        "INSERT INTO windows VALUES ('w3', 4);"
+        "INSERT INTO segments VALUES ('w3', 'retail');"
+        "INSERT INTO channels VALUES ('w3', '@marketopt', 'marketopt_promo', 'retail'),"
+        " ('w3', '+Ejz6ubzm21IyMTQy', 'marketopt_private', 'retail');"
+        "INSERT INTO positions VALUES ('w3', '@marketopt', 'leaflet_page'),"
+        " ('w3', '@marketopt', 'post_text'),"
+        " ('w3', '+Ejz6ubzm21IyMTQy', 'leaflet_page');"
+    )
+    return conn
+
+
+def test_the_two_per_window_readers_fold_the_chain_and_refuse_the_union():
+    """Ruling 10.09 (oo) 3 and (pp) 2(e), both defects of the same two readers, both ways.
+
+    `promo_by_chain` and `coverage` carry their own `WHERE window_id = ?`, so `all` — the selector
+    the screen has read since (mm) — would render an empty table and a crash rather than the union.
+    And `promo_by_chain` keyed its rows by the raw `source_id`, so the retailer whose second channel
+    the fold map names appeared TWICE beside a screen that had folded it into one.
+
+    Summed, not overwritten: both channels carry a `leaflet_page` row, and a fold that assigned
+    instead of adding would report one of them.
+    """
+    conn = _two_channels_of_one_chain()
+
+    by_chain = aggregates.promo_by_chain(conn, "w3", ("marketopt_promo",))
+    assert "marketopt_private" not in by_chain
+    assert by_chain["marketopt_promo"] == {
+        "position_rows": 3,
+        "by_carrier": {"leaflet_page": 2, "post_text": 1},
+        "named_by_amendment_3_20": True,
+    }
+    assert aggregates.coverage(conn, "w3")["channels"] == {
+        "with_a_row": 2, "in_registry": 4, "share": 0.5
+    }
+
+    with pytest.raises(ValueError, match="not a window id"):
+        aggregates.promo_by_chain(conn, aggregates.ALL_WINDOWS, ("marketopt_promo",))
+    with pytest.raises(ValueError, match="not a window id"):
+        aggregates.coverage(conn, aggregates.ALL_WINDOWS)
