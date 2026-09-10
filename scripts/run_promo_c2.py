@@ -46,7 +46,7 @@ import os
 import re
 import subprocess
 import sys
-from datetime import UTC, datetime
+from datetime import UTC, date, datetime
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -487,23 +487,57 @@ def register() -> dict:
     return record
 
 
-WINDOW_ID = "w2"
-"""The aggregate id of the window this registration bought — `windows.window_id`, ruling 02.09 (d)
-item 1 («the executor picks it and says so in the record»). `w1` stays 5c2's. A NAME and not a date,
-for the reason `build_aggregates.WINDOW_ID` gives: `windows.anchor` already carries the date."""
+STEP_WINDOWS = {"promo-c2": "w2", "promo-c3": "w3"}
+"""The aggregate id of the window each LEG buys — `windows.window_id`, ruling 02.09 (d) item 1
+(«the executor picks it and says so in the record»). `w1` stays 5c2's. A NAME and not a date, for
+the reason `build_aggregates.WINDOW_ID` gives: `windows.anchor` already carries the date.
+
+A MAP off `--step` and not a module constant, because `repoint()` rebinds the leg's files and its
+ledger line and could never rebind a name read at import: c3 would have written w2's answer into
+its own registration and the store would have built one window twice
+([[a_default_argument_freezes_the_constant_it_names]], ruling 10.09 (mm) 2(b), fork (c)).
+"""
+
+AUTHORITY = (
+    "docs/reviews/2026-08-30-plan-promo-pulse-1.md «Ruling 10.09 (mm)» item 2(b) — «the addendum's"
+    " decision fields BRANCH ON THE LEG: window_id from --step (promo-c2 → w2, promo-c3 → w3; a"
+    " step without a window → the emitter refuses), dated = the day it is written, authority ="
+    " this ruling — never a constant», amending ruling 02.09 (d) item 1"
+)
 
 REGISTRY = REPO_ROOT / "config" / "registry.yaml"
 
 
+def window_for(step: str) -> str:
+    """The window this leg's rows belong to — or a refusal. A step with no window is not a default.
+
+    THREE legs, not two: `promo-c2`, `promo-c3`, and every other step the flag can carry. An `else`
+    that fell through to w2 would file a third leg's rows into the C2 window and the build would
+    agree with it, because a row belongs to a window by its registration's pinned ids and by nothing
+    that could contradict this field ([[a_two_way_branch_on_a_three_way_parameter]]).
+    """
+    if step not in STEP_WINDOWS:
+        raise SystemExit(
+            f"--step {step!r} has no window: {', '.join(f'{k} → {v}' for k, v in STEP_WINDOWS.items())}."
+            " A leg aggregates through its own seal into its own window, so the window is named"
+            " before the registration grows the field — not defaulted here. Nothing written."
+        )
+    return STEP_WINDOWS[step]
+
+
 def register_addendum() -> dict:
-    """Ruling 02.09 (d) item 1 — the registry this run bought under, ADDED to a sealed record.
+    """Ruling 02.09 (d) item 1, as (mm) 2(b) amends it — the registry this LEG bought under.
 
     An addendum and not a re-registration: `register()` would recompute every rate and population
     against today's files and silently re-pin what the run was judged on. This adds the ONE key the
     ruling names and refuses to touch a key that is already there, so the sealed half stays sealed
     ([[a_self_pinning_producer_cannot_grow_a_parameter]]). The field is DATED, so the record says
     when the pin joined it rather than reading as if it had always been there.
+
+    The window is resolved BEFORE the pin is computed, so a step with no window leaves the sealed
+    record byte-identical rather than half-grown.
     """
+    window_id = window_for(STEP)
     prereg = load(PREREG)
     key = rel(REGISTRY)
     if key in prereg["pinned_inputs"]:
@@ -515,14 +549,12 @@ def register_addendum() -> dict:
     prereg["pinned_inputs"][key] = sha256_of(REGISTRY)
     prereg["addendum"] = [
         {
-            "dated": "2026-09-03",
-            "authority": "docs/reviews/2026-08-30-plan-promo-pulse-1.md «Ruling 02.09 (d)» item 1"
-            " — «It pins the registry it was bought under … added to pinned_inputs by the"
-            " registration's own writer … never re-pinning what is already there»",
+            "dated": date.today().isoformat(),
+            "authority": AUTHORITY,
             "added": [key],
-            "window_id": WINDOW_ID,
-            "why": "the C2 window is aggregated through ITS OWN seal, and the segment join is a"
-            " join to a set of channels: without this pin the window would be built against"
+            "window_id": window_id,
+            "why": f"the {STEP} window is aggregated through ITS OWN seal, and the segment join is"
+            " a join to a set of channels: without this pin the window would be built against"
             " whatever registry the checkout happens to hold",
         }
     ]

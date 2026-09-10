@@ -3,6 +3,7 @@
 import json
 import re
 import sys
+from datetime import date
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -433,14 +434,48 @@ def test_the_addendum_adds_the_registry_pin_once_and_refuses_to_re_pin(tmp_path,
     monkeypatch.setattr(driver, "PREREG", prereg)
     monkeypatch.setattr(driver, "REGISTRY", registry)
 
+    monkeypatch.setattr(driver, "STEP", "promo-c2")
+
     record = driver.register_addendum()
     key = driver.rel(registry)
     assert record["pinned_inputs"][key] == driver.sha256_of(registry)
     assert record["pinned_inputs"]["results/x.json"] == "0" * 64, "nothing already pinned moved"
-    assert record["addendum"][0]["window_id"] == driver.WINDOW_ID
-    assert record["addendum"][0]["dated"]
+    assert record["addendum"][0]["window_id"] == "w2"
+    assert record["addendum"][0]["dated"] == date.today().isoformat()
 
     sealed = prereg.read_bytes()
     with pytest.raises(SystemExit, match="an addendum adds, it never re-pins"):
         driver.register_addendum()
     assert prereg.read_bytes() == sealed, "a refusal writes nothing"
+
+
+def test_the_addendums_window_branches_on_the_leg_and_a_third_step_refuses(tmp_path, monkeypatch):
+    """Ruling (mm) 2(b) — `--step` decides the window, and the branch is THREE-way.
+
+    Both named legs write their own id into their own record, and the leg the map does not carry
+    refuses BEFORE the pin is computed: the registration it was pointed at must come back
+    byte-identical, because a half-grown seal is the failure this whole shape exists to prevent
+    ([[a_two_way_branch_on_a_three_way_parameter]], [[a_guard_that_runs_after_the_write]]).
+    """
+    registry = tmp_path / "registry.yaml"
+    registry.write_text("watchlist: []\n", encoding="utf-8")
+    monkeypatch.setattr(driver, "REGISTRY", registry)
+
+    for step, window in (("promo-c2", "w2"), ("promo-c3", "w3")):
+        prereg = tmp_path / f"prereg_{step}.json"
+        prereg.write_text(json.dumps({"pinned_inputs": {}}, indent=2), encoding="utf-8")
+        monkeypatch.setattr(driver, "PREREG", prereg)
+        monkeypatch.setattr(driver, "STEP", step)
+        record = driver.register_addendum()
+        assert record["addendum"][0]["window_id"] == window
+        assert step in record["addendum"][0]["why"], "the record names the leg it was written for"
+        assert "«Ruling 10.09 (mm)»" in record["addendum"][0]["authority"]
+
+    stranger = tmp_path / "prereg_stranger.json"
+    stranger.write_text(json.dumps({"pinned_inputs": {}}, indent=2), encoding="utf-8")
+    sealed = stranger.read_bytes()
+    monkeypatch.setattr(driver, "PREREG", stranger)
+    monkeypatch.setattr(driver, "STEP", "promo-c4")
+    with pytest.raises(SystemExit, match="has no window"):
+        driver.register_addendum()
+    assert stranger.read_bytes() == sealed, "a step with no window writes nothing"
