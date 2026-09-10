@@ -240,7 +240,9 @@ One-sentence contracts (`docs/PROMPT-*.md`) remain for fixes and debts whose dif
   the drawn threads (`data/annotation/dev40_threads.json`, gitignored), never edited in place. Desktop Commander runs natively on
   the Mac (no VM): the team lead reads there, runs `git --no-optional-locks` read-only, runs its own suite ONLY ON A SNAPSHOT of the accepted tree (v2.8, 10.09, ruling (pp): `rsync -a --exclude graphify-out
   --exclude __pycache__ <repo>/ /tmp/mp-snap/ && cd /tmp/mp-snap && make check`, `.git` INCLUDED — the producers' `git ls-files` gates and
-  ruff's gitignore need it; a snapshot without `.git` read 297 false «not tracked» failures — in the background) — a `make check` on the LIVE tree raced the executor's next session on 10.09 and read 8 false
+  ruff's gitignore need it; a snapshot without `.git` read 297 false «not tracked» failures — in the background; ONE known environment failure in a snapshot:
+  `tests/test_baselines.py::test_the_block_carries_every_section_a_contract_pastes` — `scripts/baselines.py` keys the boot files by the repo's
+  ABSOLUTE path, so `MEMORY.md` is absent at any other path; read it as expected, never as a defect) — a `make check` on the LIVE tree raced the executor's next session on 10.09 and read 8 false
   failures; the working tree is the executor's the moment the operator pastes the next prompt — uses `~/.pyenv/shims/python3.11` (homebrew's lacks the deps), and writes NOTHING
   into the repo while an executor session is running (its porcelain stamp) — team-lead files are written between sessions and
   committed by path at the next start ritual.
