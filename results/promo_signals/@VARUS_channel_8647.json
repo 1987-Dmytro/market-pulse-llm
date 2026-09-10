@@ -1,0 +1,436 @@
+{
+  "brand_states": {
+    "note": "raw is the store's `brand_id IS NULL` + `brand_raw`, not a failure — 65 of the 145 position rows on disk are in that state (plan §5.9)",
+    "raw": 0,
+    "resolved": 0
+  },
+  "channel": "@VARUS_channel",
+  "counts": {
+    "brand_is_resolvable": 0,
+    "msg_id_exists": 0,
+    "quote_is_a_substring": 0,
+    "schema_valid": 0
+  },
+  "extractor_version": "09d40abe43ad68002b45e56b6bd5e8f8a1496217c7fc937747719779f35c5224",
+  "failures": [],
+  "kept": {
+    "about": [
+      {
+        "confidence": 1.0,
+        "msg_id": 15414,
+        "source": "post_context",
+        "subject": "яйця-сюрпризи",
+        "subject_type": "sku"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 15416,
+        "source": "explicit",
+        "subject": "8647",
+        "subject_type": "post"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 15418,
+        "source": "reply_context",
+        "subject": "яйця-сюрпризи",
+        "subject_type": "sku"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 15419,
+        "source": "reply_context",
+        "subject": "яйця-сюрпризи",
+        "subject_type": "sku"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 15420,
+        "source": "explicit",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 15421,
+        "source": "explicit",
+        "subject": "8647",
+        "subject_type": "post"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 15423,
+        "source": "explicit",
+        "subject": "8647",
+        "subject_type": "post"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 15498,
+        "source": "post_context",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 15499,
+        "source": "reply_context",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 15500,
+        "source": "reply_context",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 15501,
+        "source": "explicit",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 15502,
+        "source": "reply_context",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 15503,
+        "source": "reply_context",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 15504,
+        "source": "reply_context",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 15505,
+        "source": "explicit",
+        "subject": "8647",
+        "subject_type": "post"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 15545,
+        "source": "post_context",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 15546,
+        "source": "explicit",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 15547,
+        "source": "explicit",
+        "subject": "8647",
+        "subject_type": "post"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 15548,
+        "source": "reply_context",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 15549,
+        "source": "explicit",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 15553,
+        "source": "explicit",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 15554,
+        "source": "reply_context",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 15556,
+        "source": "reply_context",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 15559,
+        "source": "reply_context",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 15560,
+        "source": "explicit",
+        "subject": "8647",
+        "subject_type": "post"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 15564,
+        "source": "explicit",
+        "subject": "8647",
+        "subject_type": "post"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 15566,
+        "source": "reply_context",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 15568,
+        "source": "reply_context",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 15586,
+        "source": "reply_context",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 15587,
+        "source": "explicit",
+        "subject": "8647",
+        "subject_type": "post"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 15588,
+        "source": "reply_context",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 15590,
+        "source": "explicit",
+        "subject": "8647",
+        "subject_type": "post"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 15591,
+        "source": "reply_context",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 15604,
+        "source": "reply_context",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 15606,
+        "source": "reply_context",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 15607,
+        "source": "explicit",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 15608,
+        "source": "reply_context",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 15609,
+        "source": "explicit",
+        "subject": "8647",
+        "subject_type": "post"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 15610,
+        "source": "explicit",
+        "subject": "8647",
+        "subject_type": "post"
+      }
+    ],
+    "signal": [
+      {
+        "confidence": 1.0,
+        "msg_id": 15414,
+        "quote": "брелоки по 99 грн",
+        "subject": "яйця-сюрпризи",
+        "subject_type": "sku",
+        "type": "цена"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 15414,
+        "quote": "Повне розчарування!",
+        "subject": "яйця-сюрпризи",
+        "subject_type": "sku",
+        "type": "жалоба"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 15420,
+        "quote": "Щось на офіційному сайті ніякої зміни не має",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "жалоба"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 15498,
+        "quote": "жоден в мене ще не відскагувався",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "жалоба"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 15500,
+        "quote": "в додатку не знайшла звідки сканувати",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "жалоба"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 15502,
+        "quote": "саме ці не хоче",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "жалоба"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 15504,
+        "quote": "код він так нормально і не прочитав,каже шо код неякісний",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "жалоба"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 15545,
+        "quote": "Це по вашому чесно?",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "жалоба"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 15546,
+        "quote": "Варус усіх намахав",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "жалоба"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 15548,
+        "quote": "Це не чесно!",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "жалоба"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 15549,
+        "quote": "Мені теж не подобається перенесення",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "жалоба"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 15549,
+        "quote": "вартість зменшилася на 10 грн",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "цена"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 15556,
+        "quote": "Розвод",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "жалоба"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 15566,
+        "quote": "То хто тут клоун :)",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "жалоба"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 15568,
+        "quote": "готовий на колективну скаргу",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "жалоба"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 15586,
+        "quote": "а це вже напьорстки",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "жалоба"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 15588,
+        "quote": "те що переписують коли хоче це не правила",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "жалоба"
+      }
+    ]
+  },
+  "parse_failure": null,
+  "rows_in": 56,
+  "rows_kept": 56,
+  "thread_root": "8647",
+  "unsure": []
+}

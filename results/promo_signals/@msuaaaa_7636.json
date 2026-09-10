@@ -1,0 +1,50 @@
+{
+  "brand_states": {
+    "note": "raw is the store's `brand_id IS NULL` + `brand_raw`, not a failure — 65 of the 145 position rows on disk are in that state (plan §5.9)",
+    "raw": 0,
+    "resolved": 0
+  },
+  "channel": "@msuaaaa",
+  "counts": {
+    "brand_is_resolvable": 0,
+    "msg_id_exists": 0,
+    "quote_is_a_substring": 0,
+    "schema_valid": 0
+  },
+  "extractor_version": "f02fc15e0b5bd68fb1990ec77c41099e9dc2d0f04cca19f3359d0c0ec15bdb97",
+  "failures": [],
+  "kept": {
+    "about": [
+      {
+        "confidence": 1.0,
+        "msg_id": 7158,
+        "source": "post_context",
+        "subject": "ДАБЛ ЧІКЕН BBQ",
+        "subject_type": "sku"
+      }
+    ],
+    "signal": [
+      {
+        "confidence": 1.0,
+        "msg_id": 7158,
+        "quote": "Ціна жах",
+        "subject": "ДАБЛ ЧІКЕН BBQ",
+        "subject_type": "sku",
+        "type": "цена"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 7158,
+        "quote": "Ціна жах за маленьку шпуньку",
+        "subject": "ДАБЛ ЧІКЕН BBQ",
+        "subject_type": "sku",
+        "type": "жалоба"
+      }
+    ]
+  },
+  "parse_failure": null,
+  "rows_in": 3,
+  "rows_kept": 3,
+  "thread_root": "7636",
+  "unsure": []
+}

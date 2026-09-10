@@ -1,0 +1,72 @@
+{
+  "brand_states": {
+    "note": "raw is the store's `brand_id IS NULL` + `brand_raw`, not a failure — 65 of the 145 position rows on disk are in that state (plan §5.9)",
+    "raw": 0,
+    "resolved": 0
+  },
+  "channel": "@VARUS_channel",
+  "counts": {
+    "brand_is_resolvable": 0,
+    "msg_id_exists": 0,
+    "quote_is_a_substring": 0,
+    "schema_valid": 0
+  },
+  "extractor_version": "6902f76b9aa0b109fbb33374307002f0432ab92fff76f0cfb03f33b42c7d19aa",
+  "failures": [],
+  "kept": {
+    "about": [
+      {
+        "confidence": 1.0,
+        "msg_id": 414,
+        "source": "explicit",
+        "subject": "кава",
+        "subject_type": "sku"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 415,
+        "source": "explicit",
+        "subject": "печиво",
+        "subject_type": "sku"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 416,
+        "source": "post_context",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      }
+    ],
+    "signal": [
+      {
+        "confidence": 1.0,
+        "msg_id": 414,
+        "quote": "Як кава? Хто купував?",
+        "subject": "кава",
+        "subject_type": "sku",
+        "type": "спрос"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 415,
+        "quote": "Печиво класне",
+        "subject": "печиво",
+        "subject_type": "sku",
+        "type": "похвала"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 416,
+        "quote": "Де газета?",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "спрос"
+      }
+    ]
+  },
+  "parse_failure": null,
+  "rows_in": 6,
+  "rows_kept": 6,
+  "thread_root": "1901",
+  "unsure": []
+}

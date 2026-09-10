@@ -1,0 +1,79 @@
+{
+  "brand_states": {
+    "note": "raw is the store's `brand_id IS NULL` + `brand_raw`, not a failure — 65 of the 145 position rows on disk are in that state (plan §5.9)",
+    "raw": 0,
+    "resolved": 0
+  },
+  "channel": "@msuaaaa",
+  "counts": {
+    "brand_is_resolvable": 0,
+    "msg_id_exists": 0,
+    "quote_is_a_substring": 0,
+    "schema_valid": 0
+  },
+  "extractor_version": "3c7f1a03aac7b19738f8dc583e51e7482b3ab8041753813d9cbbc77d65b68660",
+  "failures": [],
+  "kept": {
+    "about": [
+      {
+        "confidence": 1.0,
+        "msg_id": 6303,
+        "source": "post_context",
+        "subject": "7202",
+        "subject_type": "post"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 6304,
+        "source": "explicit",
+        "subject": "KFC",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 6307,
+        "source": "post_context",
+        "subject": "Тріпл Чііз Біт",
+        "subject_type": "sku"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 6324,
+        "source": "reply_context",
+        "subject": "Тріпл Чііз Біт",
+        "subject_type": "sku"
+      }
+    ],
+    "signal": [
+      {
+        "confidence": 1.0,
+        "msg_id": 6303,
+        "quote": "ВАУУУУУ",
+        "subject": "7202",
+        "subject_type": "post",
+        "type": "похвала"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 6307,
+        "quote": "а ціна",
+        "subject": "Тріпл Чііз Біт",
+        "subject_type": "sku",
+        "type": "цена"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 6324,
+        "quote": "247 где-то вроде за один",
+        "subject": "Тріпл Чііз Біт",
+        "subject_type": "sku",
+        "type": "цена"
+      }
+    ]
+  },
+  "parse_failure": null,
+  "rows_in": 7,
+  "rows_kept": 7,
+  "thread_root": "7202",
+  "unsure": []
+}

@@ -1,0 +1,49 @@
+{
+  "brand_states": {
+    "note": "raw is the store's `brand_id IS NULL` + `brand_raw`, not a failure — 65 of the 145 position rows on disk are in that state (plan §5.9)",
+    "raw": 0,
+    "resolved": 0
+  },
+  "channel": "@msuaaaa",
+  "counts": {
+    "brand_is_resolvable": 0,
+    "msg_id_exists": 0,
+    "quote_is_a_substring": 0,
+    "schema_valid": 0
+  },
+  "extractor_version": "edf9a4f99c6dcb2d0b19da4b36b8cfe21010dd3e125d0d0a6df189e4bd68ed93",
+  "failures": [],
+  "kept": {
+    "about": [
+      {
+        "confidence": 1.0,
+        "msg_id": 10249,
+        "source": "post_context",
+        "subject": "9190",
+        "subject_type": "post"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 10250,
+        "source": "post_context",
+        "subject": "АТБ",
+        "subject_type": "chain"
+      }
+    ],
+    "signal": [
+      {
+        "confidence": 1.0,
+        "msg_id": 10250,
+        "quote": "Просто продлили акцію?)",
+        "subject": "АТБ",
+        "subject_type": "chain",
+        "type": "спрос"
+      }
+    ]
+  },
+  "parse_failure": null,
+  "rows_in": 3,
+  "rows_kept": 3,
+  "thread_root": "9190",
+  "unsure": []
+}

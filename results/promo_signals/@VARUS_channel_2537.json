@@ -1,0 +1,49 @@
+{
+  "brand_states": {
+    "note": "raw is the store's `brand_id IS NULL` + `brand_raw`, not a failure — 65 of the 145 position rows on disk are in that state (plan §5.9)",
+    "raw": 0,
+    "resolved": 0
+  },
+  "channel": "@VARUS_channel",
+  "counts": {
+    "brand_is_resolvable": 0,
+    "msg_id_exists": 0,
+    "quote_is_a_substring": 0,
+    "schema_valid": 0
+  },
+  "extractor_version": "4d3d93e6eb11fc6393d0972e95a0574ed07276a1a6cffdf526e5667d9bc17464",
+  "failures": [],
+  "kept": {
+    "about": [
+      {
+        "confidence": 1.0,
+        "msg_id": 1689,
+        "source": "post_context",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 1695,
+        "source": "post_context",
+        "subject": "2537",
+        "subject_type": "post"
+      }
+    ],
+    "signal": [
+      {
+        "confidence": 1.0,
+        "msg_id": 1689,
+        "quote": "Немае поваги до коллективу",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "жалоба"
+      }
+    ]
+  },
+  "parse_failure": null,
+  "rows_in": 3,
+  "rows_kept": 3,
+  "thread_root": "2537",
+  "unsure": []
+}

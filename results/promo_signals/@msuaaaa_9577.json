@@ -1,0 +1,50 @@
+{
+  "brand_states": {
+    "note": "raw is the store's `brand_id IS NULL` + `brand_raw`, not a failure — 65 of the 145 position rows on disk are in that state (plan §5.9)",
+    "raw": 0,
+    "resolved": 0
+  },
+  "channel": "@msuaaaa",
+  "counts": {
+    "brand_is_resolvable": 0,
+    "msg_id_exists": 0,
+    "quote_is_a_substring": 0,
+    "schema_valid": 0
+  },
+  "extractor_version": "717c2df3b93536f09211f5356e2361f4e200d1d4b753d8b9fd88084634c7c3b1",
+  "failures": [],
+  "kept": {
+    "about": [
+      {
+        "confidence": 1.0,
+        "msg_id": 11108,
+        "source": "explicit",
+        "subject": "ковбаса",
+        "subject_type": "sku"
+      }
+    ],
+    "signal": [
+      {
+        "confidence": 1.0,
+        "msg_id": 11108,
+        "quote": "за 19",
+        "subject": "ковбаса",
+        "subject_type": "sku",
+        "type": "цена"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 11108,
+        "quote": "це опасно",
+        "subject": "ковбаса",
+        "subject_type": "sku",
+        "type": "жалоба"
+      }
+    ]
+  },
+  "parse_failure": null,
+  "rows_in": 3,
+  "rows_kept": 3,
+  "thread_root": "9577",
+  "unsure": []
+}

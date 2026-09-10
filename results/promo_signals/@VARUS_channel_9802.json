@@ -1,0 +1,131 @@
+{
+  "brand_states": {
+    "note": "raw is the store's `brand_id IS NULL` + `brand_raw`, not a failure — 65 of the 145 position rows on disk are in that state (plan §5.9)",
+    "raw": 0,
+    "resolved": 0
+  },
+  "channel": "@VARUS_channel",
+  "counts": {
+    "brand_is_resolvable": 0,
+    "msg_id_exists": 0,
+    "quote_is_a_substring": 0,
+    "schema_valid": 0
+  },
+  "extractor_version": "19745001b94775b9989684c2fa392935bb1fd23ecb4c619f4b047847f79c8d29",
+  "failures": [],
+  "kept": {
+    "about": [
+      {
+        "confidence": 1.0,
+        "msg_id": 18643,
+        "source": "explicit",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 18649,
+        "source": "post_context",
+        "subject": "9802",
+        "subject_type": "post"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 18650,
+        "source": "reply_context",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 18651,
+        "source": "post_context",
+        "subject": "9802",
+        "subject_type": "post"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 18661,
+        "source": "reply_context",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 18663,
+        "source": "post_context",
+        "subject": "9802",
+        "subject_type": "post"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 18672,
+        "source": "explicit",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 18673,
+        "source": "post_context",
+        "subject": "9802",
+        "subject_type": "post"
+      }
+    ],
+    "signal": [
+      {
+        "confidence": 1.0,
+        "msg_id": 18643,
+        "quote": "Такий бардак у застосунку цього варусу, що ніколи не знаєш, що та як",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "жалоба"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 18643,
+        "quote": "Безглуздя!",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "жалоба"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 18650,
+        "quote": "я повинна у магазині півгодини листати розділ додатку",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "жалоба"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 18661,
+        "quote": "Вы так бесцеремонно лжёте",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "жалоба"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 18661,
+        "quote": "нет вашего идиотизма с разделением зимней поддержки и просто кешбека",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "жалоба"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 18672,
+        "quote": "Чи ви хочете , щоб скоріше Варус зник?",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "жалоба"
+      }
+    ]
+  },
+  "parse_failure": null,
+  "rows_in": 14,
+  "rows_kept": 14,
+  "thread_root": "9802",
+  "unsure": []
+}

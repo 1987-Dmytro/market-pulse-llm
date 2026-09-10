@@ -1,0 +1,100 @@
+{
+  "brand_states": {
+    "note": "raw is the store's `brand_id IS NULL` + `brand_raw`, not a failure — 65 of the 145 position rows on disk are in that state (plan §5.9)",
+    "raw": 0,
+    "resolved": 0
+  },
+  "channel": "@VARUS_channel",
+  "counts": {
+    "brand_is_resolvable": 0,
+    "msg_id_exists": 0,
+    "quote_is_a_substring": 0,
+    "schema_valid": 0
+  },
+  "extractor_version": "858a004bb2fcfbc2befb252a1b8abeb427b70100973ecdaaa1c7b753419e7058",
+  "failures": [],
+  "kept": {
+    "about": [
+      {
+        "confidence": 1.0,
+        "msg_id": 4270,
+        "source": "post_context",
+        "subject": "АЙФОН 16 ПРО",
+        "subject_type": "sku"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 4273,
+        "source": "explicit",
+        "subject": "4129",
+        "subject_type": "post"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 5106,
+        "source": "post_context",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 5107,
+        "source": "explicit",
+        "subject": "4129",
+        "subject_type": "post"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 5111,
+        "source": "post_context",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 5113,
+        "source": "explicit",
+        "subject": "4129",
+        "subject_type": "post"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 5120,
+        "source": "explicit",
+        "subject": "4129",
+        "subject_type": "post"
+      }
+    ],
+    "signal": [
+      {
+        "confidence": 1.0,
+        "msg_id": 4270,
+        "quote": "Так тут гриль-барбекю подарять. Який айфон😂",
+        "subject": "АЙФОН 16 ПРО",
+        "subject_type": "sku",
+        "type": "жалоба"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 5106,
+        "quote": "так хто виграв?",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "спрос"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 5111,
+        "quote": "як отримати свій подарунок?",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "спрос"
+      }
+    ]
+  },
+  "parse_failure": null,
+  "rows_in": 10,
+  "rows_kept": 10,
+  "thread_root": "4129",
+  "unsure": []
+}

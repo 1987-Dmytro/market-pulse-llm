@@ -1,0 +1,86 @@
+{
+  "brand_states": {
+    "note": "raw is the store's `brand_id IS NULL` + `brand_raw`, not a failure — 65 of the 145 position rows on disk are in that state (plan §5.9)",
+    "raw": 2,
+    "resolved": 0
+  },
+  "channel": "@msuaaaa",
+  "counts": {
+    "brand_is_resolvable": 0,
+    "msg_id_exists": 0,
+    "quote_is_a_substring": 0,
+    "schema_valid": 0
+  },
+  "extractor_version": "06989094aabf89fc750e65ec28fab76cc4a9d8f08b37c9a861c176bfec936752",
+  "failures": [],
+  "kept": {
+    "about": [
+      {
+        "confidence": 1.0,
+        "msg_id": 10572,
+        "source": "post_context",
+        "subject": "9354",
+        "subject_type": "post"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 10577,
+        "source": "explicit",
+        "subject": "чипсы",
+        "subject_type": "brand"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 10578,
+        "source": "explicit",
+        "subject": "ягоды замороженные",
+        "subject_type": "sku"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 10579,
+        "source": "reply_context",
+        "subject": "10578",
+        "subject_type": "post"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 10580,
+        "source": "reply_context",
+        "subject": "10579",
+        "subject_type": "post"
+      }
+    ],
+    "signal": [
+      {
+        "confidence": 1.0,
+        "msg_id": 10572,
+        "quote": "ни о чем",
+        "subject": "9354",
+        "subject_type": "post",
+        "type": "жалоба"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 10577,
+        "quote": "чипсы не на акции?",
+        "subject": "чипсы",
+        "subject_type": "brand",
+        "type": "спрос"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 10578,
+        "quote": "потому что нет замороженных ягод",
+        "subject": "ягоды замороженные",
+        "subject_type": "sku",
+        "type": "жалоба"
+      }
+    ]
+  },
+  "parse_failure": null,
+  "rows_in": 8,
+  "rows_kept": 8,
+  "thread_root": "9354",
+  "unsure": []
+}

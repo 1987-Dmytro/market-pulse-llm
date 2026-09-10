@@ -1,0 +1,181 @@
+{
+  "brand_states": {
+    "note": "raw is the store's `brand_id IS NULL` + `brand_raw`, not a failure — 65 of the 145 position rows on disk are in that state (plan §5.9)",
+    "raw": 0,
+    "resolved": 0
+  },
+  "channel": "@VARUS_channel",
+  "counts": {
+    "brand_is_resolvable": 0,
+    "msg_id_exists": 0,
+    "quote_is_a_substring": 1,
+    "schema_valid": 0
+  },
+  "extractor_version": "2a18f4e9dd25550756f28ceeb052c0f89dad99c8c341a7c761ced169d33795b4",
+  "failures": [
+    {
+      "detail": "quote 'а они жадні бо це бізнесмени'",
+      "hook": "quote_is_a_substring",
+      "kind": "signal",
+      "msg_id": 6231
+    }
+  ],
+  "kept": {
+    "about": [
+      {
+        "confidence": 1.0,
+        "msg_id": 6111,
+        "source": "post_context",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 6115,
+        "source": "post_context",
+        "subject": "5186",
+        "subject_type": "post"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 6117,
+        "source": "explicit",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 6118,
+        "source": "reply_context",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 6119,
+        "source": "reply_context",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 6121,
+        "source": "post_context",
+        "subject": "5186",
+        "subject_type": "post"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 6141,
+        "source": "reply_context",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 6142,
+        "source": "reply_context",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 6166,
+        "source": "explicit",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 6167,
+        "source": "explicit",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 6231,
+        "source": "reply_context",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 6234,
+        "source": "post_context",
+        "subject": "5186",
+        "subject_type": "post"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 6309,
+        "source": "reply_context",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      }
+    ],
+    "signal": [
+      {
+        "confidence": 1.0,
+        "msg_id": 6117,
+        "quote": "какой то сбой в приложении? Весь день не могу зайти в него",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "жалоба"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 6118,
+        "quote": "накрылось всё, ни программа лояльности не работает, ни Scan&go",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "жалоба"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 6119,
+        "quote": "набрал тележку оставил на маркете и пошел в АТБ",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "жалоба"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 6142,
+        "quote": "сертифікатами не можна оплатити?",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "спрос"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 6166,
+        "quote": "захотели- забрали",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "жалоба"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 6167,
+        "quote": "каким образом, если не секрет, можно выиграть у Варуса столько денег сразу одному покупателю?",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "спрос"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 6309,
+        "quote": "постоянно якісь трабли з акціями, у них задача заработать побільше бабла, а остальне пофіг",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "жалоба"
+      }
+    ]
+  },
+  "parse_failure": null,
+  "rows_in": 21,
+  "rows_kept": 20,
+  "thread_root": "5186",
+  "unsure": []
+}

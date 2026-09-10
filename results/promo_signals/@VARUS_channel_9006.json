@@ -1,0 +1,73 @@
+{
+  "brand_states": {
+    "note": "raw is the store's `brand_id IS NULL` + `brand_raw`, not a failure — 65 of the 145 position rows on disk are in that state (plan §5.9)",
+    "raw": 0,
+    "resolved": 0
+  },
+  "channel": "@VARUS_channel",
+  "counts": {
+    "brand_is_resolvable": 0,
+    "msg_id_exists": 0,
+    "quote_is_a_substring": 0,
+    "schema_valid": 0
+  },
+  "extractor_version": "b43eafc3bfc5aa5c81c90bb392be8391b23356caf7828b656df32a3dfe353963",
+  "failures": [],
+  "kept": {
+    "about": [
+      {
+        "confidence": 1.0,
+        "msg_id": 16691,
+        "source": "explicit",
+        "subject": "плавлений сир Мааздам",
+        "subject_type": "sku"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 16692,
+        "source": "explicit",
+        "subject": "ікра мінтаю",
+        "subject_type": "sku"
+      }
+    ],
+    "signal": [
+      {
+        "confidence": 1.0,
+        "msg_id": 16691,
+        "quote": "просто чарівний",
+        "subject": "плавлений сир Мааздам",
+        "subject_type": "sku",
+        "type": "похвала"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 16691,
+        "quote": "Неймовірно смачно",
+        "subject": "плавлений сир Мааздам",
+        "subject_type": "sku",
+        "type": "похвала"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 16691,
+        "quote": "подякувати за таку смачноту",
+        "subject": "плавлений сир Мааздам",
+        "subject_type": "sku",
+        "type": "похвала"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 16692,
+        "quote": "це смачнота!",
+        "subject": "ікра мінтаю",
+        "subject_type": "sku",
+        "type": "похвала"
+      }
+    ]
+  },
+  "parse_failure": null,
+  "rows_in": 6,
+  "rows_kept": 6,
+  "thread_root": "9006",
+  "unsure": []
+}

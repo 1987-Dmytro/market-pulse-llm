@@ -1,0 +1,56 @@
+{
+  "brand_states": {
+    "note": "raw is the store's `brand_id IS NULL` + `brand_raw`, not a failure — 65 of the 145 position rows on disk are in that state (plan §5.9)",
+    "raw": 0,
+    "resolved": 0
+  },
+  "channel": "@msuaaaa",
+  "counts": {
+    "brand_is_resolvable": 0,
+    "msg_id_exists": 0,
+    "quote_is_a_substring": 1,
+    "schema_valid": 0
+  },
+  "extractor_version": "a6029d6a93b8802b35d9d4d7e28025d4b51443123f5fb3ebc7f81581bca12559",
+  "failures": [
+    {
+      "detail": "quote 'виглядає досить вигідно'",
+      "hook": "quote_is_a_substring",
+      "kind": "signal",
+      "msg_id": 13221
+    }
+  ],
+  "kept": {
+    "about": [
+      {
+        "confidence": 1.0,
+        "msg_id": 13221,
+        "source": "post_context",
+        "subject": "McDonald’s",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 13328,
+        "source": "reply_context",
+        "subject": "McDonald’s",
+        "subject_type": "chain"
+      }
+    ],
+    "signal": [
+      {
+        "confidence": 1.0,
+        "msg_id": 13328,
+        "quote": "Ну такое",
+        "subject": "McDonald’s",
+        "subject_type": "chain",
+        "type": "жалоба"
+      }
+    ]
+  },
+  "parse_failure": null,
+  "rows_in": 4,
+  "rows_kept": 3,
+  "thread_root": "10459",
+  "unsure": []
+}

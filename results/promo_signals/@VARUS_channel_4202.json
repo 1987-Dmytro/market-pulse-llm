@@ -1,0 +1,49 @@
+{
+  "brand_states": {
+    "note": "raw is the store's `brand_id IS NULL` + `brand_raw`, not a failure — 65 of the 145 position rows on disk are in that state (plan §5.9)",
+    "raw": 0,
+    "resolved": 0
+  },
+  "channel": "@VARUS_channel",
+  "counts": {
+    "brand_is_resolvable": 0,
+    "msg_id_exists": 0,
+    "quote_is_a_substring": 0,
+    "schema_valid": 0
+  },
+  "extractor_version": "4ec47379961c55bec7b081a8311e7361d0d128dec13b01572908a13fd4d46ecd",
+  "failures": [],
+  "kept": {
+    "about": [
+      {
+        "confidence": 1.0,
+        "msg_id": 4396,
+        "source": "post_context",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 4451,
+        "source": "post_context",
+        "subject": "4202",
+        "subject_type": "post"
+      }
+    ],
+    "signal": [
+      {
+        "confidence": 1.0,
+        "msg_id": 4396,
+        "quote": "У Вінниці є ваш магазин?",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "спрос"
+      }
+    ]
+  },
+  "parse_failure": null,
+  "rows_in": 3,
+  "rows_kept": 3,
+  "thread_root": "4202",
+  "unsure": []
+}

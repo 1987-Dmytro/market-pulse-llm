@@ -1,0 +1,42 @@
+{
+  "brand_states": {
+    "note": "raw is the store's `brand_id IS NULL` + `brand_raw`, not a failure — 65 of the 145 position rows on disk are in that state (plan §5.9)",
+    "raw": 0,
+    "resolved": 0
+  },
+  "channel": "@msuaaaa",
+  "counts": {
+    "brand_is_resolvable": 0,
+    "msg_id_exists": 0,
+    "quote_is_a_substring": 0,
+    "schema_valid": 0
+  },
+  "extractor_version": "d7675f961a2c1434a9f37b5f4a45315eb272ac4e90edc742cfebff96140fed51",
+  "failures": [],
+  "kept": {
+    "about": [
+      {
+        "confidence": 1.0,
+        "msg_id": 10093,
+        "source": "explicit",
+        "subject": "KFC",
+        "subject_type": "chain"
+      }
+    ],
+    "signal": [
+      {
+        "confidence": 1.0,
+        "msg_id": 10093,
+        "quote": "шкода що змінили на 5 гострих крил",
+        "subject": "KFC",
+        "subject_type": "chain",
+        "type": "жалоба"
+      }
+    ]
+  },
+  "parse_failure": null,
+  "rows_in": 2,
+  "rows_kept": 2,
+  "thread_root": "9139",
+  "unsure": []
+}

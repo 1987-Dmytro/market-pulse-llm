@@ -1,0 +1,42 @@
+{
+  "brand_states": {
+    "note": "raw is the store's `brand_id IS NULL` + `brand_raw`, not a failure — 65 of the 145 position rows on disk are in that state (plan §5.9)",
+    "raw": 0,
+    "resolved": 0
+  },
+  "channel": "@msuaaaa",
+  "counts": {
+    "brand_is_resolvable": 0,
+    "msg_id_exists": 0,
+    "quote_is_a_substring": 0,
+    "schema_valid": 0
+  },
+  "extractor_version": "932dd426874edb9881a29252c02cddfed1caac601370938b11a0025b618dd62b",
+  "failures": [],
+  "kept": {
+    "about": [
+      {
+        "confidence": 1.0,
+        "msg_id": 9367,
+        "source": "post_context",
+        "subject": "McDonald’s",
+        "subject_type": "chain"
+      }
+    ],
+    "signal": [
+      {
+        "confidence": 1.0,
+        "msg_id": 9367,
+        "quote": "какие Маки сейчас работают ?",
+        "subject": "McDonald’s",
+        "subject_type": "chain",
+        "type": "спрос"
+      }
+    ]
+  },
+  "parse_failure": null,
+  "rows_in": 2,
+  "rows_kept": 2,
+  "thread_root": "8762",
+  "unsure": []
+}

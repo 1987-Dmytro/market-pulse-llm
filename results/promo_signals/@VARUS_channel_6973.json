@@ -1,0 +1,33 @@
+{
+  "brand_states": {
+    "note": "raw is the store's `brand_id IS NULL` + `brand_raw`, not a failure — 65 of the 145 position rows on disk are in that state (plan §5.9)",
+    "raw": 0,
+    "resolved": 0
+  },
+  "channel": "@VARUS_channel",
+  "counts": {
+    "brand_is_resolvable": 0,
+    "msg_id_exists": 0,
+    "quote_is_a_substring": 0,
+    "schema_valid": 0
+  },
+  "extractor_version": "f90d2b320e78ffc83b1f1621083a1e3738c1e45a83fc1222e8b7516369156469",
+  "failures": [],
+  "kept": {
+    "about": [
+      {
+        "confidence": 1.0,
+        "msg_id": 11853,
+        "source": "post_context",
+        "subject": "6973",
+        "subject_type": "post"
+      }
+    ],
+    "signal": []
+  },
+  "parse_failure": null,
+  "rows_in": 1,
+  "rows_kept": 1,
+  "thread_root": "6973",
+  "unsure": []
+}

@@ -1,0 +1,184 @@
+{
+  "brand_states": {
+    "note": "raw is the store's `brand_id IS NULL` + `brand_raw`, not a failure — 65 of the 145 position rows on disk are in that state (plan §5.9)",
+    "raw": 0,
+    "resolved": 0
+  },
+  "channel": "@VARUS_channel",
+  "counts": {
+    "brand_is_resolvable": 0,
+    "msg_id_exists": 0,
+    "quote_is_a_substring": 0,
+    "schema_valid": 0
+  },
+  "extractor_version": "ccd115dfa48e59d80b79c01f3de35ba634cb1bc326c1959fd8db3517939aa339",
+  "failures": [],
+  "kept": {
+    "about": [
+      {
+        "confidence": 1.0,
+        "msg_id": 16081,
+        "source": "post_context",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 16083,
+        "source": "explicit",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 16084,
+        "source": "post_context",
+        "subject": "8823",
+        "subject_type": "post"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 16087,
+        "source": "reply_context",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 16088,
+        "source": "reply_context",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 16089,
+        "source": "reply_context",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 16091,
+        "source": "post_context",
+        "subject": "8823",
+        "subject_type": "post"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 16098,
+        "source": "post_context",
+        "subject": "морозиво М’яке",
+        "subject_type": "sku"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 16113,
+        "source": "post_context",
+        "subject": "морозиво М’яке",
+        "subject_type": "sku"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 16114,
+        "source": "reply_context",
+        "subject": "морозиво М’яке",
+        "subject_type": "sku"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 16117,
+        "source": "post_context",
+        "subject": "8823",
+        "subject_type": "post"
+      }
+    ],
+    "signal": [
+      {
+        "confidence": 1.0,
+        "msg_id": 16081,
+        "quote": "не хочете вчасно доставляти замовлення",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "жалоба"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 16081,
+        "quote": "Зникає бажання щось у вас купувати",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "жалоба"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 16083,
+        "quote": "немає такої можливості",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "жалоба"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 16087,
+        "quote": "В нас теж",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "жалоба"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 16088,
+        "quote": "і кавомашини немає",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "жалоба"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 16089,
+        "quote": "нічого такого немає",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "жалоба"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 16098,
+        "quote": "чи є таке у Кривому розі?",
+        "subject": "морозиво М’яке",
+        "subject_type": "sku",
+        "type": "спрос"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 16113,
+        "quote": "не вкусная замороженная белая субстанция",
+        "subject": "морозиво М’яке",
+        "subject_type": "sku",
+        "type": "жалоба"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 16113,
+        "quote": "Больше не хочется",
+        "subject": "морозиво М’яке",
+        "subject_type": "sku",
+        "type": "жалоба"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 16114,
+        "quote": "морозиво у них смачне",
+        "subject": "морозиво М’яке",
+        "subject_type": "sku",
+        "type": "похвала"
+      }
+    ]
+  },
+  "parse_failure": null,
+  "rows_in": 21,
+  "rows_kept": 21,
+  "thread_root": "8823",
+  "unsure": []
+}

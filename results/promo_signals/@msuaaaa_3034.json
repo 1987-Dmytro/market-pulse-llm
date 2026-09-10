@@ -1,0 +1,56 @@
+{
+  "brand_states": {
+    "note": "raw is the store's `brand_id IS NULL` + `brand_raw`, not a failure — 65 of the 145 position rows on disk are in that state (plan §5.9)",
+    "raw": 0,
+    "resolved": 0
+  },
+  "channel": "@msuaaaa",
+  "counts": {
+    "brand_is_resolvable": 0,
+    "msg_id_exists": 0,
+    "quote_is_a_substring": 0,
+    "schema_valid": 0
+  },
+  "extractor_version": "8658a0e2fc46166aac350e2cbb2551971293587694f8db73a481d12e13706084",
+  "failures": [],
+  "kept": {
+    "about": [
+      {
+        "confidence": 1.0,
+        "msg_id": 1069,
+        "source": "post_context",
+        "subject": "Roshen",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 1070,
+        "source": "post_context",
+        "subject": "3034",
+        "subject_type": "post"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 1071,
+        "source": "post_context",
+        "subject": "3034",
+        "subject_type": "post"
+      }
+    ],
+    "signal": [
+      {
+        "confidence": 1.0,
+        "msg_id": 1069,
+        "quote": "А акція діє в день 17.03? Чи тільки до 17.03?",
+        "subject": "Roshen",
+        "subject_type": "chain",
+        "type": "спрос"
+      }
+    ]
+  },
+  "parse_failure": null,
+  "rows_in": 4,
+  "rows_kept": 4,
+  "thread_root": "3034",
+  "unsure": []
+}

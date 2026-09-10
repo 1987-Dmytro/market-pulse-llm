@@ -1,0 +1,256 @@
+{
+  "brand_states": {
+    "note": "raw is the store's `brand_id IS NULL` + `brand_raw`, not a failure — 65 of the 145 position rows on disk are in that state (plan §5.9)",
+    "raw": 0,
+    "resolved": 0
+  },
+  "channel": "@VARUS_channel",
+  "counts": {
+    "brand_is_resolvable": 0,
+    "msg_id_exists": 0,
+    "quote_is_a_substring": 1,
+    "schema_valid": 0
+  },
+  "extractor_version": "5061aed911aa690976251356358e337e98e83868d09b2578b939c2d6b1a23402",
+  "failures": [
+    {
+      "detail": "quote 'оказалось , что у них сбой и смс пришло '",
+      "hook": "quote_is_a_substring",
+      "kind": "signal",
+      "msg_id": 8865
+    }
+  ],
+  "kept": {
+    "about": [
+      {
+        "confidence": 1.0,
+        "msg_id": 8679,
+        "source": "post_context",
+        "subject": "6216",
+        "subject_type": "post"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 8680,
+        "source": "post_context",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 8681,
+        "source": "post_context",
+        "subject": "6216",
+        "subject_type": "post"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 8683,
+        "source": "explicit",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 8684,
+        "source": "reply_context",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 8685,
+        "source": "reply_context",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 8686,
+        "source": "reply_context",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 8688,
+        "source": "post_context",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 8689,
+        "source": "post_context",
+        "subject": "6216",
+        "subject_type": "post"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 8691,
+        "source": "post_context",
+        "subject": "6216",
+        "subject_type": "post"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 8692,
+        "source": "post_context",
+        "subject": "6216",
+        "subject_type": "post"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 8693,
+        "source": "post_context",
+        "subject": "6216",
+        "subject_type": "post"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 8694,
+        "source": "reply_context",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 8695,
+        "source": "post_context",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 8696,
+        "source": "reply_context",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 8701,
+        "source": "post_context",
+        "subject": "6216",
+        "subject_type": "post"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 8865,
+        "source": "explicit",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 9382,
+        "source": "post_context",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      }
+    ],
+    "signal": [
+      {
+        "confidence": 1.0,
+        "msg_id": 8680,
+        "quote": "В кого я можу уточнити за доставку?",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "спрос"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 8683,
+        "quote": "А що це суцільний обман?",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "жалоба"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 8683,
+        "quote": "ні зворотнього зв'язку в онлайн підтримці",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "жалоба"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 8686,
+        "quote": "И служба поддержки загадочно морозится",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "жалоба"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 8688,
+        "quote": "гаряча лінія скидає слухавку",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "жалоба"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 8694,
+        "quote": "Вони не відповіли! Гаряча лінія скидають!",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "жалоба"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 8695,
+        "quote": "Який в кого рівень щастя і позиція в рейтингу?",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "спрос"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 8865,
+        "quote": "Варус просто обманщики и мошенники",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "жалоба"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 8865,
+        "quote": "у них был сбой боксики мне начислили,аж через 4 дня",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "жалоба"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 8865,
+        "quote": "инт ернет заказ,то же отменить нельзя",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "жалоба"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 8865,
+        "quote": "На горячую линию дозвонится не возможно",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "жалоба"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 8865,
+        "quote": "ПРОСТО ПОЗОР",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "жалоба"
+      }
+    ]
+  },
+  "parse_failure": null,
+  "rows_in": 31,
+  "rows_kept": 30,
+  "thread_root": "6216",
+  "unsure": []
+}

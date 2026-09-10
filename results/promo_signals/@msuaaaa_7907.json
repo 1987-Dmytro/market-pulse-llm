@@ -1,0 +1,94 @@
+{
+  "brand_states": {
+    "note": "raw is the store's `brand_id IS NULL` + `brand_raw`, not a failure — 65 of the 145 position rows on disk are in that state (plan §5.9)",
+    "raw": 0,
+    "resolved": 0
+  },
+  "channel": "@msuaaaa",
+  "counts": {
+    "brand_is_resolvable": 0,
+    "msg_id_exists": 0,
+    "quote_is_a_substring": 0,
+    "schema_valid": 0
+  },
+  "extractor_version": "b9889ba531720af6981cdaead591cee2349acfbbf787e8fb8825571cb8ad01b9",
+  "failures": [],
+  "kept": {
+    "about": [
+      {
+        "confidence": 1.0,
+        "msg_id": 7631,
+        "source": "post_context",
+        "subject": "McDonald’s",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 7632,
+        "source": "post_context",
+        "subject": "7907",
+        "subject_type": "post"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 7639,
+        "source": "post_context",
+        "subject": "Happy Meal Friends",
+        "subject_type": "sku"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 7640,
+        "source": "post_context",
+        "subject": "7907",
+        "subject_type": "post"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 7728,
+        "source": "post_context",
+        "subject": "Happy Meal Friends",
+        "subject_type": "sku"
+      }
+    ],
+    "signal": [
+      {
+        "confidence": 1.0,
+        "msg_id": 7631,
+        "quote": "В яких містах???",
+        "subject": "McDonald’s",
+        "subject_type": "chain",
+        "type": "спрос"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 7639,
+        "quote": "А в наборі фігурки чи разом із чашками",
+        "subject": "Happy Meal Friends",
+        "subject_type": "sku",
+        "type": "спрос"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 7728,
+        "quote": "буде так дорого коштувати",
+        "subject": "Happy Meal Friends",
+        "subject_type": "sku",
+        "type": "цена"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 7728,
+        "quote": "яке меню тоді буде входити в Хеппі міл разом з іграшками",
+        "subject": "Happy Meal Friends",
+        "subject_type": "sku",
+        "type": "спрос"
+      }
+    ]
+  },
+  "parse_failure": null,
+  "rows_in": 9,
+  "rows_kept": 9,
+  "thread_root": "7907",
+  "unsure": []
+}

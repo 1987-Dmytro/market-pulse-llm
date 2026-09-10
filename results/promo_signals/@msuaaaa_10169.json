@@ -1,0 +1,86 @@
+{
+  "brand_states": {
+    "note": "raw is the store's `brand_id IS NULL` + `brand_raw`, not a failure — 65 of the 145 position rows on disk are in that state (plan §5.9)",
+    "raw": 0,
+    "resolved": 0
+  },
+  "channel": "@msuaaaa",
+  "counts": {
+    "brand_is_resolvable": 0,
+    "msg_id_exists": 0,
+    "quote_is_a_substring": 0,
+    "schema_valid": 0
+  },
+  "extractor_version": "457e0e63c95a98f77ea49d5444ffd00881fcd276c233645862d91d561a63cc57",
+  "failures": [],
+  "kept": {
+    "about": [
+      {
+        "confidence": 1.0,
+        "msg_id": 12507,
+        "source": "post_context",
+        "subject": "10169",
+        "subject_type": "post"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 12510,
+        "source": "explicit",
+        "subject": "McDonald’s",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 12511,
+        "source": "reply_context",
+        "subject": "McDonald’s",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 12512,
+        "source": "post_context",
+        "subject": "стакани",
+        "subject_type": "sku"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 12590,
+        "source": "explicit",
+        "subject": "іграшки",
+        "subject_type": "sku"
+      }
+    ],
+    "signal": [
+      {
+        "confidence": 1.0,
+        "msg_id": 12510,
+        "quote": "А коли у всіх маках?",
+        "subject": "McDonald’s",
+        "subject_type": "chain",
+        "type": "спрос"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 12512,
+        "quote": "А до коли вони будуть",
+        "subject": "стакани",
+        "subject_type": "sku",
+        "type": "спрос"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 12590,
+        "quote": "будуть іграшки?",
+        "subject": "іграшки",
+        "subject_type": "sku",
+        "type": "спрос"
+      }
+    ]
+  },
+  "parse_failure": null,
+  "rows_in": 8,
+  "rows_kept": 8,
+  "thread_root": "10169",
+  "unsure": []
+}

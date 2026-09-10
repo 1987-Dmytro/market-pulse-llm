@@ -1,0 +1,64 @@
+{
+  "brand_states": {
+    "note": "raw is the store's `brand_id IS NULL` + `brand_raw`, not a failure — 65 of the 145 position rows on disk are in that state (plan §5.9)",
+    "raw": 0,
+    "resolved": 0
+  },
+  "channel": "@VARUS_channel",
+  "counts": {
+    "brand_is_resolvable": 0,
+    "msg_id_exists": 0,
+    "quote_is_a_substring": 0,
+    "schema_valid": 0
+  },
+  "extractor_version": "12c07fb737e84e1e73844955dd8249a42802a60ff1bbd259dc163b7fe843c448",
+  "failures": [],
+  "kept": {
+    "about": [
+      {
+        "confidence": 1.0,
+        "msg_id": 16135,
+        "source": "post_context",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 16136,
+        "source": "post_context",
+        "subject": "8430",
+        "subject_type": "post"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 16137,
+        "source": "reply_context",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      }
+    ],
+    "signal": [
+      {
+        "confidence": 1.0,
+        "msg_id": 16135,
+        "quote": "не бачила результати цього конкурсу",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "спрос"
+      },
+      {
+        "confidence": 0.9,
+        "msg_id": 16137,
+        "quote": "Мене перекидає на пост із розіграшем, дедлайн 29.04",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "жалоба"
+      }
+    ]
+  },
+  "parse_failure": null,
+  "rows_in": 5,
+  "rows_kept": 5,
+  "thread_root": "8430",
+  "unsure": []
+}

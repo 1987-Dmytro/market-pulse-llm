@@ -1,0 +1,85 @@
+{
+  "brand_states": {
+    "note": "raw is the store's `brand_id IS NULL` + `brand_raw`, not a failure — 65 of the 145 position rows on disk are in that state (plan §5.9)",
+    "raw": 0,
+    "resolved": 0
+  },
+  "channel": "@VARUS_channel",
+  "counts": {
+    "brand_is_resolvable": 0,
+    "msg_id_exists": 0,
+    "quote_is_a_substring": 0,
+    "schema_valid": 0
+  },
+  "extractor_version": "d2ac1355cad9aad50df34dd80f94426d8fc125da341a7c457c15929e00611f03",
+  "failures": [],
+  "kept": {
+    "about": [
+      {
+        "confidence": 1.0,
+        "msg_id": 16805,
+        "source": "post_context",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 16806,
+        "source": "reply_context",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 16807,
+        "source": "post_context",
+        "subject": "9046",
+        "subject_type": "post"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 16809,
+        "source": "reply_context",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 16810,
+        "source": "post_context",
+        "subject": "9046",
+        "subject_type": "post"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 16832,
+        "source": "post_context",
+        "subject": "9046",
+        "subject_type": "post"
+      }
+    ],
+    "signal": [
+      {
+        "confidence": 1.0,
+        "msg_id": 16805,
+        "quote": "кешбек за оплату Scan&Go працює?",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "спрос"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 16809,
+        "quote": "треба виправити у буклеті. Бо там вказано, що до 30.04",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "жалоба"
+      }
+    ]
+  },
+  "parse_failure": null,
+  "rows_in": 8,
+  "rows_kept": 8,
+  "thread_root": "9046",
+  "unsure": []
+}

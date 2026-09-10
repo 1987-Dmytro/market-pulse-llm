@@ -1,0 +1,110 @@
+{
+  "brand_states": {
+    "note": "raw is the store's `brand_id IS NULL` + `brand_raw`, not a failure — 65 of the 145 position rows on disk are in that state (plan §5.9)",
+    "raw": 0,
+    "resolved": 0
+  },
+  "channel": "@VARUS_channel",
+  "counts": {
+    "brand_is_resolvable": 0,
+    "msg_id_exists": 0,
+    "quote_is_a_substring": 0,
+    "schema_valid": 0
+  },
+  "extractor_version": "68877d3f4ffff28741426372fc5bfdbff5da2a7cb174c71fbb7feeddfa5c50dd",
+  "failures": [],
+  "kept": {
+    "about": [
+      {
+        "confidence": 1.0,
+        "msg_id": 7887,
+        "source": "explicit",
+        "subject": "Bitget",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 7892,
+        "source": "post_context",
+        "subject": "6006",
+        "subject_type": "post"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 8008,
+        "source": "post_context",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 8012,
+        "source": "post_context",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 8061,
+        "source": "post_context",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      }
+    ],
+    "signal": [
+      {
+        "confidence": 1.0,
+        "msg_id": 7887,
+        "quote": "а якщо цієї біржі немає або це тільки для обраних?",
+        "subject": "Bitget",
+        "subject_type": "chain",
+        "type": "спрос"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 8008,
+        "quote": "це схоже на обман",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "жалоба"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 8012,
+        "quote": "дуже погано організовано - і процеси, і призовий фонд, і висвітлення результатів",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "жалоба"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 8061,
+        "quote": "те, що ніколи не виграти",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "жалоба"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 8061,
+        "quote": "всі інші відділи на 50%. Персоналу не вистачає",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "жалоба"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 8061,
+        "quote": "закуповує у тих постачальників,, які дають вартість ниже і відповідно також і якість товару",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "жалоба"
+      }
+    ]
+  },
+  "parse_failure": null,
+  "rows_in": 11,
+  "rows_kept": 11,
+  "thread_root": "6006",
+  "unsure": []
+}

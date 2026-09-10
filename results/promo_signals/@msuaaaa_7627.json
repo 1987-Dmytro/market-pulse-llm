@@ -1,0 +1,78 @@
+{
+  "brand_states": {
+    "note": "raw is the store's `brand_id IS NULL` + `brand_raw`, not a failure — 65 of the 145 position rows on disk are in that state (plan §5.9)",
+    "raw": 0,
+    "resolved": 0
+  },
+  "channel": "@msuaaaa",
+  "counts": {
+    "brand_is_resolvable": 0,
+    "msg_id_exists": 0,
+    "quote_is_a_substring": 0,
+    "schema_valid": 0
+  },
+  "extractor_version": "cdbfd2c0dd47273651b6101dd0711295951e98b2496eb33fa6d672af2de82340",
+  "failures": [],
+  "kept": {
+    "about": [
+      {
+        "confidence": 1.0,
+        "msg_id": 7134,
+        "source": "post_context",
+        "subject": "кондиціонер для прання",
+        "subject_type": "sku"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 7148,
+        "source": "explicit",
+        "subject": "Аврора",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 7151,
+        "source": "reply_context",
+        "subject": "Аврора",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 7152,
+        "source": "reply_context",
+        "subject": "Аврора",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 7218,
+        "source": "reply_context",
+        "subject": "Аврора",
+        "subject_type": "chain"
+      }
+    ],
+    "signal": [
+      {
+        "confidence": 1.0,
+        "msg_id": 7134,
+        "quote": "В Чернівцях немає",
+        "subject": "кондиціонер для прання",
+        "subject_type": "sku",
+        "type": "спрос"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 7148,
+        "quote": "де дивитися такі пропозиції із Аврори?",
+        "subject": "Аврора",
+        "subject_type": "chain",
+        "type": "спрос"
+      }
+    ]
+  },
+  "parse_failure": null,
+  "rows_in": 7,
+  "rows_kept": 7,
+  "thread_root": "7627",
+  "unsure": []
+}

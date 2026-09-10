@@ -1,0 +1,86 @@
+{
+  "brand_states": {
+    "note": "raw is the store's `brand_id IS NULL` + `brand_raw`, not a failure — 65 of the 145 position rows on disk are in that state (plan §5.9)",
+    "raw": 0,
+    "resolved": 0
+  },
+  "channel": "@VARUS_channel",
+  "counts": {
+    "brand_is_resolvable": 0,
+    "msg_id_exists": 0,
+    "quote_is_a_substring": 0,
+    "schema_valid": 0
+  },
+  "extractor_version": "8fa1ea7201128822bf19698234e6a46bb9bf80dae52656e6214c9f8ea8a1fc94",
+  "failures": [],
+  "kept": {
+    "about": [
+      {
+        "confidence": 1.0,
+        "msg_id": 21566,
+        "source": "explicit",
+        "subject": "карась",
+        "subject_type": "sku"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 21571,
+        "source": "post_context",
+        "subject": "10603",
+        "subject_type": "post"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 21575,
+        "source": "reply_context",
+        "subject": "карась",
+        "subject_type": "sku"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 21576,
+        "source": "reply_context",
+        "subject": "карась",
+        "subject_type": "sku"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 21578,
+        "source": "reply_context",
+        "subject": "карась",
+        "subject_type": "sku"
+      }
+    ],
+    "signal": [
+      {
+        "confidence": 0.9,
+        "msg_id": 21566,
+        "quote": "Ось такий карась привезли",
+        "subject": "карась",
+        "subject_type": "sku",
+        "type": "жалоба"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 21576,
+        "quote": "страшные",
+        "subject": "карась",
+        "subject_type": "sku",
+        "type": "жалоба"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 21578,
+        "quote": "рыба плохая",
+        "subject": "карась",
+        "subject_type": "sku",
+        "type": "жалоба"
+      }
+    ]
+  },
+  "parse_failure": null,
+  "rows_in": 8,
+  "rows_kept": 8,
+  "thread_root": "10603",
+  "unsure": []
+}

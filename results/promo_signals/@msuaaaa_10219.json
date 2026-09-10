@@ -1,0 +1,117 @@
+{
+  "brand_states": {
+    "note": "raw is the store's `brand_id IS NULL` + `brand_raw`, not a failure — 65 of the 145 position rows on disk are in that state (plan §5.9)",
+    "raw": 0,
+    "resolved": 0
+  },
+  "channel": "@msuaaaa",
+  "counts": {
+    "brand_is_resolvable": 0,
+    "msg_id_exists": 0,
+    "quote_is_a_substring": 0,
+    "schema_valid": 0
+  },
+  "extractor_version": "7a3cf52bfb78317b872b9642cde7fcd428e5d183526c78063df3c176a3a7398e",
+  "failures": [],
+  "kept": {
+    "about": [
+      {
+        "confidence": 1.0,
+        "msg_id": 12638,
+        "source": "explicit",
+        "subject": "Сільпо",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 12639,
+        "source": "reply_context",
+        "subject": "Сільпо",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 12643,
+        "source": "explicit",
+        "subject": "msuaaaa",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 12644,
+        "source": "post_context",
+        "subject": "чипси Люкс",
+        "subject_type": "sku"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 12647,
+        "source": "reply_context",
+        "subject": "чипси Люкс",
+        "subject_type": "sku"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 12648,
+        "source": "explicit",
+        "subject": "10219",
+        "subject_type": "post"
+      }
+    ],
+    "signal": [
+      {
+        "confidence": 1.0,
+        "msg_id": 12638,
+        "quote": "цінники не змінили",
+        "subject": "Сільпо",
+        "subject_type": "chain",
+        "type": "жалоба"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 12638,
+        "quote": "неправильна ціна",
+        "subject": "Сільпо",
+        "subject_type": "chain",
+        "type": "цена"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 12639,
+        "quote": "Ціна вірна",
+        "subject": "Сільпо",
+        "subject_type": "chain",
+        "type": "цена"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 12643,
+        "quote": "нашо викладати на канал пост з неправильним цінником",
+        "subject": "msuaaaa",
+        "subject_type": "chain",
+        "type": "жалоба"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 12644,
+        "quote": "ціна на фото вірна",
+        "subject": "чипси Люкс",
+        "subject_type": "sku",
+        "type": "цена"
+      },
+      {
+        "confidence": 0.9,
+        "msg_id": 12644,
+        "quote": "сьогодні якраз брали",
+        "subject": "чипси Люкс",
+        "subject_type": "sku",
+        "type": "похвала"
+      }
+    ]
+  },
+  "parse_failure": null,
+  "rows_in": 12,
+  "rows_kept": 12,
+  "thread_root": "10219",
+  "unsure": []
+}

@@ -1,0 +1,50 @@
+{
+  "brand_states": {
+    "note": "raw is the store's `brand_id IS NULL` + `brand_raw`, not a failure — 65 of the 145 position rows on disk are in that state (plan §5.9)",
+    "raw": 0,
+    "resolved": 0
+  },
+  "channel": "@msuaaaa",
+  "counts": {
+    "brand_is_resolvable": 0,
+    "msg_id_exists": 0,
+    "quote_is_a_substring": 0,
+    "schema_valid": 0
+  },
+  "extractor_version": "fb7f04ebe8ac5d27fa4a511c16b877db9e5f4ebb50150391e757c404c9954510",
+  "failures": [],
+  "kept": {
+    "about": [
+      {
+        "confidence": 1.0,
+        "msg_id": 2509,
+        "source": "explicit",
+        "subject": "сир",
+        "subject_type": "sku"
+      }
+    ],
+    "signal": [
+      {
+        "confidence": 1.0,
+        "msg_id": 2509,
+        "quote": "термін придатності закінчується в цьому місяці",
+        "subject": "сир",
+        "subject_type": "sku",
+        "type": "жалоба"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 2509,
+        "quote": "чи то лише в мене так в сільпо?",
+        "subject": "Сільпо",
+        "subject_type": "chain",
+        "type": "жалоба"
+      }
+    ]
+  },
+  "parse_failure": null,
+  "rows_in": 3,
+  "rows_kept": 3,
+  "thread_root": "4588",
+  "unsure": []
+}

@@ -1,0 +1,78 @@
+{
+  "brand_states": {
+    "note": "raw is the store's `brand_id IS NULL` + `brand_raw`, not a failure — 65 of the 145 position rows on disk are in that state (plan §5.9)",
+    "raw": 0,
+    "resolved": 0
+  },
+  "channel": "@VARUS_channel",
+  "counts": {
+    "brand_is_resolvable": 0,
+    "msg_id_exists": 0,
+    "quote_is_a_substring": 0,
+    "schema_valid": 0
+  },
+  "extractor_version": "79d29edf0f222223e339ffd3949c96e642dd5a326112af87d2fadbe72542de0d",
+  "failures": [],
+  "kept": {
+    "about": [
+      {
+        "confidence": 1.0,
+        "msg_id": 19018,
+        "source": "post_context",
+        "subject": "пряники Varto",
+        "subject_type": "sku"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 19019,
+        "source": "explicit",
+        "subject": "9912",
+        "subject_type": "post"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 19020,
+        "source": "explicit",
+        "subject": "9912",
+        "subject_type": "post"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 19021,
+        "source": "explicit",
+        "subject": "9912",
+        "subject_type": "post"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 19023,
+        "source": "explicit",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      }
+    ],
+    "signal": [
+      {
+        "confidence": 1.0,
+        "msg_id": 19018,
+        "quote": "за такою ціною",
+        "subject": "пряники Varto",
+        "subject_type": "sku",
+        "type": "цена"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 19023,
+        "quote": "Обожнюю вас, VARUS!",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "похвала"
+      }
+    ]
+  },
+  "parse_failure": null,
+  "rows_in": 7,
+  "rows_kept": 7,
+  "thread_root": "9912",
+  "unsure": []
+}

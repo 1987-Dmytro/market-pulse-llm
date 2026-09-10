@@ -1,0 +1,231 @@
+{
+  "brand_states": {
+    "note": "raw is the store's `brand_id IS NULL` + `brand_raw`, not a failure — 65 of the 145 position rows on disk are in that state (plan §5.9)",
+    "raw": 0,
+    "resolved": 0
+  },
+  "channel": "@VARUS_channel",
+  "counts": {
+    "brand_is_resolvable": 0,
+    "msg_id_exists": 0,
+    "quote_is_a_substring": 1,
+    "schema_valid": 0
+  },
+  "extractor_version": "e030d3dfb46b17b0d08f7537b3399a2865380eedf2439e785ed2ce866d0f5e5f",
+  "failures": [
+    {
+      "detail": "quote 'акция по 100 грн за кг'",
+      "hook": "quote_is_a_substring",
+      "kind": "signal",
+      "msg_id": 17372
+    }
+  ],
+  "kept": {
+    "about": [
+      {
+        "confidence": 1.0,
+        "msg_id": 17346,
+        "source": "post_context",
+        "subject": "9277",
+        "subject_type": "post"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 17347,
+        "source": "post_context",
+        "subject": "9277",
+        "subject_type": "post"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 17348,
+        "source": "post_context",
+        "subject": "9277",
+        "subject_type": "post"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 17359,
+        "source": "post_context",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 17367,
+        "source": "reply_context",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 17368,
+        "source": "explicit",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 17370,
+        "source": "post_context",
+        "subject": "9277",
+        "subject_type": "post"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 17371,
+        "source": "post_context",
+        "subject": "9277",
+        "subject_type": "post"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 17372,
+        "source": "explicit",
+        "subject": "сельдь",
+        "subject_type": "sku"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 17373,
+        "source": "post_context",
+        "subject": "9277",
+        "subject_type": "post"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 17374,
+        "source": "post_context",
+        "subject": "9277",
+        "subject_type": "post"
+      }
+    ],
+    "signal": [
+      {
+        "confidence": 1.0,
+        "msg_id": 17347,
+        "quote": "Дуже класно",
+        "subject": "9277",
+        "subject_type": "post",
+        "type": "похвала"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 17359,
+        "quote": "Не всегда довольна",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "жалоба"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 17359,
+        "quote": "ржавого цвета и мясо расползается",
+        "subject": "скумбрия",
+        "subject_type": "sku",
+        "type": "жалоба"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 17359,
+        "quote": "ржавого цвета и мясо расползается",
+        "subject": "сельдь атлантическая",
+        "subject_type": "sku",
+        "type": "жалоба"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 17359,
+        "quote": "500 грн в мусорку",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "цена"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 17359,
+        "quote": "500 грн в мусорку",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "жалоба"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 17367,
+        "quote": "рыба приезжала по доставке всегда суперская",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "похвала"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 17367,
+        "quote": "я у них теперь в доставку рыбу не заказываю",
+        "subject": "Сільпо",
+        "subject_type": "chain",
+        "type": "жалоба"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 17368,
+        "quote": "Они берут дешевейшую а продают как супер",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "жалоба"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 17368,
+        "quote": "сельдь по 220 грн",
+        "subject": "сельдь",
+        "subject_type": "sku",
+        "type": "цена"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 17368,
+        "quote": "жирная, вкусная, супер",
+        "subject": "сельдь",
+        "subject_type": "sku",
+        "type": "похвала"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 17368,
+        "quote": "В варусе такого нет",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "жалоба"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 17372,
+        "quote": "220 грн сельдь!",
+        "subject": "сельдь",
+        "subject_type": "sku",
+        "type": "цена"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 17372,
+        "quote": "за такие деньги и должна быть супер",
+        "subject": "сельдь",
+        "subject_type": "sku",
+        "type": "цена"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 17372,
+        "quote": "привозили суперскую",
+        "subject": "сельдь",
+        "subject_type": "sku",
+        "type": "похвала"
+      }
+    ]
+  },
+  "parse_failure": null,
+  "rows_in": 27,
+  "rows_kept": 26,
+  "thread_root": "9277",
+  "unsure": []
+}

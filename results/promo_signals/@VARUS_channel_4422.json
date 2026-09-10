@@ -1,0 +1,136 @@
+{
+  "brand_states": {
+    "note": "raw is the store's `brand_id IS NULL` + `brand_raw`, not a failure — 65 of the 145 position rows on disk are in that state (plan §5.9)",
+    "raw": 0,
+    "resolved": 0
+  },
+  "channel": "@VARUS_channel",
+  "counts": {
+    "brand_is_resolvable": 0,
+    "msg_id_exists": 0,
+    "quote_is_a_substring": 1,
+    "schema_valid": 0
+  },
+  "extractor_version": "292b62b928f91fbda9b7c1882063a077eb47ed5a198330082623a4a6ed2ec9ab",
+  "failures": [
+    {
+      "detail": "quote 'скоротили строк до 15.08.25, даже нікого'",
+      "hook": "quote_is_a_substring",
+      "kind": "signal",
+      "msg_id": 4942
+    }
+  ],
+  "kept": {
+    "about": [
+      {
+        "confidence": 1.0,
+        "msg_id": 4809,
+        "source": "explicit",
+        "subject": "izibank",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 4813,
+        "source": "explicit",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 0.9,
+        "msg_id": 4815,
+        "source": "post_context",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 4816,
+        "source": "reply_context",
+        "subject": "izibank",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 4818,
+        "source": "reply_context",
+        "subject": "izibank",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 4820,
+        "source": "explicit",
+        "subject": "4816",
+        "subject_type": "post"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 4841,
+        "source": "explicit",
+        "subject": "4816",
+        "subject_type": "post"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 4843,
+        "source": "explicit",
+        "subject": "OTP банк",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 4856,
+        "source": "explicit",
+        "subject": "4422",
+        "subject_type": "post"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 4942,
+        "source": "explicit",
+        "subject": "OTP банк",
+        "subject_type": "chain"
+      }
+    ],
+    "signal": [
+      {
+        "confidence": 1.0,
+        "msg_id": 4813,
+        "quote": "вас зламали?",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "жалоба"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 4815,
+        "quote": "Чому так несправедливо?",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "жалоба"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 4816,
+        "quote": "поддержка отвечает спустя сутки и через 15 минут без ответа закрывает чат",
+        "subject": "izibank",
+        "subject_type": "chain",
+        "type": "жалоба"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 4818,
+        "quote": "служба поддержки просто ужасная",
+        "subject": "izibank",
+        "subject_type": "chain",
+        "type": "жалоба"
+      }
+    ]
+  },
+  "parse_failure": null,
+  "rows_in": 15,
+  "rows_kept": 14,
+  "thread_root": "4422",
+  "unsure": []
+}

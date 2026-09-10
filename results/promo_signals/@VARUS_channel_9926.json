@@ -1,0 +1,71 @@
+{
+  "brand_states": {
+    "note": "raw is the store's `brand_id IS NULL` + `brand_raw`, not a failure — 65 of the 145 position rows on disk are in that state (plan §5.9)",
+    "raw": 0,
+    "resolved": 0
+  },
+  "channel": "@VARUS_channel",
+  "counts": {
+    "brand_is_resolvable": 0,
+    "msg_id_exists": 0,
+    "quote_is_a_substring": 0,
+    "schema_valid": 0
+  },
+  "extractor_version": "49d9a2804f1fa9ac2c73872628ea2fd853ed7965ce529ab1525303c8d3014e2b",
+  "failures": [],
+  "kept": {
+    "about": [
+      {
+        "confidence": 1.0,
+        "msg_id": 19165,
+        "source": "post_context",
+        "subject": "9926",
+        "subject_type": "post"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 19166,
+        "source": "post_context",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 19172,
+        "source": "explicit",
+        "subject": "сир з пліснявою",
+        "subject_type": "sku"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 19179,
+        "source": "explicit",
+        "subject": "профитроли с дорблю",
+        "subject_type": "sku"
+      }
+    ],
+    "signal": [
+      {
+        "confidence": 1.0,
+        "msg_id": 19166,
+        "quote": "допущена помилка!",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "жалоба"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 19172,
+        "quote": "У Вас є сир з пліснявою?",
+        "subject": "сир з пліснявою",
+        "subject_type": "sku",
+        "type": "спрос"
+      }
+    ]
+  },
+  "parse_failure": null,
+  "rows_in": 6,
+  "rows_kept": 6,
+  "thread_root": "9926",
+  "unsure": []
+}

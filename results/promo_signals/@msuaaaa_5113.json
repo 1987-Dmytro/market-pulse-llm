@@ -1,0 +1,49 @@
+{
+  "brand_states": {
+    "note": "raw is the store's `brand_id IS NULL` + `brand_raw`, not a failure — 65 of the 145 position rows on disk are in that state (plan §5.9)",
+    "raw": 0,
+    "resolved": 0
+  },
+  "channel": "@msuaaaa",
+  "counts": {
+    "brand_is_resolvable": 0,
+    "msg_id_exists": 0,
+    "quote_is_a_substring": 0,
+    "schema_valid": 0
+  },
+  "extractor_version": "588bf581cc98efd1b35ac5ddf7d1625c964303fa117cb686ab0b50ddf0eb7a2d",
+  "failures": [],
+  "kept": {
+    "about": [
+      {
+        "confidence": 1.0,
+        "msg_id": 3133,
+        "source": "post_context",
+        "subject": "5113",
+        "subject_type": "post"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 3456,
+        "source": "post_context",
+        "subject": "Рошен",
+        "subject_type": "chain"
+      }
+    ],
+    "signal": [
+      {
+        "confidence": 1.0,
+        "msg_id": 3456,
+        "quote": "чекаємо на нові акції",
+        "subject": "Рошен",
+        "subject_type": "chain",
+        "type": "спрос"
+      }
+    ]
+  },
+  "parse_failure": null,
+  "rows_in": 3,
+  "rows_kept": 3,
+  "thread_root": "5113",
+  "unsure": []
+}

@@ -1,0 +1,57 @@
+{
+  "brand_states": {
+    "note": "raw is the store's `brand_id IS NULL` + `brand_raw`, not a failure — 65 of the 145 position rows on disk are in that state (plan §5.9)",
+    "raw": 0,
+    "resolved": 0
+  },
+  "channel": "@VARUS_channel",
+  "counts": {
+    "brand_is_resolvable": 0,
+    "msg_id_exists": 0,
+    "quote_is_a_substring": 0,
+    "schema_valid": 0
+  },
+  "extractor_version": "b1f40d16fed6e478f9c3f16915712621b826f197c8711ab902ab3380cade7a46",
+  "failures": [],
+  "kept": {
+    "about": [
+      {
+        "confidence": 1.0,
+        "msg_id": 819,
+        "source": "post_context",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 820,
+        "source": "post_context",
+        "subject": "продукція ТОКЕРИ",
+        "subject_type": "sku"
+      }
+    ],
+    "signal": [
+      {
+        "confidence": 1.0,
+        "msg_id": 819,
+        "quote": "Чекаємо дегустацію на Палладіна в Києві!!",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "спрос"
+      },
+      {
+        "confidence": 0.9,
+        "msg_id": 820,
+        "quote": "я бы не отказалась от такого бы",
+        "subject": "продукція ТОКЕРИ",
+        "subject_type": "sku",
+        "type": "похвала"
+      }
+    ]
+  },
+  "parse_failure": null,
+  "rows_in": 4,
+  "rows_kept": 4,
+  "thread_root": "2053",
+  "unsure": []
+}

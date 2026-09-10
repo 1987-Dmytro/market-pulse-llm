@@ -1,0 +1,93 @@
+{
+  "brand_states": {
+    "note": "raw is the store's `brand_id IS NULL` + `brand_raw`, not a failure — 65 of the 145 position rows on disk are in that state (plan §5.9)",
+    "raw": 0,
+    "resolved": 0
+  },
+  "channel": "@VARUS_channel",
+  "counts": {
+    "brand_is_resolvable": 0,
+    "msg_id_exists": 0,
+    "quote_is_a_substring": 0,
+    "schema_valid": 0
+  },
+  "extractor_version": "c803690b3dd35b92381584aae800eb7d9e462c4642107ee68bb3e77986f60079",
+  "failures": [],
+  "kept": {
+    "about": [
+      {
+        "confidence": 1.0,
+        "msg_id": 2784,
+        "source": "post_context",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 2785,
+        "source": "explicit",
+        "subject": "яйця гуся криптолова",
+        "subject_type": "sku"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 2786,
+        "source": "post_context",
+        "subject": "3163",
+        "subject_type": "post"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 2788,
+        "source": "post_context",
+        "subject": "3163",
+        "subject_type": "post"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 2796,
+        "source": "explicit",
+        "subject": "курячі чіпси",
+        "subject_type": "sku"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 2800,
+        "source": "post_context",
+        "subject": "3163",
+        "subject_type": "post"
+      }
+    ],
+    "signal": [
+      {
+        "confidence": 1.0,
+        "msg_id": 2784,
+        "quote": "Такий формат каталогу мені до вподоби",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "похвала"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 2785,
+        "quote": "Чи є в продажу яйця гуся криптолова?",
+        "subject": "яйця гуся криптолова",
+        "subject_type": "sku",
+        "type": "спрос"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 2796,
+        "quote": "іноді потрапляється пліснява",
+        "subject": "курячі чіпси",
+        "subject_type": "sku",
+        "type": "жалоба"
+      }
+    ]
+  },
+  "parse_failure": null,
+  "rows_in": 9,
+  "rows_kept": 9,
+  "thread_root": "3163",
+  "unsure": []
+}

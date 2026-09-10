@@ -1,0 +1,161 @@
+{
+  "brand_states": {
+    "note": "raw is the store's `brand_id IS NULL` + `brand_raw`, not a failure — 65 of the 145 position rows on disk are in that state (plan §5.9)",
+    "raw": 0,
+    "resolved": 0
+  },
+  "channel": "@VARUS_channel",
+  "counts": {
+    "brand_is_resolvable": 0,
+    "msg_id_exists": 0,
+    "quote_is_a_substring": 0,
+    "schema_valid": 0
+  },
+  "extractor_version": "1dfd74b108a6d82a7d237166fccee2758476142167ad1e133145220e15af760a",
+  "failures": [],
+  "kept": {
+    "about": [
+      {
+        "confidence": 1.0,
+        "msg_id": 2978,
+        "source": "post_context",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 2980,
+        "source": "post_context",
+        "subject": "3289",
+        "subject_type": "post"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 2981,
+        "source": "reply_context",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 2983,
+        "source": "explicit",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 2988,
+        "source": "post_context",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 2989,
+        "source": "post_context",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 2990,
+        "source": "post_context",
+        "subject": "3289",
+        "subject_type": "post"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 2991,
+        "source": "post_context",
+        "subject": "3289",
+        "subject_type": "post"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 2992,
+        "source": "post_context",
+        "subject": "3289",
+        "subject_type": "post"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 2993,
+        "source": "reply_context",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      }
+    ],
+    "signal": [
+      {
+        "confidence": 1.0,
+        "msg_id": 2978,
+        "quote": "много акций и хороших продуктов",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "похвала"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 2978,
+        "quote": "дурят людей и не привозят все заказанрые продукты и не возвращают деньги",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "жалоба"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 2981,
+        "quote": "я разочаровалась в вашем магазине",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "жалоба"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 2983,
+        "quote": "Колись буде варус на березінці?",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "спрос"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 2988,
+        "quote": "Доставка и правда ужас ужас",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "жалоба"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 2989,
+        "quote": "який зараз відсоток на бонусну картку",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "спрос"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 2989,
+        "quote": "щось взагалі копійки нараховуються",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "жалоба"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 2993,
+        "quote": "Зазвичай вибираю акційні",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "привычка"
+      }
+    ]
+  },
+  "parse_failure": null,
+  "rows_in": 18,
+  "rows_kept": 18,
+  "thread_root": "3289",
+  "unsure": []
+}

@@ -1,0 +1,64 @@
+{
+  "brand_states": {
+    "note": "raw is the store's `brand_id IS NULL` + `brand_raw`, not a failure — 65 of the 145 position rows on disk are in that state (plan §5.9)",
+    "raw": 0,
+    "resolved": 0
+  },
+  "channel": "@msuaaaa",
+  "counts": {
+    "brand_is_resolvable": 0,
+    "msg_id_exists": 0,
+    "quote_is_a_substring": 0,
+    "schema_valid": 0
+  },
+  "extractor_version": "a97c9f43521c9f102d8bf0a866902b2cc51672b6403243066336671c394bedc9",
+  "failures": [],
+  "kept": {
+    "about": [
+      {
+        "confidence": 1.0,
+        "msg_id": 13583,
+        "source": "post_context",
+        "subject": "Морозиво Міньйон",
+        "subject_type": "sku"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 13584,
+        "source": "post_context",
+        "subject": "Морозиво Пряне печиво Міньйон",
+        "subject_type": "sku"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 13585,
+        "source": "post_context",
+        "subject": "Морозиво Пряне печиво Міньйон",
+        "subject_type": "sku"
+      }
+    ],
+    "signal": [
+      {
+        "confidence": 1.0,
+        "msg_id": 13584,
+        "quote": "Ох, як спокусивши морозивом... Пряме дитинство!",
+        "subject": "Морозиво Пряне печиво Міньйон",
+        "subject_type": "sku",
+        "type": "похвала"
+      },
+      {
+        "confidence": 0.9,
+        "msg_id": 13585,
+        "quote": "Вони усі не нові)",
+        "subject": "Морозиво Пряне печиво Міньйон",
+        "subject_type": "sku",
+        "type": "жалоба"
+      }
+    ]
+  },
+  "parse_failure": null,
+  "rows_in": 5,
+  "rows_kept": 5,
+  "thread_root": "10651",
+  "unsure": []
+}

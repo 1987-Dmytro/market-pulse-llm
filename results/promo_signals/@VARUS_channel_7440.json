@@ -1,0 +1,242 @@
+{
+  "brand_states": {
+    "note": "raw is the store's `brand_id IS NULL` + `brand_raw`, not a failure — 65 of the 145 position rows on disk are in that state (plan §5.9)",
+    "raw": 0,
+    "resolved": 0
+  },
+  "channel": "@VARUS_channel",
+  "counts": {
+    "brand_is_resolvable": 0,
+    "msg_id_exists": 0,
+    "quote_is_a_substring": 0,
+    "schema_valid": 0
+  },
+  "extractor_version": "d36319dfa8690dd2a4d0dbd7d5439b2fcd40b2ff11a23e16e98b9b921439a3b2",
+  "failures": [],
+  "kept": {
+    "about": [
+      {
+        "confidence": 1.0,
+        "msg_id": 12745,
+        "source": "explicit",
+        "subject": "мафин",
+        "subject_type": "sku"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 12746,
+        "source": "post_context",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 12748,
+        "source": "post_context",
+        "subject": "7440",
+        "subject_type": "post"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 12749,
+        "source": "post_context",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 12750,
+        "source": "reply_context",
+        "subject": "12749",
+        "subject_type": "post"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 12751,
+        "source": "post_context",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 12752,
+        "source": "explicit",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 12754,
+        "source": "post_context",
+        "subject": "7440",
+        "subject_type": "post"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 12759,
+        "source": "post_context",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 12760,
+        "source": "post_context",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 12761,
+        "source": "post_context",
+        "subject": "7440",
+        "subject_type": "post"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 12763,
+        "source": "post_context",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 12816,
+        "source": "reply_context",
+        "subject": "12763",
+        "subject_type": "post"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 12817,
+        "source": "post_context",
+        "subject": "7440",
+        "subject_type": "post"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 12818,
+        "source": "post_context",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 12821,
+        "source": "post_context",
+        "subject": "7440",
+        "subject_type": "post"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 13323,
+        "source": "post_context",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      }
+    ],
+    "signal": [
+      {
+        "confidence": 1.0,
+        "msg_id": 12745,
+        "quote": "абы скидок на \"мафин\" почаще были",
+        "subject": "мафин",
+        "subject_type": "sku",
+        "type": "спрос"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 12745,
+        "quote": "абы скидок на \"мафин\" почаще были",
+        "subject": "мафин",
+        "subject_type": "sku",
+        "type": "цена"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 12746,
+        "quote": "Санітарні норми вийшли з чату ?",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "жалоба"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 12751,
+        "quote": "найкращий супермаркет",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "похвала"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 12751,
+        "quote": "там завжди пускали всіх собачок",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "привычка"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 12751,
+        "quote": "обожнюю всіх там працівників",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "похвала"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 12752,
+        "quote": "У Варусі в Києві не пускають з тваринками",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "жалоба"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 12759,
+        "quote": "Почему всегда в Киеве?!Других городов в Украине нет что-ли",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "жалоба"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 12760,
+        "quote": "Дуже крута акція!",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "похвала"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 12760,
+        "quote": "ви молодчинки",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "похвала"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 12763,
+        "quote": "задовбали з блохастими в магазинах",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "жалоба"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 12818,
+        "quote": "Спасибо за комфорт для наших любимцев",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "похвала"
+      }
+    ]
+  },
+  "parse_failure": null,
+  "rows_in": 29,
+  "rows_kept": 29,
+  "thread_root": "7440",
+  "unsure": []
+}

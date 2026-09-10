@@ -1,0 +1,88 @@
+{
+  "brand_states": {
+    "note": "raw is the store's `brand_id IS NULL` + `brand_raw`, not a failure — 65 of the 145 position rows on disk are in that state (plan §5.9)",
+    "raw": 0,
+    "resolved": 0
+  },
+  "channel": "@VARUS_channel",
+  "counts": {
+    "brand_is_resolvable": 0,
+    "msg_id_exists": 0,
+    "quote_is_a_substring": 1,
+    "schema_valid": 0
+  },
+  "extractor_version": "068c3546b15897d7cad9745302a6693c1b9104136c5edc8e7d94a45831a89fd8",
+  "failures": [
+    {
+      "detail": "quote 'Ну а 25 гривен-это, конечно, насмешка'",
+      "hook": "quote_is_a_substring",
+      "kind": "signal",
+      "msg_id": 3058
+    }
+  ],
+  "kept": {
+    "about": [
+      {
+        "confidence": 1.0,
+        "msg_id": 3057,
+        "source": "post_context",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 3058,
+        "source": "reply_context",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      }
+    ],
+    "signal": [
+      {
+        "confidence": 1.0,
+        "msg_id": 3057,
+        "quote": "Что у вас с доставкой?! Это ужас!",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "жалоба"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 3057,
+        "quote": "Переносят время на день вперед или вообще не привозят вовремя!!!!",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "жалоба"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 3057,
+        "quote": "Извинения это 25 грн промокод который не нужен",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "жалоба"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 3058,
+        "quote": "с таким отношением к клиентам",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "жалоба"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 3058,
+        "quote": "заказывал почти каждую неделю",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "привычка"
+      }
+    ]
+  },
+  "parse_failure": null,
+  "rows_in": 8,
+  "rows_kept": 7,
+  "thread_root": "3342",
+  "unsure": []
+}

@@ -1,0 +1,279 @@
+{
+  "brand_states": {
+    "note": "raw is the store's `brand_id IS NULL` + `brand_raw`, not a failure — 65 of the 145 position rows on disk are in that state (plan §5.9)",
+    "raw": 0,
+    "resolved": 0
+  },
+  "channel": "@VARUS_channel",
+  "counts": {
+    "brand_is_resolvable": 0,
+    "msg_id_exists": 0,
+    "quote_is_a_substring": 0,
+    "schema_valid": 0
+  },
+  "extractor_version": "e0affbc322226616e0621397f269155a895189826005e9833ba8a553e0aeaeba",
+  "failures": [],
+  "kept": {
+    "about": [
+      {
+        "confidence": 1.0,
+        "msg_id": 8030,
+        "source": "post_context",
+        "subject": "Щастябокс",
+        "subject_type": "sku"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 8032,
+        "source": "post_context",
+        "subject": "Щастябокс",
+        "subject_type": "sku"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 8033,
+        "source": "post_context",
+        "subject": "Щастябокс",
+        "subject_type": "sku"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 8034,
+        "source": "post_context",
+        "subject": "Щастябокс",
+        "subject_type": "sku"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 8035,
+        "source": "post_context",
+        "subject": "Щастябокс",
+        "subject_type": "sku"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 8036,
+        "source": "post_context",
+        "subject": "Щастябокс",
+        "subject_type": "sku"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 8037,
+        "source": "post_context",
+        "subject": "6009",
+        "subject_type": "post"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 8038,
+        "source": "post_context",
+        "subject": "Щастябокс",
+        "subject_type": "sku"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 8039,
+        "source": "post_context",
+        "subject": "6009",
+        "subject_type": "post"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 8044,
+        "source": "post_context",
+        "subject": "6009",
+        "subject_type": "post"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 8056,
+        "source": "post_context",
+        "subject": "Щастябокс",
+        "subject_type": "sku"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 8058,
+        "source": "explicit",
+        "subject": "масло",
+        "subject_type": "sku"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 8062,
+        "source": "explicit",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 8063,
+        "source": "reply_context",
+        "subject": "масло",
+        "subject_type": "sku"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 8075,
+        "source": "explicit",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 8085,
+        "source": "explicit",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 8088,
+        "source": "reply_context",
+        "subject": "масло",
+        "subject_type": "sku"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 8123,
+        "source": "reply_context",
+        "subject": "масло",
+        "subject_type": "sku"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 8126,
+        "source": "explicit",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 8134,
+        "source": "post_context",
+        "subject": "6009",
+        "subject_type": "post"
+      }
+    ],
+    "signal": [
+      {
+        "confidence": 1.0,
+        "msg_id": 8030,
+        "quote": "Купи бокс за 500 грн",
+        "subject": "Щастябокс",
+        "subject_type": "sku",
+        "type": "цена"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 8030,
+        "quote": "Смішні які",
+        "subject": "Щастябокс",
+        "subject_type": "sku",
+        "type": "жалоба"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 8032,
+        "quote": "Взагалі не задоволена боксом",
+        "subject": "Щастябокс",
+        "subject_type": "sku",
+        "type": "жалоба"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 8033,
+        "quote": "що в тому боксі взагалі?",
+        "subject": "Щастябокс",
+        "subject_type": "sku",
+        "type": "спрос"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 8034,
+        "quote": "Торгівля повітрям",
+        "subject": "Щастябокс",
+        "subject_type": "sku",
+        "type": "жалоба"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 8035,
+        "quote": "А покажіть, що там?",
+        "subject": "Щастябокс",
+        "subject_type": "sku",
+        "type": "спрос"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 8038,
+        "quote": "половину тысячи отдать за картонку",
+        "subject": "Щастябокс",
+        "subject_type": "sku",
+        "type": "цена"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 8038,
+        "quote": "половину тысячи отдать за картонку",
+        "subject": "Щастябокс",
+        "subject_type": "sku",
+        "type": "жалоба"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 8058,
+        "quote": "Отвратительное",
+        "subject": "масло",
+        "subject_type": "sku",
+        "type": "жалоба"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 8058,
+        "quote": "Пытался оставить честный отзыв на их сайте, не добавляют",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "жалоба"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 8062,
+        "quote": "варусу байдуже, що на полиці",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "жалоба"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 8075,
+        "quote": "навіщо тоді варус портить собі репутацію?",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "жалоба"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 8088,
+        "quote": "не може коштувати якісне масло - дешево",
+        "subject": "масло",
+        "subject_type": "sku",
+        "type": "цена"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 8123,
+        "quote": "не тратить семейный бюджет на отраву под видом масло",
+        "subject": "масло",
+        "subject_type": "sku",
+        "type": "жалоба"
+      }
+    ]
+  },
+  "parse_failure": null,
+  "rows_in": 34,
+  "rows_kept": 34,
+  "thread_root": "6009",
+  "unsure": []
+}

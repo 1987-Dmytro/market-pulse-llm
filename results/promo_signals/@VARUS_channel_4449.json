@@ -1,0 +1,57 @@
+{
+  "brand_states": {
+    "note": "raw is the store's `brand_id IS NULL` + `brand_raw`, not a failure — 65 of the 145 position rows on disk are in that state (plan §5.9)",
+    "raw": 0,
+    "resolved": 0
+  },
+  "channel": "@VARUS_channel",
+  "counts": {
+    "brand_is_resolvable": 0,
+    "msg_id_exists": 0,
+    "quote_is_a_substring": 0,
+    "schema_valid": 0
+  },
+  "extractor_version": "c5b33cfbb55aa9e9ff0f7d46cb266baabd0c9d3e5cb5f430ced4b49afbe27dcb",
+  "failures": [],
+  "kept": {
+    "about": [
+      {
+        "confidence": 1.0,
+        "msg_id": 4939,
+        "source": "explicit",
+        "subject": "сир Дор-Блю",
+        "subject_type": "sku"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 5170,
+        "source": "reply_context",
+        "subject": "Сир ЧЕДДЕР ЛЕЙЧЕЙСТЕР червонии",
+        "subject_type": "sku"
+      }
+    ],
+    "signal": [
+      {
+        "confidence": 1.0,
+        "msg_id": 4939,
+        "quote": "А Дор-Блю буде?",
+        "subject": "сир Дор-Блю",
+        "subject_type": "sku",
+        "type": "спрос"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 5170,
+        "quote": "невігласи )))",
+        "subject": "Сир ЧЕДДЕР ЛЕЙЧЕЙСТЕР червонии",
+        "subject_type": "sku",
+        "type": "жалоба"
+      }
+    ]
+  },
+  "parse_failure": null,
+  "rows_in": 4,
+  "rows_kept": 4,
+  "thread_root": "4449",
+  "unsure": []
+}

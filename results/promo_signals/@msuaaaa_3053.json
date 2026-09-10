@@ -1,0 +1,57 @@
+{
+  "brand_states": {
+    "note": "raw is the store's `brand_id IS NULL` + `brand_raw`, not a failure — 65 of the 145 position rows on disk are in that state (plan §5.9)",
+    "raw": 0,
+    "resolved": 0
+  },
+  "channel": "@msuaaaa",
+  "counts": {
+    "brand_is_resolvable": 0,
+    "msg_id_exists": 0,
+    "quote_is_a_substring": 0,
+    "schema_valid": 0
+  },
+  "extractor_version": "95571ed1d56c93d6c573fc3a45f4579cad7f3642ddb3c9f945dc3f47c59bc578",
+  "failures": [],
+  "kept": {
+    "about": [
+      {
+        "confidence": 1.0,
+        "msg_id": 840,
+        "source": "explicit",
+        "subject": "чипси",
+        "subject_type": "sku"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 841,
+        "source": "post_context",
+        "subject": "АТБ",
+        "subject_type": "chain"
+      }
+    ],
+    "signal": [
+      {
+        "confidence": 1.0,
+        "msg_id": 840,
+        "quote": "нихуя не было там бабок",
+        "subject": "чипси",
+        "subject_type": "sku",
+        "type": "жалоба"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 841,
+        "quote": "Создатель акции урод",
+        "subject": "АТБ",
+        "subject_type": "chain",
+        "type": "жалоба"
+      }
+    ]
+  },
+  "parse_failure": null,
+  "rows_in": 4,
+  "rows_kept": 4,
+  "thread_root": "3053",
+  "unsure": []
+}

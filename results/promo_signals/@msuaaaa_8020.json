@@ -1,0 +1,71 @@
+{
+  "brand_states": {
+    "note": "raw is the store's `brand_id IS NULL` + `brand_raw`, not a failure — 65 of the 145 position rows on disk are in that state (plan §5.9)",
+    "raw": 0,
+    "resolved": 0
+  },
+  "channel": "@msuaaaa",
+  "counts": {
+    "brand_is_resolvable": 0,
+    "msg_id_exists": 0,
+    "quote_is_a_substring": 0,
+    "schema_valid": 0
+  },
+  "extractor_version": "ea51d46d5a22d58115389b52c7dfa3ab562f3c9e441b5cd3c483aaea1743c3fb",
+  "failures": [],
+  "kept": {
+    "about": [
+      {
+        "confidence": 1.0,
+        "msg_id": 7908,
+        "source": "explicit",
+        "subject": "McDonald’s",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 7909,
+        "source": "reply_context",
+        "subject": "8020",
+        "subject_type": "post"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 7913,
+        "source": "explicit",
+        "subject": "Glovo",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 7914,
+        "source": "explicit",
+        "subject": "8020",
+        "subject_type": "post"
+      }
+    ],
+    "signal": [
+      {
+        "confidence": 1.0,
+        "msg_id": 7908,
+        "quote": "А можна взяти щось у МакДональдзі за національний кешбек?",
+        "subject": "McDonald’s",
+        "subject_type": "chain",
+        "type": "спрос"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 7913,
+        "quote": "Подскажите где найти эти товары в приложении глово? Или активировать их нужно?",
+        "subject": "Glovo",
+        "subject_type": "chain",
+        "type": "спрос"
+      }
+    ]
+  },
+  "parse_failure": null,
+  "rows_in": 6,
+  "rows_kept": 6,
+  "thread_root": "8020",
+  "unsure": []
+}

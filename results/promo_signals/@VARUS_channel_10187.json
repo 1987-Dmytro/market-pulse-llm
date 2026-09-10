@@ -1,0 +1,93 @@
+{
+  "brand_states": {
+    "note": "raw is the store's `brand_id IS NULL` + `brand_raw`, not a failure — 65 of the 145 position rows on disk are in that state (plan §5.9)",
+    "raw": 0,
+    "resolved": 0
+  },
+  "channel": "@VARUS_channel",
+  "counts": {
+    "brand_is_resolvable": 0,
+    "msg_id_exists": 0,
+    "quote_is_a_substring": 0,
+    "schema_valid": 0
+  },
+  "extractor_version": "dafff37c92b8734c07075fe120246446332ce40ac74bf7fd52bf4def18e5f726",
+  "failures": [],
+  "kept": {
+    "about": [
+      {
+        "confidence": 1.0,
+        "msg_id": 20081,
+        "source": "post_context",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 20082,
+        "source": "post_context",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 20083,
+        "source": "explicit",
+        "subject": "10187",
+        "subject_type": "post"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 20085,
+        "source": "explicit",
+        "subject": "10187",
+        "subject_type": "post"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 20091,
+        "source": "explicit",
+        "subject": "кур стегно",
+        "subject_type": "sku"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 20093,
+        "source": "explicit",
+        "subject": "10187",
+        "subject_type": "post"
+      }
+    ],
+    "signal": [
+      {
+        "confidence": 1.0,
+        "msg_id": 20081,
+        "quote": "Що за дебільний огидний текст?",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "жалоба"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 20082,
+        "quote": "Потужно-незламний",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "жалоба"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 20091,
+        "quote": "це за 100г ціна?",
+        "subject": "кур стегно",
+        "subject_type": "sku",
+        "type": "цена"
+      }
+    ]
+  },
+  "parse_failure": null,
+  "rows_in": 9,
+  "rows_kept": 9,
+  "thread_root": "10187",
+  "unsure": []
+}

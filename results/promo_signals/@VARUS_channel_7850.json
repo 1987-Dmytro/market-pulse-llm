@@ -1,0 +1,86 @@
+{
+  "brand_states": {
+    "note": "raw is the store's `brand_id IS NULL` + `brand_raw`, not a failure — 65 of the 145 position rows on disk are in that state (plan §5.9)",
+    "raw": 2,
+    "resolved": 0
+  },
+  "channel": "@VARUS_channel",
+  "counts": {
+    "brand_is_resolvable": 0,
+    "msg_id_exists": 0,
+    "quote_is_a_substring": 0,
+    "schema_valid": 0
+  },
+  "extractor_version": "c92e60a13e4f09f6678022ed89b9bef761f34b7da7b8ded6fc40b31372ef6582",
+  "failures": [],
+  "kept": {
+    "about": [
+      {
+        "confidence": 1.0,
+        "msg_id": 13773,
+        "source": "post_context",
+        "subject": "7850",
+        "subject_type": "post"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 13790,
+        "source": "explicit",
+        "subject": "морозиво",
+        "subject_type": "sku"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 13793,
+        "source": "reply_context",
+        "subject": "морозиво",
+        "subject_type": "sku"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 13794,
+        "source": "explicit",
+        "subject": "белоруская тм",
+        "subject_type": "brand"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 13913,
+        "source": "reply_context",
+        "subject": "морозиво",
+        "subject_type": "sku"
+      }
+    ],
+    "signal": [
+      {
+        "confidence": 0.9,
+        "msg_id": 13790,
+        "quote": "Белоруское морожено?",
+        "subject": "морозиво",
+        "subject_type": "sku",
+        "type": "жалоба"
+      },
+      {
+        "confidence": 0.9,
+        "msg_id": 13794,
+        "quote": "Но белоруская тм🤡",
+        "subject": "белоруская тм",
+        "subject_type": "brand",
+        "type": "жалоба"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 13913,
+        "quote": "ВКУСНОЕ ОЧЕНЬ",
+        "subject": "морозиво",
+        "subject_type": "sku",
+        "type": "похвала"
+      }
+    ]
+  },
+  "parse_failure": null,
+  "rows_in": 8,
+  "rows_kept": 8,
+  "thread_root": "7850",
+  "unsure": []
+}

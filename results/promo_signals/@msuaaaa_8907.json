@@ -1,0 +1,42 @@
+{
+  "brand_states": {
+    "note": "raw is the store's `brand_id IS NULL` + `brand_raw`, not a failure — 65 of the 145 position rows on disk are in that state (plan §5.9)",
+    "raw": 0,
+    "resolved": 0
+  },
+  "channel": "@msuaaaa",
+  "counts": {
+    "brand_is_resolvable": 0,
+    "msg_id_exists": 0,
+    "quote_is_a_substring": 0,
+    "schema_valid": 0
+  },
+  "extractor_version": "18f318a9ab0b12605db698eebbb24341fa811e960a312a6f770c79725d28f7be",
+  "failures": [],
+  "kept": {
+    "about": [
+      {
+        "confidence": 1.0,
+        "msg_id": 9643,
+        "source": "post_context",
+        "subject": "Lviv Croissants",
+        "subject_type": "chain"
+      }
+    ],
+    "signal": [
+      {
+        "confidence": 0.9,
+        "msg_id": 9643,
+        "quote": "нащо ви таке зранку постите",
+        "subject": "Lviv Croissants",
+        "subject_type": "chain",
+        "type": "жалоба"
+      }
+    ]
+  },
+  "parse_failure": null,
+  "rows_in": 2,
+  "rows_kept": 2,
+  "thread_root": "8907",
+  "unsure": []
+}

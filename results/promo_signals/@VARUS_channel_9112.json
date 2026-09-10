@@ -1,0 +1,72 @@
+{
+  "brand_states": {
+    "note": "raw is the store's `brand_id IS NULL` + `brand_raw`, not a failure — 65 of the 145 position rows on disk are in that state (plan §5.9)",
+    "raw": 0,
+    "resolved": 0
+  },
+  "channel": "@VARUS_channel",
+  "counts": {
+    "brand_is_resolvable": 0,
+    "msg_id_exists": 0,
+    "quote_is_a_substring": 0,
+    "schema_valid": 0
+  },
+  "extractor_version": "096c08266a5cfed5d76a5c3a69af0d92645a72e042927477d747b2de8ce2c826",
+  "failures": [],
+  "kept": {
+    "about": [
+      {
+        "confidence": 1.0,
+        "msg_id": 16818,
+        "source": "post_context",
+        "subject": "Сир кисломолочний Varto",
+        "subject_type": "sku"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 16819,
+        "source": "post_context",
+        "subject": "Сир кисломолочний Varto",
+        "subject_type": "sku"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 16820,
+        "source": "explicit",
+        "subject": "9112",
+        "subject_type": "post"
+      }
+    ],
+    "signal": [
+      {
+        "confidence": 1.0,
+        "msg_id": 16818,
+        "quote": "Офігенно милі кото-зайчики і зайце-котики на упаковці",
+        "subject": "Сир кисломолочний Varto",
+        "subject_type": "sku",
+        "type": "похвала"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 16819,
+        "quote": "Нажаль, у нас його не можливо вхопити",
+        "subject": "Сир кисломолочний Varto",
+        "subject_type": "sku",
+        "type": "жалоба"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 16819,
+        "quote": "не можливо вхопити",
+        "subject": "Сир кисломолочний Varto",
+        "subject_type": "sku",
+        "type": "спрос"
+      }
+    ]
+  },
+  "parse_failure": null,
+  "rows_in": 6,
+  "rows_kept": 6,
+  "thread_root": "9112",
+  "unsure": []
+}

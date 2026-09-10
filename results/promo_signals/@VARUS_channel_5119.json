@@ -1,0 +1,248 @@
+{
+  "brand_states": {
+    "note": "raw is the store's `brand_id IS NULL` + `brand_raw`, not a failure — 65 of the 145 position rows on disk are in that state (plan §5.9)",
+    "raw": 1,
+    "resolved": 0
+  },
+  "channel": "@VARUS_channel",
+  "counts": {
+    "brand_is_resolvable": 0,
+    "msg_id_exists": 0,
+    "quote_is_a_substring": 1,
+    "schema_valid": 0
+  },
+  "extractor_version": "fec5fbbf1702e8a87ce127b173a14a465e6074495148d9c78c5ece80e6422414",
+  "failures": [
+    {
+      "detail": "quote 'на жаль, на ХШ у Варусі немає олівців шо'",
+      "hook": "quote_is_a_substring",
+      "kind": "signal",
+      "msg_id": 5987
+    }
+  ],
+  "kept": {
+    "about": [
+      {
+        "confidence": 1.0,
+        "msg_id": 5987,
+        "source": "explicit",
+        "subject": "шоколадні олівці",
+        "subject_type": "sku"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 5988,
+        "source": "explicit",
+        "subject": "батончик Дубайський шоколад",
+        "subject_type": "sku"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 5989,
+        "source": "post_context",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 0.9,
+        "msg_id": 5991,
+        "source": "reply_context",
+        "subject": "шоколад",
+        "subject_type": "sku"
+      },
+      {
+        "confidence": 0.9,
+        "msg_id": 5992,
+        "source": "reply_context",
+        "subject": "шоколад",
+        "subject_type": "sku"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 5993,
+        "source": "explicit",
+        "subject": "5119",
+        "subject_type": "post"
+      },
+      {
+        "confidence": 0.9,
+        "msg_id": 5994,
+        "source": "reply_context",
+        "subject": "шоколад",
+        "subject_type": "sku"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 5995,
+        "source": "explicit",
+        "subject": "виробник",
+        "subject_type": "brand"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 5996,
+        "source": "reply_context",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 5997,
+        "source": "reply_context",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 5999,
+        "source": "explicit",
+        "subject": "5119",
+        "subject_type": "post"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 6000,
+        "source": "explicit",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 6003,
+        "source": "post_context",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 6004,
+        "source": "explicit",
+        "subject": "5119",
+        "subject_type": "post"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 6005,
+        "source": "post_context",
+        "subject": "VARUS",
+        "subject_type": "chain"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 6006,
+        "source": "explicit",
+        "subject": "5119",
+        "subject_type": "post"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 6070,
+        "source": "explicit",
+        "subject": "шоколад Великобритания",
+        "subject_type": "sku"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 6080,
+        "source": "explicit",
+        "subject": "5119",
+        "subject_type": "post"
+      }
+    ],
+    "signal": [
+      {
+        "confidence": 1.0,
+        "msg_id": 5988,
+        "quote": "Хочу попробовать батончик - типа Дубайский шоколад",
+        "subject": "батончик Дубайський шоколад",
+        "subject_type": "sku",
+        "type": "спрос"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 5988,
+        "quote": "в нашем Варусе его к сожалению нет пока",
+        "subject": "батончик Дубайський шоколад",
+        "subject_type": "sku",
+        "type": "жалоба"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 5989,
+        "quote": "Не купуйте. Як не соромно так дурити покупців",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "жалоба"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 5991,
+        "quote": "дивіться на якість. він ваесь білий",
+        "subject": "шоколад",
+        "subject_type": "sku",
+        "type": "жалоба"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 5992,
+        "quote": "внешний вид конечно … Я даже не знаю, служит ли это поводом к возврату",
+        "subject": "шоколад",
+        "subject_type": "sku",
+        "type": "жалоба"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 5994,
+        "quote": "Можливо посмакуєте отим, що мені продали?",
+        "subject": "шоколад",
+        "subject_type": "sku",
+        "type": "жалоба"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 6000,
+        "quote": "Варус, щось ви стали якоюсь забігайлівкою",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "жалоба"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 6000,
+        "quote": "Товари найнижчої якості, на тижні вже вдруге повертаю товар",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "жалоба"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 6003,
+        "quote": "Самое ужасное, что нет у них поддержки нормальной",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "жалоба"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 6005,
+        "quote": "Підскажіть чому зникла адреса доставки чи самовивозу",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "type": "спрос"
+      },
+      {
+        "confidence": 1.0,
+        "msg_id": 6070,
+        "quote": "небыло вчера в наличии в двух варусах",
+        "subject": "шоколад Великобритания",
+        "subject_type": "sku",
+        "type": "жалоба"
+      }
+    ]
+  },
+  "parse_failure": null,
+  "rows_in": 30,
+  "rows_kept": 29,
+  "thread_root": "5119",
+  "unsure": []
+}
