@@ -46,7 +46,8 @@ at s46 + 5 new. **$0; cloud untouched.**
 
 ## Named, not built (the phase file forbids adding what it did not ask for)
 - **No test covers `loop_daemon.py`** (§2's list names the schedule, the three GETs and the tick; it is checked by
-  `--once`), and its `reading()` branch for a CONFIGURED endpoint has never fired.
+  `--once`). Its two other `reading()` branches — a CONFIGURED endpoint, a missing export — were fired by hand and
+  print their sentence; neither has ever reached the log, and no test holds them.
 - **`tick.SCHEDULE_DEFAULT`'s note still says «the schedule UI is out of scope (§6)»** — false since this item; `PUT`
   preserves it verbatim rather than re-spelling the file's prose. `results/loop*.log` is gitignored beside the tick's
   state — a clock; `tests/test_serve.py` skips itself where the `serve` extra is not installed.
