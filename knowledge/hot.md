@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-09-09 20:40:28 (every SessionStart)
+**Auto-refreshed:** 2026-09-10 12:07:38 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
-eaee5d2 docs(team-lead): ruling 09.09 (kk) — s42 «c3» ACCEPTED as a COMPLETE paid leg ($0.2577 of $0.80, 30 pages + 8 posts) on my own runs; the OPEN STOP is a FALSE band refusal (5% relative tolerance cannot grade a $0.23 leg — a late-posting $0.0305 kind is 13.4%); ruling: an ABSOLUTE floor beside the band (DOLLAR_FLOOR $0.05, the MS-floor pattern) → «kk-close» ($0) adds it + a two-way test, closes $0.2577, deletes the volume; PHASE v27, stop-patterns §6
-6ae9fcb docs(progress): s42's OPEN STOP — §5 refuses on the BAND, settled $0.257668 vs a recorded $0.227200, 13.4% off a 5.0% tolerance; the reference missed a whole billed kind
-1ec4e27 docs(progress): s42's PROGRESS lands inside its 60-line cap
-fef6e0b docs(progress): the band refusal is labelled a FORECAST off a LOWER BOUND, not a measurement, and the constraint is named — a 5% relative band cannot grade a $0.23 leg
-9095d39 docs(progress): s42 — «c3» BOUGHT at $0.2272 of the $0.80 cap, record complete; §5 refused on the WALK three times (no billing rows), the line stays OPEN
+ec8def2 docs(team-lead): ruling 09.09 (ll) — s43 «kk-close» ACCEPTED ($0) on my own runs; promo-c3 CLOSED $0.2577, volume deleted, floor in (57 tests) — the c3 saga is closed, no paid steps remain; my --window all slip corrected to w2; FINDING: c3's data reaches no dashboard window (the plan's third window w3 is unbuilt) → next team-lead item; PHASE v28, stop-patterns §7
+d561afb docs(progress): the green reading names all THREE commits after it, and the deviation takes a tag from PROCESS's closed enum
+ef286f4 docs(progress): s43 — «kk-close» DONE at $0, no open stop; the floor is in, promo-c3 is CLOSED at $0.2577, the volume is deleted
+b361e57 money(cycle): the promo-c3 close writes its cycle-3 line reading too — $8.8398 of $10.00, REMAINING $1.1602
+d60b303 money(step): promo-c3 CLOSED at $0.2577 of the $0.80 cap — the floor graded what the band could not
 ```
 
 ## 📋 Recent decisions
