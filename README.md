@@ -20,6 +20,26 @@ Python 3.11+ with `pytest`, `ruff` and `pyyaml` available (pinned in
 `pyproject.toml`; `pip install -e '.[dev]'` inside a `.venv` if they are not on
 your PATH already).
 
+## Running it
+
+```
+pip install -e '.[serve]'   # fastapi + uvicorn, pinned
+make serve                  # http://localhost:8000/ — the app and its API, localhost only
+make loop                   # the $0 loop: wake on the schedule, tick, one line into results/loop.log
+```
+
+`make loop` buys nothing. `data/loop.json :: endpoint` is the operator's own field: the daemon
+reads it, says in the log which of the two nothings the queue is, and never starts a paid pass.
+
+To keep the loop running at login, install the launchd template — the executor never does this:
+
+```
+sed -e "s|__REPO__|$PWD|g" \
+    -e "s|__PYTHON__|$(python3.11 -c 'import sys; print(sys.executable)')|g" \
+    ops/com.marketpulse.loop.plist > ~/Library/LaunchAgents/com.marketpulse.loop.plist
+launchctl load ~/Library/LaunchAgents/com.marketpulse.loop.plist    # unload to stop it
+```
+
 ## Verifier
 
 ```

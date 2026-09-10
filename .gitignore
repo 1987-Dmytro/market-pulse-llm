@@ -111,4 +111,9 @@ xlmr_full_run.log
 # check (l) asks `git status --porcelain results` to print nothing. The screen's fuel beside it,
 # `results/promo_screen_data.json`, has no clock and IS committed.
 results/promo_tick.json
+
+# The loop daemon's wake log (scripts/loop_daemon.py, and launchd's copy of its streams under
+# ops/com.marketpulse.loop.plist). A clock like the tick's state beside it: one line per wake, so
+# committing it would dirty the tree every hour the operator leaves `make loop` running.
+results/loop*.log
 .claude/session_mode

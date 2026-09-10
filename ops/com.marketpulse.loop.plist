@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  A TEMPLATE, not an installed job: the executor never loads this (PHASE-ship-1 §2). Replace the
+  two placeholders and copy it into ~/Library/LaunchAgents/ — the steps are in the README.
+
+    __REPO__     the absolute path of this checkout   (pwd)
+    __PYTHON__   the python that has the `serve` extra (python3.11 -c 'import sys; print(sys.executable)')
+
+  It runs scripts/loop_daemon.py, which ticks and logs and buys nothing. KeepAlive restarts it if
+  it dies; the daemon's own sleep is data/schedule.json's minimum interval, so launchd is only
+  there to start it at login.
+-->
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.marketpulse.loop</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>__PYTHON__</string>
+    <string>__REPO__/scripts/loop_daemon.py</string>
+  </array>
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>PYTHONPATH</key>
+    <string>__REPO__/src</string>
+  </dict>
+  <key>WorkingDirectory</key>
+  <string>__REPO__</string>
+  <key>RunAtLoad</key>
+  <true/>
+  <key>KeepAlive</key>
+  <true/>
+  <key>StandardOutPath</key>
+  <string>__REPO__/results/loop.launchd.log</string>
+  <key>StandardErrorPath</key>
+  <string>__REPO__/results/loop.launchd.log</string>
+</dict>
+</plist>

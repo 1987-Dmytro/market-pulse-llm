@@ -51,3 +51,10 @@ promo-screen:
 # static and has no API. Needs the `serve` extra — `pip install -e '.[serve]'`.
 serve:
 	PYTHONPATH=src python3.11 scripts/serve.py
+
+# The $0 loop, running: wake on `data/schedule.json`, run the tick, write one line into
+# `results/loop.log`. It buys nothing — `data/loop.json :: endpoint` is READ and reported, and the
+# paid reading of the queue stays the operator's word. `ops/com.marketpulse.loop.plist` is the
+# launchd template that starts this at login (install steps in the README; not installed here).
+loop:
+	PYTHONPATH=src python3.11 scripts/loop_daemon.py
