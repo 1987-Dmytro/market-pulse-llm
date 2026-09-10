@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-09-10 14:08:40 (every SessionStart)
+**Auto-refreshed:** 2026-09-10 15:54:46 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
-6fb8d1b docs(progress): s44 — «w3» DONE at $0, no open stop; the screen is 1301 rows over three windows
-a7b9f74 s44(w3) iii: the screen is EVERY window, and an id the table lacks refuses instead of emptying it
-3692703 s44(w3) ii: the store builds THREE windows, c3's through its own seal exactly as w2's
-6f5dbaf s44(w3) i: the addendum's four fields BRANCH on --step, and c3's registration names w3
-5937ad0 docs(progress): s44's start ritual — ship-1's PROGRESS created from promo-pulse-1's, «next: w3»
+b26da6d docs(report): chain-fold — 83 on the screen, `marketopt_private` at 0, and no graded number moved
+3cc99ad docs(progress): back under the ≤60-line cap with the two added lines kept
+accd83a docs(progress): two reaches the item's own check does not cover — `chain_key`'s callers, and the sibling readers' second defect
+6fb5009 docs(progress): the deviation line fits the ≤60-line cap the ruling sets for this file
+cc7cc6e docs(progress): s45 — «chain-fold» DONE at $0, no open stop; ONE Маркетопт, 83 rows, no graded number moved
 ```
 
 ## 📋 Recent decisions
