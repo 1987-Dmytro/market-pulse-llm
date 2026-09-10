@@ -1096,7 +1096,46 @@ def promo_pressure(conn, window_id: str) -> dict:
     }
 
 
-def promo_positions(conn, window_id: str, chains: tuple) -> list[dict]:
+ALL_WINDOWS = "all"
+"""The selector that means «every window the store carries», ruling 10.09 (mm) 2(c).
+
+Not a window id and never stored as one: `windows` holds `w1`, `w2`, `w3`, and this is the word the
+screen's readers use to ask for their union. `tick.py` refuses any OTHER id the table lacks, which
+is what stops this from being the silent empty screen the 09.09 slip produced."""
+
+
+def positions_source(window_id: str, excluded: tuple[str, ...] = ()) -> tuple[str, tuple]:
+    """The rows the screen may read — ONE statement, so every reader sees the same population.
+
+    One window is `window_id = ?`. The union is the NEWEST reading of each `(carrier, row_id)`: a
+    row answered in two windows is one row on the screen (5 of them span w1 and w2), and the later
+    window wins because that is the reading the operator is looking at. The anchor is the order and
+    `window_id` breaks a tie, so the choice is deterministic rather than whatever the scan returned.
+
+    `excluded` is the LIVE registry's `collect: false` handles and it is applied HERE, before the
+    dedupe, so the positions table, the trends and the counted difference are all statements about
+    the same set of rows ([[the_shipped_layer_is_fed_the_screened_rows]]).
+    """
+    where, params = [], []
+    if window_id != ALL_WINDOWS:
+        where, params = ["window_id = ?"], [window_id]
+    if excluded:
+        where.append(f"channel NOT IN ({', '.join('?' * len(excluded))})")
+        params += list(excluded)
+    kept = "SELECT * FROM positions" + (" WHERE " + " AND ".join(where) if where else "")
+    if window_id != ALL_WINDOWS:
+        return kept, tuple(params)
+    return (
+        "SELECT * FROM (SELECT p.*, ROW_NUMBER() OVER (PARTITION BY p.carrier, p.row_id"
+        " ORDER BY substr(w.anchor, 1, 10) DESC, p.window_id DESC) AS newest"
+        f" FROM ({kept}) p JOIN windows w USING (window_id)) WHERE newest = 1",
+        tuple(params),
+    )
+
+
+def promo_positions(
+    conn, window_id: str, chains: tuple, excluded: tuple[str, ...] = ()
+) -> list[dict]:
     """Every position of the window as a ROW — the promo answer of SPEC 3.21 (4).
 
     **The old price is not here, and neither is anything derived from it.** `depth` is the PRINTED
@@ -1115,6 +1154,7 @@ def promo_positions(conn, window_id: str, chains: tuple) -> list[dict]:
     registry does not resolve, and those rows keep their printed name with no id and no `own` flag —
     an unresolved mark is not evidence that the brand is a competitor.
     """
+    source, params = positions_source(window_id, excluded)
     rows: list[dict] = []
     order: list[tuple] = []
     for (
@@ -1141,10 +1181,9 @@ def promo_positions(conn, window_id: str, chains: tuple) -> list[dict]:
         "SELECT p.row_id, p.brand_id, w.display, w.own, p.brand_raw, p.line, p.category,"
         " p.size_value, p.size_unit, p.pack_count, p.attribute_pct, ch.source_id, p.carrier,"
         " p.price_promo, p.discount_pct_printed, p.tier, p.channel, p.msg_id, p.ordinal"
-        " FROM positions p JOIN channels ch USING (window_id, channel)"
-        " LEFT JOIN watchlist w ON w.window_id = p.window_id AND w.brand_id = p.brand_id"
-        " WHERE p.window_id = ?",
-        (window_id,),
+        f" FROM ({source}) p JOIN channels ch USING (window_id, channel)"
+        " LEFT JOIN watchlist w ON w.window_id = p.window_id AND w.brand_id = p.brand_id",
+        params,
     ):
         brand = {"display": display or brand_raw}
         if brand_id is not None:

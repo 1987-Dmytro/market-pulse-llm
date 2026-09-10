@@ -21,6 +21,8 @@ import sqlite3
 from datetime import datetime
 from pathlib import Path
 
+from market_pulse import aggregates
+
 REPO_ROOT = Path(__file__).resolve().parents[2]
 STORES = (REPO_ROOT / "data" / "raw" / "posts", REPO_ROOT / "data" / "raw_r2" / "posts")
 
@@ -42,33 +44,48 @@ legs off one message (`@forainfo:6056`), which is why this rule exists and how s
 The same string as `loop.CARRIER`, kept here so this module reads the store's vocabulary without
 importing the collection loop; `tests/test_trends_sql.py` holds the two against each other."""
 
-DEDUPED = f"""
+
+def deduped(source: str) -> str:
+    """The CTE both statements below read, over the rows `aggregates.positions_source` hands them.
+
+    The screen's population is decided in ONE place ((mm) 2(c)): a window or the deduped union of
+    all of them, minus the channels the live registry stopped collecting. This layer is only the
+    leg-preference rule on top of whatever that returned — a second `WHERE window_id = ?` here
+    would be a second answer to «which rows are on the screen».
+
+    The partition lost `window_id` with that move and the rule did not change: the source already
+    returns one row per `(carrier, row_id)`, so for one window the key is the same set it always
+    was, and over the union a SKU read off one message stays ONE group instead of splitting per
+    window and being counted twice ([[a_fold_is_not_a_membership_test]]).
+
+    When BOTH legs read the same SKU off one message, the leaflet page's rows are the ones that
+    count and the text leg's are dropped.
+
+    **It drops a LEG, not a row, and that is the correction the measurement forced.** Ruling 03.09
+    (b) names the key (window, channel, msg_id, brand, product, volume) with no carrier in it, and
+    taking ONE row per that key drops 39 rows over 35 groups in this store — of which only ONE group
+    spans carriers, the case the ruling was ruling on. The other 34 are two readings of one SKU by
+    ONE leg, 24 of them holding more than one distinct promo price (`@atb_market_official:4359`
+    prints Активіа Біфідойогурт 260 г at 23.9 AND 24.7), and 2 of them sit inside the SEALED w1
+    window. Those are two promos, not one promo counted twice — and «prefer `leaflet_page`» cannot
+    even be applied to a group with a single carrier, so it would fall through to an arbitrary
+    `row_id` ([[a_gate_wider_than_the_order_it_guards]]).
+
+    So the partition selects the preferred LEG and keeps every row of it. `MIN(carrier <>
+    'leaflet_page')` over the group is 0 when any row is a leaflet page and 1 when none is, and a
+    row is kept when its own leg matches that. Nothing is ORDERED, so there is no tiebreak to be
+    arbitrary about, and two runs over one store return the same rows — which is what makes
+    `make tick` idempotent on this table.
+    """
+    return f"""
 one_leg_per_sku AS (
     SELECT * FROM (
         SELECT *,
                MIN(carrier <> '{PREFERRED_CARRIER}') OVER (
-                   PARTITION BY window_id, channel, msg_id, {SKU}) AS best_leg
-          FROM positions
-         WHERE window_id = ?)
+                   PARTITION BY channel, msg_id, {SKU}) AS best_leg
+          FROM ({source}))
      WHERE (carrier <> '{PREFERRED_CARRIER}') = best_leg)
 """
-"""The one source both statements below read: when BOTH legs read the same SKU off one message, the
-leaflet page's rows are the ones that count and the text leg's are dropped.
-
-**It drops a LEG, not a row, and that is the correction the measurement forced.** Ruling 03.09 (b)
-names the key (window, channel, msg_id, brand, product, volume) with no carrier in it, and taking ONE
-row per that key drops 39 rows over 35 groups in this store — of which only ONE group spans carriers,
-the case the ruling was ruling on. The other 34 are two readings of one SKU by ONE leg, 24 of them
-holding more than one distinct promo price (`@atb_market_official:4359` prints Активіа Біфідойогурт
-260 г at 23.9 AND 24.7), and 2 of them sit inside the SEALED w1 window. Those are two promos, not one
-promo counted twice — and «prefer `leaflet_page`» cannot even be applied to a group with a single
-carrier, so it would fall through to an arbitrary `row_id`
-([[a_gate_wider_than_the_order_it_guards]]).
-
-So the partition selects the preferred LEG and keeps every row of it. `MIN(carrier <> 'leaflet_page')`
-over the group is 0 when any row is a leaflet page and 1 when none is, and a row is kept when its own
-leg matches that. Nothing is ORDERED, so there is no tiebreak to be arbitrary about, and two runs
-over one store return the same rows — which is what makes `make tick` idempotent on this table."""
 
 
 def iso_week(when: str) -> str:
@@ -103,8 +120,11 @@ def bind_weeks(conn: sqlite3.Connection, weeks: dict[tuple[str, int], str]) -> N
     conn.create_function("week_of", 2, lambda channel, msg_id: weeks.get((channel, int(msg_id))))
 
 
-TREND_SQL = f"""
-WITH {DEDUPED}
+def trend_sql(source: str) -> str:
+    """One statement. `week_of` returning NULL for a position whose post is not in the store drops
+    the row rather than bucketing it under an invented week — an unknown week is not a week."""
+    return f"""
+WITH {deduped(source)}
 SELECT week_of(channel, msg_id) AS week,
        channel                  AS chain,
        {SKU},
@@ -119,18 +139,24 @@ SELECT week_of(channel, msg_id) AS week,
  GROUP BY week, chain, {SKU}
  ORDER BY week, chain, {SKU}
 """
-"""One statement. `week_of` returning NULL for a position whose post is not in the store drops the
-row rather than bucketing it under an invented week — an unknown week is not a week."""
 
 
-def sku_trends(conn: sqlite3.Connection, window_id: str) -> list[dict]:
+def sku_trends(
+    conn: sqlite3.Connection, window_id: str, excluded: tuple[str, ...] = ()
+) -> list[dict]:
     """Price per SKU per week per chain, as rows. `bind_weeks` first."""
+    source, params = aggregates.positions_source(window_id, excluded)
     conn.row_factory = sqlite3.Row
-    return [dict(row) for row in conn.execute(TREND_SQL, (window_id,))]
+    return [dict(row) for row in conn.execute(trend_sql(source), params)]
 
 
-DEPTH_SQL = f"""
-WITH {DEDUPED}
+def depth_sql(source: str) -> str:
+    """Depth per chain and per brand — a WINDOW aggregate, SPEC 3.22 (1). It never sits beside a
+    row's own promo price, because `promo ÷ (1 − depth)` reconstructs the old price the screen may
+    not print (3.21 (4)); that is why depth leaves `positions` through this query and not through
+    `sku_trends`."""
+    return f"""
+WITH {deduped(source)}
 SELECT week_of(channel, msg_id) AS week,
        channel                  AS chain,
        brand_raw                AS brand,
@@ -142,14 +168,14 @@ SELECT week_of(channel, msg_id) AS week,
  GROUP BY week, chain, brand
  ORDER BY week, chain, brand
 """
-"""Depth per chain and per brand — a WINDOW aggregate, SPEC 3.22 (1). It never sits beside a row's
-own promo price, because `promo ÷ (1 − depth)` reconstructs the old price the screen may not print
-(3.21 (4)); that is why depth leaves `positions` through this query and not through `sku_trends`."""
 
 
-def depth_trends(conn: sqlite3.Connection, window_id: str) -> list[dict]:
+def depth_trends(
+    conn: sqlite3.Connection, window_id: str, excluded: tuple[str, ...] = ()
+) -> list[dict]:
+    source, params = aggregates.positions_source(window_id, excluded)
     conn.row_factory = sqlite3.Row
-    return [dict(row) for row in conn.execute(DEPTH_SQL, (window_id,))]
+    return [dict(row) for row in conn.execute(depth_sql(source), params)]
 
 
 def by_week(rows: list[dict]) -> dict[str, list[dict]]:
@@ -164,10 +190,16 @@ def by_week(rows: list[dict]) -> dict[str, list[dict]]:
     return out
 
 
-def build(conn: sqlite3.Connection, window_id: str, weeks: dict | None = None) -> dict:
+def build(
+    conn: sqlite3.Connection,
+    window_id: str,
+    weeks: dict | None = None,
+    excluded: tuple[str, ...] = (),
+) -> dict:
     """The whole S3 reading: bind the weeks, run the two statements, group by week."""
     bind_weeks(conn, post_weeks() if weeks is None else weeks)
-    skus, depths = sku_trends(conn, window_id), depth_trends(conn, window_id)
+    skus = sku_trends(conn, window_id, excluded)
+    depths = depth_trends(conn, window_id, excluded)
     return {
         "window_id": window_id,
         "weeks": sorted(by_week(skus)),

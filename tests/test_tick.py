@@ -143,7 +143,8 @@ def world(tmp_path):
     }
 
 
-def run(world, now: str = NOW) -> int:
+def run(world, now: str = NOW, window: str | None = "w1") -> int:
+    """`window=None` passes no `--window` at all — the only way to exercise the flag's DEFAULT."""
     return tick_script.main(
         [
             "--db", str(world["db"]),
@@ -153,11 +154,11 @@ def run(world, now: str = NOW) -> int:
             "--state", str(world["state"]),
             "--schedule", str(world["schedule"]),
             "--archive", str(world["archive"]),
-            # named, not inherited: the fixture builds `w1` and the script's default is now the C2
-            # window `w2` ([[a_moved_constant_fails_green]]).
-            "--window", "w1",
             "--now", now,
         ]
+        # named, not inherited: the fixture builds `w1` and the script's default is now the UNION
+        # of every window ([[a_moved_constant_fails_green]]).
+        + ([] if window is None else ["--window", window])
     )
 
 
@@ -301,3 +302,31 @@ def test_the_cooled_queue_is_the_24_hour_rule_in_both_directions():
     still_warm = datetime.fromisoformat("2026-09-02T11:59:00+00:00")
     assert len(tick_script.cooled_threads(rows, just_cold)) == 1
     assert tick_script.cooled_threads(rows, still_warm) == []
+
+
+def test_a_window_the_table_lacks_refuses_and_the_union_is_the_default(world):
+    """Ruling 10.09 (mm) 2(c), both ways on the id the store's `windows` table decides.
+
+    The positive half is that `all` and a real id BOTH build a screen; the negative half is the
+    defect this rung exists for. On 09.09 `--window all` matched no row of `windows`, the screen was
+    written with `positions 1113 → 0`, and the exit code was zero — a checker whose failure is
+    silence ([[a_checker_whose_failure_is_silence]]). So the refusal is asserted on the ARTEFACTS as
+    well as the exception: both files and all six tables come back untouched, which is what
+    «nothing written» has to mean when the guard sits in front of a writer
+    ([[a_guard_that_runs_after_the_write]]).
+    """
+    assert run(world, window=None) == 0, "no --window at all: the DEFAULT is the union"
+    union = json.loads(world["out"].read_text(encoding="utf-8"))
+    assert union["window_id"] == aggregates.ALL_WINDOWS
+    assert [row["id"] for row in union["windows"]] == ["w1"], "the export names what it unioned"
+    assert run(world, window="w1") == 0
+    one = json.loads(world["out"].read_text(encoding="utf-8"))
+    assert one["window_id"] == "w1"
+    assert one["screen"]["positions"] == union["screen"]["positions"], "one window IS the union here"
+
+    kept, state, before = world["out"].read_bytes(), world["state"].read_bytes(), counts(world)
+    with pytest.raises(SystemExit, match="the store's `windows` table carries"):
+        run(world, window="w9")
+    assert world["out"].read_bytes() == kept, "the refusal left the screen alone"
+    assert world["state"].read_bytes() == state
+    assert counts(world) == before, "the refusal wrote no row either"

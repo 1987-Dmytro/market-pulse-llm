@@ -433,7 +433,7 @@ def digests(conn, store: RawStore, now: datetime) -> dict[str, int]:
     return counts
 
 
-def rollups(conn, window_id: str, weeks: dict) -> list[dict]:
+def rollups(conn, window_id: str, weeks: dict, excluded: tuple[str, ...] = ()) -> list[dict]:
     """`rollup` rows from S3's trends — per week × chain × brand, and every metric named for what
     it counts. `depth_mean` is the window aggregate SPEC 3.22 (1) allows; it never travels beside a
     row's own promo price, which is why it lives here and not in the screen's position rows.
@@ -441,7 +441,7 @@ def rollups(conn, window_id: str, weeks: dict) -> list[dict]:
     `weeks` is passed in and never defaulted: `trends.post_weeks()` reads the repo's own two raw
     roots, so a tick pointed at a temporary store would silently date its rollups from the live
     corpus and the test would be measuring the wrong store."""
-    reading = trends.build(conn, window_id, weeks)
+    reading = trends.build(conn, window_id, weeks, excluded)
     rows = []
     for week, by_week in sorted(reading["sku_price_by_week"].items()):
         per_brand: dict[tuple[str, str], list[dict]] = {}
@@ -470,19 +470,56 @@ def feed(conn, limit: int | None = None) -> list[dict]:
     return [dict(row) for row in (rows[:limit] if limit else rows)]
 
 
-def export(conn, window_id: str, counts: dict) -> dict:
+def not_collected(registry) -> tuple[str, ...]:
+    """The handles the LIVE registry has stopped collecting from — revision r2's `collect: false`.
+
+    The PRODUCT's population and not the store's ((mm) 2(c)): the rows stay in the store because
+    they were bought and the frozen tests read them, and the screen stops showing them the day the
+    operator pauses their channel. Read off the registry every tick, never frozen into a seal.
+    """
+    return tuple(
+        sorted(
+            channel
+            for source in registry.sources
+            if not source.collect
+            for channel in source.telegram_channels
+        )
+    )
+
+
+def on_screen(conn, window_id: str, excluded: tuple[str, ...]) -> int:
+    """How many position rows the screen's own population statement returns."""
+    source, params = aggregates.positions_source(window_id, excluded)
+    return conn.execute(f"SELECT COUNT(*) FROM ({source})", params).fetchone()[0]
+
+
+def windows_of(conn) -> list[dict]:
+    """Every window the store carries, with its anchor — the screen says WHICH readings it unions."""
+    conn.row_factory = sqlite3.Row
+    return [
+        dict(row)
+        for row in conn.execute(
+            "SELECT window_id AS id, anchor, days, since, until FROM windows ORDER BY anchor"
+        )
+    ]
+
+
+def export(conn, window_id: str, counts: dict, excluded: tuple[str, ...] = ()) -> dict:
     """The screen's only fuel — a derived export in the envelope of plan §5.12a.
 
     Sorted keys, no git block and NO CLOCK: two ticks over an unchanged store write this file
     byte for byte the same, which is a determinism check anybody can run with `shasum`. The tick's
     own timestamp lives in `results/promo_tick.json`.
     """
+    dropped = on_screen(conn, window_id, ()) - on_screen(conn, window_id, excluded)
     return {
         "contract": "docs/PHASE-promo-pulse-1.md §2 S4/C5 — `make tick` writes this, `make"
         " promo-screen` renders it and reads nothing else.",
         "window_id": window_id,
+        "windows": windows_of(conn),
+        "not_collected": {"channels": list(excluded), "position_rows": dropped},
         "screen": {
-            "positions": aggregates.promo_positions(conn, window_id, CHAINS),
+            "positions": aggregates.promo_positions(conn, window_id, CHAINS, excluded),
             "depth_by_chain_and_brand": [
                 dict(row)
                 for row in conn.execute(
@@ -519,10 +556,11 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--state", type=Path, default=STATE)
     parser.add_argument(
         "--window",
-        default="w2",
-        help="the aggregate window the screen is built from. w2 is the C2 window"
-        " (results/prereg_promo_c2.json :: addendum[0].window_id): ruling 02.09 (d) refuses the"
-        " shape that leaves the screen on w1 «because the phase's artifact IS the C2 screen».",
+        default=aggregates.ALL_WINDOWS,
+        help="the aggregate window the screen is built from, or 'all' (the DEFAULT — ruling 10.09"
+        " (mm) 2(c) supersedes 02.09 (d)'s w2): the union of every window the store carries, one"
+        " row per (carrier, row_id) with the newest window winning. An id the `windows` table does"
+        " not carry is a refusal, not an empty screen.",
     )
     parser.add_argument("--now", help="ISO timestamp; the cooled queue's clock (default: now)")
     parser.add_argument(
@@ -547,16 +585,28 @@ def main(argv: list[str] | None = None) -> int:
         return 0
 
     conn = sqlite3.connect(args.db)
+    known = [row[0] for row in conn.execute("SELECT window_id FROM windows ORDER BY anchor")]
+    if args.window != aggregates.ALL_WINDOWS and args.window not in known:
+        # BEFORE `ensure_promo_tables` and before the first insert: `--window all` used to match no
+        # row and write an EMPTY screen with a zero exit code (09.09), which is a checker whose
+        # failure is silence ([[a_checker_whose_failure_is_silence]]). Nothing is written here.
+        raise SystemExit(
+            f"--window {args.window!r}: the store's `windows` table carries {known} and"
+            f" {aggregates.ALL_WINDOWS!r} for their union. Nothing written — an id the table lacks"
+            " renders an empty screen, and an empty screen is not an answer."
+        )
     aggregates.ensure_promo_tables(conn)
     before = aggregates.promo_counts(conn)
 
     store = RawStore(args.store, archives=(args.archive,))
+    registry = load_registry(REGISTRY)
+    excluded = not_collected(registry)
     records = signal_records(args.signals)
-    written, p1 = promote(
-        conn, records, threads_of(store, records), load_registry(REGISTRY), chain_spellings()
-    )
+    written, p1 = promote(conn, records, threads_of(store, records), registry, chain_spellings())
     weeks = trends.post_weeks((args.archive / "posts", args.store / "posts"))
-    written["rollup"] = aggregates.add_promo(conn, "rollup", rollups(conn, args.window, weeks))
+    written["rollup"] = aggregates.add_promo(
+        conn, "rollup", rollups(conn, args.window, weeks, excluded)
+    )
     digest = digests(conn, store, now)
     written["digest"] = digest["inserted"]
     conn.commit()
@@ -576,7 +626,12 @@ def main(argv: list[str] | None = None) -> int:
     )
     args.out.parent.mkdir(parents=True, exist_ok=True)
     args.out.write_text(
-        json.dumps(export(conn, args.window, after), indent=2, ensure_ascii=False, sort_keys=True)
+        json.dumps(
+            export(conn, args.window, after, excluded),
+            indent=2,
+            ensure_ascii=False,
+            sort_keys=True,
+        )
         + "\n",
         encoding="utf-8",
     )
