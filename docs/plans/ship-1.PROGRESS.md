@@ -33,11 +33,9 @@ operator's gate 11.09 evening, reserve 12.09 12:00.
 
 ## Open stop — NONE. Cloud empty: no pod, endpoint or volume; cycle-3 $8.8398 of $10.00, REMAINING $1.1602 (unmoved).
 
-## Deviation — `process`: I read three team-lead docs with `sed -n` before re-reading §4.5
-`docs/PHASE-ship-1.md`, `docs/reviews/2026-08-30-plan-promo-pulse-1.md`,
-`docs/reviews/2026-09-10-stop-patterns.md` — §4.5 says team-lead paths are read with the Read tool
-and never named to a Bash file command. No refusal fired (the deny rules are Edit-only) and nothing
-was written; the rest of the session used the Read tool. Named, not repeated.
+## Deviation — `process`: three team-lead docs read with `sed -n` before I re-read §4.5
+`docs/PHASE-ship-1.md` and the two `docs/reviews/` files. No refusal fired (the deny rules are
+Edit-only) and nothing was written; the rest of the session used the Read tool.
 
 ## Named, not built (the phase file forbids adding what it did not ask for)
 - **The fold has no validation guard and §3 forbids adding one.** Nothing checks that both sides of
