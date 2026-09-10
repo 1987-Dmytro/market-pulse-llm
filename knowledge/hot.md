@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-09-10 12:07:38 (every SessionStart)
+**Auto-refreshed:** 2026-09-10 14:08:40 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
-ec8def2 docs(team-lead): ruling 09.09 (ll) — s43 «kk-close» ACCEPTED ($0) on my own runs; promo-c3 CLOSED $0.2577, volume deleted, floor in (57 tests) — the c3 saga is closed, no paid steps remain; my --window all slip corrected to w2; FINDING: c3's data reaches no dashboard window (the plan's third window w3 is unbuilt) → next team-lead item; PHASE v28, stop-patterns §7
-d561afb docs(progress): the green reading names all THREE commits after it, and the deviation takes a tag from PROCESS's closed enum
-ef286f4 docs(progress): s43 — «kk-close» DONE at $0, no open stop; the floor is in, promo-c3 is CLOSED at $0.2577, the volume is deleted
-b361e57 money(cycle): the promo-c3 close writes its cycle-3 line reading too — $8.8398 of $10.00, REMAINING $1.1602
-d60b303 money(step): promo-c3 CLOSED at $0.2577 of the $0.80 cap — the floor graded what the band could not
+6fb8d1b docs(progress): s44 — «w3» DONE at $0, no open stop; the screen is 1301 rows over three windows
+a7b9f74 s44(w3) iii: the screen is EVERY window, and an id the table lacks refuses instead of emptying it
+3692703 s44(w3) ii: the store builds THREE windows, c3's through its own seal exactly as w2's
+6f5dbaf s44(w3) i: the addendum's four fields BRANCH on --step, and c3's registration names w3
+5937ad0 docs(progress): s44's start ritual — ship-1's PROGRESS created from promo-pulse-1's, «next: w3»
 ```
 
 ## 📋 Recent decisions
@@ -23,9 +23,9 @@ d60b303 money(step): promo-c3 CLOSED at $0.2577 of the $0.80 cap — the floor g
 
 ## 📅 Recent daily logs
 
+- `2026-09-10.md`
 - `2026-09-09.md`
 - `2026-09-08.md`
-- `2026-09-06.md`
 
 <!-- AUTO-GEN END (everything below preserved across refreshes) -->
 
