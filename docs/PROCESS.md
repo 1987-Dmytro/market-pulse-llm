@@ -224,7 +224,11 @@ One-sentence contracts (`docs/PROMPT-*.md`) remain for fixes and debts whose dif
   A permission prompt or denial inside a paid session is a stop, and the team lead's.
 - `make check` is the verifier (ruff + pytest); `make check-stamped` for a HOLDS reading at a HEAD;
   `scripts/preflight_serving_guards.py` renders the real chat template offline (zero cost) — run it
-  before any pod that changes a template or serving config.
+  before any pod that changes a template or serving config. v2.9 (10.09, ruling (ss)): when the suite
+  outruns the harness's one-call ceiling (~12 min against 10), the executor may run it in SLICES whose
+  union is PROVEN equal to `ls tests/test_*.py` (no gap, no overlap, a dropped slice refused) — the
+  totals are the claim, the slicing is named in PROGRESS; the ONE-call reading is the team lead's
+  snapshot run, recorded in the next ruling.
 - Tools: vault in `knowledge/` (hot.md, daily logs, `knowledge/decisions/` + INDEX), code graph via
   `graphify` (`graphify query "what reads <file>"` before any contract that moves a shared
   artifact; post-commit hook rebuilds; `--update` after doc changes), `/save` at session end.
