@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-09-10 15:54:46 (every SessionStart)
+**Auto-refreshed:** 2026-09-10 17:05:25 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
-b26da6d docs(report): chain-fold — 83 on the screen, `marketopt_private` at 0, and no graded number moved
-3cc99ad docs(progress): back under the ≤60-line cap with the two added lines kept
-accd83a docs(progress): two reaches the item's own check does not cover — `chain_key`'s callers, and the sibling readers' second defect
-6fb5009 docs(progress): the deviation line fits the ≤60-line cap the ruling sets for this file
-cc7cc6e docs(progress): s45 — «chain-fold» DONE at $0, no open stop; ONE Маркетопт, 83 rows, no graded number moved
+161a901 docs(report): s2-promote — 281 feed rows, «118 of 678 read · 548 in the queue», and no graded number moved
+b94cc01 docs(progress): s46 — «s2-promote» DONE at $0, no open stop; 118 threads on the feed, «unsure» is 0 by measurement
+75d3d32 s46(s2-promote) iii: «118 of 678 threads read · 548 in the queue» — and a row with no reaction says WHICH of three nothings
+711b847 s46(s2-promote) ii: the 118 threads the dev loop already read reach `results/promo_signals/` — $0, nothing re-read
+3c1f2b8 s46(s2-promote) i: the loop leg's record builder LIFTED — one generator, two readers, both records byte-identical
 ```
 
 ## 📋 Recent decisions
