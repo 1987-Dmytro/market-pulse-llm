@@ -1,0 +1,28 @@
+# Which chains the OPERATOR says are present in a region — and nothing more than that.
+#
+# This file is the operator's list, NOT a property of the data. No source in `registry.yaml`
+# carries a city, a region or an oblast: `market_pulse.registry.Source` has id, name,
+# source_type, telegram_channels, verified, comments_enabled, watch, audience and collect, and
+# that is all. The only geography anywhere near a retail chain is free text inside one display
+# name — «Маркетопт (Толока) м.Кременчук» — which nothing parses.
+#
+# So a block built from this file may say «мережі, присутні в області» and may NOT say «позиції
+# області»: the leaflets of АТБ, Сільпо and ЕКО Маркет are national issues, and labelling their
+# rows with an oblast would be a claim the data does not carry (DESIGN-ship-1 §7: «an invented
+# row is not» a legal answer).
+#
+# Not to be confused with SPEC-v2 §«Категория B — Полтавская область»: that is stage 2 and it is
+# about the consumer VOICE in open chats, whose 17 channels are `collect: false`. This is a cut
+# across retail chains, a different object.
+#
+# The aggregator channels that resell АТБ promos — `atb_aktsiyi`, `atb_fanatik` — are deliberately
+# absent: they are not the retailer's own channel, and listing them beside `atb` would put one
+# physical retailer into the block twice.
+
+poltava:
+  name: Полтавська область
+  chains:
+    - marketopt_promo   # the one chain whose own channel names the city
+    - silpo
+    - atb
+    - ekomarket_shop

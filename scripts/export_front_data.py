@@ -49,9 +49,10 @@ import runpod_guard as guard  # noqa: E402
 import tick  # noqa: E402
 import window_summary_5c2 as summary  # noqa: E402
 
-from market_pulse import registry, trends  # noqa: E402
+from market_pulse import aggregates, registry, trends  # noqa: E402
 
 OUT = screen.RESULTS / "front_data.json"
+REGIONS = REPO_ROOT / "config" / "chain_regions.yaml"
 VERDICT = screen.RESULTS / "verdict_45h2.json"
 GRADE = screen.RESULTS / "grade_positions_50.json"
 DRAW = screen.RESULTS / "positions_draw_50.json"
@@ -89,6 +90,7 @@ def required() -> tuple[Path, ...]:
         builder.STRINGS,
         tick.REGISTRY,
         registry.CHAIN_ALIASES,
+        REGIONS,
         *media_manifests(),
         *(screen.RESULTS / name for name in screen.S2_FILES),
     )
@@ -170,9 +172,16 @@ def chains() -> dict:
     Order is first appearance in the registry (DESIGN-ship-1 §3: the series slot follows the
     entity, assigned once), and the row that NAMES a folded chain is the chain's own — a second
     channel of one retailer must not lend the pair its name.
+
+    `by_channel` is the same fold read from the other side: a TELEGRAM HANDLE to the chain id the
+    rows above name. The screen's two blocks key on two different id spaces — `positions[].chain.id`
+    is a folded registry id and `rollup[].chain` is the raw handle — so the Тренди tab had no way to
+    put «Маркетопт» on a bar and printed `+Ejz6ubzm21IyMTQy` instead. The lookup belongs here beside
+    the names it resolves to; the app reads a label out of it and folds nothing of its own.
     """
     folds = registry.chain_of_channel()
     table: dict[str, dict] = {}
+    by_channel: dict[str, str] = {}
     for source in registry.load_registry(tick.REGISTRY).sources:
         if not source.collect:
             continue
@@ -182,12 +191,15 @@ def chains() -> dict:
         )
         if source.id == chain_id:
             row |= {"name": source.name, "source_type": source.source_type}
+        for handle in source.telegram_channels or ():
+            by_channel[handle] = chain_id
     return {
         "from": f"{tick.rel(tick.REGISTRY)} :: sources[] where collect (id, name, source_type),"
         " folded by config/chain_aliases.yaml :: chain_of_channel",
         "reading": "the sources the registry is COLLECTING, which is the set a position row's"
         " chain can be — a chain the app meets outside this table keeps the export's own id",
         "rows": list(table.values()),
+        "by_channel": dict(sorted(by_channel.items())),
     }
 
 
@@ -327,6 +339,201 @@ def media(export: dict, manifests: tuple[Path, ...]) -> dict:
     }
 
 
+UNIT_OF_SIZE = {"г": "uah_per_kg", "мл": "uah_per_l"}
+"""The comparable unit a size is quoted in. `positions.parse_size` has already folded кг→г and
+л→мл (`market_pulse/positions.py`), so these two are every unit a row can carry and ×1000 is the
+whole conversion — no unit table, and no third kind sneaking in unnoticed."""
+
+
+def unit_price(position: dict) -> tuple[str, float] | None:
+    """The price of a kilogram or a litre of this row — `None` when the row cannot carry one.
+
+    `promo_price / (size_value × pack_count) × 1000`. **The pack matters**: where `pack_count` is
+    set the size is the size of ONE piece and the price is the price of the pack, so the four
+    multipacks in the store (Рудь 6×100 г, Лацяти 10×10 мл) would read six and ten times dear
+    without it.
+
+    It is derived from the promo price and the size alone. It touches neither `price_old` nor the
+    arithmetic depth, so SPEC 3.17 (3) / 3.21 (4) — which keep the old price off every surface —
+    do not reach it: nothing here lets a reader recover a price that was not printed.
+    """
+    item = position.get("item") or {}
+    named = UNIT_OF_SIZE.get(item.get("size_unit"))
+    size, price = item.get("size_value"), position.get("promo_price")
+    if named is None or not size or price is None:
+        return None
+    return named, round(price / (size * (item.get("pack_count") or 1)) * 1000, 4)
+
+
+def position_card(position: dict, pages: dict, names: dict) -> dict:
+    """One position as the app shows it: what it is, what it costs, and where to see it printed.
+
+    A field the row does not carry is ABSENT, not null — the same rule the position row itself is
+    written under. `page` is the leaflet photo the row was read off, so an extreme the operator
+    doubts is one click from its own page; a row whose page did not arrive simply has no `page`
+    and the app says so rather than showing a hole.
+    """
+    item, evidence = position["item"], position["evidence"]
+    chain = position["chain"]["id"]
+    card = {
+        "row_id": position["row_id"],
+        "brand": position["brand"]["display"],
+        "category": item["category"],
+        "chain": chain,
+        "chain_name": names.get(chain, chain),
+        "channel": evidence["channel"],
+        "msg_id": evidence["msg_id"],
+    }
+    for field in ("line", "size_value", "size_unit", "pack_count"):
+        if item.get(field) is not None:
+            card[field] = item[field]
+    for field in ("promo_price", "printed_pct"):
+        if position.get(field) is not None:
+            card[field] = position[field]
+    priced = unit_price(position)
+    if priced is not None:
+        card["unit"], card["unit_price"] = priced
+    page = pages.get(f"{evidence['channel']}:{evidence['msg_id']}")
+    if page is not None:
+        card["page"] = page
+    return card
+
+
+def tracked_categories() -> list[dict]:
+    """Every category the registry tracks, in the registry's own order — the law, not the data.
+
+    A group key is also a category a row can carry: `dairy` labels the 39 rows whose subcategory was
+    not printed, and `ice-cream` is a group with no split at all. Both are leaves here, and the one
+    that doubles as a parent is flagged so the app can say which of the two it is — «Молочні
+    продукти» sitting in a list of eleven beside «Сир твердий» would read as the dairy total.
+    """
+    groups = registry.load_registry(tick.REGISTRY).taxonomy.tracked_groups
+    rows = []
+    for key, group in groups.items():
+        rows.append({"category": key, "name": group["name"], "group": key, "is_group_key": True})
+        for sub, name in (group.get("subcategories") or {}).items():
+            rows.append({"category": sub, "name": name, "group": key})
+    return rows
+
+
+def category_prices(export: dict, pages: dict, names: dict) -> dict:
+    """What a kilogram costs in each tracked category — n, the spread, and the two ends named.
+
+    Cut by category AND by unit, never by category alone: five of the eleven categories hold both
+    gram and millilitre rows, and one median over the two would add ₴/kg to ₴/L and publish the sum
+    as a price ([[a_settlement_and_its_reference_measure_different_kinds]]).
+
+    The numbers are `aggregates.spread` and `aggregates.quartiles` — the repository's one spelling
+    of a median, called and not re-written. The ends are the rows themselves, because «найдешевший
+    сир» is a claim about a particular pack and the operator has to be able to look at it: the
+    extraction's own completeness bar is RED, so an extreme is exactly where a misread size lands.
+
+    The rows are the REGISTRY's categories, not the observed ones: a category the market stopped
+    promoting keeps its card and says «немає в даних», because a card that quietly disappears is an
+    empty state with no sentence (DESIGN-ship-1 §10). `positions` counts every row of the category,
+    priced or not, so the difference between it and the bases' `n` is visible rather than silent.
+    """
+    priced: dict[tuple[str, str], list] = {}
+    held: dict[str, int] = {}
+    without = 0
+    for position in export["screen"]["positions"]:
+        category = position["item"]["category"]
+        held[category] = held.get(category, 0) + 1
+        reading = unit_price(position)
+        if reading is None:
+            without += 1
+            continue
+        priced.setdefault((category, reading[0]), []).append(
+            (reading[1], position["row_id"], position)
+        )
+    # the row_id breaks a price tie, so the named end is the same row on every build
+    for members in priced.values():
+        members.sort(key=lambda member: member[:2])
+    return {
+        "from": f"{tick.rel(screen.EXPORT)} :: screen.positions[] (promo_price, item.size_value,"
+        f" item.size_unit, item.pack_count), over {tick.rel(tick.REGISTRY)} ::"
+        " taxonomy.tracked_groups",
+        "reading": "the promo price of a kilogram or a litre — promo_price / (size_value ×"
+        " pack_count) × 1000 — read per category AND per unit, because a category that holds both"
+        " grams and millilitres has no single median; n, min, q1, median, q3 and max are"
+        " aggregates.spread and aggregates.quartiles, and the two ends are the rows themselves",
+        "rows_without_a_unit_price": without,
+        "categories": [
+            row
+            | {
+                "positions": held.get(row["category"], 0),
+                "bases": [
+                    {"unit": unit}
+                    | aggregates.spread([value for value, _, _ in members])
+                    | aggregates.quartiles([value for value, _, _ in members])
+                    | {
+                        "cheapest": position_card(members[0][2], pages, names),
+                        "dearest": position_card(members[-1][2], pages, names),
+                    }
+                    for unit in UNIT_OF_SIZE.values()
+                    if (members := priced.get((row["category"], unit)))
+                ],
+            }
+            for row in tracked_categories()
+        ],
+    }
+
+
+def regions(export: dict, media_block: dict, names: dict) -> dict:
+    """The operator's regional cut: the chains they say serve a region, each on its current week.
+
+    **This is a selection of CHAINS, not a geography of rows.** No source in the registry carries a
+    city or an oblast, and the leaflets of the national chains are national issues — so the block
+    may say «мережі, присутні в області» and may not say «позиції області». The one chain whose own
+    channel names a city is Маркетопт (Толока) м.Кременчук.
+
+    «Current week» is the flyer gallery's, not a second one: per chain, the newest week that chain
+    has pages in (DESIGN-ship-1 §11). A chain with no flyer set says so by name — `absent` — and
+    shows no rows, because an empty shelf and a chain we hold no pages for are different states.
+    """
+    config = yaml.safe_load(REGIONS.read_text(encoding="utf-8"))
+    pages = media_block["pages"]
+    flyers = {flyer["chain"]: flyer for flyer in media_block["flyers"]}
+    positions = export["screen"]["positions"]
+    cut = []
+    for region, block in config.items():
+        chains_out = []
+        for chain in block["chains"]:
+            row = {"chain": chain, "name": names.get(chain, chain)}
+            flyer = flyers.get(chain)
+            if flyer is None:
+                chains_out.append(row | {"absent": "no_pages"})
+                continue
+            on_the_week = set(flyer["pages"])
+            cards = [
+                position_card(position, pages, names)
+                for position in positions
+                if pages.get(f"{position['evidence']['channel']}:{position['evidence']['msg_id']}")
+                in on_the_week
+            ]
+            cards.sort(
+                key=lambda card: (card["category"], card.get("promo_price") or 0.0, card["row_id"])
+            )
+            chains_out.append(
+                row
+                | {
+                    "week": flyer["week"],
+                    "since": flyer["since"],
+                    "until": flyer["until"],
+                    "positions": cards,
+                }
+            )
+        cut.append({"region": region, "name": block["name"], "chains": chains_out})
+    return {
+        "from": f"{tick.rel(REGIONS)} :: <region>.chains, each on its own flyer set of"
+        f" {tick.rel(OUT)} :: media.flyers",
+        "reading": "the chains the OPERATOR says serve the region, each on the newest week it has"
+        " leaflet pages in — a selection of chains, not a geography of rows: the registry carries no"
+        " region, and the leaflets of the national chains are national",
+        "cuts": cut,
+    }
+
+
 def s1_reading() -> dict:
     """The S1 bar as `scripts/grade_positions.py` recorded it, over the draw it was read on.
 
@@ -381,16 +588,24 @@ def build(export_path: Path = OUT) -> dict:
     dictionary = yaml.safe_load(builder.METRICS.read_text(encoding="utf-8"))
     strings = builder.Strings(builder.STRINGS)
 
+    # the media block is joined once and read three times: the gallery renders it, and the regional
+    # cut and the two priced ends borrow its page names rather than joining the records again
+    chain_table = chains()
+    media_block = media(promo, manifests)
+    names = {row["id"]: row["name"] for row in chain_table["rows"]}
+
     document = {
         "contract": CONTRACT,
-        "chains": chains(),
+        "chains": chain_table,
         "data_until": data_until(promo),
         "command_center": centre | {"conclusions": builder.conclusions(centre, strings)},
         "model": {
             "from": tick.rel(VERDICT),
             "verdict": json.loads(VERDICT.read_text(encoding="utf-8")),
         },
-        "media": media(promo, manifests),
+        "media": media_block,
+        "category_prices": category_prices(promo, media_block["pages"], names),
+        "regions": regions(promo, media_block, names),
         "s2_readings": screen.s2_readings(screen.RESULTS),
         "s2_boundary": screen.S2_BOUNDARY,
         "s1_reading": s1_reading(),
