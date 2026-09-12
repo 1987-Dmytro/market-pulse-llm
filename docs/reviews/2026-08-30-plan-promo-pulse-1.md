@@ -1349,3 +1349,11 @@ committed dry run, no `--register`; then the fresh verifier → the team lead's 
 5. Environment for s51: Node v24.15.0; `frontend-design@claude-plugins-official` installed executor-side; no cloud, $0.
 6. `status.money.from` naming `sessions[-1]` for a root-key block, and the two-id-spaces question, stay NAMED — ruled to front-2 planning, not silently fixed.
 7. Next item: «front-2» (§2 item 7, command centre T0–T8), fresh session s51, prompt v3 unchanged.
+
+## 12.09.2026 — ruling (vv): the operator's design gate on front-1 — RED; DESIGN v2; next «design-pass»
+1. The operator (the customer) read the accepted front and returned RED on the LOOK: not the promised «Apple/Google/antigravity», no flyer JPEGs on screen, no animations. front-1's technical acceptance (uu) STANDS — the gap is the brief's: DESIGN v1 named no reference, no media, no motion. A team-lead spec defect, not the executor's.
+2. Design interview of 12.09, the operator's word: (а) Якість with the RED 0.2333 — OUT of the static client build, served keeps it; (б) default tonality — DARK «antigravity»; (в) flyer gallery — the approved mockup, CURRENT week, one card per chain; (г) animations mandatory.
+3. `docs/DESIGN-ship-1.md` → v2: §11 addendum (wins over §3–§5 on conflict) — tonality, the media pipeline (`positions[].media` + `flyers`; only referenced files staged), the mockup grammar, the four animations, the Якість exclusion.
+4. PHASE → v8: NEW item «design-pass» before «front-2». PROGRESS's Next line set to «design-pass» by the team lead under this ruling.
+5. Media source measured: 4 280 photos under `data/annotation/*/posts_media` (3 008 in promo_c2) — the feature is $0.
+6. Next session s51 launches with prompt v3 unchanged.

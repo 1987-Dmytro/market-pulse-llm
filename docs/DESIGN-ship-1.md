@@ -1,4 +1,4 @@
-# DESIGN — `ship-1` front end (the brief the front items read; team-lead file, v1 10.09)
+# DESIGN — `ship-1` front end (the brief the front items read; team-lead file, v2 12.09 — the §11 addendum WINS over §3–§5 where they conflict; v1 10.09)
 
 Every UI fork is settled here or by §10's default. The app FORMATS, FILTERS, SORTS and LINKS; it computes no figure — every number is a field of a result file, and every number can say which file (ⓘ → provenance). Language of the UI: Ukrainian first (the customer), English by toggle; code and identifiers in English.
 
@@ -80,3 +80,12 @@ Semantic landmarks (`header`, `nav`, `main`, `footer`); every control a real `<b
 ## 10. Defaults for what this brief does not say
 
 The simplest thing that keeps the number's provenance visible; native HTML over a component; a table over a chart when the form is unclear; the dictionary's wording over a new label; no new dependency without a line in PROGRESS naming why. Never a placeholder number, never a spinner without a timeout, never an empty state without a sentence that says which of «not collected · not exported · none in the data» it is.
+
+## 11. v2 addendum (12.09, ruling (vv)) — the approved look; where this conflicts with §3–§5, §11 wins
+
+- Tonality: DARK-FIRST «antigravity» — the default theme is dark (`data-theme="dark"` is the initial state; the toggle and the light theme stay; system preference no longer picks the default). Depth by surface steps; one soft shadow level is allowed in dark; KPI values may carry a subtle accent emphasis; spacing upgraded about 1.25x over §3. The light theme keeps §3 as is.
+- Flyer media reaches the screen: `export_front_data.py` grows `positions[].media` (relative path of the row's source page photo — the evidence the store already carries points into `data/annotation/*/posts_media`) and `flyers` — per chain, the CURRENT week only: the newest window's newest flyer set per chain (chain, dates, page count, positions count, cover path). `make front` stages ONLY the referenced files into `dashboard/app/media/` (copies; their count and total bytes named in `manifest.json`); never all 4 280.
+- Промо · Позиції renders the approved mockup grammar of 12.09: header + chain-chip filter; four KPI cards with count-up; «Свіжі листівки» — ONE card per chain, current week, cover = the real JPEG, click opens a lightbox of the original pages; the positions table: a 40 px thumbnail of the row's source page, promo price large, old price struck through, a depth bar, thumbnail click opens the same lightbox at that page.
+- Animations (MANDATORY; `prefers-reduced-motion: reduce` still disables all): KPI count-up under 600 ms on first paint; flyer-card hover lift (transform + shadow, about 200 ms); staggered reveal of rows/cards on a filter change (about 30 ms step); theme crossfade about 200 ms. Plain CSS/JS; an animation library is a §4 fork, not a default.
+- Якість: EXCLUDED from the static client build — in static mode the tab is absent from navigation and unroutable; in served mode it stays exactly as accepted (the operator's word, 12.09: 1б). Default shape: a runtime mode check; a build-flag split is a legal fork — name it in PROGRESS.
+- Every other tab (Тренди, Реакції, Петля, T0–T8) adopts the same tonality and card grammar; the data contracts of §7 are unchanged.

@@ -35,7 +35,7 @@ tree of `210b878`, the last code commit — the bundle a clone builds. **$0; no 
 Also: the «таблиця» view dropped the empty-state sentence (Тренди's DEFAULT view opens on an empty series); the «мереж» card spelled a path
 into its context line (§5). Served mode re-checked after each: no regression.
 
-## Next — «front-2» ($0, §2 item 7: the command centre T0–T8). Then «e2e-ship» → the gate.
+## Next — «design-pass» ($0, §2, NEW by ruling (vv): DESIGN v2 §11 on the accepted app). Then «front-2» → «e2e-ship» → the gate.
 
 ## Open stop — NONE. Cloud empty: no pod, endpoint or volume; cycle-3 $8.8398 of $10.00, REMAINING $1.1602 (unmoved).
 
