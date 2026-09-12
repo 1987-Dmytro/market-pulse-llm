@@ -43,6 +43,8 @@ import runpod_guard as guard  # noqa: E402
 import tick  # noqa: E402
 import window_summary_5c2 as summary  # noqa: E402
 
+from market_pulse import registry  # noqa: E402
+
 OUT = screen.RESULTS / "front_data.json"
 VERDICT = screen.RESULTS / "verdict_45h2.json"
 GRADE = screen.RESULTS / "grade_positions_50.json"
@@ -71,6 +73,8 @@ def required() -> tuple[Path, ...]:
         guard.cycle3_path(),
         builder.METRICS,
         builder.STRINGS,
+        tick.REGISTRY,
+        registry.CHAIN_ALIASES,
         *(screen.RESULTS / name for name in screen.S2_FILES),
     )
 
@@ -138,6 +142,40 @@ def status(export: dict, ledger: dict, ledger_label: str) -> dict:
     }
 
 
+def chains() -> dict:
+    """The chains the app NAMES and colours, in the registry's own order, folded like the screen.
+
+    `chain.id` on a position row is a registry id folded by `aggregates.chain_key`, and the export
+    carries no display name for it — so «marketopt_promo» would be what the operator reads in a
+    table and a legend. The names come from `config/registry.yaml` through its own loader and the
+    fold from `chain_aliases.yaml` through `registry.chain_of_channel`, the same two files the
+    screen folded by: a label typed into the app would be a second spelling of a name the registry
+    already holds, and the first revision of it would leave the app lying ([[a_fold_is_not_a_membership_test]]).
+
+    Order is first appearance in the registry (DESIGN-ship-1 §3: the series slot follows the
+    entity, assigned once), and the row that NAMES a folded chain is the chain's own — a second
+    channel of one retailer must not lend the pair its name.
+    """
+    folds = registry.chain_of_channel()
+    table: dict[str, dict] = {}
+    for source in registry.load_registry(tick.REGISTRY).sources:
+        if not source.collect:
+            continue
+        chain_id = folds.get(source.id, source.id)
+        row = table.setdefault(
+            chain_id, {"id": chain_id, "name": source.name, "source_type": source.source_type}
+        )
+        if source.id == chain_id:
+            row |= {"name": source.name, "source_type": source.source_type}
+    return {
+        "from": f"{tick.rel(tick.REGISTRY)} :: sources[] where collect (id, name, source_type),"
+        " folded by config/chain_aliases.yaml :: chain_of_channel",
+        "reading": "the sources the registry is COLLECTING, which is the set a position row's"
+        " chain can be — a chain the app meets outside this table keeps the export's own id",
+        "rows": list(table.values()),
+    }
+
+
 def data_until(export: dict) -> dict:
     """The newest window boundary the screen export carries — the data's own freshness.
 
@@ -200,6 +238,7 @@ def build(export_path: Path = OUT) -> dict:
 
     document = {
         "contract": CONTRACT,
+        "chains": chains(),
         "data_until": data_until(promo),
         "command_center": centre | {"conclusions": builder.conclusions(centre, strings)},
         "model": {
@@ -207,6 +246,7 @@ def build(export_path: Path = OUT) -> dict:
             "verdict": json.loads(VERDICT.read_text(encoding="utf-8")),
         },
         "s2_readings": screen.s2_readings(screen.RESULTS),
+        "s2_boundary": screen.S2_BOUNDARY,
         "s1_reading": s1_reading(),
         "status": status(promo, ledger, tick.rel(ledger_path)),
         "dictionary": {
@@ -273,6 +313,7 @@ def main(argv: list[str] | None = None) -> int:
     print(f"  data until    {document['data_until']['date']}")
     print(f"  conclusions   {len(document['command_center']['conclusions'])}")
     print(f"  s2 readings   {len(document['s2_readings'])}")
+    print(f"  chains        {len(document['chains']['rows'])}")
     print(f"  s1 reading    {'read' if document['s1_reading']['reading'] else 'absent'}")
     print(f"  sources       {len(document['sources'])}")
     return 0

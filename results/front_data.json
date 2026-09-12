@@ -1,4 +1,90 @@
 {
+  "chains": {
+    "from": "config/registry.yaml :: sources[] where collect (id, name, source_type), folded by config/chain_aliases.yaml :: chain_of_channel",
+    "reading": "the sources the registry is COLLECTING, which is the set a position row's chain can be — a chain the app meets outside this table keeps the export's own id",
+    "rows": [
+      {
+        "id": "silpo",
+        "name": "Сільпо",
+        "source_type": "official_retail"
+      },
+      {
+        "id": "atb",
+        "name": "АТБ",
+        "source_type": "official_retail"
+      },
+      {
+        "id": "varus",
+        "name": "Varus",
+        "source_type": "official_retail"
+      },
+      {
+        "id": "msuaaaa",
+        "name": "MSUa Акції та знижки",
+        "source_type": "aggregator"
+      },
+      {
+        "id": "kopiyochka1",
+        "name": "Копійочка 🫶🏻",
+        "source_type": "community"
+      },
+      {
+        "id": "epicentrk_sale",
+        "name": "ЕПІЦЕНТР",
+        "source_type": "official_retail"
+      },
+      {
+        "id": "atb_aktsiyi",
+        "name": "АТБ Акції",
+        "source_type": "aggregator"
+      },
+      {
+        "id": "marketopt_promo",
+        "name": "Маркетопт (Толока) м.Кременчук",
+        "source_type": "official_retail"
+      },
+      {
+        "id": "forainfo",
+        "name": "Фора",
+        "source_type": "official_retail"
+      },
+      {
+        "id": "ekomarket_shop",
+        "name": "ЕКО Маркет",
+        "source_type": "official_retail"
+      },
+      {
+        "id": "atb_fanatik",
+        "name": "ФАНАТИК АТБ | АКЦІЇ",
+        "source_type": "aggregator"
+      },
+      {
+        "id": "blyzenko",
+        "name": "БЛИЗЕНЬКО🌿",
+        "source_type": "official_retail"
+      },
+      {
+        "id": "fozzy",
+        "name": "Fozzy",
+        "source_type": "official_retail"
+      },
+      {
+        "id": "sim23",
+        "name": "Сім23 та Сімі💜",
+        "source_type": "official_retail"
+      },
+      {
+        "id": "rozetka",
+        "name": "Rozetka продукти",
+        "source_type": "official_retail"
+      },
+      {
+        "id": "xochydeshevshe",
+        "name": "Хочу дешевше",
+        "source_type": "aggregator"
+      }
+    ]
+  },
   "command_center": {
     "conclusions": [
       {
@@ -9773,6 +9859,7 @@
       }
     }
   },
+  "s2_boundary": "The shipped row is the product's pipeline end to end: every answer through the four hooks of §2 S4 — a signal row whose quote is not a substring of the comment it cites is dropped — and then P1. The «with P1» reading beside it is that same layer over the model's RAW answer, one filter upstream, so the two differ by exactly what the hooks drop; the «raw» rows are the reader before P1 at all. A number measured upstream of a product filter is the model's, disclosed as such, never the product's (ruling 08.09 (dd)).",
   "s2_readings": [
     {
       "agreed": 83,
@@ -9860,9 +9947,17 @@
     }
   ],
   "sources": {
+    "config/chain_aliases.yaml": {
+      "bytes": 2891,
+      "sha256": "be872cbf63bd4f54c6ba9782fd7c437e3792b41e1373d6930f452681f640221f"
+    },
     "config/metrics.yaml": {
       "bytes": 16771,
       "sha256": "82a5964b8e8287ab795bb810a092b23d688704e06ae6e7fd10a3d2dc962c0faf"
+    },
+    "config/registry.yaml": {
+      "bytes": 40570,
+      "sha256": "eff8ba5ba17ad102a0619a0ff18b3348a1df5a3b2b0b3fd11fcba2f6b210a3b4"
     },
     "config/ui_strings.yaml": {
       "bytes": 34984,
@@ -9872,7 +9967,6 @@
       "bytes": 222697,
       "sha256": "260b0cafc05dac20561df975321517646bbf11902a227a478074b3e6aa7188f9"
     },
-    "results/front_data.json": "this file",
     "results/grade_positions_50.json": {
       "bytes": 17591,
       "sha256": "6669663bc17ce63a76e0e4426b540feaeb0ac2f08e39048671c84071cae96add"
