@@ -47,9 +47,10 @@ one file over, in `results/promo_tick.json`, which is the tick's own state and w
 not read.
 
 **What it does NOT do. It does not collect, it does not extract and it does not schedule itself.**
-`data/schedule.json` is READ (min interval 1 h, default 6 h) and reported as a due time; the
-schedule UI is out of scope (phase spec §6) and the file is created here once, with the defaults,
-so a reader can see what the loop obeys. The interval gates a SCHEDULER, never this command: a tick
+`data/schedule.json` is READ (min interval 1 h, default 6 h) and reported as a due time; the file is
+created here once, with the defaults, so a reader can see what the loop obeys, and the two intervals
+are edited from the Петля tab through `PUT /api/schedule` (PHASE-ship-1 §2, ruling 10.09 (ss) 3 —
+they were out of scope while the loop had no UI, and that sentence stood here after it got one). The interval gates a SCHEDULER, never this command: a tick
 that refused to run twice in an hour would make «run twice on an unchanged store → zero new rows»
 untestable, and the check would pass over a run that never happened
 ([[a_prefilter_cannot_certify_the_population]]). `--if-due` is there for the cron caller that does
@@ -84,8 +85,8 @@ STATE = REPO_ROOT / "results" / "promo_tick.json"
 SCHEDULE_DEFAULT = {
     "min_interval_hours": 1,
     "default_interval_hours": 6,
-    "note": "READ by scripts/tick.py and by nothing else. Phase spec §2 S4 fixes both numbers;"
-    " the schedule UI is out of scope (§6), so this file is the whole of the loop's schedule.",
+    "note": "READ by scripts/tick.py and written by PUT /api/schedule. Phase spec §2 S4 fixes the"
+    " defaults; this file is the whole of the loop's schedule.",
 }
 
 CHAINS = ("atb", "varus", "silpo", "novus", "fora", "megamarket", "auchan")
