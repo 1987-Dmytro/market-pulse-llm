@@ -9,8 +9,28 @@
 
 import { useEffect, useState } from 'react'
 
+import type { Mode } from './data/load.ts'
+
 export const PROMO_TABS = ['positions', 'trends', 'reactions', 'quality', 'loop'] as const
 export const CC_TABS = ['t0', 't1', 't2', 't3', 't4', 't5', 't6', 't7', 't8'] as const
+
+/** The tab the STATIC client build does not ship (DESIGN-ship-1 §11, the operator's word 12.09). */
+export const SERVED_ONLY = 'quality'
+
+/**
+ * The promo tabs of a mode. The static build is the public showcase and Якість is the tab that
+ * reads the RED S1 bar, so it is not in it — and «not in the navigation» is not the same as «not
+ * reachable»: `#/promo/quality` is a link someone already has. {@link servedOnly} answers the
+ * route with the same rule this list is built from, so one of them cannot drift open.
+ */
+export function promoTabs(mode: Mode): readonly string[] {
+  return mode === 'served' ? PROMO_TABS : PROMO_TABS.filter((tab) => tab !== SERVED_ONLY)
+}
+
+/** Does this path ask for a tab this mode does not carry? */
+export function servedOnly(path: string, mode: Mode): boolean {
+  return mode !== 'served' && path === `/promo/${SERVED_ONLY}`
+}
 
 /**
  * Front-1 lands on the promo half: the brief's `#/cc/t0` is a tab front-2 builds, and a default

@@ -12,12 +12,14 @@ import { AppContext, applyLang, applyTheme, rememberLang, rememberTheme, remembe
 import type { App as AppData, ThemeChoice } from './app-state.ts'
 import { chainTable } from './data/chains.ts'
 import { SourceMissing, loadAll } from './data/load.ts'
+import type { Mode } from './data/load.ts'
 import { dataUntil } from './data/front.ts'
 import { asDayMonth, positions } from './data/promo.ts'
 import { count } from './format.ts'
 import type { Lang } from './i18n/t.ts'
 import { translator } from './i18n/t.ts'
-import { CC_TABS, PROMO_TABS, hrefFor, paramOf, useRoute } from './router.ts'
+import type { Translate } from './i18n/t.ts'
+import { CC_TABS, hrefFor, paramOf, promoTabs, servedOnly, useRoute } from './router.ts'
 import { SourceMissingPanel } from './components/SourceMissingPanel.tsx'
 import { CommandCentrePlaceholder } from './tabs/CommandCentrePlaceholder.tsx'
 import { LoopTab } from './tabs/Loop.tsx'
@@ -132,7 +134,7 @@ export function App(): React.JSX.Element {
         <div className="shell">
           <div className="group" role="tablist" aria-label={t('nav.group.promo')}>
             <span>{t('nav.group.promo')}</span>
-            {PROMO_TABS.map((tab) => (
+            {promoTabs(app.mode).map((tab) => (
               <a
                 key={tab}
                 role="tab"
@@ -160,13 +162,23 @@ export function App(): React.JSX.Element {
       </nav>
 
       <main className="shell">
-        <Tab path={route.path} />
+        <Tab path={route.path} mode={app.mode} t={t} />
       </main>
     </AppContext.Provider>
   )
 }
 
-function Tab({ path }: { path: string }): React.JSX.Element {
+function Tab({ path, mode, t }: { path: string; mode: Mode; t: Translate }): React.JSX.Element {
+  // the STATIC build does not ship Якість, and a link to it is answered by the sentence that says
+  // where the tab is — not by the tab, and not by a blank (DESIGN-ship-1 §11, §10)
+  if (servedOnly(path, mode)) {
+    return (
+      <>
+        <h2 className="question">{t('quality.served_only')}</h2>
+        <p className="population">{t('quality.served_only.hint')}</p>
+      </>
+    )
+  }
   switch (path) {
     case '/promo/positions':
       return <PositionsTab />

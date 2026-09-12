@@ -1,7 +1,11 @@
 /*
- * The app shell and the page grammar of DESIGN-ship-1 §4: header, two tab groups, and every tab
- * as question → KPI row → charts → rows → sources. Breakpoints are by container where a card
+ * The app shell and the page grammar of DESIGN-ship-1 §4 and §11: header, two tab groups, and every
+ * tab as question → KPI row → charts → rows → sources. Breakpoints are by container where a card
  * decides its own shape and by viewport where the grid does.
+ *
+ * §11's spacing is the §3 scale a quarter wider (`--sp-*`), its cards float on `--card-bg` +
+ * `--shadow`, and its four animations live at the bottom of this file — every one of them inside
+ * the `prefers-reduced-motion` switch at the top, which is `!important` and global on purpose.
  */
 
 * {
@@ -37,7 +41,7 @@ a {
 .shell {
   max-width: 1440px;
   margin: 0 auto;
-  padding-inline: 16px;
+  padding-inline: var(--sp-4);
 }
 
 header.top {
@@ -177,7 +181,7 @@ nav.tabs .shell {
 
 main {
   display: block;
-  padding-block: 16px 48px;
+  padding-block: var(--sp-4) 48px;
 }
 
 .question {
@@ -193,16 +197,16 @@ main {
 .kpis {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 12px;
-  margin-bottom: 16px;
+  gap: var(--sp-3);
+  margin-bottom: var(--sp-4);
 }
 
 .card {
-  background: var(--surface-1);
+  background: var(--card-bg);
   border: 1px solid var(--border);
   border-radius: var(--radius-card);
-  box-shadow: var(--shadow);
-  padding: 12px;
+  box-shadow: var(--shadow), var(--card-glow);
+  padding: var(--sp-3);
 }
 
 .tile {
@@ -240,8 +244,8 @@ main {
 .charts {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
-  margin-bottom: 16px;
+  gap: var(--sp-3);
+  margin-bottom: var(--sp-4);
 }
 
 .charts > .wide {
@@ -368,7 +372,7 @@ caption {
 th,
 td {
   border-bottom: 1px solid var(--border);
-  padding: 6px 8px;
+  padding: var(--sp-1) var(--sp-2);
   text-align: left;
   vertical-align: top;
 }
@@ -516,7 +520,7 @@ td.num {
 }
 
 .block {
-  margin-bottom: 24px;
+  margin-bottom: var(--sp-5);
 }
 
 .block > h2 {
@@ -590,4 +594,232 @@ form.schedule input {
   .top-controls {
     display: none;
   }
+}
+
+/* --- §11: the chain chips, the flyers, the pages ------------------------------------------ */
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-1);
+  margin-bottom: var(--sp-3);
+}
+
+.chips button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: 999px;
+  padding: 4px 12px;
+}
+
+.chips button .muted {
+  font-size: 12px;
+}
+
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: var(--sp-3);
+}
+
+.flyer {
+  display: grid;
+  /* the NAME takes the slack, so the dates and the counts line up across cards whose chain name
+     runs to two lines — «Маркетопт (Толока) м.Кременчук» is one of them */
+  grid-template-rows: auto 1fr auto auto;
+  gap: 2px;
+  justify-items: start;
+  text-align: left;
+  padding: var(--sp-2);
+  min-height: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  background: var(--card-bg);
+  box-shadow: var(--shadow), var(--card-glow);
+}
+
+.flyer img {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  object-position: top;
+  border-radius: var(--radius-chip);
+  background: var(--surface-2);
+  margin-bottom: 6px;
+}
+
+.flyer b {
+  display: flex;
+  align-items: center;
+}
+
+.flyer .muted {
+  font-size: 12px;
+}
+
+/* a 40 px page beside the row it was read off; the button is the hit target, the image is the
+   evidence — `loading="lazy"` keeps a hundred leaflet pages off the first paint */
+.thumb {
+  padding: 0;
+  min-height: 0;
+  border-radius: var(--radius-chip);
+  overflow: hidden;
+  line-height: 0;
+}
+
+.thumb img {
+  width: 40px;
+  height: 52px;
+  object-fit: cover;
+  object-position: top;
+  display: block;
+  background: var(--surface-2);
+}
+
+.tiny {
+  font-size: 11px;
+  line-height: 1.2;
+  display: inline-block;
+  max-width: 9ch;
+}
+
+.price {
+  font-size: 15px;
+  white-space: nowrap;
+}
+
+.depth {
+  display: inline-grid;
+  justify-items: end;
+  gap: 3px;
+}
+
+.depth .bar {
+  display: block;
+  width: 72px;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--surface-2);
+  overflow: hidden;
+}
+
+.depth .bar i {
+  display: block;
+  height: 100%;
+  border-radius: 2px;
+  background: var(--s1);
+}
+
+dialog.lightbox {
+  width: min(94vw, 1080px);
+  max-height: 92vh;
+  padding: var(--sp-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  background: var(--surface-1);
+  color: var(--text-1);
+  box-shadow: var(--lift);
+}
+
+dialog.lightbox::backdrop {
+  background: rgb(0 0 0 / 72%);
+}
+
+dialog.lightbox header,
+dialog.lightbox footer {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  margin-bottom: var(--sp-2);
+}
+
+dialog.lightbox header button {
+  margin-left: auto;
+}
+
+dialog.lightbox footer {
+  margin: var(--sp-2) 0 0;
+  justify-content: center;
+}
+
+dialog.lightbox img {
+  display: block;
+  max-width: 100%;
+  max-height: 76vh;
+  margin: 0 auto;
+  border-radius: var(--radius-chip);
+}
+
+/* --- §11: the four animations (all off under `prefers-reduced-motion`, at the top of this file) */
+
+/* 1. the KPI count-up is script, not CSS — `components/CountUp.tsx` asks the query itself */
+
+/* 2. the flyer card lifts under the pointer. The colour properties are in the SAME declaration as
+      the lift: `transition` is one property, and the theme crossfade below — written later, at the
+      same specificity — replaced this list wholesale when the two were spelled apart (measured:
+      `transition-property` on a card read «background-color, color, border-color» and the lift
+      snapped). One list, one rule. */
+.flyer,
+.thumb {
+  transition:
+    transform 200ms ease,
+    box-shadow 200ms ease,
+    background-color 200ms ease,
+    color 200ms ease,
+    border-color 200ms ease;
+}
+
+.flyer:hover,
+.flyer:focus-visible {
+  transform: translateY(-4px);
+  box-shadow: var(--lift), var(--card-glow);
+}
+
+.thumb:hover,
+.thumb:focus-visible {
+  transform: scale(1.06);
+}
+
+/* 3. rows and cards reveal in sequence when the filter changes — the step is capped so the
+      hundredth row of a page is not three seconds late.
+      The reveal SLIDES and does not fade: `both` holds the from-state until the animation runs, and
+      an animation that never gets a frame — an offscreen tab, measured: `opacity` stayed 0 on every
+      row and card — would leave the table and the gallery INVISIBLE. A row six pixels low is still
+      a row a reader can read; a row at opacity 0 is a screen that says the market is empty. */
+.reveal,
+.flyer {
+  animation: reveal 240ms ease-out both;
+  animation-delay: calc(min(var(--i, 0), 20) * 30ms);
+}
+
+@keyframes reveal {
+  from {
+    transform: translateY(6px);
+  }
+}
+
+/* 4. the theme crossfades instead of snapping */
+body,
+header.top,
+nav.tabs,
+.card,
+.scroll,
+thead th {
+  transition:
+    background-color 200ms ease,
+    color 200ms ease,
+    border-color 200ms ease;
+}
+
+/* the image slot when a photo did not arrive — a clone stages none, and the card keeps its shape */
+.cover-gone {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 3 / 4;
+  width: 100%;
+  border-radius: var(--radius-chip);
+  background: var(--surface-2);
+  margin-bottom: 6px;
+  max-width: none;
 }

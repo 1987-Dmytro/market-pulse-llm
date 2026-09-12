@@ -217,6 +217,38 @@ export interface ChainRow {
   source_type: string
 }
 
+/** One chain's newest flyer set: the staged page names, the dates those pages carry, and how many
+ *  positions were read off them (`export_front_data.media`, DESIGN-ship-1 §11). */
+export interface FlyerSet {
+  chain: string
+  week: string
+  since: string
+  until: string
+  pages: string[]
+  positions: number
+  cover: string
+}
+
+export interface MediaFile {
+  name: string
+  file: string
+  bytes: number
+}
+
+export interface MediaBlock {
+  from: string
+  reading: string
+  /** the directory `make front` stages the photos into, under the app's own root */
+  dir: string
+  /** `"<channel>:<msg_id>"` → the staged name of the page that position was read off */
+  pages: Record<string, string>
+  flyers: FlyerSet[]
+  /** the staging list — what the build copies, and the only names the app may reference */
+  files: MediaFile[]
+  rows_without_a_page: number
+  pages_without_a_date: number
+}
+
 export interface FrontExport {
   contract: string
   chains: { from: string; reading: string; rows: ChainRow[] }
@@ -227,6 +259,7 @@ export interface FrontExport {
   /** `build_promo_screen.S2_BOUNDARY` — the one sentence that separates the shipped row from
    *  the readings under it, defined once in Python and rendered wherever the table is */
   s2_boundary: string
+  media: MediaBlock
   s1_reading: S1Reading
   status: Status
   dictionary: { from: string; sha256: string; metrics: MetricEntry[] }

@@ -56,9 +56,15 @@ export function rememberLang(lang: Lang): void {
   remember(LANG_KEY, lang)
 }
 
+/**
+ * DARK is the default (DESIGN-ship-1 §11): the system preference no longer picks it. What a reader
+ * chose here still wins, and `?theme=system` still hands the choice back to the OS — but a first
+ * visit opens on the tonality the operator approved, and `index.html` carries the same attribute so
+ * the first paint is already it.
+ */
 export function rememberedTheme(): ThemeChoice {
   const value = remembered(THEME_KEY)
-  return value === 'light' || value === 'dark' ? value : 'system'
+  return value === 'light' || value === 'dark' ? value : 'dark'
 }
 
 export function rememberTheme(choice: ThemeChoice): void {

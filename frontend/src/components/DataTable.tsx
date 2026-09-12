@@ -4,6 +4,9 @@
  *
  * No virtualisation library: a hundred rows a page is the whole of the performance question, and a
  * row the reader can expand to its channel and message id is the whole of the trust question.
+ *
+ * §11's staggered reveal is one CSS rule and one `--i` per row: the `<tbody>` is keyed on what is
+ * being shown, so a filter, a sort or a page turn remounts the rows and the animation plays again.
  */
 
 import { Fragment, useEffect, useState } from 'react'
@@ -96,12 +99,12 @@ export function DataTable<T>({
               ))}
             </tr>
           </thead>
-          <tbody>
-            {shown.map((row) => {
+          <tbody key={`${String(page)}:${String(rows.length)}:${shown[0] === undefined ? '' : keyOf(shown[0])}`}>
+            {shown.map((row, index) => {
               const id = keyOf(row)
               return (
                 <Fragment key={id}>
-                  <tr>
+                  <tr className="reveal" style={{ '--i': index } as React.CSSProperties}>
                     {expand !== undefined && (
                       <td>
                         <button
