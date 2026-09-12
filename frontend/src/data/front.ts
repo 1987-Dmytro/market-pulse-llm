@@ -6,7 +6,16 @@
  * ([[a_published_number_has_one_reader]]).
  */
 
-import type { Conclusion, FrontExport, MetricEntry, S1Reading, S2Row, Status } from '../types.ts'
+import type {
+  CategoryPricesBlock,
+  Conclusion,
+  FrontExport,
+  MetricEntry,
+  RegionsBlock,
+  S1Reading,
+  S2Row,
+  Status,
+} from '../types.ts'
 import { FRONT_FILE, must } from './load.ts'
 
 export function s1(front: FrontExport): S1Reading {
@@ -54,4 +63,23 @@ export function sources(front: FrontExport): SourceRow[] {
 /** A bar as a status: the FILE's own `held` flag decides, never a comparison made here. */
 export function barStatus(held: boolean): 'good' | 'critical' {
   return held ? 'good' : 'critical'
+}
+
+export function categoryPrices(front: FrontExport): CategoryPricesBlock {
+  return must(front.category_prices, FRONT_FILE, 'category_prices')
+}
+
+export function regions(front: FrontExport): RegionsBlock {
+  return must(front.regions, FRONT_FILE, 'regions')
+}
+
+/**
+ * A telegram handle → the chain id the `chains` table names, for the blocks keyed on handles.
+ *
+ * `screen.rollup[].chain` is a raw handle and `screen.positions[].chain.id` is a folded chain id,
+ * so Тренди had no name to put on a bar and printed `+Ejz6ubzm21IyMTQy`. The fold is the producer's
+ * — read here, never computed ([[a_fold_is_not_a_membership_test]]).
+ */
+export function chainOfChannel(front: FrontExport): Record<string, string> {
+  return must(front.chains?.by_channel, FRONT_FILE, 'chains.by_channel')
 }

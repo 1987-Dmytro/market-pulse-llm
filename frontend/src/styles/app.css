@@ -711,6 +711,78 @@ form.schedule input {
   background: var(--s1);
 }
 
+/* --- the price cards: a category's median, and the region's SKUs -------------------------- */
+
+/* wider than `.gallery`, which is sized for a flyer cover: a card here carries a figure, two
+   evidence rows and a photo beside each of them */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: var(--sp-3);
+}
+
+.region .cards {
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+}
+
+.chain-head {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--sp-1) var(--sp-2);
+  margin: var(--sp-4) 0 var(--sp-2);
+}
+
+.chain-head b {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* one priced end of a category: the photo, the name, and the two prices beside the size they
+   were divided from — so the reader can check the division by eye */
+.extreme {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--sp-2);
+  align-items: start;
+  padding-top: var(--sp-2);
+  border-top: 1px solid var(--border);
+}
+
+.extreme .who {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.extreme .who b {
+  overflow-wrap: anywhere;
+}
+
+.sku {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--sp-2);
+  align-items: start;
+  padding: var(--sp-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  background: var(--card-bg);
+}
+
+.sku .who {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+/* 44 px, not the table's 40: these cards are the ones a phone is meant to tap */
+.thumb.big img {
+  width: 44px;
+  height: 58px;
+}
+
 dialog.lightbox {
   width: min(94vw, 1080px);
   max-height: 92vh;

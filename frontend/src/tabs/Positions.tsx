@@ -23,6 +23,7 @@ import type { Column } from '../components/DataTable.tsx'
 import { KpiCard } from '../components/KpiCard.tsx'
 import { Lightbox } from '../components/Lightbox.tsx'
 import { chainName, orderChains, seriesColour } from '../data/chains.ts'
+import { regions } from '../data/front.ts'
 import { FRONT_FILE, PROMO_FILE } from '../data/load.ts'
 import { MEDIA_FIELD, flyers, mediaOf, pageOf, pageUrl } from '../data/media.ts'
 import {
@@ -43,6 +44,10 @@ import {
 import { count, price, printed } from '../format.ts'
 import { paramOf, setParam, useRoute } from '../router.ts'
 import type { Position } from '../types.ts'
+
+/** The block this tab's regional cut reads — named here so its `джерела` line and its
+ *  reader cannot drift apart. */
+const REGIONS_FIELD = 'regions'
 
 const SORTS: Record<string, SortKey> = {
   brand: 'brand',
@@ -340,6 +345,8 @@ export function PositionsTab(): React.JSX.Element {
         <code>{front.chains.from}</code> · <code>{FRONT_FILE} :: {MEDIA_FIELD}</code>
       </p>
 
+      <RegionCuts onOpen={(title, name) => setOpened({ title, pages: [name], start: 0 })} />
+
       {opened !== null && (
         <Lightbox
           /* a new target is a new dialog: `start` is read once, into state, and `showModal()` runs
@@ -367,6 +374,102 @@ export function PositionsTab(): React.JSX.Element {
  * gitignored, so a clean clone stages none of them: without this the table would paint 402 broken
  * images there, and a broken image says «this page is lost», which is not what happened.
  */
+/**
+ * The operator's regional cuts: the chains they say serve a region, each on its current week.
+ *
+ * A selection of CHAINS, not a geography of rows — `reading` is the export's own sentence saying
+ * so, printed where the reader is, because the leaflets of the national chains are national issues
+ * and nothing in the data is oblast-specific. A chain with no flyer set says `absent` by name: a
+ * chain we hold no pages for and a chain with an empty shelf are different states, and neither is
+ * a zero (DESIGN-ship-1 §10).
+ */
+function RegionCuts({
+  onOpen,
+}: {
+  onOpen: (title: string, page: string) => void
+}): React.JSX.Element | null {
+  const { front, lang, t } = useApp()
+  const block = regions(front)
+  const media = mediaOf(front)
+  if (block.cuts.length === 0) return null
+  return (
+    <>
+      {block.cuts.map((cut) => (
+        <section className="block region" key={cut.region}>
+          <h2>{cut.name}</h2>
+          <p className="population">{t('region.claim')}</p>
+          {cut.chains.map((chain) => (
+            <div key={chain.chain}>
+              <p className="chain-head">
+                <b>
+                  <i className="swatch" style={{ background: seriesColour(chain.chain) }} />
+                  {chain.name}
+                </b>
+                {chain.absent === undefined ? (
+                  <span className="muted">
+                    {chain.since === chain.until
+                      ? asDayMonth(chain.since ?? '')
+                      : `${asDayMonth(chain.since ?? '')}–${asDayMonth(chain.until ?? '')}`}{' '}
+                    · {chain.week} ·{' '}
+                    {t('region.chain.rows', { rows: count(lang, chain.positions?.length ?? 0) })}
+                  </span>
+                ) : (
+                  <span className="muted">{t('region.chain.no_pages')}</span>
+                )}
+              </p>
+              {chain.positions !== undefined && chain.positions.length > 0 && (
+                <div className="cards">
+                  {chain.positions.map((card) => (
+                    <article className="sku" key={card.row_id}>
+                      {card.page === undefined ? (
+                        <span className="muted tiny">{t('media.no_page')}</span>
+                      ) : (
+                        <Thumb
+                          name={card.page}
+                          src={pageUrl(media, card.page)}
+                          onOpen={() => onOpen(chain.name, card.page as string)}
+                        />
+                      )}
+                      <span className="who">
+                        <b>{card.brand}</b>
+                        {card.line !== undefined && <span>{card.line}</span>}
+                        <span className="muted">
+                          {card.category}
+                          {card.size_value !== undefined &&
+                            ` · ${count(lang, card.size_value)} ${card.size_unit ?? ''}`}
+                        </span>
+                        <span>
+                          {card.promo_price !== undefined && (
+                            <b className="price">{price(lang, card.promo_price)}</b>
+                          )}
+                          {card.printed_pct !== undefined && (
+                            <span className="badge">{printed(card.printed_pct)}</span>
+                          )}
+                        </span>
+                        {card.unit_price !== undefined && (
+                          <span className="muted">
+                            {price(lang, card.unit_price)}/
+                            {card.unit === 'uah_per_l'
+                              ? t('trends.prices.per_l')
+                              : t('trends.prices.per_kg')}
+                          </span>
+                        )}
+                      </span>
+                    </article>
+                  ))}
+                </div>
+              )}
+            </div>
+          ))}
+          <p className="sources">
+            {t('common.sources')}: <code>{FRONT_FILE} :: {REGIONS_FIELD}</code>
+          </p>
+        </section>
+      ))}
+    </>
+  )
+}
+
 function Thumb({ name, src, onOpen }: { name: string; src: string; onOpen: () => void }): React.JSX.Element {
   const { t } = useApp()
   const [gone, setGone] = useState(false)

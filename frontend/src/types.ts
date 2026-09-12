@@ -249,9 +249,100 @@ export interface MediaBlock {
   pages_without_a_date: number
 }
 
+/** One position as a card: what it is, what it costs, and the page it was read off. The optional
+ *  fields are the row's own absences — a pack with no printed badge has no `printed_pct`, and a row
+ *  whose photo never arrived has no `page`, which is a sentence the card says rather than a hole. */
+export interface PriceCard {
+  row_id: string
+  brand: string
+  category: string
+  chain: string
+  chain_name: string
+  channel: string
+  msg_id: number
+  line?: string
+  size_value?: number
+  size_unit?: string
+  pack_count?: number
+  promo_price?: number
+  printed_pct?: number
+  /** `uah_per_kg` or `uah_per_l` — absent together with `unit_price` when the row carries no size */
+  unit?: string
+  unit_price?: number
+  page?: string
+}
+
+/** One category read in ONE unit. Never pooled across units: a category holding both grams and
+ *  millilitres has no single median, so the producer cuts it in two and the app shows both. */
+export interface CategoryBasis {
+  unit: string
+  n: number
+  min: number | null
+  median: number | null
+  max: number | null
+  q1: number | null
+  q3: number | null
+  cheapest: PriceCard
+  dearest: PriceCard
+}
+
+/** A category of `config/registry.yaml :: taxonomy.tracked_groups`, present whether or not the
+ *  market promoted it this window — `bases: []` is «немає в даних», never a zero. */
+export interface CategoryPrices {
+  category: string
+  name: string
+  group: string
+  /** set on the two keys that are also parents — `dairy` labels the rows whose subcategory was
+   *  not printed, so the app must not let it read as the dairy total */
+  is_group_key?: boolean
+  /** every row of the category, priced or not: the gap to `bases[].n` is the unpriced remainder */
+  positions: number
+  bases: CategoryBasis[]
+}
+
+export interface CategoryPricesBlock {
+  from: string
+  reading: string
+  rows_without_a_unit_price: number
+  categories: CategoryPrices[]
+}
+
+/** One chain of a regional cut, on its own current week — or `absent`, naming why it carries no
+ *  week at all. A chain with no flyer set is a different state from a chain with an empty one. */
+export interface RegionChain {
+  chain: string
+  name: string
+  absent?: string
+  week?: string
+  since?: string
+  until?: string
+  positions?: PriceCard[]
+}
+
+export interface RegionCut {
+  region: string
+  name: string
+  chains: RegionChain[]
+}
+
+/** The operator's regional cuts. A selection of CHAINS, not a geography of rows: the registry
+ *  carries no region, and `reading` is the sentence that says so on the screen. */
+export interface RegionsBlock {
+  from: string
+  reading: string
+  cuts: RegionCut[]
+}
+
 export interface FrontExport {
   contract: string
-  chains: { from: string; reading: string; rows: ChainRow[] }
+  chains: {
+    from: string
+    reading: string
+    rows: ChainRow[]
+    /** a telegram handle → the chain id `rows` names, so a block keyed on handles (the rollup)
+     *  can be labelled with the same name a block keyed on chain ids (the positions) shows */
+    by_channel: Record<string, string>
+  }
   data_until: { date: string; from: string }
   command_center: CommandCentre
   model: { from: string; verdict: Record<string, unknown> }
@@ -260,6 +351,8 @@ export interface FrontExport {
    *  the readings under it, defined once in Python and rendered wherever the table is */
   s2_boundary: string
   media: MediaBlock
+  category_prices: CategoryPricesBlock
+  regions: RegionsBlock
   s1_reading: S1Reading
   status: Status
   dictionary: { from: string; sha256: string; metrics: MetricEntry[] }

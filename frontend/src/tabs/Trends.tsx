@@ -29,8 +29,10 @@ import {
 } from 'recharts'
 
 import { useApp } from '../app-state.ts'
+import { CategoryPrices } from '../components/CategoryPrices.tsx'
 import { ChartCard } from '../components/ChartCard.tsx'
-import { colourByIndex, orderChains } from '../data/chains.ts'
+import { chainName, colourByIndex, orderChains } from '../data/chains.ts'
+import { chainOfChannel } from '../data/front.ts'
 import { PROMO_FILE } from '../data/load.ts'
 import { depthRows, rollup, rollupMetrics, rollupOf, weeks } from '../data/promo.ts'
 import { count, percent } from '../format.ts'
@@ -93,7 +95,7 @@ const TOOLTIP_STYLE = {
 const TICK = { fill: 'var(--text-2)', fontSize: 11 }
 
 export function TrendsTab(): React.JSX.Element {
-  const { promo, lang, t } = useApp()
+  const { promo, front, chains, lang, t } = useApp()
   const route = useRoute()
 
   const allWeeks = weeks(promo)
@@ -101,11 +103,48 @@ export function TrendsTab(): React.JSX.Element {
   const depthAll = depthRows(promo)
 
   const metrics = rollupMetrics(promo)
-  const brands = [...new Set(rollupAll.map((row) => row.brand))].sort((left, right) =>
-    left.localeCompare(right, 'uk'),
-  )
   const metric = pick(metrics, paramOf(route, 'metric'))
+
+  // the brands of THIS metric, fullest first — not every brand in the file alphabetically. The two
+  // defaults used to be picked independently, so the tab opened on `depth_mean` × «Альпро», a pair
+  // the export carries no row for, and the reader's first sight of Тренди was «немає в даних».
+  // Counting rows and ordering by them is a filter and a sort; no figure is made here.
+  const brandRows = new Map<string, number>()
+  if (metric !== undefined) {
+    for (const row of rollupOf(promo, metric)) {
+      brandRows.set(row.brand, (brandRows.get(row.brand) ?? 0) + 1)
+    }
+  }
+  const brands = [...brandRows.keys()].sort(
+    (left, right) =>
+      (brandRows.get(right) ?? 0) - (brandRows.get(left) ?? 0) || left.localeCompare(right, 'uk'),
+  )
   const brand = pick(brands, paramOf(route, 'brand'))
+
+  // the population line describes the FILE, not the filter: `brands` above is the metric's own
+  // list, and counting it there would make the header move when the reader changes a select
+  const allBrands = new Set(rollupAll.map((row) => row.brand))
+
+  /**
+   * The name a reader knows, for a row keyed on a telegram handle. The fold is the producer's
+   * (`front_data.json :: chains.by_channel`) — read, never computed here.
+   *
+   * The handle stays in the label when one chain reached this chart through TWO of them:
+   * `marketopt_promo` is both `@marketopt_promo` and the private invite, and those are two series
+   * the export keeps apart. Merging them would be a sum across channels no file carries, so the
+   * label disambiguates instead.
+   */
+  const folded = chainOfChannel(front)
+  const handlesOfChain = new Map<string, Set<string>>()
+  for (const row of rollupAll) {
+    const id = folded[row.chain] ?? row.chain
+    handlesOfChain.set(id, (handlesOfChain.get(id) ?? new Set()).add(row.chain))
+  }
+  const chainLabel = (handle: string): string => {
+    const id = folded[handle] ?? handle
+    const name = chainName(chains, id)
+    return (handlesOfChain.get(id)?.size ?? 1) > 1 ? `${name} (${handle})` : name
+  }
 
   // the week select, the bars and the heatmap columns read ONE week order — the export's own
   // `screen.weeks`; the default is the LAST week the depth rows reach, not the oldest
@@ -136,7 +175,7 @@ export function TrendsTab(): React.JSX.Element {
         `${left.chain} ${left.brand}`.localeCompare(`${right.chain} ${right.brand}`, 'uk'),
     )
   const bars = depthOfWeek.map((row) => ({
-    label: `${row.chain} · ${row.brand}`,
+    label: `${chainLabel(row.chain)} · ${row.brand}`,
     depth_mean: row.depth_mean,
     depth_text: percent(row.depth_mean),
   }))
@@ -172,7 +211,7 @@ export function TrendsTab(): React.JSX.Element {
       <p className="population">
         {t('trends.col.week')}: {count(lang, allWeeks.length)} · {t('trends.col.chain')}:{' '}
         {count(lang, new Set(rollupAll.map((row) => row.chain)).size)} · {t('trends.col.brand')}:{' '}
-        {count(lang, brands.length)} · {t('common.rows')}: {count(lang, rollupAll.length)}
+        {count(lang, allBrands.size)} · {t('common.rows')}: {count(lang, rollupAll.length)}
       </p>
 
       {/* no «усі» option on the brand select: «усі» would be a sum across the brands of a handle,
@@ -184,6 +223,10 @@ export function TrendsTab(): React.JSX.Element {
       </div>
 
       <div className="charts">
+        {/* price first: the depth of a discount is the second question a marketing director asks,
+            and until this block landed the tab could not answer the first one at all */}
+        <CategoryPrices />
+
         <ChartCard
           t={t}
           wide
@@ -193,7 +236,7 @@ export function TrendsTab(): React.JSX.Element {
           note={`${t('common.empty_week')} · ${t('trends.no_price_series')}`}
           legend={lineHandles.map((handle, index) => ({
             colour: colourByIndex(index),
-            label: handle,
+            label: chainLabel(handle),
           }))}
           table={{
             head: [
@@ -331,7 +374,7 @@ export function TrendsTab(): React.JSX.Element {
           table={{
             head: [t('trends.col.chain'), ...allWeeks],
             rows: heatHandles.map((handle) => [
-              handle,
+              chainLabel(handle),
               ...allWeeks.map((one) => {
                 const value = cells.get(`${handle}|${one}`)
                 return value === undefined ? '' : count(lang, value)
@@ -356,7 +399,7 @@ export function TrendsTab(): React.JSX.Element {
                 ))}
                 {heatHandles.map((handle) => (
                   <Fragment key={handle}>
-                    <span className="head">{handle}</span>
+                    <span className="head">{chainLabel(handle)}</span>
                     {allWeeks.map((one) => {
                       const value = cells.get(`${handle}|${one}`)
                       // a week this handle has no row for stays EMPTY and says so — never a 0
@@ -369,7 +412,7 @@ export function TrendsTab(): React.JSX.Element {
                           className="cell"
                           key={one}
                           style={{ background: `var(--ramp-${ramp})`, color: rampTextColour(ramp) }}
-                          title={`${handle} · ${one}`}
+                          title={`${chainLabel(handle)} · ${one}`}
                         >
                           {count(lang, value)}
                         </span>
