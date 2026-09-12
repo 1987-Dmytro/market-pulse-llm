@@ -1,4 +1,4 @@
-.PHONY: check check-stamped fmt preflight baselines tick promo-screen serve loop
+.PHONY: check check-stamped fmt preflight baselines tick promo-screen serve loop front
 
 # The single verifier. Must be green after every commit (docs/SPEC.md §9).
 check:
@@ -58,3 +58,18 @@ serve:
 # launchd template that starts this at login (install steps in the README; not installed here).
 loop:
 	PYTHONPATH=src python3.11 scripts/loop_daemon.py
+
+# The app, built: `dashboard/app/` — the static showcase and what `make serve` mounts at `/`.
+# Three steps, in this order and for this reason:
+#   1. the $0 producer writes `results/front_data.json` from the committed result files (a missing
+#      required source is a named, non-zero exit, which is what makes the build refuse rather than
+#      ship a screen with a hole in it);
+#   2. `npm ci` from the committed lockfile, `tsc --noEmit`, `vite build` — the build EMPTIES
+#      `dashboard/app/`, which is why nothing is copied in before it;
+#   3. the same producer stages the two files the adapters fetch into `dashboard/app/data/` beside
+#      `manifest.json` (file, sha256, bytes).
+# `dashboard/app/` and `frontend/node_modules/` are gitignored build outputs: a clone runs this.
+front:
+	PYTHONPATH=src python3.11 scripts/export_front_data.py
+	cd frontend && npm ci && npm run check && npm run build
+	PYTHONPATH=src python3.11 scripts/export_front_data.py --stage dashboard/app/data

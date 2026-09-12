@@ -1,0 +1,234 @@
+/**
+ * The shapes of the two exports the app reads — written FROM the files, not from memory
+ * (DESIGN-ship-1 §2). A field the producers omit when a row does not carry it is optional here and
+ * never `| null`: `src/market_pulse/aggregates.py :: promo_positions` says an absent field is
+ * ABSENT, because `0` would claim the badge was printed as zero.
+ *
+ * `command_center` is typed only as deeply as the promo half reads it — front-2 puts the command
+ * centre on the app and types the rest of that record then.
+ */
+
+export interface Window {
+  id: string
+  anchor: string
+  days: number
+  since: string
+  until: string
+}
+
+export interface Brand {
+  display: string
+  id?: string
+  own?: boolean
+}
+
+export interface PositionItem {
+  category: string
+  line?: string
+  size_value?: number
+  size_unit?: string
+  pack_count?: number
+  attribute_pct?: number
+}
+
+export interface Position {
+  row_id: string
+  tier: string
+  carrier: string
+  brand: Brand
+  chain: { id: string; named_by_amendment_3_20: boolean }
+  item: PositionItem
+  evidence: { channel: string; msg_id: number }
+  /** the PRINTED badge's own reading, absent when no badge was printed */
+  depth?: number
+  printed_pct?: number
+  promo_price?: number
+}
+
+export interface RollupRow {
+  brand: string
+  chain: string
+  metric: string
+  value: number
+  week: string
+}
+
+export interface DepthRow {
+  brand: string
+  chain: string
+  depth_mean: number
+  week: string
+}
+
+export interface FeedRow {
+  channel: string
+  msg_id: number
+  quote: string
+  thread_root: number
+  type: string
+}
+
+export interface Threads {
+  from: string
+  population: number
+  product_population: number
+  queue: number
+  read: number
+  not_collected: number
+  read_threads: string[]
+}
+
+export type TableRows = Record<string, number>
+
+export interface PromoExport {
+  contract: string
+  window_id: string
+  windows: Window[]
+  not_collected: { channels: string[]; position_rows: number }
+  screen: {
+    positions: Position[]
+    rollup: RollupRow[]
+    weeks: string[]
+    depth_by_chain_and_brand: DepthRow[]
+    feed: FeedRow[]
+    threads: Threads
+    table_rows: TableRows
+  }
+}
+
+export interface Bar {
+  bar: number
+  held: boolean
+  value: number
+}
+
+export interface S2Row {
+  label: string
+  file: string
+  block: string
+  bars: { subject_agreement: Bar; signal_type_agreement: Bar }
+  agreed: number
+  comments: number
+  misses: { total: number; gold_unsure: number; rule: string } | null
+}
+
+export interface GradeRecord {
+  contract: string
+  gold: string
+  predicted: string
+  match_rule: string
+  bars: {
+    completeness: { bar: number; gold: number; held: boolean; matched: number; value: number }
+    price_accuracy: {
+      bar: number
+      denominator: string
+      held: boolean
+      right: number
+      scored: number
+      value: number
+    }
+  }
+  readings: {
+    gold_rows_no_prediction_reached: number
+    predicted_rows_no_gold_row_claims: number
+    price_old: { agree: number; n: number; note: string }
+    printed_badge: { agree: number; n: number; note: string }
+  }
+}
+
+export interface S1Reading {
+  from: string
+  /** null when the grade file is not in this checkout — `why` says which file would carry it */
+  reading: GradeRecord | null
+  why?: string
+  draw?: { from: string; pages: number; population: number; rows_drawn: number; seed: number }
+}
+
+export interface MoneyReading {
+  from: string
+  remaining_usd: number
+  spent_usd: number
+  cap_usd: number
+  at: string
+  note: string
+}
+
+/**
+ * The tick, as the two modes answer it: the state file's own counters when a tick has run, or
+ * `at: null` beside the sentence that says which file would carry one.
+ */
+export interface TickReading {
+  at: string | null
+  why?: string
+  new_rows?: TableRows
+  table_rows?: TableRows
+  schedule?: string
+}
+
+export interface Status {
+  tick: TickReading
+  threads: Threads
+  table_rows: TableRows
+  money: MoneyReading
+  window_id: string
+  from: string
+  windows: Window[]
+}
+
+export interface Schedule {
+  min_interval_hours: number
+  default_interval_hours: number
+  note?: string
+}
+
+export interface Conclusion {
+  id: string
+  ua: string
+  en: string
+  stands_on: string[]
+}
+
+export interface MetricEntry {
+  id: string
+  name: { ua: string; en: string }
+  definition: { ua: string; en: string }
+  formula: string
+  how_to_read: { ua: string; en: string }
+  pitfalls: { ua: string[]; en: string[] }
+}
+
+export interface CommandCentre {
+  contract: string
+  phase: string
+  conclusions: Conclusion[]
+  window: Window & { populations: Record<string, number>; reading: string; rule: string }
+  metrics: Record<string, unknown>
+  cuts: Record<string, unknown>
+  not_computable: Record<string, unknown>
+  promo: Record<string, unknown>
+  provenance: Record<string, unknown>
+  convergence: Record<string, unknown>
+  dictionary: { metrics: string[]; path: string; sha256: string }
+}
+
+export interface ChainRow {
+  id: string
+  name: string
+  source_type: string
+}
+
+export interface FrontExport {
+  contract: string
+  chains: { from: string; reading: string; rows: ChainRow[] }
+  data_until: { date: string; from: string }
+  command_center: CommandCentre
+  model: { from: string; verdict: Record<string, unknown> }
+  s2_readings: S2Row[]
+  /** `build_promo_screen.S2_BOUNDARY` — the one sentence that separates the shipped row from
+   *  the readings under it, defined once in Python and rendered wherever the table is */
+  s2_boundary: string
+  s1_reading: S1Reading
+  status: Status
+  dictionary: { from: string; sha256: string; metrics: MetricEntry[] }
+  sources: Record<string, { sha256: string; bytes: number }>
+}

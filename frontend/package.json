@@ -1,0 +1,27 @@
+{
+  "name": "market-pulse-front",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Market Pulse — the command centre and the promo pulse, one React app over the result files (docs/DESIGN-ship-1.md)",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "check": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "recharts": "3.10.1"
+  },
+  "devDependencies": {
+    "@types/node": "24.13.4",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "@vitejs/plugin-react": "4.7.0",
+    "typescript": "5.9.3",
+    "vite": "6.4.3",
+    "vitest": "3.2.7"
+  }
+}

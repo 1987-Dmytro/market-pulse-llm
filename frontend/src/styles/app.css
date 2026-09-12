@@ -1,0 +1,593 @@
+/*
+ * The app shell and the page grammar of DESIGN-ship-1 §4: header, two tab groups, and every tab
+ * as question → KPI row → charts → rows → sources. Breakpoints are by container where a card
+ * decides its own shape and by viewport where the grid does.
+ */
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--surface-0);
+  color: var(--text-1);
+  font: 14px/1.45 var(--font);
+  font-variant-numeric: tabular-nums;
+}
+
+a {
+  color: var(--link);
+}
+
+:focus-visible {
+  outline: 2px solid var(--link);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+/* --- header ------------------------------------------------------------------------------- */
+
+.shell {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding-inline: 16px;
+}
+
+header.top {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: var(--surface-1);
+  border-bottom: 1px solid var(--border);
+}
+
+.top .shell {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px 16px;
+  min-height: 56px;
+  padding-block: 8px;
+}
+
+.top h1 {
+  margin: 0;
+  font-size: 16px;
+  white-space: nowrap;
+}
+
+.banner {
+  color: var(--text-2);
+  font-size: 13px;
+  flex: 1 1 320px;
+}
+
+.banner b {
+  color: var(--text-1);
+  font-weight: 600;
+}
+
+.top-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-chip);
+  background: var(--surface-2);
+  color: var(--text-2);
+  font-size: 12px;
+}
+
+button,
+select,
+input {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  min-height: 32px;
+  padding: 4px 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-chip);
+  background: var(--surface-1);
+  cursor: pointer;
+}
+
+button[aria-pressed='true'],
+button.on {
+  background: var(--surface-2);
+  border-color: var(--text-3);
+}
+
+button:disabled {
+  color: var(--text-3);
+  cursor: not-allowed;
+}
+
+/* --- navigation --------------------------------------------------------------------------- */
+
+nav.tabs {
+  background: var(--surface-1);
+  border-bottom: 1px solid var(--border);
+}
+
+nav.tabs .shell {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 24px;
+  padding-block: 6px;
+}
+
+.group {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+}
+
+.group > span {
+  color: var(--text-3);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+.group [role='tab'] {
+  padding: 6px 10px;
+  min-height: 32px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-chip);
+  color: var(--text-2);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.group [role='tab'][aria-current='page'] {
+  background: var(--surface-2);
+  border-color: var(--border);
+  color: var(--text-1);
+  font-weight: 600;
+}
+
+@media (width <= 720px) {
+  nav.tabs .shell {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+  }
+}
+
+/* --- page grammar ------------------------------------------------------------------------ */
+
+main {
+  display: block;
+  padding-block: 16px 48px;
+}
+
+.question {
+  margin: 0 0 4px;
+  font-size: 20px;
+}
+
+.population {
+  margin: 0 0 16px;
+  color: var(--text-2);
+}
+
+.kpis {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.card {
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow);
+  padding: 12px;
+}
+
+.tile {
+  container-type: inline-size;
+}
+
+.tile h3 {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  margin: 0 0 4px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-2);
+}
+
+.tile .figure {
+  margin: 0;
+  font-size: 28px;
+  line-height: 1.1;
+}
+
+.tile .context {
+  margin: 4px 0 0;
+  color: var(--text-2);
+  font-size: 12px;
+}
+
+@container (width < 240px) {
+  .tile .figure {
+    font-size: 24px;
+  }
+}
+
+.charts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.charts > .wide {
+  grid-column: 1 / -1;
+}
+
+@media (width <= 960px) {
+  .charts {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.chart-head {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.chart-head h3 {
+  margin: 0;
+  font-size: 15px;
+}
+
+.chart-head .sub {
+  color: var(--text-2);
+  font-size: 12px;
+}
+
+.chart-head .spacer {
+  flex: 1;
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  margin-top: 8px;
+  font-size: 12px;
+  color: var(--text-2);
+}
+
+.legend i {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  margin-right: 4px;
+}
+
+.sources {
+  margin: 16px 0 0;
+  color: var(--text-3);
+  font-size: 12px;
+  word-break: break-word;
+}
+
+.sources code,
+code {
+  font-family: var(--mono);
+  font-size: 12px;
+  background: var(--surface-2);
+  padding: 1px 4px;
+  border-radius: 3px;
+}
+
+/* --- tables ------------------------------------------------------------------------------ */
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 8px 12px;
+  margin-bottom: 8px;
+}
+
+.filters label {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 12px;
+  color: var(--text-2);
+}
+
+.filters select,
+.filters input {
+  min-height: 32px;
+  padding: 4px 6px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-chip);
+  background: var(--surface-1);
+  max-width: 220px;
+}
+
+.count {
+  color: var(--text-2);
+  font-size: 12px;
+  margin: 0 0 8px;
+}
+
+.scroll {
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  background: var(--surface-1);
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 13px;
+}
+
+caption {
+  caption-side: top;
+  text-align: left;
+  padding: 8px;
+  color: var(--text-2);
+  font-size: 12px;
+}
+
+th,
+td {
+  border-bottom: 1px solid var(--border);
+  padding: 6px 8px;
+  text-align: left;
+  vertical-align: top;
+}
+
+thead th {
+  position: sticky;
+  top: 0;
+  background: var(--surface-2);
+  font-weight: 600;
+  white-space: nowrap;
+  z-index: 1;
+}
+
+thead th button {
+  border: 0;
+  background: none;
+  padding: 0;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+tbody tr:nth-child(even) {
+  background: color-mix(in srgb, var(--surface-2) 45%, transparent);
+}
+
+td.num {
+  text-align: right;
+}
+
+.swatch {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  margin-right: 6px;
+}
+
+.badge {
+  display: inline-block;
+  padding: 1px 5px;
+  border-radius: var(--radius-chip);
+  background: var(--surface-2);
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.status.good {
+  color: var(--good);
+}
+
+.status.warning {
+  color: var(--warning);
+}
+
+.status.serious {
+  color: var(--serious);
+}
+
+.status.critical {
+  color: var(--critical);
+}
+
+.pager {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+  font-size: 12px;
+  color: var(--text-2);
+}
+
+.muted {
+  color: var(--text-3);
+}
+
+.note {
+  margin: 8px 0 0;
+  color: var(--text-2);
+  font-size: 12px;
+  max-width: 86ch;
+}
+
+/* --- info popover, panels ---------------------------------------------------------------- */
+
+.info {
+  min-height: 0;
+  padding: 0 4px;
+  border: 0;
+  background: none;
+  color: var(--text-3);
+  cursor: help;
+}
+
+.popover {
+  position: absolute;
+  z-index: 30;
+  max-width: 42ch;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  background: var(--surface-1);
+  box-shadow: var(--shadow);
+  color: var(--text-1);
+  font-size: 12px;
+  font-weight: 400;
+  text-align: left;
+  white-space: normal;
+}
+
+.popover p {
+  margin: 0 0 6px;
+}
+
+.holder {
+  position: relative;
+  display: inline-block;
+}
+
+.missing {
+  border: 1px solid var(--critical);
+  border-radius: var(--radius-card);
+  background: color-mix(in srgb, var(--critical) 8%, var(--surface-1));
+  padding: 12px;
+  margin-bottom: 16px;
+}
+
+.missing h3 {
+  margin: 0 0 4px;
+  font-size: 14px;
+  color: var(--critical);
+}
+
+.missing p {
+  margin: 0;
+  font-size: 13px;
+}
+
+.block {
+  margin-bottom: 24px;
+}
+
+.block > h2 {
+  font-size: 15px;
+  margin: 0 0 8px;
+}
+
+.rows {
+  display: grid;
+  gap: 8px;
+}
+
+.quote {
+  font-style: italic;
+  color: var(--text-2);
+}
+
+.pair {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  font-size: 12px;
+  color: var(--text-2);
+  margin: 0;
+}
+
+form.schedule {
+  display: grid;
+  gap: 8px;
+  max-width: 380px;
+}
+
+form.schedule label {
+  display: grid;
+  gap: 2px;
+  font-size: 12px;
+  color: var(--text-2);
+}
+
+form.schedule input {
+  min-height: 32px;
+  padding: 4px 6px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-chip);
+  background: var(--surface-1);
+}
+
+.heatmap {
+  display: grid;
+  gap: 2px;
+  font-size: 11px;
+}
+
+.heatmap .cell {
+  padding: 4px 6px;
+  border-radius: 2px;
+  text-align: right;
+  color: var(--text-1);
+}
+
+.heatmap .head {
+  color: var(--text-2);
+  text-align: left;
+  white-space: nowrap;
+  padding: 4px 6px;
+}
+
+@media print {
+  header.top,
+  nav.tabs,
+  .top-controls {
+    display: none;
+  }
+}
