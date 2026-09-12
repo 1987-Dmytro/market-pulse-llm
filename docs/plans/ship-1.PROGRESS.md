@@ -5,17 +5,17 @@ Start ritual: no team-lead file modified or new, so none was committed by path f
 (the lifted `conclusions()` callable + `tick.SCHEDULE_DEFAULT`'s corrected sentence, ruling (ss) 3, DONE there) and `266d48f` (the producer)
 were in HEAD, the app was not. s50 verified it, fixed what that found, committed it: `8d9de41` · `2731fb8` · `dd3c110` · `58e2e1f` ·
 `210b878`. **The app** (`frontend/`, 35 files): Vite 6 · React 19 · TS 5 strict · Recharts 3 · vitest, pinned, lockfile committed; hash
-routing, UA/EN, light/dark, DESIGN §3 tokens, no CSS framework. Five promo tabs read the two exports; the command centre's nine route and
-say front-2. **The producer** grew `chains` (registry names folded by `chain_aliases.yaml`, so a table reads «АТБ» not `atb`) and
-`s2_boundary`, and `tick.REGISTRY` + `registry.CHAIN_ALIASES` joined `required()`. **Determinism measured:** two runs write
-`results/front_data.json` byte for byte (sha `f1c7c629…`), carrying `data_until` from the export's windows, never a clock — DESIGN §7's
-`generated_at` is deliberately absent (fork §4.2: a clock would dirty the tree on every `make front`). **Checks, all at `210b878`:** `make
-front` green · `npm run check` clean · `npx vitest run` **19 passed** (18 + the one new test) · the five tabs render under `make serve` at
-1440 px in UA and EN, both themes, screenshots in `docs/reports/screens/` · static mode over `http.server` on the built `dashboard/app/` ·
-**no console message comes from the app** (all 35 were a MetaMask extension) · `make check` GREEN: ruff clean, **4340 passed / 2 skipped**
-in five slices whose union is PROVEN equal to `ls tests/test_*.py` (231 files, no gap, no overlap, asserted before a slice ran);
-819+974+1185+770+592 = 4340 = s48's count — front-1 adds no pytest, its tests are vitest. Porcelain over the §8 set EMPTY, and EMPTY again
-after `make front` was re-run at `f62cfac` — the bundle a clone builds. **$0; no cloud call this session.**
+routing, UA/EN, light/dark, §3 tokens, no CSS framework. Five promo tabs read the two exports; the command centre's nine route and say
+front-2. **The producer** grew `chains` (registry names folded by `chain_aliases.yaml`, so a table reads «АТБ» not `atb`) and `s2_boundary`,
+and `tick.REGISTRY` + `registry.CHAIN_ALIASES` joined `required()`. **Determinism measured:** two runs write `results/front_data.json` byte
+for byte (sha `f1c7c629…`), carrying `data_until` from the export's windows, never a clock — DESIGN §7's `generated_at` is deliberately
+absent (fork §4.2: a clock would dirty the tree on every `make front`). **Checks, all at `210b878`:** `make front` green · `npm run check`
+clean · `npx vitest run` **19 passed** (18 + the one new test) · the five tabs render under `make serve` at 1440 px in UA and EN, both
+themes, screenshots in `docs/reports/screens/` · static mode over `http.server` on the built `dashboard/app/` · **no console message comes
+from the app** (all 35 were a MetaMask extension) · `make check` GREEN: ruff clean, **4340 passed / 2 skipped** in five slices whose union
+is PROVEN equal to `ls tests/test_*.py` (231 files, no gap, no overlap, asserted before a slice ran); 819+974+1185+770+592 = 4340 = s48's
+count — front-1 adds no pytest, its tests are vitest. Porcelain over the §8 set EMPTY, and EMPTY again after `make front` was re-run on the
+tree of `210b878`, the last code commit — the bundle a clone builds. **$0; no cloud call this session.**
 
 ## Six defects CAUGHT and FIXED (§3's standing permission; each MEASURED in the browser — full text in `58e2e1f`)
 1. **A static build whose `front_data.json` lacks `status` came up BLANK** — read off the parsed document, the throw landed inside the
