@@ -117,3 +117,11 @@ results/promo_tick.json
 # committing it would dirty the tree every hour the operator leaves `make loop` running.
 results/loop*.log
 .claude/session_mode
+
+# The front end's dependencies and its build (PHASE-ship-1 §2 front-1). `frontend/package.json` and
+# `frontend/package-lock.json` ARE committed — `npm ci` installs exactly what was measured here —
+# and `dashboard/app/` is what `make front` writes from them: a build output like the derived store
+# above, so a clone builds it rather than carrying two copies of the same JSON. The operator's
+# `firebase deploy` runs after `make front`, which is also what keeps §8's porcelain empty.
+frontend/node_modules/
+dashboard/app/
