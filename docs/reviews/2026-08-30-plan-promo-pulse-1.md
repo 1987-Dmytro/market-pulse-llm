@@ -1357,3 +1357,10 @@ committed dry run, no `--register`; then the fresh verifier → the team lead's 
 4. PHASE → v8: NEW item «design-pass» before «front-2». PROGRESS's Next line set to «design-pass» by the team lead under this ruling.
 5. Media source measured: 4 280 photos under `data/annotation/*/posts_media` (3 008 in promo_c2) — the feature is $0.
 6. Next session s51 launches with prompt v3 unchanged.
+
+## 12.09.2026 — ruling (ww): «design-pass» ACCEPTED; next «front-2»
+1. ACCEPTED at `a44cad6`/`f783af4` (report `e664370`), $0. Own runs: `make front` green; `front_data.json` sha256 `aaf9f792…` byte-identical to the claim; media **referenced 402 · staged 402 · missing 0 · 90 941 197 bytes** named in the manifest with its honest «why»; vitest 21/21; `make check` **4340 passed / 2 skipped** (12:18).
+2. Own browser: dark is the FIRST PAINT on a clean storage (measured on two origins); the chip filter, the four KPI cards, «Свіжі листівки», the row thumbnails and the one `<dialog>` lightbox all live; the theme crossfade runs; the reduced-motion rule is live in the CSSOM. Static build: four promo tabs, «Якість не входить у статичну збірку — вкладка живе на сервері…», no `0.2333` anywhere on the page; `make serve` keeps the tab unchanged. A theme remembered from an earlier visit overriding the default is CORRECT behaviour, not a defect — the bar's clause is «when nothing is stored».
+3. Findings NAMED, not built: (1) row thumbnails are backed by the ORIGINAL 1499×2136 JPEGs — 90.9 MB to deploy and a heavy decode under scroll; a downscaled thumbnail variant is a candidate for «e2e-ship» planning, the operator decides beside the firebase step. (2) s51's static/served cold-start race (`load.ts` 1 s guard) stays named for «front-2» planning together with (uu) 6's two items.
+4. Bench pattern corrected: «the heavy suite runs LAST» means background + log file + poll — a foreground run does not survive the DC transport's 4-minute wait.
+5. Next: «front-2» (§2, the command centre T0–T8), fresh session s52, prompt v3 unchanged.
