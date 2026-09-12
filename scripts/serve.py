@@ -34,6 +34,7 @@ from pydantic import BaseModel, Field, model_validator
 REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
+import export_front_data as export_front  # noqa: E402
 import runpod_guard as guard  # noqa: E402
 import tick  # noqa: E402
 
@@ -87,44 +88,32 @@ def windows() -> dict:
     }
 
 
-def money() -> dict:
-    """The cycle's remaining, as the guard last RECORDED it — a reading of a file, not a balance.
+@app.get("/api/status")
+def status() -> dict:
+    """What the header and the Петля tab read: the last tick, the windows, the queue, the money.
 
-    The last session row of the guard's own ledger, its fields carried over as they were written.
-    Nothing is re-computed from a cap and a spend here: the guard is the one place that prices a
-    line, and a second spelling of that arithmetic is a defect ([[a_published_number_has_one_reader]]).
+    The fields and their wording are `export_front.status`'s — the SAME shape the static build
+    reads out of `results/front_data.json`, so the served and the static screen cannot disagree
+    about a figure or about which file it came from. This route adds the two things only a running
+    server knows: the tick's own state file, and the store's windows when a store is there.
     """
+    export = read_json(EXPORT)
     ledger = read_json(guard.cycle3_path())
     if not ledger.get("sessions"):
         raise HTTPException(500, f"{tick.rel(guard.cycle3_path())} carries no recorded reading")
-    last = ledger["sessions"][-1]
-    return {
-        "from": f"{tick.rel(guard.cycle3_path())} :: sessions[-1]",
-        "remaining_usd": last["remaining_usd"],
-        "spent_usd": last["spent_usd"],
-        "cap_usd": ledger["cycle3_cap_usd"],
-        "at": last["at"],
-        "note": last["note"],
-    }
-
-
-@app.get("/api/status")
-def status() -> dict:
-    """What the header and the Петля tab read: the last tick, the windows, the queue, the money."""
-    export = read_json(EXPORT)
     state = json.loads(STATE.read_text(encoding="utf-8")) if STATE.exists() else None
-    return {
-        "tick": state
-        or {
-            "at": None,
-            "why": f"no tick recorded — {tick.rel(STATE)} is written by `make tick` and is not"
-            " committed",
-        },
-        "threads": export["screen"]["threads"],
-        "table_rows": export["screen"]["table_rows"],
-        "money": money(),
-        "window_id": export["window_id"],
-    } | windows()
+    return (
+        export_front.status(export, ledger, tick.rel(guard.cycle3_path()))
+        | {
+            "tick": state
+            or {
+                "at": None,
+                "why": f"no tick recorded — {tick.rel(STATE)} is written by `make tick` and is not"
+                " committed",
+            }
+        }
+        | windows()
+    )
 
 
 class Schedule(BaseModel):
