@@ -66,6 +66,15 @@ export function rememberTheme(choice: ThemeChoice): void {
 }
 
 /**
+ * `<html lang>` follows the toggle (DESIGN-ship-1 §8). It is not decoration: a screen reader picks
+ * its voice and its phonemes from this attribute, so an English interface left declared `uk` is
+ * read out in Ukrainian, word for word — and the same attribute drives hyphenation and spell-check.
+ */
+export function applyLang(lang: Lang): void {
+  document.documentElement.lang = lang
+}
+
+/**
  * The toggle sets `data-theme` on `<html>`, which flips `color-scheme` and the token blocks
  * together; «system» removes the attribute so `prefers-color-scheme` decides again.
  */

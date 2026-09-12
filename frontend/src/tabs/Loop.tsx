@@ -225,37 +225,38 @@ export function LoopTab(): React.JSX.Element {
             target={TARGET}
           />
         )}
-        <form className="schedule" onSubmit={save}>
-          <label>
-            {t('loop.schedule.min')}
-            <input
-              type="number"
-              value={minHours}
-              readOnly={!served}
-              onChange={(event) => setMinHours(event.target.value)}
-            />
-          </label>
-          <label>
-            {t('loop.schedule.default')}
-            <input
-              type="number"
-              value={defaultHours}
-              readOnly={!served}
-              onChange={(event) => setDefaultHours(event.target.value)}
-            />
-          </label>
-          <p className="note">{t('loop.schedule.rule')}</p>
-          {served ? (
+        {served ? (
+          <form className="schedule" onSubmit={save}>
+            <label>
+              {t('loop.schedule.min')}
+              <input
+                type="number"
+                value={minHours}
+                onChange={(event) => setMinHours(event.target.value)}
+              />
+            </label>
+            <label>
+              {t('loop.schedule.default')}
+              <input
+                type="number"
+                value={defaultHours}
+                onChange={(event) => setDefaultHours(event.target.value)}
+              />
+            </label>
+            <p className="note">{t('loop.schedule.rule')}</p>
             <button type="submit">{t('loop.schedule.save')}</button>
-          ) : (
-            <>
-              {/* the inputs are empty because no export carries the schedule: the static build
-                  reads files, and this one is not among them */}
-              <p className="muted">{t('common.not_exported')}</p>
-              <p className="note">{t('loop.schedule.readonly')}</p>
-            </>
-          )}
-        </form>
+          </form>
+        ) : (
+          /* No export carries the schedule — `data/schedule.json` is the daemon's file and the
+             static build reads only what `make front` stages. The form used to render anyway, as
+             two EMPTY number boxes: an empty input reads as «the interval is unset», which is a
+             reading, and a false one (DESIGN-ship-1 §10 — an empty state names which of the three
+             it is). The sentence says which, and no box invites an edit no API could take. */
+          <>
+            <p className="muted">{t('loop.schedule.not_in_build')}</p>
+            <p className="note">{t('loop.schedule.readonly')}</p>
+          </>
+        )}
         {saved !== null &&
           (saved.ok ? (
             <p className="note">{t('loop.schedule.saved')}</p>
@@ -275,7 +276,9 @@ export function LoopTab(): React.JSX.Element {
             {running ? t('loop.tick.running') : t('loop.tick.now')}
           </button>
         ) : (
-          <p className="note">{t('loop.schedule.readonly')}</p>
+          // its own sentence: this section is about the tick, and the schedule's «read-only» stood
+          // here too, so the static build printed one line twice under two different headings
+          <p className="note">{t('loop.tick.no_api')}</p>
         )}
         {ran !== null &&
           (ran.ok ? (

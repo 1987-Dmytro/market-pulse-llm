@@ -22,6 +22,17 @@ export function positions(promo: PromoExport): Position[] {
   return must(promo.screen?.positions, PROMO_FILE, POSITIONS_FIELD)
 }
 
+/**
+ * A position's identity on the screen: `(carrier, row_id)`, the pair the store deduped the union
+ * by (PHASE-ship-1 §2 «w3»). `row_id` alone is a channel's own message counter and it REPEATS —
+ * seven of the 1 301 rows share an id with a row of the other carrier, two different products read
+ * off one post and one leaflet page. Keyed on `row_id`, a click on such a row's ⓘ opened BOTH
+ * rows' provenance at once, because the open row is remembered by this key.
+ */
+export function positionKey(row: Position): string {
+  return `${row.carrier}:${row.row_id}`
+}
+
 export function feed(promo: PromoExport): FeedRow[] {
   return must(promo.screen?.feed, PROMO_FILE, 'screen.feed')
 }

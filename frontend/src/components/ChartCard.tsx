@@ -81,7 +81,14 @@ export function ChartCard({
         </button>
       </div>
 
-      {asTable ? (
+      {/* An empty series says WHY in `children` (the chart branch renders it). The table view used
+          to replace that sentence with a head over an empty body — the one view of the two where
+          «none in the data» became a blank (DESIGN-ship-1 §10), and the default view of Тренди
+          opens on exactly such a series. With no rows there is no table to draw, so the sentence
+          stands in both views and the reader is never shown a hole. */}
+      {asTable && table.rows.length === 0 ? (
+        children
+      ) : asTable ? (
         <div className="scroll">
           <table>
             <caption>{subtitle}</caption>

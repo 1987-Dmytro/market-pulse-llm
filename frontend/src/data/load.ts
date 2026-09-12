@@ -86,7 +86,12 @@ export async function loadAll(): Promise<Loaded> {
     readJson<PromoExport>(dataUrl(PROMO_FILE, mode), PROMO_FILE),
     readJson<FrontExport>(dataUrl(FRONT_FILE, mode), FRONT_FILE),
   ])
-  return { mode, promo, front, status: live ?? front.status }
+  // `front.status` is the static build's whole answer for the Петля tab, and it is the ONE required
+  // block that used to be read straight off the parsed document: an export without it (a stale
+  // `dashboard/app/data/` from an older producer, a hand-trimmed copy) threw inside the render
+  // instead of at the adapter, React unmounted the tree, and the page came up BLANK — measured, not
+  // reasoned about. `must()` turns it into the SourceMissing the shell already knows how to draw.
+  return { mode, promo, front, status: live ?? must(front.status, FRONT_FILE, 'status') }
 }
 
 /** The loop's schedule — served mode only; the static build has no API to ask. */

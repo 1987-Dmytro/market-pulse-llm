@@ -8,7 +8,7 @@
 
 import { useEffect, useState } from 'react'
 
-import { AppContext, applyTheme, rememberLang, rememberTheme, rememberedLang, rememberedTheme } from './app-state.ts'
+import { AppContext, applyLang, applyTheme, rememberLang, rememberTheme, rememberedLang, rememberedTheme } from './app-state.ts'
 import type { App as AppData, ThemeChoice } from './app-state.ts'
 import { chainTable } from './data/chains.ts'
 import { SourceMissing, loadAll } from './data/load.ts'
@@ -46,6 +46,7 @@ export function App(): React.JSX.Element {
   }, [])
 
   useEffect(() => applyTheme(theme), [theme])
+  useEffect(() => applyLang(lang), [lang])
 
   // a link may carry the language and the theme: `?lang=en&theme=dark` wins over what this browser
   // remembers, which is what makes a view — including the one a screenshot is taken of — a link

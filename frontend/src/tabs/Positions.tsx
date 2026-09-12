@@ -23,6 +23,7 @@ import {
   type SortKey,
   distinct,
   filterPositions,
+  positionKey,
   positions,
   productOf,
   sortPositions,
@@ -168,10 +169,13 @@ export function PositionsTab(): React.JSX.Element {
             label: t('common.info'),
           }}
         />
+        {/* No context line: DESIGN-ship-1 §5 gives the card a short reading aid and puts the
+            `file :: field` line in the ⓘ and the tab's footer, which already carries this one.
+            Spelled into the context slot it ran to three wrapped lines of path inside the card and
+            read as the card's own source, while the value is a count of the SHOWN rows. */}
         <KpiCard
           label={t('positions.kpi.chains')}
           value={count(lang, distinct(rows, (row) => row.chain.id).length)}
-          context={front.chains.from}
         />
         <KpiCard
           label={t('positions.kpi.brands')}
@@ -213,7 +217,7 @@ export function PositionsTab(): React.JSX.Element {
         columns={columns}
         rows={rows}
         total={all.length}
-        keyOf={(row) => row.row_id}
+        keyOf={positionKey}
         sort={{ key: sortKey, direction, onSort }}
         expand={(row) => <Evidence row={row} />}
       />

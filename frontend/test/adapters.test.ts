@@ -18,8 +18,8 @@ import { describe, expect, it } from 'vitest'
 import { SLOTS, chainName, chainTable, slotOf } from '../src/data/chains.ts'
 import { barStatus, s1, s2, sources } from '../src/data/front.ts'
 import {
-  asDate, asDayMonth, filterPositions, positions, productOf, rollup, sortPositions, tableRows,
-  telegramLink, threads, volumeOf, weeks, windows,
+  asDate, asDayMonth, filterPositions, positionKey, positions, productOf, rollup, sortPositions,
+  tableRows, telegramLink, threads, volumeOf, weeks, windows,
 } from '../src/data/promo.ts'
 import type { Bar, FrontExport, Position, PromoExport } from '../src/types.ts'
 
@@ -44,6 +44,28 @@ const rowIds = (rows: Position[]): string[] => rows.map((row) => row.row_id).sor
 const chainsOnRows = [...new Set(all.map((row) => row.chain.id))]
 
 describe('promo.ts over promo_screen_data.json', () => {
+  it('keys a position on (carrier, row_id), which row_id alone does not do', () => {
+    // BOTH WAYS on the shipped export. The defect this pins was measured in the browser: the table
+    // remembers the open row by its key, so two rows sharing one key opened two provenance panels
+    // on one click. `row_id` is a channel's message counter and it repeats across carriers.
+    const keys = new Set(all.map(positionKey))
+    expect(keys.size).toBe(all.length) // the pair is unique over every shipped row
+    expect(keys.size).toBe(PUBLISHED_POSITIONS)
+
+    const bare = new Set(all.map((row) => row.row_id))
+    expect(bare.size).toBeLessThan(all.length) // and the id alone is NOT — the blind direction
+    const repeated = carried(
+      all.find((row) => all.some((other) => other !== row && other.row_id === row.row_id)),
+      'a row whose row_id another row repeats',
+    )
+    const twin = carried(
+      all.find((other) => other !== repeated && other.row_id === repeated.row_id),
+      'the second row of that id',
+    )
+    expect(positionKey(twin)).not.toBe(positionKey(repeated)) // same id, different carrier, two keys
+    expect(twin.carrier).not.toBe(repeated.carrier)
+  })
+
   it('hands the positions block over and carries the published count', () => {
     expect(all).toBe(promo.screen.positions) // the same array: the adapter copies nothing
     expect(all.length).toBe(promo.screen.positions.length)
