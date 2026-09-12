@@ -416,8 +416,33 @@ def tracked_categories() -> list[dict]:
     return rows
 
 
-def category_prices(export: dict, pages: dict, names: dict) -> dict:
-    """What a kilogram costs in each tracked category — n, the spread, and the two ends named.
+def on_the_current_week(export: dict, media_block: dict) -> list[dict]:
+    """The positions of every chain's CURRENT leaflet week — the flyer gallery's own population.
+
+    «Current week» is per chain, the newest week that chain has pages in (DESIGN-ship-1 §11): the
+    newest week over ALL chains is Маркетопт's alone, and a market read through one chain's calendar
+    is not the market. A row belongs here when the page it was read off is a page of its chain's
+    current set, which is the same membership the gallery's cards are counted by.
+    """
+    pages = media_block["pages"]
+    current = set()
+    for flyer in media_block["flyers"]:
+        current.update(flyer["pages"])
+    return [
+        position
+        for position in export["screen"]["positions"]
+        if pages.get(f"{position['evidence']['channel']}:{position['evidence']['msg_id']}")
+        in current
+    ]
+
+
+def category_prices(export: dict, media_block: dict, names: dict) -> dict:
+    """What a kilogram costs in each tracked category THIS WEEK — n, the spread, and the two ends.
+
+    The window is every chain's current leaflet, not the whole collected span: «what is cheapest in
+    ice cream» is a question about the promo now, and a median over eight weeks of leaflets answers
+    a different one (the operator's word, 12.09). It costs reach — 311 rows of 1301 — and the `n`
+    beside every median is how the reader sees that.
 
     Cut by category AND by unit, never by category alone: five of the eleven categories hold both
     gram and millilitre rows, and one median over the two would add ₴/kg to ₴/L and publish the sum
@@ -433,10 +458,12 @@ def category_prices(export: dict, pages: dict, names: dict) -> dict:
     empty state with no sentence (DESIGN-ship-1 §10). `positions` counts every row of the category,
     priced or not, so the difference between it and the bases' `n` is visible rather than silent.
     """
+    pages = media_block["pages"]
+    week = on_the_current_week(export, media_block)
     priced: dict[tuple[str, str], list] = {}
     held: dict[str, int] = {}
     without = 0
-    for position in export["screen"]["positions"]:
+    for position in week:
         category = position["item"]["category"]
         held[category] = held.get(category, 0) + 1
         reading = unit_price(position)
@@ -451,12 +478,14 @@ def category_prices(export: dict, pages: dict, names: dict) -> dict:
         members.sort(key=lambda member: member[:2])
     return {
         "from": f"{tick.rel(screen.EXPORT)} :: screen.positions[] (promo_price, item.size_value,"
-        f" item.size_unit, item.pack_count), over {tick.rel(tick.REGISTRY)} ::"
-        " taxonomy.tracked_groups",
+        f" item.size_unit, item.pack_count) on the pages of {tick.rel(OUT)} :: media.flyers, over"
+        f" {tick.rel(tick.REGISTRY)} :: taxonomy.tracked_groups",
         "reading": "the promo price of a kilogram or a litre — promo_price / (size_value ×"
-        " pack_count) × 1000 — read per category AND per unit, because a category that holds both"
-        " grams and millilitres has no single median; n, min, q1, median, q3 and max are"
-        " aggregates.spread and aggregates.quartiles, and the two ends are the rows themselves",
+        " pack_count) × 1000 — over the positions of every chain's CURRENT leaflet week, read per"
+        " category AND per unit, because a category that holds both grams and millilitres has no"
+        " single median; n, min, q1, median, q3 and max are aggregates.spread and"
+        " aggregates.quartiles, and the two ends are the rows themselves",
+        "positions": len(week),
         "rows_without_a_unit_price": without,
         "categories": [
             row
@@ -604,7 +633,7 @@ def build(export_path: Path = OUT) -> dict:
             "verdict": json.loads(VERDICT.read_text(encoding="utf-8")),
         },
         "media": media_block,
-        "category_prices": category_prices(promo, media_block["pages"], names),
+        "category_prices": category_prices(promo, media_block, names),
         "regions": regions(promo, media_block, names),
         "s2_readings": screen.s2_readings(screen.RESULTS),
         "s2_boundary": screen.S2_BOUNDARY,

@@ -107,9 +107,11 @@ export function CategoryPrices(): React.JSX.Element {
         subtitle={t('trends.prices.subtitle')}
         provenance={`${FRONT_FILE} :: ${CATEGORY_FIELD}`}
         info={[t('trends.prices.rule')]}
-        note={t('trends.prices.without', {
+        note={`${t('trends.prices.window', {
+          positions: count(lang, block.positions),
+        })} · ${t('trends.prices.without', {
           rows: count(lang, block.rows_without_a_unit_price),
-        })}
+        })}`}
         table={{
           head: [
             t('trends.prices.col.category'),

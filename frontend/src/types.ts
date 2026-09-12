@@ -303,6 +303,8 @@ export interface CategoryPrices {
 export interface CategoryPricesBlock {
   from: string
   reading: string
+  /** the rows of the window the block reads — every chain's current leaflet week */
+  positions: number
   rows_without_a_unit_price: number
   categories: CategoryPrices[]
 }

@@ -165,7 +165,7 @@
   "media.rows_without_a_page": "without a photo: {rows} of {total} — no media record carries an image for those posts",
   "media.close": "close",
   "trends.prices.title": "Promo prices by category",
-  "trends.prices.subtitle": "the median leads; the cheapest and the dearest come with the page they were read off",
+  "trends.prices.subtitle": "for the current week; the median leads, the cheapest and the dearest come with their page",
   "trends.prices.rule": "the price of a kilogram or a litre comes from the promo price and the size of that same row, divided by the pieces in the pack; a category is read per unit, because a median over grams and millilitres would be a sum with no unit",
   "trends.prices.without": "without a price per unit: {rows} — the row carries no price or no size",
   "trends.prices.median": "the median",
@@ -181,5 +181,6 @@
   "trends.prices.col.max": "dearest",
   "region.chain.rows": "positions: {rows}",
   "region.chain.no_pages": "this chain has no leaflet in the data — its positions were not read off pages",
-  "region.claim": "the chains the operator names as present in the oblast — a selection of CHAINS, not a geography of rows: the registry carries no region and no city, and the leaflets of the national chains are national. Each chain is shown on its own newest week with leaflets"
+  "region.claim": "the chains the operator names as present in the oblast — a selection of CHAINS, not a geography of rows: the registry carries no region and no city, and the leaflets of the national chains are national. Each chain is shown on its own newest week with leaflets",
+  "trends.prices.window": "each chain's current week — {positions} positions"
 }
