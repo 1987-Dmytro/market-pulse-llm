@@ -1032,6 +1032,54 @@ def s1_reading() -> dict:
     }
 
 
+def command_center_derived(centre: dict) -> dict:
+    """The one figure T4 subtracted in the browser, computed here instead (ruling (ddd) 2).
+
+    DESIGN §7 orders a «Δ vs Гармонія» column on the competitors table and PHASE §3 says the app
+    computes no figure of its own; the app was doing the subtraction. That is the same shape as the
+    «73,1 %» the front-2 close caught — a figure on the screen that no file holds — so the ruling
+    settles it here: the difference is a field, and the sealed `dashboard_data_w1.json` is only read.
+
+    The block MIRRORS `metrics.sov`, one reading per sample under the record's own
+    `headline_sample`, so a Δ and the shares it is a difference of are never read at two different
+    populations ([[the_field_true_under_the_old_constant]]). The reference brand is NAMED on every
+    reading: `aggregates.sov_block` lists the own brands `ORDER BY brand_id`, so «the first own
+    brand» is the alphabet's pick out of the two this watchlist carries, and only the field that
+    spells it out makes the column readable. A share the record left null — a sample whose mentions
+    are zero has no shares at all — subtracts to null, never to a 0 a reader would take for a
+    measured tie.
+    """
+    sov = centre["metrics"]["sov"]
+    readings = {}
+    for name, reading in sov["by_sample"].items():
+        own = reading["own_brands"]
+        if not own:
+            raise SystemExit(
+                f"export-front REFUSED: metrics.sov.by_sample.{name} names no own brand, so the Δ"
+                " column of T4 has nothing to be a difference from — a column of plain shares"
+                " under a «Δ» heading claims a comparison nobody made"
+            )
+        base = reading["share"][own[0]]
+        readings[name] = {
+            "reference": own[0],
+            "own_brands": own,
+            "delta": {
+                brand: None if share is None or base is None else round(share - base, 4)
+                for brand, share in reading["share"].items()
+            },
+        }
+    return {
+        "from": f"{tick.rel(builder.EXPORT)} :: metrics.sov.by_sample[].share (and own_brands)",
+        "reading": "each watchlist brand's share of voice MINUS the reference own brand's, at the"
+        " sample the shares themselves were read at — the T4 column of DESIGN §7, subtracted here"
+        " because the app subtracts nothing",
+        "sov_delta_vs_own": {
+            "headline_sample": sov["headline_sample"],
+            "by_sample": readings,
+        },
+    }
+
+
 def build(export_path: Path = OUT) -> dict:
     """The whole document, from the sources `required()` and `optional()` name."""
     refuse_on_a_missing_source(required())
@@ -1082,6 +1130,7 @@ def build(export_path: Path = OUT) -> dict:
         "chains": chain_table,
         "data_until": data_until(promo),
         "command_center": centre | {"conclusions": builder.conclusions(centre, strings)},
+        "command_center_derived": command_center_derived(centre),
         "model": {
             "from": tick.rel(VERDICT),
             "verdict": json.loads(VERDICT.read_text(encoding="utf-8")),
@@ -1202,6 +1251,12 @@ def main(argv: list[str] | None = None) -> int:
     print(f"wrote {tick.rel(args.out)}  {args.out.stat().st_size / 1024:.0f} KB")
     print(f"  data until    {document['data_until']['date']}")
     print(f"  conclusions   {len(document['command_center']['conclusions'])}")
+    derived = document["command_center_derived"]["sov_delta_vs_own"]
+    head = derived["by_sample"][derived["headline_sample"]]
+    print(
+        f"  t4 Δ          {len(head['delta'])} brands vs {head['reference']}"
+        f" ({derived['headline_sample']})"
+    )
     print(f"  s2 readings   {len(document['s2_readings'])}")
     print(f"  chains        {len(document['chains']['rows'])}")
     print(

@@ -9396,6 +9396,79 @@
       "until": "2026-08-09T00:00:00+00:00"
     }
   },
+  "command_center_derived": {
+    "from": "results/dashboard_data_w1.json :: metrics.sov.by_sample[].share (and own_brands)",
+    "reading": "each watchlist brand's share of voice MINUS the reference own brand's, at the sample the shares themselves were read at — the T4 column of DESIGN §7, subtracted here because the app subtracts nothing",
+    "sov_delta_vs_own": {
+      "by_sample": {
+        "bought": {
+          "delta": {
+            "ferma": 0.0,
+            "garmonija": 0.0,
+            "halychyna": 0.0,
+            "khladyk": 0.0,
+            "lasunka": 0.2,
+            "limo": 0.2,
+            "mgarske": 0.0,
+            "molokija": 0.0,
+            "myrhorodska-korivka": 0.0,
+            "premia": 0.0,
+            "president": 0.0,
+            "prostokvashyno": 0.0,
+            "rud": 0.2,
+            "selianske": 0.0,
+            "svoia-liniia": 0.0,
+            "try-vedmedi": 0.0,
+            "varto": 0.0,
+            "varus-pl": 0.4,
+            "voloshkove-pole": 0.0,
+            "yagotynske": 0.0,
+            "yahotynske-dlia-ditei": 0.0,
+            "zarih": 0.0,
+            "zlahoda": 0.0
+          },
+          "own_brands": [
+            "garmonija",
+            "mgarske"
+          ],
+          "reference": "garmonija"
+        },
+        "payable": {
+          "delta": {
+            "ferma": 0.0,
+            "garmonija": 0.0,
+            "halychyna": 0.0,
+            "khladyk": 0.0,
+            "lasunka": 0.2,
+            "limo": 0.2,
+            "mgarske": 0.0,
+            "molokija": 0.0,
+            "myrhorodska-korivka": 0.0,
+            "premia": 0.0,
+            "president": 0.0,
+            "prostokvashyno": 0.0,
+            "rud": 0.2,
+            "selianske": 0.0,
+            "svoia-liniia": 0.0,
+            "try-vedmedi": 0.0,
+            "varto": 0.0,
+            "varus-pl": 0.4,
+            "voloshkove-pole": 0.0,
+            "yagotynske": 0.0,
+            "yahotynske-dlia-ditei": 0.0,
+            "zarih": 0.0,
+            "zlahoda": 0.0
+          },
+          "own_brands": [
+            "garmonija",
+            "mgarske"
+          ],
+          "reference": "garmonija"
+        }
+      },
+      "headline_sample": "payable"
+    }
+  },
   "contract": "docs/DESIGN-ship-1.md §7 — written by scripts/export_front_data.py ($0) from the files each block names; the app computes no figure of its own",
   "data_until": {
     "date": "2026-09-05",

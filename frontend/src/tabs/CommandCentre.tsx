@@ -26,12 +26,15 @@ import { Info } from '../components/Info.tsx'
 import { KpiCard } from '../components/KpiCard.tsx'
 import { seriesColour } from '../data/chains.ts'
 import {
+  CC_DERIVED_FIELD,
+  CC_FIELD,
   aspectShare,
   ccPath,
   ccWindow,
   centre,
   coverage,
   cut,
+  deltaVsOwn,
   headline,
   modelVerdict,
   notComputable,
@@ -593,8 +596,7 @@ export function Competitors(): React.JSX.Element {
   const field = ccPath('metrics', 'sov')
   const reading = headline(share, field)
   const brands = cut(front, 'brand_by_sentiment')
-  const own = reading.own_brands[0] ?? ''
-  const ownShare = reading.share[own] ?? 0
+  const deltas = deltaVsOwn(front)
   const rows = shares(reading.share, reading.mentions)
 
   return (
@@ -623,7 +625,7 @@ export function Competitors(): React.JSX.Element {
           <tbody>
             {rows.map((row) => {
               const cells = brands.rows[row.key] ?? {}
-              const delta = row.value - ownShare
+              const delta = deltas.delta[row.key] ?? null
               return (
                 <tr key={row.key}>
                   <th scope="row">
@@ -632,8 +634,8 @@ export function Competitors(): React.JSX.Element {
                   </th>
                   <td className="num">{ratio(row.value)}</td>
                   <td className="num">{count(lang, row.count)}</td>
-                  <td className="num" style={{ color: delta === 0 ? 'var(--text-2)' : delta > 0 ? 'var(--s8)' : 'var(--s1)' }}>
-                    {delta === 0 ? '—' : ratio(delta)}
+                  <td className="num" style={{ color: !delta ? 'var(--text-2)' : delta > 0 ? 'var(--s8)' : 'var(--s1)' }}>
+                    {delta === null ? t('common.absent') : delta === 0 ? '—' : ratio(delta)}
                   </td>
                   <td className="num">
                     {Object.keys(cells).length === 0
@@ -648,9 +650,12 @@ export function Competitors(): React.JSX.Element {
           </tbody>
         </table>
       </div>
-      <p className="note">{t('cc.t4.note')}</p>
+      <p className="note">{t('cc.t4.note', { own: deltas.reference })}</p>
 
-      <Sources fields={['metrics.sov', 'cuts.brand_by_sentiment']} t={t} />
+      <Sources
+        fields={['metrics.sov', 'cuts.brand_by_sentiment', `${CC_DERIVED_FIELD}.sov_delta_vs_own`]}
+        t={t}
+      />
     </>
   )
 }
@@ -927,7 +932,9 @@ function Sources({ fields, t }: { fields: string[]; t: Translate }): React.JSX.E
         <span key={field}>
           {index > 0 && ' · '}
           <code>
-            {FRONT_FILE} :: {ccPath(field)}
+            {/* a tab's fields are paths INSIDE the command centre, except the one block the
+                producer computes beside it — that one arrives already spelled from the root */}
+            {FRONT_FILE} :: {field.startsWith(CC_FIELD) ? field : ccPath(field)}
           </code>
         </span>
       ))}

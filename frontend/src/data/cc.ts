@@ -22,6 +22,7 @@ import type {
   CcMetrics,
   CommandCentre,
   Coverage,
+  DeltaVsOwn,
   FrontExport,
   NegativeShareReading,
   NotComputable,
@@ -29,12 +30,17 @@ import type {
   PromoDepth,
   PromoPressure,
   Sampled,
+  SampledOf,
   SovReading,
   Volume,
 } from '../types.ts'
 import { FRONT_FILE, must } from './load.ts'
 
 export const CC_FIELD = 'command_center'
+
+/** The producer's own block beside it — a figure the brief orders and the sealed file does not
+ *  carry, computed once in `export_front_data.py` and only read here (ruling (ddd) 2). */
+export const CC_DERIVED_FIELD = 'command_center_derived'
 
 export function centre(front: FrontExport): CommandCentre {
   return must(front.command_center, FRONT_FILE, CC_FIELD)
@@ -56,12 +62,12 @@ function metric<K extends keyof CcMetrics>(front: FrontExport, name: K): CcMetri
  * `headline_sample` field and the `by_sample` map are written by the same producer, and a
  * disagreement between them is a defect somebody has to see.
  */
-export function headline<T>(block: Sampled<T>, field: string): T {
+export function headline<T>(block: SampledOf<T>, field: string): T {
   return must(block.by_sample?.[block.headline_sample], FRONT_FILE, `${field}.by_sample.${block.headline_sample}`)
 }
 
 /** Every sample name the block carries, headline FIRST — the order the cards are read in. */
-export function samplesOf<T>(block: Sampled<T>): string[] {
+export function samplesOf<T>(block: SampledOf<T>): string[] {
   const names = Object.keys(block.by_sample ?? {})
   return [
     ...names.filter((name) => name === block.headline_sample),
@@ -145,6 +151,19 @@ export function pressureByChain(front: FrontExport): Share[] {
     Object.entries(promoPressure(front).by_chain).map(([chain, row]) => [chain, row.position_rows]),
   )
   return shares(rows, rows)
+}
+
+/**
+ * T4's «Δ до свого» column — the producer's field, at the same population its shares are read at.
+ *
+ * The app used to subtract `share[brand] − share[own_brands[0]]` while it rendered the row. Both
+ * halves of that were the app's own: the arithmetic, and the choice of which own brand the column
+ * compares against — and the record lists two ([[the_app_computes_no_figure]]). The block mirrors
+ * `metrics.sov`, so {@link headline} picks the population here exactly as it does there.
+ */
+export function deltaVsOwn(front: FrontExport): DeltaVsOwn {
+  const field = `${CC_DERIVED_FIELD}.sov_delta_vs_own`
+  return headline(must(front.command_center_derived?.sov_delta_vs_own, FRONT_FILE, field), field)
 }
 
 /** The model's verdict as the four strings T8 prints. `decision` is a BLOCK in the record, so the

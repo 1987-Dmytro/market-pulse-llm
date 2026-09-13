@@ -247,7 +247,7 @@
   "cc.t4.population": "in {rows} rows of {of}; watchlist rules revision {rules}",
   "cc.t4.table": "The watchlist",
   "cc.t4.own": "own",
-  "cc.t4.note": "Δ is the share against our own brand; the tonality is the comment's, not a stance toward the brand",
+  "cc.t4.note": "Δ is the share against our own brand {own}; the tonality is the comment's, not a stance toward the brand",
   "cc.col.brand": "brand",
   "cc.col.share": "share",
   "cc.col.mentions": "mentions",

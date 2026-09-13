@@ -36,8 +36,8 @@ import {
   tableRows, telegramLink, threads, volumeOf, weeks, windows,
 } from '../src/data/promo.ts'
 import {
-  coverage, headline, modelVerdict, negativeShare, nsr, pressureByChain, promoDepth, samplesOf,
-  sov, volume,
+  coverage, deltaVsOwn, headline, modelVerdict, negativeShare, nsr, pressureByChain, promoDepth,
+  samplesOf, sov, volume,
 } from '../src/data/cc.ts'
 import type {
   Bar, FrontExport, NegativeShareReading, NsrReading, Position, PromoExport, SovReading,
@@ -570,6 +570,40 @@ describe('the command centre (front-2)', () => {
     const tab = readFileSync(`${root}frontend/src/tabs/CommandCentre.tsx`, 'utf8')
     expect(tab).not.toContain('/ pressure.position_rows')
     expect(tab).toContain('pressureByChain(front)')
+  })
+
+  /** Ruling (ddd) 2: T4 printed `row.value - ownShare` — a difference the app subtracted while it
+   *  rendered the row, against a reference IT chose out of the record's two own brands. */
+  it('T4’s Δ is the producer’s field, against the own brand that field names', () => {
+    const block = sov(front)
+    const reading = headline(block, 'command_center.metrics.sov')
+    const deltas = deltaVsOwn(front)
+    const path = `command_center_derived.sov_delta_vs_own.by_sample.${block.headline_sample}`
+
+    // the same population as the shares it is a difference of, and the block itself, not a copy
+    expect(field('command_center_derived.sov_delta_vs_own.headline_sample')).toBe(block.headline_sample)
+    expect(deltas).toBe(field(path))
+    // the record names TWO own brands, so «the own brand» is a choice — the field states it
+    expect(reading.own_brands.length).toBeGreaterThan(1)
+    expect(deltas.reference).toBe(reading.own_brands[0])
+
+    // and every value IS the difference, re-derived here off the sealed shares
+    expect(Object.keys(deltas.delta).sort()).toEqual(Object.keys(reading.share).sort())
+    const base = carried(reading.share[deltas.reference], 'a share for the reference own brand')
+    for (const [brand, share] of Object.entries(reading.share)) {
+      expect(deltas.delta[brand]).toBe(field(`${path}.delta.${brand}`))
+      expect(deltas.delta[brand]).toBeCloseTo(share - base, 4)
+    }
+    expect(deltas.delta[deltas.reference]).toBe(0)
+    // today the digits alone cannot tell a Δ from a share: Гармонія is mentioned 0 times in this
+    // window, so the reference is 0 and every Δ EQUALS the share beside it. What separates them is
+    // the named reference and the subtraction above ([[an_inequality_that_holds_for_the_wrong_reason]])
+    expect(base).toBe(0)
+
+    // the subtraction is gone from the tab, and the column reads the adapter
+    const tab = readFileSync(`${root}frontend/src/tabs/CommandCentre.tsx`, 'utf8')
+    expect(tab).not.toContain('row.value - ownShare')
+    expect(tab).toContain('deltaVsOwn(front)')
   })
 
   /** s59: `decision` is a ten-key block, so `String(...)` printed «рішення [object Object]» on T8. */

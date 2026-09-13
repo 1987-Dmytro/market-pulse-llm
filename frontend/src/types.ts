@@ -211,11 +211,15 @@ export interface Sample {
   watchlist_rules?: string
 }
 
-/** A metric read over TWO populations, with the file naming which one is the headline. The app
- *  never picks: `headline_sample` is the producer's ruling and the other reading stays visible. */
-export interface Sampled<T> {
+/** Readings by population, with the file naming which one is the headline. The app never picks:
+ *  `headline_sample` is the producer's ruling and the other reading stays visible. */
+export interface SampledOf<T> {
   by_sample: Record<string, T>
   headline_sample: string
+}
+
+/** A METRIC read that way — the same shape plus the population's own sentence. */
+export interface Sampled<T> extends SampledOf<T> {
   sample: Sample
 }
 
@@ -379,6 +383,24 @@ export interface CommandCentre {
   provenance: Record<string, unknown>
   convergence: Record<string, unknown>
   dictionary: { metrics: string[]; path: string; sha256: string }
+}
+
+/** One sample's Δ column: each watchlist brand's SoV share minus the reference own brand's, the
+ *  subtraction the producer does so that T4 does not (ruling (ddd) 2). `reference` is named on the
+ *  reading because the record lists its own brands alphabetically — `null` is a brand the sample
+ *  has no share for at all, and it prints as a sentence, never as a tie. */
+export interface DeltaVsOwn {
+  reference: string
+  own_brands: string[]
+  delta: Record<string, number | null>
+}
+
+/** `front_data.json :: command_center_derived` — what the producer computes FROM the sealed
+ *  command centre, for screens the brief orders a figure the sealed file does not carry. */
+export interface CommandCentreDerived {
+  from: string
+  reading: string
+  sov_delta_vs_own: SampledOf<DeltaVsOwn>
 }
 
 export interface ChainRow {
@@ -619,6 +641,7 @@ export interface FrontExport {
   }
   data_until: { date: string; from: string }
   command_center: CommandCentre
+  command_center_derived: CommandCentreDerived
   model: { from: string; verdict: Record<string, unknown> }
   s2_readings: S2Row[]
   /** `build_promo_screen.S2_BOUNDARY` — the one sentence that separates the shipped row from
