@@ -1,60 +1,38 @@
 # PROGRESS — ship-1 (ruling 03.09 (e): the executor's one file — done / next / open stop, ≤60 lines)
 
-## Done — 12.09 s51 «design-pass» ($0, PHASE-ship-1 §2 item 7, ruling (vv)): the approved look on the accepted app
-Start ritual: no team-lead file modified or new, so none was committed by path first. Commits `f783af4` (producer), `a44cad6`
-(app), `a1bdb46` (screens). **Dark is the DEFAULT**: `index.html` carries `data-theme="dark"` so the FIRST PAINT is dark and
-`rememberedTheme()` answers dark when nothing is stored — the system preference no longer picks it; toggle, light theme and
-`?theme=system` unchanged. §11's tonality is in the tokens (deeper page under a lit card, ONE soft shadow in dark, `--sp-*` =
-§3's scale ×1.25), written from ONE string into both dark blocks, so the toggle and the system query cannot drift.
-**The photos** (`export_front_data.py`, +199/-6): `media`, joined out of `results/post_media_*.json :: entries[].images[]`
-(by GLOB, not the five that exist today) into `screen.positions[].evidence` on `(channel, msg_id)` — **402 pages · 11 flyer
-sets · 25 rows with no photo**, read from the RECORDS and never from the disk, so a clone writes the same export: two runs
-byte-identical, sha256 `aaf9f792…`, and beside `media` the diff moves only `sources`. `--stage` copies exactly `media.files`
-into `dashboard/app/media/` and REPORTS **referenced 402 · staged 402 · missing 0 · 90.9 MB** into `data/manifest.json` (a size for `firebase deploy` to know);
-pointed at a tree with no photos it stages 0, refuses nothing and writes nothing — measured, so `make front` stays green on
-the clone `e2e-ship` runs. **The screen** carries §11's grammar (chips, four counted-up cards, «Свіжі
-листівки» one card per chain with the real cover, a 40 px photo per row, the price large, the printed badge as a bar, one
-`<dialog>` lightbox for both, «фото немає» where a file did not arrive) and **the four animations**: count-up ≤600 ms in
-script; lift 200 ms (measured: `translateY(-4px)` + `--lift` on the hovered card, `0` on its neighbours); reveal 30 ms/step
-capped at 20 over 100 rows; crossfade 200 ms.
-**Якість**: `promoTabs(mode)` builds the nav and `servedOnly(path, mode)` answers the route from ONE rule — measured in both
-builds: static shows four promo tabs and answers `#/promo/quality` with «вкладка живе на сервері», no `0.2333` anywhere on
-the page; served shows five and the tab is unchanged (0.2333 · 0.9524). **Checks:** `make front` green · `npm run check` clean
-· `npx vitest run` **21 passed** (19 + the two the check names) · no console message from the app (all 33 were the MetaMask
-extension) · four screens in `docs/reports/screens/` · `make check` GREEN: ruff clean, **4340 passed / 2 skipped** in five
-slices whose union is PROVEN equal to `ls tests/test_*.py` (231 files, no gap, no overlap, asserted before a slice ran);
-735+1005+803+956+841 = 4340 = s48's count — this item adds no pytest. **$0; no cloud call this session.**
+## Done — 12.09 s51 «design-pass» ($0, §2 item 7, ACCEPTED (ww)): `f783af4` (producer) · `a44cad6` (app) · `a1bdb46` (screens)
+Dark is the DEFAULT (`data-theme="dark"` in `index.html`), §11's tonality written from ONE string into both dark blocks. `media` joined out of `results/post_media_*.json` by GLOB — 402 pages · 11 flyer sets · 25 rows with no photo, read from the RECORDS, two runs byte-identical (sha `aaf9f792…`); `--stage` reported referenced 402 · staged 402 · missing 0 · 90.9 MB. Ten defects fixed before the commit (five measured in the browser, five from a read-only review). `make check` 4340/2.
 
-## Ten defects fixed before the commit — five measured in the browser, five from a read-only review (27 findings, 8
-verified adversarially); each is named in full in `a44cad6` / `f783af4`. The two the review CONFIRMED both changed what the
-screen SAYS: «без фото» now states what the join established («без фото: 25 з 1 301 — жоден запис медіа не містить знімка
-для цих дописів»), and a photo-less checkout paints «фото немає» (`onError` in row, card and lightbox) — not 402 broken images.
+## Done — 12.09 s52 «prices-and-region» ($0, operator-commissioned, ACCEPTED (xx)): `0761a70` · `a4f87d8` · `e7e3ef6` · `bea3fcb`
+Three blocks in `results/front_data.json` (NOT pinned; the byte-pin `dashboard_data_w1.json` and the position row's own fields untouched): `category_prices`, `regions`, `chains.by_channel`. ONE new number — ₴/кг · ₴/л; median, quartiles and the two ends are `aggregates.spread`/`quartiles` BY CALL, no second median in the repo. Current week = 311 rows of 1301 in 13 «category × unit» groups; Полтавщина 47 cards (Маркетопт 7 · АТБ 38 · ЕКО 2 · Сільпо a sentence, never a zero). NO threshold introduced — narrowing to the current week did the corridor's work. Producer byte-identical twice (sha `9cbac50b…`), vitest 21, `make check` 4340/2. ADR `the-price-block-is-cut-per-unit-and-the-region-is-a-chain-list`; report `docs/reports/prices-and-region.md`.
 
-## Next — «front-2» ($0, §2 item 8: the command centre T0–T8). Then «e2e-ship» → the gate.
+## Done — 13.09 s53 «price-fix», its READING ($0, §2 item 9): where each implausible unit price was born
+Start ritual: the five modified team-lead files committed by path FIRST — `99887d1`. The reading — `c9ae6cb`, `python3.11 scripts/read_price_plausibility.py` → **13 of 303 priced rows** over the 311-row current week, flagged at **x3 of their own category × unit median**. That band is the DIAGNOSTIC's own: no shipped module imports the file, the export carries no threshold and the screen keeps none — the leaflet page answers each row, never the band.
+**The deterministic layers are CLEAN, measured and not assumed:** (i) size units over the 311 rows — `г` 296 · `мл` 13 · none 2, so no third kind reaches `UNIT_OF_SIZE`; (ii) pack markers in the model answers of all 308 traced rows — **0**, so the multipack divisor is not exercised this week, and its four rows in the whole export divide correctly (Лацяти 10×10 мл → 259.90 ₴/л · Рудь 6×100 г → 148.17 ₴/кг); (iii) all 8 `rows_without_a_unit_price` are model ABSENCES (the answer carries no `price_promo`, or no size at all), not a deterministic drop. For every flagged row `parse_size` and `parse_price` reproduce the model's own string faithfully — **the figure was already wrong when it was stored.**
+**The pages: 14 rows read × 2 independent readers, unanimous on all 14; I read four of the JPEGs myself. 8 rows on 6 pages carry a figure the page does not print, every one of them the MODEL's own reading:**
+- `@blyzenkoua:7951:0/1/2` Млековіта ЙОГУРТ 350 г (3 rows) — the tag prints large **42** + raised **99** over a struck 53+99, −20%; the answer says «4,29»/«5,39»: separator one place left, last digit dropped. Page → 122.83 ₴/кг (screen: 12.26).
+- `@VARUS_channel:11234:0` Комо Кідз — the tile prints «**150г**» and 74⁹⁰ «1шт»; the answer says «15 г». The price is right and the SIZE lost a digit. Page → 499.33 ₴/кг (screen: 4993.33).
+- `@atb_market_official:4767:2` — ONE header covers two variants, «сендвіч, **75 г**» and «…Полуниця, **750 г**»; the 150⁵⁰ tag is the 750 г tub's, attached to the 75 г size. Page → 200.67 ₴/кг (screen: 2006.67).
+- `@ATB_FANatik:4657:2` — the same tile in another chain's copy: the 75 г сендвіч's own tag is **25⁹⁰** (old 43⁹⁰). Page → 345.33 ₴/кг (screen: 2006.67).
+- `@VARUS_channel:11300:0` — the page is the catalogue **COVER** (18.08–31.08.2026): it prints NO price at all and its goods are халва and ЧУДО ЧАДО ORGANIC purée 90 г, not dairy. Brand, «99 мл» and «9,99» are invented whole.
+- `@VARUS_channel:11239:0` — Вигода СИР кисломолочний is an UNPRICED packshot in the «ПЕРША ЦІНА» banner; «20,00» invented. **The x3 band does NOT flag this row (x0.335); it was read because a wider pass caught it — the band under-covers.**
+**The other 6 flagged rows the pages CONFIRM:** Briette 125 г 155⁹⁹ (1247.92) · Bounty 39,1 г 41⁹⁹ (1073.91) · Онур Айран 1 л 53⁹⁰ (53.90 ₴/л) · the three згущене-молоко rows (144.48 · 155.28 · 177.25 — the `milk` card holds condensed beside drinking milk). 13 flagged = 7 bad + 6 confirmed; the 14th read row is the unflagged `11239`.
+**Operator-visible damage: 4 of the screen's own evidence cards name a bad row** — Йогурти cheapest 12.26 · Сир кисломолочний cheapest 100.00 · Сир твердий dearest 4993.33 · Морозиво dearest 2006.67.
 
-## Open stop — NONE. Cloud empty: no pod, endpoint or volume; cycle-3 $8.8398 of $10.00, REMAINING $1.1602. $0 this session.
+## Open stop 1 — the 8 rows are the MODEL's misread, so §2 «price-fix» hands the decision to the operator
+Stop-point: the item fixes a DETERMINISTIC defect and STOPS on a model one. There is none to fix — the three layers were measured clean — and all 8 figures were already wrong in the stored answer. This item buys no re-read (§2); a re-read is a paid step (§4.1 — the operator's word).
+Question, per §2's decision table: for these 8 rows on 6 pages — (a) leave them as a NAMED known-limit, the screen going on publishing 12.26 / 4993.33 / 2006.67 as its cheapest/dearest evidence with the limit stated; or (b) buy a targeted re-read of the **six** pages before the gate; or (c) a $0 third thing the team lead rules. I have built NONE of the three.
+Tree: `main` at `c9ae6cb`; `git status --porcelain src tests scripts config results docs/plans docs/reports frontend dashboard` empty apart from this file. No sealed record moved; `grade_positions_50.json` and every graded number stand AS MEASURED. `results/front_data.json` was NOT regenerated and no producer input changed this session. Cloud empty: no pod, endpoint or volume; cycle-3 $8.8398 of $10.00, REMAINING $1.1602. **$0 this session.**
 
-## Deviations (each a §4.2 fork: the simplest reading that keeps every number on its file)
-- §11 says «`positions[].media`»; the positions are rows of `promo_screen_data.json`, which this producer must not rewrite (its
-  sha is read by tests), so the field arrives as `media.pages`, keyed by the row's own `(channel, msg_id)`. §11's «old price
-  struck through» is NOT rendered: no file carries `price_old`, and a promo price beside an arithmetic depth returns the old
-  price to the kopiyka (SPEC 3.21 (4)) — the tab's own sentence says so already, and it stays.
-- «CURRENT week» is per CHAIN — the newest week that chain has pages in — because the newest over ALL chains is Маркетопт's
-  alone (W36) while the grammar asks one card per chain; each card prints its own dates (W33…W36 over the eleven), and a set's
-  pages are the ones a position was read off, not the whole issue, so the card counts «N стор. з позиціями». A row's photo opens
-  THAT page; a card walks its set. Screenshots are NEW files; front-1's four stay as its own report's evidence.
-- `prefers-reduced-motion` was NOT toggled at the OS level — no devtools media emulation here. Measured instead: the rule is live
-  in the CSSOM (`* { transition: none; animation: none }`, both `!important`), with its declarations applied every reveal is at
-  rest and every card opaque, and the count-up asks the query itself, in script, where no stylesheet reaches.
+## Open stop 2 — `make check` is RED and the cause is a team-lead file, so I neither edited it nor weakened the guard
+`make check` on `c9ae6cb`: ruff clean · pytest **4334 passed / 6 failed / 2 skipped** in 716 s (`--- pytest exit 1 ---`). The six are one family: `write_lora_c_prereg.quoted()` and its siblings grep a ruling's VERBATIM sentence back out of `docs/STATUS.md` before a sealed registration may carry it, and the new STATUS no longer carries four of them — rulings **(в)**, **(к)**, (н)'s «проход-2 … ТОЛЬКО для армов (2 ноги, не 4)» and the product sentence «Система бесполезна, пока не находит сигналы…». Failing: `test_lora_c_armb::test_the_pass_2_leg_count…` · `test_lora_c_prep::test_the_rulings_are_quoted_verbatim…` · `test_lora_c_prep::…rebuilds_its_shipped_bytes[scripts/write_lora_c_prereg.py]` · `test_lora_c_run::test_the_status_quotation_refuses_a_paraphrase[RULING_V]` and `[RULING_K]` · `test_think_zero_shot::test_the_registration_rebuilds…`.
+ISOLATED, not inferred: in a worktree, the same four files fail 19 at `bea3fcb` (s52 accepted) and 25 at `99887d1` (the team-lead docs alone, my script not yet in the tree); the difference is EXACTLY these six, and nothing was fixed by the commit. My `c9ae6cb` is not involved — no test reads it.
+The two remedies are both the team lead's: restore the four sentences verbatim in `docs/STATUS.md`, or rule that the quotations' reference has moved and reissue the records that pin it. I did not touch STATUS.md (team-lead file) and did not weaken the guard — weakening it is a §4.4 stop of its own, and the guard is the only thing keeping a paraphrase out of a sealed registration.
+
+## Next — «insight-1» (Тренди in DESIGN §12's grammar) once stop 1 is ruled. Then «insight-2» → «data-shape» → «front-2» → «e2e-ship» → the gate Wed 16.09 evening.
 
 ## Named, not built (the phase file forbids adding what it did not ask for)
-- **A served page can come up as the STATIC build**: one cold load did, seconds after `make serve` started, while `/api/status`
-  answered 200 in 43 ms — `load.ts`'s 1 s guard is the only path to that null, and the latched mode re-points BOTH exports at
-  `./data/` (the last BUILD's copy) instead of live `results/` via `/api/exports/`: the screen then reads a stale file and says
-  nothing. Not reproduced in three further loads; §11's gate makes it visible. A fix changes DESIGN §2's boot contract — named.
-- `status.money.from` names `sessions[-1]` for a block whose `cap_usd` is a ROOT key; and the two id spaces (`rollup`/
-  `depth_by_chain_and_brand` key on a CHANNEL, `positions[].chain.id` on a folded id) — both ruled to front-2 planning by
-  (uu) 6. The English `from`/`note` sentences still render verbatim in the UA UI. Carried from s48: the S1 loss is in `product`.
-- Carried: no test for `loop_daemon.py`, `promote_signals.py`, `thread_population`, the gate's third state; `promote_signals.py`
-  never clears its output dir; the fold map has no guard ((pp) 2(a)); `spend_promo_c3.json` says `"tolerance": 0.05` where the
-  FLOOR closed it; `promo_projection_c2.json` not reproducible; no test asserts `cap_from`/`{leg}`/`{STEP}-s4`, `graded()`'s rows.
+- **A row off a page that prints NO price is invisible to any magnitude band.** Two of the 8 bad rows are that class (`11300:0`, `11239:0`) and both land mid-distribution — only a hand-widened pass found them. No $0 reading in this item can enumerate the class, so option (a) of stop 1 leaves an unbounded number of them standing, not just the 8 named.
+- **One offer counted twice in a price median**: `@ekomarket_shop:1469:0` and `@forainfo:6056:0` are each read off the leaflet page AND off the post text, so морозиво ₴/кг n=95 carries two duplicates. Neither bears a wrong price, and de-duplicating moves a PUBLISHED n and median — a population change this item does not carry.
+- **A leaflet COVER sits in the page population** (`@VARUS_channel:11300`) and a row was extracted from it; excluding covers is a new filter. And `row_id` is NOT unique — the two carriers number their rows apart, so that id names two different products, and `position_card`'s tie-break sorts on it.
+- Carried: the static/served cold-start race (`load.ts`'s 1 s guard) · `colourByIndex` colours by POSITION · «Тренди» overflows on a phone · `quartiles()` returned q1 below min at n=2 · `status.money.from` names `sessions[-1]` for a root `cap_usd` · the two id spaces · no test for `loop_daemon.py`, `promote_signals.py`, `thread_population`, the gate's third state · `spend_promo_c3.json` says `"tolerance": 0.05` where the FLOOR closed it · `promo_projection_c2.json` not reproducible · the fold map has no guard ((pp) 2(a)).
