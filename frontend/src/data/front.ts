@@ -11,12 +11,15 @@ import type {
   Conclusion,
   FrontExport,
   MetricEntry,
+  PositionsBlock,
   RegionsBlock,
+  ReportingWeek,
   S1Reading,
   S2Row,
   Status,
 } from '../types.ts'
 import { FRONT_FILE, must } from './load.ts'
+import { asDayMonth } from './promo.ts'
 
 export function s1(front: FrontExport): S1Reading {
   return must(front.s1_reading, FRONT_FILE, 's1_reading')
@@ -67,6 +70,44 @@ export function barStatus(held: boolean): 'good' | 'critical' {
 
 export function categoryPrices(front: FrontExport): CategoryPricesBlock {
   return must(front.category_prices, FRONT_FILE, 'category_prices')
+}
+
+export const POSITIONS_BLOCK_FIELD = 'positions'
+export const WEEK_FIELD = 'reporting_week'
+
+/**
+ * The positions the table shows: the sealed screen export's rows with the leaflet pages' own
+ * figures in them, corrected ONCE by the producer (ruling (aaa) 13.09).
+ *
+ * The table used to read `promo_screen_data.json :: screen.positions` straight, and kept printing
+ * the eight figures the pages contradict beside price cards that had already been corrected. That
+ * file is sealed and keeps its bytes; the correction is applied where every other priced block
+ * gets it — in `export_front_data.page_true` — and read here. Nothing is merged on this side: a
+ * second place applying the record is a second spelling of it.
+ */
+export function positionsBlock(front: FrontExport): PositionsBlock {
+  return must(front.positions, FRONT_FILE, POSITIONS_BLOCK_FIELD)
+}
+
+/** The reporting week: one banner for the app, and the chains it actually covers. */
+export function reportingWeek(front: FrontExport): ReportingWeek {
+  return must(front.reporting_week, FRONT_FILE, WEEK_FIELD)
+}
+
+/** «25.08–26.08», or one day when a set carries one date — the dates the pages themselves carry. */
+export function span(since: string, until: string): string {
+  return since === until ? asDayMonth(since) : `${asDayMonth(since)}–${asDayMonth(until)}`
+}
+
+/**
+ * Is this chain's own week earlier than the one the banner names?
+ *
+ * The comparison is the producer's own: ISO week ids of one shape, ordered as the strings its
+ * `max()` ordered. A card in an earlier week says so where it is read — the banner names the
+ * newest week ANY chain has pages in, and nine of the eleven chains are not in it.
+ */
+export function earlierThanReported(week: string, reported: ReportingWeek): boolean {
+  return week < reported.week
 }
 
 export function regions(front: FrontExport): RegionsBlock {

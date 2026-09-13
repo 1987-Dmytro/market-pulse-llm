@@ -43,6 +43,9 @@ export interface Position {
   depth?: number
   printed_pct?: number
   promo_price?: number
+  /** present only on the rows a human corrected against the leaflet page — the sealed screen
+   *  export carries none of these; they arrive on `front_data.json :: positions.rows` */
+  correction?: Correction
 }
 
 export interface RollupRow {
@@ -261,6 +264,41 @@ export interface Correction {
   exclude?: string
 }
 
+/** The rows whose own page prints no price: dropped where they cannot be priced and counted there,
+ *  with the reason each was dropped for. The same block sits on the price cards and on the
+ *  positions table — two populations, one sentence (`export_front_data.excluded_rows`). */
+export interface ExcludedRows {
+  n: number
+  from: string
+  reading: string
+  rows: { row_id: string; carrier: string; category: string; why: string }[]
+}
+
+/** The Позиції table's own rows — the sealed screen export's positions with the human-verified
+ *  record of `config/price_corrections.yaml` applied ONCE by the producer (ruling (aaa) 13.09).
+ *  The sealed file keeps its bytes; the table reads these. */
+export interface PositionsBlock {
+  from: string
+  reading: string
+  rows: Position[]
+  /** how many of `rows` carry a `correction` — the record's own count, not a filter run here */
+  corrected: number
+  excluded: ExcludedRows
+}
+
+/** The week the whole screen reports on: the newest ISO week ANY chain has leaflet pages in, and
+ *  the dates those pages carry. Not every chain has a set in it — `chains` names the ones that do,
+ *  and each chain's card keeps its own newest week (operator's rule (б), 13.09). */
+export interface ReportingWeek {
+  from: string
+  reading: string
+  week: string
+  since: string
+  until: string
+  chains: string[]
+  chains_with_a_set: number
+}
+
 /** One position as a card: what it is, what it costs, and the page it was read off. The optional
  *  fields are the row's own absences — a pack with no printed badge has no `printed_pct`, and a row
  *  whose photo never arrived has no `page`, which is a sentence the card says rather than a hole. */
@@ -323,12 +361,7 @@ export interface CategoryPricesBlock {
   /** the rows of that window whose own page prints NO price: they stay in `positions` and are
    *  counted here instead of being priced, because a row quietly dropped is a population that
    *  moved without a sentence */
-  excluded: {
-    n: number
-    from: string
-    reading: string
-    rows: { row_id: string; carrier: string; category: string; why: string }[]
-  }
+  excluded: ExcludedRows
   categories: CategoryPrices[]
 }
 
@@ -376,6 +409,8 @@ export interface FrontExport {
    *  the readings under it, defined once in Python and rendered wherever the table is */
   s2_boundary: string
   media: MediaBlock
+  reporting_week: ReportingWeek
+  positions: PositionsBlock
   category_prices: CategoryPricesBlock
   regions: RegionsBlock
   s1_reading: S1Reading

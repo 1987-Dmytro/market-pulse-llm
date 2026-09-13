@@ -13,15 +13,24 @@
 
 import { count, price } from '../format.ts'
 import type { Lang, Translate } from '../i18n/t.ts'
-import type { PriceCard } from '../types.ts'
+import type { Correction } from '../types.ts'
 import { Info } from './Info.tsx'
+
+/** What this ⓘ needs of whatever carries it: a `PriceCard` has these four fields, and a position
+ *  row keeps its size inside `item`, so the table spreads the two together at the call site. */
+export interface Corrected {
+  correction?: Correction
+  promo_price?: number
+  size_value?: number
+  size_unit?: string
+}
 
 export function CorrectionInfo({
   card,
   lang,
   t,
 }: {
-  card: PriceCard
+  card: Corrected
   lang: Lang
   t: Translate
 }): React.JSX.Element | null {

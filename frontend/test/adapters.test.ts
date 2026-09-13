@@ -5,7 +5,7 @@
  * `results/promo_screen_data.json` and `results/front_data.json` are opened off disk with node's
  * own `fs` — the files the app ships, never a fixture copied beside the test: a copy pins
  * yesterday's schema and stays green while the app breaks on today's export. Every expected value
- * is a field of the file it is asserted against, and the suite re-derives no market figure; two
+ * is a field of the file it is asserted against, and the suite re-derives no market figure; three
  * literals are allowed, each with the line that says why. No component is rendered — §3 of the
  * phase forbids a browser suite here — and `describe`/`it`/`expect` are IMPORTED, not global:
  * `vite.config.ts` sets no `test.globals`, so `vitest/globals` types satisfy tsc, nothing runtime.
@@ -16,7 +16,16 @@ import { fileURLToPath } from 'node:url'
 import { describe, expect, it } from 'vitest'
 
 import { SLOTS, chainName, chainTable, slotOf } from '../src/data/chains.ts'
-import { barStatus, s1, s2, sources } from '../src/data/front.ts'
+import {
+  barStatus,
+  earlierThanReported,
+  positionsBlock,
+  reportingWeek,
+  s1,
+  s2,
+  sources,
+  span,
+} from '../src/data/front.ts'
 import {
   asDate, asDayMonth, filterPositions, positionKey, positions, productOf, rollup, sortPositions,
   tableRows, telegramLink, threads, volumeOf, weeks, windows,
@@ -31,6 +40,10 @@ const front = JSON.parse(readFileSync(`${root}results/front_data.json`, 'utf8'))
 const PUBLISHED_POSITIONS = 1301
 /** DESIGN-ship-1 §6: eight chains, eight slots — indexes of a fixed palette, not a measurement. */
 const SLOT_COUNT = 8
+/** The rows `config/price_corrections.yaml` names — the eight of ruling (yy) 1, six corrected
+ *  against their page and two whose page prints no price. The record is a config file this suite
+ *  does not parse, so its size is the one thing about it that is carried here as a literal. */
+const RECORDED_ROWS = 8
 
 /** What the export is expected to carry: absent, it REDS the suite instead of skipping silently. */
 function carried<T>(value: T | undefined, what: string): T {
@@ -200,6 +213,86 @@ describe('front.ts over front_data.json', () => {
       expect(row.bytes).toBe(digest.bytes)
       expect(row.bytes).toBeGreaterThan(0)
     }
+  })
+})
+
+describe('front.ts :: positions — the table reads the page-true rows, not the sealed export', () => {
+  it('the record’s eight rows land field by field, and the population moves by exactly the two', () => {
+    // The defect this pins is the one ruling (aaa) 3 routed here: the table read
+    // `promo_screen_data.json :: screen.positions` straight and kept printing the eight figures the
+    // leaflet pages contradict, beside price cards already corrected. BOTH ways — the corrected
+    // rows differ from the sealed file in the corrected fields ONLY, and the sealed file is
+    // untouched, still carrying what it carried.
+    const block = positionsBlock(front)
+    const sealed = new Map(all.map((row) => [positionKey(row), row]))
+
+    expect(block.rows.length).toBe(all.length - block.excluded.n) // 1 299 of the 1 301
+    expect(block.excluded.n).toBe(block.excluded.rows.length)
+    expect(new Set(block.rows.map(positionKey)).size).toBe(block.rows.length)
+
+    const shown = new Set(block.rows.map(positionKey))
+    for (const row of block.excluded.rows) {
+      const key = `${row.carrier}:${row.row_id}` // the adapter's own key, spelled by its two fields
+      expect(sealed.has(key)).toBe(true) // in the sealed export…
+      expect(shown.has(key)).toBe(false) // …and out of the table
+      expect(row.why.length).toBeGreaterThan(0) // counted WITH the sentence it was dropped for
+    }
+
+    const corrected = block.rows.filter((row) => row.correction !== undefined)
+    expect(corrected.length).toBe(block.corrected)
+    for (const row of corrected) {
+      const was = carried(sealed.get(positionKey(row)), `the sealed row for ${positionKey(row)}`)
+      const fixed = carried(row.correction, `the correction on ${positionKey(row)}`)
+      expect(fixed.verified_by.length).toBeGreaterThan(0)
+      expect(fixed.page.length).toBeGreaterThan(0)
+      if (fixed.was.promo_price === undefined) expect(row.promo_price).toBe(was.promo_price)
+      else {
+        expect(was.promo_price).toBe(fixed.was.promo_price) // the sealed file still says the old one
+        expect(row.promo_price).not.toBe(was.promo_price) // and the table does not
+      }
+      if (fixed.was.size_value === undefined) expect(row.item.size_value).toBe(was.item.size_value)
+      else {
+        expect(was.item.size_value).toBe(fixed.was.size_value)
+        expect(row.item.size_value).not.toBe(was.item.size_value)
+      }
+      // and NOTHING else moved: the two fields the record may touch blanked on both sides, the
+      // rest of the row has to be the sealed row's, field for field
+      const flat = (one: Position): unknown => ({
+        ...one,
+        promo_price: 0,
+        correction: undefined,
+        item: { ...one.item, size_value: 0 },
+      })
+      expect(flat(row)).toEqual(flat(was))
+    }
+    expect(corrected.length + block.excluded.n).toBe(RECORDED_ROWS)
+  })
+
+  it('the reporting week is the newest week any chain has pages in, on those pages’ own dates', () => {
+    const week = reportingWeek(front)
+    const sets = front.media.flyers
+    expect(week.week).toMatch(/^\d{4}-W\d{2}$/)
+    expect(week.week).toBe([...sets].map((set) => set.week).sort().at(-1))
+    expect(week.chains_with_a_set).toBe(sets.length)
+
+    const onIt = sets.filter((set) => set.week === week.week)
+    expect([...week.chains].sort()).toEqual(onIt.map((set) => set.chain).sort())
+    expect(week.since).toBe(onIt.map((set) => set.since).sort()[0])
+    expect(week.until).toBe(onIt.map((set) => set.until).sort().at(-1))
+    expect(span(week.since, week.until)).toBe(
+      week.since === week.until ? asDayMonth(week.since)
+        : `${asDayMonth(week.since)}–${asDayMonth(week.until)}`,
+    )
+
+    // both ways on the card's own dating: a chain outside the banner's week is earlier than it and
+    // is NOT in its list, and the banner's own week is not earlier than itself
+    const earlier = sets.filter((set) => set.week !== week.week)
+    expect(earlier.length).toBeGreaterThan(0) // the screen really does carry chains of other weeks
+    for (const set of earlier) {
+      expect(earlierThanReported(set.week, week)).toBe(true)
+      expect(week.chains).not.toContain(set.chain)
+    }
+    expect(earlierThanReported(week.week, week)).toBe(false)
   })
 })
 

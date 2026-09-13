@@ -917,3 +917,38 @@ thead th {
   margin-bottom: 6px;
   max-width: none;
 }
+
+/* --- the weekly frame (insight-2) ---------------------------------------------------------- */
+
+/* One banner per promo tab, above the tab's own question: the week the screen reports on. It is
+   the newest week ANY chain has pages in, so it carries its ⓘ — the chains it covers — and every
+   chain's card keeps its own week beside its dates. */
+.week-banner {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0 0 var(--sp-2);
+  padding: 6px 10px;
+  width: fit-content;
+  max-width: 100%;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-chip);
+  background: var(--surface-2);
+  color: var(--text-2);
+  font-size: 13px;
+}
+
+.week-banner b {
+  color: var(--text-1);
+  font-variant-numeric: tabular-nums;
+}
+
+/* The ⓘ a corrected price carries sits inside a table row, and §11's staggered reveal leaves a
+   `transform` on every row — which makes each row its own stacking context, so the open panel was
+   painted UNDER the rows below it whatever its own z-index (measured in the browser, not reasoned
+   about). The row holding an open panel is lifted above its neighbours; a closed one is `hidden`
+   and lifts nothing. */
+tr:has(.popover:not([hidden])) {
+  position: relative;
+  z-index: 2;
+}

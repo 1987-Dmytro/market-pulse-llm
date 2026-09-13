@@ -1,8 +1,14 @@
 /**
  * Промо · Позиції — what the chains promote and at what price (DESIGN-ship-1 §7, §11).
  *
- * `promo_screen_data.json :: screen.positions`, all windows, filtered and sorted here and computed
- * nowhere: the depth a row shows is the PRINTED badge's own reading, and the extracted old price
+ * `front_data.json :: positions` — all windows as their own leaflet page prints them, filtered and
+ * sorted here and computed nowhere. The rows are the SEALED screen export's, with the record of
+ * `config/price_corrections.yaml` applied once by the producer (ruling (aaa) 13.09): the table was
+ * reading the sealed file straight and kept printing the eight figures the pages contradict beside
+ * price cards that had already been corrected. The two rows whose page prints no price at all leave
+ * the table and are counted under it, the same law the category block drops them by.
+ *
+ * The depth a row shows is the PRINTED badge's own reading, and the extracted old price
  * and the arithmetic depth are not on this page at all — beside a row's promo price they give the
  * old price back to the kopiyka (SPEC 3.21 (4), 3.18 (1), 3.22 (1)). §11's mockup asks for the old
  * price struck through beside the promo one; no file carries it, and the two numbers beside each
@@ -23,18 +29,23 @@ import { DataTable } from '../components/DataTable.tsx'
 import type { Column } from '../components/DataTable.tsx'
 import { KpiCard } from '../components/KpiCard.tsx'
 import { Lightbox } from '../components/Lightbox.tsx'
+import { WeekBanner } from '../components/WeekBanner.tsx'
 import { chainName, orderChains, seriesColour } from '../data/chains.ts'
-import { regions } from '../data/front.ts'
-import { FRONT_FILE, PROMO_FILE } from '../data/load.ts'
+import {
+  POSITIONS_BLOCK_FIELD,
+  earlierThanReported,
+  positionsBlock,
+  regions,
+  reportingWeek,
+  span,
+} from '../data/front.ts'
+import { FRONT_FILE } from '../data/load.ts'
 import { MEDIA_FIELD, flyers, mediaOf, pageOf, pageUrl } from '../data/media.ts'
 import {
-  POSITIONS_FIELD,
   type SortKey,
-  asDayMonth,
   distinct,
   filterPositions,
   positionKey,
-  positions,
   productOf,
   sortPositions,
   telegramLink,
@@ -67,14 +78,16 @@ interface Opened {
 }
 
 export function PositionsTab(): React.JSX.Element {
-  const { promo, front, chains, lang, t } = useApp()
+  const { front, chains, lang, t } = useApp()
   const route = useRoute()
   const [sortKey, setSortKey] = useState<SortKey>('chain')
   const [direction, setDirection] = useState<'asc' | 'desc'>('asc')
   const [opened, setOpened] = useState<Opened | null>(null)
 
   const media = mediaOf(front)
-  const all = positions(promo)
+  const block = positionsBlock(front)
+  const all = block.rows
+  const reported = reportingWeek(front)
   const chosenChain = paramOf(route, 'chain')
   const filters = {
     ...(chosenChain === undefined ? {} : { chain: chosenChain }),
@@ -147,7 +160,12 @@ export function PositionsTab(): React.JSX.Element {
         row.promo_price === undefined ? (
           <span className="muted">{t('common.absent')}</span>
         ) : (
-          <b className="price">{price(lang, row.promo_price)}</b>
+          <>
+            <b className="price">{price(lang, row.promo_price)}</b>
+            {/* the corrected figure carries its own ⓘ HERE, where it is read: a hand-corrected
+                price with nothing beside it is a number no file explains */}
+            <CorrectionInfo card={{ ...row, ...row.item }} lang={lang} t={t} />
+          </>
         ),
     },
     {
@@ -208,6 +226,7 @@ export function PositionsTab(): React.JSX.Element {
 
   return (
     <>
+      <WeekBanner />
       <h2 className="question">{t('positions.question')}</h2>
       <p className="population">{t('positions.population')}</p>
 
@@ -240,7 +259,7 @@ export function PositionsTab(): React.JSX.Element {
           context={t('common.shown', { shown: count(lang, rows.length), total: count(lang, all.length) })}
           info={{
             lines: [t('positions.population')],
-            provenance: `${PROMO_FILE} :: ${POSITIONS_FIELD}`,
+            provenance: `${FRONT_FILE} :: ${POSITIONS_BLOCK_FIELD}`,
             label: t('common.info'),
           }}
         />
@@ -290,9 +309,8 @@ export function PositionsTab(): React.JSX.Element {
                   {chainName(chains, set.chain)}
                 </b>
                 <span className="muted">
-                  {set.since === set.until
-                    ? asDayMonth(set.since)
-                    : `${asDayMonth(set.since)}–${asDayMonth(set.until)}`}
+                  {set.week} · {span(set.since, set.until)}
+                  {earlierThanReported(set.week, reported) && ` · ${t('week.older')}`}
                 </span>
                 <span className="muted">
                   {t('media.set', {
@@ -334,6 +352,12 @@ export function PositionsTab(): React.JSX.Element {
         expand={(row) => <Evidence row={row} />}
       />
 
+      {block.excluded.n > 0 && (
+        <p className="note">
+          {t('trends.prices.excluded', { rows: count(lang, block.excluded.n) })} ·{' '}
+          {block.excluded.rows.map((row) => row.row_id).join(', ')}
+        </p>
+      )}
       <p className="note">{t('positions.no_old_price')}</p>
       <p className="note">
         {t('media.rows_without_a_page', {
@@ -342,7 +366,7 @@ export function PositionsTab(): React.JSX.Element {
         })}
       </p>
       <p className="sources">
-        {t('common.sources')}: <code>{PROMO_FILE} :: {POSITIONS_FIELD}</code> ·{' '}
+        {t('common.sources')}: <code>{FRONT_FILE} :: {POSITIONS_BLOCK_FIELD}</code> ·{' '}
         <code>{front.chains.from}</code> · <code>{FRONT_FILE} :: {MEDIA_FIELD}</code>
       </p>
 
@@ -392,6 +416,7 @@ function RegionCuts({
   const { front, lang, t } = useApp()
   const block = regions(front)
   const media = mediaOf(front)
+  const reported = reportingWeek(front)
   if (block.cuts.length === 0) return null
   return (
     <>
@@ -408,11 +433,12 @@ function RegionCuts({
                 </b>
                 {chain.absent === undefined ? (
                   <span className="muted">
-                    {chain.since === chain.until
-                      ? asDayMonth(chain.since ?? '')
-                      : `${asDayMonth(chain.since ?? '')}–${asDayMonth(chain.until ?? '')}`}{' '}
+                    {span(chain.since ?? '', chain.until ?? '')}{' '}
                     · {chain.week} ·{' '}
                     {t('region.chain.rows', { rows: count(lang, chain.positions?.length ?? 0) })}
+                    {chain.week !== undefined &&
+                      earlierThanReported(chain.week, reported) &&
+                      ` · ${t('week.older')}`}
                   </span>
                 ) : (
                   <span className="muted">{t('region.chain.no_pages')}</span>

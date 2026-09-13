@@ -31,6 +31,7 @@ import {
 import { useApp } from '../app-state.ts'
 import { CategoryPrices } from '../components/CategoryPrices.tsx'
 import { ChartCard } from '../components/ChartCard.tsx'
+import { WeekBanner } from '../components/WeekBanner.tsx'
 import { chainName, colourByIndex, orderChains } from '../data/chains.ts'
 import { chainOfChannel } from '../data/front.ts'
 import { PROMO_FILE } from '../data/load.ts'
@@ -207,6 +208,7 @@ export function TrendsTab(): React.JSX.Element {
 
   return (
     <>
+      <WeekBanner />
       <h2 className="question">{t('trends.question')}</h2>
       <p className="population">
         {t('trends.col.week')}: {count(lang, allWeeks.length)} · {t('trends.col.chain')}:{' '}
