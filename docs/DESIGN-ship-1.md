@@ -1,4 +1,4 @@
-# DESIGN — `ship-1` front end (the brief the front items read; team-lead file, v2 12.09 — the §11 addendum WINS over §3–§5 where they conflict; v1 10.09)
+# DESIGN — `ship-1` front end (the brief the front items read; team-lead file, v3 13.09 — §12 (the consultant's grammar) WINS on Тренди; v2 12.09 — the §11 addendum WINS over §3–§5 where they conflict; v1 10.09)
 
 Every UI fork is settled here or by §10's default. The app FORMATS, FILTERS, SORTS and LINKS; it computes no figure — every number is a field of a result file, and every number can say which file (ⓘ → provenance). Language of the UI: Ukrainian first (the customer), English by toggle; code and identifiers in English.
 
@@ -66,6 +66,8 @@ Three readers — the marketing director (T1–T4, T7, reactions), the commercia
 | Промо · Реакції | `screen.feed`, `front_data.json :: s2_readings` (the three grade files' rows as the README prints them) | the feed table (signal chip · quote · msg_id · thread → t.me), filters; the S2 block with bars and files; «N of 678 read · M in the queue» | feed empty → «читання не запущене» with the queue count |
 | Промо · Якість | `s2_readings`, `front_data.json :: s1_reading` (from `grade_positions.py`'s file when it exists) | S1/S2 numbers vs bars with status badges, ties explained, limits in plain words | S1 → «еталон тимлида ще не розмічено» |
 | Промо · Петля | `/api/status` or `front_data.json :: status`, `/api/schedule` | windows list, last tick counters, queue, money remaining (display only), the schedule form, «тик зараз» | static → read-only + note |
+| Промо · Тренди (block) | `front_data.json :: category_prices` (per category × unit: n, min/median/max, the multipack-corrected ₴/кг·₴/л, cheapest/dearest each with brand · SKU · chain · leaflet page · t.me) | the per-category price cards; from insight-1 also the dot-range strip, the chain ranking by median with the median reference line, and «Три висновки тижня» from `conclusions` | SourceMissing panel |
+| Промо · Позиції (block) | `front_data.json :: regions` (the operator's chains cut of `config/chain_regions.yaml`; each chain on its own newest leaflet week; `reading` = the honesty sentence) | the Полтавщина SKU cards per chain, the claim sentence rendered verbatim, «no fresh leaflet» as a sentence, never a zero | SourceMissing panel |
 
 `front_data.json` is written by `scripts/export_front_data.py` ($0): `command_center` (= `results/dashboard_data_w1.json` verbatim + `conclusions` from `build_dashboard.py`'s own function), `model` (from `results/verdict_45h2.json`), `s2_readings` (the rows `build_readme_results.py` prints, by the same function), `s1_reading` (optional), `status` (the tick file, the windows from the store when present, the last recorded remaining of `results/spend_cycle3.json` — no live balance call), `dictionary`, `generated_at`, `sources` (file · sha256). A missing REQUIRED source → exit ≠ 0 naming it; optional ones (`s1_reading`) → `null` with a reason.
 
@@ -89,3 +91,12 @@ The simplest thing that keeps the number's provenance visible; native HTML over 
 - Animations (MANDATORY; `prefers-reduced-motion: reduce` still disables all): KPI count-up under 600 ms on first paint; flyer-card hover lift (transform + shadow, about 200 ms); staggered reveal of rows/cards on a filter change (about 30 ms step); theme crossfade about 200 ms. Plain CSS/JS; an animation library is a §4 fork, not a default.
 - Якість: EXCLUDED from the static client build — in static mode the tab is absent from navigation and unroutable; in served mode it stays exactly as accepted (the operator's word, 12.09: 1б). Default shape: a runtime mode check; a build-flag split is a legal fork — name it in PROGRESS.
 - Every other tab (Тренди, Реакції, Петля, T0–T8) adopts the same tonality and card grammar; the data contracts of §7 are unchanged.
+
+## 12. v3 addendum (13.09, ruling (xx)) — the consultant's grammar for Тренди (McKinsey-style; on Тренди §12 wins)
+
+- PYRAMID: the tab OPENS with «Три висновки тижня» — the week's main finding first. Every sentence is produced by a code rule in `export_front_data.py` (it names its figure and its source file); the frontend renders sentences, it words none. A week where a rule finds nothing prints nothing — an invented insight is a defect.
+- ACTION TITLES: every exhibit's title is a finding with its number, supplied by the export beside the data it titles («Рудь тримає найнижчу ціну на морозиво: 106 ₴/кг — −65% від медіани»). A topic label alone («Ціни по категоріях») is a defect. One message per exhibit; the message's series in colour, context series greyed.
+- EXHIBIT FORMS by the data's job: ranking → horizontal bars; spread → min–median–max dot-range strip per category × unit; week-over-week change → slope/dumbbell only when ≥ 2 weeks exist, else the exhibit is absent (never an empty frame). Never pie, donut, 3D or a dual axis.
+- EVERY exhibit carries: the unit on the axis, the reporting week in the corner, the source-file line (§7's house rule), and the market median as a reference line on price exhibits. A «So what» footnote appears only when a code rule produced it.
+- Colour follows the ENTITY (chain) through `chains.by_channel` — a filter change moves no colour (§3's rule, made testable here).
+- The banner of insight-2 («Тиждень W… · dates», one per tab) sits above the conclusions; each chain's card keeps its own newest week printed on it (operator's rule (б), 13.09).

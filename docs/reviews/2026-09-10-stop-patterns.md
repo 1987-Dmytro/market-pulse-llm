@@ -84,3 +84,12 @@
 | (tt)-2 | не остановка — исполнитель нашёл клаузу «эталон по пути ПЕРВЫМ» выполненной сессией раньше и проверил sha вместо повторного коммита; вторым коммитом закрепил слепое направление теста на свойстве (`identity() is None`), а не на фикстуре | плановое чтение | — | — | подтверждено в (tt) 2 |
 
 Урок (07:30): спека, чьи числа измерены на входах проверки (rr → s1-grade), проходит за 19 минут без единого вопроса — правило (oo)/(qq) работает; нового правила нет.
+
+## §10 — 13.09 (ruling (xx)) — class: process (the team lead's)
+Operator-commissioned work reached the executor OUTSIDE the phase file (s52), so PROGRESS was not
+updated and the item had no check line. Not the executor's deviation — the channel's. Rule (project,
+PROCESS-candidate): work the operator commissions directly is LEGALISED the same day by a phase
+revision (a ticked item with the team lead's own acceptance checks) and the next session opens by
+recording its Done block; the operator's brief becomes check lines before the next item runs.
+Skill: pattern only, queued into the v3.23 batch — «an operator-commissioned insertion is absorbed
+by revision before the next item, never left as unrecorded work».
