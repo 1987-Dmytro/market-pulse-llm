@@ -93,3 +93,13 @@ revision (a ticked item with the team lead's own acceptance checks) and the next
 recording its Done block; the operator's brief becomes check lines before the next item runs.
 Skill: pattern only, queued into the v3.23 batch — «an operator-commissioned insertion is absorbed
 by revision before the next item, never left as unrecorded work».
+
+## §11 — 13.09 (ruling (yy)) — class: process (the team lead's own)
+The 13.09 STATUS rewrite dropped 18 sentences + 1 witness that registration guards grep verbatim —
+six tests went red one session later, at the executor's expense. The guards pinned LAW in a ROLLING
+operator map; the rewrite was issued without running the guards that read the file. Two rules enter:
+(project, PROCESS «STATUS.md carries grepped law») — the machine section is never dropped, and a
+STATUS rewrite runs the four guard families before it lands. Skill v3.23 batch (pattern only):
+«prose a guard greps is law pinned in a document — a rolling, capped document is the wrong home for
+it (pin law in an append-only archive), and a team-lead file rewrite re-runs every guard that reads
+that file in the same sitting».

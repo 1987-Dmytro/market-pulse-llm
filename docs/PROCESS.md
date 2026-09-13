@@ -253,3 +253,13 @@ One-sentence contracts (`docs/PROMPT-*.md`) remain for fixes and debts whose dif
 
 ## Operator language
 - Conversation and `docs/STATUS.md` in Russian; code, commits, prompts, ADRs, reports in English.
+
+## STATUS.md carries grepped law (ruling (yy), 13.09)
+- The registration writers (`write_lora_c_prereg.py`, `write_think_zero_shot_prereg.py`) grep 18
+  ruling sentences + 1 witness VERBATIM out of `docs/STATUS.md`; they live in STATUS's tail section
+  «Архив запечатанных цитат рулингов» — never edited, paraphrased or dropped in a STATUS refresh.
+- Before committing ANY `docs/STATUS.md` rewrite, run the four guard families:
+  `python3.11 -m pytest tests/test_lora_c_armb.py tests/test_lora_c_prep.py tests/test_lora_c_run.py tests/test_think_zero_shot.py -q` — green or the rewrite does not land.
+- Durable fix queued POST-GATE: re-point those guards at an append-only archive file so the rolling
+  map can be rewritten freely; until then the machine section is law and STATUS may exceed its
+  60-line cap by exactly that section (declared, read by the retro).
