@@ -64,7 +64,8 @@ NOT carry: they are applied at export time, by `export_front_data.page_true()`.
 
 ## 4. Labelled and frozen (never rewritten, never grown)
 
-`docs/labels-positions-50.jsonl` (180 gold position rows, 46 pages — the S1 bar) ·
+`docs/labels-positions-50.jsonl` (180 gold position rows over the 46-page draw of
+`results/positions_draw_50.json`; 44 of those pages carry a row — the S1 bar) ·
 `docs/labels-*.jsonl` (comment gold) · `data/frozen/comments_{train,test}*.jsonl` and
 `posts_{train,test}*.jsonl` (the comment model's frozen splits) · `data/annotation/**` (the
 annotation rounds that produced them). A frozen set is a RECORD: it is re-read, never re-cut.
