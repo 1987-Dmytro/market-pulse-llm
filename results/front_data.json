@@ -84,8 +84,8 @@
             "max": 569.5,
             "median": 379.6667,
             "min": 53.9,
-            "n": 7,
-            "q1": 100.9091,
+            "n": 6,
+            "q1": 124.46,
             "q3": 569.5,
             "unit": "uah_per_l"
           }
@@ -202,21 +202,21 @@
         "bases": [
           {
             "cheapest": {
-              "brand": "Млековіта",
+              "brand": "Молочар",
               "category": "yogurt",
-              "chain": "blyzenko",
-              "chain_name": "БЛИЗЕНЬКО🌿",
-              "channel": "@blyzenkoua",
-              "line": "ЙОГУРТ Натуральний",
-              "msg_id": 7951,
-              "page": "blyzenkoua_7951.jpg",
-              "printed_pct": 20.0,
-              "promo_price": 4.29,
-              "row_id": "@blyzenkoua:7951:0",
+              "chain": "sim23",
+              "chain_name": "Сім23 та Сімі💜",
+              "channel": "@sim23_simi",
+              "line": "Йогурт 1% полуниця, персик",
+              "msg_id": 1054,
+              "page": "sim23_simi_1054.jpg",
+              "printed_pct": 38.0,
+              "promo_price": 19.9,
+              "row_id": "@sim23_simi:1054:7",
               "size_unit": "г",
-              "size_value": 350.0,
+              "size_value": 400.0,
               "unit": "uah_per_kg",
-              "unit_price": 12.2571
+              "unit_price": 49.75
             },
             "dearest": {
               "brand": "Yogurt Splash",
@@ -236,10 +236,10 @@
               "unit_price": 213.6364
             },
             "max": 213.6364,
-            "median": 99.6429,
-            "min": 12.2571,
+            "median": 103.4783,
+            "min": 49.75,
             "n": 39,
-            "q1": 77.9091,
+            "q1": 89.0,
             "q3": 138.2609,
             "unit": "uah_per_kg"
           }
@@ -253,20 +253,21 @@
         "bases": [
           {
             "cheapest": {
-              "brand": "Вигода",
+              "brand": "Молочний дар",
               "category": "curd",
               "chain": "varus",
               "chain_name": "Varus",
               "channel": "@VARUS_channel",
-              "line": "СИР кисломолочний",
-              "msg_id": 11239,
-              "page": "VARUS_channel_11239.jpg",
-              "promo_price": 20.0,
-              "row_id": "@VARUS_channel:11239:0",
+              "line": "Сир кисломолочний",
+              "msg_id": 11245,
+              "page": "VARUS_channel_11245.jpg",
+              "printed_pct": 37.0,
+              "promo_price": 56.9,
+              "row_id": "@VARUS_channel:11245:5",
               "size_unit": "г",
-              "size_value": 200.0,
+              "size_value": 350.0,
               "unit": "uah_per_kg",
-              "unit_price": 100.0
+              "unit_price": 162.5714
             },
             "dearest": {
               "brand": "Своя Лінія",
@@ -287,9 +288,9 @@
             },
             "max": 766.6667,
             "median": 298.3333,
-            "min": 100.0,
-            "n": 23,
-            "q1": 219.4444,
+            "min": 162.5714,
+            "n": 22,
+            "q1": 221.4444,
             "q3": 333.0556,
             "unit": "uah_per_kg"
           }
@@ -422,28 +423,28 @@
               "unit_price": 253.3333
             },
             "dearest": {
-              "brand": "Комо",
+              "brand": "Briette",
               "category": "cheese",
-              "chain": "varus",
-              "chain_name": "Varus",
-              "channel": "@VARUS_channel",
-              "line": "KIDS",
-              "msg_id": 11234,
-              "page": "VARUS_channel_11234.jpg",
-              "printed_pct": 31.0,
-              "promo_price": 74.9,
-              "row_id": "@VARUS_channel:11234:0",
+              "chain": "blyzenko",
+              "chain_name": "БЛИЗЕНЬКО🌿",
+              "channel": "@blyzenkoua",
+              "line": "Крімі Блу",
+              "msg_id": 7947,
+              "page": "blyzenkoua_7947.jpg",
+              "printed_pct": 20.0,
+              "promo_price": 155.99,
+              "row_id": "@blyzenkoua:7947:0",
               "size_unit": "г",
-              "size_value": 15.0,
+              "size_value": 125.0,
               "unit": "uah_per_kg",
-              "unit_price": 4993.3333
+              "unit_price": 1247.92
             },
-            "max": 4993.3333,
+            "max": 1247.92,
             "median": 390.4216,
             "min": 253.3333,
             "n": 62,
             "q1": 353.0769,
-            "q3": 477.65,
+            "q3": 475.8333,
             "unit": "uah_per_kg"
           }
         ],
@@ -575,28 +576,28 @@
               "unit_price": 106.0
             },
             "dearest": {
-              "brand": "Хрещатик",
+              "brand": "Bounty",
               "category": "ice-cream",
-              "chain": "atb",
-              "chain_name": "АТБ",
-              "channel": "@atb_market_official",
-              "line": "пломбір, з напивненням Полуниця",
-              "msg_id": 4767,
-              "page": "atb_market_official_4767.jpg",
-              "printed_pct": 41.0,
-              "promo_price": 150.5,
-              "row_id": "@atb_market_official:4767:2",
+              "chain": "blyzenko",
+              "chain_name": "БЛИЗЕНЬКО🌿",
+              "channel": "@blyzenkoua",
+              "line": "Морозиво",
+              "msg_id": 7968,
+              "page": "blyzenkoua_7968.jpg",
+              "printed_pct": 16.0,
+              "promo_price": 41.99,
+              "row_id": "@blyzenkoua:7968:6",
               "size_unit": "г",
-              "size_value": 75.0,
+              "size_value": 39.1,
               "unit": "uah_per_kg",
-              "unit_price": 2006.6667
+              "unit_price": 1073.913
             },
-            "max": 2006.6667,
-            "median": 299.0,
+            "max": 1073.913,
+            "median": 287.0,
             "min": 106.0,
             "n": 95,
             "q1": 227.1429,
-            "q3": 350.0,
+            "q3": 349.0,
             "unit": "uah_per_kg"
           },
           {
@@ -650,6 +651,25 @@
         "positions": 99
       }
     ],
+    "excluded": {
+      "from": "config/price_corrections.yaml",
+      "n": 2,
+      "reading": "rows whose own leaflet page prints NO price: the stored figure was invented and there is no page-true number to put in its place, so the row stays in the window's population and is counted here instead of being priced",
+      "rows": [
+        {
+          "carrier": "leaflet_page",
+          "category": "dairy",
+          "row_id": "@VARUS_channel:11300:0",
+          "why": "сторінка не друкує ціну"
+        },
+        {
+          "carrier": "leaflet_page",
+          "category": "curd",
+          "row_id": "@VARUS_channel:11239:0",
+          "why": "сторінка не друкує ціну"
+        }
+      ]
+    },
     "from": "results/promo_screen_data.json :: screen.positions[] (promo_price, item.size_value, item.size_unit, item.pack_count) on the pages of results/front_data.json :: media.flyers, over config/registry.yaml :: taxonomy.tracked_groups",
     "positions": 311,
     "reading": "the promo price of a kilogram or a litre — promo_price / (size_value × pack_count) × 1000 — over the positions of every chain's CURRENT leaflet week, read per category AND per unit, because a category that holds both grams and millilitres has no single median; n, min, q1, median, q3 and max are aggregates.spread and aggregates.quartiles, and the two ends are the rows themselves",
@@ -12508,6 +12528,17 @@
                 "chain": "atb",
                 "chain_name": "АТБ",
                 "channel": "@atb_market_official",
+                "correction": {
+                  "from": "config/price_corrections.yaml",
+                  "page": "atb_market_official_4767.jpg",
+                  "verified_by": [
+                    "reader-1",
+                    "reader-2"
+                  ],
+                  "was": {
+                    "size_value": 75.0
+                  }
+                },
                 "line": "пломбір, з напивненням Полуниця",
                 "msg_id": 4767,
                 "page": "atb_market_official_4767.jpg",
@@ -12515,9 +12546,9 @@
                 "promo_price": 150.5,
                 "row_id": "@atb_market_official:4767:2",
                 "size_unit": "г",
-                "size_value": 75.0,
+                "size_value": 750,
                 "unit": "uah_per_kg",
-                "unit_price": 2006.6667
+                "unit_price": 200.6667
               },
               {
                 "brand": "Яготинське",
@@ -14098,6 +14129,10 @@
     "config/metrics.yaml": {
       "bytes": 16771,
       "sha256": "82a5964b8e8287ab795bb810a092b23d688704e06ae6e7fd10a3d2dc962c0faf"
+    },
+    "config/price_corrections.yaml": {
+      "bytes": 4847,
+      "sha256": "5fe782c5fc6dc725267ab0da3cf3f06b64192e8b2e615db699c97da49692481c"
     },
     "config/registry.yaml": {
       "bytes": 40570,
