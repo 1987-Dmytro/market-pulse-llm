@@ -1043,7 +1043,7 @@ def command_center_derived(centre: dict) -> dict:
     The block MIRRORS `metrics.sov`, one reading per sample under the record's own
     `headline_sample`, so a Δ and the shares it is a difference of are never read at two different
     populations ([[the_field_true_under_the_old_constant]]). The reference brand is NAMED on every
-    reading: `aggregates.sov_block` lists the own brands `ORDER BY brand_id`, so «the first own
+    reading: `aggregates.share_of_voice` lists the own brands `ORDER BY brand_id`, so «the first own
     brand» is the alphabet's pick out of the two this watchlist carries, and only the field that
     spells it out makes the column readable. A share the record left null — a sample whose mentions
     are zero has no shares at all — subtracts to null, never to a 0 a reader would take for a

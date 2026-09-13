@@ -590,8 +590,9 @@ describe('the command centre (front-2)', () => {
     // and every value IS the difference, re-derived here off the sealed shares
     expect(Object.keys(deltas.delta).sort()).toEqual(Object.keys(reading.share).sort())
     const base = carried(reading.share[deltas.reference], 'a share for the reference own brand')
+    // `deltas` IS the export's object (asserted above), so a per-brand `toBe(field(…))` here would
+    // compare it to itself and could not fail — the difference is re-derived instead
     for (const [brand, share] of Object.entries(reading.share)) {
-      expect(deltas.delta[brand]).toBe(field(`${path}.delta.${brand}`))
       expect(deltas.delta[brand]).toBeCloseTo(share - base, 4)
     }
     expect(deltas.delta[deltas.reference]).toBe(0)

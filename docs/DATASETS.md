@@ -36,10 +36,14 @@ carries is left exactly where it is, and a week it does carry is rewritten from 
 Today: **1 301 rows, 10 weeks, 2026-W27 … 2026-W36**, every row dated.
 
 They live in `results/weekly/`, which git carries (ruling (ccc) 4, 13.09). Their first home was
-`data/derived/weekly/`, beside the store and gitignored: today's ten weeks would still have been
-reconstructible on a clean clone from committed files — `results/promo_screen_data.json` holds the
-rows and `results/post_media_*.json` their page dates — but a FUTURE week's would not, and the
-history exists for a model that has to survive the laptop it was collected on.
+`data/derived/weekly/`, beside the store and gitignored, and the claim that stood here — that the
+ten weeks were still reconstructible on a clean clone — is TOO STRONG, measured: the committed
+`results/promo_screen_data.json` and `results/post_media_*.json` restore each row's identity, its
+week and 15 of its 28 columns (some under other names), and **13 of them nothing committed carries**
+— `price_old` · `pack_count` · `price_qualifier` · `discount_footnote` ·
+`depth_disagrees_with_printed` · the five `presence_*` · `brand_raw` · `ordinal` · `window_id`.
+Those live in `data/derived/`, which no clone has. A history for a model has to survive the laptop
+it was collected on, so it is committed as it is written.
 
 Fields are the store's, so the figures are the MODEL's reading: `price_promo`, `price_old`, `depth`,
 `discount_pct_printed`, `size_value`/`size_unit`/`pack_count` (a unit price is
