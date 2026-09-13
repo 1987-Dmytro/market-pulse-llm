@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""`data/derived/pulse.db` → `data/derived/weekly/positions_<ISO-week>.jsonl` — the week the store
+"""`data/derived/pulse.db` → `results/weekly/positions_<ISO-week>.jsonl` — the week the store
 does not keep.
 
 **Why it exists.** A rerun of the aggregate build does not add a week to the derived rows, it
@@ -10,9 +10,16 @@ across a second run into the same `--out`, and the two files are byte-identical
 (`docs/plans/ship-1.PROGRESS.md`, item «data-shape»). Every week the operator collects would
 therefore be the only week on disk, and the future price model would have one week to learn from.
 
-So the weekly rows are written out beside the store, one file per ISO week, and a week is only ever
-rewritten by a run that still carries it: a file for a week this run knows nothing about is left
-exactly where it is. That is the whole of the accumulation — no index, no ledger, no state.
+So the weekly rows are written out, one file per ISO week, and a week is only ever rewritten by a
+run that still carries it: a file for a week this run knows nothing about is left exactly where it
+is. That is the whole of the accumulation — no index, no ledger, no state.
+
+**The home is `results/weekly/`, which git carries** (ruling (ccc) 4 13.09). The first home was
+`data/derived/weekly/` beside the store, and `data/**` is gitignored: the ten weeks written there
+were reconstructible on a clean clone only because the committed exports still hold today's rows,
+and week N+1 would have had no such copy — the operator's ML history would have lived on one
+laptop. Under `results/` a collected week is a diff the operator commits, and `make tick` therefore
+dirties `results/weekly/` until he does (the tick's own clock stays gitignored one file over).
 
 **The rows are the store's own**, through `aggregates.positions_source`, the one statement every
 reader of the positions table shares: the union of the windows, one row per `(carrier, row_id)` with
@@ -52,7 +59,7 @@ from market_pulse.registry import load_registry  # noqa: E402
 import tick  # noqa: E402
 
 DB = REPO_ROOT / "data" / "derived" / "pulse.db"
-OUT = REPO_ROOT / "data" / "derived" / "weekly"
+OUT = REPO_ROOT / "results" / "weekly"
 
 
 def front():

@@ -35,7 +35,9 @@ baselines:
 # INSERT OR IGNORE — so `make tick && make tick` writes zero new rows on an unchanged store.
 # The weekly rows leave with the tick because the aggregate build REPLACES the store (measured:
 # a planted window does not survive a second `build_aggregates.py` into the same `--out`), so the
-# week on disk is only ever the last one collected unless it is written out beside it.
+# week on disk is only ever the last one collected unless it is written out. It is written into
+# `results/weekly/`, which git carries — a collected week is a diff to commit, so a tick that adds
+# one dirties `results/` until the operator does (ruling (ccc) 4).
 tick:
 	PYTHONPATH=src python3.11 scripts/tick.py
 	PYTHONPATH=src python3.11 scripts/weekly_positions.py
