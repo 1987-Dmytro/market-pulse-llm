@@ -362,6 +362,32 @@ def refuse_on_the_record(reason: str) -> None:
     )
 
 
+def excluded_rows(dropped: list[dict]) -> dict:
+    """The rows the record cannot price, counted where they were dropped — ONE spelling of it.
+
+    Two blocks drop these rows over two different populations (the price cards read the current
+    leaflet week, the positions table reads every window), so the count differs by construction and
+    the SENTENCE beside it must not: a second wording of «why these rows are not here» would let one
+    screen explain the same law differently from the other.
+    """
+    return {
+        "n": len(dropped),
+        "from": tick.rel(CORRECTIONS),
+        "reading": "rows whose own leaflet page prints NO price: the stored figure was invented"
+        " and there is no page-true number to put in its place, so the row stays in the window's"
+        " population and is counted here instead of being priced",
+        "rows": [
+            {
+                "row_id": position["row_id"],
+                "carrier": position["carrier"],
+                "category": position["item"]["category"],
+                "why": excluded_from_prices(position),
+            }
+            for position in dropped
+        ],
+    }
+
+
 def excluded_from_prices(position: dict) -> str | None:
     """Why this row may carry no price at all — the readers' own sentence, or `None`.
 
@@ -442,6 +468,69 @@ def corrected(position: dict, entry: dict) -> dict:
     if "exclude" in entry:
         row["correction"]["exclude"] = entry["exclude"]
     return row
+
+
+def positions_block(printed: dict) -> dict:
+    """The rows the Позиції table shows — the page-true ones, over every window.
+
+    Ruling (aaa) 13.09. The table read `results/promo_screen_data.json :: screen.positions` straight
+    off the sealed export, so it kept printing the eight figures the leaflet pages contradict beside
+    price cards that had already been corrected — one screen saying two things. That export is
+    SEALED (K10) and stays byte-identical; the corrected rows are written here instead, through the
+    same `page_true()` the price blocks are fed by, so there is one application of the record and
+    the table cannot drift from the cards.
+
+    The two rows whose page prints no price LEAVE the table and are counted beside it, exactly as
+    the category block drops and counts them: a row the product cannot price is not a row the
+    reader should see priced, and a population that shrinks without a sentence is a claim.
+    """
+    rows = printed["screen"]["positions"]
+    dropped = [position for position in rows if excluded_from_prices(position) is not None]
+    kept = [position for position in rows if excluded_from_prices(position) is None]
+    return {
+        "from": f"{tick.rel(screen.EXPORT)} :: screen.positions[], corrected once by"
+        f" {tick.rel(CORRECTIONS)} through export_front_data.page_true",
+        "reading": "every window's positions as their own leaflet page prints them — the sealed"
+        " screen export's rows with the human-verified record applied, the corrected rows carrying"
+        " what they replaced and who read the page, and the rows whose page prints no price counted"
+        " instead of shown",
+        "rows": kept,
+        "corrected": sum(1 for position in kept if "correction" in position),
+        "excluded": excluded_rows(dropped),
+    }
+
+
+def reporting_week(media_block: dict) -> dict:
+    """The week the screen reports on: the newest ISO week ANY chain has leaflet pages in.
+
+    One banner for the whole app (operator's rule (б), 13.09) — and it is the newest week over all
+    chains, which is one chain's week and not the market's: today `marketopt_promo`'s 2026-W36, two
+    pages, while nine chains' newest set is W35 and one is W33. So the banner carries its own
+    reading and every chain's card keeps ITS OWN newest week printed on it: a card older than the
+    banner says so where it is read, and no chain's rows are folded into another week's aggregate
+    ([[a_settlement_and_its_reference_measure_different_kinds]]).
+
+    The span is the dates the pages of that week carry — the flyer sets' own `since`/`until`, not a
+    calendar week computed from the id: the export states what the data holds.
+    """
+    flyers = media_block["flyers"]
+    if not flyers:
+        raise SystemExit(
+            "export-front REFUSED: no flyer set carries a dated page, so there is no reporting week"
+            " to stamp — the banner would have to name a week no page in this export was printed in"
+        )
+    week = max(flyer["week"] for flyer in flyers)
+    on_it = [flyer for flyer in flyers if flyer["week"] == week]
+    return {
+        "from": f"{tick.rel(OUT)} :: media.flyers[] (week, since, until)",
+        "reading": "the newest ISO week any chain has leaflet pages in, with the dates those pages"
+        " carry — not every chain has a set in it, and each chain's card prints its own newest week",
+        "week": week,
+        "since": min(flyer["since"] for flyer in on_it),
+        "until": max(flyer["until"] for flyer in on_it),
+        "chains": sorted(flyer["chain"] for flyer in on_it),
+        "chains_with_a_set": len(flyers),
+    }
 
 
 UNIT_OF_SIZE = {"г": "uah_per_kg", "мл": "uah_per_l"}
@@ -598,22 +687,7 @@ def category_prices(export: dict, media_block: dict, names: dict) -> dict:
         " aggregates.quartiles, and the two ends are the rows themselves",
         "positions": len(week),
         "rows_without_a_unit_price": without,
-        "excluded": {
-            "n": len(dropped),
-            "from": tick.rel(CORRECTIONS),
-            "reading": "rows whose own leaflet page prints NO price: the stored figure was invented"
-            " and there is no page-true number to put in its place, so the row stays in the window's"
-            " population and is counted here instead of being priced",
-            "rows": [
-                {
-                    "row_id": position["row_id"],
-                    "carrier": position["carrier"],
-                    "category": position["item"]["category"],
-                    "why": excluded_from_prices(position),
-                }
-                for position in dropped
-            ],
-        },
+        "excluded": excluded_rows(dropped),
         "categories": [
             row
             | {
@@ -769,6 +843,8 @@ def build(export_path: Path = OUT) -> dict:
             "verdict": json.loads(VERDICT.read_text(encoding="utf-8")),
         },
         "media": media_block,
+        "reporting_week": reporting_week(media_block),
+        "positions": positions_block(printed),
         "category_prices": category_prices(printed, media_block, names),
         "regions": regions(printed, media_block, names),
         "s2_readings": screen.s2_readings(screen.RESULTS),
@@ -886,6 +962,17 @@ def main(argv: list[str] | None = None) -> int:
     print(
         f"  media         {len(document['media']['files'])} pages · {len(document['media']['flyers'])}"
         f" flyer sets · {document['media']['rows_without_a_page']} rows without a page"
+    )
+    print(
+        f"  positions     {len(document['positions']['rows'])} rows ·"
+        f" {document['positions']['corrected']} corrected ·"
+        f" {document['positions']['excluded']['n']} excluded"
+    )
+    print(
+        f"  week          {document['reporting_week']['week']} ·"
+        f" {document['reporting_week']['since']}–{document['reporting_week']['until']} ·"
+        f" {len(document['reporting_week']['chains'])} of"
+        f" {document['reporting_week']['chains_with_a_set']} chains"
     )
     print(f"  s1 reading    {'read' if document['s1_reading']['reading'] else 'absent'}")
     print(f"  sources       {len(document['sources'])}")
