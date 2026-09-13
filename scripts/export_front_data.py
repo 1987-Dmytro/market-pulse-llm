@@ -396,6 +396,8 @@ def page_true(positions: list[dict], table: dict) -> list[dict]:
         unknown = sorted(set(entry) - ENTRY_FIELDS)
         if unknown:
             refuse_on_the_record(f"carries the unknown key(s) {', '.join(unknown)}")
+        if not set(entry) & {*PAGE_TRUE_FIELDS, "exclude"}:
+            refuse_on_the_record(f"names {entry['row_id']} and corrects nothing on it")
         entries[(entry["row_id"], entry["carrier"])] = entry
     if len(entries) != len(table["rows"]):
         refuse_on_the_record("names one (row_id, carrier) twice")

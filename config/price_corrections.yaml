@@ -70,10 +70,14 @@ rows:
   - row_id: "@ATB_FANatik:4657:2"
     carrier: leaflet_page
     page: ATB_FANatik_4657.jpg
-    promo_price: 25.90
-    reads: "the same tile in another chain's copy of the leaflet: the 75 g сендвіч's own tag is
-      25⁹⁰ (old 43⁹⁰), not the 150⁵⁰ of the tub beside it"
-    verified_by: [reader-1, reader-2]
+    size_value: 750
+    reads: "the SAME leaflet page in the aggregator's copy, tag for tag: one header «сендвіч, 75 г /
+      … «Полуниця», 750 г», the left tag 25⁹⁰ (old 43⁹⁰) on the sandwich — which row :1 already
+      carries — and the right tag 150⁵⁰ (old 258⁹⁰) on the tube whose packshot prints «750 г». The
+      accepted reading's sentence for this row names the sandwich's tag; applying it would have made
+      this row a second copy of row :1 and lost the tube, so the PAGE decides and the correction is
+      the size, exactly as on the ATB copy above (executor read the page, 13.09 — named as Dv4)"
+    verified_by: [reader-1, reader-2, executor]
 
   - row_id: "@VARUS_channel:11300:0"
     carrier: leaflet_page

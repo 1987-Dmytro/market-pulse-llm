@@ -497,11 +497,24 @@ td.num {
 
 /* Inside a card of a grid the ⓘ can stand at the page's own right edge, and a panel that opens
    rightwards from there is a provenance nobody can read — it has nowhere to go, because no tab
-   scrolls sideways (DESIGN-ship-1 §8). In a card it opens leftwards instead. */
+   scrolls sideways (DESIGN-ship-1 §8). Anchoring it to the ⓘ only moves the clipping to whichever
+   edge the card sits at, so in a card the panel is anchored to the CARD: it opens inside the card's
+   own width wherever that card is in the grid, and on a phone it is the card that bounds it. */
+.sku,
+.extreme {
+  position: relative;
+}
+
+.sku .holder,
+.extreme .holder {
+  position: static;
+}
+
 .sku .popover,
 .extreme .popover {
-  right: 0;
-  left: auto;
+  left: 0;
+  right: auto;
+  max-width: 100%;
 }
 
 .holder {

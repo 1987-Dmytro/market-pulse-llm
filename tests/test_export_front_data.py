@@ -82,3 +82,8 @@ def test_a_correction_lands_on_its_one_row_with_provenance_and_a_record_naming_n
     with pytest.raises(SystemExit) as refused:
         efd.page_true([position(row_id="@blyzenkoua:7951:9")], {"rows": [ENTRY]})
     assert "config/price_corrections.yaml" in str(refused.value)
+
+    # an entry that corrects nothing would stamp «виправлено вручну» on a row nobody changed
+    empty = {key: value for key, value in ENTRY.items() if key != "promo_price"}
+    with pytest.raises(SystemExit):
+        efd.page_true([position()], {"rows": [empty]})

@@ -14131,8 +14131,8 @@
       "sha256": "82a5964b8e8287ab795bb810a092b23d688704e06ae6e7fd10a3d2dc962c0faf"
     },
     "config/price_corrections.yaml": {
-      "bytes": 4847,
-      "sha256": "5fe782c5fc6dc725267ab0da3cf3f06b64192e8b2e615db699c97da49692481c"
+      "bytes": 5322,
+      "sha256": "6dca0f1b7e54263c9f1ac4cc3d5e55826aeb0fa833d55b7a5d3795ac921bc739"
     },
     "config/registry.yaml": {
       "bytes": 40570,
