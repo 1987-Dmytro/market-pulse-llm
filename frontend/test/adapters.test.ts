@@ -15,7 +15,7 @@ import { readFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { describe, expect, it } from 'vitest'
 
-import { SLOTS, chainName, chainTable, seriesColour, slotOf } from '../src/data/chains.ts'
+import { SLOTS, chainName, chainTable, handleColour, seriesColour, slotOf } from '../src/data/chains.ts'
 import {
   barStatus,
   chainOfChannel,
@@ -380,12 +380,27 @@ describe('trends — the week’s findings, worded by the producer (PHASE-ship-1
     )
   })
 
-  it('every exhibit title is one the tab renders, and each is titled once', () => {
-    const drawn = ['prices', 'spread', 'chain_ranking'] // the three exhibits of Тренди
-    const ids = trends(front).exhibits.map((finding) => finding.id)
-    expect(new Set(ids).size).toBe(ids.length) // one message per exhibit
-    for (const id of ids) expect(drawn).toContain(id) // and no title nothing draws
-    for (const id of ids) expect(exhibitTitle(front, id)?.id).toBe(id)
+  it('every exhibit the tab draws is titled by the export, and no title is drawn by nothing', () => {
+    // The ids are READ from the components that ask for them — a source scan, the shape
+    // `i18n.test.ts` uses for the same question about labels. A list typed here would pass on a
+    // renamed id: the test would agree with itself while the tab printed «правило не знайшло
+    // висновку» over an exhibit the export had titled ([[a_number_typed_into_its_own_checker]]).
+    const sources = [
+      'components/CategoryPrices.tsx',
+      'components/SpreadStrip.tsx',
+      'components/ChainRanking.tsx',
+      'tabs/Trends.tsx',
+    ]
+      .map((name) => readFileSync(`${root}frontend/src/${name}`, 'utf8'))
+      .join('\n')
+    const drawn = [...sources.matchAll(/exhibitTitle\(front,\s*'([\w-]+)'\)/g)].map((found) => found[1])
+    expect(drawn.length).toBeGreaterThan(0) // the scan itself found something to compare
+
+    const titled = trends(front).exhibits.map((finding) => finding.id)
+    expect(new Set(titled).size).toBe(titled.length) // one message per exhibit
+    // both ways at once: every exhibit the tab draws is titled, and no title is drawn by nothing
+    expect([...new Set(drawn)].sort()).toEqual([...titled].sort())
+    for (const id of titled) expect(exhibitTitle(front, id)?.id).toBe(id)
     expect(exhibitTitle(front, 'no-such-exhibit')).toBe(undefined)
     expect(new Set(trends(front).conclusions.map((one) => one.id)).size).toBe(
       trends(front).conclusions.length,
@@ -423,24 +438,40 @@ describe('trends — the week’s findings, worded by the producer (PHASE-ship-1
     expect(strip?.bases.some((one) => one.unit === widest.unit)).toBe(true)
   })
 
-  it('a series colour follows the CHAIN, never a position in a filtered list', () => {
+  it('a series takes its CHAIN’s colour through the fold, never the handle’s own', () => {
+    // The palette's two anchors, from DESIGN-ship-1 §3/§6: slot 1 is the first series token and a
+    // chain the brief names no slot for is the «інші» grey. They are identities of a fixed palette,
+    // not measurements — and without them a `seriesColour` that returned ONE colour for every chain
+    // would satisfy every comparison below.
+    expect(seriesColour(SLOTS[0] ?? '')).toBe('var(--s1)')
+    expect(seriesColour('no-such-chain')).toBe('var(--text-3)')
+
     const fold = chainOfChannel(front)
-    // two handles of ONE chain are ONE colour — and the value is a function of the chain id alone
+    // a handle whose CHAIN the brief gives a slot: the series wears the chain's colour, and NOT the
+    // colour the raw handle would take — the blind direction, and the s52 defect itself (a fold
+    // that is read and then not applied leaves every line in the «інші» grey)
+    const slotted = carried(
+      Object.entries(fold).find(([handle, id]) => SLOTS.includes(id) && handle !== id),
+      'a handle whose chain the brief gives a slot',
+    )
+    expect(handleColour(fold, slotted[0])).toBe(seriesColour(slotted[1]))
+    expect(handleColour(fold, slotted[0])).not.toBe(seriesColour(slotted[0]))
+
+    // two handles of ONE chain are one colour, and it is that chain's own
     const byChain = new Map<string, string[]>()
-    for (const [handle, id] of Object.entries(fold)) {
-      byChain.set(id, [...(byChain.get(id) ?? []), handle])
-      expect(seriesColour(id)).toBe(seriesColour(fold[handle] ?? handle))
-    }
-    const shared = carried(
-      [...byChain.values()].find((handles) => handles.length > 1),
+    for (const [handle, id] of Object.entries(fold)) byChain.set(id, [...(byChain.get(id) ?? []), handle])
+    const [shared, handles] = carried(
+      [...byChain.entries()].find((entry) => entry[1].length > 1),
       'a chain reached through two handles',
     )
-    const colours = new Set(shared.map((handle) => seriesColour(fold[handle] ?? handle)))
-    expect(colours.size).toBe(1)
+    for (const handle of handles) expect(handleColour(fold, handle)).toBe(seriesColour(shared))
 
-    // the blind direction: the tab no longer reaches the by-position colour at all (s52 finding-1)
+    // a handle no fold carries keeps itself and goes recessive — never a crash, never a slot
+    expect(handleColour(fold, '@no-such-handle')).toBe('var(--text-3)')
+
+    // and the tab reaches the fold, not the by-position colour it used to (the source, as i18n does)
     const tab = readFileSync(`${root}frontend/src/tabs/Trends.tsx`, 'utf8')
-    expect(tab).toContain('seriesColour(')
+    expect(tab).toContain('handleColour(folded,')
     expect(tab).not.toContain('colourByIndex')
   })
 })

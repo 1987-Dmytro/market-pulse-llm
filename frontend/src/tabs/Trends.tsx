@@ -35,7 +35,7 @@ import { ChartCard } from '../components/ChartCard.tsx'
 import { Conclusions } from '../components/Conclusions.tsx'
 import { SpreadStrip } from '../components/SpreadStrip.tsx'
 import { WeekBanner } from '../components/WeekBanner.tsx'
-import { chainName, orderChains, seriesColour } from '../data/chains.ts'
+import { chainName, handleColour, orderChains } from '../data/chains.ts'
 import { TRENDS_FIELD, chainOfChannel } from '../data/front.ts'
 import { FRONT_FILE, PROMO_FILE } from '../data/load.ts'
 import { depthRows, rollup, rollupMetrics, rollupOf, weeks } from '../data/promo.ts'
@@ -139,10 +139,6 @@ export function TrendsTab(): React.JSX.Element {
    * label disambiguates instead.
    */
   const folded = chainOfChannel(front)
-  /** The colour of a handle's series: the CHAIN's own, through the producer's fold. It used to be
-   *  the handle's position in this chart's ordered list, so changing the brand filter moved АТБ
-   *  from blue to orange (s52's finding-1) — a colour that follows the filter names nothing. */
-  const handleColour = (handle: string): string => seriesColour(folded[handle] ?? handle)
   const handlesOfChain = new Map<string, Set<string>>()
   for (const row of rollupAll) {
     const id = folded[row.chain] ?? row.chain
@@ -252,7 +248,7 @@ export function TrendsTab(): React.JSX.Element {
           provenance={`${PROMO_FILE} :: ${ROLLUP_FIELD}, ${WEEKS_FIELD}`}
           note={`${t('common.empty_week')} · ${t('trends.no_price_series')}`}
           legend={lineHandles.map((handle) => ({
-            colour: handleColour(handle),
+            colour: handleColour(folded, handle),
             label: chainLabel(handle),
           }))}
           table={{
@@ -304,7 +300,7 @@ export function TrendsTab(): React.JSX.Element {
                     name={handle}
                     type="linear"
                     dataKey={handle}
-                    stroke={handleColour(handle)}
+                    stroke={handleColour(folded, handle)}
                     strokeWidth={2}
                     dot={{ r: 3 }}
                     connectNulls={false}

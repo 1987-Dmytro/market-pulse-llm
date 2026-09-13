@@ -48843,7 +48843,7 @@
       "category": "ice-cream",
       "name": "Морозиво",
       "ranked": 11,
-      "reading": "the chains of the basis with the most priced rows, each on its own median inside that one category — the market median of the same basis is the reference the bars are read against",
+      "reading": "the CHANNELS the registry collects, folded to their chain ids, each on its own median inside the basis with the most priced rows — the market median of the same basis is the reference the bars are read against. A row is a collected channel and not a retailer: one retailer reaches this ranking through several of them, and an aggregator channel reprints another chain's leaflet, so the same offer can stand in more than one bar (de-duplicating it would move a published population — POST-GATE)",
       "unit": "uah_per_kg"
     },
     "conclusions": [
@@ -48868,13 +48868,13 @@
         "ua": "Найширший розкид — Сир твердий: від 253,33 до 1 247,92 ₴/кг, різниця 994,59 (позицій: 62, порівняно пар: 13)."
       },
       {
-        "en": "The lowest median in Морозиво is 227.14 UAH/kg against the market's 287.00 (chains priced in it: 11): MSUa Акції та знижки.",
+        "en": "The lowest median in Морозиво is 227.14 UAH/kg against the market's 287.00 (channels priced in it: 11): MSUa Акції та знижки.",
         "id": "cheapest_chain",
         "stands_on": {
           "category_prices.categories[ice-cream].bases[uah_per_kg].chains[0].median": 227.1429,
           "category_prices.categories[ice-cream].bases[uah_per_kg].median": 287.0
         },
-        "ua": "Найнижча медіана в категорії Морозиво — 227,14 ₴/кг проти ринкової 287,00 (мереж із цінами в ній: 11): MSUa Акції та знижки."
+        "ua": "Найнижча медіана в категорії Морозиво — 227,14 ₴/кг проти ринкової 287,00 (каналів із цінами в ній: 11): MSUa Акції та знижки."
       }
     ],
     "exhibits": [

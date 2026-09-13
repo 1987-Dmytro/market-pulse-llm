@@ -71,3 +71,17 @@ export function orderChains(ids: Iterable<string>): string[] {
     return left.localeCompare(right, 'uk')
   })
 }
+
+/**
+ * The colour of a series keyed on a TELEGRAM HANDLE — its chain's colour, through the producer's
+ * fold (`front_data.json :: chains.by_channel`).
+ *
+ * It lives here, beside the slot table, because the fold is the whole of the law: a chart that
+ * coloured `@atb_market_official` directly would put АТБ in the «інші» grey (no handle is a slot
+ * id), and one that coloured by the handle's POSITION moved АТБ from blue to orange when the
+ * reader changed the brand filter (s52's finding-1). A handle the fold does not carry keeps
+ * itself, and takes the grey of a chain the brief names no slot for.
+ */
+export function handleColour(fold: Record<string, string>, handle: string): string {
+  return seriesColour(fold[handle] ?? handle)
+}

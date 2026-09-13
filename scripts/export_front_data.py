@@ -755,9 +755,9 @@ TRENDS_SENTENCES = {
     },
     "cheapest_chain": {
         "ua": "Найнижча медіана в категорії {name} — {median} {unit} проти ринкової {market}"
-        " (мереж із цінами в ній: {ranked}): {holders}.",
+        " (каналів із цінами в ній: {ranked}): {holders}.",
         "en": "The lowest median in {name} is {median} {unit} against the market's {market}"
-        " (chains priced in it: {ranked}): {holders}.",
+        " (channels priced in it: {ranked}): {holders}.",
     },
     "prices": {
         "ua": "{name} — найбільша вибірка тижня: медіана {median} {unit}, позицій {n}",
@@ -939,9 +939,12 @@ def trends_block(prices: dict) -> dict:
             "unit": basis["unit"],
             "name": category["name"],
             "ranked": len(ranked),
-            "reading": "the chains of the basis with the most priced rows, each on its own median"
-            " inside that one category — the market median of the same basis is the reference the"
-            " bars are read against",
+            "reading": "the CHANNELS the registry collects, folded to their chain ids, each on its"
+            " own median inside the basis with the most priced rows — the market median of the same"
+            " basis is the reference the bars are read against. A row is a collected channel and not"
+            " a retailer: one retailer reaches this ranking through several of them, and an"
+            " aggregator channel reprints another chain's leaflet, so the same offer can stand in"
+            " more than one bar (de-duplicating it would move a published population — POST-GATE)",
         },
     }
 

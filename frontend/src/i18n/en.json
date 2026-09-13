@@ -195,10 +195,10 @@
   "trends.exhibit.untitled": "no rule found a reading for this exhibit",
   "trends.spread.subtitle": "from the cheapest to the dearest position in each category × unit pair; the dot is the median",
   "trends.spread.rule": "the axis is shared inside one unit and never across two: UAH/kg and UAH/L on one scale would invite a comparison of a kilogram with a litre",
-  "trends.ranking.subtitle": "a chain's median inside one category",
+  "trends.ranking.subtitle": "a channel's median inside one category",
   "trends.ranking.rule": "the median is cut inside one category and one unit — a chain's median over everything it sells would read the chain with more cheese on its leaflet as the expensive one; the number of positions stands beside every bar, because one row is also a median",
-  "trends.ranking.channels": "chains stand by their channels: one retailer collected through several channels takes several rows — those are not different chains",
+  "trends.ranking.channels": "a row is a collected channel, not a retailer: one retailer reaches this ranking through several of them, and an aggregator channel reprints another chain's leaflet, so the same offer can stand in more than one bar",
   "trends.ranking.market": "the dashed line is the category's market median: {value}",
-  "trends.ranking.col.chain": "chain",
+  "trends.ranking.col.chain": "channel",
   "trends.spread.scale": "scale — up to {max}"
 }
