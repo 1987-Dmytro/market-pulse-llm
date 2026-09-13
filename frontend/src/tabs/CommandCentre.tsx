@@ -10,9 +10,11 @@
  *   by an arrow nobody could justify: window-1 is the base, and the comparison arrives with the
  *   second paid window.
  * * **Two populations, and the FILE says which is the headline.** «bought» is everything the
- *   session paid for, «payable» the rows that carry words — 1 361 apart. Every sampled metric
- *   shows its headline reading big and the other beside it, because the difference between them is
- *   the first finding of the window.
+ *   session paid for, «payable» the rows that carry words — 1 361 apart. {@link headline} reads
+ *   the file's `headline_sample` and no tab picks one for itself. NSR prints the second reading
+ *   beside the first, because that difference is the window's first finding; the other sampled
+ *   blocks name the population in their ⓘ and print one reading — the gap is named in
+ *   `docs/plans/ship-1.PROGRESS.md`, not papered over here.
  * * **A reading this window cannot carry is a SENTENCE, never an empty frame** (§10): T6 and T7 are
  *   the file's own `not_computable` entries with their reason and what unlocks them, and a cut that
  *   exports counts but not rows says «rows not exported» where the drill-down would be.
@@ -31,9 +33,11 @@ import {
   coverage,
   cut,
   headline,
+  modelVerdict,
   notComputable,
   negativeShare,
   nsr,
+  pressureByChain,
   promoDepth,
   promoPressure,
   samplesOf,
@@ -90,10 +94,18 @@ function Bars({
   rows,
   colour,
   label,
+  figure = (row) => (
+    <>
+      <b>{percent(row.value)}</b> · {count('uk', row.count)}
+    </>
+  ),
 }: {
   rows: Share[]
   colour: (key: string) => string
   label: (key: string) => string
+  /** What is written at the end of the row. The default reads the row as a SHARE; an exhibit whose
+   *  export carries a count and no share passes its own, so no percent is invented for it. */
+  figure?: (row: Share) => React.ReactNode
 }): React.JSX.Element {
   const ceiling = Math.max(...rows.map((row) => row.value), 0)
   return (
@@ -110,9 +122,7 @@ function Bars({
               }}
             />
           </span>
-          <span className="strip-values">
-            <b>{percent(row.value)}</b> · {count('uk', row.count)}
-          </span>
+          <span className="strip-values">{figure(row)}</span>
         </div>
       ))}
     </div>
@@ -652,12 +662,7 @@ export function PromoAndPrices(): React.JSX.Element {
   const depth = promoDepth(front)
   const pressure = promoPressure(front)
   const gap = notComputable(front, 'leaflet_depth_for_silpo_varus_marketopt')
-  const chains = shares(
-    Object.fromEntries(
-      Object.entries(pressure.by_chain).map(([chain, row]) => [chain, row.position_rows / pressure.position_rows]),
-    ),
-    Object.fromEntries(Object.entries(pressure.by_chain).map(([chain, row]) => [chain, row.position_rows])),
-  )
+  const chains = pressureByChain(front)
   const byBrand = shares(pressure.share, pressure.by_brand)
 
   return (
@@ -719,13 +724,18 @@ export function PromoAndPrices(): React.JSX.Element {
           title={t('cc.t5.chains.title')}
           subtitle={t('cc.t5.chains.subtitle')}
           provenance={`${FRONT_FILE} :: ${ccPath('metrics', 'promo_pressure', 'by_chain')}`}
-          info={[pressure.sample.reading]}
+          info={[pressure.sample.reading, t('cc.t5.chains.info')]}
           table={{
-            head: [t('cc.col.chain'), t('cc.col.share'), t('cc.col.rows')],
-            rows: chains.map((row) => [row.key, ratio(row.value), row.count]),
+            head: [t('cc.col.chain'), t('cc.col.rows')],
+            rows: chains.map((row) => [row.key, row.count]),
           }}
         >
-          <Bars rows={chains} colour={(key) => seriesColour(key)} label={(key) => key} />
+          <Bars
+            rows={chains}
+            colour={(key) => seriesColour(key)}
+            label={(key) => key}
+            figure={(row) => <b>{count(lang, row.count)}</b>}
+          />
         </ChartCard>
       </div>
 
@@ -811,7 +821,6 @@ export function Method(): React.JSX.Element {
   const { front, lang, t } = useApp()
   const block = centre(front)
   const window = ccWindow(front)
-  const verdict = front.model.verdict as Record<string, unknown>
   const limits = Object.entries(block.not_computable)
 
   return (
@@ -858,13 +867,7 @@ export function Method(): React.JSX.Element {
       <section className="block">
         <h2>{t('cc.t8.model')}</h2>
         <p className="context">
-          {t('cc.t8.model.line', {
-            step: String(verdict['step'] ?? ''),
-            decision: String(verdict['decision'] ?? ''),
-            passed: String(verdict['passed'] ?? ''),
-            of: String(verdict['of'] ?? ''),
-            testset: String(verdict['testset_version'] ?? ''),
-          })}
+          {t('cc.t8.model.line', modelVerdict(front))}
         </p>
         <p className="muted">
           <code>{front.model.from}</code>

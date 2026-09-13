@@ -10,7 +10,10 @@
  *   ([[a_published_number_has_one_reader]]) — and the other reading stays on the screen beside it,
  *   because the two differ by 1 361 word-less rows and the difference is the finding.
  * * **A missing field is a NAMED refusal**, never a blank and never a zero: `must` throws
- *   `SourceMissing(file, field)` and the shell renders the red panel for that tab's band.
+ *   `SourceMissing(file, field)`. A field the BOOT reads is caught by the shell and drawn as §5's
+ *   red panel; a field a tab reads during its own render has no boundary above it today, so the
+ *   throw unmounts the root instead — named as a debt in `docs/plans/ship-1.PROGRESS.md`, because
+ *   an error boundary is not a thing this phase asked for.
  */
 
 import type {
@@ -128,4 +131,32 @@ export function shares(share: Record<string, number>, counts: Record<string, num
   return Object.entries(share ?? {})
     .map(([key, value]) => ({ key, value, count: counts?.[key] ?? 0 }))
     .sort((left, right) => right.value - left.value || left.key.localeCompare(right.key))
+}
+
+/**
+ * Promo pressure per chain — the export's own `position_rows`, and nothing divided here.
+ *
+ * `promo_pressure.share` is keyed by BRAND; `by_chain` carries counts and no share of any kind, so
+ * a per-chain share would be this app's own arithmetic wearing a field's provenance line. The bar
+ * is therefore the count the file holds ([[the_app_computes_no_figure]]).
+ */
+export function pressureByChain(front: FrontExport): Share[] {
+  const rows = Object.fromEntries(
+    Object.entries(promoPressure(front).by_chain).map(([chain, row]) => [chain, row.position_rows]),
+  )
+  return shares(rows, rows)
+}
+
+/** The model's verdict as the four strings T8 prints. `decision` is a BLOCK in the record, so the
+ *  line names the arm it SELECTED — stringifying the block itself printed «[object Object]». */
+export function modelVerdict(front: FrontExport): Record<'step' | 'decision' | 'passed' | 'of' | 'testset', string> {
+  const verdict = front.model.verdict
+  const decision = (verdict['decision'] ?? {}) as Record<string, unknown>
+  return {
+    step: String(verdict['step'] ?? ''),
+    decision: String(decision['selected'] ?? ''),
+    passed: String(verdict['passed'] ?? ''),
+    of: String(verdict['of'] ?? ''),
+    testset: String(verdict['testset_version'] ?? ''),
+  }
 }

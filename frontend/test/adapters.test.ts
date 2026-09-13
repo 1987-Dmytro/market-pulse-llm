@@ -36,7 +36,8 @@ import {
   tableRows, telegramLink, threads, volumeOf, weeks, windows,
 } from '../src/data/promo.ts'
 import {
-  coverage, headline, negativeShare, nsr, promoDepth, samplesOf, sov, volume,
+  coverage, headline, modelVerdict, negativeShare, nsr, pressureByChain, promoDepth, samplesOf,
+  sov, volume,
 } from '../src/data/cc.ts'
 import type {
   Bar, FrontExport, NegativeShareReading, NsrReading, Position, PromoExport, SovReading,
@@ -545,5 +546,49 @@ describe('the command centre (front-2)', () => {
     const tab = readFileSync(`${root}frontend/src/tabs/CommandCentre.tsx`, 'utf8')
     for (const call of ['volume(front)', 'nsr(front)', 'negativeShare(front)', 'sov(front)',
                         'promoDepth(front)', 'coverage(front)']) expect(tab).toContain(call)
+  })
+
+  /** s59: the chain exhibit printed «73.1 %» — 106 ÷ 145 divided in the browser — under a
+   *  provenance line naming a block that carries no share at all. */
+  it('T5’s chain exhibit prints the count the file holds, and no share is divided here', () => {
+    const byChain = field('command_center.metrics.promo_pressure.by_chain') as Record<string, unknown>
+    const rows = pressureByChain(front)
+    expect(rows.length).toBe(Object.keys(byChain).length)
+
+    for (const row of rows) {
+      const path = `command_center.metrics.promo_pressure.by_chain.${row.key}`
+      expect(row.value).toBe(field(`${path}.position_rows`))
+      expect(row.count).toBe(row.value)
+      // nothing under the named block could have backed a share
+      expect(field(`${path}.share`)).toBeUndefined()
+    }
+    // the only `share` in the metric is keyed by BRAND, so no chain has one to read
+    const brandShare = field('command_center.metrics.promo_pressure.share') as Record<string, number>
+    for (const row of rows) expect(brandShare[row.key]).toBeUndefined()
+
+    // the division is gone from the tab, and the exhibit reads the adapter
+    const tab = readFileSync(`${root}frontend/src/tabs/CommandCentre.tsx`, 'utf8')
+    expect(tab).not.toContain('/ pressure.position_rows')
+    expect(tab).toContain('pressureByChain(front)')
+  })
+
+  /** s59: `decision` is a ten-key block, so `String(...)` printed «рішення [object Object]» on T8. */
+  it('T8’s model line names the arm the verdict selected, never the block’s stringification', () => {
+    const line = modelVerdict(front)
+
+    expect(line.decision).toBe(field('model.verdict.decision.selected'))
+    expect(line.decision).not.toBe('[object Object]')
+    expect(line.decision.length).toBeGreaterThan(0)
+    // the defect is reachable, not hypothetical: the field the line used to print IS an object
+    expect(typeof field('model.verdict.decision')).toBe('object')
+    expect(String(field('model.verdict.decision'))).toBe('[object Object]')
+
+    expect(line.step).toBe(field('model.verdict.step'))
+    expect(line.passed).toBe(String(field('model.verdict.passed')))
+    expect(line.of).toBe(String(field('model.verdict.of')))
+    expect(line.testset).toBe(field('model.verdict.testset_version'))
+
+    const tab = readFileSync(`${root}frontend/src/tabs/CommandCentre.tsx`, 'utf8')
+    expect(tab).toContain("t('cc.t8.model.line', modelVerdict(front))")
   })
 })
