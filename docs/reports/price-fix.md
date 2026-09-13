@@ -50,7 +50,8 @@ categories. The moved numbers are published here per (dd), never silently.
 - `python3.11 scripts/read_price_plausibility.py` → **13 of 303 priced rows**, unchanged: the
   accepted diagnostic reads the screen export, so ruling (yy)'s own number still reproduces.
 - `env -u NODE_ENV make front` → green; `npm run check` (tsc) clean; `npx vitest run` 21/21.
-- Own browser, served at `localhost:8000`: Позиції UA — the Полтавщина АТБ card reads «ice-cream ·
+- Own browser, served at `localhost:8000`, re-measured after `0f2db69`: Позиції UA — the
+  Полтавщина АТБ card reads «ice-cream ·
   750 г · 150,50 грн −41% · 200,67 грн/кг» and its ⓘ opens complete («виправлено вручну за
   сторінкою листівки» · «було: 75 г → 750 г» · «сторінку прочитали: reader-1, reader-2» ·
   `config/price_corrections.yaml :: atb_market_official_4767.jpg`); Тренди UA — «…311 позицій ·
