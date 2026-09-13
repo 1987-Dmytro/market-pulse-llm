@@ -21,6 +21,7 @@ import { telegramLink } from '../data/promo.ts'
 import { count, price } from '../format.ts'
 import type { CategoryBasis, CategoryPrices as Category, PriceCard } from '../types.ts'
 import { ChartCard } from './ChartCard.tsx'
+import { CorrectionInfo } from './CorrectionInfo.tsx'
 import { Lightbox } from './Lightbox.tsx'
 
 export const CATEGORY_FIELD = 'category_prices'
@@ -77,6 +78,7 @@ export function CategoryPrices(): React.JSX.Element {
             {card.unit_price !== undefined && (
               <b className="price"> {perUnit(card.unit_price, unit)}</b>
             )}
+            <CorrectionInfo card={card} lang={lang} t={t} />
           </span>
           <b>{card.brand}</b>
           {card.line !== undefined && <span>{card.line}</span>}
@@ -107,11 +109,15 @@ export function CategoryPrices(): React.JSX.Element {
         subtitle={t('trends.prices.subtitle')}
         provenance={`${FRONT_FILE} :: ${CATEGORY_FIELD}`}
         info={[t('trends.prices.rule')]}
-        note={`${t('trends.prices.window', {
-          positions: count(lang, block.positions),
-        })} · ${t('trends.prices.without', {
-          rows: count(lang, block.rows_without_a_unit_price),
-        })}`}
+        note={[
+          t('trends.prices.window', { positions: count(lang, block.positions) }),
+          t('trends.prices.without', { rows: count(lang, block.rows_without_a_unit_price) }),
+          // the rows whose page prints no price at all: counted on the block that drops them,
+          // because a population that shrank without a sentence is a claim
+          ...(block.excluded.n > 0
+            ? [t('trends.prices.excluded', { rows: count(lang, block.excluded.n) })]
+            : []),
+        ].join(' · ')}
         table={{
           head: [
             t('trends.prices.col.category'),

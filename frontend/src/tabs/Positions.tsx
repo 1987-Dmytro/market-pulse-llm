@@ -17,6 +17,7 @@
 import { useState } from 'react'
 
 import { useApp } from '../app-state.ts'
+import { CorrectionInfo } from '../components/CorrectionInfo.tsx'
 import { CountUp } from '../components/CountUp.tsx'
 import { DataTable } from '../components/DataTable.tsx'
 import type { Column } from '../components/DataTable.tsx'
@@ -445,6 +446,7 @@ function RegionCuts({
                           {card.printed_pct !== undefined && (
                             <span className="badge">{printed(card.printed_pct)}</span>
                           )}
+                          <CorrectionInfo card={card} lang={lang} t={t} />
                         </span>
                         {card.unit_price !== undefined && (
                           <span className="muted">

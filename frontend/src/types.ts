@@ -249,6 +249,18 @@ export interface MediaBlock {
   pages_without_a_date: number
 }
 
+/** What a human changed on this row and against which page — the record of
+ *  `config/price_corrections.yaml`, applied by `export_front_data.page_true` (ruling (yy) 13.09).
+ *  `was` carries the figures it replaced, so the card can say WHAT moved and not only that
+ *  something did; `exclude` marks a row whose page prints no price at all. */
+export interface Correction {
+  from: string
+  page: string
+  verified_by: string[]
+  was: { promo_price?: number; size_value?: number }
+  exclude?: string
+}
+
 /** One position as a card: what it is, what it costs, and the page it was read off. The optional
  *  fields are the row's own absences — a pack with no printed badge has no `printed_pct`, and a row
  *  whose photo never arrived has no `page`, which is a sentence the card says rather than a hole. */
@@ -270,6 +282,8 @@ export interface PriceCard {
   unit?: string
   unit_price?: number
   page?: string
+  /** present only on the rows a human corrected against the leaflet page */
+  correction?: Correction
 }
 
 /** One category read in ONE unit. Never pooled across units: a category holding both grams and
@@ -306,6 +320,15 @@ export interface CategoryPricesBlock {
   /** the rows of the window the block reads — every chain's current leaflet week */
   positions: number
   rows_without_a_unit_price: number
+  /** the rows of that window whose own page prints NO price: they stay in `positions` and are
+   *  counted here instead of being priced, because a row quietly dropped is a population that
+   *  moved without a sentence */
+  excluded: {
+    n: number
+    from: string
+    reading: string
+    rows: { row_id: string; carrier: string; category: string; why: string }[]
+  }
   categories: CategoryPrices[]
 }
 

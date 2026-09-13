@@ -495,6 +495,15 @@ td.num {
   margin: 0 0 6px;
 }
 
+/* Inside a card of a grid the ⓘ can stand at the page's own right edge, and a panel that opens
+   rightwards from there is a provenance nobody can read — it has nowhere to go, because no tab
+   scrolls sideways (DESIGN-ship-1 §8). In a card it opens leftwards instead. */
+.sku .popover,
+.extreme .popover {
+  right: 0;
+  left: auto;
+}
+
 .holder {
   position: relative;
   display: inline-block;
