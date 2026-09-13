@@ -48,7 +48,7 @@ const CALLED = keysMatching([/\bt\(\s*['"]([\w.]+)['"]/g, /\btranslate\(\s*[^,()
 const MENTIONED = keysMatching([/['"]([\w.]+)['"]/g])
 
 const NAV = "App.tsx's nav template, over the router's own tab list"
-const FRONT_2 = 'the same template; front-2 renders this tab'
+const TABLE = 'reached by a lookup on the export\'s own key, never spelled at a call'
 
 /**
  * The labels no source line spells out: `App.tsx` renders both nav groups through
@@ -56,10 +56,13 @@ const FRONT_2 = 'the same template; front-2 renders this tab'
  * cannot see them. t1–t8 stay template-reached until front-2 builds the command-centre tabs.
  */
 const REACHED_BY_TEMPLATE: Record<string, string> = {
-  'nav.promo.positions': NAV, 'nav.promo.trends': NAV, 'nav.promo.reactions': NAV,
-  'nav.promo.quality': NAV, 'nav.promo.loop': NAV, 'nav.cc.t0': NAV,
-  'nav.cc.t1': FRONT_2, 'nav.cc.t2': FRONT_2, 'nav.cc.t3': FRONT_2, 'nav.cc.t4': FRONT_2,
-  'nav.cc.t5': FRONT_2, 'nav.cc.t6': FRONT_2, 'nav.cc.t7': FRONT_2, 'nav.cc.t8': FRONT_2,
+  'nav.promo.reactions': NAV, 'nav.promo.quality': NAV, 'nav.promo.loop': NAV,
+  'nav.cc.t0': NAV, 'nav.cc.t1': NAV, 'nav.cc.t2': NAV, 'nav.cc.t3': NAV, 'nav.cc.t4': NAV,
+  'nav.cc.t5': NAV, 'nav.cc.t6': NAV, 'nav.cc.t7': NAV, 'nav.cc.t8': NAV,
+  'cc.sample.bought': TABLE, 'cc.sample.payable': TABLE,
+  'cc.aspect.price': TABLE, 'cc.aspect.taste': TABLE, 'cc.aspect.quality': TABLE,
+  'cc.aspect.availability': TABLE, 'cc.aspect.service': TABLE, 'cc.aspect.packaging': TABLE,
+  'cc.carrier.leaflet_page': TABLE, 'cc.carrier.post_text': TABLE,
 }
 
 /** What a digit may be part of: an IDENTITY that cannot go stale — a criterion's name, a law's
@@ -69,7 +72,6 @@ const IDENTITY = /\bS[1-4]\b|\bfront-[12]\b|SPEC \d+\.\d+(?: \(\d+\))?/g
 const MAY_NAME_A_NUMBER: Record<string, string> = {
   'quality.s1.title': 'names criterion S1 — the bar itself, not a reading of it',
   'quality.s2.title': 'names criterion S2 — likewise',
-  'cc.placeholder.body': 'names the step that builds the command centre, front-2',
 }
 
 describe('uk.json and en.json', () => {

@@ -21,7 +21,7 @@ import { translator } from './i18n/t.ts'
 import type { Translate } from './i18n/t.ts'
 import { CC_TABS, hrefFor, paramOf, promoTabs, servedOnly, useRoute } from './router.ts'
 import { SourceMissingPanel } from './components/SourceMissingPanel.tsx'
-import { CommandCentrePlaceholder } from './tabs/CommandCentrePlaceholder.tsx'
+import { CommandCentreTab } from './tabs/CommandCentre.tsx'
 import { LoopTab } from './tabs/Loop.tsx'
 import { PositionsTab } from './tabs/Positions.tsx'
 import { QualityTab } from './tabs/Quality.tsx'
@@ -191,6 +191,6 @@ function Tab({ path, mode, t }: { path: string; mode: Mode; t: Translate }): Rea
     case '/promo/loop':
       return <LoopTab />
     default:
-      return <CommandCentrePlaceholder path={path} />
+      return <CommandCentreTab path={path} />
   }
 }

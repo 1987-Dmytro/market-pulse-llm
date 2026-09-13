@@ -200,15 +200,182 @@ export interface MetricEntry {
   pitfalls: { ua: string[]; en: string[] }
 }
 
+/** The population a reading was taken over, and the file's own sentence about what it is. Every
+ *  figure of the command centre carries one: «5075» means nothing until it says «of what». */
+export interface Sample {
+  name: string
+  reading: string
+  rows?: number
+  of?: number
+  share?: number
+  watchlist_rules?: string
+}
+
+/** A metric read over TWO populations, with the file naming which one is the headline. The app
+ *  never picks: `headline_sample` is the producer's ruling and the other reading stays visible. */
+export interface Sampled<T> {
+  by_sample: Record<string, T>
+  headline_sample: string
+  sample: Sample
+}
+
+export interface Volume {
+  comments: { bought: number; payable: number; text_less: number }
+  leaflet_pages: number
+  position_rows: number
+  post_texts: number
+  sample: Sample
+}
+
+export interface NsrReading {
+  negative: number
+  neutral: number
+  positive: number
+  nsr: number
+  scored: number
+  sample: Sample
+}
+
+export interface NegativeShareReading {
+  negative: number
+  negative_share: number
+  negative_share_sarcasm_adjusted: number
+  reclassified_from_sarcasm: number
+  scored: number
+  sample: Sample
+}
+
+export interface SovReading {
+  mentions: Record<string, number>
+  share: Record<string, number>
+  own_brands: string[]
+  total_mentions: number
+  watchlist_rules: string
+  sample: Sample
+}
+
+export interface AspectReading {
+  labels: Record<string, number>
+  share: Record<string, number>
+  rows_with_no_aspect: number
+  total_labels: number
+  scored: number
+  sample: Sample
+}
+
+/** n + the five points of `aggregates.spread`/`quartiles` — null where the population is empty. */
+export interface Spread {
+  n: number
+  min: number | null
+  q1: number | null
+  median: number | null
+  q3: number | null
+  max: number | null
+}
+
+export interface DepthCarrier {
+  from_price_pair: Spread
+  from_printed_badge: Spread
+  position_rows: number
+  printed_disagrees_with_computed: number
+}
+
+export interface PromoDepth {
+  by_carrier: Record<string, DepthCarrier>
+  law: string
+  printed_disagrees_with_computed: number
+  readings: { from_price_pair: Spread; from_printed_badge: Spread }
+  sample: Sample
+}
+
+export interface Coverage {
+  channels: { in_registry: number; with_a_row: number; share: number }
+  segments: { in_registry: number; with_a_row: number; share: number }
+  sample: Sample
+}
+
+export interface PromoPressure {
+  by_brand: Record<string, number>
+  by_chain: Record<
+    string,
+    { by_carrier: Record<string, number>; named_by_amendment_3_20: boolean; position_rows: number }
+  >
+  share: Record<string, number>
+  position_rows: number
+  rows_with_no_resolved_brand: number
+  sample: Sample
+}
+
+export interface CcMetrics {
+  volume: Volume
+  nsr: Sampled<NsrReading>
+  negative_share_sarcasm_adjusted: Sampled<NegativeShareReading>
+  sov: Sampled<SovReading> & { watchlist_rules: string }
+  aspect_share: Sampled<AspectReading>
+  promo_depth: PromoDepth
+  promo_pressure: PromoPressure
+  coverage: Coverage
+}
+
+/** One population's own reading inside a segment or a channel cut. */
+export interface CommentCut {
+  rows: number
+  scored: number
+  sentiment: Record<string, number>
+  intents: {
+    frequency: Record<string, number>
+    labels_per_scored_row: number
+    rows_with_no_intent: number
+  }
+  language: { rows: Record<string, number>; sentiment: Record<string, Record<string, number>> }
+  brand_attribution: { mentions: Record<string, number>; rows_with_a_brand: number }
+  empty_text: { rows: number; with_no_intent: number }
+  sarcasm: { denominator: string; rate: number; true: number; false: number }
+  unreadable: { rows: number; reasons: Record<string, number> }
+}
+
+export interface SegmentCut {
+  bought: CommentCut
+  payable: CommentCut
+  channels_with_a_row: string[]
+  registry_channels: number
+}
+
+export interface ChannelCut {
+  bought: CommentCut
+  payable: CommentCut
+  segment: string
+  source_id: string
+  source_type: string
+}
+
+export interface CcCuts {
+  brand_by_sentiment: { rows: Record<string, Record<string, number>>; sample: Sample; watchlist_rules: string }
+  brand_attribution_in_the_comment_cuts: { reading: string; watchlist_rules: string }
+  comment_by_segment: Record<string, SegmentCut>
+  comment_by_channel: Record<string, ChannelCut>
+  positions_by_carrier: Record<string, number>
+  positions_by_category: Record<string, number>
+  legs: Record<string, unknown>
+}
+
+/** A reading this window CANNOT carry, in the file's own words — the sentence a tab prints instead
+ *  of a figure (DESIGN-ship-1 §10: never an empty state without a sentence). */
+export interface NotComputable {
+  reason: string
+  surface: string
+  unlock: string
+}
+
 export interface CommandCentre {
   contract: string
   phase: string
   conclusions: Conclusion[]
   window: Window & { populations: Record<string, number>; reading: string; rule: string }
-  metrics: Record<string, unknown>
-  cuts: Record<string, unknown>
-  not_computable: Record<string, unknown>
-  promo: Record<string, unknown>
+  metrics: CcMetrics
+  cuts: CcCuts
+  not_computable: Record<string, NotComputable>
+  promo: { positions_table: { law: string; rows: Position[]; sample: Sample; window: string } }
   provenance: Record<string, unknown>
   convergence: Record<string, unknown>
   dictionary: { metrics: string[]; path: string; sha256: string }

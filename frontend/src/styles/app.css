@@ -1083,3 +1083,46 @@ tr:has(.popover:not([hidden])) {
   position: relative;
   z-index: 2;
 }
+
+/* The command centre's own two shapes (DESIGN-ship-1 §6): a 100% stacked share bar — the form a
+   composition gets, never a pie — and the glossary T8 prints the dictionary into. */
+.stack {
+  display: flex;
+  width: 100%;
+  height: 18px;
+  gap: 2px;
+  border-radius: var(--radius-chip);
+  overflow: hidden;
+  background: var(--surface-2);
+}
+
+.stack .slice {
+  display: block;
+  min-width: 0;
+}
+
+.glossary {
+  display: grid;
+  gap: var(--sp-3);
+  margin: 0;
+}
+
+.glossary dt {
+  font-weight: 600;
+}
+
+.glossary dd {
+  margin: 4px 0 0;
+  color: var(--text-2);
+  font-size: 13px;
+}
+
+.glossary dd .rows {
+  margin: 4px 0 0;
+  padding-left: 18px;
+  list-style: disc;
+}
+
+.glossary code {
+  overflow-wrap: anywhere;
+}

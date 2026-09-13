@@ -35,7 +35,12 @@ import {
   asDate, asDayMonth, filterPositions, positionKey, positions, productOf, rollup, sortPositions,
   tableRows, telegramLink, threads, volumeOf, weeks, windows,
 } from '../src/data/promo.ts'
-import type { Bar, FrontExport, Position, PromoExport } from '../src/types.ts'
+import {
+  coverage, headline, negativeShare, nsr, promoDepth, samplesOf, sov, volume,
+} from '../src/data/cc.ts'
+import type {
+  Bar, FrontExport, NegativeShareReading, NsrReading, Position, PromoExport, SovReading,
+} from '../src/types.ts'
 
 const root = fileURLToPath(new URL('../../', import.meta.url))
 const promo = JSON.parse(readFileSync(`${root}results/promo_screen_data.json`, 'utf8')) as PromoExport
@@ -473,5 +478,72 @@ describe('trends — the week’s findings, worded by the producer (PHASE-ship-1
     const tab = readFileSync(`${root}frontend/src/tabs/Trends.tsx`, 'utf8')
     expect(tab).toContain('handleColour(folded,')
     expect(tab).not.toContain('colourByIndex')
+  })
+})
+
+describe('the command centre (front-2)', () => {
+  /** A dotted path into the RAW export — the second, independent way to the same figure. An
+   *  assertion that only ever called the adapter would hold over an adapter that invented the
+   *  number ([[a_number_typed_into_its_own_checker]]). */
+  function field(dotted: string): unknown {
+    return dotted
+      .split('.')
+      .reduce<unknown>((node, key) => (node as Record<string, unknown>)?.[key], front)
+  }
+
+  it('every KPI of T0 is the export’s own field, read at the export’s own headline population', () => {
+    const vol = volume(front)
+    expect(vol.comments.bought).toBe(field('command_center.metrics.volume.comments.bought'))
+    expect(vol.comments.payable).toBe(field('command_center.metrics.volume.comments.payable'))
+    expect(vol.leaflet_pages).toBe(field('command_center.metrics.volume.leaflet_pages'))
+    expect(vol.position_rows).toBe(field('command_center.metrics.volume.position_rows'))
+
+    // the three sampled metrics: the card shows the reading of the sample the FILE calls the
+    // headline, and the other sample's value is a DIFFERENT number — so a card that read the
+    // wrong population would print a figure this suite can see
+    for (const [name, block, key, read] of [
+      ['nsr', nsr(front), 'nsr', (one: NsrReading) => one.nsr],
+      [
+        'negative_share_sarcasm_adjusted',
+        negativeShare(front),
+        'negative_share_sarcasm_adjusted',
+        (one: NegativeShareReading) => one.negative_share_sarcasm_adjusted,
+      ],
+      ['sov', sov(front), 'total_mentions', (one: SovReading) => one.total_mentions],
+    ] as const) {
+      const chosen = block.headline_sample
+      expect(chosen).toBe(field(`command_center.metrics.${name}.headline_sample`))
+      expect(read(headline(block as never, name) as never)).toBe(
+        field(`command_center.metrics.${name}.by_sample.${chosen}.${key}`),
+      )
+      for (const other of samplesOf(block as never).filter((one) => one !== chosen))
+        expect(read(block.by_sample[other] as never)).toBe(
+          field(`command_center.metrics.${name}.by_sample.${other}.${key}`),
+        )
+    }
+    // the two populations of the window really do differ — without this the check above would
+    // hold over a `headline()` that always returned the first sample it found
+    expect(headline(nsr(front), 'nsr').nsr).not.toBe(
+      field('command_center.metrics.nsr.by_sample.bought.nsr'),
+    )
+
+    const depth = promoDepth(front)
+    expect(depth.readings.from_printed_badge.median).toBe(
+      field('command_center.metrics.promo_depth.readings.from_printed_badge.median'),
+    )
+    expect(depth.printed_disagrees_with_computed).toBe(
+      field('command_center.metrics.promo_depth.printed_disagrees_with_computed'),
+    )
+
+    const reach = coverage(front)
+    expect(reach.channels.share).toBe(field('command_center.metrics.coverage.channels.share'))
+    expect(reach.segments.with_a_row).toBe(
+      field('command_center.metrics.coverage.segments.with_a_row'),
+    )
+
+    // and T0 is the tab that reads them: the six adapters are called there, not re-derived
+    const tab = readFileSync(`${root}frontend/src/tabs/CommandCentre.tsx`, 'utf8')
+    for (const call of ['volume(front)', 'nsr(front)', 'negativeShare(front)', 'sov(front)',
+                        'promoDepth(front)', 'coverage(front)']) expect(tab).toContain(call)
   })
 })
