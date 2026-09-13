@@ -12,7 +12,7 @@ spelling. A post's date comes from the raw store; a leaflet page IS a message wi
 so its date lives in `results/post_media_*.json` and nowhere else (`export_front_data.media_index`).
 A message no record dates is COUNTED and dropped, never bucketed: an unknown week is not a week.
 
-## 1. Raw — what Telegram gave us (collector output, append-only per channel)
+## 1. Raw — what Telegram gave us (collector output, one file per channel)
 
 | dataset | key | week | provenance | read by |
 |---|---|---|---|---|
@@ -34,6 +34,11 @@ a sentinel table do not survive). Week N+1's collection would leave week N nowhe
 weekly files are written beside the store from its own rows, one per ISO week; a week a later run no
 longer carries is left exactly where it is, and a week it does carry is rewritten from the store.
 Today: **1 301 rows, 10 weeks, 2026-W27 … 2026-W36**, every row dated.
+
+They live under `data/**`, which git does not carry, so they accumulate on the machine that
+collects. Today's ten weeks are still reconstructible on a clean clone from committed files —
+`results/promo_screen_data.json` holds the rows and `results/post_media_*.json` their page dates —
+but a FUTURE week's rows would not be, unless the export that carries them is committed too.
 
 Fields are the store's, so the figures are the MODEL's reading: `price_promo`, `price_old`, `depth`,
 `discount_pct_printed`, `size_value`/`size_unit`/`pack_count` (a unit price is
