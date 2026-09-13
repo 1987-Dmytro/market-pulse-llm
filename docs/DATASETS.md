@@ -25,20 +25,21 @@ A message no record dates is COUNTED and dropped, never bucketed: an unknown wee
 |---|---|---|---|---|
 | `data/derived{,_w2}/leaflet_pages/`, `position_rows/`, `post_position_rows/`, `post_texts/`, `inferences/` | `(channel, msg_id)` + `ordinal` / `row_id` | joined, none stored | `at`, `task`, `prompt_sha256`, `model_revision`, `served_by`, `image_sha256`, `rendering` | re-scoring a reading without paying for it again |
 | `data/derived/pulse.db` — the aggregate layer (`scripts/build_aggregates.py`) | `positions(window_id, carrier, row_id)`; the promo tables are keyed by `uuid5` over the row's own fields | **none** — joined at query time | `window_id`, `channel`, `msg_id`, `tier`, `carrier`, `presence_*` | the screen, the trends, the rollup |
-| `data/derived/weekly/positions_<ISO-week>.jsonl` (`scripts/weekly_positions.py`, every `make tick`) | `(carrier, row_id)` inside the file | **`week`**, on every row | `window_id`, `channel`, `msg_id`, `row_id`, `carrier`, `tier`, `presence_*`, `price_qualifier` | **price forecasting · competitor promo prediction** |
+| `results/weekly/positions_<ISO-week>.jsonl` (`scripts/weekly_positions.py`, every `make tick`) — **committed**, so a tick that collects a new week dirties `results/` until the operator commits it | `(carrier, row_id)` inside the file | **`week`**, on every row | `window_id`, `channel`, `msg_id`, `row_id`, `carrier`, `tier`, `presence_*`, `price_qualifier` | **price forecasting · competitor promo prediction** |
 
 **Why the weekly files exist.** The store is REBUILT, not extended: a second
 `build_aggregates.py` into the same path unlinks the database and backs a freshly built one over it,
 so it holds exactly the windows the run's own record files describe (measured — a planted window and
 a sentinel table do not survive). Week N+1's collection would leave week N nowhere on disk. The
-weekly files are written beside the store from its own rows, one per ISO week; a week a later run no
-longer carries is left exactly where it is, and a week it does carry is rewritten from the store.
+weekly files are written from the store's own rows, one per ISO week; a week a later run no longer
+carries is left exactly where it is, and a week it does carry is rewritten from the store.
 Today: **1 301 rows, 10 weeks, 2026-W27 … 2026-W36**, every row dated.
 
-They live under `data/**`, which git does not carry, so they accumulate on the machine that
-collects. Today's ten weeks are still reconstructible on a clean clone from committed files —
-`results/promo_screen_data.json` holds the rows and `results/post_media_*.json` their page dates —
-but a FUTURE week's rows would not be, unless the export that carries them is committed too.
+They live in `results/weekly/`, which git carries (ruling (ccc) 4, 13.09). Their first home was
+`data/derived/weekly/`, beside the store and gitignored: today's ten weeks would still have been
+reconstructible on a clean clone from committed files — `results/promo_screen_data.json` holds the
+rows and `results/post_media_*.json` their page dates — but a FUTURE week's would not, and the
+history exists for a model that has to survive the laptop it was collected on.
 
 Fields are the store's, so the figures are the MODEL's reading: `price_promo`, `price_old`, `depth`,
 `discount_pct_printed`, `size_value`/`size_unit`/`pack_count` (a unit price is
