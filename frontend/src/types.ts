@@ -336,6 +336,19 @@ export interface CategoryBasis {
   q3: number | null
   cheapest: PriceCard
   dearest: PriceCard
+  /** each chain's own median INSIDE this basis, cheapest first — the ranking exhibit's rows */
+  chains: CategoryChain[]
+}
+
+/** One chain inside one (category × unit) basis. `n` rides beside the median because one row is
+ *  also a median: no floor drops a thin chain, so the reader is shown the count and decides. */
+export interface CategoryChain {
+  chain: string
+  name: string
+  n: number
+  min: number
+  median: number
+  max: number
 }
 
 /** A category of `config/registry.yaml :: taxonomy.tracked_groups`, present whether or not the
@@ -391,6 +404,42 @@ export interface RegionsBlock {
   cuts: RegionCut[]
 }
 
+/** One code rule's finding, worded by the producer in both languages (DESIGN-ship-1 §12).
+ *
+ * The app renders the sentence and words none of it: `stands_on` is the path of every figure the
+ * sentence states, inside this same export, so a reader (and the suite) can hold the words against
+ * the block they were computed from. */
+export interface Finding {
+  id: string
+  ua: string
+  en: string
+  stands_on: Record<string, number>
+}
+
+/** Which basis the chain ranking is drawn over — the one with the most priced rows. The rows
+ *  themselves live on that basis (`category_prices.categories[].bases[].chains`), read by lookup:
+ *  a second copy of them in this block could disagree with the cards beside it. */
+export interface ChainRanking {
+  category: string
+  unit: string
+  name: string
+  ranked: number
+  reading: string
+}
+
+export interface TrendsBlock {
+  from: string
+  reading: string
+  /** «Три висновки тижня» — a week where a rule found nothing carries fewer, never an invented one */
+  conclusions: Finding[]
+  /** one action title per exhibit, keyed by the exhibit's id */
+  exhibits: Finding[]
+  chain_ranking: ChainRanking | null
+  /** the (category × unit) basis the spread exhibit's own title is about — the strip accents that
+   *  row instead of finding it again, because a rule run twice is a rule with two answers */
+  widest: { category: string; unit: string } | null
+}
+
 export interface FrontExport {
   contract: string
   chains: {
@@ -412,6 +461,7 @@ export interface FrontExport {
   reporting_week: ReportingWeek
   positions: PositionsBlock
   category_prices: CategoryPricesBlock
+  trends: TrendsBlock
   regions: RegionsBlock
   s1_reading: S1Reading
   status: Status

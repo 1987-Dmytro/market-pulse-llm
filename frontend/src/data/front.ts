@@ -6,9 +6,14 @@
  * ([[a_published_number_has_one_reader]]).
  */
 
+import type { Lang } from '../i18n/t.ts'
 import type {
+  CategoryBasis,
+  CategoryPrices,
   CategoryPricesBlock,
+  ChainRanking,
   Conclusion,
+  Finding,
   FrontExport,
   MetricEntry,
   PositionsBlock,
@@ -17,6 +22,7 @@ import type {
   S1Reading,
   S2Row,
   Status,
+  TrendsBlock,
 } from '../types.ts'
 import { FRONT_FILE, must } from './load.ts'
 import { asDayMonth } from './promo.ts'
@@ -70,6 +76,44 @@ export function barStatus(held: boolean): 'good' | 'critical' {
 
 export function categoryPrices(front: FrontExport): CategoryPricesBlock {
   return must(front.category_prices, FRONT_FILE, 'category_prices')
+}
+
+export const TRENDS_FIELD = 'trends'
+
+/**
+ * The week's findings and the exhibit titles — read, never worded here (DESIGN-ship-1 §12).
+ *
+ * Every sentence on this tab is produced by a code rule in `scripts/export_front_data.py`, over
+ * the same block the exhibit beside it draws. A second wording on this side would let the screen
+ * claim what the figures under it no longer support ([[a_sentence_that_orders_the_numbers_beside_it]]).
+ */
+export function trends(front: FrontExport): TrendsBlock {
+  return must(front.trends, FRONT_FILE, TRENDS_FIELD)
+}
+
+/** The sentence in the reader's language: the producer wrote both, the app picks the side. */
+export function findingText(finding: Finding, lang: Lang): string {
+  return lang === 'uk' ? finding.ua : finding.en
+}
+
+/** One exhibit's action title, or `undefined` when no rule stood for it — an exhibit the rules
+ *  could not title says so, because a topic label invented here is exactly what §12 forbids. */
+export function exhibitTitle(front: FrontExport, id: string): Finding | undefined {
+  return trends(front).exhibits.find((finding) => finding.id === id)
+}
+
+/** The (category, unit) basis the ranking is drawn over, looked up in the block that holds its
+ *  rows. `undefined` when no basis carries a price this week — the exhibit then prints nothing. */
+export function rankedBasis(
+  front: FrontExport,
+): { ranking: ChainRanking; category: CategoryPrices; basis: CategoryBasis } | undefined {
+  const ranking = trends(front).chain_ranking
+  if (ranking === null) return undefined
+  const category = categoryPrices(front).categories.find(
+    (row) => row.category === ranking.category,
+  )
+  const basis = category?.bases.find((one) => one.unit === ranking.unit)
+  return category === undefined || basis === undefined ? undefined : { ranking, category, basis }
 }
 
 export const POSITIONS_BLOCK_FIELD = 'positions'

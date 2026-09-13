@@ -14,11 +14,11 @@
 import { useState } from 'react'
 
 import { useApp } from '../app-state.ts'
-import { categoryPrices } from '../data/front.ts'
+import { categoryPrices, exhibitTitle, findingText, reportingWeek } from '../data/front.ts'
 import { FRONT_FILE } from '../data/load.ts'
 import { mediaOf, pageUrl } from '../data/media.ts'
 import { telegramLink } from '../data/promo.ts'
-import { count, price } from '../format.ts'
+import { count, perUnit as perUnitOf, price, unitWord as unitWordOf } from '../format.ts'
 import type { CategoryBasis, CategoryPrices as Category, PriceCard } from '../types.ts'
 import { ChartCard } from './ChartCard.tsx'
 import { CorrectionInfo } from './CorrectionInfo.tsx'
@@ -48,13 +48,13 @@ export function CategoryPrices(): React.JSX.Element {
   const block = categoryPrices(front)
   const media = mediaOf(front)
   const cards = cardsOf(block.categories)
+  const title = exhibitTitle(front, 'prices')
+  const week = reportingWeek(front)
 
-  const unitWord = (unit: string): string =>
-    unit === 'uah_per_l' ? t('trends.prices.per_l') : t('trends.prices.per_kg')
+  const unitWord = (unit: string): string => unitWordOf(t, unit)
 
   /** A price per unit, beside the unit it is per — «297,00 ₴/кг». */
-  const perUnit = (value: number, unit: string): string =>
-    `${price(lang, value)}/${unitWord(unit)}`
+  const perUnit = (value: number, unit: string): string => perUnitOf(lang, t, value, unit)
 
   const end = (card: PriceCard, unit: string, label: string): React.JSX.Element => {
     const link = telegramLink(card.channel, card.msg_id)
@@ -105,8 +105,10 @@ export function CategoryPrices(): React.JSX.Element {
       <ChartCard
         t={t}
         wide
-        title={t('trends.prices.title')}
-        subtitle={t('trends.prices.subtitle')}
+        // the title is the week's finding, written by the producer's rule beside the block it
+        // titles (DESIGN-ship-1 §12) — a topic label here would be the defect that rule replaces
+        title={title === undefined ? t('trends.exhibit.untitled') : findingText(title, lang)}
+        subtitle={`${t('trends.prices.subtitle')} · ${t('trends.exhibit.week', { week: week.week })}`}
         provenance={`${FRONT_FILE} :: ${CATEGORY_FIELD}`}
         info={[t('trends.prices.rule')]}
         note={[

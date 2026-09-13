@@ -29,12 +29,15 @@ import {
 } from 'recharts'
 
 import { useApp } from '../app-state.ts'
-import { CategoryPrices } from '../components/CategoryPrices.tsx'
+import { CATEGORY_FIELD, CategoryPrices } from '../components/CategoryPrices.tsx'
+import { ChainRanking } from '../components/ChainRanking.tsx'
 import { ChartCard } from '../components/ChartCard.tsx'
+import { Conclusions } from '../components/Conclusions.tsx'
+import { SpreadStrip } from '../components/SpreadStrip.tsx'
 import { WeekBanner } from '../components/WeekBanner.tsx'
-import { chainName, colourByIndex, orderChains } from '../data/chains.ts'
-import { chainOfChannel } from '../data/front.ts'
-import { PROMO_FILE } from '../data/load.ts'
+import { chainName, orderChains, seriesColour } from '../data/chains.ts'
+import { TRENDS_FIELD, chainOfChannel } from '../data/front.ts'
+import { FRONT_FILE, PROMO_FILE } from '../data/load.ts'
 import { depthRows, rollup, rollupMetrics, rollupOf, weeks } from '../data/promo.ts'
 import { count, percent } from '../format.ts'
 import type { Lang } from '../i18n/t.ts'
@@ -136,6 +139,10 @@ export function TrendsTab(): React.JSX.Element {
    * label disambiguates instead.
    */
   const folded = chainOfChannel(front)
+  /** The colour of a handle's series: the CHAIN's own, through the producer's fold. It used to be
+   *  the handle's position in this chart's ordered list, so changing the brand filter moved АТБ
+   *  from blue to orange (s52's finding-1) — a colour that follows the filter names nothing. */
+  const handleColour = (handle: string): string => seriesColour(folded[handle] ?? handle)
   const handlesOfChain = new Map<string, Set<string>>()
   for (const row of rollupAll) {
     const id = folded[row.chain] ?? row.chain
@@ -216,6 +223,18 @@ export function TrendsTab(): React.JSX.Element {
         {count(lang, allBrands.size)} · {t('common.rows')}: {count(lang, rollupAll.length)}
       </p>
 
+      {/* the pyramid of DESIGN §12: the message first, then the exhibits that carry it, and the
+          reader's own filters last — the three charts under them answer a question he picks */}
+      <Conclusions />
+
+      <div className="charts">
+        {/* price first: the depth of a discount is the second question a marketing director asks,
+            and until this block landed the tab could not answer the first one at all */}
+        <CategoryPrices />
+        <SpreadStrip />
+        <ChainRanking />
+      </div>
+
       {/* no «усі» option on the brand select: «усі» would be a sum across the brands of a handle,
           and that sum is exactly the figure the export does not carry */}
       <div className="filters">
@@ -225,10 +244,6 @@ export function TrendsTab(): React.JSX.Element {
       </div>
 
       <div className="charts">
-        {/* price first: the depth of a discount is the second question a marketing director asks,
-            and until this block landed the tab could not answer the first one at all */}
-        <CategoryPrices />
-
         <ChartCard
           t={t}
           wide
@@ -236,8 +251,8 @@ export function TrendsTab(): React.JSX.Element {
           subtitle={`${t('trends.filter.brand')}: ${brand ?? t('common.absent')} · ${t('trends.col.week')}`}
           provenance={`${PROMO_FILE} :: ${ROLLUP_FIELD}, ${WEEKS_FIELD}`}
           note={`${t('common.empty_week')} · ${t('trends.no_price_series')}`}
-          legend={lineHandles.map((handle, index) => ({
-            colour: colourByIndex(index),
+          legend={lineHandles.map((handle) => ({
+            colour: handleColour(handle),
             label: chainLabel(handle),
           }))}
           table={{
@@ -281,15 +296,15 @@ export function TrendsTab(): React.JSX.Element {
                     typeof value === 'number' ? valueText(lang, metric, value) : String(value)
                   }
                 />
-                {/* the rollup's chain has no slot in the registry's table (it is a handle), so the
-                    colour comes from the position in THIS chart's ordered handle list */}
-                {lineHandles.map((handle, index) => (
+                {/* the rollup's row keys on a CHANNEL handle; the chain it belongs to — and with
+                    it the colour — is the producer's own fold, `chains.by_channel` */}
+                {lineHandles.map((handle) => (
                   <Line
                     key={handle}
                     name={handle}
                     type="linear"
                     dataKey={handle}
-                    stroke={colourByIndex(index)}
+                    stroke={handleColour(handle)}
                     strokeWidth={2}
                     dot={{ r: 3 }}
                     connectNulls={false}
@@ -429,8 +444,10 @@ export function TrendsTab(): React.JSX.Element {
       </div>
 
       <p className="sources">
-        {t('common.sources')}: <code>{PROMO_FILE} :: {ROLLUP_FIELD}</code> ·{' '}
-        <code>{PROMO_FILE} :: {WEEKS_FIELD}</code> · <code>{PROMO_FILE} :: {DEPTH_FIELD}</code>
+        {t('common.sources')}: <code>{FRONT_FILE} :: {TRENDS_FIELD}</code> ·{' '}
+        <code>{FRONT_FILE} :: {CATEGORY_FIELD}</code> · <code>{PROMO_FILE} :: {ROLLUP_FIELD}</code>{' '}
+        · <code>{PROMO_FILE} :: {WEEKS_FIELD}</code> ·{' '}
+        <code>{PROMO_FILE} :: {DEPTH_FIELD}</code>
       </p>
     </>
   )

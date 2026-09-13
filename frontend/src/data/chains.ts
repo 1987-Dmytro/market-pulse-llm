@@ -29,6 +29,15 @@ export function slotOf(chainId: string): number {
   return index === -1 ? 0 : index + 1
 }
 
+/**
+ * The colour of a chain, on every tab and in every chart. It is a function of the CHAIN and of
+ * nothing else: a series used to take its colour from its position in the chart's own ordered
+ * list, so changing the brand filter on Тренди moved АТБ from blue to orange (s52's finding-1).
+ *
+ * A chain the brief's slot table does not name renders in the «інші» grey (DESIGN-ship-1 §6) and
+ * keeps its name on the legend, the tooltip and the table — the promo data carries sixteen chains
+ * and the validated palette carries eight, so a ninth hue would be an unvalidated one.
+ */
 export function seriesColour(chainId: string): string {
   const slot = slotOf(chainId)
   return slot === 0 ? 'var(--text-3)' : `var(--s${slot})`
@@ -61,13 +70,4 @@ export function orderChains(ids: Iterable<string>): string[] {
     if (a !== b) return (a === 0 ? Number.MAX_SAFE_INTEGER : a) - (b === 0 ? Number.MAX_SAFE_INTEGER : b)
     return left.localeCompare(right, 'uk')
   })
-}
-
-/**
- * A colour for a series the slot table cannot name — the rollup's rows key on the CHANNEL handle
- * (`@atb_market_official`), not on a folded chain id, so those charts colour by position in their
- * own ordered list. Past the eighth series the palette is exhausted and the mark goes recessive.
- */
-export function colourByIndex(index: number): string {
-  return index < 8 ? `var(--s${index + 1})` : 'var(--text-3)'
 }

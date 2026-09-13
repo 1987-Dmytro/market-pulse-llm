@@ -141,6 +141,7 @@ nav.tabs .shell {
 .group {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 4px;
   min-width: 0;
 }
@@ -170,12 +171,10 @@ nav.tabs .shell {
   font-weight: 600;
 }
 
-@media (width <= 720px) {
-  nav.tabs .shell {
-    flex-wrap: nowrap;
-    overflow-x: auto;
-  }
-}
+/* The nav WRAPS at every width (PHASE-ship-1 §2 «insight-1»). It used to become a horizontal
+   scroll row under 720 px — the DESIGN §4 rule — and on a phone that hid half the tabs behind a
+   scroll the reader had no sign of: the tabs are the app's whole map. Wrapping costs a second
+   row and hides nothing. */
 
 /* --- page grammar ------------------------------------------------------------------------ */
 
@@ -731,6 +730,129 @@ form.schedule input {
   height: 100%;
   border-radius: 2px;
   background: var(--s1);
+}
+
+/* --- the consultant's exhibits (DESIGN §12): the message, the spread, the ranking ---------- */
+
+.conclusions {
+  margin-bottom: var(--sp-3);
+}
+
+.conclusions h2 {
+  margin: 0 0 var(--sp-2);
+  font-size: 16px;
+}
+
+.conclusions ol {
+  display: grid;
+  gap: var(--sp-2);
+  margin: 0;
+  padding-left: 20px;
+}
+
+.conclusions li {
+  line-height: 1.55;
+}
+
+.strips {
+  display: grid;
+  gap: var(--sp-4);
+}
+
+.strip-group {
+  display: grid;
+  gap: 6px;
+}
+
+/* the axis of ONE unit group: the scale ends at that group's dearest row, and the unit stands on
+   it — two units never share a scale, so each group says which one it is reading */
+.strip-unit {
+  margin: 0;
+  color: var(--text-3);
+  font-size: 12px;
+  text-align: right;
+}
+
+.strip-row,
+.rank-row {
+  display: grid;
+  grid-template-columns: minmax(110px, 1.1fr) minmax(0, 2.6fr) minmax(110px, 1.3fr);
+  align-items: center;
+  gap: 8px;
+}
+
+.strip-name,
+.rank-name {
+  font-size: 13px;
+  overflow-wrap: anywhere;
+}
+
+.track {
+  position: relative;
+  height: 18px;
+  border-radius: var(--radius-chip);
+  background: var(--surface-2);
+}
+
+.track .range {
+  position: absolute;
+  top: 8px;
+  height: 2px;
+  background: var(--text-3);
+}
+
+.track .dot {
+  position: absolute;
+  top: 4px;
+  width: 10px;
+  height: 10px;
+  margin-left: -5px;
+  border-radius: 50%;
+  background: var(--text-3);
+}
+
+.track .bar {
+  position: absolute;
+  top: 3px;
+  left: 0;
+  height: 12px;
+  border-radius: 0 4px 4px 0;
+  background: var(--text-3);
+}
+
+/* the message of the exhibit wears the colour and the context stays grey (§12) */
+.track .dot.accent,
+.track .bar.accent {
+  background: var(--s1);
+}
+
+.track .ref {
+  position: absolute;
+  top: -3px;
+  bottom: -3px;
+  border-left: 2px dashed var(--text-2);
+}
+
+.strip-values,
+.rank-value {
+  font-size: 12px;
+  color: var(--text-2);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+/* a phone reads the three parts one under the other — nothing scrolls sideways (§12, §8) */
+@media (width <= 700px) {
+  .strip-row,
+  .rank-row {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2px;
+  }
+
+  .strip-values,
+  .rank-value {
+    text-align: left;
+  }
 }
 
 /* --- the price cards: a category's median, and the region's SKUs -------------------------- */

@@ -7,7 +7,7 @@
  * the reader being able to open the file beside it.
  */
 
-import type { Lang } from './i18n/t.ts'
+import type { Lang, Translate } from './i18n/t.ts'
 
 const LOCALE: Record<Lang, string> = { uk: 'uk-UA', en: 'en-GB' }
 
@@ -42,6 +42,17 @@ export function price(lang: Lang, value: number): string {
 
 export function money(value: number): string {
   return `$${value.toFixed(4)}`
+}
+
+/** «кг» or «л» — the dictionary's word for a basis's unit, never a second spelling of it. */
+export function unitWord(t: Translate, unit: string): string {
+  return unit === 'uah_per_l' ? t('trends.prices.per_l') : t('trends.prices.per_kg')
+}
+
+/** «297,00 ₴/кг» — a price beside the unit it is per. Three blocks print one; this is the one
+ *  place that says how, so a card, a strip and a bar cannot disagree about the same figure. */
+export function perUnit(lang: Lang, t: Translate, value: number, unit: string): string {
+  return `${price(lang, value)}/${unitWord(t, unit)}`
 }
 
 /** A datetime or a date, as the day it carries (ruling 10.09 (ss) 3). */

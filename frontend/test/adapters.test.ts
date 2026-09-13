@@ -15,10 +15,15 @@ import { readFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { describe, expect, it } from 'vitest'
 
-import { SLOTS, chainName, chainTable, slotOf } from '../src/data/chains.ts'
+import { SLOTS, chainName, chainTable, seriesColour, slotOf } from '../src/data/chains.ts'
 import {
   barStatus,
+  chainOfChannel,
   earlierThanReported,
+  exhibitTitle,
+  findingText,
+  rankedBasis,
+  trends,
   positionsBlock,
   reportingWeek,
   s1,
@@ -310,5 +315,132 @@ describe('chains.ts — the names from the export, the slots from the brief', ()
     for (const [index, id] of SLOTS.entries()) expect(slotOf(id)).toBe(index + 1)
     const outside = carried(chainsOnRows.find((id) => !SLOTS.includes(id)), 'chain id outside the eight')
     expect(slotOf(outside)).toBe(0)
+  })
+})
+
+describe('trends — the week’s findings, worded by the producer (PHASE-ship-1 §2 «insight-1»)', () => {
+  /** Walk a `stands_on` path the way a reader does: `categories[ice-cream]` picks the row whose
+   *  own key is that name, `chains[0]` an index. The paths are the producer's, and a path that
+   *  names nothing resolves to `undefined` — which the negative control below relies on. */
+  const KEYS = ['category', 'unit', 'chain', 'id'] as const
+  function resolve(path: string): unknown {
+    let value: unknown = front as unknown
+    for (const part of path.split('.')) {
+      const found = /^(\w+)(?:\[([^\]]+)])?$/.exec(part)
+      if (found === undefined || found === null || value === undefined || value === null) {
+        return undefined
+      }
+      const [, name = '', key] = found
+      const next = (value as Record<string, unknown>)[name]
+      if (key === undefined) {
+        value = next
+        continue
+      }
+      const rows = (next ?? []) as Record<string, unknown>[]
+      value = /^\d+$/.test(key)
+        ? rows[Number(key)]
+        : rows.find((row) => KEYS.some((field) => row[field] === key))
+    }
+    return value
+  }
+
+  /** The digits of a string, separators dropped: «1 247,92» and «1,247.92» are the same figure
+   *  said in two languages, and what is compared is the number, never the punctuation. */
+  const digits = (text: string): string => text.replace(/\D/g, '')
+
+  const findings = [...trends(front).conclusions, ...trends(front).exhibits]
+
+  it('every sentence states the export’s own fields, in both languages', () => {
+    expect(findings.length).toBeGreaterThan(0)
+    for (const finding of findings) {
+      expect(Object.keys(finding.stands_on).length).toBeGreaterThan(0)
+      for (const [path, value] of Object.entries(finding.stands_on)) {
+        // the figure the rule recorded IS the field of this export it names
+        expect(resolve(path), path).toBe(value)
+        // ...and the sentence the reader sees carries that figure, in both languages
+        const printed = Number.isInteger(value) ? String(value) : value.toFixed(2)
+        for (const lang of ['uk', 'en'] as const) {
+          expect(digits(findingText(finding, lang)), `${finding.id} ${lang} ${path}`).toContain(
+            digits(printed),
+          )
+        }
+      }
+      expect(findingText(finding, 'uk')).toBe(finding.ua)
+      expect(findingText(finding, 'en')).toBe(finding.en)
+    }
+    // the instrument can fail: a path naming a category the block does not carry finds nothing
+    expect(resolve('category_prices.categories[no-such-category].bases[uah_per_kg].median')).toBe(
+      undefined,
+    )
+    expect(resolve('category_prices.categories[ice-cream].bases[uah_per_kg].n')).toBe(
+      carried(
+        front.category_prices.categories.find((row) => row.category === 'ice-cream'),
+        'the ice-cream category',
+      ).bases.find((one) => one.unit === 'uah_per_kg')?.n,
+    )
+  })
+
+  it('every exhibit title is one the tab renders, and each is titled once', () => {
+    const drawn = ['prices', 'spread', 'chain_ranking'] // the three exhibits of Тренди
+    const ids = trends(front).exhibits.map((finding) => finding.id)
+    expect(new Set(ids).size).toBe(ids.length) // one message per exhibit
+    for (const id of ids) expect(drawn).toContain(id) // and no title nothing draws
+    for (const id of ids) expect(exhibitTitle(front, id)?.id).toBe(id)
+    expect(exhibitTitle(front, 'no-such-exhibit')).toBe(undefined)
+    expect(new Set(trends(front).conclusions.map((one) => one.id)).size).toBe(
+      trends(front).conclusions.length,
+    )
+  })
+
+  it('the ranking is a basis’s own chain rows, cheapest first, against that basis’s median', () => {
+    const ranked = carried(rankedBasis(front), 'the ranked basis')
+    const { ranking, basis, category } = ranked
+    expect(category.category).toBe(ranking.category)
+    expect(basis.unit).toBe(ranking.unit)
+    expect(ranking.name).toBe(category.name)
+    expect(ranking.ranked).toBe(basis.chains.length)
+    expect(basis.chains.length).toBeGreaterThan(0)
+
+    // the rows are the block's own, ordered by the median with the chain id breaking a tie
+    const ordered = [...basis.chains].sort(
+      (left, right) => left.median - right.median || left.chain.localeCompare(right.chain),
+    )
+    expect(basis.chains).toEqual(ordered)
+    // every chain of the ranking is a chain the export names, and its n is a row count, not a floor
+    const table = chainTable(front)
+    for (const row of basis.chains) {
+      expect(row.name).toBe(chainName(table, row.chain))
+      expect(row.n).toBeGreaterThan(0)
+      expect(row.min).toBeLessThanOrEqual(row.median)
+      expect(row.median).toBeLessThanOrEqual(row.max)
+    }
+    // the sum of the chains' rows is the basis's own n: the ranking drops no priced row
+    expect(basis.chains.reduce((total, row) => total + row.n, 0)).toBe(basis.n)
+    // and the basis the strip accents is one the block carries
+    const widest = trends(front).widest
+    if (widest === null) throw new Error('the export names no widest basis for the strip')
+    const strip = front.category_prices.categories.find((row) => row.category === widest.category)
+    expect(strip?.bases.some((one) => one.unit === widest.unit)).toBe(true)
+  })
+
+  it('a series colour follows the CHAIN, never a position in a filtered list', () => {
+    const fold = chainOfChannel(front)
+    // two handles of ONE chain are ONE colour — and the value is a function of the chain id alone
+    const byChain = new Map<string, string[]>()
+    for (const [handle, id] of Object.entries(fold)) {
+      byChain.set(id, [...(byChain.get(id) ?? []), handle])
+      expect(seriesColour(id)).toBe(seriesColour(fold[handle] ?? handle))
+    }
+    const shared = carried(
+      [...byChain.values()].find((handles) => handles.length > 1),
+      'a chain reached through two handles',
+    )
+    const colours = new Set(shared.map((handle) => seriesColour(fold[handle] ?? handle)))
+    expect(colours.size).toBe(1)
+
+    // the blind direction: the tab no longer reaches the by-position colour at all (s52 finding-1)
+    const tab = readFileSync(`${root}frontend/src/tabs/Trends.tsx`, 'utf8')
+    expect(tab).toContain('seriesColour(')
+    expect(tab).not.toContain('colourByIndex')
   })
 })

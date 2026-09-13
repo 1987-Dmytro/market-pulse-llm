@@ -832,6 +832,7 @@ def trends_block(prices: dict) -> dict:
         "conclusions": [],
         "exhibits": [],
         "chain_ranking": None,
+        "widest": None,
     }
     if not bases:
         return empty
@@ -864,15 +865,20 @@ def trends_block(prices: dict) -> dict:
             "chain": cheapest["chain_name"],
             "gap": figure((basis["median"] - low) / basis["median"] * 100, 0),
         }
-        stands_on = {
+        # each sentence stands on the fields IT states: the title says the median and the count,
+        # the reading says the floor beside them, and neither carries a path it never prints
+        size = {
             basis_path(category, basis, "n"): basis["n"],
             basis_path(category, basis, "median"): basis["median"],
-            basis_path(category, basis, "cheapest.unit_price"): low,
         }
         conclusions.append(
-            {"id": "largest_sample", **sentence("largest_sample", **fills), "stands_on": stands_on}
+            {
+                "id": "largest_sample",
+                **sentence("largest_sample", **fills),
+                "stands_on": size | {basis_path(category, basis, "cheapest.unit_price"): low},
+            }
         )
-        exhibits.append({"id": "prices", **sentence("prices", **fills), "stands_on": stands_on})
+        exhibits.append({"id": "prices", **sentence("prices", **fills), "stands_on": size})
 
     category, basis = widest
     unit = UNIT_WORD[basis["unit"]]
@@ -885,15 +891,18 @@ def trends_block(prices: dict) -> dict:
         "n": basis["n"],
         "bases": len(bases),
     }
-    stands_on = {
+    ends = {
         basis_path(category, basis, "min"): basis["min"],
         basis_path(category, basis, "max"): basis["max"],
-        basis_path(category, basis, "n"): basis["n"],
     }
     conclusions.append(
-        {"id": "widest_spread", **sentence("widest_spread", **fills), "stands_on": stands_on}
+        {
+            "id": "widest_spread",
+            **sentence("widest_spread", **fills),
+            "stands_on": ends | {basis_path(category, basis, "n"): basis["n"]},
+        }
     )
-    exhibits.append({"id": "spread", **sentence("spread", **fills), "stands_on": stands_on})
+    exhibits.append({"id": "spread", **sentence("spread", **fills), "stands_on": ends})
 
     # the ranking rides the largest basis: the exhibit a director reads first is the category the
     # week actually priced, and a ranking of one category is a comparison chains can be held to
@@ -922,6 +931,9 @@ def trends_block(prices: dict) -> dict:
     return empty | {
         "conclusions": conclusions,
         "exhibits": exhibits,
+        # which basis each exhibit's message is ABOUT: the strip accents the row its own title
+        # names, and an app that found that row by re-running the argmax would be a second rule
+        "widest": {"category": widest[0]["category"], "unit": widest[1]["unit"]},
         "chain_ranking": {
             "category": category["category"],
             "unit": basis["unit"],

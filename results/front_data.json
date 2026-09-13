@@ -48882,7 +48882,6 @@
         "en": "Морозиво — the week's largest sample: median 287.00 UAH/kg, positions 95",
         "id": "prices",
         "stands_on": {
-          "category_prices.categories[ice-cream].bases[uah_per_kg].cheapest.unit_price": 106.0,
           "category_prices.categories[ice-cream].bases[uah_per_kg].median": 287.0,
           "category_prices.categories[ice-cream].bases[uah_per_kg].n": 95
         },
@@ -48893,8 +48892,7 @@
         "id": "spread",
         "stands_on": {
           "category_prices.categories[cheese].bases[uah_per_kg].max": 1247.92,
-          "category_prices.categories[cheese].bases[uah_per_kg].min": 253.3333,
-          "category_prices.categories[cheese].bases[uah_per_kg].n": 62
+          "category_prices.categories[cheese].bases[uah_per_kg].min": 253.3333
         },
         "ua": "Найширший розкид — Сир твердий: від 253,33 до 1 247,92 ₴/кг"
       },
@@ -48909,6 +48907,10 @@
       }
     ],
     "from": "results/front_data.json :: category_prices.categories[].bases[]",
-    "reading": "the week's readings and every exhibit's title, produced by the code rules of TRENDS_SENTENCES over the price block this tab draws — each states the population it compared before it names what it found in it, and carries the fields it stands on"
+    "reading": "the week's readings and every exhibit's title, produced by the code rules of TRENDS_SENTENCES over the price block this tab draws — each states the population it compared before it names what it found in it, and carries the fields it stands on",
+    "widest": {
+      "category": "cheese",
+      "unit": "uah_per_kg"
+    }
   }
 }
