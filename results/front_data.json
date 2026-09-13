@@ -4,6 +4,32 @@
       {
         "bases": [
           {
+            "chains": [
+              {
+                "chain": "varus",
+                "max": 133.8,
+                "median": 133.8,
+                "min": 133.8,
+                "n": 1,
+                "name": "Varus"
+              },
+              {
+                "chain": "sim23",
+                "max": 149.5,
+                "median": 149.5,
+                "min": 149.5,
+                "n": 1,
+                "name": "Сім23 та Сімі💜"
+              },
+              {
+                "chain": "blyzenko",
+                "max": 503.96,
+                "median": 209.9607,
+                "min": 199.9714,
+                "n": 4,
+                "name": "БЛИЗЕНЬКО🌿"
+              }
+            ],
             "cheapest": {
               "brand": "ЖМЗ",
               "category": "dairy",
@@ -47,6 +73,40 @@
             "unit": "uah_per_kg"
           },
           {
+            "chains": [
+              {
+                "chain": "varus",
+                "max": 53.9,
+                "median": 53.9,
+                "min": 53.9,
+                "n": 1,
+                "name": "Varus"
+              },
+              {
+                "chain": "blyzenko",
+                "max": 147.98,
+                "median": 147.98,
+                "min": 147.98,
+                "n": 1,
+                "name": "БЛИЗЕНЬКО🌿"
+              },
+              {
+                "chain": "atb",
+                "max": 569.5,
+                "median": 474.5833,
+                "min": 379.6667,
+                "n": 2,
+                "name": "АТБ"
+              },
+              {
+                "chain": "atb_aktsiyi",
+                "max": 569.5,
+                "median": 474.5833,
+                "min": 379.6667,
+                "n": 2,
+                "name": "АТБ Акції"
+              }
+            ],
             "cheapest": {
               "brand": "Онур",
               "category": "dairy",
@@ -99,6 +159,72 @@
       {
         "bases": [
           {
+            "chains": [
+              {
+                "chain": "varus",
+                "max": 48.1609,
+                "median": 44.5804,
+                "min": 41.0,
+                "n": 2,
+                "name": "Varus"
+              },
+              {
+                "chain": "msuaaaa",
+                "max": 48.1609,
+                "median": 46.2971,
+                "min": 44.4333,
+                "n": 2,
+                "name": "MSUa Акції та знижки"
+              },
+              {
+                "chain": "atb",
+                "max": 48.1609,
+                "median": 48.1609,
+                "min": 48.1609,
+                "n": 1,
+                "name": "АТБ"
+              },
+              {
+                "chain": "atb_aktsiyi",
+                "max": 48.1609,
+                "median": 48.1609,
+                "min": 48.1609,
+                "n": 1,
+                "name": "АТБ Акції"
+              },
+              {
+                "chain": "atb_fanatik",
+                "max": 48.1609,
+                "median": 48.1609,
+                "min": 48.1609,
+                "n": 1,
+                "name": "ФАНАТИК АТБ | АКЦІЇ"
+              },
+              {
+                "chain": "sim23",
+                "max": 63.0526,
+                "median": 63.0526,
+                "min": 63.0526,
+                "n": 1,
+                "name": "Сім23 та Сімі💜"
+              },
+              {
+                "chain": "blyzenko",
+                "max": 177.25,
+                "median": 63.1474,
+                "min": 40.6484,
+                "n": 3,
+                "name": "БЛИЗЕНЬКО🌿"
+              },
+              {
+                "chain": "marketopt_promo",
+                "max": 155.2778,
+                "median": 149.8803,
+                "min": 144.4828,
+                "n": 2,
+                "name": "Маркетопт (Толока) м.Кременчук"
+              }
+            ],
             "cheapest": {
               "brand": "РадиМо",
               "category": "milk",
@@ -150,6 +276,32 @@
       {
         "bases": [
           {
+            "chains": [
+              {
+                "chain": "varus",
+                "max": 65.3571,
+                "median": 45.7647,
+                "min": 45.7647,
+                "n": 3,
+                "name": "Varus"
+              },
+              {
+                "chain": "blyzenko",
+                "max": 59.7586,
+                "median": 59.7586,
+                "min": 59.7586,
+                "n": 1,
+                "name": "БЛИЗЕНЬКО🌿"
+              },
+              {
+                "chain": "sim23",
+                "max": 71.1905,
+                "median": 60.4703,
+                "min": 49.75,
+                "n": 2,
+                "name": "Сім23 та Сімі💜"
+              }
+            ],
             "cheapest": {
               "brand": "Селянський",
               "category": "kefir-ryazhanka",
@@ -201,6 +353,72 @@
       {
         "bases": [
           {
+            "chains": [
+              {
+                "chain": "marketopt_promo",
+                "max": 88.9286,
+                "median": 88.9286,
+                "min": 88.9286,
+                "n": 1,
+                "name": "Маркетопт (Толока) м.Кременчук"
+              },
+              {
+                "chain": "blyzenko",
+                "max": 166.6296,
+                "median": 90.3688,
+                "min": 64.975,
+                "n": 12,
+                "name": "БЛИЗЕНЬКО🌿"
+              },
+              {
+                "chain": "atb_aktsiyi",
+                "max": 213.6364,
+                "median": 96.4252,
+                "min": 89.0,
+                "n": 8,
+                "name": "АТБ Акції"
+              },
+              {
+                "chain": "msuaaaa",
+                "max": 133.3,
+                "median": 98.7857,
+                "min": 64.2714,
+                "n": 2,
+                "name": "MSUa Акції та знижки"
+              },
+              {
+                "chain": "varus",
+                "max": 111.6,
+                "median": 105.6214,
+                "min": 99.6429,
+                "n": 2,
+                "name": "Varus"
+              },
+              {
+                "chain": "sim23",
+                "max": 142.5,
+                "median": 125.2174,
+                "min": 49.75,
+                "n": 4,
+                "name": "Сім23 та Сімі💜"
+              },
+              {
+                "chain": "atb",
+                "max": 213.6364,
+                "median": 141.2391,
+                "min": 89.0,
+                "n": 6,
+                "name": "АТБ"
+              },
+              {
+                "chain": "atb_fanatik",
+                "max": 189.0,
+                "median": 141.2391,
+                "min": 89.372,
+                "n": 4,
+                "name": "ФАНАТИК АТБ | АКЦІЇ"
+              }
+            ],
             "cheapest": {
               "brand": "Молочар",
               "category": "yogurt",
@@ -252,6 +470,48 @@
       {
         "bases": [
           {
+            "chains": [
+              {
+                "chain": "varus",
+                "max": 303.125,
+                "median": 219.4444,
+                "min": 162.5714,
+                "n": 6,
+                "name": "Varus"
+              },
+              {
+                "chain": "sim23",
+                "max": 245.0,
+                "median": 245.0,
+                "min": 245.0,
+                "n": 1,
+                "name": "Сім23 та Сімі💜"
+              },
+              {
+                "chain": "blyzenko",
+                "max": 360.8333,
+                "median": 253.3,
+                "min": 222.1111,
+                "n": 5,
+                "name": "БЛИЗЕНЬКО🌿"
+              },
+              {
+                "chain": "atb_aktsiyi",
+                "max": 766.6667,
+                "median": 329.1667,
+                "min": 298.3333,
+                "n": 6,
+                "name": "АТБ Акції"
+              },
+              {
+                "chain": "msuaaaa",
+                "max": 333.0556,
+                "median": 333.0556,
+                "min": 194.3889,
+                "n": 4,
+                "name": "MSUa Акції та знижки"
+              }
+            ],
             "cheapest": {
               "brand": "Молочний дар",
               "category": "curd",
@@ -303,6 +563,64 @@
       {
         "bases": [
           {
+            "chains": [
+              {
+                "chain": "msuaaaa",
+                "max": 123.0,
+                "median": 116.49,
+                "min": 109.98,
+                "n": 2,
+                "name": "MSUa Акції та знижки"
+              },
+              {
+                "chain": "atb",
+                "max": 123.0,
+                "median": 123.0,
+                "min": 123.0,
+                "n": 1,
+                "name": "АТБ"
+              },
+              {
+                "chain": "atb_aktsiyi",
+                "max": 123.0,
+                "median": 123.0,
+                "min": 123.0,
+                "n": 1,
+                "name": "АТБ Акції"
+              },
+              {
+                "chain": "atb_fanatik",
+                "max": 123.0,
+                "median": 123.0,
+                "min": 123.0,
+                "n": 1,
+                "name": "ФАНАТИК АТБ | АКЦІЇ"
+              },
+              {
+                "chain": "varus",
+                "max": 159.6667,
+                "median": 132.8333,
+                "min": 69.75,
+                "n": 4,
+                "name": "Varus"
+              },
+              {
+                "chain": "blyzenko",
+                "max": 399.9714,
+                "median": 148.5429,
+                "min": 146.6333,
+                "n": 3,
+                "name": "БЛИЗЕНЬКО🌿"
+              },
+              {
+                "chain": "sim23",
+                "max": 199.6667,
+                "median": 166.3333,
+                "min": 134.8649,
+                "n": 3,
+                "name": "Сім23 та Сімі💜"
+              }
+            ],
             "cheapest": {
               "brand": "Столиця Смаку",
               "category": "sour-cream",
@@ -354,6 +672,72 @@
       {
         "bases": [
           {
+            "chains": [
+              {
+                "chain": "marketopt_promo",
+                "max": 332.7778,
+                "median": 332.7778,
+                "min": 332.7778,
+                "n": 1,
+                "name": "Маркетопт (Толока) м.Кременчук"
+              },
+              {
+                "chain": "varus",
+                "max": 405.0,
+                "median": 341.1111,
+                "min": 277.2222,
+                "n": 2,
+                "name": "Varus"
+              },
+              {
+                "chain": "atb_fanatik",
+                "max": 366.1111,
+                "median": 366.1111,
+                "min": 366.1111,
+                "n": 1,
+                "name": "ФАНАТИК АТБ | АКЦІЇ"
+              },
+              {
+                "chain": "msuaaaa",
+                "max": 388.8333,
+                "median": 366.1111,
+                "min": 338.8333,
+                "n": 3,
+                "name": "MSUa Акції та знижки"
+              },
+              {
+                "chain": "blyzenko",
+                "max": 368.3947,
+                "median": 368.3947,
+                "min": 368.3947,
+                "n": 1,
+                "name": "БЛИЗЕНЬКО🌿"
+              },
+              {
+                "chain": "atb",
+                "max": 474.375,
+                "median": 420.2431,
+                "min": 366.1111,
+                "n": 2,
+                "name": "АТБ"
+              },
+              {
+                "chain": "atb_aktsiyi",
+                "max": 474.375,
+                "median": 420.2431,
+                "min": 366.1111,
+                "n": 2,
+                "name": "АТБ Акції"
+              },
+              {
+                "chain": "sim23",
+                "max": 465.0,
+                "median": 465.0,
+                "min": 465.0,
+                "n": 1,
+                "name": "Сім23 та Сімі💜"
+              }
+            ],
             "cheapest": {
               "brand": "Столиця Смаку",
               "category": "butter",
@@ -405,6 +789,72 @@
       {
         "bases": [
           {
+            "chains": [
+              {
+                "chain": "atb",
+                "max": 452.6667,
+                "median": 353.0769,
+                "min": 353.0769,
+                "n": 5,
+                "name": "АТБ"
+              },
+              {
+                "chain": "atb_aktsiyi",
+                "max": 452.6667,
+                "median": 353.0769,
+                "min": 266.0,
+                "n": 6,
+                "name": "АТБ Акції"
+              },
+              {
+                "chain": "atb_fanatik",
+                "max": 452.6667,
+                "median": 353.0769,
+                "min": 353.0769,
+                "n": 5,
+                "name": "ФАНАТИК АТБ | АКЦІЇ"
+              },
+              {
+                "chain": "msuaaaa",
+                "max": 583.92,
+                "median": 353.0769,
+                "min": 264.6471,
+                "n": 9,
+                "name": "MSUa Акції та знижки"
+              },
+              {
+                "chain": "marketopt_promo",
+                "max": 468.0,
+                "median": 369.0,
+                "min": 270.0,
+                "n": 2,
+                "name": "Маркетопт (Толока) м.Кременчук"
+              },
+              {
+                "chain": "varus",
+                "max": 979.0,
+                "median": 392.6667,
+                "min": 274.5,
+                "n": 16,
+                "name": "Varus"
+              },
+              {
+                "chain": "blyzenko",
+                "max": 1247.92,
+                "median": 399.9259,
+                "min": 277.7222,
+                "n": 13,
+                "name": "БЛИЗЕНЬКО🌿"
+              },
+              {
+                "chain": "sim23",
+                "max": 1150.0,
+                "median": 791.6667,
+                "min": 253.3333,
+                "n": 6,
+                "name": "Сім23 та Сімі💜"
+              }
+            ],
             "cheapest": {
               "brand": "KOMO",
               "category": "cheese",
@@ -456,6 +906,48 @@
       {
         "bases": [
           {
+            "chains": [
+              {
+                "chain": "varus",
+                "max": 113.0,
+                "median": 113.0,
+                "min": 113.0,
+                "n": 1,
+                "name": "Varus"
+              },
+              {
+                "chain": "atb",
+                "max": 196.7742,
+                "median": 160.7692,
+                "min": 152.6667,
+                "n": 3,
+                "name": "АТБ"
+              },
+              {
+                "chain": "atb_aktsiyi",
+                "max": 234.6154,
+                "median": 160.7692,
+                "min": 134.8387,
+                "n": 9,
+                "name": "АТБ Акції"
+              },
+              {
+                "chain": "msuaaaa",
+                "max": 199.9333,
+                "median": 178.7717,
+                "min": 152.6667,
+                "n": 4,
+                "name": "MSUa Акції та знижки"
+              },
+              {
+                "chain": "blyzenko",
+                "max": 277.7222,
+                "median": 277.7222,
+                "min": 277.7222,
+                "n": 1,
+                "name": "БЛИЗЕНЬКО🌿"
+              }
+            ],
             "cheapest": {
               "brand": "Хуторёнка",
               "category": "dairy-desserts",
@@ -507,6 +999,16 @@
       {
         "bases": [
           {
+            "chains": [
+              {
+                "chain": "blyzenko",
+                "max": 135.99,
+                "median": 135.99,
+                "min": 135.99,
+                "n": 2,
+                "name": "БЛИЗЕНЬКО🌿"
+              }
+            ],
             "cheapest": {
               "brand": "alpro",
               "category": "plant-based-analogs",
@@ -558,6 +1060,96 @@
       {
         "bases": [
           {
+            "chains": [
+              {
+                "chain": "msuaaaa",
+                "max": 342.7143,
+                "median": 227.1429,
+                "min": 106.0,
+                "n": 11,
+                "name": "MSUa Акції та знижки"
+              },
+              {
+                "chain": "atb_fanatik",
+                "max": 350.0,
+                "median": 248.1569,
+                "min": 199.8,
+                "n": 14,
+                "name": "ФАНАТИК АТБ | АКЦІЇ"
+              },
+              {
+                "chain": "atb",
+                "max": 350.0,
+                "median": 257.6471,
+                "min": 199.8,
+                "n": 17,
+                "name": "АТБ"
+              },
+              {
+                "chain": "atb_aktsiyi",
+                "max": 350.0,
+                "median": 264.7059,
+                "min": 199.8,
+                "n": 13,
+                "name": "АТБ Акції"
+              },
+              {
+                "chain": "xochydeshevshe",
+                "max": 270.0,
+                "median": 270.0,
+                "min": 270.0,
+                "n": 1,
+                "name": "Хочу дешевше"
+              },
+              {
+                "chain": "forainfo",
+                "max": 332.2222,
+                "median": 323.4795,
+                "min": 299.0,
+                "n": 4,
+                "name": "Фора"
+              },
+              {
+                "chain": "ekomarket_shop",
+                "max": 329.0,
+                "median": 329.0,
+                "min": 329.0,
+                "n": 2,
+                "name": "ЕКО Маркет"
+              },
+              {
+                "chain": "sim23",
+                "max": 498.5714,
+                "median": 349.0,
+                "min": 327.1429,
+                "n": 5,
+                "name": "Сім23 та Сімі💜"
+              },
+              {
+                "chain": "varus",
+                "max": 498.0,
+                "median": 356.25,
+                "min": 209.0,
+                "n": 19,
+                "name": "Varus"
+              },
+              {
+                "chain": "blyzenko",
+                "max": 1073.913,
+                "median": 366.6234,
+                "min": 342.7143,
+                "n": 8,
+                "name": "БЛИЗЕНЬКО🌿"
+              },
+              {
+                "chain": "marketopt_promo",
+                "max": 573.75,
+                "median": 573.75,
+                "min": 573.75,
+                "n": 1,
+                "name": "Маркетопт (Толока) м.Кременчук"
+              }
+            ],
             "cheapest": {
               "brand": "Рудь",
               "category": "ice-cream",
@@ -601,6 +1193,32 @@
             "unit": "uah_per_kg"
           },
           {
+            "chains": [
+              {
+                "chain": "atb",
+                "max": 106.0,
+                "median": 106.0,
+                "min": 106.0,
+                "n": 1,
+                "name": "АТБ"
+              },
+              {
+                "chain": "atb_fanatik",
+                "max": 106.0,
+                "median": 106.0,
+                "min": 106.0,
+                "n": 1,
+                "name": "ФАНАТИК АТБ | АКЦІЇ"
+              },
+              {
+                "chain": "msuaaaa",
+                "max": 210.0,
+                "median": 152.25,
+                "min": 94.5,
+                "n": 2,
+                "name": "MSUa Акції та знижки"
+              }
+            ],
             "cheapest": {
               "brand": "Рудь",
               "category": "ice-cream",
@@ -48219,5 +48837,78 @@
         "until": "2026-09-05"
       }
     ]
+  },
+  "trends": {
+    "chain_ranking": {
+      "category": "ice-cream",
+      "name": "Морозиво",
+      "ranked": 11,
+      "reading": "the chains of the basis with the most priced rows, each on its own median inside that one category — the market median of the same basis is the reference the bars are read against",
+      "unit": "uah_per_kg"
+    },
+    "conclusions": [
+      {
+        "en": "The week's largest sample is Морозиво: median 287.00 UAH/kg, priced positions 95 (category × unit pairs: 13). Its lowest price is 106.00 UAH/kg (Рудь, MSUa Акції та знижки), 63% below the median.",
+        "id": "largest_sample",
+        "stands_on": {
+          "category_prices.categories[ice-cream].bases[uah_per_kg].cheapest.unit_price": 106.0,
+          "category_prices.categories[ice-cream].bases[uah_per_kg].median": 287.0,
+          "category_prices.categories[ice-cream].bases[uah_per_kg].n": 95
+        },
+        "ua": "Найбільша вибірка тижня — Морозиво: медіана 287,00 ₴/кг, позицій з ціною 95 (пар «категорія × одиниця»: 13). Найнижча ціна — 106,00 ₴/кг (Рудь, MSUa Акції та знижки), на 63% нижче за медіану."
+      },
+      {
+        "en": "The widest spread is Сир твердий: from 253.33 to 1,247.92 UAH/kg, a difference of 994.59 (positions: 62, pairs compared: 13).",
+        "id": "widest_spread",
+        "stands_on": {
+          "category_prices.categories[cheese].bases[uah_per_kg].max": 1247.92,
+          "category_prices.categories[cheese].bases[uah_per_kg].min": 253.3333,
+          "category_prices.categories[cheese].bases[uah_per_kg].n": 62
+        },
+        "ua": "Найширший розкид — Сир твердий: від 253,33 до 1 247,92 ₴/кг, різниця 994,59 (позицій: 62, порівняно пар: 13)."
+      },
+      {
+        "en": "The lowest median in Морозиво is 227.14 UAH/kg against the market's 287.00 (chains priced in it: 11): MSUa Акції та знижки.",
+        "id": "cheapest_chain",
+        "stands_on": {
+          "category_prices.categories[ice-cream].bases[uah_per_kg].chains[0].median": 227.1429,
+          "category_prices.categories[ice-cream].bases[uah_per_kg].median": 287.0
+        },
+        "ua": "Найнижча медіана в категорії Морозиво — 227,14 ₴/кг проти ринкової 287,00 (мереж із цінами в ній: 11): MSUa Акції та знижки."
+      }
+    ],
+    "exhibits": [
+      {
+        "en": "Морозиво — the week's largest sample: median 287.00 UAH/kg, positions 95",
+        "id": "prices",
+        "stands_on": {
+          "category_prices.categories[ice-cream].bases[uah_per_kg].cheapest.unit_price": 106.0,
+          "category_prices.categories[ice-cream].bases[uah_per_kg].median": 287.0,
+          "category_prices.categories[ice-cream].bases[uah_per_kg].n": 95
+        },
+        "ua": "Морозиво — найбільша вибірка тижня: медіана 287,00 ₴/кг, позицій 95"
+      },
+      {
+        "en": "The widest spread — Сир твердий: from 253.33 to 1,247.92 UAH/kg",
+        "id": "spread",
+        "stands_on": {
+          "category_prices.categories[cheese].bases[uah_per_kg].max": 1247.92,
+          "category_prices.categories[cheese].bases[uah_per_kg].min": 253.3333,
+          "category_prices.categories[cheese].bases[uah_per_kg].n": 62
+        },
+        "ua": "Найширший розкид — Сир твердий: від 253,33 до 1 247,92 ₴/кг"
+      },
+      {
+        "en": "The lowest median in Морозиво — 227.14 UAH/kg against the market's 287.00: MSUa Акції та знижки",
+        "id": "chain_ranking",
+        "stands_on": {
+          "category_prices.categories[ice-cream].bases[uah_per_kg].chains[0].median": 227.1429,
+          "category_prices.categories[ice-cream].bases[uah_per_kg].median": 287.0
+        },
+        "ua": "Найнижча медіана в категорії Морозиво — 227,14 ₴/кг проти ринкової 287,00: MSUa Акції та знижки"
+      }
+    ],
+    "from": "results/front_data.json :: category_prices.categories[].bases[]",
+    "reading": "the week's readings and every exhibit's title, produced by the code rules of TRENDS_SENTENCES over the price block this tab draws — each states the population it compared before it names what it found in it, and carries the fields it stands on"
   }
 }

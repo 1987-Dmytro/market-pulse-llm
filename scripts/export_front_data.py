@@ -632,6 +632,28 @@ def on_the_current_week(export: dict, media_block: dict) -> list[dict]:
     ]
 
 
+def chain_medians(members: list, names: dict) -> list[dict]:
+    """Each chain's own median INSIDE one (category × unit) basis — the ranking exhibit's rows.
+
+    Cut inside the basis and never across categories: a chain's median over everything it prices
+    would be a median of cheese beside milk, and the chain with more cheese on its leaflet would
+    read as the expensive one ([[a_category_that_mixes_units_has_no_single_median]]).
+
+    `n` rides beside every median because one row IS a median here — no floor drops a thin chain
+    (that would be a threshold this item did not ask for); the reader sees the 1 and decides.
+    """
+    per: dict[str, list[float]] = {}
+    for value, _, position in members:
+        per.setdefault(position["chain"]["id"], []).append(value)
+    rows = [
+        {"chain": chain, "name": names.get(chain, chain)} | aggregates.spread(values)
+        for chain, values in per.items()
+    ]
+    # cheapest first, the chain id breaking a tie — the ranking is the same on every build
+    rows.sort(key=lambda row: (row["median"], row["chain"]))
+    return rows
+
+
 def category_prices(export: dict, media_block: dict, names: dict) -> dict:
     """What a kilogram costs in each tracked category THIS WEEK — n, the spread, and the two ends.
 
@@ -699,6 +721,7 @@ def category_prices(export: dict, media_block: dict, names: dict) -> dict:
                     | {
                         "cheapest": position_card(members[0][2], pages, names),
                         "dearest": position_card(members[-1][2], pages, names),
+                        "chains": chain_medians(members, names),
                     }
                     for unit in UNIT_OF_SIZE.values()
                     if (members := priced.get((row["category"], unit)))
@@ -706,6 +729,208 @@ def category_prices(export: dict, media_block: dict, names: dict) -> dict:
             }
             for row in tracked_categories()
         ],
+    }
+
+
+UNIT_WORD = {"uah_per_kg": ("₴/кг", "UAH/kg"), "uah_per_l": ("₴/л", "UAH/L")}
+"""What a basis is quoted in, in the two languages the app prints. A unit lives on the sentence and
+on the axis beside it (DESIGN-ship-1 §12), never only in a field name the reader cannot see."""
+
+TRENDS_SENTENCES = {
+    # Counts arrive as «label: number», in both languages, because a numeral that agrees with its
+    # noun cannot be written by a template: «2 мережі» and «5 мереж» are one fill and two words.
+    "largest_sample": {
+        "ua": "Найбільша вибірка тижня — {name}: медіана {median} {unit}, позицій з ціною {n}"
+        " (пар «категорія × одиниця»: {bases}). Найнижча ціна — {low} {unit} ({brand}, {chain}),"
+        " на {gap}% нижче за медіану.",
+        "en": "The week's largest sample is {name}: median {median} {unit}, priced positions {n}"
+        " (category × unit pairs: {bases}). Its lowest price is {low} {unit} ({brand}, {chain}),"
+        " {gap}% below the median.",
+    },
+    "widest_spread": {
+        "ua": "Найширший розкид — {name}: від {min} до {max} {unit}, різниця {diff}"
+        " (позицій: {n}, порівняно пар: {bases}).",
+        "en": "The widest spread is {name}: from {min} to {max} {unit}, a difference of {diff}"
+        " (positions: {n}, pairs compared: {bases}).",
+    },
+    "cheapest_chain": {
+        "ua": "Найнижча медіана в категорії {name} — {median} {unit} проти ринкової {market}"
+        " (мереж із цінами в ній: {ranked}): {holders}.",
+        "en": "The lowest median in {name} is {median} {unit} against the market's {market}"
+        " (chains priced in it: {ranked}): {holders}.",
+    },
+    "prices": {
+        "ua": "{name} — найбільша вибірка тижня: медіана {median} {unit}, позицій {n}",
+        "en": "{name} — the week's largest sample: median {median} {unit}, positions {n}",
+    },
+    "spread": {
+        "ua": "Найширший розкид — {name}: від {min} до {max} {unit}",
+        "en": "The widest spread — {name}: from {min} to {max} {unit}",
+    },
+    "chain_ranking": {
+        "ua": "Найнижча медіана в категорії {name} — {median} {unit} проти ринкової"
+        " {market}: {holders}",
+        "en": "The lowest median in {name} — {median} {unit} against the market's"
+        " {market}: {holders}",
+    },
+}
+"""The rules' words, the only place they are written. The three readings of the week and the three
+exhibit titles are the SAME findings said long and short: the pyramid of DESIGN §12 puts the
+message at the top of the page and again on the exhibit it titles."""
+
+
+def figure(value: float, digits: int = 2) -> tuple[str, str]:
+    """One number in the two languages — «1 247,92» and «1,247.92». The app renders the sentence
+    whole and formats nothing inside it, so the decimal mark is chosen here or not at all."""
+    text = f"{value:,.{digits}f}"
+    return text.replace(",", " ").replace(".", ","), text
+
+
+def sentence(key: str, **fills) -> dict:
+    """One rule's sentence in both languages. A fill given as a `(ua, en)` pair is split per side —
+    `build_dashboard.Strings` does the same, so a word that is translated stays translated."""
+    return {
+        language: TRENDS_SENTENCES[key][language].format(
+            **{
+                name: value[index] if isinstance(value, tuple) else value
+                for name, value in fills.items()
+            }
+        )
+        for index, language in enumerate(("ua", "en"))
+    }
+
+
+def basis_path(category: dict, basis: dict, field: str) -> str:
+    """Where a figure of a sentence lives in THIS export — the path a reader (and the suite) walks
+    to hold the sentence against the block it was computed from."""
+    return f"category_prices.categories[{category['category']}].bases[{basis['unit']}].{field}"
+
+
+def trends_block(prices: dict) -> dict:
+    """The week's findings as code rules state them — «Три висновки тижня» and the exhibit titles.
+
+    DESIGN-ship-1 §12: the tab opens with the message and every exhibit is titled by a finding with
+    its number. The rules run HERE, over the block the exhibits draw, so the app renders sentences
+    and words none of them — a second wording of a reading on the other side of the wire would let
+    one surface claim what the other's figures no longer support (PHASE-ship-1 §3).
+
+    Each rule states the population it compared and then names the row it found in it, the shape
+    `build_dashboard.reading_segment` set: a rule may claim what it counted. Where several chains
+    share the lowest median the sentence lists them ALL rather than picking one by its id.
+
+    A rule that has nothing to stand on returns nothing and the tab prints nothing — an invented
+    insight is a defect, and so is an exhibit titled by a week that carried no rows.
+    """
+    bases = [
+        (category, basis) for category in prices["categories"] for basis in category["bases"]
+    ]
+    empty = {
+        "from": f"{tick.rel(OUT)} :: category_prices.categories[].bases[]",
+        "reading": "the week's readings and every exhibit's title, produced by the code rules of"
+        " TRENDS_SENTENCES over the price block this tab draws — each states the population it"
+        " compared before it names what it found in it, and carries the fields it stands on",
+        "conclusions": [],
+        "exhibits": [],
+        "chain_ranking": None,
+    }
+    if not bases:
+        return empty
+
+    # the argmax keys carry the category and the unit, so a tie between two bases is broken by the
+    # pair's own name and the same basis is chosen on every build
+    largest = max(bases, key=lambda pair: (pair[1]["n"], pair[0]["category"], pair[1]["unit"]))
+    widest = max(
+        bases,
+        key=lambda pair: (
+            round(pair[1]["max"] - pair[1]["min"], 4),
+            pair[0]["category"],
+            pair[1]["unit"],
+        ),
+    )
+    conclusions, exhibits = [], []
+
+    category, basis = largest
+    unit, cheapest = UNIT_WORD[basis["unit"]], basis["cheapest"]
+    low = cheapest.get("unit_price")
+    if low is not None and basis["median"]:
+        fills = {
+            "name": category["name"],
+            "median": figure(basis["median"]),
+            "unit": unit,
+            "n": basis["n"],
+            "bases": len(bases),
+            "low": figure(low),
+            "brand": cheapest["brand"],
+            "chain": cheapest["chain_name"],
+            "gap": figure((basis["median"] - low) / basis["median"] * 100, 0),
+        }
+        stands_on = {
+            basis_path(category, basis, "n"): basis["n"],
+            basis_path(category, basis, "median"): basis["median"],
+            basis_path(category, basis, "cheapest.unit_price"): low,
+        }
+        conclusions.append(
+            {"id": "largest_sample", **sentence("largest_sample", **fills), "stands_on": stands_on}
+        )
+        exhibits.append({"id": "prices", **sentence("prices", **fills), "stands_on": stands_on})
+
+    category, basis = widest
+    unit = UNIT_WORD[basis["unit"]]
+    fills = {
+        "name": category["name"],
+        "min": figure(basis["min"]),
+        "max": figure(basis["max"]),
+        "unit": unit,
+        "diff": figure(basis["max"] - basis["min"]),
+        "n": basis["n"],
+        "bases": len(bases),
+    }
+    stands_on = {
+        basis_path(category, basis, "min"): basis["min"],
+        basis_path(category, basis, "max"): basis["max"],
+        basis_path(category, basis, "n"): basis["n"],
+    }
+    conclusions.append(
+        {"id": "widest_spread", **sentence("widest_spread", **fills), "stands_on": stands_on}
+    )
+    exhibits.append({"id": "spread", **sentence("spread", **fills), "stands_on": stands_on})
+
+    # the ranking rides the largest basis: the exhibit a director reads first is the category the
+    # week actually priced, and a ranking of one category is a comparison chains can be held to
+    category, basis = largest
+    unit, ranked = UNIT_WORD[basis["unit"]], basis["chains"]
+    holders = [row for row in ranked if row["median"] == ranked[0]["median"]]
+    fills = {
+        "name": category["name"],
+        "median": figure(ranked[0]["median"]),
+        "unit": unit,
+        "market": figure(basis["median"]),
+        "ranked": len(ranked),
+        "holders": ", ".join(row["name"] for row in holders),
+    }
+    stands_on = {
+        basis_path(category, basis, "chains[0].median"): ranked[0]["median"],
+        basis_path(category, basis, "median"): basis["median"],
+    }
+    conclusions.append(
+        {"id": "cheapest_chain", **sentence("cheapest_chain", **fills), "stands_on": stands_on}
+    )
+    exhibits.append(
+        {"id": "chain_ranking", **sentence("chain_ranking", **fills), "stands_on": stands_on}
+    )
+
+    return empty | {
+        "conclusions": conclusions,
+        "exhibits": exhibits,
+        "chain_ranking": {
+            "category": category["category"],
+            "unit": basis["unit"],
+            "name": category["name"],
+            "ranked": len(ranked),
+            "reading": "the chains of the basis with the most priced rows, each on its own median"
+            " inside that one category — the market median of the same basis is the reference the"
+            " bars are read against",
+        },
     }
 
 
@@ -833,6 +1058,10 @@ def build(export_path: Path = OUT) -> dict:
         "screen": promo["screen"] | {"positions": page_true(promo["screen"]["positions"], record)}
     }
 
+    # the price block is built once and read twice: the exhibits draw it and the week's readings
+    # are the rules' findings IN it, so a sentence and the card beside it cannot disagree
+    prices = category_prices(printed, media_block, names)
+
     document = {
         "contract": CONTRACT,
         "chains": chain_table,
@@ -845,7 +1074,8 @@ def build(export_path: Path = OUT) -> dict:
         "media": media_block,
         "reporting_week": reporting_week(media_block),
         "positions": positions_block(printed),
-        "category_prices": category_prices(printed, media_block, names),
+        "category_prices": prices,
+        "trends": trends_block(prices),
         "regions": regions(printed, media_block, names),
         "s2_readings": screen.s2_readings(screen.RESULTS),
         "s2_boundary": screen.S2_BOUNDARY,
@@ -973,6 +1203,16 @@ def main(argv: list[str] | None = None) -> int:
         f" {document['reporting_week']['since']}–{document['reporting_week']['until']} ·"
         f" {len(document['reporting_week']['chains'])} of"
         f" {document['reporting_week']['chains_with_a_set']} chains"
+    )
+    print(
+        f"  trends        {len(document['trends']['conclusions'])} readings ·"
+        f" {len(document['trends']['exhibits'])} exhibit titles"
+        + (
+            f" · ranking {document['trends']['chain_ranking']['name']}"
+            f" ({document['trends']['chain_ranking']['ranked']} chains)"
+            if document["trends"]["chain_ranking"] is not None
+            else " · no ranking"
+        )
     )
     print(f"  s1 reading    {'read' if document['s1_reading']['reading'] else 'absent'}")
     print(f"  sources       {len(document['sources'])}")
