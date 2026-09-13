@@ -263,3 +263,8 @@ One-sentence contracts (`docs/PROMPT-*.md`) remain for fixes and debts whose dif
 - Durable fix queued POST-GATE: re-point those guards at an append-only archive file so the rolling
   map can be rewritten freely; until then the machine section is law and STATUS may exceed its
   60-line cap by exactly that section (declared, read by the retro).
+
+## Acceptance is the relay's brake (ruling (ccc), 13.09)
+- «needs a ruling» anywhere in a report = an open stop: the executor ends the turn at that sentence.
+- The operator opens the next executor session only AFTER the team lead's acceptance line for the
+  previous item; «готово» goes to the team lead first, always.

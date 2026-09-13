@@ -103,3 +103,13 @@ STATUS rewrite runs the four guard families before it lands. Skill v3.23 batch (
 «prose a guard greps is law pinned in a document — a rolling, capped document is the wrong home for
 it (pin law in an append-only archive), and a team-lead file rewrite re-runs every guard that reads
 that file in the same sitting».
+
+## §12 — 13.09 (ruling (ccc)) — class: process (both tiers)
+Three items ran in ONE stretch with no acceptance between them; a report line saying «needs a
+RULING» was written and the run continued past it; the third item died mid-ritual with PROGRESS
+uncommitted. Two rules enter (project, PROCESS): a report containing «needs a ruling» IS an open
+stop — the turn ends at the sentence, whatever the next line of PROGRESS says; and the operator's
+relaunch waits for the team lead's acceptance line — «готово» travels to the team lead BEFORE the
+next session opens. Skill v3.23 batch (patterns only): «an unresolved ruling request anywhere in a
+report ends the turn» · «batching items defers acceptance debt, not work — the debt lands on the
+day's last hour».
