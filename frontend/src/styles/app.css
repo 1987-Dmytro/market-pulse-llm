@@ -257,8 +257,11 @@ main {
   }
 }
 
+/* the head wraps: at a phone's width the title, the ⓘ and the two buttons do not fit on one line,
+   and without this the buttons painted past the right edge of the screen (measured at 390 px) */
 .chart-head {
   display: flex;
+  flex-wrap: wrap;
   align-items: baseline;
   gap: 8px;
   margin-bottom: 8px;
@@ -500,17 +503,23 @@ td.num {
    edge the card sits at, so in a card the panel is anchored to the CARD: it opens inside the card's
    own width wherever that card is in the grid, and on a phone it is the card that bounds it. */
 .sku,
-.extreme {
+.extreme,
+.chart-head,
+.conclusions li {
   position: relative;
 }
 
 .sku .holder,
-.extreme .holder {
+.extreme .holder,
+.chart-head .holder,
+.conclusions li .holder {
   position: static;
 }
 
 .sku .popover,
-.extreme .popover {
+.extreme .popover,
+.chart-head .popover,
+.conclusions li .popover {
   left: 0;
   right: auto;
   max-width: 100%;
