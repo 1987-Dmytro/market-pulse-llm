@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-09-13 18:24:00 (every SessionStart)
+**Auto-refreshed:** 2026-09-13 20:00:11 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
+afadbda docs(progress): s59 «front-2-close» — the item is closed by its checks, 4344/2 on `2d8afb9`
+2d8afb9 brain(s59): the cache points at «weekly-home», and the day's log carries what the batch cost
+0ea6bb6 front(front-2-close): two figures the screen printed that no file holds
+6347058 docs(team-lead): ruling (ccc) — the batched run unpacked, front-2 stays open for a lawful close
 1a3e0e5 front(front-2): the command centre stops being a placeholder — nine tabs over one block
-0a6eba7 docs(progress): s57 «data-shape» — the store is rebuilt, the week leaves with the tick, 4344/2
-5c9f766 docs(datasets): drop a durability claim I did not measure, and say what the gitignore costs
-24e6e07 docs(datasets): the layer map for the operator's future models — 66 lines
-a954cac test(data-shape): the three checks the item names, each shown red by its own mutation
 ```
 
 ## 📋 Recent decisions
