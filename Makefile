@@ -33,8 +33,12 @@ baselines:
 # The $0 loop (phase promo-pulse-1, S4). Promotes what the paid legs already wrote into the six
 # promo tables and exports the screen's fuel. Idempotent by construction — uuid5 ids and
 # INSERT OR IGNORE — so `make tick && make tick` writes zero new rows on an unchanged store.
+# The weekly rows leave with the tick because the aggregate build REPLACES the store (measured:
+# a planted window does not survive a second `build_aggregates.py` into the same `--out`), so the
+# week on disk is only ever the last one collected unless it is written out beside it.
 tick:
 	PYTHONPATH=src python3.11 scripts/tick.py
+	PYTHONPATH=src python3.11 scripts/weekly_positions.py
 
 # The C5 promo screen. Reads `results/promo_screen_data.json` for the market and the graders'
 # records of `build_promo_screen.S2_SOURCES` for the S2 block — committed result files, nothing
