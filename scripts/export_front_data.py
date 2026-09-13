@@ -53,6 +53,7 @@ from market_pulse import aggregates, registry, trends  # noqa: E402
 
 OUT = screen.RESULTS / "front_data.json"
 REGIONS = REPO_ROOT / "config" / "chain_regions.yaml"
+CORRECTIONS = REPO_ROOT / "config" / "price_corrections.yaml"
 VERDICT = screen.RESULTS / "verdict_45h2.json"
 GRADE = screen.RESULTS / "grade_positions_50.json"
 DRAW = screen.RESULTS / "positions_draw_50.json"
@@ -91,6 +92,7 @@ def required() -> tuple[Path, ...]:
         tick.REGISTRY,
         registry.CHAIN_ALIASES,
         REGIONS,
+        CORRECTIONS,
         *media_manifests(),
         *(screen.RESULTS / name for name in screen.S2_FILES),
     )
@@ -339,6 +341,107 @@ def media(export: dict, manifests: tuple[Path, ...]) -> dict:
     }
 
 
+PAGE_TRUE_FIELDS = ("promo_price", "size_value")
+"""The two figures a correction may carry: the price the tag prints and the size printed beside it —
+the two the unit price is computed from. `promo_price` sits on the row and `size_value` inside its
+`item`, which is why the two are applied by name below and not by a loop over a field map."""
+
+ENTRY_FIELDS = frozenset(
+    {"row_id", "carrier", "page", "reads", "verified_by", "exclude", *PAGE_TRUE_FIELDS}
+)
+"""Every key an entry of the record may carry. A key outside this set is a REFUSAL and not a key
+ignored: a hand-written record whose typo applies nothing would leave the screen publishing the
+figure a human already read off the page and corrected ([[a_patch_list_closed_by_enumeration]])."""
+
+
+def refuse_on_the_record(reason: str) -> None:
+    raise SystemExit(
+        f"export-front REFUSED: {tick.rel(CORRECTIONS)} {reason} — the record names rows one by one"
+        " and a row it names that this export does not carry is a correction that silently did not"
+        " happen, which is the defect the record exists to close"
+    )
+
+
+def excluded_from_prices(position: dict) -> str | None:
+    """Why this row may carry no price at all — the readers' own sentence, or `None`.
+
+    The two rows it answers for were read off pages that print NO price: the figure in the store was
+    invented whole, and there is no page-true number to put in its place. They stay in the window's
+    population and are counted on the block that drops them, because a row that quietly disappears
+    is a population that moved without a sentence ([[stop_collecting_is_not_delete_the_row]]).
+    """
+    return (position.get("correction") or {}).get("exclude")
+
+
+def page_true(positions: list[dict], table: dict) -> list[dict]:
+    """The rows as their own leaflet page prints them — `config/price_corrections.yaml`, applied ONCE.
+
+    Ruling (yy) 13.09 option (c). The «price-fix» reading measured the deterministic layers clean and
+    found eight rows on six pages whose figure the page contradicts: the model misread a photograph,
+    so the repair is a human reading written down, not code. This is the one place it is applied —
+    between the screen export and every block this file writes — so a corrected row reads the same
+    on the price cards and in the regional cut, and nothing downstream corrects a second time.
+
+    Identity is `(row_id, carrier)` and never `row_id` alone: seven ids in the 1 301-row export name
+    two different products, one off the leaflet page and one off the post text, and one of the
+    corrected rows is such an id ([[an_exclusion_by_id_is_not_an_exclusion_by_text]]). An entry that
+    matches anything but EXACTLY ONE row is a refusal — the check's «names a row the data lacks» and
+    «names two products» are the same comparison.
+
+    The correction travels ON the row (`correction`), so the card the app renders can say what a
+    human changed and against which page, and an excluded row is marked rather than deleted.
+    """
+    entries: dict[tuple[str, str], dict] = {}
+    for entry in table["rows"]:
+        unknown = sorted(set(entry) - ENTRY_FIELDS)
+        if unknown:
+            refuse_on_the_record(f"carries the unknown key(s) {', '.join(unknown)}")
+        entries[(entry["row_id"], entry["carrier"])] = entry
+    if len(entries) != len(table["rows"]):
+        refuse_on_the_record("names one (row_id, carrier) twice")
+
+    rows, matched = [], dict.fromkeys(entries, 0)
+    for position in positions:
+        entry = entries.get((position["row_id"], position["carrier"]))
+        if entry is None:
+            rows.append(position)
+            continue
+        matched[(position["row_id"], position["carrier"])] += 1
+        rows.append(corrected(position, entry))
+    unmet = [
+        f"{row_id} ({carrier}) matched {hits} rows"
+        for (row_id, carrier), hits in matched.items()
+        if hits != 1
+    ]
+    if unmet:
+        refuse_on_the_record(
+            "names " + "; ".join(unmet) + ", and every entry must name exactly one"
+        )
+    return rows
+
+
+def corrected(position: dict, entry: dict) -> dict:
+    """One row with the page's own figures in it, carrying what it replaced and who read the page."""
+    item = dict(position["item"])
+    row = dict(position) | {"item": item}
+    was: dict = {}
+    if "promo_price" in entry:
+        was["promo_price"] = position.get("promo_price")
+        row["promo_price"] = entry["promo_price"]
+    if "size_value" in entry:
+        was["size_value"] = item.get("size_value")
+        item["size_value"] = entry["size_value"]
+    row["correction"] = {
+        "from": tick.rel(CORRECTIONS),
+        "page": entry["page"],
+        "verified_by": entry["verified_by"],
+        "was": was,
+    }
+    if "exclude" in entry:
+        row["correction"]["exclude"] = entry["exclude"]
+    return row
+
+
 UNIT_OF_SIZE = {"г": "uah_per_kg", "мл": "uah_per_l"}
 """The comparable unit a size is quoted in. `positions.parse_size` has already folded кг→г and
 л→мл (`market_pulse/positions.py`), so these two are every unit a row can carry and ×1000 is the
@@ -396,6 +499,8 @@ def position_card(position: dict, pages: dict, names: dict) -> dict:
     page = pages.get(f"{evidence['channel']}:{evidence['msg_id']}")
     if page is not None:
         card["page"] = page
+    if "correction" in position:
+        card["correction"] = position["correction"]
     return card
 
 
@@ -462,10 +567,14 @@ def category_prices(export: dict, media_block: dict, names: dict) -> dict:
     week = on_the_current_week(export, media_block)
     priced: dict[tuple[str, str], list] = {}
     held: dict[str, int] = {}
+    dropped = []
     without = 0
     for position in week:
         category = position["item"]["category"]
         held[category] = held.get(category, 0) + 1
+        if excluded_from_prices(position) is not None:
+            dropped.append(position)
+            continue
         reading = unit_price(position)
         if reading is None:
             without += 1
@@ -487,6 +596,22 @@ def category_prices(export: dict, media_block: dict, names: dict) -> dict:
         " aggregates.quartiles, and the two ends are the rows themselves",
         "positions": len(week),
         "rows_without_a_unit_price": without,
+        "excluded": {
+            "n": len(dropped),
+            "from": tick.rel(CORRECTIONS),
+            "reading": "rows whose own leaflet page prints NO price: the stored figure was invented"
+            " and there is no page-true number to put in its place, so the row stays in the window's"
+            " population and is counted here instead of being priced",
+            "rows": [
+                {
+                    "row_id": position["row_id"],
+                    "carrier": position["carrier"],
+                    "category": position["item"]["category"],
+                    "why": excluded_from_prices(position),
+                }
+                for position in dropped
+            ],
+        },
         "categories": [
             row
             | {
@@ -539,6 +664,7 @@ def regions(export: dict, media_block: dict, names: dict) -> dict:
                 for position in positions
                 if pages.get(f"{position['evidence']['channel']}:{position['evidence']['msg_id']}")
                 in on_the_week
+                and excluded_from_prices(position) is None
             ]
             cards.sort(
                 key=lambda card: (card["category"], card.get("promo_price") or 0.0, card["row_id"])
@@ -623,6 +749,14 @@ def build(export_path: Path = OUT) -> dict:
     media_block = media(promo, manifests)
     names = {row["id"]: row["name"] for row in chain_table["rows"]}
 
+    # the page-true rows, corrected once, for every block that shows a price. The gallery keeps the
+    # RAW rows on purpose: `media` joins pages, not figures, and a row dropped from it would move the
+    # flyer set the operator browses — the cover in the page population is POST-GATE ((yy) 5).
+    record = yaml.safe_load(CORRECTIONS.read_text(encoding="utf-8"))
+    printed = promo | {
+        "screen": promo["screen"] | {"positions": page_true(promo["screen"]["positions"], record)}
+    }
+
     document = {
         "contract": CONTRACT,
         "chains": chain_table,
@@ -633,8 +767,8 @@ def build(export_path: Path = OUT) -> dict:
             "verdict": json.loads(VERDICT.read_text(encoding="utf-8")),
         },
         "media": media_block,
-        "category_prices": category_prices(promo, media_block, names),
-        "regions": regions(promo, media_block, names),
+        "category_prices": category_prices(printed, media_block, names),
+        "regions": regions(printed, media_block, names),
         "s2_readings": screen.s2_readings(screen.RESULTS),
         "s2_boundary": screen.S2_BOUNDARY,
         "s1_reading": s1_reading(),

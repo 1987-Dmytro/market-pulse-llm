@@ -1,0 +1,94 @@
+# The rows whose figure the leaflet page CONTRADICTS — read by human eyes, page by page.
+#
+# Ruling (yy) 13.09 option (c). The $0 reading of «price-fix» (`scripts/read_price_plausibility.py`,
+# commit `c9ae6cb`) measured the three deterministic layers CLEAN — the size units, the multipack
+# divisor and the eight rows with no unit price are all exactly what the stored model answer holds —
+# and then read the pages: eight rows on six pages carry a figure the page does not print. The
+# defect is the MODEL's reading of a photograph, so there is no code to fix and no corridor to add;
+# what a human verified against the page is written down here, once, by hand.
+#
+# This file is a RECORD of what six leaflet pages print, not a rule and not a threshold. It names
+# rows one by one: nothing here can reach a row it does not name, and a row it names that the data
+# does not carry is a refusal, never a silent skip (`export_front_data.page_true`).
+#
+# Identity is `row_id` AND `carrier`: `row_id` repeats — seven ids in the 1 301-row export name two
+# different products, one read off the leaflet page and one off the post text, and
+# `@VARUS_channel:11300:0` is one of them. A correction keyed on the id alone would patch a product
+# no one read.
+#
+# A correction may set `promo_price` and `size_value` — the two figures the page prints and the two
+# the unit price is computed from. Any other key is a refusal: an unknown field must not be applied
+# silently, and a field the readers did not verify is not a correction.
+#
+# `verified_by` names who read THAT page: `reader-1` and `reader-2` are the two independent readings
+# of 13.09 (unanimous on all 14 rows they were given); `team-lead` appears on the two pages ruling
+# (yy) 1 says the team lead opened themselves.
+#
+# The excluded rows are not «wrong by a digit» — their page prints NO price at all, so there is no
+# page-true figure to write. They stay in the export as positions and are COUNTED on the price
+# block, because a row quietly dropped is a population that moved without a sentence.
+
+rows:
+  - row_id: "@blyzenkoua:7951:0"
+    carrier: leaflet_page
+    page: blyzenkoua_7951.jpg
+    promo_price: 42.99
+    reads: "the tag prints a large 42 and a raised 99 over a struck 53+99, -20%, ЙОГУРТ 350 г; the
+      stored answer says «4,29» — the separator one place left and the last digit dropped"
+    verified_by: [reader-1, reader-2, team-lead]
+
+  - row_id: "@blyzenkoua:7951:1"
+    carrier: leaflet_page
+    page: blyzenkoua_7951.jpg
+    promo_price: 42.99
+    reads: "the same tag, the second of the three 350 g yogurts under one price"
+    verified_by: [reader-1, reader-2, team-lead]
+
+  - row_id: "@blyzenkoua:7951:2"
+    carrier: leaflet_page
+    page: blyzenkoua_7951.jpg
+    promo_price: 42.99
+    reads: "the same tag, the third of the three 350 g yogurts under one price"
+    verified_by: [reader-1, reader-2, team-lead]
+
+  - row_id: "@VARUS_channel:11234:0"
+    carrier: leaflet_page
+    page: VARUS_channel_11234.jpg
+    size_value: 150
+    reads: "the tile prints «150г» and 74⁹⁰ «1шт»; the price is right and the SIZE lost a digit —
+      the stored answer says «15 г»"
+    verified_by: [reader-1, reader-2, team-lead]
+
+  - row_id: "@atb_market_official:4767:2"
+    carrier: leaflet_page
+    page: atb_market_official_4767.jpg
+    size_value: 750
+    reads: "ONE header covers two variants — «сендвіч, 75 г» and «…Полуниця, 750 г» — and the 150⁵⁰
+      tag is the 750 g tub's; the stored answer attached it to the 75 g size"
+    verified_by: [reader-1, reader-2]
+
+  - row_id: "@ATB_FANatik:4657:2"
+    carrier: leaflet_page
+    page: ATB_FANatik_4657.jpg
+    promo_price: 25.90
+    reads: "the same tile in another chain's copy of the leaflet: the 75 g сендвіч's own tag is
+      25⁹⁰ (old 43⁹⁰), not the 150⁵⁰ of the tub beside it"
+    verified_by: [reader-1, reader-2]
+
+  - row_id: "@VARUS_channel:11300:0"
+    carrier: leaflet_page
+    page: VARUS_channel_11300.jpg
+    exclude: "сторінка не друкує ціну"
+    reads: "the page is the catalogue COVER (18.08-31.08.2026): it prints no price at all, and its
+      goods are халва and ЧУДО ЧАДО ORGANIC purée 90 g, not dairy — brand, «99 мл» and «9,99» are
+      invented whole"
+    verified_by: [reader-1, reader-2]
+
+  - row_id: "@VARUS_channel:11239:0"
+    carrier: leaflet_page
+    page: VARUS_channel_11239.jpg
+    exclude: "сторінка не друкує ціну"
+    reads: "Вигода СИР кисломолочний is an UNPRICED packshot inside the «ПЕРША ЦІНА» banner; «20,00»
+      is invented. The x3 band of the reading did not flag this row (x0.335) — it was read because a
+      hand-widened pass caught it"
+    verified_by: [reader-1, reader-2]
