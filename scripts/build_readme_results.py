@@ -42,11 +42,11 @@ START = (
 )
 END = "<!-- /RESULTS -->"
 
-FRONT = REPO_ROOT / "results" / "front_data.json"
-GRADE = REPO_ROOT / "results" / "grade_positions_50.json"
-RESCORES = REPO_ROOT / "results" / "rescores_v3.json"
-VERDICT = REPO_ROOT / "results" / "verdict_45h2.json"
-WEEKLY = REPO_ROOT / "results" / "weekly"
+FRONT = "front_data.json"
+GRADE = "grade_positions_50.json"
+RESCORES = "rescores_v3.json"
+VERDICT = "verdict_45h2.json"
+WEEKLY = "weekly"
 
 
 def load(path: Path) -> dict | list:
@@ -59,19 +59,30 @@ def load(path: Path) -> dict | list:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
-def holdings() -> list[str]:
-    """«What the instrument holds today» — the populations the app shows, each naming its field."""
-    front = load(FRONT)
+def holdings(results: Path) -> list[str]:
+    """«What the instrument holds today» — the populations the app shows, each naming its field.
+
+    Every source is resolved under the SAME `results` directory the S2 rows are read from: the
+    two halves of one block may not come from two trees, which is what `--results` would have
+    done while the console line claimed one ([[two_values_for_one_input_get_quoted_kindly]]).
+    """
+    front = load(results / FRONT)
     positions = front["positions"]
     threads = front["status"]["threads"]
     reactions = front["reactions_v2"]
     region = front["region"]
-    weeks = sorted(path.name for path in WEEKLY.glob("positions_*.jsonl"))
+    weekly = results / WEEKLY
+    weeks = sorted(path.name for path in weekly.glob("positions_*.jsonl"))
+    if not weeks:
+        raise SystemExit(
+            f"build-readme REFUSED: no positions_<ISO-week>.jsonl under {weekly} — the weekly row"
+            " is a count over those files and an empty glob has nothing to count"
+        )
     weekly_rows = sum(
-        len([line for line in (WEEKLY / name).read_text(encoding="utf-8").splitlines() if line])
+        len([line for line in (weekly / name).read_text(encoding="utf-8").splitlines() if line])
         for name in weeks
     )
-    screen_rows = len(load(screen.EXPORT)["screen"]["positions"])
+    screen_rows = len(load(results / screen.EXPORT.name)["screen"]["positions"])
     money = front["status"]["money"]
     rows = [
         (
@@ -98,7 +109,7 @@ def holdings() -> list[str]:
         (
             "weeks in the committed dataset",
             f"{len(weeks)} ({weeks[0].split('_')[1].split('.')[0]}–"
-            f"{weeks[-1].split('_')[1].split('.')[0]}) · {weekly_rows} rows",
+            f"{weeks[-1].split('_')[1].split('.')[0]}) · {weekly_rows} rows counted over them",
             "`results/weekly/positions_<ISO-week>.jsonl`",
         ),
         (
@@ -116,17 +127,17 @@ def holdings() -> list[str]:
         (
             "watchlist mentions in the region",
             f"{region['totals']['mentions']} — the baseline, not an empty screen",
-            "`results/front_data.json` :: region.baseline",
+            "`results/front_data.json` :: region.totals.mentions",
         ),
         (
-            "money spent on the whole instrument",
+            "money spent in the current cycle",
             f"${money['spent_usd']:.4f} of the ${money['cap_usd']:.2f} cap",
-            "`results/spend_cycle3.json` :: sessions[-1]",
+            f"`{money['from']}`",
         ),
     ]
     lines = [
-        "**What the instrument holds today.** Every figure is a field of the file beside it; the"
-        " app prints these same fields and computes none of them.",
+        "**What the instrument holds today.** Every figure is a field of the file beside it —"
+        " the weekly row the one count, over the files its pattern names.",
         "",
         "| what | value | file :: field |",
         "|---|---|---|",
@@ -135,9 +146,9 @@ def holdings() -> list[str]:
     return lines
 
 
-def s1() -> list[str]:
+def s1(results: Path) -> list[str]:
     """The S1 bar — published as measured, RED, with the two limits the grade file carries."""
-    grade = load(GRADE)
+    grade = load(results / GRADE)
     completeness = grade["bars"]["completeness"]
     accuracy = grade["bars"]["price_accuracy"]
     readings = grade["readings"]
@@ -161,15 +172,23 @@ def s1() -> list[str]:
     ]
 
 
-def model() -> list[str]:
+def model(results: Path) -> list[str]:
     """Base vs fine-tune on ONE gold version, and the shipped verdict as its own line.
 
     The gate rows are selected by their METRIC, never by their position in the list: `G1d` appears
     twice (post_type, then relevance beside it) and an index would silently print the second one
-    ([[a_block_selected_by_ordinal_runs_the_wrong_block]]).
+    ([[a_block_selected_by_ordinal_runs_the_wrong_block]]). The «one gold version» in the sentence
+    is CHECKED across the records rather than read off the first of them, for the same reason: the
+    whole claim of the table is that its columns compare.
     """
-    rescores = load(RESCORES)
-    verdict = load(VERDICT)
+    rescores = load(results / RESCORES)
+    verdict = load(results / VERDICT)
+    golds = {record["gold_version"] for record in rescores}
+    if len(golds) != 1:
+        raise SystemExit(
+            f"build-readme REFUSED: {results / RESCORES} carries {sorted(golds)} — the table's"
+            " claim is that one gold scored every row, and rows from two golds do not compare"
+        )
     names = {
         None: "base — zero-shot, no training",
         "real-only": "fine-tune, real data only",
@@ -177,17 +196,23 @@ def model() -> list[str]:
     }
 
     def gate(record: dict, name: str, metric: str = "") -> str:
+        """One cell. A gate the record does not carry at all is a REFUSAL, not a dash: «—» is the
+        file's own «not computable here» (G1b needs a fine-tune) and the two may not look alike."""
         for entry in record["gates"]:
             if entry["gate"] != name or (metric and metric not in entry["metric"]):
                 continue
             if "values" in entry:
                 return f"{entry['values']['overall']:.4f}"
             return "—" if entry.get("value") is None else f"{entry['value']:.4f}"
-        return "—"
+        raise SystemExit(
+            f"build-readme REFUSED: the {record['arm'] or 'base'} row of {results / RESCORES}"
+            f" carries no {name}{' ' + metric if metric else ''} — a column the file cannot fill"
+            " is not a dash"
+        )
 
     lines = [
         "**The model: the fine-tune beside the base it was trained from.** One gold version for"
-        f" every row ({rescores[0]['gold_version']}), so the columns compare; every value is"
+        f" every row ({golds.pop()}), so the columns compare; every value is"
         " `results/rescores_v3.json`'s own field.",
         "",
         "| arm | sentiment macro-F1 | sarcasm fix-rate | intents micro-F1 | post_type macro-F1 |"
@@ -268,7 +293,12 @@ def main(argv: list[str] | None = None) -> int:
         )
     rows = screen.s2_readings(args.results)
     body = "\n\n".join(
-        ["\n".join(holdings()), "\n".join(s1()), block(rows), "\n".join(model())],
+        [
+            "\n".join(holdings(args.results)),
+            "\n".join(s1(args.results)),
+            block(rows),
+            "\n".join(model(args.results)),
+        ],
     )
     head, rest = text.split(START, 1)
     _, tail = rest.split(END, 1)

@@ -19,10 +19,11 @@ source(s) results/region_collect_report.json …», make stopping at the first r
 
 **Built here.** `firebase.json` (`public: dashboard/app`, SPA rewrite) + `.firebaserc.example`, the operator's
 real `.firebaserc` gitignored. `make session` prints the standing prompt's fenced block out of the file, never a
-copy, refusing by name when the file carries no block or more than one. `README.md` is the front page and
-carries not one typed number: `scripts/build_readme_results.py` writes its figures between one marker pair,
+copy, refusing by name when the file carries no block or more than one. `README.md` is the front page — seven frames of the
+app — and carries not one typed number: `scripts/build_readme_results.py` writes its figures between one marker pair,
 every row naming its `file :: field`, byte-identically on a second run and on the clone.
 
-**Deviations.** None to the built clauses; the SPA rewrite is inert for a hash-routed app, in the file because
-the check line names it (spec text). **Debts:** PROGRESS «named, not built».
+**Deviations.** None to the built clauses. The SPA rewrite never fires on the app's own hash routes; on a
+hand-typed deep path it would serve `index.html`, whose relative assets then 404 — it is in the file because the
+check line names it (cause: spec text). **Debts:** PROGRESS «named, not built».
 **`make check` (working tree, HEAD `671ab29` both ends).** `ruff check .` **All checks passed!** · **4348 passed, 2 skipped in 703.65 s**, exit 0 — the same 4348 ruling (iii) accepted, since this item adds no Python test; the two docs written during the run are read by no test (grep shown in the session).

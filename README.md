@@ -18,13 +18,13 @@ QLoRA adapter on rented GPUs, and no training at all in stage 1.
 | | |
 |---|---|
 | ![Command centre, tab Огляд, dark theme](docs/reports/screens/front-2-t0-overview-dark.png) | ![Промо · Позиції with the reporting week](docs/reports/screens/insight-2-positions-week.png) |
-| **Командний центр · Огляд** — the six headline metrics, each with its context line, status badge and provenance ⓘ. | **Промо · Позиції** — every promo position over all windows, page-true, with the leaflet page behind each row. |
+| **Командний центр · Огляд** — the six headline metrics, each with its context line, status badge and provenance ⓘ. | **Промо · Позиції** — every promo position over all windows, page-true; a row read off a leaflet page carries that page, a row read off a post text says so. |
 | ![Промо · Тренди, the consultant's exhibits](docs/reports/screens/insight-1-trends-dark.png) | ![Промо · Реакції, the complaint pair and the thread cards](docs/reports/screens/reactions-region-reactions-dark.png) |
 | **Промо · Тренди** — «Три висновки тижня» and the price exhibits, each titled with its own finding. | **Промо · Реакції** — what buyers say under promo posts: service vs product, the signal mix, the voice of the SKU. |
 | ![Промо · Регіон, the honest zero](docs/reports/screens/reactions-region-region-dark.png) | ![Промо · Якість, the bars as measured](docs/reports/screens/promo-quality.png) |
 | **Промо · Регіон** — the home region's baseline: a zero printed as a measurement, with the window it was measured over. | **Промо · Якість** — the S1 and S2 bars as measured, red where they are red, with the file behind each. |
 
-The flyer gallery — the real leaflet pages every position is read off:
+The flyer gallery — the real leaflet pages the page-read positions come from:
 
 ![Свіжі листівки — one card per chain, the cover is the real page](docs/reports/screens/design-pass-flyers.png)
 
@@ -32,6 +32,7 @@ The flyer gallery — the real leaflet pages every position is read off:
 
 ```
 pip install -e '.[serve]'   # fastapi + uvicorn, pinned
+make front                  # build the app once (below) — `make serve` mounts what it builds
 make serve                  # http://localhost:8000/ — the app and its API, localhost only
 make loop                   # the $0 loop: wake on the schedule, tick, one line into results/loop.log
 ```
@@ -55,8 +56,9 @@ make front                  # npm ci && tsc && vite build → dashboard/app/ + d
 ```
 
 `dashboard/app/` is a build output (gitignored): the same app, reading the exports as files, with
-the loop controls read-only. `make front` refuses by name when a result file it needs is missing,
-so the build never ships a screen with a hole in it. Deploying is the operator's own command:
+the loop controls read-only. `make front` refuses by name when a result file it needs is missing, so
+a figure never comes up blank; the leaflet photos are staged separately and their count is printed.
+Deploying is the operator's own command:
 
 ```
 cp .firebaserc.example .firebaserc     # then put your Firebase project id in it
@@ -66,12 +68,14 @@ npx firebase-tools deploy --only hosting
 
 `firebase.json` ships the hosting config (`public: dashboard/app`, SPA rewrite). Build on the
 machine that carries the leaflet photos: the flyer JPEGs live under `data/annotation/`, which git
-does not carry, and `make front` reports how many of the referenced photos it staged.
+does not carry, and `make front` reports how many of the referenced photos it staged. They are the
+originals the reader was run on — their count and total bytes are in `dashboard/app/data/manifest.json`,
+and whether the showcase ships them downscaled is the operator's call (ruling (ww) 3).
 
 ## The numbers
 
 <!-- RESULTS — written by scripts/build_readme_results.py from the result files each row names; regenerate with `make promo-screen`, never edit -->
-**What the instrument holds today.** Every figure is a field of the file beside it; the app prints these same fields and computes none of them.
+**What the instrument holds today.** Every figure is a field of the file beside it — the weekly row the one count, over the files its pattern names.
 
 | what | value | file :: field |
 |---|---|---|
@@ -79,11 +83,11 @@ does not carry, and `make front` reports how many of the referenced photos it st
 | positions in the table, page-true | 1299 · 2 excluded (6 corrected by leaflet page) | `results/front_data.json` :: positions |
 | promo threads read for reactions | 118 of 666 · 548 queued | `results/front_data.json` :: status.threads |
 | signal rows under those threads | 281 | `results/front_data.json` :: reactions_v2 |
-| weeks in the committed dataset | 10 (2026-W27–2026-W36) · 1301 rows | `results/weekly/positions_<ISO-week>.jsonl` |
+| weeks in the committed dataset | 10 (2026-W27–2026-W36) · 1301 rows counted over them | `results/weekly/positions_<ISO-week>.jsonl` |
 | Poltava-region channels watched | 18 · 15889 posts · 8232 comments | `results/front_data.json` :: region.totals |
 | region comment sample | 1008 of 3700 threads · 2692 outstanding | `results/region_collect_report.json` :: totals |
-| watchlist mentions in the region | 0 — the baseline, not an empty screen | `results/front_data.json` :: region.baseline |
-| money spent on the whole instrument | $8.8398 of the $10.00 cap | `results/spend_cycle3.json` :: sessions[-1] |
+| watchlist mentions in the region | 0 — the baseline, not an empty screen | `results/front_data.json` :: region.totals.mentions |
+| money spent in the current cycle | $8.8398 of the $10.00 cap | `results/spend_cycle3.json :: sessions[-1]` |
 
 **S1 — positions read off leaflet pages, graded on the team lead's blind gold.** The bar is RED and ships RED: the reader finds a quarter of the rows a human finds on the same pages, and prices what it does find.
 
@@ -120,16 +124,20 @@ The shipped decision was taken at step 4.5h2 пласт ablation on test set v4 
 
 ## What it does not do
 
-- **Stage 1 buys no new model reading.** 548 promo threads and the whole regional field are in the
-  queue, priced but unbought; the paid pass starts on the operator's word, never on a schedule.
-- **The S1 reader is red and ships red.** It finds a quarter of the positions a human finds on the
-  same leaflet pages. What it does find, it prices correctly — that is the whole claim.
-- **The region's baseline is a zero.** Eighteen Poltava-region channels, no watchlist mention in
-  the window: the field is clean, and the zero is the point of reference the brand's own activity
+- **Stage 1 buys no new model reading.** The promo threads still in the queue — the count is in the
+  table above — and the whole regional field are priced but unbought; the paid pass starts on the
+  operator's word, never on a schedule.
+- **The S1 reader is red and ships red.** It finds a fraction of the positions a human finds on the
+  same leaflet pages (the reading is in the table above). What it does find, it prices correctly —
+  that is the whole claim.
+- **The region's baseline is a zero.** The Poltava-region channels above carry no watchlist mention
+  in the window: the field is clean, and the zero is the point of reference the brand's own activity
   will move. The comment half of that sweep is a sample of the newest threads per channel, and the
   screen prints how many were read of how many exist.
 - **Telegram only.** X, Facebook/Instagram and website monitoring are deferred extensions with no
-  code in this repo, and no new source enters without a registry revision.
+  code in this repo. A new promo source is a revision of `config/registry.yaml`; the home region is
+  watched through its own one-reader list, `config/region_channels.yaml`, and its posts land in a
+  root of their own.
 
 ## Where the truth lives
 

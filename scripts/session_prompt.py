@@ -21,8 +21,12 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 PROMPT = REPO_ROOT / "docs" / "PROMPT-standing.md"
 
 
-def blocks(text: str) -> list[list[str]]:
-    """Every fenced block's body, in order."""
+def blocks(text: str) -> list[list[str]] | None:
+    """Every fenced block's body, in order — or None when the last fence is never closed.
+
+    An unclosed fence is not a block with a missing line: it is a file whose structure this reader
+    cannot trust, and silently dropping the tail would print a TRUNCATED prompt at exit 0.
+    """
     found: list[list[str]] = []
     body: list[str] | None = None
     for line in text.splitlines():
@@ -34,7 +38,7 @@ def blocks(text: str) -> list[list[str]]:
                 body = None
         elif body is not None:
             body.append(line)
-    return found
+    return None if body is not None else found
 
 
 def main() -> int:
@@ -42,10 +46,24 @@ def main() -> int:
         print(f"session REFUSED: {PROMPT.relative_to(REPO_ROOT)} is missing", file=sys.stderr)
         return 1
     found = blocks(PROMPT.read_text(encoding="utf-8"))
+    if found is None:
+        print(
+            f"session REFUSED: {PROMPT.relative_to(REPO_ROOT)} leaves a fence unclosed — the prompt"
+            " it would print is truncated at the line the fence was opened on",
+            file=sys.stderr,
+        )
+        return 1
     if len(found) != 1:
         print(
             f"session REFUSED: {PROMPT.relative_to(REPO_ROOT)} carries {len(found)} fenced blocks,"
             " and the standing prompt is the one of them — say which in the file, never here",
+            file=sys.stderr,
+        )
+        return 1
+    if not [line for line in found[0] if line.strip()]:
+        print(
+            f"session REFUSED: the fenced block of {PROMPT.relative_to(REPO_ROOT)} is empty — an"
+            " operator who pastes a blank prompt starts a session with no item",
             file=sys.stderr,
         )
         return 1
