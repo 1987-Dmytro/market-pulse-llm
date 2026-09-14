@@ -21,12 +21,12 @@ QLoRA adapter on rented GPUs, and no training at all in stage 1.
 | **Командний центр · Огляд** — the six headline metrics, each with its context line, status badge and provenance ⓘ. | **Промо · Позиції** — every promo position over all windows, page-true; a row read off a leaflet page carries that page, a row read off a post text says so. |
 | ![Промо · Тренди, the consultant's exhibits](docs/reports/screens/insight-1-trends-dark.png) | ![Промо · Реакції, the complaint pair and the thread cards](docs/reports/screens/reactions-region-reactions-dark.png) |
 | **Промо · Тренди** — «Три висновки тижня» and the price exhibits, each titled with its own finding. | **Промо · Реакції** — what buyers say under promo posts: service vs product, the signal mix, the voice of the SKU. |
-| ![Промо · Регіон, the honest zero](docs/reports/screens/reactions-region-region-dark.png) | ![Промо · Якість, the bars as measured](docs/reports/screens/promo-quality.png) |
-| **Промо · Регіон** — the home region's baseline: a zero printed as a measurement, with the window it was measured over. | **Промо · Якість** — the S1 and S2 bars as measured, red where they are red, with the file behind each. |
+| ![Промо · Регіон, the honest zero](docs/reports/screens/reactions-region-region-dark.png) | ![Свіжі листівки — one card per chain, the cover is the real leaflet page](docs/reports/screens/design-pass-flyers.png) |
+| **Промо · Регіон** — the home region's baseline: a zero printed as a measurement, with the window it was measured over. | **Свіжі листівки** — the real leaflet pages the page-read positions come from, one card per chain, the cover a real page. |
 
-The flyer gallery — the real leaflet pages the page-read positions come from:
-
-![Свіжі листівки — one card per chain, the cover is the real page](docs/reports/screens/design-pass-flyers.png)
+A sixth tab, **Промо · Якість**, prints the S1 and S2 bars as measured — red where they are red, each with the
+file behind it. Its numbers are in the table below; `make serve` shows the tab itself (the static build leaves
+it out by design).
 
 ## Run it
 
