@@ -113,3 +113,9 @@ relaunch waits for the team lead's acceptance line — «готово» travels 
 next session opens. Skill v3.23 batch (patterns only): «an unresolved ruling request anywhere in a
 report ends the turn» · «batching items defers acceptance debt, not work — the debt lands on the
 day's last hour».
+
+## §13 (14.09, s61 «region-collect» stop; the team lead's) — a spec that authorizes moving a SEALED file owes a $0 blast-radius reading FIRST
+The (eee) spec authorized «the one registry move» after measuring only the collector and the session — not the seal. The flip's real radius (measured by the executor, apply-and-revert): a pinned-inputs sha family goes unreachable through the revision reconstruction (make check RED), and a live reader (`tick.not_collected()`) moves a PUBLISHED population through the sealed export. Worse: the flip did not even reach the goal (`a1_sources()` filters bucket A; comments gate on `comments_enabled`). Two rules forward:
+1. Before a spec authorizes touching a sealed/pinned file, the TEAM LEAD's own $0 reading lists (a) every pin family and how it reconstructs, (b) every live reader of the touched field, (c) whether the touch even achieves the item's goal. «Разрешено» без замера радиуса — гарантированный стоп.
+2. The precedent catalogue beats a new mechanism: ruling 04.09 (g) had already answered this exact class (a one-reader side file; the sealed file never moves). Grep the decisions log for the file's name before designing a change to it.
+The executor's apply–measure–revert survey, with the tree left clean, is the standing this process wants at such a fork — named as the model.
