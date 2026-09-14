@@ -1,6 +1,6 @@
 # ship-1 — «Проект закончен и работает?»
 
-**Yes on a clean clone — every clause of the check line but one.** `git clone <repo> /tmp/mp-e2e` at `671ab29`:
+**Yes on a clean clone — every clause of the check line but one.** `git clone <repo> /tmp/mp-e2e` at `0a50eb0`:
 `make front` exit 0, `make tick` exit 0 («no store at data/derived/pulse.db — nothing to promote, nothing
 written»), `make promo-screen` exit 0 off the committed exports, `make serve` → `/api/status` 200 and `/` 200
 then stopped, `draw_truth_20.py` 20 rows, `make session` the standing prompt out of `docs/PROMPT-standing.md`,
