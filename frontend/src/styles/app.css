@@ -1126,3 +1126,48 @@ tr:has(.popover:not([hidden])) {
 .glossary code {
   overflow-wrap: anywhere;
 }
+
+/* --- Промо · Реакції: the thread cards and the product's own voice (DESIGN §13) ------------ */
+
+/* one thread: the promo post that drew the reaction, and the signals under it. `.chain-head`
+   already spaces a card's own header row, so this only owns what is below it */
+.card.thread {
+  display: grid;
+  gap: var(--sp-2);
+  align-content: start;
+}
+
+.card.thread .chain-head {
+  margin: 0;
+}
+
+.card.thread .rows li {
+  border-top: 1px solid var(--border);
+  padding-top: 8px;
+}
+
+/* the post's text, three lines of it (§13 (3)). The whole text is in the export and the clamp is
+   a display choice: the title attribute and the t.me link beside it both still carry it */
+.clamp {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin: 0;
+  color: var(--text-2);
+  font-size: 13px;
+}
+
+.voice {
+  margin: var(--sp-3) 0;
+}
+
+.voice h3 {
+  font-size: 14px;
+  margin: 0 0 8px;
+}
+
+.voice .rows li {
+  border-top: 1px solid var(--border);
+  padding-top: 8px;
+}

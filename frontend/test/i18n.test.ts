@@ -56,7 +56,8 @@ const TABLE = 'reached by a lookup on the export\'s own key, never spelled at a 
  * cannot see them. t1–t8 stay template-reached until front-2 builds the command-centre tabs.
  */
 const REACHED_BY_TEMPLATE: Record<string, string> = {
-  'nav.promo.reactions': NAV, 'nav.promo.quality': NAV, 'nav.promo.loop': NAV,
+  'nav.promo.reactions': NAV, 'nav.promo.region': NAV, 'nav.promo.quality': NAV,
+  'nav.promo.loop': NAV,
   'nav.cc.t0': NAV, 'nav.cc.t1': NAV, 'nav.cc.t2': NAV, 'nav.cc.t3': NAV, 'nav.cc.t4': NAV,
   'nav.cc.t5': NAV, 'nav.cc.t6': NAV, 'nav.cc.t7': NAV, 'nav.cc.t8': NAV,
   'cc.sample.bought': TABLE, 'cc.sample.payable': TABLE,

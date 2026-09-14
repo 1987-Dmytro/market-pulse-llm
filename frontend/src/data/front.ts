@@ -17,8 +17,11 @@ import type {
   FrontExport,
   MetricEntry,
   PositionsBlock,
+  ReactionsBlock,
+  RegionPulseBlock,
   RegionsBlock,
   ReportingWeek,
+  Said,
   S1Reading,
   S2Row,
   Status,
@@ -156,6 +159,32 @@ export function earlierThanReported(week: string, reported: ReportingWeek): bool
 
 export function regions(front: FrontExport): RegionsBlock {
   return must(front.regions, FRONT_FILE, 'regions')
+}
+
+export const REACTIONS_FIELD = 'reactions_v2'
+export const REGION_PULSE_FIELD = 'region'
+
+/** Промо · Реакції's own block: the matrix, the mix, the months, the cards and the voice, all
+ *  counted by the producer. The tab filters, sorts and links them and counts nothing itself. */
+export function reactionsV2(front: FrontExport): ReactionsBlock {
+  return must(front.reactions_v2, FRONT_FILE, REACTIONS_FIELD)
+}
+
+/**
+ * The stage-2 regional baseline — `region`, NOT `regions`.
+ *
+ * `regions(front)` above is the operator's cut across retail chains, rendered at the foot of
+ * Позиції. This one is the keyword sentinel over the eighteen Poltava-oblast channels. The names
+ * differ by one letter in the export because the phase file names them so; the two functions do
+ * not, and no figure crosses between them.
+ */
+export function regionPulse(front: FrontExport): RegionPulseBlock {
+  return must(front.region, FRONT_FILE, REGION_PULSE_FIELD)
+}
+
+/** The producer's sentence in the reader's language. `Said` is `Finding` without the id. */
+export function saidText(said: Said, lang: Lang): string {
+  return lang === 'uk' ? said.ua : said.en
 }
 
 /**

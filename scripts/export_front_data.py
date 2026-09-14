@@ -1341,6 +1341,23 @@ def reactions_v2(promo: dict) -> dict:
         " of a signal is the month of the promo post its thread hangs under — the comment's own"
         " date is in the raw store, which the repository does not carry",
         "rows": len(rows),
+        # the SAME 281 rows `screen.feed` carries — one population, one record — with the three
+        # fields the sealed export's feed does not hold. §13 (5) asks the table to filter by
+        # subject_type, and a table that read the sealed feed could not: the tab therefore reads
+        # this one and only this one, rather than joining two lists of the same thing
+        "feed": [
+            {
+                "channel": row["channel"],
+                "msg_id": row["msg_id"],
+                "thread_root": row["thread_root"],
+                "type": row["type"],
+                "subject": row["subject"],
+                "subject_type": row["subject_type"],
+                "quote": row["quote"],
+                "confidence": row["confidence"],
+            }
+            for row in rows
+        ],
         "coverage": {
             "read": threads["read"],
             "queue": threads["queue"],

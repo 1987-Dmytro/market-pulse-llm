@@ -26,6 +26,7 @@ import { LoopTab } from './tabs/Loop.tsx'
 import { PositionsTab } from './tabs/Positions.tsx'
 import { QualityTab } from './tabs/Quality.tsx'
 import { ReactionsTab } from './tabs/Reactions.tsx'
+import { RegionTab } from './tabs/Region.tsx'
 import { TrendsTab } from './tabs/Trends.tsx'
 
 type Boot =
@@ -186,6 +187,8 @@ function Tab({ path, mode, t }: { path: string; mode: Mode; t: Translate }): Rea
       return <TrendsTab />
     case '/promo/reactions':
       return <ReactionsTab />
+    case '/promo/region':
+      return <RegionTab />
     case '/promo/quality':
       return <QualityTab />
     case '/promo/loop':

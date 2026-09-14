@@ -11,7 +11,7 @@
  * `vite.config.ts` sets no `test.globals`, so `vitest/globals` types satisfy tsc, nothing runtime.
  */
 
-import { readFileSync } from 'node:fs'
+import { readFileSync, statSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { describe, expect, it } from 'vitest'
 
@@ -23,6 +23,9 @@ import {
   exhibitTitle,
   findingText,
   rankedBasis,
+  reactionsV2,
+  regionPulse,
+  saidText,
   trends,
   positionsBlock,
   reportingWeek,
@@ -61,6 +64,20 @@ function carried<T>(value: T | undefined, what: string): T {
   if (value === undefined) throw new Error(`the export carries no ${what}`)
   return value
 }
+
+/** A dotted path into the RAW export — the second, independent way to the same figure. An
+ *  assertion that only ever called the adapter would hold over an adapter that invented the
+ *  number ([[a_number_typed_into_its_own_checker]]). Lifted to the file's scope when «reactions-
+ *  region» needed the same second route; one spelling, not two. */
+function field(dotted: string): unknown {
+  return dotted
+    .split('.')
+    .reduce<unknown>((node, key) => (node as Record<string, unknown>)?.[key], front)
+}
+
+/** The digits of a string, separators dropped: «1 247,92» and «1,247.92» are the same figure said
+ *  in two languages, and what is compared is the number, never the punctuation. */
+const digits = (text: string): string => text.replace(/\D/g, '')
 
 const all = positions(promo)
 const rowWith = (of: (row: Position) => boolean, what: string): Position => carried(all.find(of), what)
@@ -222,7 +239,10 @@ describe('front.ts over front_data.json', () => {
       expect(row.sha256).toBe(digest.sha256)
       expect(row.sha256).toMatch(/^[0-9a-f]{64}$/) // a sha256 in hex is 64 characters wide
       expect(row.bytes).toBe(digest.bytes)
-      expect(row.bytes).toBeGreaterThan(0)
+      // the size on disk, not «> 0»: `results/region_mentions.jsonl` is a REAL source that is
+      // legitimately empty — nothing was found — and reading the file back is the stronger check
+      // the literal was standing in for (fork (e), PHASE-ship-1 §4.4)
+      expect(row.bytes).toBe(statSync(`${root}${row.file}`).size)
     }
   })
 })
@@ -349,10 +369,6 @@ describe('trends — the week’s findings, worded by the producer (PHASE-ship-1
     }
     return value
   }
-
-  /** The digits of a string, separators dropped: «1 247,92» and «1,247.92» are the same figure
-   *  said in two languages, and what is compared is the number, never the punctuation. */
-  const digits = (text: string): string => text.replace(/\D/g, '')
 
   const findings = [...trends(front).conclusions, ...trends(front).exhibits]
 
@@ -483,15 +499,6 @@ describe('trends — the week’s findings, worded by the producer (PHASE-ship-1
 })
 
 describe('the command centre (front-2)', () => {
-  /** A dotted path into the RAW export — the second, independent way to the same figure. An
-   *  assertion that only ever called the adapter would hold over an adapter that invented the
-   *  number ([[a_number_typed_into_its_own_checker]]). */
-  function field(dotted: string): unknown {
-    return dotted
-      .split('.')
-      .reduce<unknown>((node, key) => (node as Record<string, unknown>)?.[key], front)
-  }
-
   it('every KPI of T0 is the export’s own field, read at the export’s own headline population', () => {
     const vol = volume(front)
     expect(vol.comments.bought).toBe(field('command_center.metrics.volume.comments.bought'))
@@ -625,5 +632,168 @@ describe('the command centre (front-2)', () => {
 
     const tab = readFileSync(`${root}frontend/src/tabs/CommandCentre.tsx`, 'utf8')
     expect(tab).toContain("t('cc.t8.model.line', modelVerdict(front))")
+  })
+})
+
+describe('reactions-region — the two tabs of DESIGN §13 read their blocks and count nothing', () => {
+  const reactions = reactionsV2(front)
+  const place = regionPulse(front)
+  /** The two languages every producer sentence is written in — each side is asserted, because a
+   *  fill that reached one template and not the other is exactly what ships a half-translated page. */
+  const SIDES = ['uk', 'en'] as const
+
+  it('every matrix cell is the export’s own, and the two margins add up to its row count', () => {
+    const cells = reactions.matrix.cells
+    expect(cells).toBe(field('reactions_v2.matrix.cells'))
+    expect(cells.reduce((sum, one) => sum + one.n, 0)).toBe(reactions.rows)
+    expect(reactions.rows).toBe(field('reactions_v2.rows'))
+
+    // the margins RE-DERIVED off the cells: `by_type` handed straight back would be the block
+    // compared to itself, which cannot fail ([[a_number_typed_into_its_own_checker]])
+    for (const type of reactions.matrix.types) {
+      const margin = cells.filter((one) => one.type === type).reduce((sum, one) => sum + one.n, 0)
+      expect(reactions.matrix.by_type[type]).toBe(margin)
+      expect(margin).toBeGreaterThan(0)
+    }
+    for (const subject of reactions.matrix.subject_types) {
+      const margin = cells
+        .filter((one) => one.subject_type === subject)
+        .reduce((sum, one) => sum + one.n, 0)
+      expect(reactions.matrix.by_subject_type[subject]).toBe(margin)
+    }
+
+    // the complaint pair the tab opens with is two cells of that same matrix, and they DIFFER —
+    // without this the checks above would hold over a matrix of one repeated number
+    const pair = reactions.complaints
+    for (const bar of pair.bars) {
+      const cell = carried(
+        cells.find((one) => one.type === pair.type && one.subject_type === bar.subject_type),
+        `cell ${pair.type} × ${bar.subject_type}`,
+      )
+      expect(bar.n).toBe(cell.n)
+    }
+    const [first, second] = pair.bars
+    expect(carried(first, 'the pair’s first bar').n).not.toBe(
+      carried(second, 'the pair’s second bar').n,
+    )
+    // and the title states those two figures, in both languages, with no third number invented
+    for (const lang of SIDES) {
+      const said = digits(saidText(pair.title, lang))
+      expect(said).toContain(digits(String(carried(first, 'first').n)))
+      expect(said).toContain(digits(String(carried(second, 'second').n)))
+      expect(said).toContain(digits(String(reactions.rows)))
+    }
+  })
+
+  it('a thread card carries the signal count of the rows under it, and the cards are the loudest', () => {
+    const cards = reactions.threads.cards
+    expect(cards.length).toBe(reactions.threads.shown)
+    expect(cards.length).toBeGreaterThan(0)
+    expect(reactions.threads.of).toBe(reactions.coverage.threads_with_a_signal)
+    expect(cards.length).toBeLessThanOrEqual(reactions.threads.of)
+
+    let previous = Number.POSITIVE_INFINITY
+    for (const card of cards) {
+      expect(card.signals).toBe(card.rows.length) // the count IS the rows it stands on
+      expect(card.signals).toBeLessThanOrEqual(previous) // ranked, not merely listed
+      previous = card.signals
+      expect(card.text === null || card.text.length > 0).toBe(true)
+    }
+    // the ranking is real: the loudest thread is louder than the quietest card shown
+    expect(carried(cards[0], 'the first card').signals).toBeGreaterThan(
+      carried(cards[cards.length - 1], 'the last card').signals,
+    )
+
+    // «Голос товару» is the sku column of the same matrix, group by group
+    const voice = reactions.sku_voice
+    expect(voice.rows).toBe(reactions.matrix.by_subject_type['sku'])
+    expect(voice.groups.reduce((sum, group) => sum + group.n, 0)).toBe(voice.rows)
+    for (const group of voice.groups) expect(group.n).toBe(group.rows.length)
+
+    const tab = readFileSync(`${root}frontend/src/tabs/Reactions.tsx`, 'utf8')
+    expect(tab).toContain('reactionsV2(front)')
+  })
+
+  it('the feed the tab reads is the sealed export’s own population, row for row', () => {
+    const key = (row: { channel: string; msg_id: number; thread_root: string | number
+      type: string; quote: string | null }): string =>
+      `${row.channel}/${row.msg_id}/${row.thread_root}/${row.type}/${row.quote ?? ''}`
+    const mine = reactions.feed.map(key).sort()
+    const sealed = promo.screen.feed.map(key).sort()
+    expect(mine.length).toBe(reactions.rows)
+    expect(mine).toEqual(sealed) // one population, one record — the tab reads this list, not both
+    // and the subject fields are what the sealed feed could NOT carry, which is why it is re-read
+    expect(promo.screen.feed.every((row) => !('subject_type' in row))).toBe(true)
+    expect(reactions.feed.every((row) => row.subject_type.length > 0)).toBe(true)
+  })
+
+  it('the monthly series is the complaint share of its own two counts, month by month', () => {
+    const months = reactions.monthly.months
+    expect(months.length).toBeGreaterThan(0)
+    expect(months.reduce((sum, one) => sum + one.signals, 0) + reactions.monthly.without_a_date).toBe(
+      reactions.rows,
+    )
+    for (const month of months) {
+      expect(month.complaints).toBeLessThanOrEqual(month.signals)
+      expect(month.share).toBeCloseTo(month.complaints / month.signals, 10)
+    }
+    // the months are ordered, and they are not all the same share — a series that were would make
+    // the peak/low sentence true for the wrong reason
+    expect([...months].sort((left, right) => left.month.localeCompare(right.month))).toEqual(months)
+    expect(new Set(months.map((one) => one.share)).size).toBeGreaterThan(1)
+  })
+
+  it('the region baseline is a ZERO the file states, beside counts that are not zero', () => {
+    expect(place.totals).toBe(field('region.totals'))
+    expect(place.totals.mentions).toBe(0)
+    expect(place.mentions.length).toBe(place.totals.mentions)
+    for (const brand of place.brands) {
+      expect(brand.mentions).toBe(field(`region.brands.${place.brands.indexOf(brand)}.mentions`))
+      expect(brand.mentions).toBe(0)
+      expect(brand.spellings.length).toBeGreaterThan(0) // a brand with no spelling counts nothing
+    }
+    // the zero is a measurement and not an empty screen: the window, the channels and the two
+    // populations it was read over are all non-zero, and the per-channel rows add up to them
+    expect(place.window.first_date).not.toBeNull()
+    expect(place.window.last_date).not.toBeNull()
+    expect(place.totals.channels).toBe(place.channels.length)
+    expect(place.channels.reduce((sum, one) => sum + one.posts, 0)).toBe(place.totals.posts)
+    expect(place.channels.reduce((sum, one) => sum + one.comments, 0)).toBe(place.totals.comments)
+    expect(place.totals.posts).toBeGreaterThan(0)
+    expect(place.totals.comments).toBeGreaterThan(0)
+    for (const lang of SIDES) {
+      expect(digits(saidText(place.baseline_says, lang))).toContain(
+        digits(String(place.totals.mentions)),
+      )
+    }
+  })
+
+  it('the sample sentence prints the collector’s own three figures, in both languages', () => {
+    const sample = place.sample
+    expect(sample.threads_read).toBe(field('region.sample.threads_read'))
+    expect(sample.threads_total).toBe(field('region.sample.threads_total'))
+    expect(sample.outstanding).toBe(field('region.sample.outstanding'))
+    // outstanding is the difference, re-derived — the honesty of the sentence IS this identity
+    expect(sample.outstanding).toBe(sample.threads_total - sample.threads_read)
+    expect(sample.threads_read).toBeLessThan(sample.threads_total)
+    expect(sample.outstanding).toBeGreaterThan(0)
+
+    for (const lang of SIDES) {
+      const said = digits(saidText(sample.sentence, lang))
+      expect(said).toContain(digits(String(sample.threads_read)))
+      expect(said).toContain(digits(String(sample.threads_total)))
+      expect(said).toContain(digits(String(sample.outstanding)))
+    }
+    // the per-channel rows the coverage table prints carry the same identity, channel by channel
+    const counted = place.channels.filter((row) => row.threads_total !== null)
+    expect(counted.length).toBe(place.channels.length)
+    expect(
+      counted.reduce((sum, row) => sum + (row.threads_total ?? 0), 0),
+    ).toBe(sample.threads_total)
+    expect(counted.reduce((sum, row) => sum + (row.threads_read ?? 0), 0)).toBe(sample.threads_read)
+
+    const tab = readFileSync(`${root}frontend/src/tabs/Region.tsx`, 'utf8')
+    expect(tab).toContain('regionPulse(front)')
+    expect(tab).toContain('saidText(block.sample.sentence, lang)')
   })
 })

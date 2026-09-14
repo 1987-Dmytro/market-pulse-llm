@@ -11,7 +11,7 @@ import { useEffect, useState } from 'react'
 
 import type { Mode } from './data/load.ts'
 
-export const PROMO_TABS = ['positions', 'trends', 'reactions', 'quality', 'loop'] as const
+export const PROMO_TABS = ['positions', 'trends', 'reactions', 'region', 'quality', 'loop'] as const
 export const CC_TABS = ['t0', 't1', 't2', 't3', 't4', 't5', 't6', 't7', 't8'] as const
 
 /** The tab the STATIC client build does not ship (DESIGN-ship-1 §11, the operator's word 12.09). */

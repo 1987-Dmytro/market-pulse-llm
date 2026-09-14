@@ -593,6 +593,163 @@ export interface RegionsBlock {
   cuts: RegionCut[]
 }
 
+/** A sentence the producer wrote in both languages. `Finding` is this plus an id and its figures'
+ *  paths; the readings of §13 carry no id, because each one titles exactly one exhibit. */
+export interface Said {
+  ua: string
+  en: string
+}
+
+/** One finding the paid reader kept, inside its thread's card (DESIGN-ship-1 §13 (3)). */
+export interface SignalRow {
+  type: string
+  subject: string | null
+  subject_type: string
+  quote: string | null
+  confidence: number | null
+}
+
+/** A thread the reader found something in: the ROOT promo post and the signals under it.
+ *  `date` and `text` are `null` when the committed draw and pack files do not carry the thread —
+ *  «rows not exported» is a legal answer and an invented post is not. */
+export interface ThreadCard {
+  channel: string
+  thread_root: string
+  date: string | null
+  text: string | null
+  signals: number
+  rows: SignalRow[]
+}
+
+export interface VoiceGroup {
+  type: string
+  title: Said
+  n: number
+  rows: {
+    subject: string | null
+    quote: string | null
+    channel: string
+    thread_root: string
+    confidence: number | null
+  }[]
+}
+
+/** Промо · Реакції in §13's grammar. Every figure is counted by the producer over
+ *  `results/promo_signals/`: one row per FINDING, never per comment. */
+export interface ReactionsBlock {
+  from: string
+  reading: string
+  rows: number
+  /** the same population `promo_screen_data.json :: screen.feed` carries, with the subject fields
+   *  that export does not hold — the tab reads this list and never both */
+  feed: (SignalRow & { channel: string; msg_id: number; thread_root: string })[]
+  coverage: {
+    read: number
+    queue: number
+    not_collected: number
+    population: number
+    product_population: number
+    channels: number
+    threads_with_a_signal: number
+    low_confidence: number
+    from: string
+  }
+  matrix: {
+    types: string[]
+    subject_types: string[]
+    subject_words: Record<string, Said>
+    cells: { type: string; subject_type: string; n: number }[]
+    by_type: Record<string, number>
+    by_subject_type: Record<string, number>
+  }
+  complaints: {
+    type: string
+    of_type: number
+    bars: { subject_type: string; n: number }[]
+    other: number
+    title: Said
+  }
+  mix_by_channel: {
+    channels: {
+      channel: string
+      signals: number
+      parts: { type: string; n: number; share: number }[]
+      complaints: number
+    }[]
+    title: Said | null
+  }
+  monthly: {
+    type: string
+    months: { month: string; signals: number; complaints: number; share: number }[]
+    /** signals whose thread carries no post date at all — printed, never dropped in silence */
+    without_a_date: number
+    title: Said | null
+  }
+  threads: { cards: ThreadCard[]; shown: number; of: number; title: Said | null }
+  sku_voice: { groups: VoiceGroup[]; rows: number; title: Said }
+}
+
+/** One mention the keyword sentinel found. Empty is the honest answer and the file is empty today. */
+export interface MentionRow {
+  channel: string
+  msg_id: number
+  kind: string
+  date: string
+  brand: string
+  /** WHICH spelling hit — what lets a human judge «Гармонія» the brand from «гармонія» the noun */
+  matched: string
+  quote: string
+}
+
+/** One regional channel: the sentinel's own counts, joined to the collector's thread coverage.
+ *  The three thread figures are `null` for a channel the report does not carry. */
+export interface RegionChannel {
+  channel: string
+  posts: number
+  comments: number
+  mentions: number
+  first_date: string | null
+  last_date: string | null
+  threads_total: number | null
+  threads_read: number | null
+  outstanding: number | null
+}
+
+/**
+ * Промо · Регіон — the stage-2 keyword sentinel's baseline (DESIGN-ship-1 §13).
+ *
+ * NOT `RegionsBlock` one letter over: that is the operator's cut across retail CHAINS
+ * (`config/chain_regions.yaml`) rendered at the foot of Позиції, and this is the Poltava-oblast
+ * CHANNELS the sentinel reads. Two populations, two files, and nothing joins them.
+ */
+export interface RegionPulseBlock {
+  from: string
+  reading: string
+  window: { first_date: string | null; last_date: string | null }
+  totals: { channels: number; posts: number; comments: number; mentions: number }
+  sources: { brands: string; channels: string; roots: string[] }
+  brands: {
+    brand_id: string
+    name: string
+    own: boolean | null
+    spellings: string[]
+    mentions: number
+  }[]
+  channels: RegionChannel[]
+  mentions: MentionRow[]
+  sample: {
+    channels: number
+    threads_total: number
+    threads_read: number
+    outstanding: number
+    sentence: Said
+    from: string
+  }
+  instrument: Said
+  baseline_says: Said
+  promo_link: { chain: string; name: string }
+}
+
 /** One code rule's finding, worded by the producer in both languages (DESIGN-ship-1 §12).
  *
  * The app renders the sentence and words none of it: `stands_on` is the path of every figure the
@@ -652,7 +809,11 @@ export interface FrontExport {
   positions: PositionsBlock
   category_prices: CategoryPricesBlock
   trends: TrendsBlock
+  /** the CHAIN cut at the foot of Позиції — `region` below is the sentinel's channels, and the two
+   *  are one letter apart on purpose only in the spec: nothing joins them */
   regions: RegionsBlock
+  reactions_v2: ReactionsBlock
+  region: RegionPulseBlock
   s1_reading: S1Reading
   status: Status
   dictionary: { from: string; sha256: string; metrics: MetricEntry[] }

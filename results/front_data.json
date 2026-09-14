@@ -46445,6 +46445,2818 @@
       "read": 118,
       "threads_with_a_signal": 100
     },
+    "feed": [
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 414,
+        "quote": "Як кава? Хто купував?",
+        "subject": "кава",
+        "subject_type": "sku",
+        "thread_root": "1901",
+        "type": "спрос"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 415,
+        "quote": "Печиво класне",
+        "subject": "печиво",
+        "subject_type": "sku",
+        "thread_root": "1901",
+        "type": "похвала"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 416,
+        "quote": "Де газета?",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "1901",
+        "type": "спрос"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 819,
+        "quote": "Чекаємо дегустацію на Палладіна в Києві!!",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "2053",
+        "type": "спрос"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 0.9,
+        "msg_id": 820,
+        "quote": "я бы не отказалась от такого бы",
+        "subject": "продукція ТОКЕРИ",
+        "subject_type": "sku",
+        "thread_root": "2053",
+        "type": "похвала"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 1689,
+        "quote": "Немае поваги до коллективу",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "2537",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 2697,
+        "quote": "чому НацКешбек не нараховується через сплату в SCAN&GO ??",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "3054",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 2784,
+        "quote": "Такий формат каталогу мені до вподоби",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "3163",
+        "type": "похвала"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 2785,
+        "quote": "Чи є в продажу яйця гуся криптолова?",
+        "subject": "яйця гуся криптолова",
+        "subject_type": "sku",
+        "thread_root": "3163",
+        "type": "спрос"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 2796,
+        "quote": "іноді потрапляється пліснява",
+        "subject": "курячі чіпси",
+        "subject_type": "sku",
+        "thread_root": "3163",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 2978,
+        "quote": "много акций и хороших продуктов",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "3289",
+        "type": "похвала"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 2978,
+        "quote": "дурят людей и не привозят все заказанрые продукты и не возвращают деньги",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "3289",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 2981,
+        "quote": "я разочаровалась в вашем магазине",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "3289",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 2983,
+        "quote": "Колись буде варус на березінці?",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "3289",
+        "type": "спрос"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 2988,
+        "quote": "Доставка и правда ужас ужас",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "3289",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 2989,
+        "quote": "який зараз відсоток на бонусну картку",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "3289",
+        "type": "спрос"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 2989,
+        "quote": "щось взагалі копійки нараховуються",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "3289",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 2993,
+        "quote": "Зазвичай вибираю акційні",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "3289",
+        "type": "привычка"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 3057,
+        "quote": "Что у вас с доставкой?! Это ужас!",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "3342",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 3057,
+        "quote": "Переносят время на день вперед или вообще не привозят вовремя!!!!",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "3342",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 3057,
+        "quote": "Извинения это 25 грн промокод который не нужен",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "3342",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 3058,
+        "quote": "с таким отношением к клиентам",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "3342",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 3058,
+        "quote": "заказывал почти каждую неделю",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "3342",
+        "type": "привычка"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 3178,
+        "quote": "Васної?",
+        "subject": "морозиво ескімо Varto",
+        "subject_type": "sku",
+        "thread_root": "3436",
+        "type": "спрос"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 3183,
+        "quote": "Очень вкусное мороженое",
+        "subject": "морозиво ескімо Varto",
+        "subject_type": "sku",
+        "thread_root": "3436",
+        "type": "похвала"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 3183,
+        "quote": "Было бы не плохо,если бы оно было в наличии",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "3436",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 3183,
+        "quote": "Бывает крайне редко",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "3436",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 3570,
+        "quote": "Что с бонусами,новые правила?у меня сасообслуживание ноль",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "3621",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 4270,
+        "quote": "Так тут гриль-барбекю подарять. Який айфон😂",
+        "subject": "АЙФОН 16 ПРО",
+        "subject_type": "sku",
+        "thread_root": "4129",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 5106,
+        "quote": "так хто виграв?",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "4129",
+        "type": "спрос"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 5111,
+        "quote": "як отримати свій подарунок?",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "4129",
+        "type": "спрос"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 4396,
+        "quote": "У Вінниці є ваш магазин?",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "4202",
+        "type": "спрос"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 4686,
+        "quote": "Класно",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "4340",
+        "type": "похвала"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 4813,
+        "quote": "вас зламали?",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "4422",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 4815,
+        "quote": "Чому так несправедливо?",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "4422",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 4816,
+        "quote": "поддержка отвечает спустя сутки и через 15 минут без ответа закрывает чат",
+        "subject": "izibank",
+        "subject_type": "chain",
+        "thread_root": "4422",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 4818,
+        "quote": "служба поддержки просто ужасная",
+        "subject": "izibank",
+        "subject_type": "chain",
+        "thread_root": "4422",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 4939,
+        "quote": "А Дор-Блю буде?",
+        "subject": "сир Дор-Блю",
+        "subject_type": "sku",
+        "thread_root": "4449",
+        "type": "спрос"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 5170,
+        "quote": "невігласи )))",
+        "subject": "Сир ЧЕДДЕР ЛЕЙЧЕЙСТЕР червонии",
+        "subject_type": "sku",
+        "thread_root": "4449",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 5587,
+        "quote": "Облапать все без перчаток и подавать. Высокая кухня!",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "4871",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 5588,
+        "quote": "не апетитно",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "4871",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 5988,
+        "quote": "Хочу попробовать батончик - типа Дубайский шоколад",
+        "subject": "батончик Дубайський шоколад",
+        "subject_type": "sku",
+        "thread_root": "5119",
+        "type": "спрос"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 5988,
+        "quote": "в нашем Варусе его к сожалению нет пока",
+        "subject": "батончик Дубайський шоколад",
+        "subject_type": "sku",
+        "thread_root": "5119",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 5989,
+        "quote": "Не купуйте. Як не соромно так дурити покупців",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "5119",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 5991,
+        "quote": "дивіться на якість. він ваесь білий",
+        "subject": "шоколад",
+        "subject_type": "sku",
+        "thread_root": "5119",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 5992,
+        "quote": "внешний вид конечно … Я даже не знаю, служит ли это поводом к возврату",
+        "subject": "шоколад",
+        "subject_type": "sku",
+        "thread_root": "5119",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 5994,
+        "quote": "Можливо посмакуєте отим, що мені продали?",
+        "subject": "шоколад",
+        "subject_type": "sku",
+        "thread_root": "5119",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 6000,
+        "quote": "Варус, щось ви стали якоюсь забігайлівкою",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "5119",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 6000,
+        "quote": "Товари найнижчої якості, на тижні вже вдруге повертаю товар",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "5119",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 6003,
+        "quote": "Самое ужасное, что нет у них поддержки нормальной",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "5119",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 6005,
+        "quote": "Підскажіть чому зникла адреса доставки чи самовивозу",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "5119",
+        "type": "спрос"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 6070,
+        "quote": "небыло вчера в наличии в двух варусах",
+        "subject": "шоколад Великобритания",
+        "subject_type": "sku",
+        "thread_root": "5119",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 6117,
+        "quote": "какой то сбой в приложении? Весь день не могу зайти в него",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "5186",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 6118,
+        "quote": "накрылось всё, ни программа лояльности не работает, ни Scan&go",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "5186",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 6119,
+        "quote": "набрал тележку оставил на маркете и пошел в АТБ",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "5186",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 6142,
+        "quote": "сертифікатами не можна оплатити?",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "5186",
+        "type": "спрос"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 6166,
+        "quote": "захотели- забрали",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "5186",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 6167,
+        "quote": "каким образом, если не секрет, можно выиграть у Варуса столько денег сразу одному покупателю?",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "5186",
+        "type": "спрос"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 6309,
+        "quote": "постоянно якісь трабли з акціями, у них задача заработать побільше бабла, а остальне пофіг",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "5186",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 7516,
+        "quote": "ох і розводять лохів",
+        "subject": "майонез",
+        "subject_type": "sku",
+        "thread_root": "5854",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 7786,
+        "quote": "де мої замовлення? час отримання 05,12 19,20 - тиша",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "5994",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 7786,
+        "quote": "написала в телеграм підтримку - тиша досі",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "5994",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 7786,
+        "quote": "дзвінок на гарячу лінію, оператора так і не знайшли",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "5994",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 7792,
+        "quote": "точно такая же фигня",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "5994",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 7806,
+        "quote": "Так же, ще і смс прийшло ніби отримав",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "5994",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 7887,
+        "quote": "а якщо цієї біржі немає або це тільки для обраних?",
+        "subject": "Bitget",
+        "subject_type": "chain",
+        "thread_root": "6006",
+        "type": "спрос"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 8008,
+        "quote": "це схоже на обман",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "6006",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 8012,
+        "quote": "дуже погано організовано - і процеси, і призовий фонд, і висвітлення результатів",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "6006",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 8061,
+        "quote": "те, що ніколи не виграти",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "6006",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 8061,
+        "quote": "всі інші відділи на 50%. Персоналу не вистачає",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "6006",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 8061,
+        "quote": "закуповує у тих постачальників,, які дають вартість ниже і відповідно також і якість товару",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "6006",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 8030,
+        "quote": "Купи бокс за 500 грн",
+        "subject": "Щастябокс",
+        "subject_type": "sku",
+        "thread_root": "6009",
+        "type": "цена"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 8030,
+        "quote": "Смішні які",
+        "subject": "Щастябокс",
+        "subject_type": "sku",
+        "thread_root": "6009",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 8032,
+        "quote": "Взагалі не задоволена боксом",
+        "subject": "Щастябокс",
+        "subject_type": "sku",
+        "thread_root": "6009",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 8033,
+        "quote": "що в тому боксі взагалі?",
+        "subject": "Щастябокс",
+        "subject_type": "sku",
+        "thread_root": "6009",
+        "type": "спрос"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 8034,
+        "quote": "Торгівля повітрям",
+        "subject": "Щастябокс",
+        "subject_type": "sku",
+        "thread_root": "6009",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 8035,
+        "quote": "А покажіть, що там?",
+        "subject": "Щастябокс",
+        "subject_type": "sku",
+        "thread_root": "6009",
+        "type": "спрос"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 8038,
+        "quote": "половину тысячи отдать за картонку",
+        "subject": "Щастябокс",
+        "subject_type": "sku",
+        "thread_root": "6009",
+        "type": "цена"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 8038,
+        "quote": "половину тысячи отдать за картонку",
+        "subject": "Щастябокс",
+        "subject_type": "sku",
+        "thread_root": "6009",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 8058,
+        "quote": "Отвратительное",
+        "subject": "масло",
+        "subject_type": "sku",
+        "thread_root": "6009",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 8058,
+        "quote": "Пытался оставить честный отзыв на их сайте, не добавляют",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "6009",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 8062,
+        "quote": "варусу байдуже, що на полиці",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "6009",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 8075,
+        "quote": "навіщо тоді варус портить собі репутацію?",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "6009",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 8088,
+        "quote": "не може коштувати якісне масло - дешево",
+        "subject": "масло",
+        "subject_type": "sku",
+        "thread_root": "6009",
+        "type": "цена"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 8123,
+        "quote": "не тратить семейный бюджет на отраву под видом масло",
+        "subject": "масло",
+        "subject_type": "sku",
+        "thread_root": "6009",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 8680,
+        "quote": "В кого я можу уточнити за доставку?",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "6216",
+        "type": "спрос"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 8683,
+        "quote": "А що це суцільний обман?",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "6216",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 8683,
+        "quote": "ні зворотнього зв'язку в онлайн підтримці",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "6216",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 8686,
+        "quote": "И служба поддержки загадочно морозится",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "6216",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 8688,
+        "quote": "гаряча лінія скидає слухавку",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "6216",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 8694,
+        "quote": "Вони не відповіли! Гаряча лінія скидають!",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "6216",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 8695,
+        "quote": "Який в кого рівень щастя і позиція в рейтингу?",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "6216",
+        "type": "спрос"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 8865,
+        "quote": "Варус просто обманщики и мошенники",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "6216",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 8865,
+        "quote": "у них был сбой боксики мне начислили,аж через 4 дня",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "6216",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 8865,
+        "quote": "инт ернет заказ,то же отменить нельзя",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "6216",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 8865,
+        "quote": "На горячую линию дозвонится не возможно",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "6216",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 8865,
+        "quote": "ПРОСТО ПОЗОР",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "6216",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 9383,
+        "quote": "А 4 січня \"акція одного дня\" відсутня?",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "6278",
+        "type": "спрос"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 11453,
+        "quote": "Нічого з цього не знайшла",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "6951",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 12745,
+        "quote": "абы скидок на \"мафин\" почаще были",
+        "subject": "мафин",
+        "subject_type": "sku",
+        "thread_root": "7440",
+        "type": "спрос"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 12745,
+        "quote": "абы скидок на \"мафин\" почаще были",
+        "subject": "мафин",
+        "subject_type": "sku",
+        "thread_root": "7440",
+        "type": "цена"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 12746,
+        "quote": "Санітарні норми вийшли з чату ?",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "7440",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 12751,
+        "quote": "найкращий супермаркет",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "7440",
+        "type": "похвала"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 12751,
+        "quote": "там завжди пускали всіх собачок",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "7440",
+        "type": "привычка"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 12751,
+        "quote": "обожнюю всіх там працівників",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "7440",
+        "type": "похвала"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 12752,
+        "quote": "У Варусі в Києві не пускають з тваринками",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "7440",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 12759,
+        "quote": "Почему всегда в Киеве?!Других городов в Украине нет что-ли",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "7440",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 12760,
+        "quote": "Дуже крута акція!",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "7440",
+        "type": "похвала"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 12760,
+        "quote": "ви молодчинки",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "7440",
+        "type": "похвала"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 12763,
+        "quote": "задовбали з блохастими в магазинах",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "7440",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 12818,
+        "quote": "Спасибо за комфорт для наших любимцев",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "7440",
+        "type": "похвала"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 0.9,
+        "msg_id": 13790,
+        "quote": "Белоруское морожено?",
+        "subject": "морозиво",
+        "subject_type": "sku",
+        "thread_root": "7850",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 0.9,
+        "msg_id": 13794,
+        "quote": "Но белоруская тм🤡",
+        "subject": "белоруская тм",
+        "subject_type": "brand",
+        "thread_root": "7850",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 13913,
+        "quote": "ВКУСНОЕ ОЧЕНЬ",
+        "subject": "морозиво",
+        "subject_type": "sku",
+        "thread_root": "7850",
+        "type": "похвала"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 14206,
+        "quote": "А як приєднатися?",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "8084",
+        "type": "спрос"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 14724,
+        "quote": "Так с 2 или 9",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "8308",
+        "type": "спрос"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 14898,
+        "quote": "Ммм, дуже зручно, \"запитуєш на касі\"...",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "8364",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 16135,
+        "quote": "не бачила результати цього конкурсу",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "8430",
+        "type": "спрос"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 0.9,
+        "msg_id": 16137,
+        "quote": "Мене перекидає на пост із розіграшем, дедлайн 29.04",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "8430",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 15414,
+        "quote": "брелоки по 99 грн",
+        "subject": "яйця-сюрпризи",
+        "subject_type": "sku",
+        "thread_root": "8647",
+        "type": "цена"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 15414,
+        "quote": "Повне розчарування!",
+        "subject": "яйця-сюрпризи",
+        "subject_type": "sku",
+        "thread_root": "8647",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 15420,
+        "quote": "Щось на офіційному сайті ніякої зміни не має",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "8647",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 15498,
+        "quote": "жоден в мене ще не відскагувався",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "8647",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 15500,
+        "quote": "в додатку не знайшла звідки сканувати",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "8647",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 15502,
+        "quote": "саме ці не хоче",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "8647",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 15504,
+        "quote": "код він так нормально і не прочитав,каже шо код неякісний",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "8647",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 15545,
+        "quote": "Це по вашому чесно?",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "8647",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 15546,
+        "quote": "Варус усіх намахав",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "8647",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 15548,
+        "quote": "Це не чесно!",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "8647",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 15549,
+        "quote": "Мені теж не подобається перенесення",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "8647",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 15549,
+        "quote": "вартість зменшилася на 10 грн",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "8647",
+        "type": "цена"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 15556,
+        "quote": "Розвод",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "8647",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 15566,
+        "quote": "То хто тут клоун :)",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "8647",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 15568,
+        "quote": "готовий на колективну скаргу",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "8647",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 15586,
+        "quote": "а це вже напьорстки",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "8647",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 15588,
+        "quote": "те що переписують коли хоче це не правила",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "8647",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 16081,
+        "quote": "не хочете вчасно доставляти замовлення",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "8823",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 16081,
+        "quote": "Зникає бажання щось у вас купувати",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "8823",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 16083,
+        "quote": "немає такої можливості",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "8823",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 16087,
+        "quote": "В нас теж",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "8823",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 16088,
+        "quote": "і кавомашини немає",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "8823",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 16089,
+        "quote": "нічого такого немає",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "8823",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 16098,
+        "quote": "чи є таке у Кривому розі?",
+        "subject": "морозиво М’яке",
+        "subject_type": "sku",
+        "thread_root": "8823",
+        "type": "спрос"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 16113,
+        "quote": "не вкусная замороженная белая субстанция",
+        "subject": "морозиво М’яке",
+        "subject_type": "sku",
+        "thread_root": "8823",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 16113,
+        "quote": "Больше не хочется",
+        "subject": "морозиво М’яке",
+        "subject_type": "sku",
+        "thread_root": "8823",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 16114,
+        "quote": "морозиво у них смачне",
+        "subject": "морозиво М’яке",
+        "subject_type": "sku",
+        "thread_root": "8823",
+        "type": "похвала"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 16691,
+        "quote": "просто чарівний",
+        "subject": "плавлений сир Мааздам",
+        "subject_type": "sku",
+        "thread_root": "9006",
+        "type": "похвала"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 16691,
+        "quote": "Неймовірно смачно",
+        "subject": "плавлений сир Мааздам",
+        "subject_type": "sku",
+        "thread_root": "9006",
+        "type": "похвала"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 16691,
+        "quote": "подякувати за таку смачноту",
+        "subject": "плавлений сир Мааздам",
+        "subject_type": "sku",
+        "thread_root": "9006",
+        "type": "похвала"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 16692,
+        "quote": "це смачнота!",
+        "subject": "ікра мінтаю",
+        "subject_type": "sku",
+        "thread_root": "9006",
+        "type": "похвала"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 16687,
+        "quote": "і де в цій пасті фундук? Фундук і ароматизатор - то трохи різне та є введенням в оману покупця!",
+        "subject": "паста TUT NUT",
+        "subject_type": "sku",
+        "thread_root": "9034",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 16805,
+        "quote": "кешбек за оплату Scan&Go працює?",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "9046",
+        "type": "спрос"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 16809,
+        "quote": "треба виправити у буклеті. Бо там вказано, що до 30.04",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "9046",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 16818,
+        "quote": "Офігенно милі кото-зайчики і зайце-котики на упаковці",
+        "subject": "Сир кисломолочний Varto",
+        "subject_type": "sku",
+        "thread_root": "9112",
+        "type": "похвала"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 16819,
+        "quote": "Нажаль, у нас його не можливо вхопити",
+        "subject": "Сир кисломолочний Varto",
+        "subject_type": "sku",
+        "thread_root": "9112",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 16819,
+        "quote": "не можливо вхопити",
+        "subject": "Сир кисломолочний Varto",
+        "subject_type": "sku",
+        "thread_root": "9112",
+        "type": "спрос"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 17347,
+        "quote": "Дуже класно",
+        "subject": "9277",
+        "subject_type": "post",
+        "thread_root": "9277",
+        "type": "похвала"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 17359,
+        "quote": "Не всегда довольна",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "9277",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 17359,
+        "quote": "ржавого цвета и мясо расползается",
+        "subject": "скумбрия",
+        "subject_type": "sku",
+        "thread_root": "9277",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 17359,
+        "quote": "ржавого цвета и мясо расползается",
+        "subject": "сельдь атлантическая",
+        "subject_type": "sku",
+        "thread_root": "9277",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 17359,
+        "quote": "500 грн в мусорку",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "9277",
+        "type": "цена"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 17359,
+        "quote": "500 грн в мусорку",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "9277",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 17367,
+        "quote": "рыба приезжала по доставке всегда суперская",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "9277",
+        "type": "похвала"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 17367,
+        "quote": "я у них теперь в доставку рыбу не заказываю",
+        "subject": "Сільпо",
+        "subject_type": "chain",
+        "thread_root": "9277",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 17368,
+        "quote": "Они берут дешевейшую а продают как супер",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "9277",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 17368,
+        "quote": "сельдь по 220 грн",
+        "subject": "сельдь",
+        "subject_type": "sku",
+        "thread_root": "9277",
+        "type": "цена"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 17368,
+        "quote": "жирная, вкусная, супер",
+        "subject": "сельдь",
+        "subject_type": "sku",
+        "thread_root": "9277",
+        "type": "похвала"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 17368,
+        "quote": "В варусе такого нет",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "9277",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 17372,
+        "quote": "220 грн сельдь!",
+        "subject": "сельдь",
+        "subject_type": "sku",
+        "thread_root": "9277",
+        "type": "цена"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 17372,
+        "quote": "за такие деньги и должна быть супер",
+        "subject": "сельдь",
+        "subject_type": "sku",
+        "thread_root": "9277",
+        "type": "цена"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 17372,
+        "quote": "привозили суперскую",
+        "subject": "сельдь",
+        "subject_type": "sku",
+        "thread_root": "9277",
+        "type": "похвала"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 18089,
+        "quote": "Супер акція",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "9461",
+        "type": "похвала"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 18643,
+        "quote": "Такий бардак у застосунку цього варусу, що ніколи не знаєш, що та як",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "9802",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 18643,
+        "quote": "Безглуздя!",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "9802",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 18650,
+        "quote": "я повинна у магазині півгодини листати розділ додатку",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "9802",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 18661,
+        "quote": "Вы так бесцеремонно лжёте",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "9802",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 18661,
+        "quote": "нет вашего идиотизма с разделением зимней поддержки и просто кешбека",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "9802",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 18672,
+        "quote": "Чи ви хочете , щоб скоріше Варус зник?",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "9802",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 18935,
+        "quote": "вау, дуже гарно",
+        "subject": "Пиво світле Pilsner MOVA",
+        "subject_type": "sku",
+        "thread_root": "9850",
+        "type": "похвала"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 19018,
+        "quote": "за такою ціною",
+        "subject": "пряники Varto",
+        "subject_type": "sku",
+        "thread_root": "9912",
+        "type": "цена"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 19023,
+        "quote": "Обожнюю вас, VARUS!",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "9912",
+        "type": "похвала"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 19166,
+        "quote": "допущена помилка!",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "9926",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 19172,
+        "quote": "У Вас є сир з пліснявою?",
+        "subject": "сир з пліснявою",
+        "subject_type": "sku",
+        "thread_root": "9926",
+        "type": "спрос"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 19477,
+        "quote": "Як ввести промокод у мобільному зачтосунку?",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "9999",
+        "type": "спрос"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 19478,
+        "quote": "Теж саме питання",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "9999",
+        "type": "спрос"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 19481,
+        "quote": "Це дуже не зручно",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "9999",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 19484,
+        "quote": "Занадто довго він на стадії разробки",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "9999",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 20081,
+        "quote": "Що за дебільний огидний текст?",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "10187",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 20082,
+        "quote": "Потужно-незламний",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "10187",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 20091,
+        "quote": "це за 100г ціна?",
+        "subject": "кур стегно",
+        "subject_type": "sku",
+        "thread_root": "10187",
+        "type": "цена"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 20737,
+        "quote": "чтобы акционый товар оказался на полке магазина?",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "10360",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 20737,
+        "quote": "А можно как то повлиять, чтобы акционый товар оказался на полке магазина?",
+        "subject": "VARUS",
+        "subject_type": "chain",
+        "thread_root": "10360",
+        "type": "спрос"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 0.9,
+        "msg_id": 21566,
+        "quote": "Ось такий карась привезли",
+        "subject": "карась",
+        "subject_type": "sku",
+        "thread_root": "10603",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 21576,
+        "quote": "страшные",
+        "subject": "карась",
+        "subject_type": "sku",
+        "thread_root": "10603",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@VARUS_channel",
+        "confidence": 1.0,
+        "msg_id": 21578,
+        "quote": "рыба плохая",
+        "subject": "карась",
+        "subject_type": "sku",
+        "thread_root": "10603",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@msuaaaa",
+        "confidence": 1.0,
+        "msg_id": 171,
+        "quote": "за 30 шт 49.99 грн",
+        "subject": "пакети для сміття",
+        "subject_type": "sku",
+        "thread_root": "2455",
+        "type": "цена"
+      },
+      {
+        "channel": "@msuaaaa",
+        "confidence": 1.0,
+        "msg_id": 181,
+        "quote": "50 грн",
+        "subject": "цукор",
+        "subject_type": "sku",
+        "thread_root": "2455",
+        "type": "цена"
+      },
+      {
+        "channel": "@msuaaaa",
+        "confidence": 1.0,
+        "msg_id": 406,
+        "quote": "А він є у Києві ???",
+        "subject": "Велмарт",
+        "subject_type": "chain",
+        "thread_root": "2684",
+        "type": "спрос"
+      },
+      {
+        "channel": "@msuaaaa",
+        "confidence": 1.0,
+        "msg_id": 1069,
+        "quote": "А акція діє в день 17.03? Чи тільки до 17.03?",
+        "subject": "Roshen",
+        "subject_type": "chain",
+        "thread_root": "3034",
+        "type": "спрос"
+      },
+      {
+        "channel": "@msuaaaa",
+        "confidence": 1.0,
+        "msg_id": 840,
+        "quote": "нихуя не было там бабок",
+        "subject": "чипси",
+        "subject_type": "sku",
+        "thread_root": "3053",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@msuaaaa",
+        "confidence": 1.0,
+        "msg_id": 841,
+        "quote": "Создатель акции урод",
+        "subject": "АТБ",
+        "subject_type": "chain",
+        "thread_root": "3053",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@msuaaaa",
+        "confidence": 1.0,
+        "msg_id": 1217,
+        "quote": "Шикарно",
+        "subject": "McDonald’s",
+        "subject_type": "chain",
+        "thread_root": "3454",
+        "type": "похвала"
+      },
+      {
+        "channel": "@msuaaaa",
+        "confidence": 1.0,
+        "msg_id": 1217,
+        "quote": "Канал не о скидках, а о треше",
+        "subject": "McDonald’s",
+        "subject_type": "chain",
+        "thread_root": "3454",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@msuaaaa",
+        "confidence": 1.0,
+        "msg_id": 2013,
+        "quote": "Чи викладаєте з рошену акції?",
+        "subject": "рошен",
+        "subject_type": "chain",
+        "thread_root": "4173",
+        "type": "спрос"
+      },
+      {
+        "channel": "@msuaaaa",
+        "confidence": 1.0,
+        "msg_id": 2508,
+        "quote": "1 кг за певну кількість грн чи не?",
+        "subject": "АТБ",
+        "subject_type": "chain",
+        "thread_root": "4490",
+        "type": "цена"
+      },
+      {
+        "channel": "@msuaaaa",
+        "confidence": 1.0,
+        "msg_id": 2509,
+        "quote": "термін придатності закінчується в цьому місяці",
+        "subject": "сир",
+        "subject_type": "sku",
+        "thread_root": "4588",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@msuaaaa",
+        "confidence": 1.0,
+        "msg_id": 2509,
+        "quote": "чи то лише в мене так в сільпо?",
+        "subject": "Сільпо",
+        "subject_type": "chain",
+        "thread_root": "4588",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@msuaaaa",
+        "confidence": 1.0,
+        "msg_id": 2517,
+        "quote": "Можна з Mashket?",
+        "subject": "McDonald’s",
+        "subject_type": "chain",
+        "thread_root": "4599",
+        "type": "спрос"
+      },
+      {
+        "channel": "@msuaaaa",
+        "confidence": 1.0,
+        "msg_id": 3015,
+        "quote": "продукты которые на слнд день по акции будут",
+        "subject": "Сільпо",
+        "subject_type": "chain",
+        "thread_root": "5015",
+        "type": "спрос"
+      },
+      {
+        "channel": "@msuaaaa",
+        "confidence": 0.9,
+        "msg_id": 3042,
+        "quote": "Еще бы завтра выложили",
+        "subject": "Сільпо",
+        "subject_type": "chain",
+        "thread_root": "5046",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@msuaaaa",
+        "confidence": 0.9,
+        "msg_id": 3043,
+        "quote": "Давайте что в апельмоне",
+        "subject": "апельмон",
+        "subject_type": "chain",
+        "thread_root": "5046",
+        "type": "спрос"
+      },
+      {
+        "channel": "@msuaaaa",
+        "confidence": 1.0,
+        "msg_id": 3456,
+        "quote": "чекаємо на нові акції",
+        "subject": "Рошен",
+        "subject_type": "chain",
+        "thread_root": "5113",
+        "type": "спрос"
+      },
+      {
+        "channel": "@msuaaaa",
+        "confidence": 1.0,
+        "msg_id": 3856,
+        "quote": "Це треба через додаток ваучер сканувати чи через отой манітор на якому замовляти?",
+        "subject": "McDonald’s",
+        "subject_type": "chain",
+        "thread_root": "5513",
+        "type": "спрос"
+      },
+      {
+        "channel": "@msuaaaa",
+        "confidence": 1.0,
+        "msg_id": 3974,
+        "quote": "А пиво де",
+        "subject": "пиво",
+        "subject_type": "sku",
+        "thread_root": "5704",
+        "type": "спрос"
+      },
+      {
+        "channel": "@msuaaaa",
+        "confidence": 1.0,
+        "msg_id": 5218,
+        "quote": "Різниця у вартості кави",
+        "subject": "кава",
+        "subject_type": "sku",
+        "thread_root": "6502",
+        "type": "цена"
+      },
+      {
+        "channel": "@msuaaaa",
+        "confidence": 0.9,
+        "msg_id": 5218,
+        "quote": "Різниця у вартості кави в один день🤡",
+        "subject": "кава",
+        "subject_type": "sku",
+        "thread_root": "6502",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@msuaaaa",
+        "confidence": 1.0,
+        "msg_id": 5460,
+        "quote": "Підкажіть, хтось має промокод sinsay на знижку 10% в корзині?",
+        "subject": "sinsay",
+        "subject_type": "chain",
+        "thread_root": "6691",
+        "type": "спрос"
+      },
+      {
+        "channel": "@msuaaaa",
+        "confidence": 1.0,
+        "msg_id": 6303,
+        "quote": "ВАУУУУУ",
+        "subject": "7202",
+        "subject_type": "post",
+        "thread_root": "7202",
+        "type": "похвала"
+      },
+      {
+        "channel": "@msuaaaa",
+        "confidence": 1.0,
+        "msg_id": 6307,
+        "quote": "а ціна",
+        "subject": "Тріпл Чііз Біт",
+        "subject_type": "sku",
+        "thread_root": "7202",
+        "type": "цена"
+      },
+      {
+        "channel": "@msuaaaa",
+        "confidence": 1.0,
+        "msg_id": 6324,
+        "quote": "247 где-то вроде за один",
+        "subject": "Тріпл Чііз Біт",
+        "subject_type": "sku",
+        "thread_root": "7202",
+        "type": "цена"
+      },
+      {
+        "channel": "@msuaaaa",
+        "confidence": 1.0,
+        "msg_id": 6538,
+        "quote": "ура, хоть что-то толковое уже",
+        "subject": "McDonald’s",
+        "subject_type": "chain",
+        "thread_root": "7333",
+        "type": "похвала"
+      },
+      {
+        "channel": "@msuaaaa",
+        "confidence": 1.0,
+        "msg_id": 6618,
+        "quote": "прибрати каву..",
+        "subject": "McDonald’s",
+        "subject_type": "chain",
+        "thread_root": "7348",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@msuaaaa",
+        "confidence": 1.0,
+        "msg_id": 6716,
+        "quote": "Підкажіть пліз для чого ваучери взагалі?",
+        "subject": "McDonald’s",
+        "subject_type": "chain",
+        "thread_root": "7402",
+        "type": "спрос"
+      },
+      {
+        "channel": "@msuaaaa",
+        "confidence": 1.0,
+        "msg_id": 7134,
+        "quote": "В Чернівцях немає",
+        "subject": "кондиціонер для прання",
+        "subject_type": "sku",
+        "thread_root": "7627",
+        "type": "спрос"
+      },
+      {
+        "channel": "@msuaaaa",
+        "confidence": 1.0,
+        "msg_id": 7148,
+        "quote": "де дивитися такі пропозиції із Аврори?",
+        "subject": "Аврора",
+        "subject_type": "chain",
+        "thread_root": "7627",
+        "type": "спрос"
+      },
+      {
+        "channel": "@msuaaaa",
+        "confidence": 1.0,
+        "msg_id": 7158,
+        "quote": "Ціна жах",
+        "subject": "ДАБЛ ЧІКЕН BBQ",
+        "subject_type": "sku",
+        "thread_root": "7636",
+        "type": "цена"
+      },
+      {
+        "channel": "@msuaaaa",
+        "confidence": 1.0,
+        "msg_id": 7158,
+        "quote": "Ціна жах за маленьку шпуньку",
+        "subject": "ДАБЛ ЧІКЕН BBQ",
+        "subject_type": "sku",
+        "thread_root": "7636",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@msuaaaa",
+        "confidence": 1.0,
+        "msg_id": 7339,
+        "quote": "Топ",
+        "subject": "Сільпо",
+        "subject_type": "chain",
+        "thread_root": "7693",
+        "type": "похвала"
+      },
+      {
+        "channel": "@msuaaaa",
+        "confidence": 1.0,
+        "msg_id": 7393,
+        "quote": "Було б чудово",
+        "subject": "АТБ",
+        "subject_type": "chain",
+        "thread_root": "7792",
+        "type": "похвала"
+      },
+      {
+        "channel": "@msuaaaa",
+        "confidence": 1.0,
+        "msg_id": 7395,
+        "quote": "скільки ці продукти чекати?",
+        "subject": "АТБ",
+        "subject_type": "chain",
+        "thread_root": "7792",
+        "type": "спрос"
+      },
+      {
+        "channel": "@msuaaaa",
+        "confidence": 1.0,
+        "msg_id": 7410,
+        "quote": "не сумісні речі",
+        "subject": "Укрпошта",
+        "subject_type": "chain",
+        "thread_root": "7792",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@msuaaaa",
+        "confidence": 1.0,
+        "msg_id": 7414,
+        "quote": "досить не погано працює",
+        "subject": "Укрпошта",
+        "subject_type": "chain",
+        "thread_root": "7792",
+        "type": "похвала"
+      },
+      {
+        "channel": "@msuaaaa",
+        "confidence": 1.0,
+        "msg_id": 7581,
+        "quote": "Чому у Вас не всі картинки з акціями атб ?",
+        "subject": "АТБ",
+        "subject_type": "chain",
+        "thread_root": "7825",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@msuaaaa",
+        "confidence": 1.0,
+        "msg_id": 7599,
+        "quote": "Щось страшне як для свята",
+        "subject": "іграшки",
+        "subject_type": "sku",
+        "thread_root": "7900",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@msuaaaa",
+        "confidence": 1.0,
+        "msg_id": 7631,
+        "quote": "В яких містах???",
+        "subject": "McDonald’s",
+        "subject_type": "chain",
+        "thread_root": "7907",
+        "type": "спрос"
+      },
+      {
+        "channel": "@msuaaaa",
+        "confidence": 1.0,
+        "msg_id": 7639,
+        "quote": "А в наборі фігурки чи разом із чашками",
+        "subject": "Happy Meal Friends",
+        "subject_type": "sku",
+        "thread_root": "7907",
+        "type": "спрос"
+      },
+      {
+        "channel": "@msuaaaa",
+        "confidence": 1.0,
+        "msg_id": 7728,
+        "quote": "буде так дорого коштувати",
+        "subject": "Happy Meal Friends",
+        "subject_type": "sku",
+        "thread_root": "7907",
+        "type": "цена"
+      },
+      {
+        "channel": "@msuaaaa",
+        "confidence": 1.0,
+        "msg_id": 7728,
+        "quote": "яке меню тоді буде входити в Хеппі міл разом з іграшками",
+        "subject": "Happy Meal Friends",
+        "subject_type": "sku",
+        "thread_root": "7907",
+        "type": "спрос"
+      },
+      {
+        "channel": "@msuaaaa",
+        "confidence": 1.0,
+        "msg_id": 7908,
+        "quote": "А можна взяти щось у МакДональдзі за національний кешбек?",
+        "subject": "McDonald’s",
+        "subject_type": "chain",
+        "thread_root": "8020",
+        "type": "спрос"
+      },
+      {
+        "channel": "@msuaaaa",
+        "confidence": 1.0,
+        "msg_id": 7913,
+        "quote": "Подскажите где найти эти товары в приложении глово? Или активировать их нужно?",
+        "subject": "Glovo",
+        "subject_type": "chain",
+        "thread_root": "8020",
+        "type": "спрос"
+      },
+      {
+        "channel": "@msuaaaa",
+        "confidence": 1.0,
+        "msg_id": 8065,
+        "quote": "повернув мені гроші за чіпси тому що затрималися з доставкою Тож вийшло вигідніше",
+        "subject": "Mono",
+        "subject_type": "chain",
+        "thread_root": "8096",
+        "type": "похвала"
+      },
+      {
+        "channel": "@msuaaaa",
+        "confidence": 1.0,
+        "msg_id": 8716,
+        "quote": "Де кока кола",
+        "subject": "кола",
+        "subject_type": "brand",
+        "thread_root": "8412",
+        "type": "спрос"
+      },
+      {
+        "channel": "@msuaaaa",
+        "confidence": 1.0,
+        "msg_id": 8752,
+        "quote": "акції на чіпси нема",
+        "subject": "АТБ",
+        "subject_type": "chain",
+        "thread_root": "8412",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@msuaaaa",
+        "confidence": 1.0,
+        "msg_id": 9279,
+        "quote": "Нових знижок атб ще не виклали?",
+        "subject": "атб",
+        "subject_type": "chain",
+        "thread_root": "8717",
+        "type": "спрос"
+      },
+      {
+        "channel": "@msuaaaa",
+        "confidence": 1.0,
+        "msg_id": 9367,
+        "quote": "какие Маки сейчас работают ?",
+        "subject": "McDonald’s",
+        "subject_type": "chain",
+        "thread_root": "8762",
+        "type": "спрос"
+      },
+      {
+        "channel": "@msuaaaa",
+        "confidence": 0.9,
+        "msg_id": 9400,
+        "quote": "И всьо?",
+        "subject": "АТБ",
+        "subject_type": "chain",
+        "thread_root": "8768",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@msuaaaa",
+        "confidence": 1.0,
+        "msg_id": 9451,
+        "quote": "Дякую за вашу працю",
+        "subject": "msuaaaa",
+        "subject_type": "chain",
+        "thread_root": "8788",
+        "type": "похвала"
+      },
+      {
+        "channel": "@msuaaaa",
+        "confidence": 1.0,
+        "msg_id": 9637,
+        "quote": "зроблено з гівна и палиць",
+        "subject": "желейні крокодильчики",
+        "subject_type": "sku",
+        "thread_root": "8905",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@msuaaaa",
+        "confidence": 0.9,
+        "msg_id": 9643,
+        "quote": "нащо ви таке зранку постите",
+        "subject": "Lviv Croissants",
+        "subject_type": "chain",
+        "thread_root": "8907",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@msuaaaa",
+        "confidence": 1.0,
+        "msg_id": 10093,
+        "quote": "шкода що змінили на 5 гострих крил",
+        "subject": "KFC",
+        "subject_type": "chain",
+        "thread_root": "9139",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@msuaaaa",
+        "confidence": 1.0,
+        "msg_id": 10181,
+        "quote": "Не вкусное",
+        "subject": "МакКантрі",
+        "subject_type": "sku",
+        "thread_root": "9140",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@msuaaaa",
+        "confidence": 1.0,
+        "msg_id": 10275,
+        "quote": "А як його там знайти?",
+        "subject": "McDonald’s",
+        "subject_type": "chain",
+        "thread_root": "9164",
+        "type": "спрос"
+      },
+      {
+        "channel": "@msuaaaa",
+        "confidence": 1.0,
+        "msg_id": 10250,
+        "quote": "Просто продлили акцію?)",
+        "subject": "АТБ",
+        "subject_type": "chain",
+        "thread_root": "9190",
+        "type": "спрос"
+      },
+      {
+        "channel": "@msuaaaa",
+        "confidence": 1.0,
+        "msg_id": 10572,
+        "quote": "ни о чем",
+        "subject": "9354",
+        "subject_type": "post",
+        "thread_root": "9354",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@msuaaaa",
+        "confidence": 1.0,
+        "msg_id": 10577,
+        "quote": "чипсы не на акции?",
+        "subject": "чипсы",
+        "subject_type": "brand",
+        "thread_root": "9354",
+        "type": "спрос"
+      },
+      {
+        "channel": "@msuaaaa",
+        "confidence": 1.0,
+        "msg_id": 10578,
+        "quote": "потому что нет замороженных ягод",
+        "subject": "ягоды замороженные",
+        "subject_type": "sku",
+        "thread_root": "9354",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@msuaaaa",
+        "confidence": 1.0,
+        "msg_id": 10899,
+        "quote": "КОЛИ АКЦія на лЕЙС",
+        "subject": "чипси лейс",
+        "subject_type": "sku",
+        "thread_root": "9483",
+        "type": "спрос"
+      },
+      {
+        "channel": "@msuaaaa",
+        "confidence": 1.0,
+        "msg_id": 10899,
+        "quote": "КОЛИ АКЦія на лЕЙС",
+        "subject": "чипси лейс",
+        "subject_type": "sku",
+        "thread_root": "9483",
+        "type": "цена"
+      },
+      {
+        "channel": "@msuaaaa",
+        "confidence": 1.0,
+        "msg_id": 11009,
+        "quote": "вигідно",
+        "subject": "McDonald’s",
+        "subject_type": "chain",
+        "thread_root": "9545",
+        "type": "похвала"
+      },
+      {
+        "channel": "@msuaaaa",
+        "confidence": 1.0,
+        "msg_id": 11108,
+        "quote": "за 19",
+        "subject": "ковбаса",
+        "subject_type": "sku",
+        "thread_root": "9577",
+        "type": "цена"
+      },
+      {
+        "channel": "@msuaaaa",
+        "confidence": 1.0,
+        "msg_id": 11108,
+        "quote": "це опасно",
+        "subject": "ковбаса",
+        "subject_type": "sku",
+        "thread_root": "9577",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@msuaaaa",
+        "confidence": 1.0,
+        "msg_id": 11224,
+        "quote": "Де купити?",
+        "subject": "свічки BISCOTTI",
+        "subject_type": "sku",
+        "thread_root": "9618",
+        "type": "спрос"
+      },
+      {
+        "channel": "@msuaaaa",
+        "confidence": 1.0,
+        "msg_id": 11970,
+        "quote": "Первый раз брали классное нам понравилось",
+        "subject": "піца-капкейк",
+        "subject_type": "sku",
+        "thread_root": "9952",
+        "type": "похвала"
+      },
+      {
+        "channel": "@msuaaaa",
+        "confidence": 1.0,
+        "msg_id": 11970,
+        "quote": "Вчера взяли непропечённое",
+        "subject": "піца-капкейк",
+        "subject_type": "sku",
+        "thread_root": "9952",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@msuaaaa",
+        "confidence": 1.0,
+        "msg_id": 12190,
+        "quote": "Цікаво виробник Україна?",
+        "subject": "Pepsi Gold",
+        "subject_type": "sku",
+        "thread_root": "10021",
+        "type": "спрос"
+      },
+      {
+        "channel": "@msuaaaa",
+        "confidence": 1.0,
+        "msg_id": 12388,
+        "quote": "а як користуватися цими купонами із застосунку?",
+        "subject": "KFC",
+        "subject_type": "chain",
+        "thread_root": "10121",
+        "type": "спрос"
+      },
+      {
+        "channel": "@msuaaaa",
+        "confidence": 1.0,
+        "msg_id": 12510,
+        "quote": "А коли у всіх маках?",
+        "subject": "McDonald’s",
+        "subject_type": "chain",
+        "thread_root": "10169",
+        "type": "спрос"
+      },
+      {
+        "channel": "@msuaaaa",
+        "confidence": 1.0,
+        "msg_id": 12512,
+        "quote": "А до коли вони будуть",
+        "subject": "стакани",
+        "subject_type": "sku",
+        "thread_root": "10169",
+        "type": "спрос"
+      },
+      {
+        "channel": "@msuaaaa",
+        "confidence": 1.0,
+        "msg_id": 12590,
+        "quote": "будуть іграшки?",
+        "subject": "іграшки",
+        "subject_type": "sku",
+        "thread_root": "10169",
+        "type": "спрос"
+      },
+      {
+        "channel": "@msuaaaa",
+        "confidence": 1.0,
+        "msg_id": 12638,
+        "quote": "цінники не змінили",
+        "subject": "Сільпо",
+        "subject_type": "chain",
+        "thread_root": "10219",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@msuaaaa",
+        "confidence": 1.0,
+        "msg_id": 12638,
+        "quote": "неправильна ціна",
+        "subject": "Сільпо",
+        "subject_type": "chain",
+        "thread_root": "10219",
+        "type": "цена"
+      },
+      {
+        "channel": "@msuaaaa",
+        "confidence": 1.0,
+        "msg_id": 12639,
+        "quote": "Ціна вірна",
+        "subject": "Сільпо",
+        "subject_type": "chain",
+        "thread_root": "10219",
+        "type": "цена"
+      },
+      {
+        "channel": "@msuaaaa",
+        "confidence": 1.0,
+        "msg_id": 12643,
+        "quote": "нашо викладати на канал пост з неправильним цінником",
+        "subject": "msuaaaa",
+        "subject_type": "chain",
+        "thread_root": "10219",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@msuaaaa",
+        "confidence": 1.0,
+        "msg_id": 12644,
+        "quote": "ціна на фото вірна",
+        "subject": "чипси Люкс",
+        "subject_type": "sku",
+        "thread_root": "10219",
+        "type": "цена"
+      },
+      {
+        "channel": "@msuaaaa",
+        "confidence": 0.9,
+        "msg_id": 12644,
+        "quote": "сьогодні якраз брали",
+        "subject": "чипси Люкс",
+        "subject_type": "sku",
+        "thread_root": "10219",
+        "type": "похвала"
+      },
+      {
+        "channel": "@msuaaaa",
+        "confidence": 1.0,
+        "msg_id": 13328,
+        "quote": "Ну такое",
+        "subject": "McDonald’s",
+        "subject_type": "chain",
+        "thread_root": "10459",
+        "type": "жалоба"
+      },
+      {
+        "channel": "@msuaaaa",
+        "confidence": 1.0,
+        "msg_id": 13519,
+        "quote": "Очень вкусное",
+        "subject": "пиво BAVARIA POMEGRANATE",
+        "subject_type": "sku",
+        "thread_root": "10617",
+        "type": "похвала"
+      },
+      {
+        "channel": "@msuaaaa",
+        "confidence": 1.0,
+        "msg_id": 13529,
+        "quote": "Це у якому ашані?",
+        "subject": "пиво BAVARIA POMEGRANATE",
+        "subject_type": "sku",
+        "thread_root": "10617",
+        "type": "спрос"
+      },
+      {
+        "channel": "@msuaaaa",
+        "confidence": 1.0,
+        "msg_id": 13542,
+        "quote": "Ця акція діє лише у новому магазині?",
+        "subject": "Сільпо",
+        "subject_type": "chain",
+        "thread_root": "10635",
+        "type": "спрос"
+      },
+      {
+        "channel": "@msuaaaa",
+        "confidence": 1.0,
+        "msg_id": 13584,
+        "quote": "Ох, як спокусивши морозивом... Пряме дитинство!",
+        "subject": "Морозиво Пряне печиво Міньйон",
+        "subject_type": "sku",
+        "thread_root": "10651",
+        "type": "похвала"
+      },
+      {
+        "channel": "@msuaaaa",
+        "confidence": 0.9,
+        "msg_id": 13585,
+        "quote": "Вони усі не нові)",
+        "subject": "Морозиво Пряне печиво Міньйон",
+        "subject_type": "sku",
+        "thread_root": "10651",
+        "type": "жалоба"
+      }
+    ],
     "from": "results/promo_signals/*.json :: kept.signal — the paid dev loop's own records, joined on (channel, thread_root) to promo_threads_draw*.json :: draw[].post_date and to promo_*_pack.json :: items[].post; the coverage line is results/promo_screen_data.json :: screen.threads",
     "matrix": {
       "by_subject_type": {
