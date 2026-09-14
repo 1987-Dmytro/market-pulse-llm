@@ -11,11 +11,22 @@ same sentence, `build_promo_screen.S2_BOUNDARY`, so the README and the screen ca
 a number or about what separates the shipped row from the readings. A missing source is that
 reader's own named refusal; missing markers are this script's. Running it twice writes the same
 bytes: nothing here reads a clock.
+
+PHASE-ship-1 §1 (c) makes the README the product's front page, and a front page carries figures:
+what the instrument holds, the S1 bar, the S2 readings, and the fine-tuned model beside the base it
+was trained from. All four sections are written HERE, between one pair of markers, for the reason
+the S2 block already existed — a figure typed into prose is a figure no file can move
+([[the_cheap_file_gets_the_expected_number]]), and every row names the file and the field it was
+read from. The base-vs-fine-tune table is the v3 RE-SCORES (`results/rescores_v3.json`): base and
+both fine-tune arms scored against ONE gold version, which is the only comparison that is a
+comparison — the shipped 4.5h2 verdict is a different test set and is quoted as its own line
+([[a_settlement_and_its_reference_measure_different_kinds]]).
 """
 
 from __future__ import annotations
 
 import argparse
+import json
 import sys
 from pathlib import Path
 
@@ -26,10 +37,178 @@ import build_promo_screen as screen  # noqa: E402
 
 README = REPO_ROOT / "README.md"
 START = (
-    "<!-- S2 READINGS — written by scripts/build_readme_results.py from the result files each row"
-    " names; regenerate, never edit -->"
+    "<!-- RESULTS — written by scripts/build_readme_results.py from the result files each row"
+    " names; regenerate with `make promo-screen`, never edit -->"
 )
-END = "<!-- /S2 READINGS -->"
+END = "<!-- /RESULTS -->"
+
+FRONT = REPO_ROOT / "results" / "front_data.json"
+GRADE = REPO_ROOT / "results" / "grade_positions_50.json"
+RESCORES = REPO_ROOT / "results" / "rescores_v3.json"
+VERDICT = REPO_ROOT / "results" / "verdict_45h2.json"
+WEEKLY = REPO_ROOT / "results" / "weekly"
+
+
+def load(path: Path) -> dict | list:
+    """A source of this block, or the same kind of named refusal every reader here makes."""
+    if not path.exists():
+        raise SystemExit(
+            f"build-readme REFUSED: missing {path.relative_to(REPO_ROOT)} — the README prints"
+            " figures out of result files and writes no partial block"
+        )
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def holdings() -> list[str]:
+    """«What the instrument holds today» — the populations the app shows, each naming its field."""
+    front = load(FRONT)
+    positions = front["positions"]
+    threads = front["status"]["threads"]
+    reactions = front["reactions_v2"]
+    region = front["region"]
+    weeks = sorted(path.name for path in WEEKLY.glob("positions_*.jsonl"))
+    weekly_rows = sum(
+        len([line for line in (WEEKLY / name).read_text(encoding="utf-8").splitlines() if line])
+        for name in weeks
+    )
+    screen_rows = len(load(screen.EXPORT)["screen"]["positions"])
+    money = front["status"]["money"]
+    rows = [
+        (
+            "promo positions on the screen",
+            f"{screen_rows}",
+            "`results/promo_screen_data.json` :: screen.positions",
+        ),
+        (
+            "positions in the table, page-true",
+            f"{len(positions['rows'])} · {positions['excluded']['n']} excluded"
+            f" ({positions['corrected']} corrected by leaflet page)",
+            "`results/front_data.json` :: positions",
+        ),
+        (
+            "promo threads read for reactions",
+            f"{threads['read']} of {threads['product_population']} · {threads['queue']} queued",
+            "`results/front_data.json` :: status.threads",
+        ),
+        (
+            "signal rows under those threads",
+            f"{reactions['rows']}",
+            "`results/front_data.json` :: reactions_v2",
+        ),
+        (
+            "weeks in the committed dataset",
+            f"{len(weeks)} ({weeks[0].split('_')[1].split('.')[0]}–"
+            f"{weeks[-1].split('_')[1].split('.')[0]}) · {weekly_rows} rows",
+            "`results/weekly/positions_<ISO-week>.jsonl`",
+        ),
+        (
+            "Poltava-region channels watched",
+            f"{region['totals']['channels']} · {region['totals']['posts']} posts ·"
+            f" {region['totals']['comments']} comments",
+            "`results/front_data.json` :: region.totals",
+        ),
+        (
+            "region comment sample",
+            f"{region['sample']['threads_read']} of {region['sample']['threads_total']} threads"
+            f" · {region['sample']['outstanding']} outstanding",
+            "`results/region_collect_report.json` :: totals",
+        ),
+        (
+            "watchlist mentions in the region",
+            f"{region['totals']['mentions']} — the baseline, not an empty screen",
+            "`results/front_data.json` :: region.baseline",
+        ),
+        (
+            "money spent on the whole instrument",
+            f"${money['spent_usd']:.4f} of the ${money['cap_usd']:.2f} cap",
+            "`results/spend_cycle3.json` :: sessions[-1]",
+        ),
+    ]
+    lines = [
+        "**What the instrument holds today.** Every figure is a field of the file beside it; the"
+        " app prints these same fields and computes none of them.",
+        "",
+        "| what | value | file :: field |",
+        "|---|---|---|",
+    ]
+    lines += [f"| {what} | {value} | {source} |" for what, value, source in rows]
+    return lines
+
+
+def s1() -> list[str]:
+    """The S1 bar — published as measured, RED, with the two limits the grade file carries."""
+    grade = load(GRADE)
+    completeness = grade["bars"]["completeness"]
+    accuracy = grade["bars"]["price_accuracy"]
+    readings = grade["readings"]
+    return [
+        "**S1 — positions read off leaflet pages, graded on the team lead's blind gold.** The bar"
+        " is RED and ships RED: the reader finds a quarter of the rows a human finds on the same"
+        " pages, and prices what it does find.",
+        "",
+        "| reading | value | bar | file |",
+        "|---|---|---|---|",
+        f"| completeness | {completeness['value']:.4f} ({completeness['matched']}/"
+        f"{completeness['gold']}) {'✅' if completeness['held'] else '❌'} |"
+        f" {completeness['bar']:.2f} | `results/grade_positions_50.json` :: bars.completeness |",
+        f"| promo-price accuracy | {accuracy['value']:.4f} ({accuracy['right']}/"
+        f"{accuracy['scored']}) {'✅' if accuracy['held'] else '❌'} | {accuracy['bar']:.2f} |"
+        " `results/grade_positions_50.json` :: bars.price_accuracy |",
+        "",
+        f"Gold rows no prediction reached: {readings['gold_rows_no_prediction_reached']}."
+        f" Predicted rows no gold row claims: {readings['predicted_rows_no_gold_row_claims']}."
+        f" The gold is `{grade['gold']}`, written blind by the team lead.",
+    ]
+
+
+def model() -> list[str]:
+    """Base vs fine-tune on ONE gold version, and the shipped verdict as its own line.
+
+    The gate rows are selected by their METRIC, never by their position in the list: `G1d` appears
+    twice (post_type, then relevance beside it) and an index would silently print the second one
+    ([[a_block_selected_by_ordinal_runs_the_wrong_block]]).
+    """
+    rescores = load(RESCORES)
+    verdict = load(VERDICT)
+    names = {
+        None: "base — zero-shot, no training",
+        "real-only": "fine-tune, real data only",
+        "with-synthetic": "fine-tune + synthetic sarcasm",
+    }
+
+    def gate(record: dict, name: str, metric: str = "") -> str:
+        for entry in record["gates"]:
+            if entry["gate"] != name or (metric and metric not in entry["metric"]):
+                continue
+            if "values" in entry:
+                return f"{entry['values']['overall']:.4f}"
+            return "—" if entry.get("value") is None else f"{entry['value']:.4f}"
+        return "—"
+
+    lines = [
+        "**The model: the fine-tune beside the base it was trained from.** One gold version for"
+        f" every row ({rescores[0]['gold_version']}), so the columns compare; every value is"
+        " `results/rescores_v3.json`'s own field.",
+        "",
+        "| arm | sentiment macro-F1 | sarcasm fix-rate | intents micro-F1 | post_type macro-F1 |"
+        " brand F1 |",
+        "|---|---|---|---|---|---|",
+    ]
+    for record in rescores:
+        lines.append(
+            f"| {names.get(record['arm'], record['arm'])} | {gate(record, 'G1a')} |"
+            f" {gate(record, 'G1b')} | {gate(record, 'G1c')} |"
+            f" {gate(record, 'G1d', 'post_type')} | {gate(record, 'G1e')} |"
+        )
+    lines += [
+        "",
+        f"The shipped decision was taken at step {verdict['step']} on test set"
+        f" {verdict['testset_version']} — a LATER gold than the table above, so its numbers are not"
+        f" this table's: {verdict['passed']} of {verdict['of']} gates held"
+        f" (`results/verdict_45h2.json` :: verdicts), and the app's Методологія tab prints the same"
+        " line. The model is `google/gemma-4-31b-it` + a QLoRA adapter, run on a rented GPU.",
+    ]
+    return lines
 
 
 def block(rows: list[dict]) -> str:
@@ -88,10 +267,16 @@ def main(argv: list[str] | None = None) -> int:
             " markers are the contract, and a README without them is not edited blind"
         )
     rows = screen.s2_readings(args.results)
+    body = "\n\n".join(
+        ["\n".join(holdings()), "\n".join(s1()), block(rows), "\n".join(model())],
+    )
     head, rest = text.split(START, 1)
     _, tail = rest.split(END, 1)
-    args.readme.write_text(f"{head}{START}\n{block(rows)}\n{END}{tail}", encoding="utf-8")
-    print(f"wrote the S2 block of {args.readme}: {len(rows)} readings from {args.results}")
+    args.readme.write_text(f"{head}{START}\n{body}\n{END}{tail}", encoding="utf-8")
+    print(
+        f"wrote the results block of {args.readme}: holdings + S1 + {len(rows)} S2 readings"
+        f" + base-vs-fine-tune, from {args.results}"
+    )
     return 0
 
 
