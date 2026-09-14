@@ -46414,6 +46414,2928 @@
       }
     ]
   },
+  "reactions_v2": {
+    "complaints": {
+      "bars": [
+        {
+          "n": 110,
+          "subject_type": "chain"
+        },
+        {
+          "n": 37,
+          "subject_type": "sku"
+        }
+      ],
+      "of_type": 149,
+      "other": 2,
+      "title": {
+        "en": "Complaints are about the CHAIN, not the product: 110 against the chain to 37 about the product (signals in all 281; complaints addressed elsewhere: 2).",
+        "ua": "Скаржаться передусім на МЕРЕЖУ, не на товар: 110 скарг на мережу проти 37 на товар (усього сигналів 281; інших адресатів скарги: 2)."
+      },
+      "type": "жалоба"
+    },
+    "coverage": {
+      "channels": 2,
+      "from": "results/promo_threads_draw*.json :: population.by_channel, less the channels config/registry.yaml has stopped collecting; `read` counts the records under results/promo_signals/",
+      "low_confidence": 12,
+      "not_collected": 12,
+      "population": 678,
+      "product_population": 666,
+      "queue": 548,
+      "read": 118,
+      "threads_with_a_signal": 100
+    },
+    "from": "results/promo_signals/*.json :: kept.signal — the paid dev loop's own records, joined on (channel, thread_root) to promo_threads_draw*.json :: draw[].post_date and to promo_*_pack.json :: items[].post; the coverage line is results/promo_screen_data.json :: screen.threads",
+    "matrix": {
+      "by_subject_type": {
+        "brand": 3,
+        "chain": 180,
+        "post": 3,
+        "sku": 95
+      },
+      "by_type": {
+        "жалоба": 149,
+        "похвала": 38,
+        "привычка": 3,
+        "спрос": 66,
+        "цена": 25
+      },
+      "cells": [
+        {
+          "n": 110,
+          "subject_type": "chain",
+          "type": "жалоба"
+        },
+        {
+          "n": 43,
+          "subject_type": "chain",
+          "type": "спрос"
+        },
+        {
+          "n": 37,
+          "subject_type": "sku",
+          "type": "жалоба"
+        },
+        {
+          "n": 21,
+          "subject_type": "sku",
+          "type": "спрос"
+        },
+        {
+          "n": 20,
+          "subject_type": "sku",
+          "type": "цена"
+        },
+        {
+          "n": 19,
+          "subject_type": "chain",
+          "type": "похвала"
+        },
+        {
+          "n": 17,
+          "subject_type": "sku",
+          "type": "похвала"
+        },
+        {
+          "n": 5,
+          "subject_type": "chain",
+          "type": "цена"
+        },
+        {
+          "n": 3,
+          "subject_type": "chain",
+          "type": "привычка"
+        },
+        {
+          "n": 2,
+          "subject_type": "post",
+          "type": "похвала"
+        },
+        {
+          "n": 2,
+          "subject_type": "brand",
+          "type": "спрос"
+        },
+        {
+          "n": 1,
+          "subject_type": "brand",
+          "type": "жалоба"
+        },
+        {
+          "n": 1,
+          "subject_type": "post",
+          "type": "жалоба"
+        }
+      ],
+      "subject_types": [
+        "chain",
+        "sku",
+        "brand",
+        "post"
+      ],
+      "subject_words": {
+        "brand": {
+          "en": "about the brand",
+          "ua": "на бренд"
+        },
+        "chain": {
+          "en": "about the chain",
+          "ua": "на мережу"
+        },
+        "post": {
+          "en": "about the post",
+          "ua": "про допис"
+        },
+        "sku": {
+          "en": "about the product",
+          "ua": "на товар"
+        }
+      },
+      "types": [
+        "жалоба",
+        "спрос",
+        "похвала",
+        "цена",
+        "привычка"
+      ]
+    },
+    "mix_by_channel": {
+      "channels": [
+        {
+          "channel": "@VARUS_channel",
+          "complaints": 123,
+          "parts": [
+            {
+              "n": 123,
+              "share": 0.6307692307692307,
+              "type": "жалоба"
+            },
+            {
+              "n": 32,
+              "share": 0.1641025641025641,
+              "type": "спрос"
+            },
+            {
+              "n": 25,
+              "share": 0.1282051282051282,
+              "type": "похвала"
+            },
+            {
+              "n": 12,
+              "share": 0.06153846153846154,
+              "type": "цена"
+            },
+            {
+              "n": 3,
+              "share": 0.015384615384615385,
+              "type": "привычка"
+            }
+          ],
+          "signals": 195
+        },
+        {
+          "channel": "@msuaaaa",
+          "complaints": 26,
+          "parts": [
+            {
+              "n": 26,
+              "share": 0.3023255813953488,
+              "type": "жалоба"
+            },
+            {
+              "n": 34,
+              "share": 0.3953488372093023,
+              "type": "спрос"
+            },
+            {
+              "n": 13,
+              "share": 0.1511627906976744,
+              "type": "похвала"
+            },
+            {
+              "n": 13,
+              "share": 0.1511627906976744,
+              "type": "цена"
+            }
+          ],
+          "signals": 86
+        }
+      ],
+      "title": {
+        "en": "The loudest channel is @VARUS_channel: 195 signals of 281, 63.1% of them complaints.",
+        "ua": "Найгучніший канал — @VARUS_channel: 195 сигналів із 281, з них скарг 63,1%."
+      }
+    },
+    "monthly": {
+      "months": [
+        {
+          "complaints": 0,
+          "month": "2025-02",
+          "share": 0.0,
+          "signals": 3
+        },
+        {
+          "complaints": 3,
+          "month": "2025-03",
+          "share": 0.6,
+          "signals": 5
+        },
+        {
+          "complaints": 0,
+          "month": "2025-04",
+          "share": 0.0,
+          "signals": 4
+        },
+        {
+          "complaints": 2,
+          "month": "2025-05",
+          "share": 0.3333333333333333,
+          "signals": 6
+        },
+        {
+          "complaints": 2,
+          "month": "2025-06",
+          "share": 0.3333333333333333,
+          "signals": 6
+        },
+        {
+          "complaints": 2,
+          "month": "2025-07",
+          "share": 0.4,
+          "signals": 5
+        },
+        {
+          "complaints": 12,
+          "month": "2025-08",
+          "share": 0.6,
+          "signals": 20
+        },
+        {
+          "complaints": 6,
+          "month": "2025-09",
+          "share": 0.5,
+          "signals": 12
+        },
+        {
+          "complaints": 17,
+          "month": "2025-10",
+          "share": 0.6538461538461539,
+          "signals": 26
+        },
+        {
+          "complaints": 4,
+          "month": "2025-11",
+          "share": 0.26666666666666666,
+          "signals": 15
+        },
+        {
+          "complaints": 31,
+          "month": "2025-12",
+          "share": 0.7209302325581395,
+          "signals": 43
+        },
+        {
+          "complaints": 0,
+          "month": "2026-01",
+          "share": 0.0,
+          "signals": 2
+        },
+        {
+          "complaints": 6,
+          "month": "2026-02",
+          "share": 0.75,
+          "signals": 8
+        },
+        {
+          "complaints": 8,
+          "month": "2026-03",
+          "share": 0.34782608695652173,
+          "signals": 23
+        },
+        {
+          "complaints": 18,
+          "month": "2026-04",
+          "share": 0.72,
+          "signals": 25
+        },
+        {
+          "complaints": 19,
+          "month": "2026-05",
+          "share": 0.5,
+          "signals": 38
+        },
+        {
+          "complaints": 11,
+          "month": "2026-06",
+          "share": 0.4230769230769231,
+          "signals": 26
+        },
+        {
+          "complaints": 8,
+          "month": "2026-07",
+          "share": 0.5714285714285714,
+          "signals": 14
+        }
+      ],
+      "title": {
+        "en": "The complaint share by month: highest in 2026-02 (75.0%), lowest in 2025-02 (0.0%); the month is the promo post's, the thread being the reply to it.",
+        "ua": "Частка скарг по місяцях: найвища — 2026-02 (75,0%), найнижча — 2025-02 (0,0%); місяць — це місяць промо-допису, під яким читали тред."
+      },
+      "type": "жалоба",
+      "without_a_date": 0
+    },
+    "reading": "one row per finding the reader kept, never per comment: a comment that names three things carries three signals, so every count here is a count of SIGNALS. The month of a signal is the month of the promo post its thread hangs under — the comment's own date is in the raw store, which the repository does not carry",
+    "rows": 281,
+    "sku_voice": {
+      "groups": [
+        {
+          "n": 37,
+          "rows": [
+            {
+              "channel": "@VARUS_channel",
+              "confidence": 1.0,
+              "quote": "іноді потрапляється пліснява",
+              "subject": "курячі чіпси",
+              "thread_root": "3163"
+            },
+            {
+              "channel": "@VARUS_channel",
+              "confidence": 1.0,
+              "quote": "Так тут гриль-барбекю подарять. Який айфон😂",
+              "subject": "АЙФОН 16 ПРО",
+              "thread_root": "4129"
+            },
+            {
+              "channel": "@VARUS_channel",
+              "confidence": 1.0,
+              "quote": "невігласи )))",
+              "subject": "Сир ЧЕДДЕР ЛЕЙЧЕЙСТЕР червонии",
+              "thread_root": "4449"
+            },
+            {
+              "channel": "@VARUS_channel",
+              "confidence": 1.0,
+              "quote": "в нашем Варусе его к сожалению нет пока",
+              "subject": "батончик Дубайський шоколад",
+              "thread_root": "5119"
+            },
+            {
+              "channel": "@VARUS_channel",
+              "confidence": 1.0,
+              "quote": "дивіться на якість. він ваесь білий",
+              "subject": "шоколад",
+              "thread_root": "5119"
+            },
+            {
+              "channel": "@VARUS_channel",
+              "confidence": 1.0,
+              "quote": "внешний вид конечно … Я даже не знаю, служит ли это поводом к возврату",
+              "subject": "шоколад",
+              "thread_root": "5119"
+            },
+            {
+              "channel": "@VARUS_channel",
+              "confidence": 1.0,
+              "quote": "Можливо посмакуєте отим, що мені продали?",
+              "subject": "шоколад",
+              "thread_root": "5119"
+            },
+            {
+              "channel": "@VARUS_channel",
+              "confidence": 1.0,
+              "quote": "небыло вчера в наличии в двух варусах",
+              "subject": "шоколад Великобритания",
+              "thread_root": "5119"
+            },
+            {
+              "channel": "@VARUS_channel",
+              "confidence": 1.0,
+              "quote": "ох і розводять лохів",
+              "subject": "майонез",
+              "thread_root": "5854"
+            },
+            {
+              "channel": "@VARUS_channel",
+              "confidence": 1.0,
+              "quote": "Смішні які",
+              "subject": "Щастябокс",
+              "thread_root": "6009"
+            },
+            {
+              "channel": "@VARUS_channel",
+              "confidence": 1.0,
+              "quote": "Взагалі не задоволена боксом",
+              "subject": "Щастябокс",
+              "thread_root": "6009"
+            },
+            {
+              "channel": "@VARUS_channel",
+              "confidence": 1.0,
+              "quote": "Торгівля повітрям",
+              "subject": "Щастябокс",
+              "thread_root": "6009"
+            },
+            {
+              "channel": "@VARUS_channel",
+              "confidence": 1.0,
+              "quote": "половину тысячи отдать за картонку",
+              "subject": "Щастябокс",
+              "thread_root": "6009"
+            },
+            {
+              "channel": "@VARUS_channel",
+              "confidence": 1.0,
+              "quote": "Отвратительное",
+              "subject": "масло",
+              "thread_root": "6009"
+            },
+            {
+              "channel": "@VARUS_channel",
+              "confidence": 1.0,
+              "quote": "не тратить семейный бюджет на отраву под видом масло",
+              "subject": "масло",
+              "thread_root": "6009"
+            },
+            {
+              "channel": "@VARUS_channel",
+              "confidence": 0.9,
+              "quote": "Белоруское морожено?",
+              "subject": "морозиво",
+              "thread_root": "7850"
+            },
+            {
+              "channel": "@VARUS_channel",
+              "confidence": 1.0,
+              "quote": "Повне розчарування!",
+              "subject": "яйця-сюрпризи",
+              "thread_root": "8647"
+            },
+            {
+              "channel": "@VARUS_channel",
+              "confidence": 1.0,
+              "quote": "не вкусная замороженная белая субстанция",
+              "subject": "морозиво М’яке",
+              "thread_root": "8823"
+            },
+            {
+              "channel": "@VARUS_channel",
+              "confidence": 1.0,
+              "quote": "Больше не хочется",
+              "subject": "морозиво М’яке",
+              "thread_root": "8823"
+            },
+            {
+              "channel": "@VARUS_channel",
+              "confidence": 1.0,
+              "quote": "і де в цій пасті фундук? Фундук і ароматизатор - то трохи різне та є введенням в оману покупця!",
+              "subject": "паста TUT NUT",
+              "thread_root": "9034"
+            },
+            {
+              "channel": "@VARUS_channel",
+              "confidence": 1.0,
+              "quote": "Нажаль, у нас його не можливо вхопити",
+              "subject": "Сир кисломолочний Varto",
+              "thread_root": "9112"
+            },
+            {
+              "channel": "@VARUS_channel",
+              "confidence": 1.0,
+              "quote": "ржавого цвета и мясо расползается",
+              "subject": "скумбрия",
+              "thread_root": "9277"
+            },
+            {
+              "channel": "@VARUS_channel",
+              "confidence": 1.0,
+              "quote": "ржавого цвета и мясо расползается",
+              "subject": "сельдь атлантическая",
+              "thread_root": "9277"
+            },
+            {
+              "channel": "@VARUS_channel",
+              "confidence": 0.9,
+              "quote": "Ось такий карась привезли",
+              "subject": "карась",
+              "thread_root": "10603"
+            },
+            {
+              "channel": "@VARUS_channel",
+              "confidence": 1.0,
+              "quote": "страшные",
+              "subject": "карась",
+              "thread_root": "10603"
+            },
+            {
+              "channel": "@VARUS_channel",
+              "confidence": 1.0,
+              "quote": "рыба плохая",
+              "subject": "карась",
+              "thread_root": "10603"
+            },
+            {
+              "channel": "@msuaaaa",
+              "confidence": 1.0,
+              "quote": "нихуя не было там бабок",
+              "subject": "чипси",
+              "thread_root": "3053"
+            },
+            {
+              "channel": "@msuaaaa",
+              "confidence": 1.0,
+              "quote": "термін придатності закінчується в цьому місяці",
+              "subject": "сир",
+              "thread_root": "4588"
+            },
+            {
+              "channel": "@msuaaaa",
+              "confidence": 0.9,
+              "quote": "Різниця у вартості кави в один день🤡",
+              "subject": "кава",
+              "thread_root": "6502"
+            },
+            {
+              "channel": "@msuaaaa",
+              "confidence": 1.0,
+              "quote": "Ціна жах за маленьку шпуньку",
+              "subject": "ДАБЛ ЧІКЕН BBQ",
+              "thread_root": "7636"
+            },
+            {
+              "channel": "@msuaaaa",
+              "confidence": 1.0,
+              "quote": "Щось страшне як для свята",
+              "subject": "іграшки",
+              "thread_root": "7900"
+            },
+            {
+              "channel": "@msuaaaa",
+              "confidence": 1.0,
+              "quote": "зроблено з гівна и палиць",
+              "subject": "желейні крокодильчики",
+              "thread_root": "8905"
+            },
+            {
+              "channel": "@msuaaaa",
+              "confidence": 1.0,
+              "quote": "Не вкусное",
+              "subject": "МакКантрі",
+              "thread_root": "9140"
+            },
+            {
+              "channel": "@msuaaaa",
+              "confidence": 1.0,
+              "quote": "потому что нет замороженных ягод",
+              "subject": "ягоды замороженные",
+              "thread_root": "9354"
+            },
+            {
+              "channel": "@msuaaaa",
+              "confidence": 1.0,
+              "quote": "це опасно",
+              "subject": "ковбаса",
+              "thread_root": "9577"
+            },
+            {
+              "channel": "@msuaaaa",
+              "confidence": 1.0,
+              "quote": "Вчера взяли непропечённое",
+              "subject": "піца-капкейк",
+              "thread_root": "9952"
+            },
+            {
+              "channel": "@msuaaaa",
+              "confidence": 0.9,
+              "quote": "Вони усі не нові)",
+              "subject": "Морозиво Пряне печиво Міньйон",
+              "thread_root": "10651"
+            }
+          ],
+          "title": {
+            "en": "What they complain about",
+            "ua": "На що скаржаться"
+          },
+          "type": "жалоба"
+        },
+        {
+          "n": 21,
+          "rows": [
+            {
+              "channel": "@VARUS_channel",
+              "confidence": 1.0,
+              "quote": "Як кава? Хто купував?",
+              "subject": "кава",
+              "thread_root": "1901"
+            },
+            {
+              "channel": "@VARUS_channel",
+              "confidence": 1.0,
+              "quote": "Чи є в продажу яйця гуся криптолова?",
+              "subject": "яйця гуся криптолова",
+              "thread_root": "3163"
+            },
+            {
+              "channel": "@VARUS_channel",
+              "confidence": 1.0,
+              "quote": "Васної?",
+              "subject": "морозиво ескімо Varto",
+              "thread_root": "3436"
+            },
+            {
+              "channel": "@VARUS_channel",
+              "confidence": 1.0,
+              "quote": "А Дор-Блю буде?",
+              "subject": "сир Дор-Блю",
+              "thread_root": "4449"
+            },
+            {
+              "channel": "@VARUS_channel",
+              "confidence": 1.0,
+              "quote": "Хочу попробовать батончик - типа Дубайский шоколад",
+              "subject": "батончик Дубайський шоколад",
+              "thread_root": "5119"
+            },
+            {
+              "channel": "@VARUS_channel",
+              "confidence": 1.0,
+              "quote": "що в тому боксі взагалі?",
+              "subject": "Щастябокс",
+              "thread_root": "6009"
+            },
+            {
+              "channel": "@VARUS_channel",
+              "confidence": 1.0,
+              "quote": "А покажіть, що там?",
+              "subject": "Щастябокс",
+              "thread_root": "6009"
+            },
+            {
+              "channel": "@VARUS_channel",
+              "confidence": 1.0,
+              "quote": "абы скидок на \"мафин\" почаще были",
+              "subject": "мафин",
+              "thread_root": "7440"
+            },
+            {
+              "channel": "@VARUS_channel",
+              "confidence": 1.0,
+              "quote": "чи є таке у Кривому розі?",
+              "subject": "морозиво М’яке",
+              "thread_root": "8823"
+            },
+            {
+              "channel": "@VARUS_channel",
+              "confidence": 1.0,
+              "quote": "не можливо вхопити",
+              "subject": "Сир кисломолочний Varto",
+              "thread_root": "9112"
+            },
+            {
+              "channel": "@VARUS_channel",
+              "confidence": 1.0,
+              "quote": "У Вас є сир з пліснявою?",
+              "subject": "сир з пліснявою",
+              "thread_root": "9926"
+            },
+            {
+              "channel": "@msuaaaa",
+              "confidence": 1.0,
+              "quote": "А пиво де",
+              "subject": "пиво",
+              "thread_root": "5704"
+            },
+            {
+              "channel": "@msuaaaa",
+              "confidence": 1.0,
+              "quote": "В Чернівцях немає",
+              "subject": "кондиціонер для прання",
+              "thread_root": "7627"
+            },
+            {
+              "channel": "@msuaaaa",
+              "confidence": 1.0,
+              "quote": "А в наборі фігурки чи разом із чашками",
+              "subject": "Happy Meal Friends",
+              "thread_root": "7907"
+            },
+            {
+              "channel": "@msuaaaa",
+              "confidence": 1.0,
+              "quote": "яке меню тоді буде входити в Хеппі міл разом з іграшками",
+              "subject": "Happy Meal Friends",
+              "thread_root": "7907"
+            },
+            {
+              "channel": "@msuaaaa",
+              "confidence": 1.0,
+              "quote": "КОЛИ АКЦія на лЕЙС",
+              "subject": "чипси лейс",
+              "thread_root": "9483"
+            },
+            {
+              "channel": "@msuaaaa",
+              "confidence": 1.0,
+              "quote": "Де купити?",
+              "subject": "свічки BISCOTTI",
+              "thread_root": "9618"
+            },
+            {
+              "channel": "@msuaaaa",
+              "confidence": 1.0,
+              "quote": "Цікаво виробник Україна?",
+              "subject": "Pepsi Gold",
+              "thread_root": "10021"
+            },
+            {
+              "channel": "@msuaaaa",
+              "confidence": 1.0,
+              "quote": "А до коли вони будуть",
+              "subject": "стакани",
+              "thread_root": "10169"
+            },
+            {
+              "channel": "@msuaaaa",
+              "confidence": 1.0,
+              "quote": "будуть іграшки?",
+              "subject": "іграшки",
+              "thread_root": "10169"
+            },
+            {
+              "channel": "@msuaaaa",
+              "confidence": 1.0,
+              "quote": "Це у якому ашані?",
+              "subject": "пиво BAVARIA POMEGRANATE",
+              "thread_root": "10617"
+            }
+          ],
+          "title": {
+            "en": "What they ask about",
+            "ua": "Що питають"
+          },
+          "type": "спрос"
+        },
+        {
+          "n": 20,
+          "rows": [
+            {
+              "channel": "@VARUS_channel",
+              "confidence": 1.0,
+              "quote": "Купи бокс за 500 грн",
+              "subject": "Щастябокс",
+              "thread_root": "6009"
+            },
+            {
+              "channel": "@VARUS_channel",
+              "confidence": 1.0,
+              "quote": "половину тысячи отдать за картонку",
+              "subject": "Щастябокс",
+              "thread_root": "6009"
+            },
+            {
+              "channel": "@VARUS_channel",
+              "confidence": 1.0,
+              "quote": "не може коштувати якісне масло - дешево",
+              "subject": "масло",
+              "thread_root": "6009"
+            },
+            {
+              "channel": "@VARUS_channel",
+              "confidence": 1.0,
+              "quote": "абы скидок на \"мафин\" почаще были",
+              "subject": "мафин",
+              "thread_root": "7440"
+            },
+            {
+              "channel": "@VARUS_channel",
+              "confidence": 1.0,
+              "quote": "брелоки по 99 грн",
+              "subject": "яйця-сюрпризи",
+              "thread_root": "8647"
+            },
+            {
+              "channel": "@VARUS_channel",
+              "confidence": 1.0,
+              "quote": "сельдь по 220 грн",
+              "subject": "сельдь",
+              "thread_root": "9277"
+            },
+            {
+              "channel": "@VARUS_channel",
+              "confidence": 1.0,
+              "quote": "220 грн сельдь!",
+              "subject": "сельдь",
+              "thread_root": "9277"
+            },
+            {
+              "channel": "@VARUS_channel",
+              "confidence": 1.0,
+              "quote": "за такие деньги и должна быть супер",
+              "subject": "сельдь",
+              "thread_root": "9277"
+            },
+            {
+              "channel": "@VARUS_channel",
+              "confidence": 1.0,
+              "quote": "за такою ціною",
+              "subject": "пряники Varto",
+              "thread_root": "9912"
+            },
+            {
+              "channel": "@VARUS_channel",
+              "confidence": 1.0,
+              "quote": "це за 100г ціна?",
+              "subject": "кур стегно",
+              "thread_root": "10187"
+            },
+            {
+              "channel": "@msuaaaa",
+              "confidence": 1.0,
+              "quote": "за 30 шт 49.99 грн",
+              "subject": "пакети для сміття",
+              "thread_root": "2455"
+            },
+            {
+              "channel": "@msuaaaa",
+              "confidence": 1.0,
+              "quote": "50 грн",
+              "subject": "цукор",
+              "thread_root": "2455"
+            },
+            {
+              "channel": "@msuaaaa",
+              "confidence": 1.0,
+              "quote": "Різниця у вартості кави",
+              "subject": "кава",
+              "thread_root": "6502"
+            },
+            {
+              "channel": "@msuaaaa",
+              "confidence": 1.0,
+              "quote": "а ціна",
+              "subject": "Тріпл Чііз Біт",
+              "thread_root": "7202"
+            },
+            {
+              "channel": "@msuaaaa",
+              "confidence": 1.0,
+              "quote": "247 где-то вроде за один",
+              "subject": "Тріпл Чііз Біт",
+              "thread_root": "7202"
+            },
+            {
+              "channel": "@msuaaaa",
+              "confidence": 1.0,
+              "quote": "Ціна жах",
+              "subject": "ДАБЛ ЧІКЕН BBQ",
+              "thread_root": "7636"
+            },
+            {
+              "channel": "@msuaaaa",
+              "confidence": 1.0,
+              "quote": "буде так дорого коштувати",
+              "subject": "Happy Meal Friends",
+              "thread_root": "7907"
+            },
+            {
+              "channel": "@msuaaaa",
+              "confidence": 1.0,
+              "quote": "КОЛИ АКЦія на лЕЙС",
+              "subject": "чипси лейс",
+              "thread_root": "9483"
+            },
+            {
+              "channel": "@msuaaaa",
+              "confidence": 1.0,
+              "quote": "за 19",
+              "subject": "ковбаса",
+              "thread_root": "9577"
+            },
+            {
+              "channel": "@msuaaaa",
+              "confidence": 1.0,
+              "quote": "ціна на фото вірна",
+              "subject": "чипси Люкс",
+              "thread_root": "10219"
+            }
+          ],
+          "title": {
+            "en": "About the price",
+            "ua": "Про ціну"
+          },
+          "type": "цена"
+        },
+        {
+          "n": 17,
+          "rows": [
+            {
+              "channel": "@VARUS_channel",
+              "confidence": 1.0,
+              "quote": "Печиво класне",
+              "subject": "печиво",
+              "thread_root": "1901"
+            },
+            {
+              "channel": "@VARUS_channel",
+              "confidence": 0.9,
+              "quote": "я бы не отказалась от такого бы",
+              "subject": "продукція ТОКЕРИ",
+              "thread_root": "2053"
+            },
+            {
+              "channel": "@VARUS_channel",
+              "confidence": 1.0,
+              "quote": "Очень вкусное мороженое",
+              "subject": "морозиво ескімо Varto",
+              "thread_root": "3436"
+            },
+            {
+              "channel": "@VARUS_channel",
+              "confidence": 1.0,
+              "quote": "ВКУСНОЕ ОЧЕНЬ",
+              "subject": "морозиво",
+              "thread_root": "7850"
+            },
+            {
+              "channel": "@VARUS_channel",
+              "confidence": 1.0,
+              "quote": "морозиво у них смачне",
+              "subject": "морозиво М’яке",
+              "thread_root": "8823"
+            },
+            {
+              "channel": "@VARUS_channel",
+              "confidence": 1.0,
+              "quote": "просто чарівний",
+              "subject": "плавлений сир Мааздам",
+              "thread_root": "9006"
+            },
+            {
+              "channel": "@VARUS_channel",
+              "confidence": 1.0,
+              "quote": "Неймовірно смачно",
+              "subject": "плавлений сир Мааздам",
+              "thread_root": "9006"
+            },
+            {
+              "channel": "@VARUS_channel",
+              "confidence": 1.0,
+              "quote": "подякувати за таку смачноту",
+              "subject": "плавлений сир Мааздам",
+              "thread_root": "9006"
+            },
+            {
+              "channel": "@VARUS_channel",
+              "confidence": 1.0,
+              "quote": "це смачнота!",
+              "subject": "ікра мінтаю",
+              "thread_root": "9006"
+            },
+            {
+              "channel": "@VARUS_channel",
+              "confidence": 1.0,
+              "quote": "Офігенно милі кото-зайчики і зайце-котики на упаковці",
+              "subject": "Сир кисломолочний Varto",
+              "thread_root": "9112"
+            },
+            {
+              "channel": "@VARUS_channel",
+              "confidence": 1.0,
+              "quote": "жирная, вкусная, супер",
+              "subject": "сельдь",
+              "thread_root": "9277"
+            },
+            {
+              "channel": "@VARUS_channel",
+              "confidence": 1.0,
+              "quote": "привозили суперскую",
+              "subject": "сельдь",
+              "thread_root": "9277"
+            },
+            {
+              "channel": "@VARUS_channel",
+              "confidence": 1.0,
+              "quote": "вау, дуже гарно",
+              "subject": "Пиво світле Pilsner MOVA",
+              "thread_root": "9850"
+            },
+            {
+              "channel": "@msuaaaa",
+              "confidence": 1.0,
+              "quote": "Первый раз брали классное нам понравилось",
+              "subject": "піца-капкейк",
+              "thread_root": "9952"
+            },
+            {
+              "channel": "@msuaaaa",
+              "confidence": 0.9,
+              "quote": "сьогодні якраз брали",
+              "subject": "чипси Люкс",
+              "thread_root": "10219"
+            },
+            {
+              "channel": "@msuaaaa",
+              "confidence": 1.0,
+              "quote": "Очень вкусное",
+              "subject": "пиво BAVARIA POMEGRANATE",
+              "thread_root": "10617"
+            },
+            {
+              "channel": "@msuaaaa",
+              "confidence": 1.0,
+              "quote": "Ох, як спокусивши морозивом... Пряме дитинство!",
+              "subject": "Морозиво Пряне печиво Міньйон",
+              "thread_root": "10651"
+            }
+          ],
+          "title": {
+            "en": "What they praise",
+            "ua": "Що хвалять"
+          },
+          "type": "похвала"
+        }
+      ],
+      "rows": 95,
+      "title": {
+        "en": "95 of the 281 signals name a product; the rest address the chain, the brand or the post itself.",
+        "ua": "Про конкретні товари — 95 сигналів із 281; решта адресована мережі, бренду або самому допису."
+      }
+    },
+    "threads": {
+      "cards": [
+        {
+          "channel": "@VARUS_channel",
+          "date": "2026-04-23",
+          "rows": [
+            {
+              "confidence": 1.0,
+              "quote": "брелоки по 99 грн",
+              "subject": "яйця-сюрпризи",
+              "subject_type": "sku",
+              "type": "цена"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "Повне розчарування!",
+              "subject": "яйця-сюрпризи",
+              "subject_type": "sku",
+              "type": "жалоба"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "Щось на офіційному сайті ніякої зміни не має",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "жалоба"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "жоден в мене ще не відскагувався",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "жалоба"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "в додатку не знайшла звідки сканувати",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "жалоба"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "саме ці не хоче",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "жалоба"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "код він так нормально і не прочитав,каже шо код неякісний",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "жалоба"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "Це по вашому чесно?",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "жалоба"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "Варус усіх намахав",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "жалоба"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "Це не чесно!",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "жалоба"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "Мені теж не подобається перенесення",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "жалоба"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "вартість зменшилася на 10 грн",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "цена"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "Розвод",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "жалоба"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "То хто тут клоун :)",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "жалоба"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "готовий на колективну скаргу",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "жалоба"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "а це вже напьорстки",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "жалоба"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "те що переписують коли хоче це не правила",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "жалоба"
+            }
+          ],
+          "signals": 17,
+          "text": "Памʼятається нам, що Гусь Призолов обіцяв спакувати валізи та помахати крилом уже 30.04. Га-га, це був пранк! Він залишається з Варусолюбами ще на місяць — до 31.05.2026 🪿🎁\n\nПернатий ще й підкинув додатковий бонус: з 23.04.2026 акційна ціна яєць-сюрпризів стає 89 грн замість 99 грн і діє, якщо в чеку є товар партнерів. А подарунки з набору, колекційні брелоки, гра за QR-кодом — як були, так і є без змін. Розіграш суперпризів за місце в ТОП-30 відбудеться 01.06.2026.\n\nКількість акційного товару обмежена та може бути відсутня в окремих магазинах мережі. Наявність перевіряй у додатку або на сайті VARUS.UA 🧡",
+          "thread_root": "8647"
+        },
+        {
+          "channel": "@VARUS_channel",
+          "date": "2026-05-22",
+          "rows": [
+            {
+              "confidence": 1.0,
+              "quote": "Дуже класно",
+              "subject": "9277",
+              "subject_type": "post",
+              "type": "похвала"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "Не всегда довольна",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "жалоба"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "ржавого цвета и мясо расползается",
+              "subject": "скумбрия",
+              "subject_type": "sku",
+              "type": "жалоба"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "ржавого цвета и мясо расползается",
+              "subject": "сельдь атлантическая",
+              "subject_type": "sku",
+              "type": "жалоба"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "500 грн в мусорку",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "цена"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "500 грн в мусорку",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "жалоба"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "рыба приезжала по доставке всегда суперская",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "похвала"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "я у них теперь в доставку рыбу не заказываю",
+              "subject": "Сільпо",
+              "subject_type": "chain",
+              "type": "жалоба"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "Они берут дешевейшую а продают как супер",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "жалоба"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "сельдь по 220 грн",
+              "subject": "сельдь",
+              "subject_type": "sku",
+              "type": "цена"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "жирная, вкусная, супер",
+              "subject": "сельдь",
+              "subject_type": "sku",
+              "type": "похвала"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "В варусе такого нет",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "жалоба"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "220 грн сельдь!",
+              "subject": "сельдь",
+              "subject_type": "sku",
+              "type": "цена"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "за такие деньги и должна быть супер",
+              "subject": "сельдь",
+              "subject_type": "sku",
+              "type": "цена"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "привозили суперскую",
+              "subject": "сельдь",
+              "subject_type": "sku",
+              "type": "похвала"
+            }
+          ],
+          "signals": 15,
+          "text": "Час спливає! Встигніть скористатися «Національним кешбеком» у VARUS!\n\nНагадуємо, що поточний етап програми «Національний кешбек» діє до 30 червня включно. Якщо ви відкладали великі покупки або просто хочете повернути кошти за щоденний кошик - зараз саме час!\n\nНагадуємо правила:\n👉 За покупки товарів українського виробництва у VARUS вам повертається або 5%, або 15% кешбеку 😎\n👉 Максимальна сума, яку можна накопичити за місяць - до 3 000 грн.\nНадалі програма працюватиме у звичному режимі\n\nЯк перевірити товар просто біля полиці?\nУсе максимально легко: відкривайте додаток Дія, переходьте в розділ «Національний кешбек» та скануйте штрихкод продукту прямо в магазині, аби переконатися, що він бере участь у програмі.\n\nНе втрачайте можливість заощадити та підтримати наших! Купуйте українське у VARUS та слідкуйте за оновленням програми «Національний кешбек»🇺🇦",
+          "thread_root": "9277"
+        },
+        {
+          "channel": "@VARUS_channel",
+          "date": "2025-12-09",
+          "rows": [
+            {
+              "confidence": 1.0,
+              "quote": "Купи бокс за 500 грн",
+              "subject": "Щастябокс",
+              "subject_type": "sku",
+              "type": "цена"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "Смішні які",
+              "subject": "Щастябокс",
+              "subject_type": "sku",
+              "type": "жалоба"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "Взагалі не задоволена боксом",
+              "subject": "Щастябокс",
+              "subject_type": "sku",
+              "type": "жалоба"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "що в тому боксі взагалі?",
+              "subject": "Щастябокс",
+              "subject_type": "sku",
+              "type": "спрос"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "Торгівля повітрям",
+              "subject": "Щастябокс",
+              "subject_type": "sku",
+              "type": "жалоба"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "А покажіть, що там?",
+              "subject": "Щастябокс",
+              "subject_type": "sku",
+              "type": "спрос"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "половину тысячи отдать за картонку",
+              "subject": "Щастябокс",
+              "subject_type": "sku",
+              "type": "цена"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "половину тысячи отдать за картонку",
+              "subject": "Щастябокс",
+              "subject_type": "sku",
+              "type": "жалоба"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "Отвратительное",
+              "subject": "масло",
+              "subject_type": "sku",
+              "type": "жалоба"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "Пытался оставить честный отзыв на их сайте, не добавляют",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "жалоба"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "варусу байдуже, що на полиці",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "жалоба"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "навіщо тоді варус портить собі репутацію?",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "жалоба"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "не може коштувати якісне масло - дешево",
+              "subject": "масло",
+              "subject_type": "sku",
+              "type": "цена"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "не тратить семейный бюджет на отраву под видом масло",
+              "subject": "масло",
+              "subject_type": "sku",
+              "type": "жалоба"
+            }
+          ],
+          "signals": 14,
+          "text": "Хто Щастябокс придбає, той обовʼязково знайде сертифікат із промокодом від нашого партнера АЗК WOG 🤩\n\nВаріантів промокоду декілька: \n\n🔸 бонуси на наступну заправку якісним пальним на WOG \n🔸 30% бонусами на WOG CAFE\n🔸 50 грн бонусами на WOG PRIDE \n\nЦікаво, який дістанеться тобі? Шукай Щастябокс у супермаркетах VARUS та на VARUS.UA 🧡\n\nP.S. Для учасників гри тамагочі-Варусятко на бокс діє знижка 30%",
+          "thread_root": "6009"
+        },
+        {
+          "channel": "@VARUS_channel",
+          "date": "2025-12-21",
+          "rows": [
+            {
+              "confidence": 1.0,
+              "quote": "В кого я можу уточнити за доставку?",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "спрос"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "А що це суцільний обман?",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "жалоба"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "ні зворотнього зв'язку в онлайн підтримці",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "жалоба"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "И служба поддержки загадочно морозится",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "жалоба"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "гаряча лінія скидає слухавку",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "жалоба"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "Вони не відповіли! Гаряча лінія скидають!",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "жалоба"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "Який в кого рівень щастя і позиція в рейтингу?",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "спрос"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "Варус просто обманщики и мошенники",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "жалоба"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "у них был сбой боксики мне начислили,аж через 4 дня",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "жалоба"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "инт ернет заказ,то же отменить нельзя",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "жалоба"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "На горячую линию дозвонится не возможно",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "жалоба"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "ПРОСТО ПОЗОР",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "жалоба"
+            }
+          ],
+          "signals": 12,
+          "text": "Прикрась свято цінами!  Якщо вже й летіти на мітлі крізь заметіль і красти Місяць, то лише з гарним настроєм. А наш акційний алкокаталог знає, як його створити 😉\n\nГортай добірку напоїв із фільму «Вечори на хуторі біля Диканьки» і купуй їх зі знижками з 22.12 по 24.12\n\nБільше новорічно-колоритного шукай на VARUS.UA 🧡",
+          "thread_root": "6216"
+        },
+        {
+          "channel": "@VARUS_channel",
+          "date": "2026-03-02",
+          "rows": [
+            {
+              "confidence": 1.0,
+              "quote": "абы скидок на \"мафин\" почаще были",
+              "subject": "мафин",
+              "subject_type": "sku",
+              "type": "спрос"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "абы скидок на \"мафин\" почаще были",
+              "subject": "мафин",
+              "subject_type": "sku",
+              "type": "цена"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "Санітарні норми вийшли з чату ?",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "жалоба"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "найкращий супермаркет",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "похвала"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "там завжди пускали всіх собачок",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "привычка"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "обожнюю всіх там працівників",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "похвала"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "У Варусі в Києві не пускають з тваринками",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "жалоба"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "Почему всегда в Киеве?!Других городов в Украине нет что-ли",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "жалоба"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "Дуже крута акція!",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "похвала"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "ви молодчинки",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "похвала"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "задовбали з блохастими в магазинах",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "жалоба"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "Спасибо за комфорт для наших любимцев",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "похвала"
+            }
+          ],
+          "signals": 12,
+          "text": "Бери песика з собою на шопінг у VARUS та вигравай сертифікат на покупки 🐾\n\nУ супермаркетах Києва, Дніпра та Одеси з’явилися спеціальні pet-візочки для твоїх чотирилапих друзів 🐶 \n\nВідтепер шопінг стане комфортним для всієї родини — включно з пухнастими. А ще можна виграти подарунок!\n\n🔸Публікуй в Instagram-сториз фото улюбленця в pet-візочку з відміткою @varus.ua \n🔸Став + під цим конкурсним дописом в Instagram, щоб ми не пропустили твій кадр\n\nСеред усіх учасників рандомно розіграємо 5 сертифікатів номіналом 500 грн.\n\n📍 Конкурс триватиме з 02.03 до 08.03.\n\nРезультати опублікуємо 09.03 у сториз та в Telegram-каналі VARUS.\n\n📍 Де вже можна скористатися pet-візочком? Шукай повний перелік адрес та офіційні правила участі у конкурсі на VARUS.UA \n\nХай щастить, га-а-а-а-в 🐶🧡",
+          "thread_root": "7440"
+        },
+        {
+          "channel": "@VARUS_channel",
+          "date": "2025-10-21",
+          "rows": [
+            {
+              "confidence": 1.0,
+              "quote": "Хочу попробовать батончик - типа Дубайский шоколад",
+              "subject": "батончик Дубайський шоколад",
+              "subject_type": "sku",
+              "type": "спрос"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "в нашем Варусе его к сожалению нет пока",
+              "subject": "батончик Дубайський шоколад",
+              "subject_type": "sku",
+              "type": "жалоба"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "Не купуйте. Як не соромно так дурити покупців",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "жалоба"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "дивіться на якість. він ваесь білий",
+              "subject": "шоколад",
+              "subject_type": "sku",
+              "type": "жалоба"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "внешний вид конечно … Я даже не знаю, служит ли это поводом к возврату",
+              "subject": "шоколад",
+              "subject_type": "sku",
+              "type": "жалоба"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "Можливо посмакуєте отим, що мені продали?",
+              "subject": "шоколад",
+              "subject_type": "sku",
+              "type": "жалоба"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "Варус, щось ви стали якоюсь забігайлівкою",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "жалоба"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "Товари найнижчої якості, на тижні вже вдруге повертаю товар",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "жалоба"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "Самое ужасное, что нет у них поддержки нормальной",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "жалоба"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "Підскажіть чому зникла адреса доставки чи самовивозу",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "спрос"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "небыло вчера в наличии в двух варусах",
+              "subject": "шоколад Великобритания",
+              "subject_type": "sku",
+              "type": "жалоба"
+            }
+          ],
+          "signals": 11,
+          "text": "Баланс? Це коли в одній руці олівець, яким викреслюєш завдання зі свого планера, а в іншій — тримаєш плитку шоколаду. Так працює система заохочення😋\n\n📍 Пропозиції діють з 14.10 по 22.10\n\nБільше смако-мотиваційного шукай у супермаркетах VARUS або на VARUS.UA 🧡",
+          "thread_root": "5119"
+        },
+        {
+          "channel": "@VARUS_channel",
+          "date": "2026-05-02",
+          "rows": [
+            {
+              "confidence": 1.0,
+              "quote": "не хочете вчасно доставляти замовлення",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "жалоба"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "Зникає бажання щось у вас купувати",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "жалоба"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "немає такої можливості",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "жалоба"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "В нас теж",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "жалоба"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "і кавомашини немає",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "жалоба"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "нічого такого немає",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "жалоба"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "чи є таке у Кривому розі?",
+              "subject": "морозиво М’яке",
+              "subject_type": "sku",
+              "type": "спрос"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "не вкусная замороженная белая субстанция",
+              "subject": "морозиво М’яке",
+              "subject_type": "sku",
+              "type": "жалоба"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "Больше не хочется",
+              "subject": "морозиво М’яке",
+              "subject_type": "sku",
+              "type": "жалоба"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "морозиво у них смачне",
+              "subject": "морозиво М’яке",
+              "subject_type": "sku",
+              "type": "похвала"
+            }
+          ],
+          "signals": 10,
+          "text": "А що, якщо сьогодні ви — той самий майстер морозива? 🍦\n\nОбираєте, натискаєте — і ідеальний завиток уже у ваших руках.\n\nНіжне, вершкове, зі 100% молока — і саме таке, як хочеться вам.\n\nІ ще приємніше: морозиво «М’яке» — всього за 35 грн.\nТут складно зупинитись на одному… але ми вас розуміємо 😉\n\nЗаходьте у VARUS і створюйте свій ідеальний десерт!\n\n📍 Де можна придбати морозиво:\n\nДніпро:\n• ТЦ «Європа», площа Європейська, 1-Д\n• вул. Січеславська Набережна, 33\n• ТЦ «Мост-Сіті», вул. Королеви Єлизавети ІІ, 2\n• вул. Івана Акінфеєва, 9\n• просп. Дмитра Яворницького, 106\n• вул. Набережна Перемоги, 56-А\n• вул. Березинська, 23-А\n\nКиїв:\n• вул. Васильківська, 34\n• вул. Жилянська, 59\n• вул. Костянтинівська, 2А\n\nКривий Ріг:\n• просп. Поштовий, 25\n\nЛиманка:\n• просп. Полковника Гуляєва, ж/м «Дружний», 107/1\n\nОдеса:\n• вул. Дача Ковалевського, 91\n• Французький бульвар, 22",
+          "thread_root": "8823"
+        },
+        {
+          "channel": "@VARUS_channel",
+          "date": "2025-08-03",
+          "rows": [
+            {
+              "confidence": 1.0,
+              "quote": "много акций и хороших продуктов",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "похвала"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "дурят людей и не привозят все заказанрые продукты и не возвращают деньги",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "жалоба"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "я разочаровалась в вашем магазине",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "жалоба"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "Колись буде варус на березінці?",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "спрос"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "Доставка и правда ужас ужас",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "жалоба"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "який зараз відсоток на бонусну картку",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "спрос"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "щось взагалі копійки нараховуються",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "жалоба"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "Зазвичай вибираю акційні",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "привычка"
+            }
+          ],
+          "signals": 8,
+          "text": "Натуральні продукти для тих, хто піклується про здоров’я і смак.\nБез лактози, без зайвих добавок, тільки чиста користь!\n\nПропозиції діють з 22.07 по 04.08 \n\nОбирай якість — живи легко!\nАкційна газета тут 👈🏼",
+          "thread_root": "3289"
+        },
+        {
+          "channel": "@VARUS_channel",
+          "date": "2025-10-24",
+          "rows": [
+            {
+              "confidence": 1.0,
+              "quote": "какой то сбой в приложении? Весь день не могу зайти в него",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "жалоба"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "накрылось всё, ни программа лояльности не работает, ни Scan&go",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "жалоба"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "набрал тележку оставил на маркете и пошел в АТБ",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "жалоба"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "сертифікатами не можна оплатити?",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "спрос"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "захотели- забрали",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "жалоба"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "каким образом, если не секрет, можно выиграть у Варуса столько денег сразу одному покупателю?",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "спрос"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "постоянно якісь трабли з акціями, у них задача заработать побільше бабла, а остальне пофіг",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "жалоба"
+            }
+          ],
+          "signals": 7,
+          "text": "Не пропусти! Пухнаста курʼєрка несе в лапах порцію акцій на різні-різні товари.\n\nЗнижКиця доставляє їх тільки учасникам програми лояльності VARUS PERFECT, у кого встановлений додаток VARUS. Тож не пронявкай свій пакунок вигоди 🧡\n\n📍 Пропозиції діють з 23.10 по 29.10",
+          "thread_root": "5186"
+        },
+        {
+          "channel": "@VARUS_channel",
+          "date": "2025-12-09",
+          "rows": [
+            {
+              "confidence": 1.0,
+              "quote": "а якщо цієї біржі немає або це тільки для обраних?",
+              "subject": "Bitget",
+              "subject_type": "chain",
+              "type": "спрос"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "це схоже на обман",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "жалоба"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "дуже погано організовано - і процеси, і призовий фонд, і висвітлення результатів",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "жалоба"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "те, що ніколи не виграти",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "жалоба"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "всі інші відділи на 50%. Персоналу не вистачає",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "жалоба"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "закуповує у тих постачальників,, які дають вартість ниже і відповідно також і якість товару",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "жалоба"
+            }
+          ],
+          "signals": 6,
+          "text": "Вітаємо переможця першого щотижневого призу розіграшу з провідною біржею Bitget 😎\n\n🥳 Чорнобай Олександр @Sashaua80\n\n250 USDT на акаунт UID 8330590616 Bitget — ваші!\n\nРозіграш триває, тож наступним щасливчиком можеш стати й ти! \n\nЩотижня розіграш 250 USDT, а у фіналі місяця — iPhone 17 Pro 256 GB або 1700 USDT на акаунт Bitget! \n\nРоби замовлення від 1499 грн, заповнюй форму участі та шукай більше деталей на VARUS.UA\n\n*З переможцем звʼяжуться найближчим часом",
+          "thread_root": "6006"
+        },
+        {
+          "channel": "@VARUS_channel",
+          "date": "2026-06-13",
+          "rows": [
+            {
+              "confidence": 1.0,
+              "quote": "Такий бардак у застосунку цього варусу, що ніколи не знаєш, що та як",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "жалоба"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "Безглуздя!",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "жалоба"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "я повинна у магазині півгодини листати розділ додатку",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "жалоба"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "Вы так бесцеремонно лжёте",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "жалоба"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "нет вашего идиотизма с разделением зимней поддержки и просто кешбека",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "жалоба"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "Чи ви хочете , щоб скоріше Варус зник?",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "жалоба"
+            }
+          ],
+          "signals": 6,
+          "text": "Вихідні — саме той час, коли можна спокійно спланувати покупки на наступний тиждень 🛒\n\n🔸 Макарони ТМ Al Dente\n🔸 Сир веган ТМ Gourmet Green\n🔸 Крем-йогурт без лактози ТМ Baltais\n🔸 Шоколад органічний ТМ Super Fudgio\n\nТож влаштовуйся зручніше, гортай наш каталог знижок і відзначай усе, що давно хотілося спробувати або вигідно поповнити запаси вдома.\n📍 Акції діють з 09.06 до 22.06.\n\nБільше позицій шукай у супермаркетах VARUS або на VARUS.UA 🧡",
+          "thread_root": "9802"
+        },
+        {
+          "channel": "@msuaaaa",
+          "date": "2026-06-12",
+          "rows": [
+            {
+              "confidence": 1.0,
+              "quote": "цінники не змінили",
+              "subject": "Сільпо",
+              "subject_type": "chain",
+              "type": "жалоба"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "неправильна ціна",
+              "subject": "Сільпо",
+              "subject_type": "chain",
+              "type": "цена"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "Ціна вірна",
+              "subject": "Сільпо",
+              "subject_type": "chain",
+              "type": "цена"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "нашо викладати на канал пост з неправильним цінником",
+              "subject": "msuaaaa",
+              "subject_type": "chain",
+              "type": "жалоба"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "ціна на фото вірна",
+              "subject": "чипси Люкс",
+              "subject_type": "sku",
+              "type": "цена"
+            },
+            {
+              "confidence": 0.9,
+              "quote": "сьогодні якраз брали",
+              "subject": "чипси Люкс",
+              "subject_type": "sku",
+              "type": "похвала"
+            }
+          ],
+          "signals": 6,
+          "text": "Знижка на чипси Люкс у 🥲😊\n\n Лише по 29,99 грн 🍿 \n🗓 з 12 по 13 червня",
+          "thread_root": "10219"
+        },
+        {
+          "channel": "@VARUS_channel",
+          "date": "2025-08-05",
+          "rows": [
+            {
+              "confidence": 1.0,
+              "quote": "Что у вас с доставкой?! Это ужас!",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "жалоба"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "Переносят время на день вперед или вообще не привозят вовремя!!!!",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "жалоба"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "Извинения это 25 грн промокод который не нужен",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "жалоба"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "с таким отношением к клиентам",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "жалоба"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "заказывал почти каждую неделю",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "привычка"
+            }
+          ],
+          "signals": 5,
+          "text": "Надворі спека — охолоджуйся, ще й подарунки забирай! Бо розігруємо 10 000 призів за покупку морозива 🍦\n\nКлади у кошик улюблене морозиво з 15 липня по 31 серпня — отримай шанс виграти кожні 2 тижні!\n\nЯк це працює:\n\n1️⃣ Купуй морозиво улюблених брендів в два етапи:\n🔸 з 29 липня по 11 серпня: «Ласунка», «Mars», «Laska», «Біла Береза»\n🔸 з 12 по 31 серпня: «Рудь» та «Три Ведмеді»\n2️⃣ Скануй свою картку лояльності VARUS PERFECT\n3️⃣ Та автоматично бери участь у розіграші призів – кожні 2 тижні!\n\n🎁 На тебе чекають:\n✔️ бонуси на рахунок VARUS Perfect (5, 20, 50 грн)\n✔️ пляшки для води\n✔️ пляжні рушники\n✔️ сумки-холодильники\n\n🗓 Етапи розіграшу:\n• 29.07-11.08 – результати 12.08\n• 12.08-31.08 – результати 01.09\n\nА в кінці акції – головний приз: ПОРТАТИВНИЙ ХОЛОДИЛЬНИК!🤩\nОхолоджуйся та вигравай! Бо з VARUS — літо зі смаком перемог!",
+          "thread_root": "3342"
+        },
+        {
+          "channel": "@VARUS_channel",
+          "date": "2025-12-06",
+          "rows": [
+            {
+              "confidence": 1.0,
+              "quote": "де мої замовлення? час отримання 05,12 19,20 - тиша",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "жалоба"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "написала в телеграм підтримку - тиша досі",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "жалоба"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "дзвінок на гарячу лінію, оператора так і не знайшли",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "жалоба"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "точно такая же фигня",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "жалоба"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "Так же, ще і смс прийшло ніби отримав",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "жалоба"
+            }
+          ],
+          "signals": 5,
+          "text": "Цей фільм показує, що не все в житті йде за планом. Та існує-таки в ньому дещо стале: знижки від VARUS 😎\n\nЦього разу на пʼянке з легендарного різдвяного фільму «Відпустка за обміном» і лише з 07.12 по 09.12. \n\nЛишається тільки передивитися кіно — і повний релакс гарантований. А за кілька днів чекай продовження нашого марафону кіно та вигідних пропозицій 🧡\n\nБільше знижок шукай у повному алко-каталозі на VARUS.UA",
+          "thread_root": "5994"
+        },
+        {
+          "channel": "@VARUS_channel",
+          "date": "2025-08-07",
+          "rows": [
+            {
+              "confidence": 1.0,
+              "quote": "Васної?",
+              "subject": "морозиво ескімо Varto",
+              "subject_type": "sku",
+              "type": "спрос"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "Очень вкусное мороженое",
+              "subject": "морозиво ескімо Varto",
+              "subject_type": "sku",
+              "type": "похвала"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "Было бы не плохо,если бы оно было в наличии",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "жалоба"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "Бывает крайне редко",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "жалоба"
+            }
+          ],
+          "signals": 4,
+          "text": "-40% на ескімо від власної ТМ Varto у VARUS 🔥\n\nОбирай своє улюблене морозиво ескімо Varto з натуральним пломбіром за ДСТУ:\n👉 Ескімо пломбір з ароматом ванілі в кондитерській глазурі, 15%, 75 г \n👉 Ескімо з шоколадним смаком в кондитерській глазурі, 12%, 75 г\n\nЛише 21.50 грн/шт\n✅ 100% пломбір \n✅ Без пальмової олії ✅ Перевірено відділом якості VARUS\n\n⏳ Не проґав! Смакуй якісно та вигідно — бо ВАРТО обирати ТМ Varto!  \n\nАкція діє з 7.08.2025 по 13.08.2025",
+          "thread_root": "3436"
+        },
+        {
+          "channel": "@VARUS_channel",
+          "date": "2025-09-19",
+          "rows": [
+            {
+              "confidence": 1.0,
+              "quote": "вас зламали?",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "жалоба"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "Чому так несправедливо?",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "жалоба"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "поддержка отвечает спустя сутки и через 15 минут без ответа закрывает чат",
+              "subject": "izibank",
+              "subject_type": "chain",
+              "type": "жалоба"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "служба поддержки просто ужасная",
+              "subject": "izibank",
+              "subject_type": "chain",
+              "type": "жалоба"
+            }
+          ],
+          "signals": 4,
+          "text": "▫️ «izibank» + «Varus» = 10% кешбеку\n\nрозраховуйся карткою izibank у VARUS — у магазинах, на сайті чи в додатку — і отримуй кешбек:\n\n🔟% — для клієнтів izibank, які зареєструвались з 18.09.25\n2️⃣% — для клієнтів, зареєстрованих у застосунку izibank до 18.09.25\n\nмаксимальний розмір кешбеку - 500 грн в міс.\n\nзавантажуй застосунок izibank, відкривай картку та миттєво отримуй 10% кешбеку на всі покупки у VARUS! \n\nакція діє з 18.09 по 31.12.2025.\npromo.izibank.com.ua/varus",
+          "thread_root": "4422"
+        },
+        {
+          "channel": "@VARUS_channel",
+          "date": "2026-05-12",
+          "rows": [
+            {
+              "confidence": 1.0,
+              "quote": "просто чарівний",
+              "subject": "плавлений сир Мааздам",
+              "subject_type": "sku",
+              "type": "похвала"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "Неймовірно смачно",
+              "subject": "плавлений сир Мааздам",
+              "subject_type": "sku",
+              "type": "похвала"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "подякувати за таку смачноту",
+              "subject": "плавлений сир Мааздам",
+              "subject_type": "sku",
+              "type": "похвала"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "це смачнота!",
+              "subject": "ікра мінтаю",
+              "subject_type": "sku",
+              "type": "похвала"
+            }
+          ],
+          "signals": 4,
+          "text": "Якщо все, що тобі хочеться в таку погоду — це пірнути у прохолодний басейн, то маємо альтернативу. Басейн акцій на різне-прерізне!\n\n📍Акції діють з 12.05 до 25.05\n\nБільше приємного шукай у супермаркетах VARUS\nабо на VARUS.UA🧡",
+          "thread_root": "9006"
+        },
+        {
+          "channel": "@VARUS_channel",
+          "date": "2026-06-24",
+          "rows": [
+            {
+              "confidence": 1.0,
+              "quote": "Як ввести промокод у мобільному зачтосунку?",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "спрос"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "Теж саме питання",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "спрос"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "Це дуже не зручно",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "жалоба"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "Занадто довго він на стадії разробки",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "жалоба"
+            }
+          ],
+          "signals": 4,
+          "text": "Наша #знижкосереда вже тут, щоб зробити літо ще солодшим 🍓\n\nЛови знижку 25% на чеки від 1000 грн із промокодом FRESHSWEET25 на замовлення:\nфруктів, морозива, йогуртів та печива 😋\n\n👉 Термін дії промокоду: з 25.06.2026 до 08.07.2026.\n👉 Наступний секретний промокод з’явиться зовсім скоро й лише для нашого Telegram-ком’юніті.\n\nЗнижка має свої правила:\n📍 не поширюється на акцизні товари, пакети та вартість доставки;\n📍 не діє на акційні товари та тютюнові вироби;\n📍 не може перевищувати 500 грн на одне замовлення.\n\nДодавай у кошик усе для солодких моментів літа на VARUS.UA 🧡",
+          "thread_root": "9999"
+        },
+        {
+          "channel": "@msuaaaa",
+          "date": "2025-11-13",
+          "rows": [
+            {
+              "confidence": 1.0,
+              "quote": "Було б чудово",
+              "subject": "АТБ",
+              "subject_type": "chain",
+              "type": "похвала"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "скільки ці продукти чекати?",
+              "subject": "АТБ",
+              "subject_type": "chain",
+              "type": "спрос"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "не сумісні речі",
+              "subject": "Укрпошта",
+              "subject_type": "chain",
+              "type": "жалоба"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "досить не погано працює",
+              "subject": "Укрпошта",
+              "subject_type": "chain",
+              "type": "похвала"
+            }
+          ],
+          "signals": 4,
+          "text": "📦Укрпошта та 🥦АТБ об’єдналися!\n\nТепер замовляй продукти з сайту АТБ і отримуй безкоштовну доставку у відділення Укрпошти — у будь-яке місто, село чи громаду 🇺🇦\n\n🛒 Замовлення від 299 грн, вага до 30 кг\n📦 Акція діє до 30 листопада",
+          "thread_root": "7792"
+        },
+        {
+          "channel": "@msuaaaa",
+          "date": "2025-11-24",
+          "rows": [
+            {
+              "confidence": 1.0,
+              "quote": "В яких містах???",
+              "subject": "McDonald’s",
+              "subject_type": "chain",
+              "type": "спрос"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "А в наборі фігурки чи разом із чашками",
+              "subject": "Happy Meal Friends",
+              "subject_type": "sku",
+              "type": "спрос"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "буде так дорого коштувати",
+              "subject": "Happy Meal Friends",
+              "subject_type": "sku",
+              "type": "цена"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "яке меню тоді буде входити в Хеппі міл разом з іграшками",
+              "subject": "Happy Meal Friends",
+              "subject_type": "sku",
+              "type": "спрос"
+            }
+          ],
+          "signals": 4,
+          "text": "🍟 У деяких містах Макдональдз уже запустив Happy Meal із меню Friends - поки що в тестовому режимі 👀\nВартість від 321 грн 🪙\n\nПовний перелік меню з цінами — у коментарях 🗯",
+          "thread_root": "7907"
+        },
+        {
+          "channel": "@VARUS_channel",
+          "date": "2025-04-24",
+          "rows": [
+            {
+              "confidence": 1.0,
+              "quote": "Як кава? Хто купував?",
+              "subject": "кава",
+              "subject_type": "sku",
+              "type": "спрос"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "Печиво класне",
+              "subject": "печиво",
+              "subject_type": "sku",
+              "type": "похвала"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "Де газета?",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "спрос"
+            }
+          ],
+          "signals": 3,
+          "text": "Жили-були колись зайві витрати. Постійно згризали велику частку місячного бюджету. І ніхто не міг їм раду дати, бо і сирочку смачного хочеться, і о 22:00 за шоколадкою сходити — то вже традиція 🍫\n\nТа знайшлася в цьому супермаркеті добірка вигідна-превигідна, та й показала, як жити ррраціонально, бюджетно та смачно. Кінець, а більше щасливо-знижкових історій шукай у нашій газеті на VARUS.UA 🧡\n\nЗаощаджуй з акційними товарами з 24.04 по 30.04 у мережі VARUS, окрім магазинів формату «VARUS to go» за адресами: м. Дніпро, вул. Акінфієва, 9В; м. Київ, вул. Жилянська, 59.",
+          "thread_root": "1901"
+        },
+        {
+          "channel": "@VARUS_channel",
+          "date": "2025-07-29",
+          "rows": [
+            {
+              "confidence": 1.0,
+              "quote": "Такий формат каталогу мені до вподоби",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "похвала"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "Чи є в продажу яйця гуся криптолова?",
+              "subject": "яйця гуся криптолова",
+              "subject_type": "sku",
+              "type": "спрос"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "іноді потрапляється пліснява",
+              "subject": "курячі чіпси",
+              "subject_type": "sku",
+              "type": "жалоба"
+            }
+          ],
+          "signals": 3,
+          "text": "Зайти «просто по хліб» не вийде — двотижневий каталог знижок так і манить новими пропозиціями. І смачненьке взяв, і сума в чеку ррраціональна!\n\n📍Пропозиції діють з 22.07 по 04.08\n\nБільше вигідного шукай у супермаркетах VARUS або на VARUS.UA 🧡",
+          "thread_root": "3163"
+        },
+        {
+          "channel": "@VARUS_channel",
+          "date": "2025-09-09",
+          "rows": [
+            {
+              "confidence": 1.0,
+              "quote": "Так тут гриль-барбекю подарять. Який айфон😂",
+              "subject": "АЙФОН 16 ПРО",
+              "subject_type": "sku",
+              "type": "жалоба"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "так хто виграв?",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "спрос"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "як отримати свій подарунок?",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "спрос"
+            }
+          ],
+          "signals": 3,
+          "text": "Коли VARUS відзначає свій день народження, свято не омине нікого — бо кожен має шанс виграти новенький АЙФОН 16 ПРО 📱\n\nОсь і яблучні умови:\n\n🔸 підпишися на канал VARUS у Telegram;\n🔸 тисни кнопку «Беру участь» під дописом.\n\nЩасливця рандомно оберемо вже 23.09 о 17:00 за допомогою @GivysBot.\n\n📍Офіційні правила розіграшу переглядай за посиланням.\n📍Важливо! Брати участь у розіграші можуть лише мешканці населених пунктів, де є VARUS.\n\nНехай щастить! І не пропусти — у вересні ще буде багацько сюрпризів 🍀",
+          "thread_root": "4129"
+        },
+        {
+          "channel": "@VARUS_channel",
+          "date": "2026-03-21",
+          "rows": [
+            {
+              "confidence": 0.9,
+              "quote": "Белоруское морожено?",
+              "subject": "морозиво",
+              "subject_type": "sku",
+              "type": "жалоба"
+            },
+            {
+              "confidence": 0.9,
+              "quote": "Но белоруская тм🤡",
+              "subject": "белоруская тм",
+              "subject_type": "brand",
+              "type": "жалоба"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "ВКУСНОЕ ОЧЕНЬ",
+              "subject": "морозиво",
+              "subject_type": "sku",
+              "type": "похвала"
+            }
+          ],
+          "signals": 3,
+          "text": "Для добрих справ не потрібен привід. Їх можна робити навіть під час звичайних покупок. Просто клади у кошик товари з логотипом ГеройCar. Саме з їх покупкою ти автоматично долучаєшся до великого збору на автівки. \n\nТому що з продажу кожного такого товару ми перераховуємо по 1 грн на пікапи для війська. Нашим Захисникам дуже потрібні надійні колеса 🧡",
+          "thread_root": "7850"
+        },
+        {
+          "channel": "@VARUS_channel",
+          "date": "2026-05-14",
+          "rows": [
+            {
+              "confidence": 1.0,
+              "quote": "Офігенно милі кото-зайчики і зайце-котики на упаковці",
+              "subject": "Сир кисломолочний Varto",
+              "subject_type": "sku",
+              "type": "похвала"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "Нажаль, у нас його не можливо вхопити",
+              "subject": "Сир кисломолочний Varto",
+              "subject_type": "sku",
+              "type": "жалоба"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "не можливо вхопити",
+              "subject": "Сир кисломолочний Varto",
+              "subject_type": "sku",
+              "type": "спрос"
+            }
+          ],
+          "signals": 3,
+          "text": "ТОП-5 причин обрати кисломолочний сир ТМ Varto👇\n\n1️⃣ Натуральне джерело білка та кальцію — смачно і корисно щодня\n2️⃣ Ідеально для сніданків, десертів та корисних перекусів\n3️⃣ Ніжна текстура та класичний улюблений смак\n4️⃣ Вироблено в Україні 🇺🇦\n5️⃣ Знижки до -23% — ще більше причин взяти у кошик 😉\n\n🔸Сир кисломолочний 5% КЛАСИЧНИЙ Varto — 59,90 грн.\n🔸Сир кисломолочний 9% Varto — 64,90 грн.\n\nВарто обирати ТМ Varto 🧡",
+          "thread_root": "9112"
+        },
+        {
+          "channel": "@VARUS_channel",
+          "date": "2026-07-03",
+          "rows": [
+            {
+              "confidence": 1.0,
+              "quote": "Що за дебільний огидний текст?",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "жалоба"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "Потужно-незламний",
+              "subject": "VARUS",
+              "subject_type": "chain",
+              "type": "жалоба"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "це за 100г ціна?",
+              "subject": "кур стегно",
+              "subject_type": "sku",
+              "type": "цена"
+            }
+          ],
+          "signals": 3,
+          "text": "ЗнижКиця вчора прийшла на точку, де ловить на-а-а-йзнижковіші знижки. А там жаба тримає в пащі торбу вигоди. Пухнаста не розгубилася й одним махом хвоста вихопила її для тебе! \n\n🔸Молоко пряжене ТМ ПростоНаше\n🔸Кава мелена Espresso Krönung Gold ТМ Jacobs\n🔸Паста креветочна ТМ Veladis\n🔸Тісто листково-дріжджове ТМ Рудь\n🔸Лікери ТМ Jim Beam\n🔸Зубна паста ТМ Dentissimo\n🔸Гель для прання ТМ Sarmix\n\nЗабирай, тільки обовʼязково завантаж додаток VARUS і зареєструйся в програмі лояльності VARUS PERFECT. Інакше — дзуськи 🧡\n\n📍 Акції діють з 02.07 до 08.07.",
+          "thread_root": "10187"
+        },
+        {
+          "channel": "@VARUS_channel",
+          "date": "2026-07-24",
+          "rows": [
+            {
+              "confidence": 0.9,
+              "quote": "Ось такий карась привезли",
+              "subject": "карась",
+              "subject_type": "sku",
+              "type": "жалоба"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "страшные",
+              "subject": "карась",
+              "subject_type": "sku",
+              "type": "жалоба"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "рыба плохая",
+              "subject": "карась",
+              "subject_type": "sku",
+              "type": "жалоба"
+            }
+          ],
+          "signals": 3,
+          "text": "ЗнижКиця вклала свою «шубу» стайлером і вийшла на знижкополювання. І що думаєш? Потрапила під зливу та й промокла до ворсинки. \n\n🔸Сік, Нектар ТМ Jaffa\n🔸Оливки ТМ Ficacci\n🔸Чай ТМ Sherlock Secrets\n🔸Креветки очищенні з соусом чилі ТМ Delfin\n🔸Корм для котів ТМ Brit\n🔸Папір туалетний ТМ Velvet\n🔸Паста для чищення ТМ The Pink Staff\n\nГоловне, що акції для тебе вже в торбі. Забирай, якщо завантажив додаток VARUS і зареєструвався в програмі лояльності VARUS PERFECT 🧡\n\n📍 Акції діють з 23.07 до 29.07.",
+          "thread_root": "10603"
+        },
+        {
+          "channel": "@msuaaaa",
+          "date": "2025-10-08",
+          "rows": [
+            {
+              "confidence": 1.0,
+              "quote": "ВАУУУУУ",
+              "subject": "7202",
+              "subject_type": "post",
+              "type": "похвала"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "а ціна",
+              "subject": "Тріпл Чііз Біт",
+              "subject_type": "sku",
+              "type": "цена"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "247 где-то вроде за один",
+              "subject": "Тріпл Чііз Біт",
+              "subject_type": "sku",
+              "type": "цена"
+            }
+          ],
+          "signals": 3,
+          "text": "Крейзі середа в KFC!🍔\n🎟️ За купоном 5050 — бери 2 за ціною 1 - 235 грн 🪙\n\n🍔 ТРІПЛ ЧІІЗ БІТ 🧀\n📆 Лише сьогодні — 8 жовтня",
+          "thread_root": "7202"
+        },
+        {
+          "channel": "@msuaaaa",
+          "date": "2026-03-18",
+          "rows": [
+            {
+              "confidence": 1.0,
+              "quote": "ни о чем",
+              "subject": "9354",
+              "subject_type": "post",
+              "type": "жалоба"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "чипсы не на акции?",
+              "subject": "чипсы",
+              "subject_type": "brand",
+              "type": "спрос"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "потому что нет замороженных ягод",
+              "subject": "ягоды замороженные",
+              "subject_type": "sku",
+              "type": "жалоба"
+            }
+          ],
+          "signals": 3,
+          "text": "Знижки в АТБ 😜🤪\n\n🗓з 18.03.26 по 24.03.2026\nВигода до -50%🔣\n\nЩе більше акцій у коментарях 🗯",
+          "thread_root": "9354"
+        },
+        {
+          "channel": "@msuaaaa",
+          "date": "2026-06-08",
+          "rows": [
+            {
+              "confidence": 1.0,
+              "quote": "А коли у всіх маках?",
+              "subject": "McDonald’s",
+              "subject_type": "chain",
+              "type": "спрос"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "А до коли вони будуть",
+              "subject": "стакани",
+              "subject_type": "sku",
+              "type": "спрос"
+            },
+            {
+              "confidence": 1.0,
+              "quote": "будуть іграшки?",
+              "subject": "іграшки",
+              "subject_type": "sku",
+              "type": "спрос"
+            }
+          ],
+          "signals": 3,
+          "text": "🍔 У McDonald’s вже з’явилося нове МакМеню з колекційними футбольними стаканами до FIFA 2026! 🏆🆗\n\nЦіни стартують від 235 грн 🪙",
+          "thread_root": "10169"
+        }
+      ],
+      "of": 100,
+      "shown": 30,
+      "title": {
+        "en": "Showing 30 of the 100 threads that drew at least one signal — the loudest carries 17; the rest stay in the table below.",
+        "ua": "Показано 30 тредів із 100, що зібрали хоч один сигнал — найгучніший несе 17 сигналів; решта лишається в таблиці нижче."
+      }
+    }
+  },
+  "region": {
+    "baseline_says": {
+      "en": "0 mentions between 2026-07-10 and 2026-09-14 — the point of reference: the field is clean, and the brand's own activity is what will move this number.",
+      "ua": "0 згадок за 2026-07-10 – 2026-09-14 — це точка відліку: поле чисте, і власна активність бренду зрушить це число."
+    },
+    "brands": [
+      {
+        "brand_id": "garmonija",
+        "mentions": 0,
+        "name": "Гармонія",
+        "own": true,
+        "spellings": [
+          "Гармонія",
+          "Гармония",
+          "ТМ Гармонія"
+        ]
+      },
+      {
+        "brand_id": "myrhorodska-korivka",
+        "mentions": 0,
+        "name": "Миргородська корівка",
+        "own": false,
+        "spellings": [
+          "Миргородська корівка",
+          "Миргородская коровка"
+        ]
+      },
+      {
+        "brand_id": "zarih",
+        "mentions": 0,
+        "name": "Заріг",
+        "own": false,
+        "spellings": [
+          "Заріг",
+          "Зарог"
+        ]
+      }
+    ],
+    "channels": [
+      {
+        "channel": "@mo3ambik",
+        "comments": 2569,
+        "first_date": "2026-07-10T10:34:40+00:00",
+        "last_date": "2026-09-14T09:03:20+00:00",
+        "mentions": 0,
+        "outstanding": 49,
+        "posts": 424,
+        "threads_read": 226,
+        "threads_total": 275
+      },
+      {
+        "channel": "@poltava_informue",
+        "comments": 0,
+        "first_date": "2026-07-10T11:52:35+00:00",
+        "last_date": "2026-09-14T08:22:53+00:00",
+        "mentions": 0,
+        "outstanding": 0,
+        "posts": 3334,
+        "threads_read": 0,
+        "threads_total": 0
+      },
+      {
+        "channel": "@suspilnepoltava",
+        "comments": 0,
+        "first_date": "2026-07-10T11:09:55+00:00",
+        "last_date": "2026-09-14T08:47:23+00:00",
+        "mentions": 0,
+        "outstanding": 0,
+        "posts": 1170,
+        "threads_read": 0,
+        "threads_total": 0
+      },
+      {
+        "channel": "@telegraf_kremenchuk",
+        "comments": 294,
+        "first_date": "2026-07-10T11:21:04+00:00",
+        "last_date": "2026-09-14T08:37:58+00:00",
+        "mentions": 0,
+        "outstanding": 314,
+        "posts": 1418,
+        "threads_read": 80,
+        "threads_total": 394
+      },
+      {
+        "channel": "@gorishnie_plavni1",
+        "comments": 261,
+        "first_date": "2026-07-10T10:41:01+00:00",
+        "last_date": "2026-09-14T08:43:01+00:00",
+        "mentions": 0,
+        "outstanding": 102,
+        "posts": 1342,
+        "threads_read": 80,
+        "threads_total": 182
+      },
+      {
+        "channel": "@myrhorodtown",
+        "comments": 165,
+        "first_date": "2026-07-10T11:35:05+00:00",
+        "last_date": "2026-09-14T08:10:15+00:00",
+        "mentions": 0,
+        "outstanding": 19,
+        "posts": 606,
+        "threads_read": 80,
+        "threads_total": 99
+      },
+      {
+        "channel": "@Hadiach_telegram",
+        "comments": 316,
+        "first_date": "2026-07-10T13:53:31+00:00",
+        "last_date": "2026-09-14T08:34:12+00:00",
+        "mentions": 0,
+        "outstanding": 65,
+        "posts": 392,
+        "threads_read": 80,
+        "threads_total": 145
+      },
+      {
+        "channel": "@globine1",
+        "comments": 299,
+        "first_date": "2026-07-10T11:34:53+00:00",
+        "last_date": "2026-09-14T08:18:10+00:00",
+        "mentions": 0,
+        "outstanding": 30,
+        "posts": 246,
+        "threads_read": 78,
+        "threads_total": 108
+      },
+      {
+        "channel": "@piryatingromada",
+        "comments": 0,
+        "first_date": "2026-07-10T15:41:34+00:00",
+        "last_date": "2026-09-14T08:12:35+00:00",
+        "mentions": 0,
+        "outstanding": 0,
+        "posts": 162,
+        "threads_read": 0,
+        "threads_total": 0
+      },
+      {
+        "channel": "@PirOperative",
+        "comments": 280,
+        "first_date": "2026-07-11T20:00:25+00:00",
+        "last_date": "2026-09-14T07:15:27+00:00",
+        "mentions": 0,
+        "outstanding": 120,
+        "posts": 278,
+        "threads_read": 80,
+        "threads_total": 200
+      },
+      {
+        "channel": "@zinkivnews",
+        "comments": 21,
+        "first_date": "2026-07-13T16:17:10+00:00",
+        "last_date": "2026-09-11T11:13:53+00:00",
+        "mentions": 0,
+        "outstanding": 0,
+        "posts": 33,
+        "threads_read": 9,
+        "threads_total": 9
+      },
+      {
+        "channel": "@LHVC_info",
+        "comments": 2,
+        "first_date": "2026-07-20T10:17:18+00:00",
+        "last_date": "2026-09-10T18:49:21+00:00",
+        "mentions": 0,
+        "outstanding": 0,
+        "posts": 6,
+        "threads_read": 2,
+        "threads_total": 2
+      },
+      {
+        "channel": "@KarlivkaLive",
+        "comments": 3,
+        "first_date": "2026-07-17T14:21:44+00:00",
+        "last_date": "2026-09-14T08:10:09+00:00",
+        "mentions": 0,
+        "outstanding": 1,
+        "posts": 23,
+        "threads_read": 2,
+        "threads_total": 3
+      },
+      {
+        "channel": "@poltava_pvp",
+        "comments": 769,
+        "first_date": "2026-07-10T11:00:02+00:00",
+        "last_date": "2026-09-14T08:35:12+00:00",
+        "mentions": 0,
+        "outstanding": 510,
+        "posts": 1022,
+        "threads_read": 80,
+        "threads_total": 590
+      },
+      {
+        "channel": "@poltava20",
+        "comments": 172,
+        "first_date": "2026-07-10T10:36:01+00:00",
+        "last_date": "2026-09-14T08:53:35+00:00",
+        "mentions": 0,
+        "outstanding": 960,
+        "posts": 3775,
+        "threads_read": 80,
+        "threads_total": 1040
+      },
+      {
+        "channel": "@h_kremenchug",
+        "comments": 2197,
+        "first_date": "2026-07-10T11:36:13+00:00",
+        "last_date": "2026-09-14T08:54:08+00:00",
+        "mentions": 0,
+        "outstanding": 522,
+        "posts": 1242,
+        "threads_read": 80,
+        "threads_total": 602
+      },
+      {
+        "channel": "@kremen_news",
+        "comments": 0,
+        "first_date": "2026-07-10T10:40:25+00:00",
+        "last_date": "2026-08-08T11:01:05+00:00",
+        "mentions": 0,
+        "outstanding": 0,
+        "posts": 354,
+        "threads_read": 0,
+        "threads_total": 0
+      },
+      {
+        "channel": "@dikankaa",
+        "comments": 884,
+        "first_date": "2026-07-14T10:52:11+00:00",
+        "last_date": "2026-09-11T12:41:30+00:00",
+        "mentions": 0,
+        "outstanding": 0,
+        "posts": 62,
+        "threads_read": 51,
+        "threads_total": 51
+      }
+    ],
+    "from": "results/region_baseline.json (window, per-channel counts, mentions per brand) · results/region_mentions.jsonl (the rows) · results/region_collect_report.json (thread coverage), joined on the channel handle; the names are config/region_brands.yaml :: brands[].display_names",
+    "instrument": {
+      "en": "This tab reads KEYWORDS, not the model: 18 Poltava-region channels, 15,889 posts and 8,232 comments matched against a 3-brand dictionary. Reading the region with the model is stage 2's paid step.",
+      "ua": "Вкладка читає КЛЮЧОВІ СЛОВА, а не модель: 18 каналів Полтавщини, 15 889 дописів і 8 232 коментарів, звірені зі словником із 3 брендів. Читання регіону моделлю — платний крок стадії 2."
+    },
+    "mentions": [],
+    "promo_link": {
+      "chain": "marketopt_promo",
+      "name": "Маркетопт (Толока) м.Кременчук"
+    },
+    "reading": "a KEYWORD sentinel over the eighteen Poltava-oblast channels, not the model: case-insensitive, on word boundaries, not stemmed. A mention is one ROW per brand named, so a post naming two brands is two rows — never «N posts mentioned the brand»",
+    "sample": {
+      "channels": 18,
+      "from": "data/raw_region/ ∪ the frozen data/raw/ archive, through market_pulse.raw_store: threads_total = posts with reply_count > 0, threads_read = posts a stored comment names as its parent",
+      "outstanding": 2692,
+      "sentence": {
+        "en": "comments are a sample: 1,008 of 3,700 threads read (2,692 queued)",
+        "ua": "коментарі — вибірка: прочитано 1 008 із 3 700 тредів (2 692 у черзі)"
+      },
+      "threads_read": 1008,
+      "threads_total": 3700
+    },
+    "sources": {
+      "brands": "config/region_brands.yaml",
+      "channels": "config/region_channels.yaml",
+      "roots": [
+        "data/raw",
+        "data/raw_region"
+      ]
+    },
+    "totals": {
+      "channels": 18,
+      "comments": 8232,
+      "mentions": 0,
+      "posts": 15889
+    },
+    "window": {
+      "first_date": "2026-07-10T10:34:40+00:00",
+      "last_date": "2026-09-14T09:03:20+00:00"
+    }
+  },
   "regions": {
     "cuts": [
       {
@@ -48667,6 +51589,10 @@
       "bytes": 5322,
       "sha256": "6dca0f1b7e54263c9f1ac4cc3d5e55826aeb0fa833d55b7a5d3795ac921bc739"
     },
+    "config/region_brands.yaml": {
+      "bytes": 2113,
+      "sha256": "42de0e90926d210f4be1caf4038831175e696af7c7fd1964b47670d5d4000bdc"
+    },
     "config/registry.yaml": {
       "bytes": 40570,
       "sha256": "eff8ba5ba17ad102a0619a0ff18b3348a1df5a3b2b0b3fd11fcba2f6b210a3b4"
@@ -48723,9 +51649,45 @@
       "bytes": 272188,
       "sha256": "5ceba5ff01826d57c0aafde0b9b7fcced303352a605052169aa82f965fd91cd6"
     },
+    "results/promo_dev40_pack.json": {
+      "bytes": 189635,
+      "sha256": "5360ec0f02a7ab2169bae97d01421a83f3644ee56e3bb1ca9d17405878573aed"
+    },
+    "results/promo_holdout2_pack.json": {
+      "bytes": 72234,
+      "sha256": "30941e5910b83ff691320cd488700dca7c2a5779119965432dfdce0151b78e50"
+    },
+    "results/promo_holdout40_pack.json": {
+      "bytes": 112084,
+      "sha256": "12a3172874dcb9a8addd4b0b4d8837871e17a837aa5bf722add57fa12b8c6d95"
+    },
     "results/promo_screen_data.json": {
       "bytes": 1069815,
       "sha256": "e45860c62627d2fcb73f0deb4f0ad8841448039b8801cf669288465077a357a7"
+    },
+    "results/promo_threads_draw.json": {
+      "bytes": 34482,
+      "sha256": "6f9fa245b9d702549cdc323849146de1825a12df8048c8ba8077c42e2508a407"
+    },
+    "results/promo_threads_draw_2.json": {
+      "bytes": 20603,
+      "sha256": "567cb2360bf51f8018147ba367cce99911e5f0cfa3faa3bff073d7bcc7fc4ea2"
+    },
+    "results/promo_threads_draw_3.json": {
+      "bytes": 20898,
+      "sha256": "76435461ca26ab8d9ef81259cb441d48e9d08e5123efbe86768275169fb504ba"
+    },
+    "results/region_baseline.json": {
+      "bytes": 4317,
+      "sha256": "5a756848780dae0b7842855309319d72e8b1fa34c188ac66ec092b96f3a47133"
+    },
+    "results/region_collect_report.json": {
+      "bytes": 2695,
+      "sha256": "8cf7563ba8d1b14688542d0a6f4fa0852b3475eca82414e45fc4d3f450418f9e"
+    },
+    "results/region_mentions.jsonl": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
     },
     "results/spend_cycle3.json": {
       "bytes": 8852,

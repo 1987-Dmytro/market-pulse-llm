@@ -28,12 +28,16 @@ messages each). Joining is the one action a collector takes that WRITES on Teleg
     PYTHONPATH=src python3.11 scripts/collect_region.py --plan
     PYTHONPATH=src python3.11 scripts/collect_region.py --posts
     PYTHONPATH=src python3.11 scripts/collect_region.py --comments
+
+Every mode ends by writing `results/region_collect_report.json` — the thread coverage the Регіон
+tab prints (ruling (hhh) 3). `--plan` writes it without a single Telegram call.
 """
 
 from __future__ import annotations
 
 import argparse
 import asyncio
+import json
 import sys
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
@@ -62,6 +66,14 @@ SIDE_FILE = REPO_ROOT / "config" / "region_channels.yaml"
 REGION_ROOT = REPO_ROOT / "data" / "raw_region"
 """Ruling (ggg) 4: region monitoring is a DIFFERENT population from the promo pipeline and its root
 says so. Nothing under `data/raw_r2/` or `data/raw/` is written here."""
+
+REPORT = REPO_ROOT / "results" / "region_collect_report.json"
+"""The comment population is a SAMPLE and the screen has to say so (ruling (hhh) 3).
+
+`--max-threads` reads the newest N threads per channel and PRINTS what it left; that print is a
+line in a terminal nobody keeps. The three figures it names — threads_total, threads_read,
+outstanding — become a file so `scripts/export_front_data.py` can carry them into the Регіон tab's
+coverage table, where the honesty is in front of the operator instead of in a progress note."""
 
 FALLBACK_WINDOW_DAYS = 28
 """Only for a channel with NO archived post at all. All eighteen have one today, so this is the
@@ -232,6 +244,68 @@ def channel_row(store: RawStore, handle: str, written: dict) -> dict:
     }
 
 
+def report(store: RawStore) -> dict:
+    """Thread coverage per channel, read off the STORE and never off this run's counters.
+
+    Over `side_channels()` whatever `--only` says: the three figures are properties of what is on
+    disk, not of what one invocation touched, and a report rebuilt from a filtered run would
+    silently shrink the committed artifact to the channels that run happened to name
+    ([[a_shrunk_population_is_a_test_change]]). Two runs over an unchanged store therefore write
+    identical bytes.
+
+    `threads_total` is «posts that carry replies», `threads_read` is «posts a stored comment points
+    back at» and `outstanding` is the difference — the same three quantities `fetch_threads` works
+    from (`todo = with_replies - parents`), so the queue the screen prints is the queue the next run
+    will actually drain.
+    """
+    rows = []
+    for handle in side_channels():
+        posts = store.index("post", handle)
+        comments = store.index("comment", handle)
+        total, read = len(posts.with_replies), len(comments.parents)
+        rows.append(
+            {
+                "channel": handle,
+                "threads_total": total,
+                "threads_read": read,
+                "outstanding": total - read,
+            }
+        )
+    return {
+        "contract": "PHASE-ship-1 §2 «reactions-region» (ruling (hhh) 3) — the comment SAMPLE as a"
+        " field the screen can print",
+        "from": "data/raw_region/ ∪ the frozen data/raw/ archive, through market_pulse.raw_store:"
+        " threads_total = posts with reply_count > 0, threads_read = posts a stored comment names"
+        " as its parent",
+        "channels": rows,
+        "totals": {
+            "channels": len(rows),
+            "threads_total": sum(row["threads_total"] for row in rows),
+            "threads_read": sum(row["threads_read"] for row in rows),
+            "outstanding": sum(row["outstanding"] for row in rows),
+        },
+    }
+
+
+def write_report(store: RawStore, path: Path = REPORT) -> dict:
+    """Write the coverage report and return it. Called at the END of every mode, `--plan` included.
+
+    The plan mode makes no Telegram call at all, so the file is reproducible at $0 by anyone with
+    the store — which is what lets `make front` be re-run without a collection.
+    """
+    body = report(store)
+    path.write_text(
+        json.dumps(body, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
+    print(
+        f"\n{path.relative_to(REPO_ROOT)}: {body['totals']['threads_read']} of"
+        f" {body['totals']['threads_total']} threads read ·"
+        f" {body['totals']['outstanding']} outstanding",
+        flush=True,
+    )
+    return body
+
+
 def render(rows: list[dict]) -> str:
     head = (
         f"{'channel':<22}{'posts':>7}{'+new':>6}{'first':>12}{'last':>12}"
@@ -264,6 +338,7 @@ async def run(args) -> list[dict]:
         rows = [channel_row(store, handle, written[handle]) for handle in handles]
         print(render(rows))
         print(f"\n{len(rows)} regional channels; no Telegram call was made.")
+        write_report(store)
         return rows
 
     salt = load_salt()
@@ -340,6 +415,7 @@ async def run(args) -> list[dict]:
 
     rows = [channel_row(store, handle, written[handle]) for handle in handles]
     print(render(rows))
+    write_report(store)
     return rows
 
 

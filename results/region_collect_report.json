@@ -1,0 +1,120 @@
+{
+  "channels": [
+    {
+      "channel": "@mo3ambik",
+      "outstanding": 49,
+      "threads_read": 226,
+      "threads_total": 275
+    },
+    {
+      "channel": "@poltava_informue",
+      "outstanding": 0,
+      "threads_read": 0,
+      "threads_total": 0
+    },
+    {
+      "channel": "@suspilnepoltava",
+      "outstanding": 0,
+      "threads_read": 0,
+      "threads_total": 0
+    },
+    {
+      "channel": "@telegraf_kremenchuk",
+      "outstanding": 314,
+      "threads_read": 80,
+      "threads_total": 394
+    },
+    {
+      "channel": "@gorishnie_plavni1",
+      "outstanding": 102,
+      "threads_read": 80,
+      "threads_total": 182
+    },
+    {
+      "channel": "@myrhorodtown",
+      "outstanding": 19,
+      "threads_read": 80,
+      "threads_total": 99
+    },
+    {
+      "channel": "@Hadiach_telegram",
+      "outstanding": 65,
+      "threads_read": 80,
+      "threads_total": 145
+    },
+    {
+      "channel": "@globine1",
+      "outstanding": 30,
+      "threads_read": 78,
+      "threads_total": 108
+    },
+    {
+      "channel": "@piryatingromada",
+      "outstanding": 0,
+      "threads_read": 0,
+      "threads_total": 0
+    },
+    {
+      "channel": "@PirOperative",
+      "outstanding": 120,
+      "threads_read": 80,
+      "threads_total": 200
+    },
+    {
+      "channel": "@zinkivnews",
+      "outstanding": 0,
+      "threads_read": 9,
+      "threads_total": 9
+    },
+    {
+      "channel": "@LHVC_info",
+      "outstanding": 0,
+      "threads_read": 2,
+      "threads_total": 2
+    },
+    {
+      "channel": "@KarlivkaLive",
+      "outstanding": 1,
+      "threads_read": 2,
+      "threads_total": 3
+    },
+    {
+      "channel": "@poltava_pvp",
+      "outstanding": 510,
+      "threads_read": 80,
+      "threads_total": 590
+    },
+    {
+      "channel": "@poltava20",
+      "outstanding": 960,
+      "threads_read": 80,
+      "threads_total": 1040
+    },
+    {
+      "channel": "@h_kremenchug",
+      "outstanding": 522,
+      "threads_read": 80,
+      "threads_total": 602
+    },
+    {
+      "channel": "@kremen_news",
+      "outstanding": 0,
+      "threads_read": 0,
+      "threads_total": 0
+    },
+    {
+      "channel": "@dikankaa",
+      "outstanding": 0,
+      "threads_read": 51,
+      "threads_total": 51
+    }
+  ],
+  "contract": "PHASE-ship-1 §2 «reactions-region» (ruling (hhh) 3) — the comment SAMPLE as a field the screen can print",
+  "from": "data/raw_region/ ∪ the frozen data/raw/ archive, through market_pulse.raw_store: threads_total = posts with reply_count > 0, threads_read = posts a stored comment names as its parent",
+  "totals": {
+    "channels": 18,
+    "outstanding": 2692,
+    "threads_read": 1008,
+    "threads_total": 3700
+  }
+}

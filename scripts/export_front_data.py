@@ -33,6 +33,7 @@ build. `--stage` is the one step that touches the images — it copies what it f
 from __future__ import annotations
 
 import argparse
+import collections
 import json
 import shutil
 import sys
@@ -66,6 +67,33 @@ leg writes a sixth, and a join closed by enumeration would drop that leg's pages
 MEDIA_DIR = "media"
 """Where `--stage` puts the photos, beside the `data/` it is pointed at — `dashboard/app/media/`."""
 
+SIGNALS_DIR = screen.RESULTS / "promo_signals"
+THREAD_DRAW_GLOB = "promo_threads_draw*.json"
+PROMO_PACK_GLOB = "promo_*_pack.json"
+"""The three committed halves of a reaction: the loop's own signal records, the draw that says WHEN
+each thread's promo post was published, and the pack that carries the post's TEXT.
+
+By glob for the same reason `MEDIA_GLOB` is: the next paid leg writes a fourth draw and a fourth
+pack, and a join closed by enumeration would drop that leg without a word. And all three live under
+`results/`, which git carries — the dates and texts are in `data/raw/`, which is gitignored, so a
+producer that read the store would write one export here and a different one on the clean clone
+«e2e-ship» runs `make front` on ([[reproducible_means_try_it]])."""
+
+REGION_BASELINE = screen.RESULTS / "region_baseline.json"
+REGION_MENTIONS = screen.RESULTS / "region_mentions.jsonl"
+REGION_REPORT = screen.RESULTS / "region_collect_report.json"
+REGION_BRANDS = REPO_ROOT / "config" / "region_brands.yaml"
+
+THREAD_CARDS = 30
+"""DESIGN-ship-1 §13 (3): «top ≤30». Not a threshold this item introduced — the rest of the threads
+stay in the feed table below the cards, and the block prints how many of how many are shown."""
+
+HOME_CHAIN = "marketopt_promo"
+"""DESIGN §13 (5)'s link target — «Промо в домашньому регіоні» → Позиції filtered to Маркетопт.
+`config/chain_regions.yaml` calls it «the one chain whose own channel names the city»; naming the id
+here rather than taking the region cut's first entry keeps a reordering of that operator-edited file
+from silently re-pointing the link ([[a_block_selected_by_ordinal_runs_the_wrong_block]])."""
+
 CONTRACT = (
     "docs/DESIGN-ship-1.md §7 — written by scripts/export_front_data.py ($0) from the files each"
     " block names; the app computes no figure of its own"
@@ -93,7 +121,13 @@ def required() -> tuple[Path, ...]:
         registry.CHAIN_ALIASES,
         REGIONS,
         CORRECTIONS,
+        REGION_BASELINE,
+        REGION_MENTIONS,
+        REGION_REPORT,
+        REGION_BRANDS,
         *media_manifests(),
+        *thread_draws(),
+        *promo_packs(),
         *(screen.RESULTS / name for name in screen.S2_FILES),
     )
 
@@ -216,6 +250,14 @@ def data_until(export: dict) -> dict:
         "date": max(window["until"][:10] for window in export["windows"]),
         "from": f"{tick.rel(screen.EXPORT)} :: windows[].until (by date — w1 is a datetime)",
     }
+
+
+def thread_draws() -> tuple[Path, ...]:
+    return tuple(sorted(screen.RESULTS.glob(THREAD_DRAW_GLOB)))
+
+
+def promo_packs() -> tuple[Path, ...]:
+    return tuple(sorted(screen.RESULTS.glob(PROMO_PACK_GLOB)))
 
 
 def media_manifests() -> tuple[Path, ...]:
@@ -779,6 +821,103 @@ exhibit titles are the SAME findings said long and short: the pyramid of DESIGN 
 message at the top of the page and again on the exhibit it titles."""
 
 
+REACTIONS_SENTENCES = {
+    # Every key is prefixed, because `SENTENCES` merges this table over the Тренди one and a shared
+    # key would silently shadow a reading of the other tab.
+    "reactions_complaints_chain": {
+        "ua": "Скаржаться передусім на МЕРЕЖУ, не на товар: {chain} скарг на мережу проти {sku} на"
+        " товар (усього сигналів {rows}; інших адресатів скарги: {other}).",
+        "en": "Complaints are about the CHAIN, not the product: {chain} against the chain to {sku}"
+        " about the product (signals in all {rows}; complaints addressed elsewhere: {other}).",
+    },
+    "reactions_complaints_sku": {
+        "ua": "Скаржаться передусім на ТОВАР, не на мережу: {sku} скарг на товар проти {chain} на"
+        " мережу (усього сигналів {rows}; інших адресатів скарги: {other}).",
+        "en": "Complaints are about the PRODUCT, not the chain: {sku} about the product to {chain}"
+        " against the chain (signals in all {rows}; complaints addressed elsewhere: {other}).",
+    },
+    "reactions_complaints_tie": {
+        "ua": "Скарг на мережу і на товар порівну — по {chain} (усього сигналів {rows}; інших"
+        " адресатів скарги: {other}).",
+        "en": "Complaints split evenly between the chain and the product — {chain} each (signals in"
+        " all {rows}; complaints addressed elsewhere: {other}).",
+    },
+    "reactions_mix": {
+        "ua": "Найгучніший канал — {channel}: {n} сигналів із {rows}, з них скарг {share}%.",
+        "en": "The loudest channel is {channel}: {n} signals of {rows}, {share}% of them complaints.",
+    },
+    "reactions_monthly": {
+        "ua": "Частка скарг по місяцях: найвища — {peak_month} ({peak}%), найнижча — {low_month}"
+        " ({low}%); місяць — це місяць промо-допису, під яким читали тред.",
+        "en": "The complaint share by month: highest in {peak_month} ({peak}%), lowest in"
+        " {low_month} ({low}%); the month is the promo post's, the thread being the reply to it.",
+    },
+    "reactions_threads": {
+        "ua": "Показано {shown} тредів із {of}, що зібрали хоч один сигнал — найгучніший несе {top}"
+        " сигналів; решта лишається в таблиці нижче.",
+        "en": "Showing {shown} of the {of} threads that drew at least one signal — the loudest"
+        " carries {top}; the rest stay in the table below.",
+    },
+    "reactions_voice": {
+        "ua": "Про конкретні товари — {rows} сигналів із {of}; решта адресована мережі, бренду або"
+        " самому допису.",
+        "en": "{rows} of the {of} signals name a product; the rest address the chain, the brand or"
+        " the post itself.",
+    },
+    "region_instrument": {
+        "ua": "Вкладка читає КЛЮЧОВІ СЛОВА, а не модель: {channels} каналів Полтавщини, {posts}"
+        " дописів і {comments} коментарів, звірені зі словником із {brands} брендів. Читання"
+        " регіону моделлю — платний крок стадії 2.",
+        "en": "This tab reads KEYWORDS, not the model: {channels} Poltava-region channels,"
+        " {posts} posts and {comments} comments matched against a {brands}-brand dictionary."
+        " Reading the region with the model is stage 2's paid step.",
+    },
+    "region_zero": {
+        "ua": "{mentions} згадок за {since} – {until} — це точка відліку: поле чисте, і власна"
+        " активність бренду зрушить це число.",
+        "en": "{mentions} mentions between {since} and {until} — the point of reference: the field"
+        " is clean, and the brand's own activity is what will move this number.",
+    },
+    "region_seen": {
+        "ua": "{mentions} згадок за {since} – {until}; кожен рядок несе свою цитату, бо «Гармонія» —"
+        " ще й звичайне слово.",
+        "en": "{mentions} mentions between {since} and {until}; every row carries its quote, because"
+        " «Гармонія» is also an ordinary word.",
+    },
+    "region_sample": {
+        "ua": "коментарі — вибірка: прочитано {read} із {total} тредів ({outstanding} у черзі)",
+        "en": "comments are a sample: {read} of {total} threads read ({outstanding} queued)",
+    },
+}
+"""Ruling (hhh) 3's sentence is the last one, word for word: the sample honesty is ON THE SCREEN."""
+
+SENTENCES = TRENDS_SENTENCES | REACTIONS_SENTENCES
+"""One table for `sentence()`. Merged rather than appended to `TRENDS_SENTENCES` so that constant
+keeps meaning what its name and docstring say — Тренди's three readings and three exhibit titles."""
+
+TYPE_WORDS = {
+    "спрос": ("Що питають", "What they ask about"),
+    "похвала": ("Що хвалять", "What they praise"),
+    "жалоба": ("На що скаржаться", "What they complain about"),
+    "цена": ("Про ціну", "About the price"),
+    "привычка": ("Про звичку", "About habit"),
+}
+SUBJECT_WORDS = {
+    "chain": ("на мережу", "about the chain"),
+    "sku": ("на товар", "about the product"),
+    "brand": ("на бренд", "about the brand"),
+    "post": ("про допис", "about the post"),
+}
+"""The reader's vocabulary in words, for the four headings DESIGN §13 (4) names and for the pair of
+§13 (2). A type or subject the law grows later falls back to its own token rather than vanishing —
+the heading is then untranslated, which is visible, where a dropped group is not."""
+
+
+def in_words(table: dict, key: str) -> dict:
+    ua, en = table.get(key, (key, key))
+    return {"ua": ua, "en": en}
+
+
 def figure(value: float, digits: int = 2) -> tuple[str, str]:
     """One number in the two languages — «1 247,92» and «1,247.92». The app renders the sentence
     whole and formats nothing inside it, so the decimal mark is chosen here or not at all."""
@@ -790,7 +929,7 @@ def sentence(key: str, **fills) -> dict:
     """One rule's sentence in both languages. A fill given as a `(ua, en)` pair is split per side —
     `build_dashboard.Strings` does the same, so a word that is translated stays translated."""
     return {
-        language: TRENDS_SENTENCES[key][language].format(
+        language: SENTENCES[key][language].format(
             **{
                 name: value[index] if isinstance(value, tuple) else value
                 for name, value in fills.items()
@@ -1005,6 +1144,383 @@ def regions(export: dict, media_block: dict, names: dict) -> dict:
     }
 
 
+def signal_rows() -> list[dict]:
+    """Every signal the paid dev loop kept, one row per finding, in a fixed order.
+
+    `results/promo_signals/<channel>_<root>.json` is the record `scripts/promo_p1_apply.py` wrote
+    per thread; `kept.signal` is the findings and `kept.about` is what the thread is about. The row
+    keeps its POSITION in its own file, because one comment can carry several findings and the
+    order they were read in is the record's — `screen.feed` is keyed the same way.
+    """
+    rows = []
+    for path in sorted(SIGNALS_DIR.glob("*.json")):
+        record = json.loads(path.read_text(encoding="utf-8"))
+        for index, row in enumerate(record["kept"]["signal"]):
+            rows.append(
+                {
+                    "channel": record["channel"],
+                    "thread_root": str(record["thread_root"]),
+                    "index": index,
+                    "msg_id": row["msg_id"],
+                    "type": row["type"],
+                    "subject": row.get("subject"),
+                    "subject_type": row.get("subject_type") or "—",
+                    "quote": row.get("quote"),
+                    "confidence": row.get("confidence"),
+                }
+            )
+    rows.sort(key=lambda row: (row["channel"], int(row["thread_root"]), row["index"]))
+    return rows
+
+
+def drawn_posts() -> dict[tuple[str, str], dict]:
+    """(channel, thread_root) → the promo post's own date and text, from COMMITTED result files.
+
+    Two halves, two files: the draw carries `post_date` for every thread it drew, and the pack
+    carries the `post` text that was rendered for the reader. The obvious source for both is
+    `data/raw/posts/`, and that is exactly why it is not used — `data/` is gitignored, so this
+    export would stop being reproducible from the repository the moment it joined the store.
+
+    A thread the packs do not carry gets `text: None`: «rows not exported» is a legal answer on this
+    screen (DESIGN §7) and an invented text is not.
+    """
+    joined: dict[tuple[str, str], dict] = {}
+    for path in thread_draws():
+        body = json.loads(path.read_text(encoding="utf-8"))
+
+        def walk(node):
+            if isinstance(node, dict):
+                if "thread_root" in node:
+                    yield node
+                    return
+                for value in node.values():
+                    yield from walk(value)
+            elif isinstance(node, list):
+                for value in node:
+                    yield from walk(value)
+
+        for row in walk(body["draw"]):
+            key = (row["channel"], str(row["thread_root"]))
+            joined.setdefault(key, {"date": None, "text": None})["date"] = row.get("post_date")
+    for path in promo_packs():
+        body = json.loads(path.read_text(encoding="utf-8"))
+        for item in body.get("items") or []:
+            if not isinstance(item, dict) or "channel" not in item or "post_id" not in item:
+                continue
+            key = (item["channel"], str(item["post_id"]))
+            joined.setdefault(key, {"date": None, "text": None})["text"] = item.get("post")
+    return joined
+
+
+def reactions_v2(promo: dict) -> dict:
+    """Промо · Реакції in DESIGN §13's grammar — counted HERE, so the tab renders and counts nothing.
+
+    Five readings over one population (`results/promo_signals/`): the type × subject matrix and the
+    complaint pair the tab opens with, the signal mix per channel, the monthly complaint share, the
+    loudest threads with their own promo post, and the product's own voice.
+
+    The month is the PROMO POST's, not the comment's — the comment's date lives only in
+    `data/raw/comments/`, which git does not carry. The sentence says so where it is printed.
+    """
+    rows = signal_rows()
+    posts = drawn_posts()
+    threads = promo["screen"]["threads"]
+
+    by_type = collections.Counter(row["type"] for row in rows)
+    by_subject = collections.Counter(row["subject_type"] for row in rows)
+    cells = collections.Counter((row["type"], row["subject_type"]) for row in rows)
+    types = [name for name, _ in sorted(by_type.items(), key=lambda one: (-one[1], one[0]))]
+    subjects = [name for name, _ in sorted(by_subject.items(), key=lambda one: (-one[1], one[0]))]
+
+    complaint = "жалоба"
+    chain_n, sku_n = cells[(complaint, "chain")], cells[(complaint, "sku")]
+    key = (
+        "reactions_complaints_chain"
+        if chain_n > sku_n
+        else "reactions_complaints_sku"
+        if sku_n > chain_n
+        else "reactions_complaints_tie"
+    )
+
+    mix = []
+    for channel, total in sorted(
+        collections.Counter(row["channel"] for row in rows).items(),
+        key=lambda one: (-one[1], one[0]),
+    ):
+        counted = collections.Counter(row["type"] for row in rows if row["channel"] == channel)
+        mix.append(
+            {
+                "channel": channel,
+                "signals": total,
+                "parts": [
+                    {"type": name, "n": counted[name], "share": counted[name] / total}
+                    for name in types
+                    if counted[name]
+                ],
+                "complaints": counted[complaint],
+            }
+        )
+
+    months: dict[str, dict] = {}
+    undated = 0
+    for row in rows:
+        date = posts.get((row["channel"], row["thread_root"]), {}).get("date")
+        if not date:
+            undated += 1
+            continue
+        month = months.setdefault(date[:7], {"month": date[:7], "signals": 0, "complaints": 0})
+        month["signals"] += 1
+        month["complaints"] += row["type"] == complaint
+    series = [
+        one | {"share": one["complaints"] / one["signals"]}
+        for one in sorted(months.values(), key=lambda one: one["month"])
+    ]
+    # `series` is sorted by month and max/min keep the FIRST extreme they meet, so a tie goes to the
+    # earliest month — the sentence is a function of the series, not of the order a dict was built in
+    peak = max(series, key=lambda one: one["share"], default=None)
+    low = min(series, key=lambda one: one["share"], default=None)
+
+    ranked = collections.Counter((row["channel"], row["thread_root"]) for row in rows)
+    order = sorted(ranked.items(), key=lambda one: (-one[1], one[0][0], int(one[0][1])))
+    cards = []
+    for (channel, root), signals in order[:THREAD_CARDS]:
+        post = posts.get((channel, root), {})
+        cards.append(
+            {
+                "channel": channel,
+                "thread_root": root,
+                "date": post.get("date"),
+                "text": post.get("text"),
+                "signals": signals,
+                "rows": [
+                    {
+                        "type": row["type"],
+                        "subject": row["subject"],
+                        "subject_type": row["subject_type"],
+                        "quote": row["quote"],
+                        "confidence": row["confidence"],
+                    }
+                    for row in rows
+                    if row["channel"] == channel and row["thread_root"] == root
+                ],
+            }
+        )
+
+    voice = [row for row in rows if row["subject_type"] == "sku"]
+    groups = []
+    for name, n in sorted(
+        collections.Counter(row["type"] for row in voice).items(),
+        key=lambda one: (-one[1], one[0]),
+    ):
+        groups.append(
+            {
+                "type": name,
+                "title": in_words(TYPE_WORDS, name),
+                "n": n,
+                "rows": [
+                    {
+                        "subject": row["subject"],
+                        "quote": row["quote"],
+                        "channel": row["channel"],
+                        "thread_root": row["thread_root"],
+                        "confidence": row["confidence"],
+                    }
+                    for row in voice
+                    if row["type"] == name
+                ],
+            }
+        )
+
+    return {
+        "from": f"{tick.rel(SIGNALS_DIR)}/*.json :: kept.signal — the paid dev loop's own records,"
+        f" joined on (channel, thread_root) to {THREAD_DRAW_GLOB} :: draw[].post_date and to"
+        f" {PROMO_PACK_GLOB} :: items[].post; the coverage line is"
+        f" {tick.rel(screen.EXPORT)} :: screen.threads",
+        "reading": "one row per finding the reader kept, never per comment: a comment that names"
+        " three things carries three signals, so every count here is a count of SIGNALS. The month"
+        " of a signal is the month of the promo post its thread hangs under — the comment's own"
+        " date is in the raw store, which the repository does not carry",
+        "rows": len(rows),
+        "coverage": {
+            "read": threads["read"],
+            "queue": threads["queue"],
+            "not_collected": threads["not_collected"],
+            "population": threads["population"],
+            "product_population": threads["product_population"],
+            "channels": len({row["channel"] for row in rows}),
+            "threads_with_a_signal": len(ranked),
+            "low_confidence": sum(1 for row in rows if (row["confidence"] or 1) < 1),
+            "from": threads["from"],
+        },
+        "matrix": {
+            "types": types,
+            "subject_types": subjects,
+            "subject_words": {name: in_words(SUBJECT_WORDS, name) for name in subjects},
+            "cells": [
+                {"type": one[0], "subject_type": one[1], "n": n}
+                for one, n in sorted(cells.items(), key=lambda one: (-one[1], one[0]))
+            ],
+            "by_type": dict(by_type),
+            "by_subject_type": dict(by_subject),
+        },
+        "complaints": {
+            "type": complaint,
+            "of_type": by_type[complaint],
+            "bars": [
+                {"subject_type": "chain", "n": chain_n},
+                {"subject_type": "sku", "n": sku_n},
+            ],
+            "other": by_type[complaint] - chain_n - sku_n,
+            "title": sentence(
+                key,
+                chain=figure(chain_n, 0),
+                sku=figure(sku_n, 0),
+                rows=figure(len(rows), 0),
+                other=figure(by_type[complaint] - chain_n - sku_n, 0),
+            ),
+        },
+        "mix_by_channel": {
+            "channels": mix,
+            "title": sentence(
+                "reactions_mix",
+                channel=mix[0]["channel"],
+                n=figure(mix[0]["signals"], 0),
+                rows=figure(len(rows), 0),
+                share=figure(100 * mix[0]["complaints"] / mix[0]["signals"], 1),
+            )
+            if mix
+            else None,
+        },
+        "monthly": {
+            "type": complaint,
+            "months": series,
+            "without_a_date": undated,
+            "title": sentence(
+                "reactions_monthly",
+                peak_month=peak["month"],
+                peak=figure(100 * peak["share"], 1),
+                low_month=low["month"],
+                low=figure(100 * low["share"], 1),
+            )
+            if peak is not None and low is not None
+            else None,
+        },
+        "threads": {
+            "cards": cards,
+            "shown": len(cards),
+            "of": len(ranked),
+            "title": sentence(
+                "reactions_threads",
+                shown=figure(len(cards), 0),
+                of=figure(len(ranked), 0),
+                top=figure(order[0][1], 0),
+            )
+            if order
+            else None,
+        },
+        "sku_voice": {
+            "groups": groups,
+            "rows": len(voice),
+            "title": sentence(
+                "reactions_voice", rows=figure(len(voice), 0), of=figure(len(rows), 0)
+            ),
+        },
+    }
+
+
+def region(names: dict) -> dict:
+    """Промо · Регіон — the stage-2 sentinel's baseline, carried by reference.
+
+    NOT `regions` one key over: that block is the operator's cut across retail CHAINS
+    (`config/chain_regions.yaml`), and this one is the Poltava-oblast channels the keyword sentinel
+    watches. Two populations, two files, one letter apart — the tab and the types say so too.
+
+    Every figure here is a field of `results/region_baseline.json` or
+    `results/region_collect_report.json`; nothing is recomputed, and the only thing this function
+    adds is the brands' display names, which live in the dictionary the sentinel matched on.
+    """
+    baseline = json.loads(REGION_BASELINE.read_text(encoding="utf-8"))
+    report = json.loads(REGION_REPORT.read_text(encoding="utf-8"))
+    mentions = [
+        json.loads(line)
+        for line in REGION_MENTIONS.read_text(encoding="utf-8").splitlines()
+        if line.strip()
+    ]
+    # the dictionary is the operator's to edit and the BASELINE is the measurement: a brand is on
+    # this screen because the scan counted it, and the dictionary only says what to call it
+    dictionary = {
+        entry["brand_id"]: entry
+        for entry in yaml.safe_load(REGION_BRANDS.read_text(encoding="utf-8"))["brands"]
+    }
+    brands = []
+    for brand_id, counted in baseline["mentions_per_brand"].items():
+        entry = dictionary.get(brand_id, {})
+        spellings = entry.get("display_names") or []
+        brands.append(
+            {
+                "brand_id": brand_id,
+                "name": spellings[0] if spellings else brand_id,
+                "own": entry.get("own"),
+                "spellings": spellings,
+                "mentions": counted,
+            }
+        )
+    brands.sort(key=lambda one: (not one["own"], one["brand_id"]))
+
+    coverage = {row["channel"]: row for row in report["channels"]}
+    channels = [
+        row
+        | {
+            "threads_total": coverage.get(row["channel"], {}).get("threads_total"),
+            "threads_read": coverage.get(row["channel"], {}).get("threads_read"),
+            "outstanding": coverage.get(row["channel"], {}).get("outstanding"),
+        }
+        for row in baseline["channels"]
+    ]
+
+    window = baseline["window"]
+    total = baseline["totals"]["mentions"]
+    return {
+        "from": f"{tick.rel(REGION_BASELINE)} (window, per-channel counts, mentions per brand) ·"
+        f" {tick.rel(REGION_MENTIONS)} (the rows) · {tick.rel(REGION_REPORT)} (thread coverage),"
+        f" joined on the channel handle; the names are {tick.rel(REGION_BRANDS)}"
+        " :: brands[].display_names",
+        "reading": "a KEYWORD sentinel over the eighteen Poltava-oblast channels, not the model:"
+        " case-insensitive, on word boundaries, not stemmed. A mention is one ROW per brand named,"
+        " so a post naming two brands is two rows — never «N posts mentioned the brand»",
+        "window": window,
+        "totals": baseline["totals"],
+        "sources": baseline["sources"],
+        "brands": brands,
+        "channels": channels,
+        "mentions": mentions,
+        "sample": report["totals"]
+        | {
+            "sentence": sentence(
+                "region_sample",
+                read=figure(report["totals"]["threads_read"], 0),
+                total=figure(report["totals"]["threads_total"], 0),
+                outstanding=figure(report["totals"]["outstanding"], 0),
+            ),
+            "from": report["from"],
+        },
+        "instrument": sentence(
+            "region_instrument",
+            channels=figure(baseline["totals"]["channels"], 0),
+            posts=figure(baseline["totals"]["posts"], 0),
+            comments=figure(baseline["totals"]["comments"], 0),
+            brands=figure(len(brands), 0),
+        ),
+        "baseline_says": sentence(
+            "region_zero" if total == 0 else "region_seen",
+            mentions=figure(total, 0),
+            since=str(window["first_date"])[:10],
+            until=str(window["last_date"])[:10],
+        ),
+        "promo_link": {"chain": HOME_CHAIN, "name": names.get(HOME_CHAIN, HOME_CHAIN)},
+    }
+
+
 def s1_reading() -> dict:
     """The S1 bar as `scripts/grade_positions.py` recorded it, over the draw it was read on.
 
@@ -1141,6 +1657,8 @@ def build(export_path: Path = OUT) -> dict:
         "category_prices": prices,
         "trends": trends_block(prices),
         "regions": regions(printed, media_block, names),
+        "reactions_v2": reactions_v2(promo),
+        "region": region(names),
         "s2_readings": screen.s2_readings(screen.RESULTS),
         "s2_boundary": screen.S2_BOUNDARY,
         "s1_reading": s1_reading(),
@@ -1283,6 +1801,19 @@ def main(argv: list[str] | None = None) -> int:
             if document["trends"]["chain_ranking"] is not None
             else " · no ranking"
         )
+    )
+    reactions = document["reactions_v2"]
+    print(
+        f"  reactions     {reactions['rows']} signals · {reactions['threads']['of']} threads ·"
+        f" {len(reactions['monthly']['months'])} months ·"
+        f" {reactions['sku_voice']['rows']} about a product"
+    )
+    place = document["region"]
+    print(
+        f"  region        {place['totals']['channels']} channels ·"
+        f" {place['totals']['posts']} posts · {place['totals']['comments']} comments ·"
+        f" {place['totals']['mentions']} mentions ·"
+        f" {place['sample']['threads_read']} of {place['sample']['threads_total']} threads read"
     )
     print(f"  s1 reading    {'read' if document['s1_reading']['reading'] else 'absent'}")
     print(f"  sources       {len(document['sources'])}")
