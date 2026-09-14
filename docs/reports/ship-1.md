@@ -5,7 +5,7 @@
 written»), `make promo-screen` exit 0 off the committed exports, `make serve` → `/api/status` 200 and `/` 200
 then stopped, `draw_truth_20.py` 20 rows, `make session` the standing prompt out of `docs/PROMPT-standing.md`,
 `firebase.json` + `.firebaserc.example` present and nothing deployed. Porcelain then EMPTY and the two seals
-plus the front export unmoved (`e45860c6…` · `eff8ba5b…` · `25566dff…`). Log: `/tmp/e2e_final.log`.
+plus the front export unmoved (`e45860c6…` · `eff8ba5b…` · `25566dff…`). Log: `/tmp/e2e_final3.log`.
 
 **The open clause is `make check` ON THE CLONE** (the open stop in `docs/plans/ship-1.PROGRESS.md`): exit 2 at
 collection, `tests/test_train_qlora.py` reading `data/raw/posts` at import; allowed to continue it reads **3939
@@ -26,4 +26,4 @@ every row naming its `file :: field`, byte-identically on a second run and on th
 **Deviations.** None to the built clauses. The SPA rewrite never fires on the app's own hash routes; on a
 hand-typed deep path it would serve `index.html`, whose relative assets then 404 — it is in the file because the
 check line names it (cause: spec text). **Debts:** PROGRESS «named, not built».
-**`make check` (working tree, HEAD `671ab29` both ends).** `ruff check .` **All checks passed!** · **4348 passed, 2 skipped in 703.65 s**, exit 0 — the same 4348 ruling (iii) accepted, since this item adds no Python test; the two docs written during the run are read by no test (grep shown in the session).
+**`make check` (working tree, HEAD `0a50eb0` both ends).** `ruff check .` **All checks passed!** · **4348 passed, 2 skipped in 715.41 s**, exit 0 — the same 4348 ruling (iii) accepted, since this item adds no Python test.
