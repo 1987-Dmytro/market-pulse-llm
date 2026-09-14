@@ -1,0 +1,29 @@
+# The brands `scripts/region_sentinel.py` watches for in the Poltava-oblast channels.
+#
+# THE OPERATOR EDITS THIS FILE FREELY — ruling (ggg) 5: an amendment here needs no ruling and no
+# code change. Add a brand by adding a block; add a spelling by adding a line to `display_names`.
+#
+# The seed is THREE, and it is the registry's own answer rather than a choice: the own brand
+# «Гармонія», plus every watchlist entry tagged `regional: poltava`. Zero SOURCES carry that tag —
+# it is a watchlist field — which is why the seed is read off the brands and not off the channels.
+#
+# `display_names` are matched case-insensitively, on word boundaries, with the four apostrophe
+# spellings folded together. They are NOT stemmed: «Миргородська корівка» is matched as written and
+# the inflected «миргородської корівки» is not a hit. That is the rule PHASE §2 (iii) names, and
+# the cost of it is measured rather than assumed — see `docs/plans/ship-1.PROGRESS.md`.
+#
+# «Гармонія» is also an ordinary Ukrainian noun («harmony»). The sentinel therefore carries the
+# QUOTE on every mention row: the count alone cannot tell the brand from the noun, and a human
+# reading 200 characters can. This is the reason the baseline's zero is worth having — a zero needs
+# no disambiguation at all.
+
+brands:
+  - brand_id: garmonija
+    own: true
+    display_names: ["Гармонія", "Гармония", "ТМ Гармонія"]
+  - brand_id: zarih
+    own: false
+    display_names: ["Заріг", "Зарог"]
+  - brand_id: myrhorodska-korivka
+    own: false
+    display_names: ["Миргородська корівка", "Миргородская коровка"]
