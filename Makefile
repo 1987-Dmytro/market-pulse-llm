@@ -1,4 +1,4 @@
-.PHONY: check check-stamped fmt preflight baselines tick promo-screen serve loop front
+.PHONY: check check-stamped fmt preflight baselines tick promo-screen serve loop front session
 
 # The single verifier. Must be green after every commit (docs/SPEC.md §9).
 check:
@@ -15,6 +15,12 @@ check-stamped:
 
 fmt:
 	ruff format .
+
+# The standing prompt, printed for the operator to paste into a fresh `claude` process — the block
+# is read out of the team lead's `docs/PROMPT-standing.md`, never re-typed here, so a revised
+# prompt reaches the next session by itself.
+session:
+	@python3.11 scripts/session_prompt.py
 
 # Consumers, prose, pins and digests for the names a contract is about to touch.
 # ARGS goes through verbatim, options included; a query that starts with a dash goes

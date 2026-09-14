@@ -125,3 +125,8 @@ results/loop*.log
 # `firebase deploy` runs after `make front`, which is also what keeps §8's porcelain empty.
 frontend/node_modules/
 dashboard/app/
+
+# The operator's own Firebase project id (`firebase use --add` writes it). `.firebaserc.example`
+# IS committed and carries a placeholder: the hosting config in `firebase.json` is the product's,
+# the project it deploys to is his. The executor never runs a deploy (PHASE-ship-1 §4.1).
+.firebaserc
