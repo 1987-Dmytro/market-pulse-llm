@@ -4,41 +4,47 @@
 ЭТОТ файл через Desktop Commander; новая тимлид-сессия начинается с константного промта оператора и
 читает этот файл ПЕРВЫМ, затем docs/STATUS.md и новейшую секцию лога решений. Ничего искать не надо.
 
-## Состояние на 14.09 (вечер) — всё принято моими прогонами, $0 весь день
-- Фаза `ship-1`, PHASE v20; рулинги дня: (fff) weekly-home · (ggg) стоп s61 → форма (c), реестр не
-  двигается · (hhh) region-collect · (iii) reactions-region. Вся объединённая задача (eee) —
-  редизайн Реакцій + регион — закрыта за ОДИН день, четыре приёмки подряд.
-- Сеалы целы: `promo_screen_data.json` e45860c6… · `config/registry.yaml` eff8ba5b…; экран 1301.
-- Suite 4348/2 (`/tmp/tl_make_check_s63.log`), vitest 37/37 — прогоны тимлида.
-- Регион: 18 каналов вне реестра (`config/region_channels.yaml`), корень `data/raw_region/`
-  (15 889 постов · 8 232 коммента), baseline 0/0/0, выборка комментов честно на экране.
-- Деньги: REMAINING $1.1602; облако пусто; впереди только $0.
+## Состояние на 14.09 (ночь) — фаза `ship-1`: ВСЕ исполнительские айтемы ПРИНЯТЫ
+- PHASE v21; рулинг дня (jjj): s64 «e2e-ship» принят моими прогонами — чистый клон
+  (front/tick/promo-screen exit 0 · serve 200×2 · проба отказывает по имени ДО npm ci · truth 20
+  строк · session-блок), suite рабочего дерева 4348/2 (`/tmp/tl_make_check_s64.log`), отчёт 29 строк.
+- Стоп s64 рулен (a): §8 — предикат («front and serve green on a clean clone»), suite живёт на
+  рабочем дереве со стором; клаузула `make check` на клоне ВЫЧЕРКНУТА из §2 (моя же команда,
+  не прогнанная через собственный гейт); 372 скипа в 65 файлах отклонены как ослабление §4.
+- Сеалы целы: `promo_screen_data.json` e45860c6… · `config/registry.yaml` eff8ba5b… ·
+  `front_data.json` 25566dff…; экран 1301. Деньги: REMAINING $1.1602; облако пусто; впереди $0.
+- Правки этой сессии (мои файлы, закоммичены по пути): PHASE →v21 (тик + вычерк) · рулинг (jjj)
+  в логе решений · STATUS · PROMPT-standing.md (список путей получил docs/HANDOFF-teamlead.md —
+  make session раньше печатал блок без него) · этот файл.
 
 ## Осталось до гейта
-s64 «e2e-ship» (исполнитель) → «linkedin-pack» (ТИМЛИД, после README) →
-ГЕЙТ (оператор): ср 16.09 вечером (резерв чт 17.09 12:00). Запас ~сутки.
+«linkedin-pack» (ТИМЛИД, свежая сессия 15.09) → ГЕЙТ (оператор): ср 16.09 вечером
+(резерв чт 17.09 12:00 — только на время оператора, от сбора больше не зависит).
 
 ## Следующая тимлид-сессия делает
-1. Принимает отчёт s64 «e2e-ship» СВОИМИ прогонами: чистый клон в /tmp (make check + front + tick +
-   promo-screen), проба удалённого источника — ПРЯМО-требуемый файл ((iii) 3, не glob), README-витрина,
-   `docs/reports/ship-1.md` ≤30 строк, make check ≥ 4348, порцелан §8 пуст. Рулинг ≤12 строк,
-   тик в PHASE (→v21), STATUS, и ПЕРЕЗАПИСЬ этого файла.
-2. Затем свой айтем «linkedin-pack»: пост + скриншоты + легенда — только из README и файлов
-   результатов, ничего от руки.
+1. Свой айтем «linkedin-pack»: пост + набор скриншотов (docs/reports/screens/, восемь свежих кадров
+   dark+light от s63; Якість без §11-кадра — сказано в README) + легенда «как построено» — ТОЛЬКО из
+   README.md и файлов результатов, ни одной цифры от руки. Чек: каждая цифра поста именует файл.
+2. Тик «linkedin-pack» в PHASE (→v22), одна строка приёмки в лог решений, STATUS, ПЕРЕЗАПИСЬ этого файла.
 3. STATUS всегда отвечает КОГДА: гейт ср 16.09 вечером.
+4. Исполнитель до гейта НЕ нужен. После гейта — стандартный промт печатает `make session`
+   (или блок из docs/PROMPT-standing.md, теперь с HANDOFF в списке путей).
+
+## Заметки среды тимлида (стоили этой сессии по разу)
+- Шелл Desktop Commander несёт NODE_ENV=production → `npm ci` опускает devDeps (tsc не ставится):
+  клонные прогоны фронта — строго `env -u NODE_ENV make front`.
+- Долгий поллинг в одном вызове DC (>4 мин) роняет транспорт: ждать suite порциями sleep ≤175 s;
+  grep итога suite — по шаблону `=+ [0-9]+ passed`, не по слову «passed» (ловит ruff).
 
 ## Долги пост-гейта (до гейта не трогать)
 glob-асимметрия `required()` · emptiness-guard `report()` · «—» chip · error boundary вкладок ·
 s1-bakeoff · добор 2 692 региональных тредов бесплатными перегонами · платное чтение очереди (548)
-только после dry-run · перенос запечатанных цитат STATUS в архивный файл.
+только после dry-run · перенос запечатанных цитат STATUS в архивный файл · решение оператора по
+90,9 МБ полноразмерных JPEG на витрине · миграция/чистка results/ (3,5 ГБ) после снятия пинов.
 
 ## Решённое, что легко забыть
-- Скилл-строка v3.23 ОДОБРЕНА оператором 14.09 (замер радиуса перед касанием запечатанного файла +
-  grep прецедентов; хендофф-в-репо + константный старт). Обновление скилла — на стороне оператора в
-  Cowork; патч выдан в чате 14.09.
+- Скилл-строка v3.23 одобрена 14.09; вкладка в карту — на стороне оператора в Cowork (патч в чате
+  14.09; при вкладке снять старую фразу «no separate handoff documents» из §8 карты).
 - `config/region_brands.yaml` оператор правит сам, без рулинга (ggg 5).
-
-## Запуск s64 (свежий процесс `claude` в репо, вставить дословно)
-```
-Phase ship-1. Every docs/ file below is read with the Read tool — never cat, sed, awk or cp on a team-lead path. Read, in this order and nothing else first: git log -15 --oneline; docs/plans/ship-1.PROGRESS.md; the NEWEST dated section of docs/reviews/2026-08-30-plan-promo-pulse-1.md; docs/PHASE-ship-1.md §2 as the feature list and §4 as the fork defaults; docs/DESIGN-ship-1.md before any front item. Commit any modified or new team-lead file by path first (docs/STATUS.md, docs/PHASE-*.md, docs/PROMPT-*.md, docs/DESIGN-*.md, docs/PROCESS.md, docs/reviews/*, docs/labels-*.jsonl, docs/HANDOFF-teamlead.md). Then do exactly ONE item: the "next" line of PROGRESS. Verify it with its own check and show the output. Commit by path. Update PROGRESS (done / next / open stop, ≤60 lines). If you reach a stop-point of §4 — a paid or irreversible step, a sealed file that would move, a test that would have to be weakened — write it into PROGRESS as the open stop (≤15 lines: stop-point, question, tree state) and END YOUR TURN; a UI or library fork is NOT a stop (§4: decide, name it in PROGRESS, continue). Never add a test, pin, guard or ledger the phase file did not ask for; name the need in PROGRESS instead. Money: $0 on every item; nothing is created in the cloud.
-```
+- Клон ставит 0 из 402 JPEG листовок (data/annotation вне git по закону) — витрина деплоится с
+  Мака оператора; README это говорит.
