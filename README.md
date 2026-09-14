@@ -87,7 +87,7 @@ and whether the showcase ships them downscaled is the operator's call (ruling (w
 | Poltava-region channels watched | 18 · 15889 posts · 8232 comments | `results/front_data.json` :: region.totals |
 | region comment sample | 1008 of 3700 threads · 2692 outstanding | `results/region_collect_report.json` :: totals |
 | watchlist mentions in the region | 0 — the baseline, not an empty screen | `results/front_data.json` :: region.totals.mentions |
-| money spent in the current cycle | $8.8398 of the $10.00 cap | `results/spend_cycle3.json :: sessions[-1]` |
+| money spent in the current cycle | $8.8398 of the $10.00 cap | `results/spend_cycle3.json :: sessions[-1].spent_usd` · `cycle3_cap_usd` |
 
 **S1 — positions read off leaflet pages, graded on the team lead's blind gold.** The bar is RED and ships RED: the reader finds a quarter of the rows a human finds on the same pages, and prices what it does find.
 

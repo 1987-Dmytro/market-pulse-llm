@@ -132,7 +132,10 @@ def holdings(results: Path) -> list[str]:
         (
             "money spent in the current cycle",
             f"${money['spent_usd']:.4f} of the ${money['cap_usd']:.2f} cap",
-            f"`{money['from']}`",
+            # Two fields, and they do NOT live in one place: the spend is the ledger's last session
+            # row, the cap is a top-level field of the same file. One citation covering both would
+            # send a reader into `sessions[-1]` for a cap that is not there.
+            f"`{money['from']}.spent_usd` · `cycle3_cap_usd`",
         ),
     ]
     lines = [
