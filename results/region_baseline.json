@@ -1,0 +1,172 @@
+{
+  "channels": [
+    {
+      "channel": "@mo3ambik",
+      "comments": 2569,
+      "first_date": "2026-07-10T10:34:40+00:00",
+      "last_date": "2026-09-14T09:03:20+00:00",
+      "mentions": 0,
+      "posts": 424
+    },
+    {
+      "channel": "@poltava_informue",
+      "comments": 0,
+      "first_date": "2026-07-10T11:52:35+00:00",
+      "last_date": "2026-09-14T08:22:53+00:00",
+      "mentions": 0,
+      "posts": 3334
+    },
+    {
+      "channel": "@suspilnepoltava",
+      "comments": 0,
+      "first_date": "2026-07-10T11:09:55+00:00",
+      "last_date": "2026-09-14T08:47:23+00:00",
+      "mentions": 0,
+      "posts": 1170
+    },
+    {
+      "channel": "@telegraf_kremenchuk",
+      "comments": 294,
+      "first_date": "2026-07-10T11:21:04+00:00",
+      "last_date": "2026-09-14T08:37:58+00:00",
+      "mentions": 0,
+      "posts": 1418
+    },
+    {
+      "channel": "@gorishnie_plavni1",
+      "comments": 261,
+      "first_date": "2026-07-10T10:41:01+00:00",
+      "last_date": "2026-09-14T08:43:01+00:00",
+      "mentions": 0,
+      "posts": 1342
+    },
+    {
+      "channel": "@myrhorodtown",
+      "comments": 165,
+      "first_date": "2026-07-10T11:35:05+00:00",
+      "last_date": "2026-09-14T08:10:15+00:00",
+      "mentions": 0,
+      "posts": 606
+    },
+    {
+      "channel": "@Hadiach_telegram",
+      "comments": 316,
+      "first_date": "2026-07-10T13:53:31+00:00",
+      "last_date": "2026-09-14T08:34:12+00:00",
+      "mentions": 0,
+      "posts": 392
+    },
+    {
+      "channel": "@globine1",
+      "comments": 299,
+      "first_date": "2026-07-10T11:34:53+00:00",
+      "last_date": "2026-09-14T08:18:10+00:00",
+      "mentions": 0,
+      "posts": 246
+    },
+    {
+      "channel": "@piryatingromada",
+      "comments": 0,
+      "first_date": "2026-07-10T15:41:34+00:00",
+      "last_date": "2026-09-14T08:12:35+00:00",
+      "mentions": 0,
+      "posts": 162
+    },
+    {
+      "channel": "@PirOperative",
+      "comments": 280,
+      "first_date": "2026-07-11T20:00:25+00:00",
+      "last_date": "2026-09-14T07:15:27+00:00",
+      "mentions": 0,
+      "posts": 278
+    },
+    {
+      "channel": "@zinkivnews",
+      "comments": 21,
+      "first_date": "2026-07-13T16:17:10+00:00",
+      "last_date": "2026-09-11T11:13:53+00:00",
+      "mentions": 0,
+      "posts": 33
+    },
+    {
+      "channel": "@LHVC_info",
+      "comments": 2,
+      "first_date": "2026-07-20T10:17:18+00:00",
+      "last_date": "2026-09-10T18:49:21+00:00",
+      "mentions": 0,
+      "posts": 6
+    },
+    {
+      "channel": "@KarlivkaLive",
+      "comments": 3,
+      "first_date": "2026-07-17T14:21:44+00:00",
+      "last_date": "2026-09-14T08:10:09+00:00",
+      "mentions": 0,
+      "posts": 23
+    },
+    {
+      "channel": "@poltava_pvp",
+      "comments": 769,
+      "first_date": "2026-07-10T11:00:02+00:00",
+      "last_date": "2026-09-14T08:35:12+00:00",
+      "mentions": 0,
+      "posts": 1022
+    },
+    {
+      "channel": "@poltava20",
+      "comments": 172,
+      "first_date": "2026-07-10T10:36:01+00:00",
+      "last_date": "2026-09-14T08:53:35+00:00",
+      "mentions": 0,
+      "posts": 3775
+    },
+    {
+      "channel": "@h_kremenchug",
+      "comments": 2197,
+      "first_date": "2026-07-10T11:36:13+00:00",
+      "last_date": "2026-09-14T08:54:08+00:00",
+      "mentions": 0,
+      "posts": 1242
+    },
+    {
+      "channel": "@kremen_news",
+      "comments": 0,
+      "first_date": "2026-07-10T10:40:25+00:00",
+      "last_date": "2026-08-08T11:01:05+00:00",
+      "mentions": 0,
+      "posts": 354
+    },
+    {
+      "channel": "@dikankaa",
+      "comments": 884,
+      "first_date": "2026-07-14T10:52:11+00:00",
+      "last_date": "2026-09-11T12:41:30+00:00",
+      "mentions": 0,
+      "posts": 62
+    }
+  ],
+  "contract": "PHASE-ship-1 §2 «region-collect» (iii) — stage-2 regional baseline ($0)",
+  "mentions_per_brand": {
+    "garmonija": 0,
+    "myrhorodska-korivka": 0,
+    "zarih": 0
+  },
+  "sources": {
+    "brands": "config/region_brands.yaml",
+    "channels": "config/region_channels.yaml",
+    "roots": [
+      "data/raw",
+      "data/raw_region"
+    ]
+  },
+  "totals": {
+    "channels": 18,
+    "comments": 8232,
+    "mentions": 0,
+    "posts": 15889
+  },
+  "window": {
+    "first_date": "2026-07-10T10:34:40+00:00",
+    "last_date": "2026-09-14T09:03:20+00:00"
+  }
+}
