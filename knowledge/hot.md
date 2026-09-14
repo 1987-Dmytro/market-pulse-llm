@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-09-14 12:17:04 (every SessionStart)
+**Auto-refreshed:** 2026-09-14 14:06:50 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
-117e10b docs(progress): run the write paths the fixes changed, and reconcile the test count
-6a9cac7 docs(progress): s62 «region-collect» — the registry never moved and the zero is honest
-e608f56 data(region-collect iii): the stage-2 regional baseline is an honest, printed ZERO
-9d102a3 fix(region-collect): five defects my own adversarial review of this diff caught
-40c1087 feat(region-collect ii+iii): a regional collector and a $0 sentinel, both one-reader
+86ffebb docs(progress): s63 «reactions-region» — the two tabs, and what the month really is
+1f3e100 fix(reactions-region): ten defects my own adversarial review of this diff caught
+7ff8c26 fix(reactions-region): §13 (5) says CHIPS with counts, and a select is not one
+fbd1f03 docs(reactions-region): six frames of the two tabs, dark and light
+064fbf0 feat(reactions-region iii+iv): Реакції in §13's grammar, and a Регіон tab for the honest zero
 ```
 
 ## 📋 Recent decisions
@@ -30,34 +30,34 @@ e608f56 data(region-collect iii): the stage-2 regional baseline is an honest, pr
 <!-- AUTO-GEN END (everything below preserved across refreshes) -->
 
 # Hot Cache — curated
-**Last update:** 2026-09-13 s60 «weekly-home»: 7 коммитов, vitest 31/31, 4344/2, $0; у меня стопов НЕТ.
+**Last update:** 2026-09-14 s63 «reactions-region»: 8 коммитов, vitest 37/37, 4348/2, $0; у меня стопов НЕТ.
 Этап 1 `SPEC-v2`, карта `STATUS.md`, цикл v3, фаза **ship-1**, процесс **Money v2.6**. Руками, ≤40 строк.
 
 ## 🔥 What's Hot — приложение отвечает на вопрос директора по маркетингу
-**13.09 ((ddd)+(eee)):** `front-2` ПРИНЯТ; s60 закрыл **«weekly-home»**, обе клаузулы. (1) 10 недель
-W27–W36 (**1 301 строка**) — в **`results/weekly/`**, который git несёт: один коммит by path, `cmp` 10/10
-против принятого набора. **Принятый дайджест `72d9d46e…` = `shasum <пути> | shasum`: он хеширует ПУТИ,
-законный переезд его двигает (`b636e842…`); держится контентный `cat …` = `d4fb6a44…`.** (2) T4 «Δ до
-свого» — ПОЛЕ `command_center_derived`, приложение не вычитает; доля эталона 0.0000, поэтому Δ численно
-равна доле — тест краснеет только от мутации ССЫЛКИ (`max(share)`). Свой ревью диффа (5 линз → 10 находок
-→ по 3 скептика, выжило 0) принёс 3 починки МОЕГО текста: обещание восстановимости на клоне в
-`DATASETS.md` (реально 15 из 28 колонок), несуществующий `aggregates.sov_block` в докстринге, тест
-сравнивал блок сам с собой. **Правило дня: единогласный отказ 30 из 30 — тоже показание, не приговор.**
+**14.09 ((hhh)):** s63 закрыл **«reactions-region»**, все четыре клаузулы. Реакції перерисована по §13,
+**Промо · Регіон** — новая вкладка (`#/promo/region`), у которой ЧЕСТНЫЙ НОЛЬ — это предложение продюсера,
+а не пустой экран. `collect_region.py` пишет `results/region_collect_report.json` на ЛЮБОМ режиме, `--plan`
+включительно (**3 700 / 1 008 / 2 692**, `8cf7563b…` одинаково из трёх запусков, $0). **Даты и тексты — из
+закоммиченных `promo_threads_draw*.json` и `promo_*_pack.json`, НЕ из `data/raw/`** (gitignored → клон
+собрал бы другое); все шесть файлов git несёт, но в `required()` они ГЛОБЫ, а глоб не умеет отказать по
+имени. Свой ревью диффа (6 линз → 42 находки → по 3 скептика) дал **10 починок**, одна сняла нарушение
+§12: месячный график был **ДВОЙНОЙ ОСЬЮ**. **Правило дня: перевёрнутый заголовок проходит три `toContain`
+— держи ПОРЯДОК слов, а не их наличие.**
 
-## ⏭️ Next — «region-collect» ($0, (eee)): ЕДИНСТВЕННЫЙ разрешённый ход реестра
-НАПЕЧАТАТЬ каналы, чья пауза ссылается на «phase B (рулинг (ц) 30.08)» (ждём 17 районных), снять паузу
-ТОЛЬКО с них, дифф построчно — §4.1: слово оператора дано, это НЕ стоп. Потом `collect_r2.py` (посты И
-комментарии в `data/raw_r2/`), потом НОВЫЙ `region_sentinel.py` ($0, БЕЗ модели) → `region_mentions.jsonl`
-+ `region_baseline.json` (ноль — число). Далее **reactions-region** → **e2e-ship** → ГЕЙТ 16.09 вечером.
+## ⏭️ Next — «e2e-ship» ($0): фаза закрывается на ЧИСТОМ КЛОНЕ
+`git clone <repo> /tmp/mp-e2e`, затем `make check && make front && make tick && make promo-screen` — зелено
+(клон без стора говорит это и выходит 0); переименованный источник → `make front` падает ≠ 0 ПО ИМЕНИ;
+`make serve` smoke, `draw_truth_20.py`, `make session`, `firebase.json` + `.firebaserc.example` есть и НЕ
+деплоятся, README как первая страница со скриншотами, `docs/reports/ship-1.md` ≤30 строк, порцелан пуст.
+Далее **linkedin-pack** (тимлид) → ГЕЙТ ср 16.09 вечером.
 
 ## 🚧 Blockers / долги (названы, не построены)
 **Файлы тимлида — только Read-tool; харнес-файл — только Write-tool, `diff` = пруф.**
-**Деньги: $0 13.09, подов и ТОМОВ нет, дрипа нет.** Гард печатал `REMAINING $1.1602` (09.09) — с тех пор
-не тратилось. Незакоммичено и не моё: `knowledge/runbooks/network-wifi-flap.md` (12.09, читать CORRECTION).
-**Названо и НЕ починено (вне плана):** у приложения НЕТ error boundary — `must()` внутри рендера
-вкладки размонтирует корень вместо красной панели §5 (нашлось в s59, чинить не просили; (ddd) 3 —
+**Деньги: $0 14.09, подов и ТОМОВ нет, дрипа нет.** Гард печатал `REMAINING $1.1602` (09.09) — с тех пор
+не тратилось. **Названо и НЕ починено (вне плана):** у приложения НЕТ error boundary — `must()` внутри
+рендера вкладки размонтирует корень вместо красной панели §5 (нашлось в s59, чинить не просили; (ddd) 3 —
 POST-GATE); вторая популяция только у NSR; `SovReading.share` типизирована `number`, хотя продюсер
-может писать null — окно с нулём упоминаний умрёт на колонке доли раньше Δ.
+может писать null; `report()` над пустым стором пишет восемнадцать НУЛЕЙ, и экран печатает их как замер.
 · **⛔ `tick.py --window all` — не окно, а МОЛЧАЛИВОЕ обнуление** (`positions 1113 → 0`); гони `make tick`.
 · **⛔ `promo-dev-loop` ОТКАЗЫВАЕТ.** · **⛔ БЛОК РАНБУКА — ПО СВОЕЙ ПЕРВОЙ/ПОСЛЕДНЕЙ СТРОКЕ, НЕ по фенсу.**
 · **⚠️ `pgrep -f "pytest -q"` матчит СВОЙ ЖЕ шелл-ожидатель** — петля не выходит; матчи по `bin/pytest`.
