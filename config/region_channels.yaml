@@ -27,9 +27,9 @@ channels:
   - handle: "@mo3ambik"
     note: "МОЗАМБІК.МЕДІА: Лубни, Пирятин, Хорол, Гребінка, Оржиця — five raiony in one feed"
   - handle: "@poltava_informue"
-    note: "Полтава Інформує — oblast centre; 1316 archive posts, none with replies"
+    note: "Полтава Інформує — oblast centre; 1316 archive posts and NO linked discussion group"
   - handle: "@suspilnepoltava"
-    note: "Суспільне Полтава — the public broadcaster's oblast desk"
+    note: "Суспільне Полтава — the public broadcaster's oblast desk; no linked discussion group"
   - handle: "@telegraf_kremenchuk"
     note: "Кременчуцький Телеграф — Kremenchuk; the one channel that also carries 9 promo position rows"
   - handle: "@gorishnie_plavni1"
@@ -41,13 +41,13 @@ channels:
   - handle: "@globine1"
     note: "Х Глобине — Hlobyne raion classifieds and news"
   - handle: "@piryatingromada"
-    note: "Пирятинська громада — the hromada's official feed; no replies in the archive"
+    note: "Пирятинська громада — the hromada's official feed; no linked discussion group"
   - handle: "@PirOperative"
     note: "Пирятин Оперативний — the unofficial Pyriatyn feed beside it"
   - handle: "@zinkivnews"
-    note: "Зіньків Новини — the smallest of the eighteen, 9 archive posts"
+    note: "Зіньків Новини — 9 archive posts over three weeks, the quietest but one"
   - handle: "@LHVC_info"
-    note: "Лохвиця.info — Lokhvytsia; 1 archive post, so its window starts effectively empty"
+    note: "Лохвиця.info — Lokhvytsia; 1 archive post, the smallest of the eighteen"
   - handle: "@KarlivkaLive"
     note: "Оголошення. Karlivka Live — Karlivka classifieds"
   - handle: "@poltava_pvp"
@@ -57,12 +57,13 @@ channels:
   - handle: "@h_kremenchug"
     note: "Х Кременчук — 5340 replies over 213 archive threads, the loudest comment field"
   - handle: "@kremen_news"
-    note: "КРЕМІНЬ | НОВИНИ | КРЕМЕНЧУК — Kremenchuk news; no replies in the archive"
+    note: "КРЕМІНЬ | НОВИНИ | КРЕМЕНЧУК — silent since 2026-08-08; no linked discussion group"
   - handle: "@dikankaa"
     note: >-
       Диканька — the EIGHTEENTH, added by ruling (ggg) 2 and not a registry row at all.
       It was excluded from the promo registry on 2026-08-08 by the day-2 language census
-      (`results/language_census_5c1_day2.json`: ru 20 of 30 decidable posts) and that exclusion
-      stands for the promo pipeline. Regional monitoring reads Ukrainian AND Russian text for the
-      same brand strings, so the census is not a reason to stop watching it; 30 v1 posts with 457
-      replies are already on disk, and Telethon needs no registry row to collect more.
+      (`results/language_census_5c1_day2.json`: 30 posts in the window, 20 of them decidable, and
+      all 20 read ru — `ua_share` 0.0) and that exclusion stands for the promo pipeline.
+      Regional monitoring reads Ukrainian AND Russian text for the same brand strings, so the
+      census is not a reason to stop watching it; 30 v1 posts with 457 replies are already on
+      disk, and Telethon needs no registry row to collect more.

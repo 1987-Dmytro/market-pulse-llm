@@ -80,8 +80,17 @@ def side_channels() -> list[str]:
     """The handles, in file order. The file is the only list; nothing re-derives it."""
     loaded = yaml.safe_load(SIDE_FILE.read_text(encoding="utf-8"))
     handles = [entry["handle"] for entry in loaded["channels"]]
-    if len(set(handles)) != len(handles):
-        raise SystemExit(f"{SIDE_FILE}: a handle is listed twice — the store key must be unique")
+    # On the STORE KEY, not the literal spelling: `RawStore.path` strips the `@`, and a
+    # case-insensitive filesystem then resolves `@poltava20` and `@Poltava20` to ONE file, which
+    # a spelling-only check would let through. `scripts/region_sentinel.py :: load_channels`
+    # makes the same refusal on the same key — two readers of one file must not drift.
+    keys = [one.lstrip("@").casefold() for one in handles]
+    if len(set(keys)) != len(keys):
+        doubled = sorted({key for key in keys if keys.count(key) > 1})
+        raise SystemExit(
+            f"{SIDE_FILE}: {', '.join(doubled)} listed more than once — one store file would be"
+            " written twice under two spellings of one channel"
+        )
     return handles
 
 
@@ -132,8 +141,13 @@ def since_of(handle: str) -> datetime:
     )
 
 
-async def walk_window(client, entity, source, handle, since, store, provenance) -> int:
-    """Posts newer than `since`, flushed in chunks so an interrupt keeps what it read."""
+async def walk_window(client, entity, source, handle, since, store, provenance, written) -> int:
+    """Posts newer than `since`, flushed in chunks so an interrupt keeps what it read.
+
+    `written` is the channel's row in the summary and is updated after EVERY flush, not returned at
+    the end: the rows are already on disk by then, and a raise on the next page would leave the
+    caller with no number to print for rows that exist ([[log_the_side_effect_that_already_happened]]).
+    """
     buffer, stored = [], 0
     async for message in client.iter_messages(entity, wait_time=REQUEST_PAUSE):
         if message.action is not None:
@@ -144,9 +158,11 @@ async def walk_window(client, entity, source, handle, since, store, provenance) 
             message.grouped_id is None or message.grouped_id != buffer[-1]["grouped_id"]
         ):
             stored += store.append(collapse_albums(buffer))
+            written["posts"] = stored
             buffer.clear()
         buffer.append(post_record(message, source, handle, provenance))
     stored += store.append(collapse_albums(buffer))
+    written["posts"] = stored
     return stored
 
 
@@ -162,7 +178,7 @@ async def fetch_threads(client, entity, source, handle, store, salt, provenance,
     todo = sorted(posts.with_replies - store.index("comment", handle).parents, reverse=True)
     left = todo[cap:] if cap is not None else []
     todo = todo[:cap] if cap is not None else todo
-    stored, failed = 0, 0
+    stored, failed, read = 0, 0, 0
     for done, parent in enumerate(todo, start=1):
         try:
             records = [
@@ -173,8 +189,15 @@ async def fetch_threads(client, entity, source, handle, store, salt, provenance,
                 if message.action is None
             ]
             stored += store.append(records)
+            read += 1
         except FloodWaitError as exc:
-            print(f"    FloodWait {exc.seconds}s — sleeping", flush=True)
+            # The thread is ABANDONED, not retried, so it is a failure and not a read. `len(todo)`
+            # as the read count would report coverage of a thread whose comments were never
+            # fetched — and this number is the item's own evidence of what was collected. The
+            # thread returns to `todo` on the next run: `todo` is «has replies, has no stored
+            # comment», so an abandoned thread is still outstanding and resumes for free.
+            failed += 1
+            print(f"    FloodWait {exc.seconds}s — thread {parent} left, sleeping", flush=True)
             await asyncio.sleep(exc.seconds)
         except Exception as exc:  # noqa: BLE001 — one bad thread must not end the channel
             failed += 1
@@ -183,7 +206,7 @@ async def fetch_threads(client, entity, source, handle, store, salt, provenance,
             print(f"    {done}/{len(todo)} threads, {stored} comments", flush=True)
         await asyncio.sleep(THREAD_PAUSE)
     return {
-        "threads_read": len(todo),
+        "threads_read": read,
         "comments_stored": stored,
         "threads_failed": failed,
         "threads_left": len(left),
@@ -261,9 +284,8 @@ async def run(args) -> list[dict]:
                 since = since_of(handle)
                 try:
                     got = await walk_window(
-                        client, entity, source, handle, since, store, provenance
+                        client, entity, source, handle, since, store, provenance, written[handle]
                     )
-                    written[handle]["posts"] = got
                     print(f"  {handle}: +{got} posts since {since.isoformat()[:10]}", flush=True)
                 except FloodWaitError as exc:
                     print(f"  {handle}: FloodWait {exc.seconds}s — sleeping", flush=True)
@@ -272,7 +294,25 @@ async def run(args) -> list[dict]:
                     print(f"  {handle}: {type(exc).__name__}: {exc}", flush=True)
 
             if args.comments:
-                linked = await linked_group(client, entity)
+                try:
+                    linked = await linked_group(client, entity)
+                except Exception as exc:  # noqa: BLE001 — one channel must not end the sweep
+                    # `GetFullChannelRequest` is a SEPARATE rpc from `get_entity`, which telethon
+                    # can answer from the session cache without a network call — so this is the one
+                    # place in the loop a live failure lands. Unguarded it killed the whole run AND
+                    # `render(rows)` below it, so the per-channel counts §2 (ii) requires printed
+                    # were lost for the channels already collected. A channel that has gone private
+                    # would take every channel after it in file order with it, on every run.
+                    #
+                    # The recorded outcome is the ERROR, never `comments: 0`: a zero here is a
+                    # measured fact about a channel with no discussion group, and an rpc that did
+                    # not answer is not that fact ([[a_stub_replaces_the_guard_it_should_trigger]]).
+                    written[handle]["discussion"] = f"unread: {type(exc).__name__}: {exc}"
+                    print(
+                        f"  {handle}: {type(exc).__name__}: {exc} — comments not read", flush=True
+                    )
+                    await asyncio.sleep(CHANNEL_PAUSE)
+                    continue
                 if linked is None:
                     # §2 (ii): a channel without a linked discussion is a printed ZERO, never a
                     # failure. The promo registry's `comments_enabled: false` is NOT this answer —

@@ -3,9 +3,15 @@
 # THE OPERATOR EDITS THIS FILE FREELY — ruling (ggg) 5: an amendment here needs no ruling and no
 # code change. Add a brand by adding a block; add a spelling by adding a line to `display_names`.
 #
-# The seed is THREE, and it is the registry's own answer rather than a choice: the own brand
-# «Гармонія», plus every watchlist entry tagged `regional: poltava`. Zero SOURCES carry that tag —
-# it is a watchlist field — which is why the seed is read off the brands and not off the channels.
+# The seed is THREE and it is ruling (ggg) 5's list, read off the registry's watchlist: «Гармонія»
+# (the brand this instrument exists for) plus every watchlist entry tagged `regional: poltava` —
+# `zarih` and `myrhorodska-korivka`. Zero SOURCES carry that tag; it is a watchlist field, which is
+# why the seed is read off the brands and not off the channels.
+#
+# Not «every own brand plus the regional ones»: the watchlist carries TWO `own: true` brands,
+# `garmonija` and `mgarske`, so that rule would seed four. `mgarske` is out because the ruling's
+# list does not name it, not because the data says it is absent — adding it is an operator edit
+# here and needs no ruling.
 #
 # `display_names` are matched case-insensitively, on word boundaries, with the four apostrophe
 # spellings folded together. They are NOT stemmed: «Миргородська корівка» is matched as written and

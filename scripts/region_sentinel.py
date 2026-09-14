@@ -51,31 +51,48 @@ sentence of a 900-character announcement would otherwise be quoted by text that 
 it."""
 
 APOSTROPHES = "’ʼ‘´`"
-"""The four spellings Telegram text actually carries for the Ukrainian apostrophe, folded onto the
+"""The five spellings Telegram text actually carries for the Ukrainian apostrophe, folded onto the
 ASCII one on BOTH sides of the comparison — «м'ясо», «м’ясо» and «мʼясо» are one word."""
 
 
-def fold(text: str) -> str:
-    """Case, apostrophe and composition folded — the one normaliser both sides go through.
+def prepare(text: str) -> str:
+    """The one normaliser both sides go through — and the string the quote is cut from.
 
-    NFC first: a Telegram client may send «і» as i + U+0308, and a dictionary typed in an editor
-    sends the single code point. Unfolded, the two never match and the miss is invisible.
+    NFC first: a Telegram client may send «ї» as i + U+0308, and a dictionary typed in an editor
+    sends the single code point. Unnormalised, the two never match and the miss is invisible.
+
+    Case is NOT folded here, and that is the point. `str.casefold()` is not length-preserving
+    (`ẞ` → `ss`, `İ` → `i̇`), so a match offset taken on a casefolded string and used to slice the
+    original drifts by one character per such code point — a published quote that does not contain
+    the brand it is evidence for. Matching is case-insensitive through `re.IGNORECASE` instead, on
+    THIS string, and the quote is cut from THIS string: one text, one index space, no drift
+    possible. (Measured before the change: 0 of 42 184 stored records change length under
+    `casefold`, so the defect was latent rather than live — the fix removes the class.)
     """
     text = unicodedata.normalize("NFC", text)
     for mark in APOSTROPHES:
         text = text.replace(mark, "'")
-    return text.casefold()
+    return text
 
 
 def compile_names(display_names: list[str]) -> list[tuple[str, re.Pattern]]:
-    r"""One word-boundary pattern per spelling, over the folded text.
+    r"""One bounded pattern per spelling, over the prepared text.
 
-    `\b` is `re`'s unicode boundary, so «Гармонія» does not match inside «Гармонієць» — and, by the
-    same rule, it is NOT stemmed: «миргородської корівки» is not a hit for «Миргородська корівка».
-    PHASE §2 (iii) names word boundaries and that is what this is; the cost of the missing stemmer
-    is measured in PROGRESS rather than quietly paid.
+    The boundary is `(?<!\w)…(?!\w)`, which is NOT a stylistic variant of `\b`: it is the idiom
+    `market_pulse.brands.find_watchlist_brands` already uses for exactly this job, and the two must
+    not drift. It also behaves where `\b` cannot — the operator edits this dictionary freely and
+    may add a spelling as the pack prints it («Гармонія®», «ТМ «Гармонія»»), and a trailing `\b`
+    after `®` inverts to «the next character MUST be a word character», so such a spelling is
+    loaded, listed, scanned for, and can never produce a hit.
+
+    Bounded either way it is NOT stemmed: «миргородської корівки» is not a hit for «Миргородська
+    корівка». PHASE §2 (iii) names word boundaries and that is what this is; the cost of the
+    missing stemmer is measured in `docs/plans/ship-1.PROGRESS.md`, not quietly paid.
     """
-    return [(name, re.compile(rf"\b{re.escape(fold(name))}\b")) for name in display_names]
+    return [
+        (name, re.compile(rf"(?<!\w){re.escape(prepare(name))}(?!\w)", re.IGNORECASE))
+        for name in display_names
+    ]
 
 
 def load_brands(path: Path = BRANDS_FILE) -> list[dict]:
@@ -89,14 +106,29 @@ def load_brands(path: Path = BRANDS_FILE) -> list[dict]:
     if not path.exists():
         raise SystemExit(f"{path}: the brand dictionary is missing — nothing to watch for")
     loaded = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+    entries = loaded.get("brands") or []
+    # A brand with no spelling is REFUSED, not skipped. Skipped, it is absent from
+    # `mentions_per_brand` entirely — and this file's whole product is a printed zero, so a brand
+    # the operator added with a typo'd key would read as «not mentioned» when it was never looked
+    # for. The two are different facts and only one of them is this file's answer.
+    nameless = [
+        entry.get("brand_id", "<no brand_id>")
+        for entry in entries
+        if not entry.get("display_names")
+    ]
+    if nameless:
+        raise SystemExit(
+            f"{path}: {', '.join(nameless)} carries no `display_names` — a brand with no spelling"
+            " would be scanned for nothing and reported as a zero it never earned. Add the"
+            " spellings or remove the block. Nothing written."
+        )
     brands = [
         {
             "brand_id": entry["brand_id"],
             "own": bool(entry.get("own", False)),
             "names": compile_names(entry["display_names"]),
         }
-        for entry in (loaded.get("brands") or [])
-        if entry.get("display_names")
+        for entry in entries
     ]
     if not brands:
         raise SystemExit(
@@ -107,15 +139,36 @@ def load_brands(path: Path = BRANDS_FILE) -> list[dict]:
 
 
 def load_channels(path: Path = CHANNELS_FILE) -> list[str]:
+    """The handles, refusing a duplicate on the STORE KEY — the same refusal the collector makes.
+
+    `scripts/collect_region.py :: side_channels` refuses a repeated handle because it would be one
+    store file written twice; here the same repetition would scan one channel's rows twice and
+    publish its posts, comments and mentions doubled in `region_baseline.json`. Two readers of one
+    file, and the drift between them is the defect — so both compare the key the store actually
+    uses (`@` stripped, case-insensitive, which is what `RawStore.path` and a case-insensitive
+    filesystem resolve to), not the literal spelling.
+    """
     loaded = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
     handles = [entry["handle"] for entry in (loaded.get("channels") or [])]
     if not handles:
         raise SystemExit(f"{path}: no channel listed — nothing to scan. Nothing written.")
+    keys = [one.lstrip("@").casefold() for one in handles]
+    if len(set(keys)) != len(keys):
+        doubled = sorted({key for key in keys if keys.count(key) > 1})
+        raise SystemExit(
+            f"{path}: {', '.join(doubled)} listed more than once — one channel's rows would be"
+            " counted twice in the published baseline. Nothing written."
+        )
     return handles
 
 
 def quote_around(text: str, start: int, end: int) -> str:
-    """`QUOTE_CHARS` of the original text around the match, on one line."""
+    """`QUOTE_CHARS` of the PREPARED text around the match, on one line.
+
+    `text` here is the same string the match offsets were taken on — see :func:`prepare`. A quote
+    cut from a differently-indexed copy of the post is evidence that need not contain the brand it
+    is evidence for.
+    """
     head = max(0, start - QUOTE_LEAD)
     tail = min(len(text), max(end, head + QUOTE_CHARS))
     return " ".join(text[head:tail].split())
@@ -127,14 +180,13 @@ def mentions_in(record: dict, kind: str, brands: list[dict]) -> list[dict]:
     One row per brand and not per spelling: «Гармонія» and «ТМ Гармонія» are the same brand in the
     same sentence, and two rows would make one mention read as two in the baseline's count.
     """
-    text = record.get("text") or ""
+    text = prepare(record.get("text") or "")
     if not text:
         return []
-    folded = fold(text)
     out = []
     for brand in brands:
         for name, pattern in brand["names"]:
-            found = pattern.search(folded)
+            found = pattern.search(text)
             if found is None:
                 continue
             out.append(
@@ -224,7 +276,11 @@ def baseline_of(
 
 
 def write(rows: list[dict], baseline: dict, mentions_path: Path, baseline_path: Path) -> None:
+    # BOTH parents before EITHER write: a baseline that fails on a missing directory after the
+    # mentions file is already rewritten leaves the pair disagreeing, and the pair IS the
+    # reading ([[a_crash_must_write_into_the_file_its_reader_opens]]).
     mentions_path.parent.mkdir(parents=True, exist_ok=True)
+    baseline_path.parent.mkdir(parents=True, exist_ok=True)
     mentions_path.write_text(
         "".join(json.dumps(row, ensure_ascii=False) + "\n" for row in rows), encoding="utf-8"
     )
