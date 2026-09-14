@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-09-14 10:12:30 (every SessionStart)
+**Auto-refreshed:** 2026-09-14 12:17:04 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
-563f7c1 docs(progress): the stop has a second half — the flip moves the sealed screen's 1301
-4aa691a docs(progress): s61 «region-collect» (i) — the 17 are printed; the flip moves a sealed pin
-9d3ea59 brain(s61 start): sweep the hook-written files s60 left dirty
-5a76196 docs(team-lead): ruling (fff) — «weekly-home» accepted, the map points at «region-collect»
-5784e0a docs(weekly-home): name the tree the suite read, and the gold's 44 of 46 pages
+117e10b docs(progress): run the write paths the fixes changed, and reconcile the test count
+6a9cac7 docs(progress): s62 «region-collect» — the registry never moved and the zero is honest
+e608f56 data(region-collect iii): the stage-2 regional baseline is an honest, printed ZERO
+9d102a3 fix(region-collect): five defects my own adversarial review of this diff caught
+40c1087 feat(region-collect ii+iii): a regional collector and a $0 sentinel, both one-reader
 ```
 
 ## 📋 Recent decisions
