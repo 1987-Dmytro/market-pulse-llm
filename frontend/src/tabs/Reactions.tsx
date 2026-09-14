@@ -30,14 +30,13 @@ import { type Column, DataTable } from '../components/DataTable.tsx'
 import { Info } from '../components/Info.tsx'
 import { S2Table } from '../components/S2Table.tsx'
 import { REACTIONS_FIELD, reactionsV2, s2, saidText } from '../data/front.ts'
-import { FRONT_FILE, PROMO_FILE } from '../data/load.ts'
-import { tableRows, telegramLink } from '../data/promo.ts'
+import { FRONT_FILE } from '../data/load.ts'
+import { telegramLink } from '../data/promo.ts'
 import { count, percent } from '../format.ts'
 import type { Lang, Translate } from '../i18n/t.ts'
 import { paramOf, setParam, useRoute } from '../router.ts'
 import type { ReactionsBlock, SignalRow, ThreadCard } from '../types.ts'
 
-const TABLE_ROWS_FIELD = 'screen.table_rows'
 const COVERAGE_FIELD = `${REACTIONS_FIELD}.coverage`
 
 /** The tooltip wears the card's own surface, so a mark's value is read in the page's theme. */
@@ -86,14 +85,11 @@ function distinctOf(entries: FeedEntry[], of: (row: FeedEntry['row']) => string)
 }
 
 export function ReactionsTab(): React.JSX.Element {
-  const { promo, front, lang, t } = useApp()
+  const { front, lang, t } = useApp()
   const route = useRoute()
 
   const block = reactionsV2(front)
   const reach = block.coverage
-  const recorded = tableRows(promo)
-  const evidenceRows = recorded['evidence']
-  const signalRows = recorded['signal']
 
   const entries: FeedEntry[] = block.feed.map((row, index) => ({
     key: `${row.channel}/${row.msg_id}#${index}`,
@@ -333,14 +329,10 @@ export function ReactionsTab(): React.JSX.Element {
         {t('reactions.population', {
           product: count(lang, reach.product_population),
           population: count(lang, reach.population),
-        })}{' '}
-        · {t('positions.col.evidence')}:{' '}
-        {evidenceRows === undefined ? t('common.not_exported') : count(lang, evidenceRows)} ·{' '}
-        {t('reactions.col.signal')}:{' '}
-        {signalRows === undefined ? t('common.not_exported') : count(lang, signalRows)}
+        })}
         <Info
-          lines={[reach.from, t('loop.tick.tables')]}
-          provenance={`${FRONT_FILE} :: ${COVERAGE_FIELD} · ${PROMO_FILE} :: ${TABLE_ROWS_FIELD}`}
+          lines={[reach.from]}
+          provenance={`${FRONT_FILE} :: ${COVERAGE_FIELD}`}
           label={t('common.info')}
         />
       </div>
@@ -349,10 +341,6 @@ export function ReactionsTab(): React.JSX.Element {
         {t('common.sources')}:{' '}
         <code>
           {FRONT_FILE} :: {REACTIONS_FIELD}
-        </code>{' '}
-        ·{' '}
-        <code>
-          {PROMO_FILE} :: {TABLE_ROWS_FIELD}
         </code>{' '}
         · <code>{FRONT_FILE} :: s2_readings</code>
       </p>
@@ -489,11 +477,21 @@ function Monthly({
       ]}
       legend={[
         { colour: typeColour(series.type), label: shareLabel },
-        { colour: 'var(--text-3)', label: t('reactions.monthly.signals') },
+        { colour: 'var(--text-3)', label: t('reactions.monthly.weight') },
       ]}
       table={{
-        head: [t('reactions.monthly.col.month'), shareLabel, t('reactions.monthly.signals')],
-        rows: series.months.map((one) => [one.month, percent(one.share), one.signals]),
+        head: [
+          t('reactions.monthly.col.month'),
+          shareLabel,
+          t('reactions.monthly.weight'),
+          t('reactions.monthly.signals'),
+        ],
+        rows: series.months.map((one) => [
+          one.month,
+          percent(one.share),
+          percent(one.weight),
+          one.signals,
+        ]),
       }}
     >
       <ResponsiveContainer width="100%" height={280}>
@@ -507,31 +505,18 @@ function Monthly({
             tick={TICK}
             stroke="var(--text-3)"
           />
-          {/* the context axis, greyed: a full complaint share over two signals and over forty are
-              different findings, and a share drawn alone cannot say which one a month is */}
-          <YAxis
-            yAxisId="signals"
-            orientation="right"
-            width={48}
-            tickFormatter={(value: number) => count(lang, value)}
-            tick={TICK}
-            stroke="var(--text-3)"
-          />
           <Tooltip
             contentStyle={TOOLTIP_STYLE}
-            formatter={(value, name) =>
-              typeof value !== 'number'
-                ? String(value)
-                : name === shareLabel
-                  ? percent(value)
-                  : count(lang, value)
-            }
+            formatter={(value) => (typeof value === 'number' ? percent(value) : String(value))}
           />
+          {/* the context series, greyed and on the SAME axis: how much of the year's talk a month
+              carried is a SHARE too, so no second scale is needed — and §12 forbids a dual axis
+              outright, which is what a count drawn against a share would have required */}
           <Line
-            yAxisId="signals"
-            name={t('reactions.monthly.signals')}
+            yAxisId="share"
+            name={t('reactions.monthly.weight')}
             type="linear"
-            dataKey="signals"
+            dataKey="weight"
             stroke="var(--text-3)"
             strokeDasharray="4 3"
             strokeWidth={1}
@@ -647,11 +632,13 @@ function ThreadPanel({
     <article className="card thread">
       <div className="chain-head">
         <b>{card.channel}</b>
-        <span className="muted">{card.date ?? t('common.absent')}</span>
+        <span className="muted">{card.date ?? t('common.not_exported')}</span>
         <span className="badge">
           {t('reactions.threads.signals', { n: count(lang, card.signals) })}
         </span>
-        {link !== null && (
+        {link === null ? (
+          <span className="muted">{t('positions.link.private')}</span>
+        ) : (
           <a href={link} target="_blank" rel="noreferrer noopener">
             {t('positions.link')}
           </a>
@@ -677,13 +664,15 @@ function ThreadPanel({
 }
 
 /** A quote, and the badge §13 asks for on a row the reader was not sure of — never a hidden row.
- *  Narrower than `SignalRow` on purpose: the voice rows carry their type in their group's heading. */
-function Quote({ row }: { row: Pick<SignalRow, 'quote' | 'confidence'> }): React.JSX.Element {
+ *  Narrower than `SignalRow` on purpose: the voice rows carry their type in their group's heading.
+ *  `low_confidence` is the PRODUCER's flag: «< 1» spelled here too would be a second reading of the
+ *  reader's own certainty, and `confidence: 0` is a real one a falsy test would call certain. */
+function Quote({ row }: { row: Pick<SignalRow, 'quote' | 'low_confidence'> }): React.JSX.Element {
   const { t } = useApp()
   return (
     <span className="quote">
       {row.quote ?? t('common.absent')}
-      {row.confidence !== null && row.confidence < 1 && (
+      {row.low_confidence && (
         <>
           {' '}
           <span className="badge">{t('reactions.low_confidence')}</span>

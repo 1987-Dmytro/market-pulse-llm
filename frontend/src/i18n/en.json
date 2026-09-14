@@ -70,7 +70,6 @@
   "positions.col.chain": "chain",
   "positions.col.carrier": "carrier",
   "positions.col.category": "category",
-  "positions.col.evidence": "evidence",
   "positions.filter.chain": "chain",
   "positions.filter.brand": "brand",
   "positions.filter.carrier": "carrier",
@@ -300,7 +299,7 @@
   "reactions.complaints.other": "complaints addressed elsewhere: {other}",
   "reactions.mix.subtitle": "a channel's signals, as shares",
   "reactions.mix.col.channel": "channel",
-  "reactions.monthly.subtitle": "the complaint share by month; grey is how many signals that month",
+  "reactions.monthly.subtitle": "the complaint share by month; grey is the month's own share of all signals",
   "reactions.monthly.share": "complaint share",
   "reactions.monthly.signals": "signals that month",
   "reactions.monthly.col.month": "month",
@@ -333,5 +332,8 @@
   "region.col.threads": "threads read",
   "region.col.outstanding": "queued",
   "region.link.title": "Promo in the home region",
-  "region.link.cta": "Positions: {chain}"
+  "region.link.cta": "Positions: {chain}",
+  "reactions.monthly.weight": "the month's share of all signals",
+  "region.col.mentions": "mentions",
+  "region.baseline.unlisted": "not in the dictionary"
 }

@@ -80,8 +80,16 @@ export function RegionTab(): React.JSX.Element {
               label={brand.name}
               value={count(lang, brand.mentions)}
               context={`${
-                brand.own === true ? t('region.baseline.own') : t('region.baseline.rival')
-              } · ${t('region.baseline.spellings', { spellings: brand.spellings.join(' · ') })}`}
+                brand.own === null
+                  ? t('region.baseline.unlisted')
+                  : brand.own
+                    ? t('region.baseline.own')
+                    : t('region.baseline.rival')
+              } · ${
+                brand.spellings.length === 0
+                  ? t('common.absent')
+                  : t('region.baseline.spellings', { spellings: brand.spellings.join(' · ') })
+              }`}
               info={{
                 lines: [saidText(block.baseline_says, lang), block.reading],
                 provenance: `${FRONT_FILE} :: ${REGION_PULSE_FIELD}.brands`,
@@ -136,7 +144,7 @@ export function RegionTab(): React.JSX.Element {
                   {t('region.col.outstanding')}
                 </th>
                 <th scope="col" className="num">
-                  {t('region.col.brand')}
+                  {t('region.col.mentions')}
                 </th>
               </tr>
             </thead>

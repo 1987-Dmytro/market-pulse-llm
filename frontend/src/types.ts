@@ -607,6 +607,8 @@ export interface SignalRow {
   subject_type: string
   quote: string | null
   confidence: number | null
+  /** the producer's own rule, so the app never re-spells «what counts as unsure» */
+  low_confidence: boolean
 }
 
 /** A thread the reader found something in: the ROOT promo post and the signals under it.
@@ -631,6 +633,7 @@ export interface VoiceGroup {
     channel: string
     thread_root: string
     confidence: number | null
+    low_confidence: boolean
   }[]
 }
 
@@ -680,7 +683,14 @@ export interface ReactionsBlock {
   }
   monthly: {
     type: string
-    months: { month: string; signals: number; complaints: number; share: number }[]
+    months: {
+      month: string
+      signals: number
+      complaints: number
+      share: number
+      /** the month's size AS A SHARE, so §12's greyed context rides the one axis */
+      weight: number
+    }[]
     /** signals whose thread carries no post date at all — printed, never dropped in silence */
     without_a_date: number
     title: Said | null

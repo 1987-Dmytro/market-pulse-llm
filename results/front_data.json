@@ -46449,6 +46449,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 414,
         "quote": "Як кава? Хто купував?",
         "subject": "кава",
@@ -46459,6 +46460,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 415,
         "quote": "Печиво класне",
         "subject": "печиво",
@@ -46469,6 +46471,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 416,
         "quote": "Де газета?",
         "subject": "VARUS",
@@ -46479,6 +46482,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 819,
         "quote": "Чекаємо дегустацію на Палладіна в Києві!!",
         "subject": "VARUS",
@@ -46489,6 +46493,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 0.9,
+        "low_confidence": true,
         "msg_id": 820,
         "quote": "я бы не отказалась от такого бы",
         "subject": "продукція ТОКЕРИ",
@@ -46499,6 +46504,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 1689,
         "quote": "Немае поваги до коллективу",
         "subject": "VARUS",
@@ -46509,6 +46515,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 2697,
         "quote": "чому НацКешбек не нараховується через сплату в SCAN&GO ??",
         "subject": "VARUS",
@@ -46519,6 +46526,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 2784,
         "quote": "Такий формат каталогу мені до вподоби",
         "subject": "VARUS",
@@ -46529,6 +46537,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 2785,
         "quote": "Чи є в продажу яйця гуся криптолова?",
         "subject": "яйця гуся криптолова",
@@ -46539,6 +46548,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 2796,
         "quote": "іноді потрапляється пліснява",
         "subject": "курячі чіпси",
@@ -46549,6 +46559,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 2978,
         "quote": "много акций и хороших продуктов",
         "subject": "VARUS",
@@ -46559,6 +46570,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 2978,
         "quote": "дурят людей и не привозят все заказанрые продукты и не возвращают деньги",
         "subject": "VARUS",
@@ -46569,6 +46581,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 2981,
         "quote": "я разочаровалась в вашем магазине",
         "subject": "VARUS",
@@ -46579,6 +46592,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 2983,
         "quote": "Колись буде варус на березінці?",
         "subject": "VARUS",
@@ -46589,6 +46603,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 2988,
         "quote": "Доставка и правда ужас ужас",
         "subject": "VARUS",
@@ -46599,6 +46614,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 2989,
         "quote": "який зараз відсоток на бонусну картку",
         "subject": "VARUS",
@@ -46609,6 +46625,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 2989,
         "quote": "щось взагалі копійки нараховуються",
         "subject": "VARUS",
@@ -46619,6 +46636,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 2993,
         "quote": "Зазвичай вибираю акційні",
         "subject": "VARUS",
@@ -46629,6 +46647,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 3057,
         "quote": "Что у вас с доставкой?! Это ужас!",
         "subject": "VARUS",
@@ -46639,6 +46658,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 3057,
         "quote": "Переносят время на день вперед или вообще не привозят вовремя!!!!",
         "subject": "VARUS",
@@ -46649,6 +46669,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 3057,
         "quote": "Извинения это 25 грн промокод который не нужен",
         "subject": "VARUS",
@@ -46659,6 +46680,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 3058,
         "quote": "с таким отношением к клиентам",
         "subject": "VARUS",
@@ -46669,6 +46691,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 3058,
         "quote": "заказывал почти каждую неделю",
         "subject": "VARUS",
@@ -46679,6 +46702,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 3178,
         "quote": "Васної?",
         "subject": "морозиво ескімо Varto",
@@ -46689,6 +46713,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 3183,
         "quote": "Очень вкусное мороженое",
         "subject": "морозиво ескімо Varto",
@@ -46699,6 +46724,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 3183,
         "quote": "Было бы не плохо,если бы оно было в наличии",
         "subject": "VARUS",
@@ -46709,6 +46735,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 3183,
         "quote": "Бывает крайне редко",
         "subject": "VARUS",
@@ -46719,6 +46746,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 3570,
         "quote": "Что с бонусами,новые правила?у меня сасообслуживание ноль",
         "subject": "VARUS",
@@ -46729,6 +46757,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 4270,
         "quote": "Так тут гриль-барбекю подарять. Який айфон😂",
         "subject": "АЙФОН 16 ПРО",
@@ -46739,6 +46768,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 5106,
         "quote": "так хто виграв?",
         "subject": "VARUS",
@@ -46749,6 +46779,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 5111,
         "quote": "як отримати свій подарунок?",
         "subject": "VARUS",
@@ -46759,6 +46790,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 4396,
         "quote": "У Вінниці є ваш магазин?",
         "subject": "VARUS",
@@ -46769,6 +46801,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 4686,
         "quote": "Класно",
         "subject": "VARUS",
@@ -46779,6 +46812,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 4813,
         "quote": "вас зламали?",
         "subject": "VARUS",
@@ -46789,6 +46823,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 4815,
         "quote": "Чому так несправедливо?",
         "subject": "VARUS",
@@ -46799,6 +46834,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 4816,
         "quote": "поддержка отвечает спустя сутки и через 15 минут без ответа закрывает чат",
         "subject": "izibank",
@@ -46809,6 +46845,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 4818,
         "quote": "служба поддержки просто ужасная",
         "subject": "izibank",
@@ -46819,6 +46856,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 4939,
         "quote": "А Дор-Блю буде?",
         "subject": "сир Дор-Блю",
@@ -46829,6 +46867,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 5170,
         "quote": "невігласи )))",
         "subject": "Сир ЧЕДДЕР ЛЕЙЧЕЙСТЕР червонии",
@@ -46839,6 +46878,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 5587,
         "quote": "Облапать все без перчаток и подавать. Высокая кухня!",
         "subject": "VARUS",
@@ -46849,6 +46889,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 5588,
         "quote": "не апетитно",
         "subject": "VARUS",
@@ -46859,6 +46900,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 5988,
         "quote": "Хочу попробовать батончик - типа Дубайский шоколад",
         "subject": "батончик Дубайський шоколад",
@@ -46869,6 +46911,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 5988,
         "quote": "в нашем Варусе его к сожалению нет пока",
         "subject": "батончик Дубайський шоколад",
@@ -46879,6 +46922,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 5989,
         "quote": "Не купуйте. Як не соромно так дурити покупців",
         "subject": "VARUS",
@@ -46889,6 +46933,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 5991,
         "quote": "дивіться на якість. він ваесь білий",
         "subject": "шоколад",
@@ -46899,6 +46944,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 5992,
         "quote": "внешний вид конечно … Я даже не знаю, служит ли это поводом к возврату",
         "subject": "шоколад",
@@ -46909,6 +46955,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 5994,
         "quote": "Можливо посмакуєте отим, що мені продали?",
         "subject": "шоколад",
@@ -46919,6 +46966,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 6000,
         "quote": "Варус, щось ви стали якоюсь забігайлівкою",
         "subject": "VARUS",
@@ -46929,6 +46977,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 6000,
         "quote": "Товари найнижчої якості, на тижні вже вдруге повертаю товар",
         "subject": "VARUS",
@@ -46939,6 +46988,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 6003,
         "quote": "Самое ужасное, что нет у них поддержки нормальной",
         "subject": "VARUS",
@@ -46949,6 +46999,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 6005,
         "quote": "Підскажіть чому зникла адреса доставки чи самовивозу",
         "subject": "VARUS",
@@ -46959,6 +47010,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 6070,
         "quote": "небыло вчера в наличии в двух варусах",
         "subject": "шоколад Великобритания",
@@ -46969,6 +47021,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 6117,
         "quote": "какой то сбой в приложении? Весь день не могу зайти в него",
         "subject": "VARUS",
@@ -46979,6 +47032,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 6118,
         "quote": "накрылось всё, ни программа лояльности не работает, ни Scan&go",
         "subject": "VARUS",
@@ -46989,6 +47043,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 6119,
         "quote": "набрал тележку оставил на маркете и пошел в АТБ",
         "subject": "VARUS",
@@ -46999,6 +47054,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 6142,
         "quote": "сертифікатами не можна оплатити?",
         "subject": "VARUS",
@@ -47009,6 +47065,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 6166,
         "quote": "захотели- забрали",
         "subject": "VARUS",
@@ -47019,6 +47076,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 6167,
         "quote": "каким образом, если не секрет, можно выиграть у Варуса столько денег сразу одному покупателю?",
         "subject": "VARUS",
@@ -47029,6 +47087,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 6309,
         "quote": "постоянно якісь трабли з акціями, у них задача заработать побільше бабла, а остальне пофіг",
         "subject": "VARUS",
@@ -47039,6 +47098,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 7516,
         "quote": "ох і розводять лохів",
         "subject": "майонез",
@@ -47049,6 +47109,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 7786,
         "quote": "де мої замовлення? час отримання 05,12 19,20 - тиша",
         "subject": "VARUS",
@@ -47059,6 +47120,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 7786,
         "quote": "написала в телеграм підтримку - тиша досі",
         "subject": "VARUS",
@@ -47069,6 +47131,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 7786,
         "quote": "дзвінок на гарячу лінію, оператора так і не знайшли",
         "subject": "VARUS",
@@ -47079,6 +47142,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 7792,
         "quote": "точно такая же фигня",
         "subject": "VARUS",
@@ -47089,6 +47153,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 7806,
         "quote": "Так же, ще і смс прийшло ніби отримав",
         "subject": "VARUS",
@@ -47099,6 +47164,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 7887,
         "quote": "а якщо цієї біржі немає або це тільки для обраних?",
         "subject": "Bitget",
@@ -47109,6 +47175,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 8008,
         "quote": "це схоже на обман",
         "subject": "VARUS",
@@ -47119,6 +47186,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 8012,
         "quote": "дуже погано організовано - і процеси, і призовий фонд, і висвітлення результатів",
         "subject": "VARUS",
@@ -47129,6 +47197,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 8061,
         "quote": "те, що ніколи не виграти",
         "subject": "VARUS",
@@ -47139,6 +47208,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 8061,
         "quote": "всі інші відділи на 50%. Персоналу не вистачає",
         "subject": "VARUS",
@@ -47149,6 +47219,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 8061,
         "quote": "закуповує у тих постачальників,, які дають вартість ниже і відповідно також і якість товару",
         "subject": "VARUS",
@@ -47159,6 +47230,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 8030,
         "quote": "Купи бокс за 500 грн",
         "subject": "Щастябокс",
@@ -47169,6 +47241,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 8030,
         "quote": "Смішні які",
         "subject": "Щастябокс",
@@ -47179,6 +47252,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 8032,
         "quote": "Взагалі не задоволена боксом",
         "subject": "Щастябокс",
@@ -47189,6 +47263,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 8033,
         "quote": "що в тому боксі взагалі?",
         "subject": "Щастябокс",
@@ -47199,6 +47274,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 8034,
         "quote": "Торгівля повітрям",
         "subject": "Щастябокс",
@@ -47209,6 +47285,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 8035,
         "quote": "А покажіть, що там?",
         "subject": "Щастябокс",
@@ -47219,6 +47296,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 8038,
         "quote": "половину тысячи отдать за картонку",
         "subject": "Щастябокс",
@@ -47229,6 +47307,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 8038,
         "quote": "половину тысячи отдать за картонку",
         "subject": "Щастябокс",
@@ -47239,6 +47318,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 8058,
         "quote": "Отвратительное",
         "subject": "масло",
@@ -47249,6 +47329,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 8058,
         "quote": "Пытался оставить честный отзыв на их сайте, не добавляют",
         "subject": "VARUS",
@@ -47259,6 +47340,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 8062,
         "quote": "варусу байдуже, що на полиці",
         "subject": "VARUS",
@@ -47269,6 +47351,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 8075,
         "quote": "навіщо тоді варус портить собі репутацію?",
         "subject": "VARUS",
@@ -47279,6 +47362,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 8088,
         "quote": "не може коштувати якісне масло - дешево",
         "subject": "масло",
@@ -47289,6 +47373,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 8123,
         "quote": "не тратить семейный бюджет на отраву под видом масло",
         "subject": "масло",
@@ -47299,6 +47384,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 8680,
         "quote": "В кого я можу уточнити за доставку?",
         "subject": "VARUS",
@@ -47309,6 +47395,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 8683,
         "quote": "А що це суцільний обман?",
         "subject": "VARUS",
@@ -47319,6 +47406,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 8683,
         "quote": "ні зворотнього зв'язку в онлайн підтримці",
         "subject": "VARUS",
@@ -47329,6 +47417,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 8686,
         "quote": "И служба поддержки загадочно морозится",
         "subject": "VARUS",
@@ -47339,6 +47428,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 8688,
         "quote": "гаряча лінія скидає слухавку",
         "subject": "VARUS",
@@ -47349,6 +47439,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 8694,
         "quote": "Вони не відповіли! Гаряча лінія скидають!",
         "subject": "VARUS",
@@ -47359,6 +47450,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 8695,
         "quote": "Який в кого рівень щастя і позиція в рейтингу?",
         "subject": "VARUS",
@@ -47369,6 +47461,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 8865,
         "quote": "Варус просто обманщики и мошенники",
         "subject": "VARUS",
@@ -47379,6 +47472,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 8865,
         "quote": "у них был сбой боксики мне начислили,аж через 4 дня",
         "subject": "VARUS",
@@ -47389,6 +47483,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 8865,
         "quote": "инт ернет заказ,то же отменить нельзя",
         "subject": "VARUS",
@@ -47399,6 +47494,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 8865,
         "quote": "На горячую линию дозвонится не возможно",
         "subject": "VARUS",
@@ -47409,6 +47505,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 8865,
         "quote": "ПРОСТО ПОЗОР",
         "subject": "VARUS",
@@ -47419,6 +47516,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 9383,
         "quote": "А 4 січня \"акція одного дня\" відсутня?",
         "subject": "VARUS",
@@ -47429,6 +47527,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 11453,
         "quote": "Нічого з цього не знайшла",
         "subject": "VARUS",
@@ -47439,6 +47538,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 12745,
         "quote": "абы скидок на \"мафин\" почаще были",
         "subject": "мафин",
@@ -47449,6 +47549,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 12745,
         "quote": "абы скидок на \"мафин\" почаще были",
         "subject": "мафин",
@@ -47459,6 +47560,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 12746,
         "quote": "Санітарні норми вийшли з чату ?",
         "subject": "VARUS",
@@ -47469,6 +47571,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 12751,
         "quote": "найкращий супермаркет",
         "subject": "VARUS",
@@ -47479,6 +47582,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 12751,
         "quote": "там завжди пускали всіх собачок",
         "subject": "VARUS",
@@ -47489,6 +47593,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 12751,
         "quote": "обожнюю всіх там працівників",
         "subject": "VARUS",
@@ -47499,6 +47604,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 12752,
         "quote": "У Варусі в Києві не пускають з тваринками",
         "subject": "VARUS",
@@ -47509,6 +47615,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 12759,
         "quote": "Почему всегда в Киеве?!Других городов в Украине нет что-ли",
         "subject": "VARUS",
@@ -47519,6 +47626,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 12760,
         "quote": "Дуже крута акція!",
         "subject": "VARUS",
@@ -47529,6 +47637,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 12760,
         "quote": "ви молодчинки",
         "subject": "VARUS",
@@ -47539,6 +47648,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 12763,
         "quote": "задовбали з блохастими в магазинах",
         "subject": "VARUS",
@@ -47549,6 +47659,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 12818,
         "quote": "Спасибо за комфорт для наших любимцев",
         "subject": "VARUS",
@@ -47559,6 +47670,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 0.9,
+        "low_confidence": true,
         "msg_id": 13790,
         "quote": "Белоруское морожено?",
         "subject": "морозиво",
@@ -47569,6 +47681,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 0.9,
+        "low_confidence": true,
         "msg_id": 13794,
         "quote": "Но белоруская тм🤡",
         "subject": "белоруская тм",
@@ -47579,6 +47692,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 13913,
         "quote": "ВКУСНОЕ ОЧЕНЬ",
         "subject": "морозиво",
@@ -47589,6 +47703,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 14206,
         "quote": "А як приєднатися?",
         "subject": "VARUS",
@@ -47599,6 +47714,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 14724,
         "quote": "Так с 2 или 9",
         "subject": "VARUS",
@@ -47609,6 +47725,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 14898,
         "quote": "Ммм, дуже зручно, \"запитуєш на касі\"...",
         "subject": "VARUS",
@@ -47619,6 +47736,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 16135,
         "quote": "не бачила результати цього конкурсу",
         "subject": "VARUS",
@@ -47629,6 +47747,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 0.9,
+        "low_confidence": true,
         "msg_id": 16137,
         "quote": "Мене перекидає на пост із розіграшем, дедлайн 29.04",
         "subject": "VARUS",
@@ -47639,6 +47758,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 15414,
         "quote": "брелоки по 99 грн",
         "subject": "яйця-сюрпризи",
@@ -47649,6 +47769,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 15414,
         "quote": "Повне розчарування!",
         "subject": "яйця-сюрпризи",
@@ -47659,6 +47780,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 15420,
         "quote": "Щось на офіційному сайті ніякої зміни не має",
         "subject": "VARUS",
@@ -47669,6 +47791,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 15498,
         "quote": "жоден в мене ще не відскагувався",
         "subject": "VARUS",
@@ -47679,6 +47802,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 15500,
         "quote": "в додатку не знайшла звідки сканувати",
         "subject": "VARUS",
@@ -47689,6 +47813,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 15502,
         "quote": "саме ці не хоче",
         "subject": "VARUS",
@@ -47699,6 +47824,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 15504,
         "quote": "код він так нормально і не прочитав,каже шо код неякісний",
         "subject": "VARUS",
@@ -47709,6 +47835,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 15545,
         "quote": "Це по вашому чесно?",
         "subject": "VARUS",
@@ -47719,6 +47846,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 15546,
         "quote": "Варус усіх намахав",
         "subject": "VARUS",
@@ -47729,6 +47857,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 15548,
         "quote": "Це не чесно!",
         "subject": "VARUS",
@@ -47739,6 +47868,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 15549,
         "quote": "Мені теж не подобається перенесення",
         "subject": "VARUS",
@@ -47749,6 +47879,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 15549,
         "quote": "вартість зменшилася на 10 грн",
         "subject": "VARUS",
@@ -47759,6 +47890,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 15556,
         "quote": "Розвод",
         "subject": "VARUS",
@@ -47769,6 +47901,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 15566,
         "quote": "То хто тут клоун :)",
         "subject": "VARUS",
@@ -47779,6 +47912,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 15568,
         "quote": "готовий на колективну скаргу",
         "subject": "VARUS",
@@ -47789,6 +47923,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 15586,
         "quote": "а це вже напьорстки",
         "subject": "VARUS",
@@ -47799,6 +47934,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 15588,
         "quote": "те що переписують коли хоче це не правила",
         "subject": "VARUS",
@@ -47809,6 +47945,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 16081,
         "quote": "не хочете вчасно доставляти замовлення",
         "subject": "VARUS",
@@ -47819,6 +47956,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 16081,
         "quote": "Зникає бажання щось у вас купувати",
         "subject": "VARUS",
@@ -47829,6 +47967,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 16083,
         "quote": "немає такої можливості",
         "subject": "VARUS",
@@ -47839,6 +47978,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 16087,
         "quote": "В нас теж",
         "subject": "VARUS",
@@ -47849,6 +47989,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 16088,
         "quote": "і кавомашини немає",
         "subject": "VARUS",
@@ -47859,6 +48000,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 16089,
         "quote": "нічого такого немає",
         "subject": "VARUS",
@@ -47869,6 +48011,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 16098,
         "quote": "чи є таке у Кривому розі?",
         "subject": "морозиво М’яке",
@@ -47879,6 +48022,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 16113,
         "quote": "не вкусная замороженная белая субстанция",
         "subject": "морозиво М’яке",
@@ -47889,6 +48033,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 16113,
         "quote": "Больше не хочется",
         "subject": "морозиво М’яке",
@@ -47899,6 +48044,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 16114,
         "quote": "морозиво у них смачне",
         "subject": "морозиво М’яке",
@@ -47909,6 +48055,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 16691,
         "quote": "просто чарівний",
         "subject": "плавлений сир Мааздам",
@@ -47919,6 +48066,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 16691,
         "quote": "Неймовірно смачно",
         "subject": "плавлений сир Мааздам",
@@ -47929,6 +48077,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 16691,
         "quote": "подякувати за таку смачноту",
         "subject": "плавлений сир Мааздам",
@@ -47939,6 +48088,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 16692,
         "quote": "це смачнота!",
         "subject": "ікра мінтаю",
@@ -47949,6 +48099,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 16687,
         "quote": "і де в цій пасті фундук? Фундук і ароматизатор - то трохи різне та є введенням в оману покупця!",
         "subject": "паста TUT NUT",
@@ -47959,6 +48110,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 16805,
         "quote": "кешбек за оплату Scan&Go працює?",
         "subject": "VARUS",
@@ -47969,6 +48121,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 16809,
         "quote": "треба виправити у буклеті. Бо там вказано, що до 30.04",
         "subject": "VARUS",
@@ -47979,6 +48132,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 16818,
         "quote": "Офігенно милі кото-зайчики і зайце-котики на упаковці",
         "subject": "Сир кисломолочний Varto",
@@ -47989,6 +48143,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 16819,
         "quote": "Нажаль, у нас його не можливо вхопити",
         "subject": "Сир кисломолочний Varto",
@@ -47999,6 +48154,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 16819,
         "quote": "не можливо вхопити",
         "subject": "Сир кисломолочний Varto",
@@ -48009,6 +48165,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 17347,
         "quote": "Дуже класно",
         "subject": "9277",
@@ -48019,6 +48176,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 17359,
         "quote": "Не всегда довольна",
         "subject": "VARUS",
@@ -48029,6 +48187,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 17359,
         "quote": "ржавого цвета и мясо расползается",
         "subject": "скумбрия",
@@ -48039,6 +48198,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 17359,
         "quote": "ржавого цвета и мясо расползается",
         "subject": "сельдь атлантическая",
@@ -48049,6 +48209,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 17359,
         "quote": "500 грн в мусорку",
         "subject": "VARUS",
@@ -48059,6 +48220,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 17359,
         "quote": "500 грн в мусорку",
         "subject": "VARUS",
@@ -48069,6 +48231,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 17367,
         "quote": "рыба приезжала по доставке всегда суперская",
         "subject": "VARUS",
@@ -48079,6 +48242,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 17367,
         "quote": "я у них теперь в доставку рыбу не заказываю",
         "subject": "Сільпо",
@@ -48089,6 +48253,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 17368,
         "quote": "Они берут дешевейшую а продают как супер",
         "subject": "VARUS",
@@ -48099,6 +48264,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 17368,
         "quote": "сельдь по 220 грн",
         "subject": "сельдь",
@@ -48109,6 +48275,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 17368,
         "quote": "жирная, вкусная, супер",
         "subject": "сельдь",
@@ -48119,6 +48286,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 17368,
         "quote": "В варусе такого нет",
         "subject": "VARUS",
@@ -48129,6 +48297,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 17372,
         "quote": "220 грн сельдь!",
         "subject": "сельдь",
@@ -48139,6 +48308,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 17372,
         "quote": "за такие деньги и должна быть супер",
         "subject": "сельдь",
@@ -48149,6 +48319,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 17372,
         "quote": "привозили суперскую",
         "subject": "сельдь",
@@ -48159,6 +48330,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 18089,
         "quote": "Супер акція",
         "subject": "VARUS",
@@ -48169,6 +48341,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 18643,
         "quote": "Такий бардак у застосунку цього варусу, що ніколи не знаєш, що та як",
         "subject": "VARUS",
@@ -48179,6 +48352,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 18643,
         "quote": "Безглуздя!",
         "subject": "VARUS",
@@ -48189,6 +48363,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 18650,
         "quote": "я повинна у магазині півгодини листати розділ додатку",
         "subject": "VARUS",
@@ -48199,6 +48374,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 18661,
         "quote": "Вы так бесцеремонно лжёте",
         "subject": "VARUS",
@@ -48209,6 +48385,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 18661,
         "quote": "нет вашего идиотизма с разделением зимней поддержки и просто кешбека",
         "subject": "VARUS",
@@ -48219,6 +48396,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 18672,
         "quote": "Чи ви хочете , щоб скоріше Варус зник?",
         "subject": "VARUS",
@@ -48229,6 +48407,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 18935,
         "quote": "вау, дуже гарно",
         "subject": "Пиво світле Pilsner MOVA",
@@ -48239,6 +48418,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 19018,
         "quote": "за такою ціною",
         "subject": "пряники Varto",
@@ -48249,6 +48429,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 19023,
         "quote": "Обожнюю вас, VARUS!",
         "subject": "VARUS",
@@ -48259,6 +48440,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 19166,
         "quote": "допущена помилка!",
         "subject": "VARUS",
@@ -48269,6 +48451,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 19172,
         "quote": "У Вас є сир з пліснявою?",
         "subject": "сир з пліснявою",
@@ -48279,6 +48462,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 19477,
         "quote": "Як ввести промокод у мобільному зачтосунку?",
         "subject": "VARUS",
@@ -48289,6 +48473,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 19478,
         "quote": "Теж саме питання",
         "subject": "VARUS",
@@ -48299,6 +48484,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 19481,
         "quote": "Це дуже не зручно",
         "subject": "VARUS",
@@ -48309,6 +48495,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 19484,
         "quote": "Занадто довго він на стадії разробки",
         "subject": "VARUS",
@@ -48319,6 +48506,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 20081,
         "quote": "Що за дебільний огидний текст?",
         "subject": "VARUS",
@@ -48329,6 +48517,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 20082,
         "quote": "Потужно-незламний",
         "subject": "VARUS",
@@ -48339,6 +48528,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 20091,
         "quote": "це за 100г ціна?",
         "subject": "кур стегно",
@@ -48349,6 +48539,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 20737,
         "quote": "чтобы акционый товар оказался на полке магазина?",
         "subject": "VARUS",
@@ -48359,6 +48550,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 20737,
         "quote": "А можно как то повлиять, чтобы акционый товар оказался на полке магазина?",
         "subject": "VARUS",
@@ -48369,6 +48561,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 0.9,
+        "low_confidence": true,
         "msg_id": 21566,
         "quote": "Ось такий карась привезли",
         "subject": "карась",
@@ -48379,6 +48572,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 21576,
         "quote": "страшные",
         "subject": "карась",
@@ -48389,6 +48583,7 @@
       {
         "channel": "@VARUS_channel",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 21578,
         "quote": "рыба плохая",
         "subject": "карась",
@@ -48399,6 +48594,7 @@
       {
         "channel": "@msuaaaa",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 171,
         "quote": "за 30 шт 49.99 грн",
         "subject": "пакети для сміття",
@@ -48409,6 +48605,7 @@
       {
         "channel": "@msuaaaa",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 181,
         "quote": "50 грн",
         "subject": "цукор",
@@ -48419,6 +48616,7 @@
       {
         "channel": "@msuaaaa",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 406,
         "quote": "А він є у Києві ???",
         "subject": "Велмарт",
@@ -48429,6 +48627,7 @@
       {
         "channel": "@msuaaaa",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 1069,
         "quote": "А акція діє в день 17.03? Чи тільки до 17.03?",
         "subject": "Roshen",
@@ -48439,6 +48638,7 @@
       {
         "channel": "@msuaaaa",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 840,
         "quote": "нихуя не было там бабок",
         "subject": "чипси",
@@ -48449,6 +48649,7 @@
       {
         "channel": "@msuaaaa",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 841,
         "quote": "Создатель акции урод",
         "subject": "АТБ",
@@ -48459,6 +48660,7 @@
       {
         "channel": "@msuaaaa",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 1217,
         "quote": "Шикарно",
         "subject": "McDonald’s",
@@ -48469,6 +48671,7 @@
       {
         "channel": "@msuaaaa",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 1217,
         "quote": "Канал не о скидках, а о треше",
         "subject": "McDonald’s",
@@ -48479,6 +48682,7 @@
       {
         "channel": "@msuaaaa",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 2013,
         "quote": "Чи викладаєте з рошену акції?",
         "subject": "рошен",
@@ -48489,6 +48693,7 @@
       {
         "channel": "@msuaaaa",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 2508,
         "quote": "1 кг за певну кількість грн чи не?",
         "subject": "АТБ",
@@ -48499,6 +48704,7 @@
       {
         "channel": "@msuaaaa",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 2509,
         "quote": "термін придатності закінчується в цьому місяці",
         "subject": "сир",
@@ -48509,6 +48715,7 @@
       {
         "channel": "@msuaaaa",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 2509,
         "quote": "чи то лише в мене так в сільпо?",
         "subject": "Сільпо",
@@ -48519,6 +48726,7 @@
       {
         "channel": "@msuaaaa",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 2517,
         "quote": "Можна з Mashket?",
         "subject": "McDonald’s",
@@ -48529,6 +48737,7 @@
       {
         "channel": "@msuaaaa",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 3015,
         "quote": "продукты которые на слнд день по акции будут",
         "subject": "Сільпо",
@@ -48539,6 +48748,7 @@
       {
         "channel": "@msuaaaa",
         "confidence": 0.9,
+        "low_confidence": true,
         "msg_id": 3042,
         "quote": "Еще бы завтра выложили",
         "subject": "Сільпо",
@@ -48549,6 +48759,7 @@
       {
         "channel": "@msuaaaa",
         "confidence": 0.9,
+        "low_confidence": true,
         "msg_id": 3043,
         "quote": "Давайте что в апельмоне",
         "subject": "апельмон",
@@ -48559,6 +48770,7 @@
       {
         "channel": "@msuaaaa",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 3456,
         "quote": "чекаємо на нові акції",
         "subject": "Рошен",
@@ -48569,6 +48781,7 @@
       {
         "channel": "@msuaaaa",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 3856,
         "quote": "Це треба через додаток ваучер сканувати чи через отой манітор на якому замовляти?",
         "subject": "McDonald’s",
@@ -48579,6 +48792,7 @@
       {
         "channel": "@msuaaaa",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 3974,
         "quote": "А пиво де",
         "subject": "пиво",
@@ -48589,6 +48803,7 @@
       {
         "channel": "@msuaaaa",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 5218,
         "quote": "Різниця у вартості кави",
         "subject": "кава",
@@ -48599,6 +48814,7 @@
       {
         "channel": "@msuaaaa",
         "confidence": 0.9,
+        "low_confidence": true,
         "msg_id": 5218,
         "quote": "Різниця у вартості кави в один день🤡",
         "subject": "кава",
@@ -48609,6 +48825,7 @@
       {
         "channel": "@msuaaaa",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 5460,
         "quote": "Підкажіть, хтось має промокод sinsay на знижку 10% в корзині?",
         "subject": "sinsay",
@@ -48619,6 +48836,7 @@
       {
         "channel": "@msuaaaa",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 6303,
         "quote": "ВАУУУУУ",
         "subject": "7202",
@@ -48629,6 +48847,7 @@
       {
         "channel": "@msuaaaa",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 6307,
         "quote": "а ціна",
         "subject": "Тріпл Чііз Біт",
@@ -48639,6 +48858,7 @@
       {
         "channel": "@msuaaaa",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 6324,
         "quote": "247 где-то вроде за один",
         "subject": "Тріпл Чііз Біт",
@@ -48649,6 +48869,7 @@
       {
         "channel": "@msuaaaa",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 6538,
         "quote": "ура, хоть что-то толковое уже",
         "subject": "McDonald’s",
@@ -48659,6 +48880,7 @@
       {
         "channel": "@msuaaaa",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 6618,
         "quote": "прибрати каву..",
         "subject": "McDonald’s",
@@ -48669,6 +48891,7 @@
       {
         "channel": "@msuaaaa",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 6716,
         "quote": "Підкажіть пліз для чого ваучери взагалі?",
         "subject": "McDonald’s",
@@ -48679,6 +48902,7 @@
       {
         "channel": "@msuaaaa",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 7134,
         "quote": "В Чернівцях немає",
         "subject": "кондиціонер для прання",
@@ -48689,6 +48913,7 @@
       {
         "channel": "@msuaaaa",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 7148,
         "quote": "де дивитися такі пропозиції із Аврори?",
         "subject": "Аврора",
@@ -48699,6 +48924,7 @@
       {
         "channel": "@msuaaaa",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 7158,
         "quote": "Ціна жах",
         "subject": "ДАБЛ ЧІКЕН BBQ",
@@ -48709,6 +48935,7 @@
       {
         "channel": "@msuaaaa",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 7158,
         "quote": "Ціна жах за маленьку шпуньку",
         "subject": "ДАБЛ ЧІКЕН BBQ",
@@ -48719,6 +48946,7 @@
       {
         "channel": "@msuaaaa",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 7339,
         "quote": "Топ",
         "subject": "Сільпо",
@@ -48729,6 +48957,7 @@
       {
         "channel": "@msuaaaa",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 7393,
         "quote": "Було б чудово",
         "subject": "АТБ",
@@ -48739,6 +48968,7 @@
       {
         "channel": "@msuaaaa",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 7395,
         "quote": "скільки ці продукти чекати?",
         "subject": "АТБ",
@@ -48749,6 +48979,7 @@
       {
         "channel": "@msuaaaa",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 7410,
         "quote": "не сумісні речі",
         "subject": "Укрпошта",
@@ -48759,6 +48990,7 @@
       {
         "channel": "@msuaaaa",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 7414,
         "quote": "досить не погано працює",
         "subject": "Укрпошта",
@@ -48769,6 +49001,7 @@
       {
         "channel": "@msuaaaa",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 7581,
         "quote": "Чому у Вас не всі картинки з акціями атб ?",
         "subject": "АТБ",
@@ -48779,6 +49012,7 @@
       {
         "channel": "@msuaaaa",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 7599,
         "quote": "Щось страшне як для свята",
         "subject": "іграшки",
@@ -48789,6 +49023,7 @@
       {
         "channel": "@msuaaaa",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 7631,
         "quote": "В яких містах???",
         "subject": "McDonald’s",
@@ -48799,6 +49034,7 @@
       {
         "channel": "@msuaaaa",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 7639,
         "quote": "А в наборі фігурки чи разом із чашками",
         "subject": "Happy Meal Friends",
@@ -48809,6 +49045,7 @@
       {
         "channel": "@msuaaaa",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 7728,
         "quote": "буде так дорого коштувати",
         "subject": "Happy Meal Friends",
@@ -48819,6 +49056,7 @@
       {
         "channel": "@msuaaaa",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 7728,
         "quote": "яке меню тоді буде входити в Хеппі міл разом з іграшками",
         "subject": "Happy Meal Friends",
@@ -48829,6 +49067,7 @@
       {
         "channel": "@msuaaaa",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 7908,
         "quote": "А можна взяти щось у МакДональдзі за національний кешбек?",
         "subject": "McDonald’s",
@@ -48839,6 +49078,7 @@
       {
         "channel": "@msuaaaa",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 7913,
         "quote": "Подскажите где найти эти товары в приложении глово? Или активировать их нужно?",
         "subject": "Glovo",
@@ -48849,6 +49089,7 @@
       {
         "channel": "@msuaaaa",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 8065,
         "quote": "повернув мені гроші за чіпси тому що затрималися з доставкою Тож вийшло вигідніше",
         "subject": "Mono",
@@ -48859,6 +49100,7 @@
       {
         "channel": "@msuaaaa",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 8716,
         "quote": "Де кока кола",
         "subject": "кола",
@@ -48869,6 +49111,7 @@
       {
         "channel": "@msuaaaa",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 8752,
         "quote": "акції на чіпси нема",
         "subject": "АТБ",
@@ -48879,6 +49122,7 @@
       {
         "channel": "@msuaaaa",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 9279,
         "quote": "Нових знижок атб ще не виклали?",
         "subject": "атб",
@@ -48889,6 +49133,7 @@
       {
         "channel": "@msuaaaa",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 9367,
         "quote": "какие Маки сейчас работают ?",
         "subject": "McDonald’s",
@@ -48899,6 +49144,7 @@
       {
         "channel": "@msuaaaa",
         "confidence": 0.9,
+        "low_confidence": true,
         "msg_id": 9400,
         "quote": "И всьо?",
         "subject": "АТБ",
@@ -48909,6 +49155,7 @@
       {
         "channel": "@msuaaaa",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 9451,
         "quote": "Дякую за вашу працю",
         "subject": "msuaaaa",
@@ -48919,6 +49166,7 @@
       {
         "channel": "@msuaaaa",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 9637,
         "quote": "зроблено з гівна и палиць",
         "subject": "желейні крокодильчики",
@@ -48929,6 +49177,7 @@
       {
         "channel": "@msuaaaa",
         "confidence": 0.9,
+        "low_confidence": true,
         "msg_id": 9643,
         "quote": "нащо ви таке зранку постите",
         "subject": "Lviv Croissants",
@@ -48939,6 +49188,7 @@
       {
         "channel": "@msuaaaa",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 10093,
         "quote": "шкода що змінили на 5 гострих крил",
         "subject": "KFC",
@@ -48949,6 +49199,7 @@
       {
         "channel": "@msuaaaa",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 10181,
         "quote": "Не вкусное",
         "subject": "МакКантрі",
@@ -48959,6 +49210,7 @@
       {
         "channel": "@msuaaaa",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 10275,
         "quote": "А як його там знайти?",
         "subject": "McDonald’s",
@@ -48969,6 +49221,7 @@
       {
         "channel": "@msuaaaa",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 10250,
         "quote": "Просто продлили акцію?)",
         "subject": "АТБ",
@@ -48979,6 +49232,7 @@
       {
         "channel": "@msuaaaa",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 10572,
         "quote": "ни о чем",
         "subject": "9354",
@@ -48989,6 +49243,7 @@
       {
         "channel": "@msuaaaa",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 10577,
         "quote": "чипсы не на акции?",
         "subject": "чипсы",
@@ -48999,6 +49254,7 @@
       {
         "channel": "@msuaaaa",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 10578,
         "quote": "потому что нет замороженных ягод",
         "subject": "ягоды замороженные",
@@ -49009,6 +49265,7 @@
       {
         "channel": "@msuaaaa",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 10899,
         "quote": "КОЛИ АКЦія на лЕЙС",
         "subject": "чипси лейс",
@@ -49019,6 +49276,7 @@
       {
         "channel": "@msuaaaa",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 10899,
         "quote": "КОЛИ АКЦія на лЕЙС",
         "subject": "чипси лейс",
@@ -49029,6 +49287,7 @@
       {
         "channel": "@msuaaaa",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 11009,
         "quote": "вигідно",
         "subject": "McDonald’s",
@@ -49039,6 +49298,7 @@
       {
         "channel": "@msuaaaa",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 11108,
         "quote": "за 19",
         "subject": "ковбаса",
@@ -49049,6 +49309,7 @@
       {
         "channel": "@msuaaaa",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 11108,
         "quote": "це опасно",
         "subject": "ковбаса",
@@ -49059,6 +49320,7 @@
       {
         "channel": "@msuaaaa",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 11224,
         "quote": "Де купити?",
         "subject": "свічки BISCOTTI",
@@ -49069,6 +49331,7 @@
       {
         "channel": "@msuaaaa",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 11970,
         "quote": "Первый раз брали классное нам понравилось",
         "subject": "піца-капкейк",
@@ -49079,6 +49342,7 @@
       {
         "channel": "@msuaaaa",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 11970,
         "quote": "Вчера взяли непропечённое",
         "subject": "піца-капкейк",
@@ -49089,6 +49353,7 @@
       {
         "channel": "@msuaaaa",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 12190,
         "quote": "Цікаво виробник Україна?",
         "subject": "Pepsi Gold",
@@ -49099,6 +49364,7 @@
       {
         "channel": "@msuaaaa",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 12388,
         "quote": "а як користуватися цими купонами із застосунку?",
         "subject": "KFC",
@@ -49109,6 +49375,7 @@
       {
         "channel": "@msuaaaa",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 12510,
         "quote": "А коли у всіх маках?",
         "subject": "McDonald’s",
@@ -49119,6 +49386,7 @@
       {
         "channel": "@msuaaaa",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 12512,
         "quote": "А до коли вони будуть",
         "subject": "стакани",
@@ -49129,6 +49397,7 @@
       {
         "channel": "@msuaaaa",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 12590,
         "quote": "будуть іграшки?",
         "subject": "іграшки",
@@ -49139,6 +49408,7 @@
       {
         "channel": "@msuaaaa",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 12638,
         "quote": "цінники не змінили",
         "subject": "Сільпо",
@@ -49149,6 +49419,7 @@
       {
         "channel": "@msuaaaa",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 12638,
         "quote": "неправильна ціна",
         "subject": "Сільпо",
@@ -49159,6 +49430,7 @@
       {
         "channel": "@msuaaaa",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 12639,
         "quote": "Ціна вірна",
         "subject": "Сільпо",
@@ -49169,6 +49441,7 @@
       {
         "channel": "@msuaaaa",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 12643,
         "quote": "нашо викладати на канал пост з неправильним цінником",
         "subject": "msuaaaa",
@@ -49179,6 +49452,7 @@
       {
         "channel": "@msuaaaa",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 12644,
         "quote": "ціна на фото вірна",
         "subject": "чипси Люкс",
@@ -49189,6 +49463,7 @@
       {
         "channel": "@msuaaaa",
         "confidence": 0.9,
+        "low_confidence": true,
         "msg_id": 12644,
         "quote": "сьогодні якраз брали",
         "subject": "чипси Люкс",
@@ -49199,6 +49474,7 @@
       {
         "channel": "@msuaaaa",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 13328,
         "quote": "Ну такое",
         "subject": "McDonald’s",
@@ -49209,6 +49485,7 @@
       {
         "channel": "@msuaaaa",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 13519,
         "quote": "Очень вкусное",
         "subject": "пиво BAVARIA POMEGRANATE",
@@ -49219,6 +49496,7 @@
       {
         "channel": "@msuaaaa",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 13529,
         "quote": "Це у якому ашані?",
         "subject": "пиво BAVARIA POMEGRANATE",
@@ -49229,6 +49507,7 @@
       {
         "channel": "@msuaaaa",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 13542,
         "quote": "Ця акція діє лише у новому магазині?",
         "subject": "Сільпо",
@@ -49239,6 +49518,7 @@
       {
         "channel": "@msuaaaa",
         "confidence": 1.0,
+        "low_confidence": false,
         "msg_id": 13584,
         "quote": "Ох, як спокусивши морозивом... Пряме дитинство!",
         "subject": "Морозиво Пряне печиво Міньйон",
@@ -49249,6 +49529,7 @@
       {
         "channel": "@msuaaaa",
         "confidence": 0.9,
+        "low_confidence": true,
         "msg_id": 13585,
         "quote": "Вони усі не нові)",
         "subject": "Морозиво Пряне печиво Міньйон",
@@ -49444,109 +49725,127 @@
           "complaints": 0,
           "month": "2025-02",
           "share": 0.0,
-          "signals": 3
+          "signals": 3,
+          "weight": 0.010676156583629894
         },
         {
           "complaints": 3,
           "month": "2025-03",
           "share": 0.6,
-          "signals": 5
+          "signals": 5,
+          "weight": 0.017793594306049824
         },
         {
           "complaints": 0,
           "month": "2025-04",
           "share": 0.0,
-          "signals": 4
+          "signals": 4,
+          "weight": 0.014234875444839857
         },
         {
           "complaints": 2,
           "month": "2025-05",
           "share": 0.3333333333333333,
-          "signals": 6
+          "signals": 6,
+          "weight": 0.021352313167259787
         },
         {
           "complaints": 2,
           "month": "2025-06",
           "share": 0.3333333333333333,
-          "signals": 6
+          "signals": 6,
+          "weight": 0.021352313167259787
         },
         {
           "complaints": 2,
           "month": "2025-07",
           "share": 0.4,
-          "signals": 5
+          "signals": 5,
+          "weight": 0.017793594306049824
         },
         {
           "complaints": 12,
           "month": "2025-08",
           "share": 0.6,
-          "signals": 20
+          "signals": 20,
+          "weight": 0.0711743772241993
         },
         {
           "complaints": 6,
           "month": "2025-09",
           "share": 0.5,
-          "signals": 12
+          "signals": 12,
+          "weight": 0.042704626334519574
         },
         {
           "complaints": 17,
           "month": "2025-10",
           "share": 0.6538461538461539,
-          "signals": 26
+          "signals": 26,
+          "weight": 0.09252669039145907
         },
         {
           "complaints": 4,
           "month": "2025-11",
           "share": 0.26666666666666666,
-          "signals": 15
+          "signals": 15,
+          "weight": 0.05338078291814947
         },
         {
           "complaints": 31,
           "month": "2025-12",
           "share": 0.7209302325581395,
-          "signals": 43
+          "signals": 43,
+          "weight": 0.15302491103202848
         },
         {
           "complaints": 0,
           "month": "2026-01",
           "share": 0.0,
-          "signals": 2
+          "signals": 2,
+          "weight": 0.0071174377224199285
         },
         {
           "complaints": 6,
           "month": "2026-02",
           "share": 0.75,
-          "signals": 8
+          "signals": 8,
+          "weight": 0.028469750889679714
         },
         {
           "complaints": 8,
           "month": "2026-03",
           "share": 0.34782608695652173,
-          "signals": 23
+          "signals": 23,
+          "weight": 0.08185053380782918
         },
         {
           "complaints": 18,
           "month": "2026-04",
           "share": 0.72,
-          "signals": 25
+          "signals": 25,
+          "weight": 0.08896797153024912
         },
         {
           "complaints": 19,
           "month": "2026-05",
           "share": 0.5,
-          "signals": 38
+          "signals": 38,
+          "weight": 0.13523131672597866
         },
         {
           "complaints": 11,
           "month": "2026-06",
           "share": 0.4230769230769231,
-          "signals": 26
+          "signals": 26,
+          "weight": 0.09252669039145907
         },
         {
           "complaints": 8,
           "month": "2026-07",
           "share": 0.5714285714285714,
-          "signals": 14
+          "signals": 14,
+          "weight": 0.0498220640569395
         }
       ],
       "title": {
@@ -49566,6 +49865,7 @@
             {
               "channel": "@VARUS_channel",
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "іноді потрапляється пліснява",
               "subject": "курячі чіпси",
               "thread_root": "3163"
@@ -49573,6 +49873,7 @@
             {
               "channel": "@VARUS_channel",
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "Так тут гриль-барбекю подарять. Який айфон😂",
               "subject": "АЙФОН 16 ПРО",
               "thread_root": "4129"
@@ -49580,6 +49881,7 @@
             {
               "channel": "@VARUS_channel",
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "невігласи )))",
               "subject": "Сир ЧЕДДЕР ЛЕЙЧЕЙСТЕР червонии",
               "thread_root": "4449"
@@ -49587,6 +49889,7 @@
             {
               "channel": "@VARUS_channel",
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "в нашем Варусе его к сожалению нет пока",
               "subject": "батончик Дубайський шоколад",
               "thread_root": "5119"
@@ -49594,6 +49897,7 @@
             {
               "channel": "@VARUS_channel",
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "дивіться на якість. він ваесь білий",
               "subject": "шоколад",
               "thread_root": "5119"
@@ -49601,6 +49905,7 @@
             {
               "channel": "@VARUS_channel",
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "внешний вид конечно … Я даже не знаю, служит ли это поводом к возврату",
               "subject": "шоколад",
               "thread_root": "5119"
@@ -49608,6 +49913,7 @@
             {
               "channel": "@VARUS_channel",
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "Можливо посмакуєте отим, що мені продали?",
               "subject": "шоколад",
               "thread_root": "5119"
@@ -49615,6 +49921,7 @@
             {
               "channel": "@VARUS_channel",
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "небыло вчера в наличии в двух варусах",
               "subject": "шоколад Великобритания",
               "thread_root": "5119"
@@ -49622,6 +49929,7 @@
             {
               "channel": "@VARUS_channel",
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "ох і розводять лохів",
               "subject": "майонез",
               "thread_root": "5854"
@@ -49629,6 +49937,7 @@
             {
               "channel": "@VARUS_channel",
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "Смішні які",
               "subject": "Щастябокс",
               "thread_root": "6009"
@@ -49636,6 +49945,7 @@
             {
               "channel": "@VARUS_channel",
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "Взагалі не задоволена боксом",
               "subject": "Щастябокс",
               "thread_root": "6009"
@@ -49643,6 +49953,7 @@
             {
               "channel": "@VARUS_channel",
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "Торгівля повітрям",
               "subject": "Щастябокс",
               "thread_root": "6009"
@@ -49650,6 +49961,7 @@
             {
               "channel": "@VARUS_channel",
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "половину тысячи отдать за картонку",
               "subject": "Щастябокс",
               "thread_root": "6009"
@@ -49657,6 +49969,7 @@
             {
               "channel": "@VARUS_channel",
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "Отвратительное",
               "subject": "масло",
               "thread_root": "6009"
@@ -49664,6 +49977,7 @@
             {
               "channel": "@VARUS_channel",
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "не тратить семейный бюджет на отраву под видом масло",
               "subject": "масло",
               "thread_root": "6009"
@@ -49671,6 +49985,7 @@
             {
               "channel": "@VARUS_channel",
               "confidence": 0.9,
+              "low_confidence": true,
               "quote": "Белоруское морожено?",
               "subject": "морозиво",
               "thread_root": "7850"
@@ -49678,6 +49993,7 @@
             {
               "channel": "@VARUS_channel",
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "Повне розчарування!",
               "subject": "яйця-сюрпризи",
               "thread_root": "8647"
@@ -49685,6 +50001,7 @@
             {
               "channel": "@VARUS_channel",
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "не вкусная замороженная белая субстанция",
               "subject": "морозиво М’яке",
               "thread_root": "8823"
@@ -49692,6 +50009,7 @@
             {
               "channel": "@VARUS_channel",
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "Больше не хочется",
               "subject": "морозиво М’яке",
               "thread_root": "8823"
@@ -49699,6 +50017,7 @@
             {
               "channel": "@VARUS_channel",
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "і де в цій пасті фундук? Фундук і ароматизатор - то трохи різне та є введенням в оману покупця!",
               "subject": "паста TUT NUT",
               "thread_root": "9034"
@@ -49706,6 +50025,7 @@
             {
               "channel": "@VARUS_channel",
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "Нажаль, у нас його не можливо вхопити",
               "subject": "Сир кисломолочний Varto",
               "thread_root": "9112"
@@ -49713,6 +50033,7 @@
             {
               "channel": "@VARUS_channel",
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "ржавого цвета и мясо расползается",
               "subject": "скумбрия",
               "thread_root": "9277"
@@ -49720,6 +50041,7 @@
             {
               "channel": "@VARUS_channel",
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "ржавого цвета и мясо расползается",
               "subject": "сельдь атлантическая",
               "thread_root": "9277"
@@ -49727,6 +50049,7 @@
             {
               "channel": "@VARUS_channel",
               "confidence": 0.9,
+              "low_confidence": true,
               "quote": "Ось такий карась привезли",
               "subject": "карась",
               "thread_root": "10603"
@@ -49734,6 +50057,7 @@
             {
               "channel": "@VARUS_channel",
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "страшные",
               "subject": "карась",
               "thread_root": "10603"
@@ -49741,6 +50065,7 @@
             {
               "channel": "@VARUS_channel",
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "рыба плохая",
               "subject": "карась",
               "thread_root": "10603"
@@ -49748,6 +50073,7 @@
             {
               "channel": "@msuaaaa",
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "нихуя не было там бабок",
               "subject": "чипси",
               "thread_root": "3053"
@@ -49755,6 +50081,7 @@
             {
               "channel": "@msuaaaa",
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "термін придатності закінчується в цьому місяці",
               "subject": "сир",
               "thread_root": "4588"
@@ -49762,6 +50089,7 @@
             {
               "channel": "@msuaaaa",
               "confidence": 0.9,
+              "low_confidence": true,
               "quote": "Різниця у вартості кави в один день🤡",
               "subject": "кава",
               "thread_root": "6502"
@@ -49769,6 +50097,7 @@
             {
               "channel": "@msuaaaa",
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "Ціна жах за маленьку шпуньку",
               "subject": "ДАБЛ ЧІКЕН BBQ",
               "thread_root": "7636"
@@ -49776,6 +50105,7 @@
             {
               "channel": "@msuaaaa",
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "Щось страшне як для свята",
               "subject": "іграшки",
               "thread_root": "7900"
@@ -49783,6 +50113,7 @@
             {
               "channel": "@msuaaaa",
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "зроблено з гівна и палиць",
               "subject": "желейні крокодильчики",
               "thread_root": "8905"
@@ -49790,6 +50121,7 @@
             {
               "channel": "@msuaaaa",
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "Не вкусное",
               "subject": "МакКантрі",
               "thread_root": "9140"
@@ -49797,6 +50129,7 @@
             {
               "channel": "@msuaaaa",
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "потому что нет замороженных ягод",
               "subject": "ягоды замороженные",
               "thread_root": "9354"
@@ -49804,6 +50137,7 @@
             {
               "channel": "@msuaaaa",
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "це опасно",
               "subject": "ковбаса",
               "thread_root": "9577"
@@ -49811,6 +50145,7 @@
             {
               "channel": "@msuaaaa",
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "Вчера взяли непропечённое",
               "subject": "піца-капкейк",
               "thread_root": "9952"
@@ -49818,6 +50153,7 @@
             {
               "channel": "@msuaaaa",
               "confidence": 0.9,
+              "low_confidence": true,
               "quote": "Вони усі не нові)",
               "subject": "Морозиво Пряне печиво Міньйон",
               "thread_root": "10651"
@@ -49835,6 +50171,7 @@
             {
               "channel": "@VARUS_channel",
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "Як кава? Хто купував?",
               "subject": "кава",
               "thread_root": "1901"
@@ -49842,6 +50179,7 @@
             {
               "channel": "@VARUS_channel",
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "Чи є в продажу яйця гуся криптолова?",
               "subject": "яйця гуся криптолова",
               "thread_root": "3163"
@@ -49849,6 +50187,7 @@
             {
               "channel": "@VARUS_channel",
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "Васної?",
               "subject": "морозиво ескімо Varto",
               "thread_root": "3436"
@@ -49856,6 +50195,7 @@
             {
               "channel": "@VARUS_channel",
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "А Дор-Блю буде?",
               "subject": "сир Дор-Блю",
               "thread_root": "4449"
@@ -49863,6 +50203,7 @@
             {
               "channel": "@VARUS_channel",
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "Хочу попробовать батончик - типа Дубайский шоколад",
               "subject": "батончик Дубайський шоколад",
               "thread_root": "5119"
@@ -49870,6 +50211,7 @@
             {
               "channel": "@VARUS_channel",
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "що в тому боксі взагалі?",
               "subject": "Щастябокс",
               "thread_root": "6009"
@@ -49877,6 +50219,7 @@
             {
               "channel": "@VARUS_channel",
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "А покажіть, що там?",
               "subject": "Щастябокс",
               "thread_root": "6009"
@@ -49884,6 +50227,7 @@
             {
               "channel": "@VARUS_channel",
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "абы скидок на \"мафин\" почаще были",
               "subject": "мафин",
               "thread_root": "7440"
@@ -49891,6 +50235,7 @@
             {
               "channel": "@VARUS_channel",
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "чи є таке у Кривому розі?",
               "subject": "морозиво М’яке",
               "thread_root": "8823"
@@ -49898,6 +50243,7 @@
             {
               "channel": "@VARUS_channel",
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "не можливо вхопити",
               "subject": "Сир кисломолочний Varto",
               "thread_root": "9112"
@@ -49905,6 +50251,7 @@
             {
               "channel": "@VARUS_channel",
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "У Вас є сир з пліснявою?",
               "subject": "сир з пліснявою",
               "thread_root": "9926"
@@ -49912,6 +50259,7 @@
             {
               "channel": "@msuaaaa",
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "А пиво де",
               "subject": "пиво",
               "thread_root": "5704"
@@ -49919,6 +50267,7 @@
             {
               "channel": "@msuaaaa",
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "В Чернівцях немає",
               "subject": "кондиціонер для прання",
               "thread_root": "7627"
@@ -49926,6 +50275,7 @@
             {
               "channel": "@msuaaaa",
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "А в наборі фігурки чи разом із чашками",
               "subject": "Happy Meal Friends",
               "thread_root": "7907"
@@ -49933,6 +50283,7 @@
             {
               "channel": "@msuaaaa",
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "яке меню тоді буде входити в Хеппі міл разом з іграшками",
               "subject": "Happy Meal Friends",
               "thread_root": "7907"
@@ -49940,6 +50291,7 @@
             {
               "channel": "@msuaaaa",
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "КОЛИ АКЦія на лЕЙС",
               "subject": "чипси лейс",
               "thread_root": "9483"
@@ -49947,6 +50299,7 @@
             {
               "channel": "@msuaaaa",
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "Де купити?",
               "subject": "свічки BISCOTTI",
               "thread_root": "9618"
@@ -49954,6 +50307,7 @@
             {
               "channel": "@msuaaaa",
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "Цікаво виробник Україна?",
               "subject": "Pepsi Gold",
               "thread_root": "10021"
@@ -49961,6 +50315,7 @@
             {
               "channel": "@msuaaaa",
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "А до коли вони будуть",
               "subject": "стакани",
               "thread_root": "10169"
@@ -49968,6 +50323,7 @@
             {
               "channel": "@msuaaaa",
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "будуть іграшки?",
               "subject": "іграшки",
               "thread_root": "10169"
@@ -49975,6 +50331,7 @@
             {
               "channel": "@msuaaaa",
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "Це у якому ашані?",
               "subject": "пиво BAVARIA POMEGRANATE",
               "thread_root": "10617"
@@ -49992,6 +50349,7 @@
             {
               "channel": "@VARUS_channel",
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "Купи бокс за 500 грн",
               "subject": "Щастябокс",
               "thread_root": "6009"
@@ -49999,6 +50357,7 @@
             {
               "channel": "@VARUS_channel",
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "половину тысячи отдать за картонку",
               "subject": "Щастябокс",
               "thread_root": "6009"
@@ -50006,6 +50365,7 @@
             {
               "channel": "@VARUS_channel",
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "не може коштувати якісне масло - дешево",
               "subject": "масло",
               "thread_root": "6009"
@@ -50013,6 +50373,7 @@
             {
               "channel": "@VARUS_channel",
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "абы скидок на \"мафин\" почаще были",
               "subject": "мафин",
               "thread_root": "7440"
@@ -50020,6 +50381,7 @@
             {
               "channel": "@VARUS_channel",
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "брелоки по 99 грн",
               "subject": "яйця-сюрпризи",
               "thread_root": "8647"
@@ -50027,6 +50389,7 @@
             {
               "channel": "@VARUS_channel",
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "сельдь по 220 грн",
               "subject": "сельдь",
               "thread_root": "9277"
@@ -50034,6 +50397,7 @@
             {
               "channel": "@VARUS_channel",
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "220 грн сельдь!",
               "subject": "сельдь",
               "thread_root": "9277"
@@ -50041,6 +50405,7 @@
             {
               "channel": "@VARUS_channel",
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "за такие деньги и должна быть супер",
               "subject": "сельдь",
               "thread_root": "9277"
@@ -50048,6 +50413,7 @@
             {
               "channel": "@VARUS_channel",
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "за такою ціною",
               "subject": "пряники Varto",
               "thread_root": "9912"
@@ -50055,6 +50421,7 @@
             {
               "channel": "@VARUS_channel",
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "це за 100г ціна?",
               "subject": "кур стегно",
               "thread_root": "10187"
@@ -50062,6 +50429,7 @@
             {
               "channel": "@msuaaaa",
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "за 30 шт 49.99 грн",
               "subject": "пакети для сміття",
               "thread_root": "2455"
@@ -50069,6 +50437,7 @@
             {
               "channel": "@msuaaaa",
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "50 грн",
               "subject": "цукор",
               "thread_root": "2455"
@@ -50076,6 +50445,7 @@
             {
               "channel": "@msuaaaa",
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "Різниця у вартості кави",
               "subject": "кава",
               "thread_root": "6502"
@@ -50083,6 +50453,7 @@
             {
               "channel": "@msuaaaa",
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "а ціна",
               "subject": "Тріпл Чііз Біт",
               "thread_root": "7202"
@@ -50090,6 +50461,7 @@
             {
               "channel": "@msuaaaa",
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "247 где-то вроде за один",
               "subject": "Тріпл Чііз Біт",
               "thread_root": "7202"
@@ -50097,6 +50469,7 @@
             {
               "channel": "@msuaaaa",
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "Ціна жах",
               "subject": "ДАБЛ ЧІКЕН BBQ",
               "thread_root": "7636"
@@ -50104,6 +50477,7 @@
             {
               "channel": "@msuaaaa",
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "буде так дорого коштувати",
               "subject": "Happy Meal Friends",
               "thread_root": "7907"
@@ -50111,6 +50485,7 @@
             {
               "channel": "@msuaaaa",
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "КОЛИ АКЦія на лЕЙС",
               "subject": "чипси лейс",
               "thread_root": "9483"
@@ -50118,6 +50493,7 @@
             {
               "channel": "@msuaaaa",
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "за 19",
               "subject": "ковбаса",
               "thread_root": "9577"
@@ -50125,6 +50501,7 @@
             {
               "channel": "@msuaaaa",
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "ціна на фото вірна",
               "subject": "чипси Люкс",
               "thread_root": "10219"
@@ -50142,6 +50519,7 @@
             {
               "channel": "@VARUS_channel",
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "Печиво класне",
               "subject": "печиво",
               "thread_root": "1901"
@@ -50149,6 +50527,7 @@
             {
               "channel": "@VARUS_channel",
               "confidence": 0.9,
+              "low_confidence": true,
               "quote": "я бы не отказалась от такого бы",
               "subject": "продукція ТОКЕРИ",
               "thread_root": "2053"
@@ -50156,6 +50535,7 @@
             {
               "channel": "@VARUS_channel",
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "Очень вкусное мороженое",
               "subject": "морозиво ескімо Varto",
               "thread_root": "3436"
@@ -50163,6 +50543,7 @@
             {
               "channel": "@VARUS_channel",
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "ВКУСНОЕ ОЧЕНЬ",
               "subject": "морозиво",
               "thread_root": "7850"
@@ -50170,6 +50551,7 @@
             {
               "channel": "@VARUS_channel",
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "морозиво у них смачне",
               "subject": "морозиво М’яке",
               "thread_root": "8823"
@@ -50177,6 +50559,7 @@
             {
               "channel": "@VARUS_channel",
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "просто чарівний",
               "subject": "плавлений сир Мааздам",
               "thread_root": "9006"
@@ -50184,6 +50567,7 @@
             {
               "channel": "@VARUS_channel",
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "Неймовірно смачно",
               "subject": "плавлений сир Мааздам",
               "thread_root": "9006"
@@ -50191,6 +50575,7 @@
             {
               "channel": "@VARUS_channel",
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "подякувати за таку смачноту",
               "subject": "плавлений сир Мааздам",
               "thread_root": "9006"
@@ -50198,6 +50583,7 @@
             {
               "channel": "@VARUS_channel",
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "це смачнота!",
               "subject": "ікра мінтаю",
               "thread_root": "9006"
@@ -50205,6 +50591,7 @@
             {
               "channel": "@VARUS_channel",
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "Офігенно милі кото-зайчики і зайце-котики на упаковці",
               "subject": "Сир кисломолочний Varto",
               "thread_root": "9112"
@@ -50212,6 +50599,7 @@
             {
               "channel": "@VARUS_channel",
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "жирная, вкусная, супер",
               "subject": "сельдь",
               "thread_root": "9277"
@@ -50219,6 +50607,7 @@
             {
               "channel": "@VARUS_channel",
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "привозили суперскую",
               "subject": "сельдь",
               "thread_root": "9277"
@@ -50226,6 +50615,7 @@
             {
               "channel": "@VARUS_channel",
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "вау, дуже гарно",
               "subject": "Пиво світле Pilsner MOVA",
               "thread_root": "9850"
@@ -50233,6 +50623,7 @@
             {
               "channel": "@msuaaaa",
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "Первый раз брали классное нам понравилось",
               "subject": "піца-капкейк",
               "thread_root": "9952"
@@ -50240,6 +50631,7 @@
             {
               "channel": "@msuaaaa",
               "confidence": 0.9,
+              "low_confidence": true,
               "quote": "сьогодні якраз брали",
               "subject": "чипси Люкс",
               "thread_root": "10219"
@@ -50247,6 +50639,7 @@
             {
               "channel": "@msuaaaa",
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "Очень вкусное",
               "subject": "пиво BAVARIA POMEGRANATE",
               "thread_root": "10617"
@@ -50254,6 +50647,7 @@
             {
               "channel": "@msuaaaa",
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "Ох, як спокусивши морозивом... Пряме дитинство!",
               "subject": "Морозиво Пряне печиво Міньйон",
               "thread_root": "10651"
@@ -50280,6 +50674,7 @@
           "rows": [
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "брелоки по 99 грн",
               "subject": "яйця-сюрпризи",
               "subject_type": "sku",
@@ -50287,6 +50682,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "Повне розчарування!",
               "subject": "яйця-сюрпризи",
               "subject_type": "sku",
@@ -50294,6 +50690,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "Щось на офіційному сайті ніякої зміни не має",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -50301,6 +50698,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "жоден в мене ще не відскагувався",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -50308,6 +50706,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "в додатку не знайшла звідки сканувати",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -50315,6 +50714,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "саме ці не хоче",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -50322,6 +50722,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "код він так нормально і не прочитав,каже шо код неякісний",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -50329,6 +50730,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "Це по вашому чесно?",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -50336,6 +50738,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "Варус усіх намахав",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -50343,6 +50746,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "Це не чесно!",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -50350,6 +50754,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "Мені теж не подобається перенесення",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -50357,6 +50762,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "вартість зменшилася на 10 грн",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -50364,6 +50770,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "Розвод",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -50371,6 +50778,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "То хто тут клоун :)",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -50378,6 +50786,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "готовий на колективну скаргу",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -50385,6 +50794,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "а це вже напьорстки",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -50392,6 +50802,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "те що переписують коли хоче це не правила",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -50408,6 +50819,7 @@
           "rows": [
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "Дуже класно",
               "subject": "9277",
               "subject_type": "post",
@@ -50415,6 +50827,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "Не всегда довольна",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -50422,6 +50835,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "ржавого цвета и мясо расползается",
               "subject": "скумбрия",
               "subject_type": "sku",
@@ -50429,6 +50843,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "ржавого цвета и мясо расползается",
               "subject": "сельдь атлантическая",
               "subject_type": "sku",
@@ -50436,6 +50851,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "500 грн в мусорку",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -50443,6 +50859,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "500 грн в мусорку",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -50450,6 +50867,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "рыба приезжала по доставке всегда суперская",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -50457,6 +50875,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "я у них теперь в доставку рыбу не заказываю",
               "subject": "Сільпо",
               "subject_type": "chain",
@@ -50464,6 +50883,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "Они берут дешевейшую а продают как супер",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -50471,6 +50891,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "сельдь по 220 грн",
               "subject": "сельдь",
               "subject_type": "sku",
@@ -50478,6 +50899,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "жирная, вкусная, супер",
               "subject": "сельдь",
               "subject_type": "sku",
@@ -50485,6 +50907,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "В варусе такого нет",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -50492,6 +50915,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "220 грн сельдь!",
               "subject": "сельдь",
               "subject_type": "sku",
@@ -50499,6 +50923,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "за такие деньги и должна быть супер",
               "subject": "сельдь",
               "subject_type": "sku",
@@ -50506,6 +50931,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "привозили суперскую",
               "subject": "сельдь",
               "subject_type": "sku",
@@ -50522,6 +50948,7 @@
           "rows": [
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "Купи бокс за 500 грн",
               "subject": "Щастябокс",
               "subject_type": "sku",
@@ -50529,6 +50956,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "Смішні які",
               "subject": "Щастябокс",
               "subject_type": "sku",
@@ -50536,6 +50964,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "Взагалі не задоволена боксом",
               "subject": "Щастябокс",
               "subject_type": "sku",
@@ -50543,6 +50972,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "що в тому боксі взагалі?",
               "subject": "Щастябокс",
               "subject_type": "sku",
@@ -50550,6 +50980,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "Торгівля повітрям",
               "subject": "Щастябокс",
               "subject_type": "sku",
@@ -50557,6 +50988,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "А покажіть, що там?",
               "subject": "Щастябокс",
               "subject_type": "sku",
@@ -50564,6 +50996,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "половину тысячи отдать за картонку",
               "subject": "Щастябокс",
               "subject_type": "sku",
@@ -50571,6 +51004,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "половину тысячи отдать за картонку",
               "subject": "Щастябокс",
               "subject_type": "sku",
@@ -50578,6 +51012,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "Отвратительное",
               "subject": "масло",
               "subject_type": "sku",
@@ -50585,6 +51020,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "Пытался оставить честный отзыв на их сайте, не добавляют",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -50592,6 +51028,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "варусу байдуже, що на полиці",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -50599,6 +51036,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "навіщо тоді варус портить собі репутацію?",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -50606,6 +51044,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "не може коштувати якісне масло - дешево",
               "subject": "масло",
               "subject_type": "sku",
@@ -50613,6 +51052,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "не тратить семейный бюджет на отраву под видом масло",
               "subject": "масло",
               "subject_type": "sku",
@@ -50629,6 +51069,7 @@
           "rows": [
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "В кого я можу уточнити за доставку?",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -50636,6 +51077,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "А що це суцільний обман?",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -50643,6 +51085,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "ні зворотнього зв'язку в онлайн підтримці",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -50650,6 +51093,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "И служба поддержки загадочно морозится",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -50657,6 +51101,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "гаряча лінія скидає слухавку",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -50664,6 +51109,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "Вони не відповіли! Гаряча лінія скидають!",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -50671,6 +51117,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "Який в кого рівень щастя і позиція в рейтингу?",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -50678,6 +51125,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "Варус просто обманщики и мошенники",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -50685,6 +51133,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "у них был сбой боксики мне начислили,аж через 4 дня",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -50692,6 +51141,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "инт ернет заказ,то же отменить нельзя",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -50699,6 +51149,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "На горячую линию дозвонится не возможно",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -50706,6 +51157,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "ПРОСТО ПОЗОР",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -50722,6 +51174,7 @@
           "rows": [
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "абы скидок на \"мафин\" почаще были",
               "subject": "мафин",
               "subject_type": "sku",
@@ -50729,6 +51182,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "абы скидок на \"мафин\" почаще были",
               "subject": "мафин",
               "subject_type": "sku",
@@ -50736,6 +51190,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "Санітарні норми вийшли з чату ?",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -50743,6 +51198,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "найкращий супермаркет",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -50750,6 +51206,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "там завжди пускали всіх собачок",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -50757,6 +51214,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "обожнюю всіх там працівників",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -50764,6 +51222,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "У Варусі в Києві не пускають з тваринками",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -50771,6 +51230,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "Почему всегда в Киеве?!Других городов в Украине нет что-ли",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -50778,6 +51238,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "Дуже крута акція!",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -50785,6 +51246,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "ви молодчинки",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -50792,6 +51254,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "задовбали з блохастими в магазинах",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -50799,6 +51262,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "Спасибо за комфорт для наших любимцев",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -50815,6 +51279,7 @@
           "rows": [
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "Хочу попробовать батончик - типа Дубайский шоколад",
               "subject": "батончик Дубайський шоколад",
               "subject_type": "sku",
@@ -50822,6 +51287,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "в нашем Варусе его к сожалению нет пока",
               "subject": "батончик Дубайський шоколад",
               "subject_type": "sku",
@@ -50829,6 +51295,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "Не купуйте. Як не соромно так дурити покупців",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -50836,6 +51303,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "дивіться на якість. він ваесь білий",
               "subject": "шоколад",
               "subject_type": "sku",
@@ -50843,6 +51311,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "внешний вид конечно … Я даже не знаю, служит ли это поводом к возврату",
               "subject": "шоколад",
               "subject_type": "sku",
@@ -50850,6 +51319,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "Можливо посмакуєте отим, що мені продали?",
               "subject": "шоколад",
               "subject_type": "sku",
@@ -50857,6 +51327,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "Варус, щось ви стали якоюсь забігайлівкою",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -50864,6 +51335,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "Товари найнижчої якості, на тижні вже вдруге повертаю товар",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -50871,6 +51343,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "Самое ужасное, что нет у них поддержки нормальной",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -50878,6 +51351,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "Підскажіть чому зникла адреса доставки чи самовивозу",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -50885,6 +51359,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "небыло вчера в наличии в двух варусах",
               "subject": "шоколад Великобритания",
               "subject_type": "sku",
@@ -50901,6 +51376,7 @@
           "rows": [
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "не хочете вчасно доставляти замовлення",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -50908,6 +51384,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "Зникає бажання щось у вас купувати",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -50915,6 +51392,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "немає такої можливості",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -50922,6 +51400,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "В нас теж",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -50929,6 +51408,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "і кавомашини немає",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -50936,6 +51416,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "нічого такого немає",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -50943,6 +51424,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "чи є таке у Кривому розі?",
               "subject": "морозиво М’яке",
               "subject_type": "sku",
@@ -50950,6 +51432,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "не вкусная замороженная белая субстанция",
               "subject": "морозиво М’яке",
               "subject_type": "sku",
@@ -50957,6 +51440,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "Больше не хочется",
               "subject": "морозиво М’яке",
               "subject_type": "sku",
@@ -50964,6 +51448,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "морозиво у них смачне",
               "subject": "морозиво М’яке",
               "subject_type": "sku",
@@ -50980,6 +51465,7 @@
           "rows": [
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "много акций и хороших продуктов",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -50987,6 +51473,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "дурят людей и не привозят все заказанрые продукты и не возвращают деньги",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -50994,6 +51481,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "я разочаровалась в вашем магазине",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -51001,6 +51489,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "Колись буде варус на березінці?",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -51008,6 +51497,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "Доставка и правда ужас ужас",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -51015,6 +51505,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "який зараз відсоток на бонусну картку",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -51022,6 +51513,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "щось взагалі копійки нараховуються",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -51029,6 +51521,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "Зазвичай вибираю акційні",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -51045,6 +51538,7 @@
           "rows": [
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "какой то сбой в приложении? Весь день не могу зайти в него",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -51052,6 +51546,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "накрылось всё, ни программа лояльности не работает, ни Scan&go",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -51059,6 +51554,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "набрал тележку оставил на маркете и пошел в АТБ",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -51066,6 +51562,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "сертифікатами не можна оплатити?",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -51073,6 +51570,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "захотели- забрали",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -51080,6 +51578,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "каким образом, если не секрет, можно выиграть у Варуса столько денег сразу одному покупателю?",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -51087,6 +51586,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "постоянно якісь трабли з акціями, у них задача заработать побільше бабла, а остальне пофіг",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -51103,6 +51603,7 @@
           "rows": [
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "а якщо цієї біржі немає або це тільки для обраних?",
               "subject": "Bitget",
               "subject_type": "chain",
@@ -51110,6 +51611,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "це схоже на обман",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -51117,6 +51619,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "дуже погано організовано - і процеси, і призовий фонд, і висвітлення результатів",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -51124,6 +51627,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "те, що ніколи не виграти",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -51131,6 +51635,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "всі інші відділи на 50%. Персоналу не вистачає",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -51138,6 +51643,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "закуповує у тих постачальників,, які дають вартість ниже і відповідно також і якість товару",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -51154,6 +51660,7 @@
           "rows": [
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "Такий бардак у застосунку цього варусу, що ніколи не знаєш, що та як",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -51161,6 +51668,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "Безглуздя!",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -51168,6 +51676,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "я повинна у магазині півгодини листати розділ додатку",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -51175,6 +51684,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "Вы так бесцеремонно лжёте",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -51182,6 +51692,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "нет вашего идиотизма с разделением зимней поддержки и просто кешбека",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -51189,6 +51700,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "Чи ви хочете , щоб скоріше Варус зник?",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -51205,6 +51717,7 @@
           "rows": [
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "цінники не змінили",
               "subject": "Сільпо",
               "subject_type": "chain",
@@ -51212,6 +51725,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "неправильна ціна",
               "subject": "Сільпо",
               "subject_type": "chain",
@@ -51219,6 +51733,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "Ціна вірна",
               "subject": "Сільпо",
               "subject_type": "chain",
@@ -51226,6 +51741,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "нашо викладати на канал пост з неправильним цінником",
               "subject": "msuaaaa",
               "subject_type": "chain",
@@ -51233,6 +51749,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "ціна на фото вірна",
               "subject": "чипси Люкс",
               "subject_type": "sku",
@@ -51240,6 +51757,7 @@
             },
             {
               "confidence": 0.9,
+              "low_confidence": true,
               "quote": "сьогодні якраз брали",
               "subject": "чипси Люкс",
               "subject_type": "sku",
@@ -51256,6 +51774,7 @@
           "rows": [
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "Что у вас с доставкой?! Это ужас!",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -51263,6 +51782,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "Переносят время на день вперед или вообще не привозят вовремя!!!!",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -51270,6 +51790,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "Извинения это 25 грн промокод который не нужен",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -51277,6 +51798,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "с таким отношением к клиентам",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -51284,6 +51806,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "заказывал почти каждую неделю",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -51300,6 +51823,7 @@
           "rows": [
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "де мої замовлення? час отримання 05,12 19,20 - тиша",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -51307,6 +51831,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "написала в телеграм підтримку - тиша досі",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -51314,6 +51839,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "дзвінок на гарячу лінію, оператора так і не знайшли",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -51321,6 +51847,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "точно такая же фигня",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -51328,6 +51855,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "Так же, ще і смс прийшло ніби отримав",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -51344,6 +51872,7 @@
           "rows": [
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "Васної?",
               "subject": "морозиво ескімо Varto",
               "subject_type": "sku",
@@ -51351,6 +51880,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "Очень вкусное мороженое",
               "subject": "морозиво ескімо Varto",
               "subject_type": "sku",
@@ -51358,6 +51888,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "Было бы не плохо,если бы оно было в наличии",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -51365,6 +51896,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "Бывает крайне редко",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -51381,6 +51913,7 @@
           "rows": [
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "вас зламали?",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -51388,6 +51921,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "Чому так несправедливо?",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -51395,6 +51929,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "поддержка отвечает спустя сутки и через 15 минут без ответа закрывает чат",
               "subject": "izibank",
               "subject_type": "chain",
@@ -51402,6 +51937,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "служба поддержки просто ужасная",
               "subject": "izibank",
               "subject_type": "chain",
@@ -51418,6 +51954,7 @@
           "rows": [
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "просто чарівний",
               "subject": "плавлений сир Мааздам",
               "subject_type": "sku",
@@ -51425,6 +51962,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "Неймовірно смачно",
               "subject": "плавлений сир Мааздам",
               "subject_type": "sku",
@@ -51432,6 +51970,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "подякувати за таку смачноту",
               "subject": "плавлений сир Мааздам",
               "subject_type": "sku",
@@ -51439,6 +51978,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "це смачнота!",
               "subject": "ікра мінтаю",
               "subject_type": "sku",
@@ -51455,6 +51995,7 @@
           "rows": [
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "Як ввести промокод у мобільному зачтосунку?",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -51462,6 +52003,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "Теж саме питання",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -51469,6 +52011,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "Це дуже не зручно",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -51476,6 +52019,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "Занадто довго він на стадії разробки",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -51492,6 +52036,7 @@
           "rows": [
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "Було б чудово",
               "subject": "АТБ",
               "subject_type": "chain",
@@ -51499,6 +52044,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "скільки ці продукти чекати?",
               "subject": "АТБ",
               "subject_type": "chain",
@@ -51506,6 +52052,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "не сумісні речі",
               "subject": "Укрпошта",
               "subject_type": "chain",
@@ -51513,6 +52060,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "досить не погано працює",
               "subject": "Укрпошта",
               "subject_type": "chain",
@@ -51529,6 +52077,7 @@
           "rows": [
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "В яких містах???",
               "subject": "McDonald’s",
               "subject_type": "chain",
@@ -51536,6 +52085,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "А в наборі фігурки чи разом із чашками",
               "subject": "Happy Meal Friends",
               "subject_type": "sku",
@@ -51543,6 +52093,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "буде так дорого коштувати",
               "subject": "Happy Meal Friends",
               "subject_type": "sku",
@@ -51550,6 +52101,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "яке меню тоді буде входити в Хеппі міл разом з іграшками",
               "subject": "Happy Meal Friends",
               "subject_type": "sku",
@@ -51566,6 +52118,7 @@
           "rows": [
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "Як кава? Хто купував?",
               "subject": "кава",
               "subject_type": "sku",
@@ -51573,6 +52126,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "Печиво класне",
               "subject": "печиво",
               "subject_type": "sku",
@@ -51580,6 +52134,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "Де газета?",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -51596,6 +52151,7 @@
           "rows": [
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "Такий формат каталогу мені до вподоби",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -51603,6 +52159,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "Чи є в продажу яйця гуся криптолова?",
               "subject": "яйця гуся криптолова",
               "subject_type": "sku",
@@ -51610,6 +52167,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "іноді потрапляється пліснява",
               "subject": "курячі чіпси",
               "subject_type": "sku",
@@ -51626,6 +52184,7 @@
           "rows": [
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "Так тут гриль-барбекю подарять. Який айфон😂",
               "subject": "АЙФОН 16 ПРО",
               "subject_type": "sku",
@@ -51633,6 +52192,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "так хто виграв?",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -51640,6 +52200,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "як отримати свій подарунок?",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -51656,6 +52217,7 @@
           "rows": [
             {
               "confidence": 0.9,
+              "low_confidence": true,
               "quote": "Белоруское морожено?",
               "subject": "морозиво",
               "subject_type": "sku",
@@ -51663,6 +52225,7 @@
             },
             {
               "confidence": 0.9,
+              "low_confidence": true,
               "quote": "Но белоруская тм🤡",
               "subject": "белоруская тм",
               "subject_type": "brand",
@@ -51670,6 +52233,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "ВКУСНОЕ ОЧЕНЬ",
               "subject": "морозиво",
               "subject_type": "sku",
@@ -51686,6 +52250,7 @@
           "rows": [
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "Офігенно милі кото-зайчики і зайце-котики на упаковці",
               "subject": "Сир кисломолочний Varto",
               "subject_type": "sku",
@@ -51693,6 +52258,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "Нажаль, у нас його не можливо вхопити",
               "subject": "Сир кисломолочний Varto",
               "subject_type": "sku",
@@ -51700,6 +52266,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "не можливо вхопити",
               "subject": "Сир кисломолочний Varto",
               "subject_type": "sku",
@@ -51716,6 +52283,7 @@
           "rows": [
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "Що за дебільний огидний текст?",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -51723,6 +52291,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "Потужно-незламний",
               "subject": "VARUS",
               "subject_type": "chain",
@@ -51730,6 +52299,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "це за 100г ціна?",
               "subject": "кур стегно",
               "subject_type": "sku",
@@ -51746,6 +52316,7 @@
           "rows": [
             {
               "confidence": 0.9,
+              "low_confidence": true,
               "quote": "Ось такий карась привезли",
               "subject": "карась",
               "subject_type": "sku",
@@ -51753,6 +52324,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "страшные",
               "subject": "карась",
               "subject_type": "sku",
@@ -51760,6 +52332,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "рыба плохая",
               "subject": "карась",
               "subject_type": "sku",
@@ -51776,6 +52349,7 @@
           "rows": [
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "ВАУУУУУ",
               "subject": "7202",
               "subject_type": "post",
@@ -51783,6 +52357,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "а ціна",
               "subject": "Тріпл Чііз Біт",
               "subject_type": "sku",
@@ -51790,6 +52365,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "247 где-то вроде за один",
               "subject": "Тріпл Чііз Біт",
               "subject_type": "sku",
@@ -51806,6 +52382,7 @@
           "rows": [
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "ни о чем",
               "subject": "9354",
               "subject_type": "post",
@@ -51813,6 +52390,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "чипсы не на акции?",
               "subject": "чипсы",
               "subject_type": "brand",
@@ -51820,6 +52398,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "потому что нет замороженных ягод",
               "subject": "ягоды замороженные",
               "subject_type": "sku",
@@ -51836,6 +52415,7 @@
           "rows": [
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "А коли у всіх маках?",
               "subject": "McDonald’s",
               "subject_type": "chain",
@@ -51843,6 +52423,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "А до коли вони будуть",
               "subject": "стакани",
               "subject_type": "sku",
@@ -51850,6 +52431,7 @@
             },
             {
               "confidence": 1.0,
+              "low_confidence": false,
               "quote": "будуть іграшки?",
               "subject": "іграшки",
               "subject_type": "sku",
@@ -52109,8 +52691,8 @@
     ],
     "from": "results/region_baseline.json (window, per-channel counts, mentions per brand) · results/region_mentions.jsonl (the rows) · results/region_collect_report.json (thread coverage), joined on the channel handle; the names are config/region_brands.yaml :: brands[].display_names",
     "instrument": {
-      "en": "This tab reads KEYWORDS, not the model: 18 Poltava-region channels, 15,889 posts and 8,232 comments matched against a 3-brand dictionary. Reading the region with the model is stage 2's paid step.",
-      "ua": "Вкладка читає КЛЮЧОВІ СЛОВА, а не модель: 18 каналів Полтавщини, 15 889 дописів і 8 232 коментарів, звірені зі словником із 3 брендів. Читання регіону моделлю — платний крок стадії 2."
+      "en": "This tab reads KEYWORDS, not the model: 18 Poltava-region channels, 15,889 posts and 8,232 comments matched against the sentinel's 3 brands. Reading the region with the model is stage 2's paid step.",
+      "ua": "Вкладка читає КЛЮЧОВІ СЛОВА, а не модель: 18 каналів Полтавщини, 15 889 дописів і 8 232 коментарів, звірені з 3 брендами вартового. Читання регіону моделлю — платний крок стадії 2."
     },
     "mentions": [],
     "promo_link": {

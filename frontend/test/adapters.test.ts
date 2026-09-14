@@ -49,6 +49,17 @@ import type {
 const root = fileURLToPath(new URL('../../', import.meta.url))
 const promo = JSON.parse(readFileSync(`${root}results/promo_screen_data.json`, 'utf8')) as PromoExport
 const front = JSON.parse(readFileSync(`${root}results/front_data.json`, 'utf8')) as FrontExport
+/** The two files `front_data.json :: region` is carried BY REFERENCE from. Read here so the block
+ *  can be held against its sources and not only against itself — an export that invented a figure
+ *  would pass every assertion made inside its own document. */
+const baseline = JSON.parse(readFileSync(`${root}results/region_baseline.json`, 'utf8')) as {
+  totals: Record<string, number>
+  mentions_per_brand: Record<string, number>
+  window: { first_date: string | null; last_date: string | null }
+}
+const collectReport = JSON.parse(
+  readFileSync(`${root}results/region_collect_report.json`, 'utf8'),
+) as { totals: Record<string, number>; channels: { channel: string; threads_total: number }[] }
 
 /** The count PHASE-ship-1 §2 «w3» PUBLISHED — the one figure this file may carry as a literal. */
 const PUBLISHED_POSITIONS = 1301
@@ -676,12 +687,42 @@ describe('reactions-region — the two tabs of DESIGN §13 read their blocks and
     expect(carried(first, 'the pair’s first bar').n).not.toBe(
       carried(second, 'the pair’s second bar').n,
     )
-    // and the title states those two figures, in both languages, with no third number invented
+    // and the title states those two figures IN THE ORDER ITS RULE FOUND THEM: three toContain
+    // checks pass just as well over «на товар, не на мережу», which is the opposite finding
+    const bigger = Math.max(carried(first, 'first').n, carried(second, 'second').n)
+    const smaller = Math.min(carried(first, 'first').n, carried(second, 'second').n)
     for (const lang of SIDES) {
       const said = digits(saidText(pair.title, lang))
-      expect(said).toContain(digits(String(carried(first, 'first').n)))
-      expect(said).toContain(digits(String(carried(second, 'second').n)))
+      expect(said).toContain(digits(String(bigger)))
+      expect(said).toContain(digits(String(smaller)))
       expect(said).toContain(digits(String(reactions.rows)))
+      if (bigger !== smaller) {
+        expect(said.indexOf(digits(String(bigger)))).toBeLessThan(
+          said.indexOf(digits(String(smaller))),
+        )
+        // and the WORDS are in that order too. Both words appear in every branch of the rule
+        // («на МЕРЕЖУ, не на товар» names them both), so presence proves nothing and only the
+        // order does: the inverted finding keeps the same two numbers in the same places.
+        const words = saidText(pair.title, lang).toUpperCase()
+        const stem = (subject: string): string =>
+          subject === 'chain'
+            ? lang === 'uk'
+              ? 'МЕРЕЖ'
+              : 'CHAIN'
+            : lang === 'uk'
+              ? 'ТОВАР'
+              : 'PRODUCT'
+        const larger = carried(
+          cells.find((one) => one.type === pair.type && one.n === bigger),
+          'the larger complaint cell',
+        ).subject_type
+        const lesser = carried(
+          cells.find((one) => one.type === pair.type && one.n === smaller),
+          'the smaller complaint cell',
+        ).subject_type
+        expect(words.indexOf(stem(larger))).toBeGreaterThanOrEqual(0)
+        expect(words.indexOf(stem(larger))).toBeLessThan(words.indexOf(stem(lesser)))
+      }
     }
   })
 
@@ -699,9 +740,11 @@ describe('reactions-region — the two tabs of DESIGN §13 read their blocks and
       previous = card.signals
       expect(card.text === null || card.text.length > 0).toBe(true)
     }
-    // the ranking is real: the loudest thread is louder than the quietest card shown
-    expect(carried(cards[0], 'the first card').signals).toBeGreaterThan(
-      carried(cards[cards.length - 1], 'the last card').signals,
+    // the ranking is real: the first card carries the MAXIMUM of every card's count. An assertion
+    // that the first beats the last is a fact about today's spread, and a week where every thread
+    // drew one signal would red it while the export stayed correct
+    expect(carried(cards[0], 'the first card').signals).toBe(
+      Math.max(...cards.map((one) => one.signals)),
     )
 
     // «Голос товару» is the sku column of the same matrix, group by group
@@ -725,6 +768,20 @@ describe('reactions-region — the two tabs of DESIGN §13 read their blocks and
     // and the subject fields are what the sealed feed could NOT carry, which is why it is re-read
     expect(promo.screen.feed.every((row) => !('subject_type' in row))).toBe(true)
     expect(reactions.feed.every((row) => row.subject_type.length > 0)).toBe(true)
+
+    // the low-confidence FLAG is the producer's rule, and the app renders it instead of re-reading
+    // the threshold. It must agree with the row's own certainty — a `confidence` of 0 is a reading
+    // and not a missing one — and the coverage counter must be the same rows counted
+    for (const row of reactions.feed) {
+      expect(row.low_confidence).toBe(row.confidence !== null && row.confidence < 1)
+    }
+    expect(reactions.feed.filter((row) => row.low_confidence).length).toBe(
+      reactions.coverage.low_confidence,
+    )
+    expect(reactions.coverage.low_confidence).toBeGreaterThan(0) // the badge is reachable
+    const tab = readFileSync(`${root}frontend/src/tabs/Reactions.tsx`, 'utf8')
+    expect(tab).toContain('row.low_confidence')
+    expect(tab).not.toContain('confidence < 1') // the threshold is not spelled twice
   })
 
   it('the monthly series is the complaint share of its own two counts, month by month', () => {
@@ -737,18 +794,27 @@ describe('reactions-region — the two tabs of DESIGN §13 read their blocks and
       expect(month.complaints).toBeLessThanOrEqual(month.signals)
       expect(month.share).toBeCloseTo(month.complaints / month.signals, 10)
     }
-    // the months are ordered, and they are not all the same share — a series that were would make
-    // the peak/low sentence true for the wrong reason
+    // the months are ordered, and the greyed context series is a share of the SAME population, so
+    // it rides the one axis §12 allows: the weights close on 1 over the dated rows
     expect([...months].sort((left, right) => left.month.localeCompare(right.month))).toEqual(months)
-    expect(new Set(months.map((one) => one.share)).size).toBeGreaterThan(1)
+    expect(months.reduce((sum, one) => sum + one.weight, 0)).toBeCloseTo(
+      (reactions.rows - reactions.monthly.without_a_date) / reactions.rows,
+      10,
+    )
+    for (const month of months) expect(month.weight).toBeCloseTo(month.signals / reactions.rows, 10)
   })
 
   it('the region baseline is a ZERO the file states, beside counts that are not zero', () => {
     expect(place.totals).toBe(field('region.totals'))
     expect(place.totals.mentions).toBe(0)
     expect(place.mentions.length).toBe(place.totals.mentions)
+    // against the SENTINEL's own file, not against the export's copy of itself
+    expect(place.totals).toEqual(baseline.totals)
+    expect(place.window).toEqual(baseline.window)
+    expect(Object.fromEntries(place.brands.map((one) => [one.brand_id, one.mentions]))).toEqual(
+      baseline.mentions_per_brand,
+    )
     for (const brand of place.brands) {
-      expect(brand.mentions).toBe(field(`region.brands.${place.brands.indexOf(brand)}.mentions`))
       expect(brand.mentions).toBe(0)
       expect(brand.spellings.length).toBeGreaterThan(0) // a brand with no spelling counts nothing
     }
@@ -770,13 +836,17 @@ describe('reactions-region — the two tabs of DESIGN §13 read their blocks and
 
   it('the sample sentence prints the collector’s own three figures, in both languages', () => {
     const sample = place.sample
-    expect(sample.threads_read).toBe(field('region.sample.threads_read'))
-    expect(sample.threads_total).toBe(field('region.sample.threads_total'))
-    expect(sample.outstanding).toBe(field('region.sample.outstanding'))
-    // outstanding is the difference, re-derived — the honesty of the sentence IS this identity
+    // the collector's file is the second route: `field(...)` alone would hold over an export that
+    // invented all three figures inside its own document
+    expect(sample.threads_read).toBe(collectReport.totals['threads_read'])
+    expect(sample.threads_total).toBe(collectReport.totals['threads_total'])
+    expect(sample.outstanding).toBe(collectReport.totals['outstanding'])
+    // outstanding is the difference, re-derived — the honesty of the sentence IS this identity.
+    // What is NOT asserted is that anything is outstanding: draining the queue is a free re-run the
+    // phase encourages, and a test that reddened on it would punish the instrument for working
     expect(sample.outstanding).toBe(sample.threads_total - sample.threads_read)
-    expect(sample.threads_read).toBeLessThan(sample.threads_total)
-    expect(sample.outstanding).toBeGreaterThan(0)
+    expect(sample.threads_read).toBeLessThanOrEqual(sample.threads_total)
+    expect(sample.threads_total).toBeGreaterThan(0)
 
     for (const lang of SIDES) {
       const said = digits(saidText(sample.sentence, lang))
@@ -787,6 +857,7 @@ describe('reactions-region — the two tabs of DESIGN §13 read their blocks and
     // the per-channel rows the coverage table prints carry the same identity, channel by channel
     const counted = place.channels.filter((row) => row.threads_total !== null)
     expect(counted.length).toBe(place.channels.length)
+    expect(counted.length).toBe(collectReport.channels.length) // one screen, one channel set
     expect(
       counted.reduce((sum, row) => sum + (row.threads_total ?? 0), 0),
     ).toBe(sample.threads_total)

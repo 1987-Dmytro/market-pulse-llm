@@ -70,7 +70,6 @@
   "positions.col.chain": "мережа",
   "positions.col.carrier": "носій",
   "positions.col.category": "категорія",
-  "positions.col.evidence": "докази",
   "positions.filter.chain": "мережа",
   "positions.filter.brand": "бренд",
   "positions.filter.carrier": "носій",
@@ -300,7 +299,7 @@
   "reactions.complaints.other": "інших адресатів скарги: {other}",
   "reactions.mix.subtitle": "сигнали каналу, частками",
   "reactions.mix.col.channel": "канал",
-  "reactions.monthly.subtitle": "частка скарг по місяцях; сірим — скільки всього сигналів того місяця",
+  "reactions.monthly.subtitle": "частка скарг по місяцях; сірим — яку частку всіх сигналів дав той місяць",
   "reactions.monthly.share": "частка скарг",
   "reactions.monthly.signals": "сигналів за місяць",
   "reactions.monthly.col.month": "місяць",
@@ -333,5 +332,8 @@
   "region.col.threads": "тредів прочитано",
   "region.col.outstanding": "у черзі",
   "region.link.title": "Промо в домашньому регіоні",
-  "region.link.cta": "Позиції: {chain}"
+  "region.link.cta": "Позиції: {chain}",
+  "reactions.monthly.weight": "частка сигналів місяця",
+  "region.col.mentions": "згадок",
+  "region.baseline.unlisted": "немає у словнику"
 }

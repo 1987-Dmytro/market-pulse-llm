@@ -866,10 +866,10 @@ REACTIONS_SENTENCES = {
     },
     "region_instrument": {
         "ua": "Вкладка читає КЛЮЧОВІ СЛОВА, а не модель: {channels} каналів Полтавщини, {posts}"
-        " дописів і {comments} коментарів, звірені зі словником із {brands} брендів. Читання"
+        " дописів і {comments} коментарів, звірені з {brands} брендами вартового. Читання"
         " регіону моделлю — платний крок стадії 2.",
         "en": "This tab reads KEYWORDS, not the model: {channels} Poltava-region channels,"
-        " {posts} posts and {comments} comments matched against a {brands}-brand dictionary."
+        " {posts} posts and {comments} comments matched against the sentinel's {brands} brands."
         " Reading the region with the model is stage 2's paid step.",
     },
     "region_zero": {
@@ -1167,6 +1167,10 @@ def signal_rows() -> list[dict]:
                     "subject_type": row.get("subject_type") or "—",
                     "quote": row.get("quote"),
                     "confidence": row.get("confidence"),
+                    # the rule, spelled HERE and nowhere else: `confidence` is a number the reader
+                    # wrote and `0.0` is a real reading, so a falsy test would call it certain
+                    "low_confidence": row.get("confidence") is not None
+                    and row["confidence"] < 1,
                 }
             )
     rows.sort(key=lambda row: (row["channel"], int(row["thread_root"]), row["index"]))
@@ -1201,14 +1205,21 @@ def drawn_posts() -> dict[tuple[str, str], dict]:
 
         for row in walk(body["draw"]):
             key = (row["channel"], str(row["thread_root"]))
-            joined.setdefault(key, {"date": None, "text": None})["date"] = row.get("post_date")
+            # assigned only when it HAS one: a thread the draws carry twice (dev-40 and dev-2 are
+            # arms of one file) would otherwise take whichever copy came last, missing value and all
+            if row.get("post_date"):
+                joined.setdefault(key, {"date": None, "text": None})["date"] = row["post_date"]
+            else:
+                joined.setdefault(key, {"date": None, "text": None})
     for path in promo_packs():
         body = json.loads(path.read_text(encoding="utf-8"))
         for item in body.get("items") or []:
             if not isinstance(item, dict) or "channel" not in item or "post_id" not in item:
                 continue
             key = (item["channel"], str(item["post_id"]))
-            joined.setdefault(key, {"date": None, "text": None})["text"] = item.get("post")
+            joined.setdefault(key, {"date": None, "text": None})
+            if item.get("post"):
+                joined[key]["text"] = item["post"]
     return joined
 
 
@@ -1225,6 +1236,13 @@ def reactions_v2(promo: dict) -> dict:
     rows = signal_rows()
     posts = drawn_posts()
     threads = promo["screen"]["threads"]
+    if not rows and threads["read"]:
+        raise SystemExit(
+            f"export-front REFUSED: {tick.rel(SIGNALS_DIR)}/ holds no signal record, and"
+            f" {tick.rel(screen.EXPORT)} :: screen.threads says {threads['read']} threads were"
+            " read — the tab would print that coverage over an empty page. A directory this"
+            " export counts is a source like any other (the glob cannot be spelled in required())"
+        )
 
     by_type = collections.Counter(row["type"] for row in rows)
     by_subject = collections.Counter(row["subject_type"] for row in rows)
@@ -1272,7 +1290,13 @@ def reactions_v2(promo: dict) -> dict:
         month["signals"] += 1
         month["complaints"] += row["type"] == complaint
     series = [
-        one | {"share": one["complaints"] / one["signals"]}
+        one
+        | {
+            "share": one["complaints"] / one["signals"],
+            # the greyed context of §12, on the SAME axis: «how much of the year's talk was this
+            # month» is a share too, and a second axis is the one form §12 forbids outright
+            "weight": one["signals"] / len(rows),
+        }
         for one in sorted(months.values(), key=lambda one: one["month"])
     ]
     # `series` is sorted by month and max/min keep the FIRST extreme they meet, so a tie goes to the
@@ -1299,6 +1323,7 @@ def reactions_v2(promo: dict) -> dict:
                         "subject_type": row["subject_type"],
                         "quote": row["quote"],
                         "confidence": row["confidence"],
+                        "low_confidence": row["low_confidence"],
                     }
                     for row in rows
                     if row["channel"] == channel and row["thread_root"] == root
@@ -1324,6 +1349,7 @@ def reactions_v2(promo: dict) -> dict:
                         "channel": row["channel"],
                         "thread_root": row["thread_root"],
                         "confidence": row["confidence"],
+                        "low_confidence": row["low_confidence"],
                     }
                     for row in voice
                     if row["type"] == name
@@ -1355,6 +1381,7 @@ def reactions_v2(promo: dict) -> dict:
                 "subject_type": row["subject_type"],
                 "quote": row["quote"],
                 "confidence": row["confidence"],
+                "low_confidence": row["low_confidence"],
             }
             for row in rows
         ],
@@ -1366,7 +1393,7 @@ def reactions_v2(promo: dict) -> dict:
             "product_population": threads["product_population"],
             "channels": len({row["channel"] for row in rows}),
             "threads_with_a_signal": len(ranked),
-            "low_confidence": sum(1 for row in rows if (row["confidence"] or 1) < 1),
+            "low_confidence": sum(1 for row in rows if row["low_confidence"]),
             "from": threads["from"],
         },
         "matrix": {
@@ -1419,7 +1446,9 @@ def reactions_v2(promo: dict) -> dict:
                 low_month=low["month"],
                 low=figure(100 * low["share"], 1),
             )
-            if peak is not None and low is not None
+            # a peak and a low over ONE month name the same point twice: a series that short has
+            # no comparison in it, and the tab falls back to the exhibit's own label
+            if peak is not None and low is not None and len(series) > 1
             else None,
         },
         "threads": {
