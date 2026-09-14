@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-09-13 20:00:11 (every SessionStart)
+**Auto-refreshed:** 2026-09-14 09:17:26 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
-afadbda docs(progress): s59 «front-2-close» — the item is closed by its checks, 4344/2 on `2d8afb9`
-2d8afb9 brain(s59): the cache points at «weekly-home», and the day's log carries what the batch cost
-0ea6bb6 front(front-2-close): two figures the screen printed that no file holds
-6347058 docs(team-lead): ruling (ccc) — the batched run unpacked, front-2 stays open for a lawful close
-1a3e0e5 front(front-2): the command centre stops being a placeholder — nine tabs over one block
+5784e0a docs(weekly-home): name the tree the suite read, and the gold's 44 of 46 pages
+348643b docs(progress): name the second T4 frame and why it exists
+796ef75 brain(s60): the cache points at «region-collect», and the day's log keeps two lessons
+5b5d34c docs(screens): the frame that actually shows what T4's commit claims
+547495d docs(progress): s60 «weekly-home» — the weeks have a home git carries, the Δ is a field, 4344/2 on `d262d02`
 ```
 
 ## 📋 Recent decisions
