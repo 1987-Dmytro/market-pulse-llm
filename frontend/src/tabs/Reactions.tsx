@@ -141,7 +141,46 @@ export function ReactionsTab(): React.JSX.Element {
     },
   ]
 
-  /** A filter whose options carry the export's own counts (§13 (5)), never a count made here. */
+  /**
+   * §13 (5)'s chips: one per value, each wearing the EXPORT's own count — never a count made here.
+   * Pressing the chip that is already on clears the filter, so the group needs no «усі» of its own
+   * beyond the first chip; the state lives in the hash, so a filtered view is a link.
+   */
+  const chips = (
+    name: string,
+    label: string,
+    values: string[],
+    of: Record<string, number>,
+    swatch: (value: string) => string | undefined,
+  ) => {
+    const chosen = paramOf(route, name)
+    return (
+      <div className="chips" role="group" aria-label={label}>
+        <button
+          type="button"
+          aria-pressed={chosen === undefined}
+          onClick={() => setParam(route, name, undefined)}
+        >
+          {label}: {t('common.all')}
+        </button>
+        {values.map((value) => {
+          const colour = swatch(value)
+          return (
+            <button
+              key={value}
+              type="button"
+              aria-pressed={chosen === value}
+              onClick={() => setParam(route, name, chosen === value ? undefined : value)}
+            >
+              {colour !== undefined && <i className="swatch" style={{ background: colour }} />}
+              {value} <span className="muted">{count(lang, of[value] ?? 0)}</span>
+            </button>
+          )
+        })}
+      </div>
+    )
+  }
+
   const select = (name: string, label: string, values: string[], of: Record<string, number>) => (
     <label>
       {label}
@@ -238,19 +277,21 @@ export function ReactionsTab(): React.JSX.Element {
 
           <section className="block">
             <h2>{t('reactions.feed.title')}</h2>
+            {chips(
+              'signal',
+              t('reactions.filter.signal'),
+              distinctOf(entries, (row) => row.type),
+              block.matrix.by_type,
+              typeColour,
+            )}
+            {chips(
+              'about',
+              t('reactions.filter.subject'),
+              distinctOf(entries, (row) => row.subject_type),
+              block.matrix.by_subject_type,
+              () => undefined,
+            )}
             <div className="filters">
-              {select(
-                'signal',
-                t('reactions.filter.signal'),
-                distinctOf(entries, (row) => row.type),
-                block.matrix.by_type,
-              )}
-              {select(
-                'about',
-                t('reactions.filter.subject'),
-                distinctOf(entries, (row) => row.subject_type),
-                block.matrix.by_subject_type,
-              )}
               {select(
                 'channel',
                 t('reactions.filter.channel'),
