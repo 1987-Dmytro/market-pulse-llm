@@ -1,0 +1,68 @@
+# Stage-2 regional monitoring — the Poltava-oblast channels the sentinel watches.
+#
+# This file is OUTSIDE `config/registry.yaml` and is not a registry of sources. Ruling (ggg)
+# 14.09 met the alternative and refused it: un-pausing these rows inside the registry breaks two
+# seals (the LIVE-r2 pin family `eff8ba5b…` goes unreachable and `make check` reds; `tick.
+# not_collected()` reads `collect` live, so `@telegraf_kremenchuk`'s 9 position rows return and the
+# sealed `results/promo_screen_data.json` leaves `e45860c6…` with the published 1301 at 1310) — and
+# collects nothing, because `collect_r2.py :: a1_sources()` takes bucket A only and regional is B.
+# So this is the 04.09 (g) shape: a one-reader side file. No pin moves, no revision, no preflight
+# change, and `config/registry.yaml` stays byte-identical to `eff8ba5b…`.
+#
+# READ BY EXACTLY TWO THINGS: `scripts/collect_region.py` (collects into `data/raw_region/`) and
+# `scripts/region_sentinel.py` (scans for watchlist brands). No promo reader walks either this file
+# or that root — region monitoring is a DIFFERENT population from the promo pipeline, and a reader
+# that folded them would move a published number without naming it.
+#
+# `handle` is the store key: `data/raw_region/{posts,comments}/<handle without @>.jsonl`, and the
+# same spelling the v1 archive used in 07–08.2026 (`data/raw/posts/PirOperative.jsonl` keeps its
+# capitals). A channel re-spelled here is a SECOND channel to every reader downstream.
+#
+# The seventeen are the registry rows whose pause reads `deferred to phase B (ruling (ц) 30.08)` —
+# printed and diffed in s61 against PHASE §2's expected set, which differs by one substitution:
+# the phase named `dikankaa`, the registry carries `mo3ambik`. Both are here: `mo3ambik` because it
+# is one of the seventeen, `dikankaa` as the eighteenth by ruling (ggg) 2.
+
+channels:
+  - handle: "@mo3ambik"
+    note: "МОЗАМБІК.МЕДІА: Лубни, Пирятин, Хорол, Гребінка, Оржиця — five raiony in one feed"
+  - handle: "@poltava_informue"
+    note: "Полтава Інформує — oblast centre; 1316 archive posts, none with replies"
+  - handle: "@suspilnepoltava"
+    note: "Суспільне Полтава — the public broadcaster's oblast desk"
+  - handle: "@telegraf_kremenchuk"
+    note: "Кременчуцький Телеграф — Kremenchuk; the one channel that also carries 9 promo position rows"
+  - handle: "@gorishnie_plavni1"
+    note: "Горішні Плавні — the raion's news feed"
+  - handle: "@myrhorodtown"
+    note: "Mirgorodtown — Myrhorod, the home town of the `myrhorodska-korivka` competitor"
+  - handle: "@Hadiach_telegram"
+    note: "Гадяч — raion feed"
+  - handle: "@globine1"
+    note: "Х Глобине — Hlobyne raion classifieds and news"
+  - handle: "@piryatingromada"
+    note: "Пирятинська громада — the hromada's official feed; no replies in the archive"
+  - handle: "@PirOperative"
+    note: "Пирятин Оперативний — the unofficial Pyriatyn feed beside it"
+  - handle: "@zinkivnews"
+    note: "Зіньків Новини — the smallest of the eighteen, 9 archive posts"
+  - handle: "@LHVC_info"
+    note: "Лохвиця.info — Lokhvytsia; 1 archive post, so its window starts effectively empty"
+  - handle: "@KarlivkaLive"
+    note: "Оголошення. Karlivka Live — Karlivka classifieds"
+  - handle: "@poltava_pvp"
+    note: "PVP.POLTAVA — 2902 replies over 275 archive threads, the second-loudest comment field"
+  - handle: "@poltava20"
+    note: "Полтава ІНФО | Новини Світло — the largest feed, 1535 archive posts"
+  - handle: "@h_kremenchug"
+    note: "Х Кременчук — 5340 replies over 213 archive threads, the loudest comment field"
+  - handle: "@kremen_news"
+    note: "КРЕМІНЬ | НОВИНИ | КРЕМЕНЧУК — Kremenchuk news; no replies in the archive"
+  - handle: "@dikankaa"
+    note: >-
+      Диканька — the EIGHTEENTH, added by ruling (ggg) 2 and not a registry row at all.
+      It was excluded from the promo registry on 2026-08-08 by the day-2 language census
+      (`results/language_census_5c1_day2.json`: ru 20 of 30 decidable posts) and that exclusion
+      stands for the promo pipeline. Regional monitoring reads Ukrainian AND Russian text for the
+      same brand strings, so the census is not a reason to stop watching it; 30 v1 posts with 457
+      replies are already on disk, and Telethon needs no registry row to collect more.
