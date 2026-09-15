@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-09-14 15:05:57 (every SessionStart)
+**Auto-refreshed:** 2026-09-15 09:44:47 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
-7c207f1 brain(s63): the cache points at «e2e-ship», not at a phase two items back
-9d53ab5 docs(progress): the six joined files are TRACKED, and four more things named not built
-86ffebb docs(progress): s63 «reactions-region» — the two tabs, and what the month really is
-1f3e100 fix(reactions-region): ten defects my own adversarial review of this diff caught
-7ff8c26 fix(reactions-region): §13 (5) says CHIPS with counts, and a select is not one
+523851e docs(team-lead): ruling (kkk) — dark-default item, Vercel showcase, de-deck; PHASE v22
+83b3c6d docs(team-lead): (jjj) addendum — serve extra reinstalled after brew python re-link; serve re-proven live 200/200 from the current tree
+65f7c03 docs(team-lead): ruling (jjj) — e2e-ship accepted on the team lead's runs; PHASE v21 (clone-suite clause struck, §8 governs); PROMPT-standing gains the HANDOFF path; STATUS + handoff rewritten
+275b9b6 docs(progress): the readings stand at 5782a53, the tree the team lead clones
+5782a53 fix(e2e-ship): the money row's two figures live in two places, and say so
 ```
 
 ## 📋 Recent decisions
