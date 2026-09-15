@@ -268,3 +268,7 @@ One-sentence contracts (`docs/PROMPT-*.md`) remain for fixes and debts whose dif
 - «needs a ruling» anywhere in a report = an open stop: the executor ends the turn at that sentence.
 - The operator opens the next executor session only AFTER the team lead's acceptance line for the
   previous item; «готово» goes to the team lead first, always.
+
+## One-writer (ruling (mmm) 15.09)
+- Одно дерево — один живой писатель: перед стартом свежего `claude` предыдущий процесс закрыт (`/exit`); запуск второй сессии при живой первой — процессный дефект оператора, не исполнителя.
+- Грязный файл, который эта сессия не пачкала, означает ПОИСК другого писателя до любой записи: `pgrep -fl "bin/claude"` · новейший `*.jsonl` в `~/.claude/projects/<repo>/` · `git worktree list`. Два живых писателя — слово оператора; сессия, увидевшая второго, отступает, сохранив его полётные правки в `scratchpad/`.
