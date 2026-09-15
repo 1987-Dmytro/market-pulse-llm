@@ -31,6 +31,9 @@
    (или блок из docs/PROMPT-standing.md, теперь с HANDOFF в списке путей).
 
 ## Заметки среды тимлида (стоили этой сессии по разу)
+- brew-обновление python@3.11 сносит site-packages: `make serve` падает на `import uvicorn`; лечение —
+  строка README `python3.11 -m pip install -e '.[serve]'` (сделано 15.09, аддендум (jjj)); перед
+  гейтом serve проверен живым: 200/200 с текущего дерева.
 - Шелл Desktop Commander несёт NODE_ENV=production → `npm ci` опускает devDeps (tsc не ставится):
   клонные прогоны фронта — строго `env -u NODE_ENV make front`.
 - Долгий поллинг в одном вызове DC (>4 мин) роняет транспорт: ждать suite порциями sleep ≤175 s;
