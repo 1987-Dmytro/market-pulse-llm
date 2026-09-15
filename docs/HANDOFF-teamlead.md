@@ -8,6 +8,7 @@ Desktop Commander; новая тимлид-сессия читает его ПЕ
 - PHASE v24; рулинги дня: (kkk) три слова оператора · (lll) dark-default принят (поведение жило с
   `a44cad6`, s65 добавил доказательство; моя (kkk)-посылка исправлена) · (mmm) print-light принят
   (печать читана МОИМ headless print-to-pdf), закон одного писателя в PROCESS §One-writer.
+- **GitHub: https://github.com/1987-Dmytro/market-pulse-llm (PRIVATE, (nnn) — публичность после гейта со скраб-листом; Vercel git-интеграция сознательно НЕ подключена).**
 - **Публичная витрина: https://market-pulse-three-zeta.vercel.app** (аккаунт `334477334477-1227`,
   проект `market-pulse`; артефакт `bf17dba3ac91fb27`; передеплой: `vercel deploy --prod --yes` из
   `dashboard/app/`). Тёмный первый рендер у каждого свежего посетителя; печать светлая.
