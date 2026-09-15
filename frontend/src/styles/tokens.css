@@ -128,3 +128,46 @@
 :root[data-theme='light'] {
   color-scheme: only light;
 }
+
+/*
+ * PAPER (DESIGN-ship-1 §8, «print is non-negotiable»; ruling (lll) 3): the print medium forces the
+ * LIGHT token block whatever `data-theme` says. A browser drops backgrounds when it prints, so the
+ * dark palette lands as #ffffff text on white paper — unreadable, and the page is the same whether
+ * the reader chose dark or the OS did.
+ *
+ * Both dark blocks are re-pointed, each matched at its own specificity (0,2,0) so the later source
+ * position is what decides: `:root[data-theme="dark"]` answers the toggle, and
+ * `:root:not([data-theme="light"])` answers the `prefers-color-scheme` block, whose guard is the
+ * same shape. Every property the dark blocks redefine is named here — `theme.test.ts` derives that
+ * list from this file, so a token added there and forgotten here reds the suite.
+ */
+@media print {
+  :root:not([data-theme='light']),
+  :root[data-theme='dark'] {
+    color-scheme: only light;
+
+    --surface-0: #fcfcfb;
+    --surface-1: #ffffff;
+    --surface-2: #f0efec;
+    --border: #e3e1dc;
+
+    --text-1: #0b0b0b;
+    --text-2: #52514e;
+    --text-3: #8a8884;
+    --link: #1c5cab;
+
+    --s1: #2a78d6;
+    --s2: #eb6834;
+    --s3: #1baf7a;
+    --s4: #eda100;
+    --s5: #e87ba4;
+    --s6: #008300;
+    --s7: #4a3aa7;
+    --s8: #e34948;
+
+    --card-bg: var(--surface-1);
+    --card-glow: 0 0 transparent;
+    --shadow: 0 1px 2px rgb(0 0 0 / 6%), 0 1px 8px rgb(0 0 0 / 4%);
+    --lift: 0 2px 6px rgb(0 0 0 / 10%), 0 12px 28px rgb(0 0 0 / 8%);
+  }
+}
