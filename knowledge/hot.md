@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-09-15 09:44:47 (every SessionStart)
+**Auto-refreshed:** 2026-09-15 10:46:26 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
-523851e docs(team-lead): ruling (kkk) — dark-default item, Vercel showcase, de-deck; PHASE v22
-83b3c6d docs(team-lead): (jjj) addendum — serve extra reinstalled after brew python re-link; serve re-proven live 200/200 from the current tree
-65f7c03 docs(team-lead): ruling (jjj) — e2e-ship accepted on the team lead's runs; PHASE v21 (clone-suite clause struck, §8 governs); PROMPT-standing gains the HANDOFF path; STATUS + handoff rewritten
-275b9b6 docs(progress): the readings stand at 5782a53, the tree the team lead clones
-5782a53 fix(e2e-ship): the money row's two figures live in two places, and say so
+5b16eb4 docs(team-lead): ruling (lll) — dark-default accepted on the team lead's runs; print-light before the deploy; PHASE v23
+597745c docs(progress): three sentences the team lead has to be able to act on, said exactly
+ae86952 docs(progress): s65 «dark-default» — the first load was already dark, and here is the proof
+ebfe2ce test(dark-default): the first visit's theme, held by the two lines that decide it
+c1621cc brain(s65 start): sweep the hook-written files s64 left dirty
 ```
 
 ## 📋 Recent decisions
@@ -23,9 +23,9 @@
 
 ## 📅 Recent daily logs
 
+- `2026-09-15.md`
 - `2026-09-14.md`
 - `2026-09-13.md`
-- `2026-09-12.md`
 
 <!-- AUTO-GEN END (everything below preserved across refreshes) -->
 
